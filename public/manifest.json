@@ -1,0 +1,15 @@
+{
+  "short_name": "DZO distributor",
+  "name": "DZO distributor",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "125x125",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#f8f8f8",
+  "background_color": "#f8f8f8"
+}
