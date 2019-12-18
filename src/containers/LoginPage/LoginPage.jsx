@@ -2,12 +2,20 @@ import React from 'react';
 import styles from './LoginPage.module.css';
 import { LOGIN_FORM } from '../../components/Form/forms';
 import Form from '../../components/Form/Form';
+import { login } from '../../api/services/authService';
+import { storeUserData } from '../../api/services/sessionService';
+import { ROUTE } from '../../constants/route';
 
-const onSubmit = (data) => {
-    console.log(data);
-};
+const LoginPage = (props) => {
+    const onSubmit = (data) => {
+        console.log(data);
+        login(data).then(response => {
+            console.log(response);
+            storeUserData(response.token);
+            props.history.push(ROUTE.MAIN)
+        })
+    };
 
-const LoginPage = () => {
     return (
         <Form
             data={LOGIN_FORM}

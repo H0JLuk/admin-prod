@@ -1,8 +1,12 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { ROUTE } from './constants/route';
-import LoginPage from './containers/LoginPage/LoginPage';
-import { isLoggedIn } from './api/services/authService';
+import { ROUTE, MAIN_ROUTE } from '../../constants/route';
+import styles from './App.module.css';
+import LoginPage from '../LoginPage/LoginPage';
+import MainPage from '../MainPage/MainPage';
+import FilesPage from '../FilesPage/FilesPage';
+import UsersPage from '../UsersPage/UsersPage';
+import { isLoggedIn } from '../../api/services/authService';
 
 class App extends React.PureComponent {
     componentDidMount() {
@@ -19,10 +23,11 @@ class App extends React.PureComponent {
 
     render() {
         return (
-            <div className="App">
+            <div className={styles.app}>
                 <Switch>
-                    <Route exact path='/' render={() => <Redirect to={ROUTE.LOGIN}/>}/>
+                    <Route exact path="/" render={() => <Redirect to={ROUTE.LOGIN}/>}/>
                     <Route path={ROUTE.LOGIN} component={LoginPage} />
+                    <Route path={ROUTE.MAIN} component={MainPage} />
                     <Route render={() => <Redirect to={ROUTE.LOGIN}/>}/>
                 </Switch>
             </div>

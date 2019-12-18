@@ -1,0 +1,8 @@
+.menu {
+    display: flex;
+}
+
+.menu__item {
+    text-decoration: none;
+    flex: 1;
+}

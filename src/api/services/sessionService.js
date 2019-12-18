@@ -1,13 +1,13 @@
 const token = 'dzo_token';
 
-export function storeUserData(userToken, personalNumber) {
-    window.localStorage.setItem(token, userToken);
+export function storeUserData(userToken) {
+    window.sessionStorage.setItem(token, userToken);
 }
 
 export function deleteUserData() {
-    window.localStorage.removeItem(token);
+    window.sessionStorage.removeItem(token);
 }
 
 export function getSession() {
-    return window.localStorage.getItem(token);
+    return window.sessionStorage.getItem(token);
 }
