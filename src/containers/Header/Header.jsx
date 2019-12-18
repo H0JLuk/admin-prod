@@ -7,7 +7,7 @@ const Header = (props) => {
     return (
         <div className={styles.header}>
             <Menu items={navigation} />
-            <div className={styles.logout} onClick={props.doLogout}>logout</div>
+            <div className={styles.logout} onClick={props.doLogout}>Выход</div>
         </div>
     )
 };

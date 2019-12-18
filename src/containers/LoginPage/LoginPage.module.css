@@ -1,6 +1,7 @@
 .loginForm {
     margin: 100px auto;
     width: 50%;
+    max-width: 400px;
 }
 
 .loginForm__field {
@@ -33,8 +34,4 @@
 .loginForm__button {
     margin-top: 100px;
     padding: 5px 30px;
-}
-
-::-ms-clear, ::-ms-reveal {
-    display: none;
 }

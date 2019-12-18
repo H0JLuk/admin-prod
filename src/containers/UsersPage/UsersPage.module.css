@@ -1,3 +1,67 @@
 .container {
+    padding-top: 60px;
+    width: 50%;
+    max-width: 400px;
+    margin: 0 auto;
+}
 
+.successBlock {
+    background-color: #ffffff;
+    border-radius: 16px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.userForm {
+    background-color: #ffffff;
+    border-radius: 16px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.userForm__field {
+    width: 80%;
+    padding-top: 30px;
+}
+
+.userForm__field label {
+    display: block;
+    bottom: 6px;
+}
+
+.userForm__field__activeLabel {
+    font-size: 14px;
+    transform: translateY(calc(-1 * 20px));
+    -ms-transform: translateY(calc(-1 * 20px));
+}
+
+.userForm__field input {
+    display: block;
+    padding: 0;
+    height: 20px;
+    margin-bottom: 8px;
+    width: calc(100% - 30px);
+}
+
+.userForm__button {
+    margin-top: 30px;
+    padding: 5px 30px;
+}
+
+::-ms-clear, ::-ms-reveal {
+    display: none;
+}
+
+.error {
+    margin-top: 10px;
+    color: #f6650a;
+}
+
+.successBlock__button {
+    padding: 5px 30px;
 }

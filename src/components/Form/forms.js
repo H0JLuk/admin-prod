@@ -20,3 +20,15 @@ export const LOGIN_FORM = {
         mask: null
     }
 };
+
+export const NEW_USER_FORM = {
+    personalNumber: {
+        label: 'Табельный номер',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 30,
+        validators: [isRequired, digitValidator],
+        mask: null
+    }
+};

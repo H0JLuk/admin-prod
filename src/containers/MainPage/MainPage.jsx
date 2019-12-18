@@ -21,7 +21,7 @@ const MainPage = (props) => {
                 <Switch>
                     <Route path={MAIN_ROUTE.FILES} component={FilesPage} />
                     <Route path={MAIN_ROUTE.USERS} component={UsersPage} />
-                    <Route render={() => <Redirect to={MAIN_ROUTE.FILES}/>}/>
+                    <Route render={() => <Redirect to={MAIN_ROUTE.USERS}/>}/>
                 </Switch>
             </div>
         </>
