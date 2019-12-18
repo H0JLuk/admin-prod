@@ -1,0 +1,40 @@
+.loginForm {
+    margin: 100px auto;
+    width: 50%;
+}
+
+.loginForm__field {
+    padding-top: 30px;
+}
+
+.loginForm__field label {
+    display: block;
+    bottom: 6px;
+}
+
+.loginForm__field__activeLabel {
+    font-size: 14px;
+    transform: translateY(calc(-1 * 30px));
+    -ms-transform: translateY(calc(-1 * 30px));
+}
+
+::-ms-clear, ::-ms-reveal {
+    display: none;
+}
+
+.loginForm__field input {
+    display: block;
+    padding: 0;
+    height: 20px;
+    margin-bottom: 8px;
+    width: calc(100% - 30px);
+}
+
+.loginForm__button {
+    margin-top: 100px;
+    padding: 5px 30px;
+}
+
+::-ms-clear, ::-ms-reveal {
+    display: none;
+}

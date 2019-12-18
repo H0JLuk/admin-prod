@@ -1,0 +1,54 @@
+.button {
+    height: var(--element-size-medium);
+    min-width: var(--element-size-medium);
+    border-radius: 9.77vw;
+    outline: none;
+    border: none;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.button.button_sfpro {
+    font-family: SFProText, serif;
+    font-weight: bold;
+    line-height: 1.14;
+    letter-spacing: 0.2px;
+    text-align: center;
+    outline: none;
+}
+
+.button.button_roboto {
+    font-size: var(--stretch-14-px);
+    font-family: Roboto, serif;
+    font-weight: 500;
+    line-height: 1.14;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.button.button_green {
+    background-color: #08a652;
+    color: #ffffff;
+}
+
+.button.button_clear {
+    color: var(--color-green);
+    background-color: transparent;
+}
+
+.button.button_disabled {
+    background-color: #c2c2c2;
+}
+
+.button.smallest {
+    font-size: var(--stretch-10-px);
+}
+
+.button.small {
+    font-size: var(--stretch-14-px);
+}
+.button.medium {
+    font-size: var(--stretch-16-px);
+}

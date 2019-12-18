@@ -1,16 +1,32 @@
 import React from 'react';
-import  {Button}  from 'megakaka-web-ui';
-import * as styles from './App.css';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { ROUTE } from './constants/route';
+import LoginPage from './containers/LoginPage/LoginPage';
+import { isLoggedIn } from './api/services/authService';
 
 class App extends React.PureComponent {
+    componentDidMount() {
+        console.log(process.env.REACT_APP_BACKEND_URL);
+    }
+
+    withRedirect = (Component) => (props) => {
+        if (!isLoggedIn()) {
+            return <Redirect to={ROUTE.LOGIN}/>;
+        }
+
+        return <Component {...props} />;
+    };
 
     render() {
-
-        console.log('btn', Button);
-        return (<div className="App">
-            asdas
-            <Button type="button"/>
-        </div>)
+        return (
+            <div className="App">
+                <Switch>
+                    <Route exact path='/' render={() => <Redirect to={ROUTE.LOGIN}/>}/>
+                    <Route path={ROUTE.LOGIN} component={LoginPage} />
+                    <Route render={() => <Redirect to={ROUTE.LOGIN}/>}/>
+                </Switch>
+            </div>
+        )
     }
 }
 
