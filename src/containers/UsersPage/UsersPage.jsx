@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './UsersPage.module.css';
 import Form from '../../components/Form/Form';
 import { NEW_USER_FORM } from '../../components/Form/forms';
-import { addUser } from '../../api/services/usersService';
+import { addUser } from '../../api/services/adminService';
 import Button from '../../components/Button/Button';
 
 const UsersPage = (props) => {

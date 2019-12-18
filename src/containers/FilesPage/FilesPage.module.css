@@ -1,0 +1,8 @@
+.container {
+    padding-top: 30px;
+}
+
+.container__button {
+    margin-right: 30px;
+    padding: 10px 20px;
+}
