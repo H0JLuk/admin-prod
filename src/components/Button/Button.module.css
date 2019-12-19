@@ -1,7 +1,5 @@
 .button {
-    height: var(--element-size-medium);
-    min-width: var(--element-size-medium);
-    border-radius: 9.77vw;
+    border-radius: 16px;
     outline: none;
     border: none;
 }
@@ -20,7 +18,7 @@
 }
 
 .button.button_roboto {
-    font-size: var(--stretch-14-px);
+    font-size: 14px;
     font-family: Roboto, serif;
     font-weight: 500;
     line-height: 1.14;
@@ -34,7 +32,7 @@
 }
 
 .button.button_clear {
-    color: var(--color-green);
+    color: #068746;
     background-color: transparent;
 }
 
@@ -43,12 +41,12 @@
 }
 
 .button.smallest {
-    font-size: var(--stretch-10-px);
+    font-size: 10px;
 }
 
 .button.small {
-    font-size: var(--stretch-14-px);
+    font-size: 14px;
 }
 .button.medium {
-    font-size: var(--stretch-16-px);
+    font-size: 16px;
 }

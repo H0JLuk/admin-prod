@@ -38,7 +38,6 @@ const UsersPage = (props) => {
                     onClick={() => setSent(false)}
                     label='Добавить еще'
                     type='green'
-                    font='sfpro'
                     className={styles.successBlock__button}/>
             </div>
     };

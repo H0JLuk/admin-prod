@@ -17,12 +17,14 @@ const FilesPage = (props) => {
                 label='Скачать предложения'
                 onClick={getData(getOffers, 'offers')}
                 className={styles.container__button}
-                type='green'/>
+                type='green'
+                font='roboto'/>
             <Button
                 label='Скачать фидбэк'
                 onClick={getData(getFeedback, 'feedback')}
                 className={styles.container__button}
-                type='green'/>
+                type='green'
+                font='roboto'/>
         </div>
     )
 };
