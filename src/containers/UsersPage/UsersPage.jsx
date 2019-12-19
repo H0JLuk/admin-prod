@@ -11,13 +11,14 @@ const UsersPage = (props) => {
 
     const onAddUser = (data) => {
         const newUser = { ...data, password: data.personalNumber };
-        addUser(newUser).then((response) => {
-            setSent(true);
-            setError(false)
-        }, (error) => {
-            setSent(false);
-            setError(true);
-        });
+        setSent(true);
+        // addUser(newUser).then((response) => {
+        //     setSent(true);
+        //     setError(false)
+        // }, (error) => {
+        //     setSent(false);
+        //     setError(true);
+        // });
     };
 
     const renderBody = () => {
@@ -38,6 +39,7 @@ const UsersPage = (props) => {
                     onClick={() => setSent(false)}
                     label='Добавить еще'
                     type='green'
+                    font='roboto'
                     className={styles.successBlock__button}/>
             </div>
     };
