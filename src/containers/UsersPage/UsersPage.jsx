@@ -11,14 +11,13 @@ const UsersPage = (props) => {
 
     const onAddUser = (data) => {
         const newUser = { ...data, password: data.personalNumber };
-        setSent(true);
-        // addUser(newUser).then((response) => {
-        //     setSent(true);
-        //     setError(false)
-        // }, (error) => {
-        //     setSent(false);
-        //     setError(true);
-        // });
+        addUser(newUser).then((response) => {
+            setSent(true);
+            setError(false)
+        }, (error) => {
+            setSent(false);
+            setError(true);
+        });
     };
 
     const renderBody = () => {

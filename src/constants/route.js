@@ -1,9 +1,9 @@
 export const ROUTE = {
     LOGIN: '/login',
-    MAIN: '/main',
+    APP: '/app',
 };
 
-export const MAIN_ROUTE = {
-    USERS: `${ROUTE.MAIN}/users`,
-    FILES: `${ROUTE.MAIN}/files`
+export const APP_ROUTE = {
+    USERS: `${ROUTE.APP}/users`,
+    FILES: `${ROUTE.APP}/files`
 };

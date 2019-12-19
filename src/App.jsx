@@ -24,8 +24,8 @@ class App extends React.PureComponent {
                 <Switch>
                     <Route exact path="/" render={() => <Redirect to={ROUTE.LOGIN}/>}/>
                     <Route path={ROUTE.LOGIN} component={LoginPage} />
-                    <Route path={ROUTE.MAIN} component={this.withRedirect(MainPage)} />
-                    <Route render={() => <Redirect to={ROUTE.LOGIN}/>}/>
+                    <Route path={ROUTE.APP} component={this.withRedirect(MainPage)} />
+                    <Route render={() => <Redirect to={ROUTE.APP}/>}/>
                 </Switch>
             </>
         )

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
-import { ROUTE, MAIN_ROUTE } from '../../constants/route';
+import { ROUTE, APP_ROUTE } from '../../constants/route';
 import styles from './MainPage.module.css';
 import Header from '../Header/Header';
 import FilesPage from '../FilesPage/FilesPage';
@@ -19,9 +19,9 @@ const MainPage = (props) => {
             <Header doLogout={doLogout}/>
             <div className={styles.wrapper}>
                 <Switch>
-                    <Route path={MAIN_ROUTE.FILES} component={FilesPage} />
-                    <Route path={MAIN_ROUTE.USERS} component={UsersPage} />
-                    <Route render={() => <Redirect to={MAIN_ROUTE.USERS}/>}/>
+                    <Route path={APP_ROUTE.FILES} component={FilesPage} />
+                    <Route path={APP_ROUTE.USERS} component={UsersPage} />
+                    <Route render={() => <Redirect to={APP_ROUTE.USERS}/>}/>
                 </Switch>
             </div>
         </>
