@@ -25,3 +25,29 @@
     font-style: normal;
     src: local('Open Sans Bold'), local('OpenSans-Bold'), url(OpenSans-Bold.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: "SBSansText";
+    src: url("SBSansText-Regular.otf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face {
+    font-family: "SBSansText";
+    src: url("SBSansText-Semibold.otf") format("truetype");
+    font-style: normal;
+    font-weight: 600;
+}
+@font-face {
+    font-family: "Roboto";
+    src: url("roboto.medium.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 500;
+}
+@font-face {
+    font-family: "SFProText";
+    src: url("SFProText-Bold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: bold;
+}
+

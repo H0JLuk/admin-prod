@@ -1,0 +1,91 @@
+.container {
+    margin: 0 auto;
+    padding-top: 60px;
+    width: 96%;
+    max-width: 1080px;
+    position: relative;
+}
+
+.successBlock {
+    background-color: #ffffff;
+    border-radius: 16px;
+    height: 180px;
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.successBlock p {
+    margin-top: 50px;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.userForm {
+    background-color: #ffffff;
+    width: 50%;
+    margin: 0 auto;
+    border-radius: 16px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.userForm__field {
+    width: 80%;
+    padding-top: 46px;
+}
+
+.userForm__field input {
+    padding-left: 2px;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.55);
+    display: block;
+    height: 20px;
+    margin-bottom: 8px;
+    width: calc(100% - 30px);
+}
+
+.userForm__field label {
+    display: block;
+    bottom: 8px;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.userForm__field__activeLabel {
+    font-size: 14px;
+    transform: translateY(calc(-1 * 26px));
+    -ms-transform: translateY(calc(-1 * 26px));
+}
+
+.userForm__button, .successBlock__button{
+    position: absolute;
+    padding: 8px 30px;
+    bottom: 30px;
+}
+
+::-ms-clear, ::-ms-reveal {
+    display: none;
+}
+
+.error {
+    margin-top: 10px;
+    color: #f6650a;
+    font-family: Roboto;
+}

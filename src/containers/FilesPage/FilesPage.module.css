@@ -1,0 +1,11 @@
+.container {
+    margin: 0 auto;
+    padding-top: 30px;
+    width: 96%;
+    max-width: 1080px;
+}
+
+.container__button {
+    margin-right: 30px;
+    padding: 10px 20px;
+}
