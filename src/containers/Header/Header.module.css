@@ -11,12 +11,12 @@
 }
 
 .header > div:first-child {
-    width: 40%;
-    max-width: 300px;
+    flex: 9;
+    padding-right: 100px;
 }
 
 .logout {
-    cursor: pointer;
+    flex: 1;
     font-family: SBSansText, sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -24,5 +24,7 @@
     font-stretch: normal;
     line-height: 1.5;
     letter-spacing: -0.3px;
+    text-align: right;
     color: #f6650a;
+    cursor: pointer;
 }

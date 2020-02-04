@@ -1,10 +1,16 @@
 .menu {
     display: flex;
+    align-items: center;
+    height: inherit;
 }
 
 .menu__item {
-    text-decoration: none;
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: inherit;
+    text-decoration: none;
     font-family: SBSansText, sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -13,4 +19,8 @@
     line-height: 1.5;
     letter-spacing: -0.3px;
     color: #000014;
+}
+
+.menu__item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
