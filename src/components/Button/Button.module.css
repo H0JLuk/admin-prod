@@ -1,4 +1,5 @@
 .button {
+    padding: 10px 20px;
     border-radius: 16px;
     outline: none;
     border: none;
@@ -6,6 +7,10 @@
 
 .button:hover {
     cursor: pointer;
+}
+
+.button:focus {
+    box-shadow: 0 0 1px 2px rgb(0, 125, 255);
 }
 
 .button.button_sfpro {
@@ -28,7 +33,12 @@
 
 .button.button_green {
     background-color: #08a652;
-    color: #ffffff;
+    color: #fff;
+}
+
+.button.button_red {
+    background-color: #da7675;
+    color: #fff;
 }
 
 .button.button_clear {

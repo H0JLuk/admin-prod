@@ -6,3 +6,12 @@ export const downloadFile = (data, name) => {
     document.body.appendChild(link);
     link.click();
 };
+
+export const loadImageWithPromise = (url, failUrl) => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(url);
+        img.onerror = () => reject(failUrl);
+        img.src = url;
+    })
+}

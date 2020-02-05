@@ -23,3 +23,15 @@ export const getOffers = async () => {
 export const getFeedback = async () => {
     return Api.get('/admin/feedback/excel', reqOptions(), 'blob');
 };
+
+export async function getBannerList() {
+    return  Api.get('/banner/list', reqOptions());
+}
+
+export async function addBanner(bannerDto) {
+    return Api.post('/admin/banner', { bannerDto }, reqOptions())
+}
+
+export async function deleteBanner(id) {
+    return Api.post(`/admin/banner/delete/${id}`, {}, reqOptions())
+}

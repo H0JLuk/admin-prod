@@ -29,7 +29,7 @@ class Button extends React.PureComponent {
 Button.propTypes = {
     label: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
-    type: PropTypes.oneOf(["green", "clear"]),
+    type: PropTypes.oneOf(["green", "red", "clear"]),
     font: PropTypes.oneOf(["roboto", "sfpro"]),
     disabled: PropTypes.bool
 };

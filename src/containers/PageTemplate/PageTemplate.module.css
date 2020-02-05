@@ -1,0 +1,21 @@
+.pageTemplateWrapper {
+    margin: 0 auto;
+    padding-top: 30px;
+    width: 96%;
+    max-width: 1080px;
+    font-family: inherit;
+}
+
+.pageHeaderSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.pageHeaderSection h3 {
+    font-family: inherit;
+    font-size: 25px;
+    font-weight: 500;
+    color: rgb(0, 0, 20);
+}
