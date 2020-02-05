@@ -6,7 +6,7 @@ export async function addUser(data) {
     return Api.post('/admin/user', data, getReqOptions());
 }
 
-const contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+const contentType = 'image/jpeg';
 const options = {
     headers: {
         Accept: '*/*',
@@ -29,9 +29,13 @@ export async function getBannerList() {
 }
 
 export async function addBanner(bannerDto) {
-    return Api.post('/admin/banner', { bannerDto }, reqOptions())
+    return Api.post('/admin/banner', { bannerDto }, reqOptions());
 }
 
 export async function deleteBanner(id) {
-    return Api.post(`/admin/banner/delete/${id}`, {}, reqOptions())
+    return Api.delete(`/admin/banner/${id}`, reqOptions());
+}
+
+export async function uploadFile(binaryFile, path) {
+    return Api.upload(`/admin/file?path=${path}`, binaryFile, reqOptions());
 }

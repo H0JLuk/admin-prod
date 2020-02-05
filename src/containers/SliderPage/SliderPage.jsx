@@ -1,74 +1,76 @@
 import React, { Component, Fragment } from 'react';
-import { getBannerList } from '../../api/services/adminService';
-import PageTemplate from '../PageTemplate/PageTemplate';
-import BannerItem from '../../components/BannerItem/BannerItem';
-import Button from '../../components/Button/Button';
-import styles from './SliderPage.module.css';
-import {LOGIN_FORM, SLIDER_EDIT_FROM} from '../../components/Form/forms';
+import {addBanner, deleteBanner, getBannerList, uploadFile} from '../../api/services/adminService';
+import {SLIDER_EDIT_FROM} from '../../components/Form/forms';
 import {getErrorText} from '../../constants/errors';
+import CustomModal from '../../components/CustomModal/CustomModal';
+import BannerItem from '../../components/BannerItem/BannerItem';
 import Form from '../../components/Form/Form';
+import Button from '../../components/Button/Button';
+import cross from '../../static/images/cross.svg';
+import styles from './SliderPage.module.css';
+import {populateFormWithData} from "../../components/Form/formHelper"
 
 
 const BANNERS_GET_ERROR = 'Ошибка получения слайдов!';
+const BANNERS_DELETE_ERROR = 'Ошибка удаления слайда!';
 const ADD_BANNER_TITLE = 'Добавить слайд';
 const REMOVE_QUESTION = 'Удалить слайд?';
 const BANNERS_LIST_TITLE = 'Список слайдов';
 const LOADING_LIST_LABEL = 'Загрузка';
+const UPLOAD_IMAGE_PLEASE = 'Пожалуйста загрузите изображение!';
 
-const LoadingTitle = () => <p className={styles.loadingLabel}>{LOADING_LIST_LABEL}</p>
+const LoadingStatus = ({ loading }) => (
+    <p className={styles.loadingLabel}>{ loading ? LOADING_LIST_LABEL : BANNERS_GET_ERROR }</p>
+)
 
 class SliderPage extends Component {
     constructor(props) {
         super(props);
         this.bannerRef = React.createRef();
-    }
-
-    state = {
-        formData: null,
-        banners: [],
-        formError: null
+        this.state = {
+            editingBannerIdx: null,
+            banners: [],
+            isOpen: false,
+            formError: null
+        }
     }
 
     componentDidMount() {
         getBannerList().then(response => {
-            const { bannerDtoList = [] } = response
+            const { bannerDtoList } = response
             this.setState({ banners: bannerDtoList })
-        }).catch(error => {
-            alert(BANNERS_GET_ERROR)
-            console.error(error.message)
+        }).catch(() => {
+            this.setState({ banners: null })
         })
     }
 
-    addBannerHandler = (openModal) => {
-        // ...some prepare before form display
-        openModal()
-    }
+    openModal = () => { this.setState({ isOpen: true }) }
+
+    closeModal = () => { this.setState({ isOpen: false }) }
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
-            console.log(`Deleting banner ${id}`)
+            deleteBanner(id).then(() => {
+                const croppedBanners = this.state.banners.filter(banner => banner.bannerId !== id)
+                this.setState({ banners: croppedBanners })
+            }).catch(() => { alert(BANNERS_DELETE_ERROR) })
         }
     }
 
-    handleEdit = (id, openModal) => {
-        console.log('Opened form edit', id)
-        openModal()
+    handleEdit = (id) => {
+        this.setState({ editingBannerIdx: id }, () => { this.openModal() })
     }
 
-    renderAddButton = (openModal) => (
-        <Button onClick={() => { this.addBannerHandler(openModal) }}
-                label={ADD_BANNER_TITLE}
-                font="roboto"
-                type="green"
-        />
-    )
-
-    renderForm = (closeModal) => {
-        const {formError} = this.state;
+    renderModalForm = () => {
+        const {formError, editingBannerIdx} = this.state;
+        const formData = editingBannerIdx !== null ? populateFormWithData(SLIDER_EDIT_FROM, {
+            dzoId: editingBannerIdx
+        }) : SLIDER_EDIT_FROM;
         return (
-            <div style={{ position: "relative" }}>
+            <div className={styles.modalForm}>
+                <img src={cross} onClick={this.closeModal} className={styles.crossSvg} alt="Закрыть" />
                 <Form
-                    data={SLIDER_EDIT_FROM}
+                    data={formData}
                     buttonText='Вход'
                     onSubmit={this.onSubmit}
                     formClassName={styles.loginForm}
@@ -79,54 +81,91 @@ class SliderPage extends Component {
                     formError={!!formError}
                     errorClassName={styles.error}
                 />
-                <form>
-                    <input type="file" ref={this.bannerRef} />
+                <form className={styles.imageUploadContainer}>
+                    <label htmlFor="bannerImageInput">Изображение баннера</label>
+                    <input type="file" id="bannerImageInput" ref={this.bannerRef} className={styles.imageUpload} />
                 </form>
-                <button onClick={closeModal}>close</button>
             </div>
         )
     }
 
+    // TODO write method on update slider
     onSubmit = (data) => {
-        console.log(data);
-        console.log(this.bannerRef.current.files[0].name);
+        if (!this.bannerRef.current.files.length) {     // on create case!
+            alert(UPLOAD_IMAGE_PLEASE);
+            return;
+        }
 
-        new Promise((resolve) => {
-            setTimeout(() => { resolve('/super/image/ulr') }, 1000)
-        }).then((url) => {
-            data['text'] = url;
-            console.log(data);
-        })
+        const imageFile = this.bannerRef.current.files[0];
+        const imageName = imageFile.name;
+        let bannerDto;
+
+        uploadFile(imageFile, imageName)
+            .then(response => {
+                bannerDto = {...data, bannerUrl: response.path}
+                return addBanner(bannerDto)
+            })
+            .then(response => {
+                const {id: bannerId = 0} = response
+                const newBannerItem = {...bannerDto, bannerId}
+                const banners = [newBannerItem, ...this.state.banners]
+                this.setState({banners, isOpen: false})
+            })
+            .catch(error => {
+                console.log(error.message)
+            })
     }
 
-    renderBannersList = (openModal) => {
+    renderBannersList = () => {
         const { banners } = this.state
-        const handleEdit = (bannerId) => this.handleEdit(bannerId, openModal)
+        const isSuccess = Array.isArray(banners)
         return (
-            <div className={styles.bannerList}>
+            <Fragment>
                 {
-                    banners.length ?
-                        banners.map((banner, i) =>
-                            <BannerItem
-                                key={`bannerItem-${i}`}
-                                handleDelete={this.handleDelete}
-                                handleEdit={handleEdit}
-                                {...banner}
-                            />
-                        ) : <LoadingTitle/>
+                    isSuccess ? (
+                        banners.length ?
+                            banners.map((banner, i) =>
+                                <BannerItem
+                                    key={`bannerItem-${i}`}
+                                    handleDelete={this.handleDelete}
+                                    handleEdit={this.handleEdit}
+                                    {...banner}
+                                />
+                            ) : <LoadingStatus loading />
+                    ) : <LoadingStatus />
                 }
-            </div>
+            </Fragment>
         )
     }
+
+    renderModifyModal = () => (
+        <CustomModal
+            isOpen={this.state.isOpen}
+            onRequestClose={this.closeModal}>
+            {this.renderModalForm()}
+        </CustomModal>
+    )
 
     render() {
+        const openWithParam = () => { this.setState({ editingBannerIdx: null }, this.openModal) }
         return (
-            <PageTemplate
-                pageTitle={BANNERS_LIST_TITLE}
-                renderAddButton={this.renderAddButton}
-                renderChildren={this.renderBannersList}
-                renderForm={this.renderForm}
-            />
+            <div className={styles.sliderPageWrapper}>
+                { this.renderModifyModal() }
+                <div className={styles.headerSection}>
+                    <h3>{BANNERS_LIST_TITLE}</h3>
+                    <div>
+                        <Button
+                            onClick={openWithParam}
+                            label={ADD_BANNER_TITLE}
+                            font="roboto"
+                            type="green"
+                        />
+                    </div>
+                </div>
+                <div className={styles.bannerList}>
+                    {this.renderBannersList()}
+                </div>
+            </div>
         )
     }
 }
