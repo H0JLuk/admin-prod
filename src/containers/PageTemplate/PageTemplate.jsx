@@ -28,6 +28,11 @@ class PageTemplate extends Component {
         )
     }
 
+    renderChildren = () => {
+        const openModal = () => { this.setModal(true) }
+        return this.props.renderChildren(openModal)
+    }
+
     render() {
         const { children, pageTitle, renderAddButton } = this.props
         const openModal = () => { this.setModal(true) }
@@ -39,7 +44,7 @@ class PageTemplate extends Component {
                     <div>{renderAddButton ? renderAddButton(openModal) : null}</div>
                 </div>
                 <div>
-                    {children}
+                    {this.renderChildren(openModal)}
                 </div>
             </div>
         )
@@ -49,7 +54,8 @@ class PageTemplate extends Component {
 PageTemplate.propTypes = {
     pageTitle: PropTypes.string.isRequired,
     renderAddButton: PropTypes.func.isRequired,
-    renderForm: PropTypes.func.isRequired,
+    renderChildren: PropTypes.func.isRequired,
+    renderForm: PropTypes.func.isRequired
 }
 
 export default PageTemplate;
