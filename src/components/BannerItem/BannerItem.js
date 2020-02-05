@@ -8,6 +8,7 @@ import styles from './BannerItem.module.css'
 
 
 const BANNER_DELETE = 'Удалить';
+const BANNER_EDIT = 'Изменить';
 
 const BannerItem = (props) => {
     const { dzoId, bannerId, bannerUrl } = props
@@ -21,6 +22,7 @@ const BannerItem = (props) => {
 
 
     const handleDelete = () => { props.handleDelete(bannerId) }
+    const handleEdit = () => { props.handleEdit(bannerId) }
 
     return (
         <div className={styles.bannerItem}>
@@ -31,6 +33,7 @@ const BannerItem = (props) => {
                     <p>bannerId: {bannerId}</p>
                 </div>
                 <div className={styles.bannerActions}>
+                    <Button type="green" onClick={handleEdit} label={BANNER_EDIT} />
                     <Button type="red" onClick={handleDelete} label={BANNER_DELETE} />
                 </div>
             </div>
@@ -42,7 +45,8 @@ BannerItem.propTypes = {
     dzoId: PropTypes.number.isRequired,
     bannerId: PropTypes.number.isRequired,
     bannerUrl: PropTypes.string.isRequired,
-    handleDelete: PropTypes.func.isRequired
+    handleDelete: PropTypes.func.isRequired,
+    handleEdit: PropTypes.func.isRequired
 }
 
 export default memo(BannerItem);

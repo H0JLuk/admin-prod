@@ -24,6 +24,10 @@
     justify-content: flex-end;
 }
 
+.descrWrapper .bannerActions > button:last-child {
+    margin-left: 20px;
+}
+
 .bannerItem .imageWrapper {
     flex: 5;
     min-height: 200px;

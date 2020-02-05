@@ -32,3 +32,15 @@ export const NEW_USER_FORM = {
         mask: null
     }
 };
+
+export const SLIDER_EDIT_FROM = {
+    dzoId: {
+        label: 'ДЗО ID',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 20,
+        validators: [isRequired],
+        mask: null
+    }
+};
