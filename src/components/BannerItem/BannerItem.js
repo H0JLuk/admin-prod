@@ -11,9 +11,8 @@ const BANNER_DELETE = 'Удалить';
 const BANNER_EDIT = 'Изменить';
 
 const BannerItem = (props) => {
-    const { dzoId, bannerId, bannerUrl } = props
+    const { bannerId, dzoId, bannerUrl, dzoName } = props
     const [url, setUrl] = useState(spinner)
-
     useEffect(() => {
         loadImageWithPromise(bannerUrl, droidSvg)
             .then(url => { setUrl(url) })
@@ -22,15 +21,21 @@ const BannerItem = (props) => {
 
 
     const handleDelete = () => { props.handleDelete(bannerId) }
-    const handleEdit = () => { props.handleEdit(bannerId) }
+    const handleEdit = () => { props.handleEdit(bannerId, dzoId, url) }
 
     return (
         <div className={styles.bannerItem}>
             <div className={styles.imageWrapper} style={ { backgroundImage: `url(${url})` } } />
             <div className={styles.descrWrapper}>
                 <div className={styles.fieldsWrapper}>
-                    <p>dzoId: {dzoId}</p>
-                    <p>bannerId: {bannerId}</p>
+                    <p><b>Баннер ID:</b> {bannerId}</p>
+                    <br/>
+                    {/*<p><b>ДЗО ID:</b> {dzoId}</p>*/}
+                    {/*<br/>*/}
+                    <p><b>ДЗО:</b> "{dzoName}"</p>
+                    <br/>
+                    {/*<p><b>url:</b> <br/>{url}</p>*/}
+                    {/*<br/>*/}
                 </div>
                 <div className={styles.bannerActions}>
                     <Button type="green" onClick={handleEdit} label={BANNER_EDIT} />
@@ -42,8 +47,9 @@ const BannerItem = (props) => {
 }
 
 BannerItem.propTypes = {
-    dzoId: PropTypes.number.isRequired,
     bannerId: PropTypes.number.isRequired,
+    dzoId: PropTypes.number.isRequired,
+    dzoName: PropTypes.string,
     bannerUrl: PropTypes.string.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleEdit: PropTypes.func.isRequired

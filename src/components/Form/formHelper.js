@@ -8,7 +8,7 @@ export const generateFormState = (obj) => {
         const { value, isRequired } = obj[key];
         state[key] = {
             value,
-            valid: (isRequired && value !== '' || !isRequired) ? true : null
+            valid: (isRequired && (value !== '' || !isRequired)) ? true : null
         };
         if (!state[key].valid) {
             ++errorCount;
