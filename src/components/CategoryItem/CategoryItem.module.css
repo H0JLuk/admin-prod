@@ -1,0 +1,71 @@
+
+.categoryItem {
+    display: flex;
+    font-family: inherit;
+    padding: 30px;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.categoryItem .descrWrapper {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.descrWrapper .fieldsWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.descrWrapper .categoryActions {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.descrWrapper .categoryActions > button:last-child {
+    margin-left: 20px;
+}
+
+.arrow_image {
+    height: 30px;
+    margin-right: 40px;
+    cursor: pointer;
+}
+.arrow_image:active {
+    background-color: deepskyblue;
+}
+
+.categoryItem .imageWrapper {
+    flex: 5;
+    min-height: 200px;
+    max-height: 200px;
+    max-width: 300px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
+    border: 2px solid #ececec;
+    border-radius: 4px;
+}
+
+.categoryItem  .textFieldFormat {
+    display: flex;
+    flex-direction: column;
+    font-family:Tahoma, sans-serif;
+    font-size:16px;
+    margin-bottom: 10px;
+}
+.categoryItem  .headerFormat {
+    display: flex;
+    flex-direction: row;
+    font-family:Tahoma, sans-serif;
+    font-size:16px;
+    margin-bottom: 3px;
+}
+.categoryItem .textFormat {
+    font-family:Tahoma, sans-serif;
+    font-size:16px;
+    margin-bottom: 10px;
+}

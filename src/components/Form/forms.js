@@ -33,14 +33,141 @@ export const NEW_USER_FORM = {
     }
 };
 
-export const SLIDER_EDIT_FROM = {
-    dzoId: {
-        label: 'ДЗО ID',
+export const LANDING_EDIT_FORM = {
+    header: {
+        label: 'Header',
         value: '',
         type: 'text',
         isRequired: true,
-        maxLength: 20,
+        maxLength: 128,
         validators: [isRequired],
+        mask: null
+    },
+    description: {
+        label: 'Description',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 4096,
+        validators: [isRequired],
+        mask: null
+    }
+};
+
+export const CATEGORY_ADD_FROM = {
+    categoryName: {
+        label: 'Имя категории',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    },
+    categoryDescription: {
+        label: 'Описание категории',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    }
+};
+export const CATEGORY_EDIT_FROM = {
+    categoryName: {
+        label: 'Имя категории',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    },
+    categoryDescription: {
+        label: 'Описание категории',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    }
+};
+export const DZO_ADD_FROM = {
+    dzoName: {
+        label: 'Имя ДЗО',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    },
+    header: {
+        label: 'Хэдер ДЗО',
+        value: '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 2048,
+        validators: [],
+        mask: null
+    },
+    description: {
+        label: 'Описание ДЗО',
+        value: '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 2048,
+        validators: [],
+        mask: null
+    },
+    dzoCode: {
+        label: 'Код ДЗО',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    },
+    webUrl: {
+        label: 'Web адрес ДЗО',
+        value: '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 2048,
+        validators: [],
+        mask: null
+    },
+
+};
+export const DZO_EDIT_FROM = {
+    header: {
+        label: 'Header',
+        value: '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 2048,
+        validators: [],
+        mask: null
+    },
+    description: {
+        label: 'Описание ДЗО',
+        value: '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 2048,
+        validators: [],
+        mask: null
+    },
+    webUrl: {
+        label: 'Web URL',
+        value: '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 2048,
+        validators: [],
         mask: null
     }
 };

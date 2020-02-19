@@ -41,6 +41,11 @@
     color: #fff;
 }
 
+.button.button_blue {
+    background-color: #0000FF;
+    color: #fff;
+}
+
 .button.button_clear {
     color: #068746;
     background-color: transparent;

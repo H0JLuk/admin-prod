@@ -1,0 +1,95 @@
+
+.dzoItem {
+    display: flex;
+    font-family:Tahoma, sans-serif;
+    padding: 30px;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.descrWrapper {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.dzoItem .descrWrapper {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.descrWrapper .fieldsWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.descrWrapper .dzoActions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.descrWrapper .dzoActions > button:last-child {
+    margin-left: 20px;
+}
+
+.dzoItem .imagesGroupBlock {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50%;
+}
+
+.dzoItem .imageBlockWrapper {
+    display: inline-block;
+    align-items: center;
+    flex: 3;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
+    border-radius: 4px;
+}
+
+.dzoItem .imageWrapper {
+    flex: 5;
+    min-height: 150px;
+    max-height: 300px;
+    max-width: 300px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
+    border-radius: 4px;
+}
+.dzoItem .screenImageWrapper {
+    flex: 5;
+    min-height: 300px;
+    max-height: 600px;
+    max-width: 600px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
+    border-radius: 4px;
+}
+
+.dzoItem .textFieldFormat {
+    display: flex;
+    flex-direction: column;
+    font-family:Tahoma, sans-serif;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.dzoItem .headerFormat {
+    display: flex;
+    flex-direction: row;
+    font-family:Tahoma, sans-serif;
+    font-size: 16px;
+    margin-bottom: 3px;
+}
+.dzoItem .textFormat {
+    font-family:Tahoma, sans-serif;
+    font-size: 16px;
+    margin-bottom: 10px;
+    align-items: center;
+}

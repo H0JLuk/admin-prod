@@ -17,25 +17,22 @@ const options = {
 const reqOptions = () => _.merge(options, getReqOptions());
 
 export const getOffers = async () => {
-    return Api.get('/admin/offer/excel', reqOptions(), 'blob');
+    return Api.get('/admin/offer/excel', getReqOptions(), 'blob');
 };
 
 export const getFeedback = async () => {
-    return Api.get('/admin/feedback/excel', reqOptions(), 'blob');
+    return Api.get('/admin/feedback/excel', getReqOptions(), 'blob');
 };
 
-export async function getBannerList() {
-    return  Api.get('/banner/list', reqOptions());
-}
-
-export async function addBanner(bannerDto) {
-    return Api.post('/admin/banner', { bannerDto }, reqOptions());
-}
-
-export async function deleteBanner(id) {
-    return Api.delete(`/admin/banner/${id}`, reqOptions());
+export async function swapPositions(firstId, secondId, subDir) {
+    subDir = !subDir ? '' : `${subDir}/`
+    return Api.put(`/admin/${subDir}swap`, {firstId, secondId}, getReqOptions());
 }
 
 export async function uploadFile(binaryFile, path) {
     return Api.upload(`/admin/file?path=${path}`, binaryFile, reqOptions());
+}
+
+export async function getStaticUrl() {
+    return Api.get('/settings/getStaticUrl', getReqOptions(), 'text');
 }
