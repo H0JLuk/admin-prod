@@ -1,4 +1,4 @@
-.landingPageWrapper {
+.categoryPageWrapper {
     margin: 0 auto;
     padding-top: 30px;
     width: 96%;
@@ -6,29 +6,29 @@
     font-family: inherit;
 }
 
-.landingList > div:not(:last-child) {
+.categoryList > div:not(:last-child) {
     margin-bottom: 30px;
 }
 
-.landingPageWrapper h3 {
+.categoryPageWrapper h3 {
     font-family: inherit;
     font-size: 25px;
     font-weight: 500;
     color: rgb(0, 0, 20);
 }
 
-.landingPageWrapper .headerSection {
+.categoryPageWrapper .headerSection {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
 }
 
-.landingPageWrapper .loadingLabel {
+.categoryPageWrapper .loadingLabel {
     position: relative;
 }
 
-.landingPageWrapper .loadingLabel:after {
+.categoryPageWrapper .loadingLabel:after {
     position: absolute;
     content: '';
     animation: dots 1.6s infinite;
@@ -102,17 +102,17 @@
     width: 50%;
 }
 
-.landingForm {
+.categoryForm {
     max-width: 400px;
     width: 100%;
     margin: 0 auto;
 }
 
-.landingForm__field {
+.categoryForm__field {
     padding-top: 36px;
 }
 
-.landingForm__field input {
+.categoryForm__field input {
     display: block;
     height: 20px;
     margin-bottom: 8px;
@@ -124,7 +124,7 @@
     color: rgba(0, 0, 0, 0.55);
 }
 
-.landingForm__field label {
+.categoryForm__field label {
     display: block;
     bottom: 0;
     font-family: Roboto, sans-serif;
@@ -137,7 +137,7 @@
     color: rgba(0, 0, 0, 0.55);
 }
 
-.landingForm__field__activeLabel {
+.categoryForm__field__activeLabel {
     font-size: 14px;
     transform: translateY(calc(-1 * 26px));
     -ms-transform: translateY(calc(-1 * 26px));
@@ -147,7 +147,7 @@
     display: none;
 }
 
-.landingForm__button {
+.categoryForm__button {
     position: absolute;
     bottom: 35px;
     padding: 5px 30px;

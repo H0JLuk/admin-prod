@@ -1,5 +1,5 @@
 
-.landingItem {
+.categoryItem {
     display: flex;
     font-family: inherit;
     padding: 30px;
@@ -7,7 +7,7 @@
     background-color: #fff;
 }
 
-.landingItem .descrWrapper {
+.categoryItem .descrWrapper {
     flex: 5;
     display: flex;
     flex-direction: column;
@@ -15,25 +15,21 @@
 }
 
 .descrWrapper .fieldsWrapper {
-    flex: 9;
+    display: flex;
+    flex-direction: column;
 }
 
-.descrWrapper .landingActions {
+.descrWrapper .categoryActions {
+    flex: 1;
     display: flex;
     justify-content: flex-end;
 }
 
-.descrWrapper .landingActions > button:last-child {
+.descrWrapper .categoryActions > button:last-child {
     margin-left: 20px;
 }
 
-.container__button {
-    margin-right: 30px;
-    padding: 10px 20px;
-}
-
 .arrow_image {
-    /*width: 100%;*/
     height: 30px;
     margin-right: 40px;
     cursor: pointer;
@@ -42,11 +38,11 @@
     background-color: deepskyblue;
 }
 
-.landingItem .imageWrapper {
+.categoryItem .imageWrapper {
     flex: 5;
     min-height: 200px;
     max-height: 200px;
-    max-width: 500px;
+    max-width: 300px;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 50% 50%;
@@ -54,21 +50,21 @@
     border-radius: 4px;
 }
 
-.landingItem  .textFieldFormat {
+.categoryItem  .textFieldFormat {
     display: flex;
     flex-direction: column;
     font-family:Tahoma, sans-serif;
     font-size:16px;
     margin-bottom: 10px;
 }
-.landingItem  .headerFormat {
+.categoryItem  .headerFormat {
     display: flex;
     flex-direction: row;
     font-family:Tahoma, sans-serif;
     font-size:16px;
     margin-bottom: 3px;
 }
-.landingItem .textFormat {
+.categoryItem .textFormat {
     font-family:Tahoma, sans-serif;
     font-size:16px;
     margin-bottom: 10px;

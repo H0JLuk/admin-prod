@@ -1,4 +1,4 @@
-.landingPageWrapper {
+.dzoPageWrapper {
     margin: 0 auto;
     padding-top: 30px;
     width: 96%;
@@ -6,29 +6,29 @@
     font-family: inherit;
 }
 
-.landingList > div:not(:last-child) {
+.dzoList > div:not(:last-child) {
     margin-bottom: 30px;
 }
 
-.landingPageWrapper h3 {
+.dzoPageWrapper h3 {
     font-family: inherit;
     font-size: 25px;
     font-weight: 500;
     color: rgb(0, 0, 20);
 }
 
-.landingPageWrapper .headerSection {
+.dzoPageWrapper .headerSection {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
 }
 
-.landingPageWrapper .loadingLabel {
+.dzoPageWrapper .loadingLabel {
     position: relative;
 }
 
-.landingPageWrapper .loadingLabel:after {
+.dzoPageWrapper .loadingLabel:after {
     position: absolute;
     content: '';
     animation: dots 1.6s infinite;
@@ -52,12 +52,12 @@
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
-    padding: 40px 0 10px;
+    padding: 4px 0 4px;
     color: rgba(0, 0, 0, 0.55);
 }
 
 .modalForm .imageUploadContainer > label {
-    padding-bottom: 15px;
+    padding-bottom: 7px;
     font-family: Roboto, sans-serif;
     font-size: 16px;
     font-weight: normal;
@@ -69,15 +69,15 @@
 }
 
 .modalForm .imageUpload {
-    padding: 40px;
+    padding: 14px;
 
     font-family: Roboto, sans-serif;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 100;
     text-align: center;
 
     border: 1px solid #bcbcbc;
-    border-radius: 4px;
+    border-radius: 1px;
     background-color: #f7f7f7;
 }
 
@@ -89,12 +89,6 @@
     75% { content: '...' }
     100% { content: '' }
 }
-
-
-
-
-
-
 .container {
     position: relative;
     height: 250px;
@@ -102,17 +96,17 @@
     width: 50%;
 }
 
-.landingForm {
+.dzoForm {
     max-width: 400px;
     width: 100%;
     margin: 0 auto;
 }
 
-.landingForm__field {
-    padding-top: 36px;
+.dzoForm__field {
+    padding-top: 18px;
 }
 
-.landingForm__field input {
+.dzoForm__field input {
     display: block;
     height: 20px;
     margin-bottom: 8px;
@@ -124,7 +118,7 @@
     color: rgba(0, 0, 0, 0.55);
 }
 
-.landingForm__field label {
+.dzoForm__field label {
     display: block;
     bottom: 0;
     font-family: Roboto, sans-serif;
@@ -137,7 +131,7 @@
     color: rgba(0, 0, 0, 0.55);
 }
 
-.landingForm__field__activeLabel {
+.dzoForm__field__activeLabel {
     font-size: 14px;
     transform: translateY(calc(-1 * 26px));
     -ms-transform: translateY(calc(-1 * 26px));
@@ -147,7 +141,7 @@
     display: none;
 }
 
-.landingForm__button {
+.dzoForm__button {
     position: absolute;
     bottom: 35px;
     padding: 5px 30px;

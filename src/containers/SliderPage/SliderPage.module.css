@@ -102,17 +102,17 @@
     width: 50%;
 }
 
-.loginForm {
+.sliderForm {
     max-width: 400px;
     width: 100%;
     margin: 0 auto;
 }
 
-.loginForm__field {
+.sliderForm__field {
     padding-top: 36px;
 }
 
-.loginForm__field input {
+.sliderForm__field input {
     display: block;
     height: 20px;
     margin-bottom: 8px;
@@ -124,7 +124,7 @@
     color: rgba(0, 0, 0, 0.55);
 }
 
-.loginForm__field label {
+.sliderForm__field label {
     display: block;
     bottom: 0;
     font-family: Roboto, sans-serif;
@@ -137,7 +137,7 @@
     color: rgba(0, 0, 0, 0.55);
 }
 
-.loginForm__field__activeLabel {
+.sliderForm__field__activeLabel {
     font-size: 14px;
     transform: translateY(calc(-1 * 26px));
     -ms-transform: translateY(calc(-1 * 26px));
@@ -147,7 +147,7 @@
     display: none;
 }
 
-.loginForm__button {
+.sliderForm__button {
     position: absolute;
     bottom: 35px;
     padding: 5px 30px;

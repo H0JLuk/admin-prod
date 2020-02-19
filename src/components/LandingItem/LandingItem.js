@@ -5,12 +5,8 @@ import Button from '../Button/Button'
 import droidSvg from '../../static/images/droid.svg'
 import spinner from '../../static/images/loading-spinner.svg'
 import styles from './LandingItem.module.css'
+import { DELETE, EDIT, MOVE_UP, MOVE_DOWN} from '../Button/ButtonLables'
 
-
-const LANDING_DELETE = 'Удалить';
-const LANDING_EDIT = 'Изменить';
-const MOVE_UP = 'Переместить вверх'
-const MOVE_DOWN = 'Переместить вниз'
 export const UP = -1;
 export const DOWN = 1;
 
@@ -34,21 +30,17 @@ export const LandingItem = (props) => {
         <div className={styles.landingItem}>
             <div className={styles.imageWrapper} style={ { backgroundImage: `url(${url})` } } />
             <div className={styles.descrWrapper}>
-                <div className={styles.fieldsWrapper}>
-                    <p><b>Landing ID:</b> {landingId}</p>
-                    <br/>
-                    <p><b>Header:</b> <br/>{header}</p>
-                    <br/>
-                    <p><b>Description:</b> <br/>{description}</p>
-                    <br/>
-                    {/*<p><b>url:</b> <br/>{url}</p>*/}
-                    {/*<br/>*/}
+                <div className={styles.textFieldFormat}>
+                    <p className={styles.headerFormat}><b>Заголовок:</b></p>
+                    <p className={styles.textFormat}>{header}</p>
+                    <p className={styles.headerFormat}><b>Описание:</b></p>
+                    <p className={styles.textFormat}>{description}</p>
                 </div>
                 <div className={styles.landingActions}>
                     <div> <img src={require('../../static/images/up-arrow.svg')} onClick={handleMoveUp} alt={MOVE_UP} className={styles.arrow_image}/> </div>
                     <div> <img src={require('../../static/images/down-arrow.svg')} onClick={handleMoveDown} alt={MOVE_DOWN} className={styles.arrow_image}/> </div>
-                    <Button type="green" onClick={handleEdit} label={LANDING_EDIT} />
-                    <Button type="red" onClick={handleDelete} label={LANDING_DELETE} />
+                    <Button type="green" onClick={handleEdit} label={EDIT} />
+                    <Button type="red" onClick={handleDelete} label={DELETE} />
                 </div>
             </div>
         </div>
