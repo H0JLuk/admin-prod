@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <groupId>ru.sberbank</groupId>
+    <modelVersion>4.0.0</modelVersion>
+    <version>1.0-SNAPSHOT</version>
+    <artifactId>distributor-admin</artifactId>
+    <properties>
+        <superapp.docker.registry>wdzo-demo.mobile-dev.net:5000</superapp.docker.registry>
+        <superapp.docker.username>dzo</superapp.docker.username>
+        <superapp.docker.password>dzo</superapp.docker.password>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.active.profile>dev</spring.active.profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>testdev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.active.profile>testdev</spring.active.profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.active.profile>prod</spring.active.profile>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <target>
+                        <exec executable="npm">
+                            <arg value="install"/>
+                        </exec>
+                        <exec executable="npm">
+                            <arg value="run"/>
+                            <arg value="build"/>
+                        </exec>
+                    </target>
+                    <failOnError>true</failOnError>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.25.2</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <alias>dzo-distributor-admin</alias>
+                            <name>dzo-distributor-admin</name>
+                            <build>
+                                <assembly>
+                                    <inline>
+                                        <fileSets>
+                                            <fileSet>
+                                                <directory>${project.basedir}/build</directory>
+                                                <outputDirectory>build/</outputDirectory>
+                                            </fileSet>
+                                        </fileSets>
+                                    </inline>
+                                </assembly>
+                                <dockerFileDir>
+                                    ${project.basedir}/devops/${spring.active.profile}/web
+                                </dockerFileDir>
+                            </build>
+                            <registry>${superapp.docker.registry}</registry>
+                        </image>
+                    </images>
+                    <authConfig>
+                        <push>
+                            <username>${superapp.docker.username}</username>
+                            <password>${superapp.docker.password}</password>
+                        </push>
+                    </authConfig>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
