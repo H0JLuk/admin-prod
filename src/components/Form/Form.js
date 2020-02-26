@@ -91,6 +91,7 @@ class Form extends React.PureComponent {
                             label={item.label}
                             value={state[key].value}
                             valid={state[key].valid}
+                            disabled={item.disabled}
                             active={state.active === key}
                             formError={formError}
                             multiline={item.multiline}

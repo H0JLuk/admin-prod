@@ -5,10 +5,12 @@ import {
     deleteDzo,
     getDzoList,
     updateDzo,
-    getBehaviorTypes} from '../../api/services/dzoService';
+    getBehaviorTypes,
+    addApplication} from '../../api/services/dzoService';
 import {getCategoryList} from '../../api/services/categoryService';
-import {DZO_EDIT_FROM, DZO_ADD_FROM} from '../../components/Form/forms';
+import {DZO_EDIT_FROM, DZO_ADD_FROM, APP_EDIT_FROM} from '../../components/Form/forms';
 import {getErrorText} from '../../constants/errors';
+import applicationTypes from '../../constants/applicationTypes';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import DzoItem from '../../components/DzoItem/DzoItem';
 import Form from '../../components/Form/Form';
@@ -17,6 +19,9 @@ import cross from '../../static/images/cross.svg';
 import styles from './DzoPage.module.css';
 import {populateFormWithData} from "../../components/Form/formHelper"
 import {CLOSE, SAVE} from '../../components/Button/ButtonLables'
+import classNames from 'classnames';
+import inputStyles from '../../components/Input/Input.module.css';
+import {isRequired} from "../../utils/validators";
 
 const DZOLIST_GET_ERROR = 'Ошибка получения ДЗО!';
 const DZO_DELETE_ERROR = 'Ошибка удаления ДЗО!';
@@ -27,30 +32,24 @@ const DZO_LIST_TITLE = 'Список ДЗО';
 const LOADING_LIST_LABEL = 'Загрузка';
 const DZO_DIR = 'dzo';
 const SET_BEHAVIOR = 'Укажите поведение.'
+const SET_APPLICATION_TYPE = 'Укажите тип приложения.'
+const SET_APPLICATION_URL = 'Укажите ссылку на приложение.'
 const DZO_CODE_NOT_UNIQUE = 'ДЗО с таким кодом уже есть!'
 
 const LoadingStatus = ({ loading }) => (
     <p className={styles.loadingLabel}>{ loading ? LOADING_LIST_LABEL : DZOLIST_GET_ERROR }</p>
 )
 
+const initialState = { editingDzo: { id: null, name: null, screenUrl: null, logoUrl: null, header: null, description: null,
+    cardUrl: null, dzoCode: null, webUrl: null, behaviorType: null, behaviorId: '' },
+    categoryIdList: [], editingAppList: null, editingAppUrl: '', editingAppType: null
+};
+
 class DzoPage extends Component {
     constructor(props) {
         super(props);
         this.dzoRef = React.createRef();
-        this.state = {
-            editingDzo: {
-                id: null,
-                name: null,
-                screenUrl: null,
-                logoUrl: null,
-                header: null,
-                description: null,
-                cardUrl: null,
-                dzoCode: null,
-                webUrl: null,
-                behaviorType: null,
-                behaviorId: '',
-            },
+        this.state = { ...initialState,
             cardFile: null,
             screenFile: null,
             logoFile: null,
@@ -58,7 +57,6 @@ class DzoPage extends Component {
             behaviorTypes: [],
             dzoList: [],
             categories: [],
-            categoryIdList: [],
             isOpen: false,
             formError: null
         };
@@ -68,6 +66,8 @@ class DzoPage extends Component {
         this.uploadFiles = this.uploadFiles.bind(this);
         this.reloadDzo = this.reloadDzo.bind(this);
         this.pushToDzoList = this.pushToDzoList.bind(this);
+        this.handleAppTypeChange = this.handleAppTypeChange.bind(this);
+        this.updateEditingAppUrl = this.updateEditingAppUrl.bind(this);
     }
 
     componentDidMount() {
@@ -89,9 +89,7 @@ class DzoPage extends Component {
         });
     }
 
-    clearState = () => { this.setState({ editingDzo: { id: null, name: null, screenUrl: null, logoUrl: null, header: null, description: null,
-                cardUrl: null, dzoCode: null, webUrl: null, behaviorType: null, behaviorId: '' }, categoryIdList: [] })
-    }
+    clearState = () => { this.setState(initialState) }
 
     openModal = () => { this.setState({ isOpen: true }) }
 
@@ -128,6 +126,10 @@ class DzoPage extends Component {
         }, () => { this.openModal() })
     }
 
+    handleAddAppLink = (id, name, appList) => {
+        this.setState({ editingDzo: { id: id, name: name }, editingAppList: appList}, () => this.openModal())
+    }
+
     handleChange(event) {
         this.setState({ editingDzo: {...this.state.editingDzo,
                 behaviorId: event.target.value,
@@ -148,6 +150,19 @@ class DzoPage extends Component {
         categoryList.push(event.target.value)
         }
         this.setState({categoryIdList: categoryList});
+    }
+
+    handleAppTypeChange({target: { value } }) {
+        const appItem = this.state.editingAppList.find(element => (element.applicationType === value))
+        if (appItem) {
+            this.setState({editingAppType: value, editingAppUrl: appItem.applicationUrl});
+        } else {
+            this.setState({editingAppType: value, editingAppUrl: ''});
+        }
+    }
+
+    updateEditingAppUrl(event) {
+        this.setState({ editingAppUrl: event.target.value})
     }
 
     handleImageSelect(event) {
@@ -192,9 +207,11 @@ class DzoPage extends Component {
     renderModalForm = () => {
         const {formError, editingDzo, categories, behaviorTypes} = this.state;
         const formData = editingDzo.id != null ? populateFormWithData(DZO_EDIT_FROM, {
-                  header: editingDzo.header,
-                  description: editingDzo.description,
-                  webUrl: editingDzo.webUrl
+            dzoName: editingDzo.name,
+            header: editingDzo.header,
+            description: editingDzo.description,
+            dzoCode: editingDzo.dzoCode,
+            webUrl: editingDzo.webUrl
         }) : DZO_ADD_FROM
         return (
             <div className={styles.modalForm}>
@@ -243,6 +260,58 @@ class DzoPage extends Component {
                     <input type="file" id="dzoLogoImage" ref={this.dzoRef} className={styles.imageUpload} onChange={this.handleImageSelect}/>
                 </form>
             </div>
+        )
+    }
+
+    renderAppEditModalForm = () => {
+        const {formError, editingDzo} = this.state;
+        const formData = populateFormWithData(APP_EDIT_FROM, {
+            dzoName: editingDzo.name,
+        })
+
+
+        return (
+        <div className={styles.modalAppForm}>
+            <img src={cross} onClick={this.closeModal} className={styles.crossSvg} alt={CLOSE} />
+            <Form
+                data={formData}
+                buttonText={SAVE}
+                onSubmit={this.appUrlSubmit}
+                formClassName={styles.appForm}
+                fieldClassName={styles.appForm__field}
+                activeLabelClassName={styles.appForm__field__activeLabel}
+                buttonClassName={styles.appForm__button}
+                errorText={getErrorText(formError)}
+                formError={!!formError}
+                errorClassName={styles.error}
+            />
+            <div className={styles.appForm}>
+                <div className={classNames(styles.appForm__field, inputStyles.field)}>
+                    <label className={classNames(inputStyles.label,styles.appForm__field__activeLabel)}>
+                        Тип приложения:<br/>
+                    </label>
+                    <select className={styles.appForm} value={this.editingAppType} onChange={this.handleAppTypeChange}>
+                        <option key={0} value={''}> Не задано </option>
+                        {applicationTypes.map(option => { return <option id={option.type} key={`application_${option.type}`} value={option.type}>{option.type}</option>
+                        })}
+                    </select>
+                </div>
+                <div className={classNames(styles.appForm__field, inputStyles.field)}>
+                    <label htmlFor="appUrl" className={classNames(inputStyles.label,styles.appForm__field__activeLabel)}>
+                        Ссылка на приложение:<br/>
+                    </label>
+                        <input type='text'
+                               id='appUrl'
+                               name='appUrl'
+                               className={inputStyles.input}
+                               onChange={this.updateEditingAppUrl}
+                               value={this.state.editingAppUrl}
+                               required pattern="^[^ ]*"
+                                />
+                </div>
+            </div>
+
+        </div>
         )
     }
 
@@ -302,7 +371,7 @@ class DzoPage extends Component {
             alert(SET_BEHAVIOR)
             return;
         }
-        if (this.checkDzoCodeUnique(data.dzoCode)) {
+        if (!this.state.editingDzo.dzoCode && this.checkDzoCodeUnique(data.dzoCode)) {
             alert(DZO_CODE_NOT_UNIQUE)
             return;
         }
@@ -347,6 +416,34 @@ class DzoPage extends Component {
             })
     }
 
+    appUrlSubmit = () => {
+        if (!this.state.editingAppType) {
+            alert(SET_APPLICATION_TYPE)
+            return;
+        }
+        if (!isRequired(this.state.editingAppUrl)) {
+            alert(SET_APPLICATION_URL)
+            return;
+        }
+        addApplication({
+            dzoId: this.state.editingDzo.id,
+            applicationType: this.state.editingAppType,
+            applicationUrl: this.state.editingAppUrl})
+            .then(() => {
+                const dzoList = this.state.dzoList.slice();
+                const curDzo = dzoList.find(elem => (elem.dzoId === this.state.editingDzo.id))
+                curDzo.applicationList.find(app => {
+                    if (app.applicationType === this.state.editingAppType){
+                        app.applicationUrl = this.state.editingAppUrl
+                    }
+                })
+                this.setState({ dzoList: dzoList }, this.closeModal)
+            })
+            .catch(error => {
+                console.log(error.message)
+            })
+    }
+
     renderDzoList = () => {
         const { dzoList } = this.state
         const isSuccess = Array.isArray(dzoList)
@@ -360,6 +457,7 @@ class DzoPage extends Component {
                                     key={`dzoItem-${i}`}
                                     handleDelete={this.handleDelete}
                                     handleEdit={this.handleEdit}
+                                    handleAddAppLink={this.handleAddAppLink}
                                     {...dzo}
                                 />
                             ) : <LoadingStatus loading />
@@ -373,7 +471,7 @@ class DzoPage extends Component {
         <CustomModal
             isOpen={this.state.isOpen}
             onRequestClose={this.closeModal}>
-            {this.renderModalForm()}
+            {(this.state.editingAppList !== null) ? this.renderAppEditModalForm() : this.renderModalForm()}
         </CustomModal>
     )
 

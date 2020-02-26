@@ -37,9 +37,25 @@
 .modalForm {
     position: relative;
     padding: 40px 40px 80px 40px;
+    height: calc(100vh - 300px);
+    overflow-y: auto;
+}
+
+.modalAppForm {
+    position: relative;
+    padding: 40px 40px 80px 40px;
+    height: 150px;
+    overflow-y: auto;
 }
 
 .modalForm .crossSvg {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 35px;
+}
+
+.modalAppForm .crossSvg {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -143,7 +159,7 @@
 
 .dzoForm__button {
     position: absolute;
-    bottom: 35px;
+    top: 670px;
     padding: 5px 30px;
 }
 
@@ -152,3 +168,69 @@
     color: #f6650a;
     font-family: Roboto, sans-serif;
 }
+
+.appForm {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+.appForm__field {
+    margin-bottom: 18px;
+    padding-top: 18px;
+}
+
+.appUrl {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.appForm__field input {
+    display: block;
+    height: 20px;
+    margin-bottom: 8px;
+    bottom: 6px;
+    padding-left: 2px;
+    width: calc(100% - 30px);
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.appForm__field label {
+    display: block;
+    bottom: 0;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.appForm__field__activeLabel {
+    font-size: 14px;
+    transform: translateY(calc(-1 * 26px));
+    -ms-transform: translateY(calc(-1 * 26px));
+}
+
+.appForm__button {
+    position: absolute;
+    top: 240px;
+    padding: 5px 30px;
+}
+
+.appForm__field input:invalid {
+    border-bottom: 1px solid #f6650a;
+}
+
+input[type="text"]:disabled {
+    background: #ccc;
+    width: 100%;
+}
+
+input[type="text"]:disabled + div > svg {
+    display: none;
+}
+
