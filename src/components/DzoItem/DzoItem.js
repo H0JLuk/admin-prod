@@ -7,8 +7,10 @@ import spinner from '../../static/images/loading-spinner.svg'
 import styles from './DzoItem.module.css'
 import { DELETE, EDIT } from '../Button/ButtonLables'
 
+const ADD_EDIT_APP_URL = 'Add/Edit App url';
+
 const DzoItem = (props) => {
-    const { dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList } = props
+    const { dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList, applicationList } = props
     const [curCardUrl, setCardUrl] = useState(spinner)
     const [curScreenUrl, setScreenUrl] = useState(spinner)
     const [curLogoUrl, setLogoUrl] = useState(spinner)
@@ -34,6 +36,9 @@ const DzoItem = (props) => {
 
     const handleDelete = () => { props.handleDelete(dzoId) }
     const handleEdit = () => { props.handleEdit(dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList) }
+    const handleAddAppLink = () => {
+        props.handleAddAppLink(dzoId, dzoName, applicationList)
+    }
 
     return (
         <div className={styles.dzoItem}>
@@ -54,7 +59,7 @@ const DzoItem = (props) => {
                 <div className={styles.textFieldFormat}>
                     <p className={styles.headerFormat}><b>Название: </b></p>
                     <p className={styles.textFormat}>{dzoName}</p>
-                    <p className={styles.headerFormat}><b>Заготовок: </b></p>
+                    <p className={styles.headerFormat}><b>Заголовок: </b></p>
                     <p className={styles.textFormat}>{header}</p>
                     <p className={styles.headerFormat}><b>Описание: </b></p>
                     <p className={styles.textFormat}>{description}</p>
@@ -66,6 +71,7 @@ const DzoItem = (props) => {
                     <p className={styles.textFormat}>{behaviorType}</p>
                 </div>
                 <div className={styles.dzoActions}>
+                    <Button type="green" onClick={handleAddAppLink} label={ADD_EDIT_APP_URL} />
                     <Button type="green" onClick={handleEdit} label={EDIT} />
                     <Button type="red" onClick={handleDelete} label={DELETE} />
                 </div>
@@ -88,6 +94,7 @@ DzoItem.propTypes = {
     webUrl: PropTypes.string,
     behaviorType: PropTypes.string.isRequired,
     categoryList: PropTypes.array.isRequired,
+    applicationList: PropTypes.array.isRequired,
 }
 
 export default memo(DzoItem);

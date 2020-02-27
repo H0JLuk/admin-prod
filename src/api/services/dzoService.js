@@ -20,3 +20,7 @@ export async function updateDzo(id, dzoDto) {
 export async function getBehaviorTypes() {
     return Api.get('/dzo/behaviorTypes', getReqOptions());
 }
+
+export async function addApplication(newApplication) {
+    return Api.post('/admin/application', newApplication, getReqOptions());
+}

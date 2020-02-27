@@ -31,7 +31,7 @@
     justify-content: flex-end;
 }
 
-.descrWrapper .dzoActions > button:last-child {
+.descrWrapper .dzoActions > button {
     margin-left: 20px;
 }
 

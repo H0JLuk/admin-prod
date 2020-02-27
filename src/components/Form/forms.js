@@ -143,6 +143,16 @@ export const DZO_ADD_FROM = {
 
 };
 export const DZO_EDIT_FROM = {
+    dzoName: {
+        label: 'Имя ДЗО (read only)',
+        value: '',
+        type: 'text',
+        disabled: true,
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    },
     header: {
         label: 'Header',
         value: '',
@@ -161,6 +171,16 @@ export const DZO_EDIT_FROM = {
         validators: [],
         mask: null
     },
+    dzoCode: {
+        label: 'Код ДЗО (read only)',
+        value: '',
+        type: 'text',
+        disabled: true,
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    },
     webUrl: {
         label: 'Web URL',
         value: '',
@@ -170,4 +190,16 @@ export const DZO_EDIT_FROM = {
         validators: [],
         mask: null
     }
+};
+export const APP_EDIT_FROM = {
+    dzoName: {
+        label: 'Имя ДЗО (read only)',
+        value: '',
+        type: 'text',
+        disabled: true,
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    },
 };
