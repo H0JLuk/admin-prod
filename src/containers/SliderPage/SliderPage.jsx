@@ -96,12 +96,13 @@ class SliderPage extends Component {
 
     handleEdit = (id, dzoId, url) => {
         const dzoName = this.getDzoName(dzoId)
-        this.setState({editingBanner: {id, dzoId: dzoId, url, dzoName }}, () => { this.openModal() })
+        this.setState({editingBanner: {id, dzoId, url, dzoName }}, () => { this.openModal() })
     }
 
     handleChangeDzo(event) {
-        const dzoName = this.getDzoName(event.target.value)
-        this.setState({ editingBanner: {...this.state.editingBanner, dzoId: event.target.value, dzoName }})
+        const { options, selectedIndex, value: dzoId } = event.target;
+        const dzoName = options[selectedIndex].text;
+        this.setState(prevState => ({editingBanner: { ...prevState.editingBanner, dzoId, dzoName }}))
     }
 
     renderModalForm = () => {

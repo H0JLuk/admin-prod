@@ -131,11 +131,11 @@ class DzoPage extends Component {
     }
 
     handleChange(event) {
-        this.setState({ editingDzo: {...this.state.editingDzo,
-                behaviorId: event.target.value,
-                behaviorType: event.target.attributes[0].ownerElement.selectedOptions[0].text
-        }});
+        const { options, selectedIndex, value: behaviorId } = event.target;
+        const behaviorType = options[selectedIndex].text;
+        this.setState(prevState => ({ editingDzo: {...prevState.editingDzo, behaviorId, behaviorType }}));
     }
+
     handleClick(event) {
         const categoryList = [];
         this.state.categoryIdList.forEach(elem => {
