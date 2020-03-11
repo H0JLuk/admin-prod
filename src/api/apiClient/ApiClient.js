@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {ROUTE} from "../../constants/route";
 
 const defaultOptions = {
     headers: {
@@ -38,6 +39,9 @@ export default class ApiClient {
             }
 
             if (response.status >= 400) {
+                if (response.status == 403) {
+                    window.location.href = ROUTE.LOGIN
+                }
                 return this.errorMessageHandler(response);
             }
 
