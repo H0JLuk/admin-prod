@@ -8,17 +8,17 @@ import styles from './BannerItem.module.css'
 import { DELETE, EDIT } from '../Button/ButtonLables'
 
 const BannerItem = (props) => {
-    const { bannerId, dzoId, bannerUrl, dzoName } = props
-    const [url, setUrl] = useState(spinner)
+    const { bannerId, dzoId, bannerUrl, dzoName } = props;
+    const [url, setUrl] = useState(spinner);
     useEffect(() => {
         loadImageWithPromise(bannerUrl, droidSvg)
             .then(url => { setUrl(url) })
             .catch(failUrl => { setUrl(failUrl) })
-    }, [bannerUrl])
+    }, [bannerUrl]);
 
 
-    const handleDelete = () => { props.handleDelete(bannerId) }
-    const handleEdit = () => { props.handleEdit(bannerId, dzoId, bannerUrl) }
+    const handleDelete = () => { props.handleDelete(bannerId) };
+    const handleEdit = () => { props.handleEdit(bannerId, dzoId, bannerUrl) };
 
     return (
         <div className={styles.bannerItem}>
@@ -34,15 +34,15 @@ const BannerItem = (props) => {
             </div>
         </div>
     )
-}
+};
 
 BannerItem.propTypes = {
     bannerId: PropTypes.number.isRequired,
     dzoId: PropTypes.number.isRequired,
-    dzoName: PropTypes.string,
+    dzoName: PropTypes.string.isRequired,
     bannerUrl: PropTypes.string.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleEdit: PropTypes.func.isRequired
-}
+};
 
 export default memo(BannerItem);

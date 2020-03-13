@@ -1,21 +1,22 @@
 import React, { Component, Fragment } from 'react';
-import {uploadFile, getStaticUrl, swapPositions} from '../../api/services/adminService';
+import { uploadFile, getStaticUrl, swapPositions } from '../../api/services/adminService';
 import {
     addCategory,
     deleteCategory,
     getCategoryList,
     updateCategory
 } from '../../api/services/categoryService';
-import {CATEGORY_EDIT_FROM, CATEGORY_ADD_FROM} from '../../components/Form/forms';
-import {getErrorText} from '../../constants/errors';
+import { CATEGORY_EDIT_FROM, CATEGORY_ADD_FROM } from '../../components/Form/forms';
+import { getErrorText } from '../../constants/errors';
 import CustomModal from '../../components/CustomModal/CustomModal';
-import {CategoryItem, UP, DOWN} from '../../components/CategoryItem/CategoryItem';
+import CategoryItem from '../../components/CategoryItem/CategoryItem';
+import { UP, DOWN } from '../../constants/movementDirections'
 import Form from '../../components/Form/Form';
 import Button from '../../components/Button/Button';
 import cross from '../../static/images/cross.svg';
 import styles from './CategoryPage.module.css';
-import {populateFormWithData} from "../../components/Form/formHelper"
-import {CLOSE, SAVE} from '../../components/Button/ButtonLables'
+import { populateFormWithData } from '../../components/Form/formHelper';
+import { CLOSE, SAVE } from '../../components/Button/ButtonLables';
 
 const CATEGORIES_GET_ERROR = 'Ошибка получения категорий!';
 const CATEGORY_DELETE_ERROR = 'Ошибка удаления категории!';
@@ -26,11 +27,11 @@ const CATEGORY_LIST_TITLE = 'Список категорий';
 const LOADING_LIST_LABEL = 'Загрузка';
 const UPLOAD_IMAGE_PLEASE = 'Пожалуйста загрузите изображение!';
 const CATEGORY_DIR = 'category';
-const CATEGORY_MOVE_ERROR = 'Ошибка изменения порядка категорий'
+const CATEGORY_MOVE_ERROR = 'Ошибка изменения порядка категорий';
 
 const LoadingStatus = ({ loading }) => (
     <p className={styles.loadingLabel}>{ loading ? LOADING_LIST_LABEL : CATEGORIES_GET_ERROR }</p>
-)
+);
 
 class CategoryPage extends Component {
     constructor(props) {
@@ -54,10 +55,10 @@ class CategoryPage extends Component {
 
     componentDidMount() {
         getStaticUrl().then(staticUrl => {
-            this.setState({ staticUrl: staticUrl })
+            this.setState({ staticUrl: staticUrl });
             return getCategoryList();
         }).then(response => {
-            const { categoryList } = response
+            const { categoryList } = response;
             this.setState({ categories: categoryList })
         }).catch(() => {
             this.setState({ staticUrl: null, categories: [] })
@@ -66,25 +67,25 @@ class CategoryPage extends Component {
 
     clearState = () => {
         this.setState({ editingCategory: { id: null, name: null, description: null, url: null, isActive: null } })
-    }
+    };
 
-    openModal = () => { this.setState({ isOpen: true }) }
+    openModal = () => { this.setState({ isOpen: true }) };
 
-    closeModal = () => { this.setState({ isOpen: false }, this.clearState) }
+    closeModal = () => { this.setState({ isOpen: false }, this.clearState) };
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
             deleteCategory(id).then(() => {
-                const croppedCategories = this.state.categories.filter(category => category.categoryId !== id)
+                const croppedCategories = this.state.categories.filter(category => category.categoryId !== id);
                 this.setState({ categories: croppedCategories })
             }).catch(() => { alert(CATEGORY_DELETE_ERROR) })
         }
-    }
+    };
 
     handleEdit = (id, name, description, url, isActive ) => {
         this.setState({
             editingCategory: { id, name, description, url, isActive }}, () => { this.openModal() })
-    }
+    };
 
     handleInputChange(event) {
         const target = event.target;
@@ -96,20 +97,20 @@ class CategoryPage extends Component {
     }
 
     handleMove = (id, direction) => {
-        const {categories} = this.state
-        let position = categories.findIndex((i) => i.categoryId === id)
+        const {categories} = this.state;
+        let position = categories.findIndex((i) => i.categoryId === id);
         if (position < 0) {
             throw new Error('Given item not found.')
         } else if ((direction === UP && position === 0) || (direction === DOWN && position === categories.length - 1)) {
             return
         }
-        const item = categories[position]
-        const newCategories = categories.filter((i) => i.categoryId !== id)
-        newCategories.splice(position + direction, 0, item)
+        const item = categories[position];
+        const newCategories = categories.filter((i) => i.categoryId !== id);
+        newCategories.splice(position + direction, 0, item);
         swapPositions(id, categories[position + direction].categoryId, CATEGORY_DIR).then(() => {
             this.setState({categories: newCategories})
         }).catch(() => { alert(CATEGORY_MOVE_ERROR) })
-    }
+    };
 
     renderModalForm = () => {
         const {formError, editingCategory} = this.state;
@@ -149,33 +150,33 @@ class CategoryPage extends Component {
                 </form>
             </div>
         )
-    }
+    };
 
     reloadCategory(categoryDto) {
-        const categories = this.state.categories.slice()
+        const categories = this.state.categories.slice();
         categories.find(element => {
             if (element.categoryId === this.state.editingCategory.id) {
                 if (this.categoryRef.current.files.length > 0 && element.categoryUrl === this.state.editingCategory.url) {
-                    element.categoryUrl = ''
+                    element.categoryUrl = '';
                     this.setState(categories);
                 }
-                element.categoryName = categoryDto.categoryName
-                element.categoryDescription = categoryDto.categoryDescription
-                element.categoryUrl = this.state.staticUrl + categoryDto.categoryUrl
+                element.categoryName = categoryDto.categoryName;
+                element.categoryDescription = categoryDto.categoryDescription;
+                element.categoryUrl = this.state.staticUrl + categoryDto.categoryUrl;
                 element.isActive = this.state.editingCategory.isActive
             }
-        })
+        });
         this.setState({categories}, this.closeModal)
     }
 
     pushToCategoriesList(categoryId, categoryDto){
-        const  { id }  = categoryId
+        const  { id }  = categoryId;
         const newCategoryItem = {
             ...categoryDto,
             categoryUrl: this.state.staticUrl + categoryDto.categoryUrl,
             dzoList: null, isActive: true, categoryId: id
-        }
-        const categories = [newCategoryItem, ...this.state.categories]
+        };
+        const categories = [newCategoryItem, ...this.state.categories];
         this.setState({categories}, this.closeModal)
     }
 
@@ -189,7 +190,7 @@ class CategoryPage extends Component {
             categoryDto = {
                 ...data, isActive: this.state.editingCategory.isActive,
                 categoryUrl: this.state.editingCategory.url.slice(this.state.staticUrl.length)
-            }
+            };
             updateCategory(this.state.editingCategory.id, categoryDto).then(() => {
                 this.reloadCategory(categoryDto)
             }).catch(error => { console.log(error.message) })
@@ -199,7 +200,7 @@ class CategoryPage extends Component {
 
             uploadFile(imageFile, imageName)
                 .then(response => {
-                    categoryDto = { ...data, isActive: this.state.editingCategory.isActive, categoryUrl: response.path }
+                    categoryDto = { ...data, isActive: this.state.editingCategory.isActive, categoryUrl: response.path };
                     if (this.state.editingCategory.id !== null) {
                         return updateCategory(this.state.editingCategory.id, categoryDto)
                     } else {
@@ -214,15 +215,15 @@ class CategoryPage extends Component {
                     }
                 })
                 .catch(error => {
-                    alert(IMAGE_UPLOAD_ERROR)
+                    alert(IMAGE_UPLOAD_ERROR);
                     console.log(error.message)
                 })
         }
-    }
+    };
 
     renderCategoriesList = () => {
-        const { categories } = this.state
-        const isSuccess = Array.isArray(categories)
+        const { categories } = this.state;
+        const isSuccess = Array.isArray(categories);
         return (
             <Fragment>
                 {
@@ -241,7 +242,7 @@ class CategoryPage extends Component {
                 }
             </Fragment>
         )
-    }
+    };
 
     renderModifyModal = () => (
         <CustomModal
@@ -249,12 +250,12 @@ class CategoryPage extends Component {
             onRequestClose={this.closeModal}>
             {this.renderModalForm()}
         </CustomModal>
-    )
+    );
 
     render() {
         const openWithParam = () => {
            this.openModal()
-        }
+        };
         return (
             <div className={styles.categoryPageWrapper}>
                 { this.renderModifyModal() }

@@ -1,26 +1,27 @@
 import React, { Component, Fragment } from 'react';
-import {getStaticUrl, swapPositions, uploadFile} from '../../api/services/adminService';
+import { getStaticUrl, swapPositions, uploadFile } from '../../api/services/adminService';
 import {
     addLanding,
     deleteLanding,
     getLandingList,
     updateLanding
 } from '../../api/services/landingService';
-import {LANDING_EDIT_FORM} from '../../components/Form/forms';
-import {getErrorText} from '../../constants/errors';
+import { LANDING_EDIT_FORM } from '../../components/Form/forms';
+import { getErrorText } from '../../constants/errors';
 import CustomModal from '../../components/CustomModal/CustomModal';
-import {LandingItem, UP, DOWN} from '../../components/LandingItem/LandingItem';
+import LandingItem from '../../components/LandingItem/LandingItem';
+import { UP, DOWN } from '../../constants/movementDirections';
 import Form from '../../components/Form/Form';
 import Button from '../../components/Button/Button';
 import cross from '../../static/images/cross.svg';
 import styles from './LandingPage.module.css';
-import {populateFormWithData} from "../../components/Form/formHelper"
-import {CLOSE, SAVE} from '../../components/Button/ButtonLables'
+import { populateFormWithData } from "../../components/Form/formHelper"
+import { CLOSE, SAVE } from '../../components/Button/ButtonLables'
 
 const LANDINGS_GET_ERROR = 'Ошибка получения лендингов!';
 const LANDINGS_DELETE_ERROR = 'Ошибка удаления лендинга!';
 const IMAGE_UPLOAD_ERROR = 'Ошибка загрузки изображения!';
-const LANDINGS_MOVE_ERROR = 'Ошибка изменения порядка лендингов'
+const LANDINGS_MOVE_ERROR = 'Ошибка изменения порядка лендингов';
 const ADD_LANDING_TITLE = 'Добавить лендинг';
 const REMOVE_QUESTION = 'Удалить лендинг?';
 const LANDINGS_LIST_TITLE = 'Список лендингов';
@@ -30,7 +31,7 @@ const LANDING_DIR = 'landing';
 
 const LoadingStatus = ({ loading }) => (
     <p className={styles.loadingLabel}>{ loading ? LOADING_LIST_LABEL : LANDINGS_GET_ERROR }</p>
-)
+);
 
 class LandingPage extends Component {
     constructor(props) {
@@ -52,10 +53,10 @@ class LandingPage extends Component {
 
     componentDidMount() {
         getStaticUrl().then(serverUrl => {
-            this.setState({ staticServerUrl: serverUrl })
+            this.setState({ staticServerUrl: serverUrl });
             return getLandingList();
         }).then(response => {
-            const { landingDtoList } = response
+            const { landingDtoList } = response;
             this.setState({ landings: landingDtoList })
         }).catch(() => {
             this.setState({ staticServerUrl: null, landings: [] })
@@ -64,40 +65,40 @@ class LandingPage extends Component {
 
     clearState = () => {
         this.setState({ editingLanding: { landingId: null, header: null, description: null, imageUrl: null } })
-    }
+    };
 
-    openModal = () => { this.setState({ isOpen: true }) }
+    openModal = () => { this.setState({ isOpen: true }) };
 
-    closeModal = () => { this.setState( { isOpen: false }, this.clearState) }
+    closeModal = () => { this.setState( { isOpen: false }, this.clearState) };
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
             deleteLanding(id).then(() => {
-                const croppedLandings = this.state.landings.filter(landing => landing.landingId !== id)
+                const croppedLandings = this.state.landings.filter(landing => landing.landingId !== id);
                 this.setState({ landings: croppedLandings })
             }).catch(() => { alert(LANDINGS_DELETE_ERROR) })
         }
-    }
+    };
 
     handleMove = (id, direction) => {
-        const {landings} = this.state
-        let position = landings.findIndex((i) => i.landingId === id)
+        const {landings} = this.state;
+        let position = landings.findIndex((i) => i.landingId === id);
         if (position < 0) {
             throw new Error('Given item not found.')
         } else if ((direction === UP && position === 0) || (direction === DOWN && position === landings.length - 1)) {
             return
         }
-        const item = landings[position]
-        const newLandings = landings.filter((i) => i.landingId !== id)
-        newLandings.splice(position + direction, 0, item)
+        const item = landings[position];
+        const newLandings = landings.filter((i) => i.landingId !== id);
+        newLandings.splice(position + direction, 0, item);
         swapPositions(id, landings[position + direction].landingId, LANDING_DIR).then(() => {
             this.setState({landings: newLandings})
         }).catch(() => { alert(LANDINGS_MOVE_ERROR) })
-    }
+    };
 
     handleEdit = (landingId, header, description, imageUrl) => {
         this.setState({editingLanding: {landingId, header, description, imageUrl}}, () => { this.openModal() })
-    }
+    };
 
     renderModalForm = () => {
         const {formError, editingLanding } = this.state;
@@ -128,23 +129,23 @@ class LandingPage extends Component {
                 </form>
             </div>
         )
-    }
+    };
 
     reloadLandings = (data, url) => {
-        const landings = this.state.landings.slice()
+        const landings = this.state.landings.slice();
         landings.find(elem => {
             if (elem.landingId === this.state.editingLanding.landingId) {
                 if (this.landingRef.current.files.length > 0 && elem.imageUrl === url) {
-                    elem.imageUrl = ''
+                    elem.imageUrl = '';
                     this.setState(landings)
                 }
-                elem.imageUrl = url
-                elem.header = data.header
+                elem.imageUrl = url;
+                elem.header = data.header;
                 elem.description = data.description
             }
-        })
+        });
         this.setState({landings}, this.closeModal)
-    }
+    };
 
     onSubmit = (data) => {
         if (!this.landingRef.current.files.length && !this.state.editingLanding.imageUrl) {
@@ -153,9 +154,9 @@ class LandingPage extends Component {
         }
         let landingDto;
         if (this.state.editingLanding.landingId !== null && !this.landingRef.current.files.length) {
-            landingDto = { ...data, imageUrl: this.state.editingLanding.imageUrl.slice(this.state.staticServerUrl.length) }
+            landingDto = { ...data, imageUrl: this.state.editingLanding.imageUrl.slice(this.state.staticServerUrl.length) };
             updateLanding(this.state.editingLanding.landingId, landingDto)
-                .catch(error => { console.log(error.message) })
+                .catch(error => { console.log(error.message) });
             this.reloadLandings(data, this.state.editingLanding.imageUrl)
         } else {
             const imageFile = this.landingRef.current.files[0];
@@ -163,7 +164,7 @@ class LandingPage extends Component {
 
             uploadFile(imageFile, imageName)
                 .then(response => {
-                    landingDto = {...data, imageUrl: response.path}
+                    landingDto = {...data, imageUrl: response.path};
                     if (this.state.editingLanding.landingId !== null) {
                         return updateLanding(this.state.editingLanding.landingId, landingDto)
                     } else {
@@ -174,22 +175,22 @@ class LandingPage extends Component {
                     if (this.state.editingLanding.landingId !== null) {
                         this.reloadLandings(data, this.state.staticServerUrl + landingDto.imageUrl)
                     } else {
-                        const { id } = response
-                        const newLandingItem = {...landingDto, landingId: id, imageUrl: this.state.staticServerUrl + landingDto.imageUrl}
-                        const landings = [...this.state.landings, newLandingItem]
+                        const { id } = response;
+                        const newLandingItem = {...landingDto, landingId: id, imageUrl: this.state.staticServerUrl + landingDto.imageUrl};
+                        const landings = [...this.state.landings, newLandingItem];
                         this.setState({landings}, this.closeModal)
                     }
                 })
                 .catch(error => {
-                    alert(IMAGE_UPLOAD_ERROR)
+                    alert(IMAGE_UPLOAD_ERROR);
                     console.log(error.message)
                 })
         }
-    }
+    };
 
     renderLandingsList = () => {
-        const { landings } = this.state
-        const isSuccess = Array.isArray(landings)
+        const { landings } = this.state;
+        const isSuccess = Array.isArray(landings);
         return (
             <Fragment>
                 {
@@ -208,7 +209,7 @@ class LandingPage extends Component {
                 }
             </Fragment>
         )
-    }
+    };
 
     renderModifyModal = () => (
         <CustomModal
@@ -216,12 +217,12 @@ class LandingPage extends Component {
             onRequestClose={this.closeModal}>
             {this.renderModalForm()}
         </CustomModal>
-    )
+    );
 
     render() {
         const openWithParam = () => {
             this.openModal()
-        }
+        };
         return (
             <div className={styles.landingPageWrapper}>
                 { this.renderModifyModal() }
@@ -231,7 +232,6 @@ class LandingPage extends Component {
                         <Button
                             onClick={openWithParam}
                             label={ADD_LANDING_TITLE}
-                            className={styles.container__button}
                             font="roboto"
                             type="green"
                         />

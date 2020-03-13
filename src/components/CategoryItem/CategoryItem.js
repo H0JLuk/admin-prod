@@ -6,26 +6,24 @@ import SimpleDzoItem from '../DzoItem/SimpleDzoItem'
 import droidSvg from '../../static/images/droid.svg'
 import spinner from '../../static/images/loading-spinner.svg'
 import styles from './CategoryItem.module.css'
-import { DELETE, EDIT, MOVE_UP, MOVE_DOWN} from '../Button/ButtonLables'
+import { DELETE, EDIT, MOVE_UP, MOVE_DOWN } from '../Button/ButtonLables'
+import { UP, DOWN } from '../../constants/movementDirections'
 
-export const UP = -1;
-export const DOWN = 1;
-
-export const CategoryItem = (props) => {
-    const { categoryId, categoryName, categoryDescription, categoryUrl, isActive, dzoList } = props
-    const [curUrl, setUrl] = useState(spinner)
+const CategoryItem = (props) => {
+    const { categoryId, categoryName, categoryDescription, categoryUrl, isActive, dzoList } = props;
+    const [curUrl, setUrl] = useState(spinner);
 
     useEffect(() => {
         loadImageWithPromise(categoryUrl, droidSvg)
             .then(categoryUrl => { setUrl(categoryUrl) })
             .catch(failUrl => { setUrl(failUrl) })
-    }, [categoryUrl])
+    }, [categoryUrl]);
 
 
-    const handleDelete = () => { props.handleDelete(categoryId) }
-    const handleEdit = () => { props.handleEdit(categoryId, categoryName, categoryDescription, categoryUrl, isActive) }
-    const handleMoveUp = () => { props.handleMove(categoryId, UP) }
-    const handleMoveDown = () => { props.handleMove(categoryId, DOWN) }
+    const handleDelete = () => { props.handleDelete(categoryId) };
+    const handleEdit = () => { props.handleEdit(categoryId, categoryName, categoryDescription, categoryUrl, isActive) };
+    const handleMoveUp = () => { props.handleMove(categoryId, UP) };
+    const handleMoveDown = () => { props.handleMove(categoryId, DOWN) };
 
     return (
         <div className={styles.categoryItem}>
@@ -54,7 +52,7 @@ export const CategoryItem = (props) => {
             </div>
         </div>
     )
-}
+};
 
 CategoryItem.propTypes = {
     categoryId: PropTypes.number.isRequired,
@@ -65,6 +63,6 @@ CategoryItem.propTypes = {
     dzoList: PropTypes.array.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleEdit: PropTypes.func.isRequired
-}
+};
 
 export default memo(CategoryItem);
