@@ -5,26 +5,24 @@ import Button from '../Button/Button'
 import droidSvg from '../../static/images/droid.svg'
 import spinner from '../../static/images/loading-spinner.svg'
 import styles from './LandingItem.module.css'
-import { DELETE, EDIT, MOVE_UP, MOVE_DOWN} from '../Button/ButtonLables'
-
-export const UP = -1;
-export const DOWN = 1;
+import { DELETE, EDIT, MOVE_UP, MOVE_DOWN } from '../Button/ButtonLables'
+import { UP, DOWN } from '../../constants/movementDirections'
 
 export const LandingItem = (props) => {
-    const { landingId, header, description, imageUrl } = props
-    const [url, setUrl] = useState(spinner)
+    const { landingId, header, description, imageUrl } = props;
+    const [url, setUrl] = useState(spinner);
 
     useEffect(() => {
         loadImageWithPromise(imageUrl, droidSvg)
             .then(url => { setUrl(url) })
             .catch(failUrl => { setUrl(failUrl) })
-    }, [imageUrl])
+    }, [imageUrl]);
 
 
-    const handleDelete = () => { props.handleDelete(landingId) }
-    const handleEdit = () => { props.handleEdit(landingId, header, description, imageUrl) }
-    const handleMoveUp = () => { props.handleMove(landingId, UP) }
-    const handleMoveDown = () => { props.handleMove(landingId, DOWN) }
+    const handleDelete = () => { props.handleDelete(landingId) };
+    const handleEdit = () => { props.handleEdit(landingId, header, description, imageUrl) };
+    const handleMoveUp = () => { props.handleMove(landingId, UP) };
+    const handleMoveDown = () => { props.handleMove(landingId, DOWN) };
 
     return (
         <div className={styles.landingItem}>
@@ -45,7 +43,7 @@ export const LandingItem = (props) => {
             </div>
         </div>
     )
-}
+};
 
 LandingItem.propTypes = {
     landingId: PropTypes.number.isRequired,
@@ -56,6 +54,6 @@ LandingItem.propTypes = {
     handleEdit: PropTypes.func.isRequired,
     handleMove: PropTypes.func.isRequired,
 
-}
+};
 
 export default memo(LandingItem);

@@ -1,20 +1,20 @@
 import React, { Component, Fragment } from 'react';
-import {getStaticUrl, uploadFile} from '../../api/services/adminService';
+import { getStaticUrl, uploadFile } from '../../api/services/adminService';
 import {
     addBanner,
     deleteBanner,
     getBannerList,
     updateBanner
 } from '../../api/services/bannerService';
-import {getDzoList} from '../../api/services/dzoService';
-import {getErrorText} from '../../constants/errors';
+import { getDzoList } from '../../api/services/dzoService';
+import { getErrorText } from '../../constants/errors';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import BannerItem from '../../components/BannerItem/BannerItem';
 import Form from '../../components/Form/Form';
 import Button from '../../components/Button/Button';
 import cross from '../../static/images/cross.svg';
 import styles from './SliderPage.module.css';
-import {CLOSE, SAVE} from '../../components/Button/ButtonLables'
+import { CLOSE, SAVE } from '../../components/Button/ButtonLables'
 
 const BANNERS_GET_ERROR = 'Ошибка получения слайдов!';
 const BANNERS_DELETE_ERROR = 'Ошибка удаления слайда!';
@@ -29,7 +29,7 @@ const BANNER_DIR = 'banner';
 
 const LoadingStatus = ({ loading }) => (
     <p className={styles.loadingLabel}>{ loading ? LOADING_LIST_LABEL : BANNERS_GET_ERROR }</p>
-)
+);
 
 class SliderPage extends Component {
     constructor(props) {
@@ -54,12 +54,12 @@ class SliderPage extends Component {
 
     componentDidMount() {
         getDzoList().then(response => {
-            const { dzoDtoList } = response
-            this.setState({ dzoList: dzoDtoList })
+            const { dzoDtoList } = response;
+            this.setState({ dzoList: dzoDtoList });
             return getBannerList()
         }).then(response => {
-            const { bannerDtoList } = response
-            this.setState({ banners: bannerDtoList })
+            const { bannerDtoList } = response;
+            this.setState({ banners: bannerDtoList });
             return getStaticUrl()
         }).then(serverUrl => {
             this.setState({ staticServerUrl: serverUrl })
@@ -70,34 +70,24 @@ class SliderPage extends Component {
 
     clearState = () => {
         this.setState({ editingBanner: { id: null, dzoId: '', url: null, dzoName: null } })
-    }
+    };
 
-    openModal = () => { this.setState({ isOpen: true }) }
+    openModal = () => { this.setState({ isOpen: true }) };
 
-    closeModal = () => { this.setState({ isOpen: false }, this.clearState) }
-
-    getDzoName = (dzoId) => {
-        const dzo = this.state.dzoList.find((elem) => (dzoId === elem.dzoId))
-        let dzoName = null
-        if (dzo != null) {
-            dzoName = dzo.dzoName
-        }
-        return dzoName
-    }
+    closeModal = () => { this.setState({ isOpen: false }, this.clearState) };
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
             deleteBanner(id).then(() => {
-                const croppedBanners = this.state.banners.filter(banner => banner.bannerId !== id)
+                const croppedBanners = this.state.banners.filter(banner => banner.bannerId !== id);
                 this.setState({ banners: croppedBanners })
             }).catch(() => { alert(BANNERS_DELETE_ERROR) })
         }
-    }
+    };
 
-    handleEdit = (id, dzoId, url) => {
-        const dzoName = this.getDzoName(dzoId)
+    handleEdit = (id, dzoId, url, dzoName) => {
         this.setState({editingBanner: {id, dzoId, url, dzoName }}, () => { this.openModal() })
-    }
+    };
 
     handleChangeDzo(event) {
         const { options, selectedIndex, value: dzoId } = event.target;
@@ -140,23 +130,23 @@ class SliderPage extends Component {
                 </form>
             </div>
         )
-    }
+    };
 
     reloadBanners = (url, dzoId) => {
-        const banners = this.state.banners.slice()
+        const banners = this.state.banners.slice();
         banners.forEach(banner => {
             if (banner.bannerId === this.state.editingBanner.id) {
                 if (this.bannerRef.current.files.length > 0 && banner.bannerUrl === url) {
-                    banner.bannerUrl = ''
+                    banner.bannerUrl = '';
                     this.setState(banners)
                 }
-                banner.bannerUrl = url
-                banner.dzoId = dzoId
+                banner.bannerUrl = url;
+                banner.dzoId = dzoId;
                 banner.dzoName = this.state.editingBanner.dzoName
             }
-        })
+        });
         this.setState({banners}, this.closeModal)
-    }
+    };
 
     onSubmit = () => {
         if (!this.bannerRef.current.files.length && !this.state.editingBanner.url) {
@@ -172,11 +162,11 @@ class SliderPage extends Component {
             bannerDto = {
                 dzoId: this.state.editingBanner.dzoId,
                 bannerUrl: this.state.editingBanner.url.slice(this.state.staticServerUrl.length)
-            }
+            };
             updateBanner(this.state.editingBanner.id, bannerDto)
                 .catch(error => {
                     console.log(error.message)
-                })
+                });
             this.reloadBanners(this.state.editingBanner.url, this.state.editingBanner.dzoId)
         } else {
             const imageFile = this.bannerRef.current.files[0];
@@ -184,7 +174,7 @@ class SliderPage extends Component {
 
             uploadFile(imageFile, imageName)
                 .then(response => {
-                    bannerDto = {bannerUrl: response.path, dzoId: this.state.editingBanner.dzoId}
+                    bannerDto = {bannerUrl: response.path, dzoId: this.state.editingBanner.dzoId};
                     if (this.state.editingBanner.id !== null) {
                         return updateBanner(this.state.editingBanner.id, bannerDto)
                     } else {
@@ -195,51 +185,45 @@ class SliderPage extends Component {
                     if (this.state.editingBanner.id !== null) {
                         this.reloadBanners(this.state.staticServerUrl + bannerDto.bannerUrl, this.state.editingBanner.dzoId)
                     } else {
-                        const { id } = response
+                        const { id } = response;
                         const newBannerItem = {
                             bannerId: id,
                             bannerUrl: this.state.staticServerUrl + bannerDto.bannerUrl,
                             dzoName: this.state.editingBanner.dzoName,
                             dzoId: this.state.editingBanner.dzoId
-                        }
-                        const banners = [...this.state.banners, newBannerItem]
+                        };
+                        const banners = [...this.state.banners, newBannerItem];
                         this.setState({banners}, this.closeModal)
                     }
                 })
                 .catch(error => {
-                    alert(IMAGE_UPLOAD_ERROR)
+                    alert(IMAGE_UPLOAD_ERROR);
                     console.log(error.message)
                 })
         }
-    }
+    };
 
     renderBannersList = () => {
-        const { banners } = this.state
-        const isSuccess = Array.isArray(banners)
+        const { banners } = this.state;
+        const isSuccess = Array.isArray(banners);
         return (
             <Fragment>
                 {
                     isSuccess ? (
                         banners.length ?
-                            banners.map((banner, i) => {
-                                const dzo = this.state.dzoList.find((elem) => (banner.dzoId === elem.dzoId))
-                                let dzoName = null
-                                if (dzo != null ) {
-                                    dzoName = dzo.dzoName
-                                }
-                                return <BannerItem
+                            banners.map((banner, i) =>
+                                <BannerItem
                                     key={`bannerItem-${i}`}
                                     handleDelete={this.handleDelete}
                                     handleEdit={this.handleEdit}
-                                    dzoName={dzoName}
                                     {...banner}
                                 />
-                            }) : <LoadingStatus loading />
+                            ) : <LoadingStatus loading />
                     ) : <LoadingStatus />
                 }
             </Fragment>
         )
-    }
+    };
 
     renderModifyModal = () => (
         <CustomModal
@@ -247,12 +231,12 @@ class SliderPage extends Component {
             onRequestClose={this.closeModal}>
             {this.renderModalForm()}
         </CustomModal>
-    )
+    );
 
     render() {
         const openWithParam = () => {
             this.openModal()
-        }
+        };
         return (
             <div className={styles.sliderPageWrapper}>
                 { this.renderModifyModal() }

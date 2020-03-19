@@ -4,7 +4,7 @@ import styles from './SimpleDzoItem.module.css'
 
 
 const SimpleDzoItem = (props) => {
-    const { dzoCode, dzoName } = props
+    const { dzoCode, dzoName } = props;
 
     return (
         <div className={styles.dzoItem}>
@@ -15,12 +15,12 @@ const SimpleDzoItem = (props) => {
             </div>
         </div>
     )
-}
+};
 
 SimpleDzoItem.propTypes = {
 
     dzoCode: PropTypes.string.isRequired,
     dzoName: PropTypes.string.isRequired,
-}
+};
 
 export default memo(SimpleDzoItem);

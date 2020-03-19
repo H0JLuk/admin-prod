@@ -10,35 +10,35 @@ import { DELETE, EDIT } from '../Button/ButtonLables'
 const ADD_EDIT_APP_URL = 'Add/Edit App url';
 
 const DzoItem = (props) => {
-    const { dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList, applicationList } = props
-    const [curCardUrl, setCardUrl] = useState(spinner)
-    const [curScreenUrl, setScreenUrl] = useState(spinner)
-    const [curLogoUrl, setLogoUrl] = useState(spinner)
+    const { dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList, applicationList } = props;
+    const [curCardUrl, setCardUrl] = useState(spinner);
+    const [curScreenUrl, setScreenUrl] = useState(spinner);
+    const [curLogoUrl, setLogoUrl] = useState(spinner);
 
     useEffect(() => {
         loadImageWithPromise(cardUrl, droidSvg)
             .then(cardUrl => { setCardUrl(cardUrl) })
             .catch(failUrl => { setCardUrl(failUrl) })
-    }, [cardUrl])
+    }, [cardUrl]);
 
     useEffect(() => {
         loadImageWithPromise(screenUrl, droidSvg)
             .then(screenUrl => { setScreenUrl(screenUrl) })
             .catch(failUrl => { setScreenUrl(failUrl) })
-    }, [screenUrl])
+    }, [screenUrl]);
 
     useEffect(() => {
         loadImageWithPromise(logoUrl, droidSvg)
             .then(logoUrl => { setLogoUrl(logoUrl) })
             .catch(failUrl => { setLogoUrl(failUrl) })
-    }, [logoUrl])
+    }, [logoUrl]);
 
 
-    const handleDelete = () => { props.handleDelete(dzoId) }
-    const handleEdit = () => { props.handleEdit(dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList) }
+    const handleDelete = () => { props.handleDelete(dzoId) };
+    const handleEdit = () => { props.handleEdit(dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList) };
     const handleAddAppLink = () => {
         props.handleAddAppLink(dzoId, dzoName, applicationList)
-    }
+    };
 
     return (
         <div className={styles.dzoItem}>
@@ -78,7 +78,7 @@ const DzoItem = (props) => {
             </div>
         </div>
     )
-}
+};
 
 DzoItem.propTypes = {
 
@@ -95,6 +95,6 @@ DzoItem.propTypes = {
     behaviorType: PropTypes.string.isRequired,
     categoryList: PropTypes.array.isRequired,
     applicationList: PropTypes.array.isRequired,
-}
+};
 
 export default memo(DzoItem);
