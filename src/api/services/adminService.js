@@ -17,11 +17,11 @@ const options = {
 const reqOptions = () => _.merge(options, getReqOptions());
 
 export const getOffers = async () => {
-    return Api.get('/admin/offer/excel', getReqOptions(), 'blob');
+    return Api.get('/admin/offer/excel', reqOptions(), 'blob');
 };
 
 export const getFeedback = async () => {
-    return Api.get('/admin/feedback/excel', getReqOptions(), 'blob');
+    return Api.get('/admin/feedback/excel', reqOptions(), 'blob');
 };
 
 export async function swapPositions(firstId, secondId, subDir) {
