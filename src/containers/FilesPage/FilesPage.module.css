@@ -1,11 +1,36 @@
 .container {
     margin: 0 auto;
-    padding-top: 30px;
+    padding-top: 20px;
     width: 96%;
     max-width: 1080px;
+}
+
+.container__block {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    flex: 1 1 0px;
+    margin: 0 auto;
+    padding: 10px 0px;
 }
 
 .container__button {
     margin-right: 30px;
     padding: 10px 20px;
 }
+
+.datepicker {
+    margin-right: 15px;
+    font-size: 15px;
+}
+
+.textFieldFormat {
+    margin-right: 15px;
+}
+
+.checkbox {
+    margin-left: 5px;
+    width: 16px;
+    height: 16px;
+}
+
