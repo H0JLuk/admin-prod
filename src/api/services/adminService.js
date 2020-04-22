@@ -16,13 +16,19 @@ const options = {
 
 const reqOptions = () => _.merge(options, getReqOptions());
 
-export const getOffers = async () => {
-    return Api.get('/admin/offer/excel', reqOptions(), 'blob');
-};
+export async function getOffers(start, end) {
+    const url = (start && end)
+        ? `/admin/offer/excel?start=${start}&end=${end}`
+        : '/admin/offer/excel';
+    return Api.get(url, reqOptions(), 'blob');
+}
 
-export const getFeedback = async () => {
-    return Api.get('/admin/feedback/excel', reqOptions(), 'blob');
-};
+export async function getFeedback(start, end) {
+    const url = (start && end) 
+        ? `/admin/feedback/excel?start=${start}&end=${end}`
+        : '/admin/feedback/excel';
+    return Api.get(url, reqOptions(), 'blob');
+}
 
 export async function swapPositions(firstId, secondId, subDir) {
     subDir = !subDir ? '' : `${subDir}/`

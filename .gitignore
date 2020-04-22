@@ -5,3 +5,11 @@ package-lock.json
 
 build/
 target/
+
+.classpath
+.factorypath
+.project
+.settings/*
+*.*~
+*.swp
+
