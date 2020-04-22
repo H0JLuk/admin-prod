@@ -74,6 +74,7 @@ export const CATEGORY_ADD_FROM = {
         mask: null
     }
 };
+
 export const CATEGORY_EDIT_FROM = {
     categoryName: {
         label: 'Имя категории',
@@ -94,6 +95,7 @@ export const CATEGORY_EDIT_FROM = {
         mask: null
     }
 };
+
 export const DZO_ADD_FROM = {
     dzoName: {
         label: 'Имя ДЗО',
@@ -142,6 +144,7 @@ export const DZO_ADD_FROM = {
     },
 
 };
+
 export const DZO_EDIT_FROM = {
     dzoName: {
         label: 'Имя ДЗО (read only)',
@@ -191,9 +194,22 @@ export const DZO_EDIT_FROM = {
         mask: null
     }
 };
+
 export const APP_EDIT_FROM = {
     dzoName: {
         label: 'Имя ДЗО (read only)',
+        value: '',
+        type: 'text',
+        disabled: true,
+        isRequired: true,
+        maxLength: 2048,
+        validators: [isRequired],
+        mask: null
+    },
+};
+
+export const PDF_EDIT_FORM = {
+    pdfName: {
         value: '',
         type: 'text',
         disabled: true,
