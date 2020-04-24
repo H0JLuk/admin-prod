@@ -42,3 +42,11 @@ export async function uploadFile(binaryFile, path) {
 export async function getStaticUrl() {
     return Api.get('/settings/getStaticUrl', getReqOptions(), 'text');
 }
+
+export async function getInstallationUrl() {
+    return Api.get('/settings/getInstallationUrl', getReqOptions(), 'text');
+}
+
+export async function getUsageUrl() {
+    return Api.get('/settings/getUsageUrl', getReqOptions(), 'text');
+}
