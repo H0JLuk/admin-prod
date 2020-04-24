@@ -5,6 +5,10 @@ export async function getDzoList() {
     return  Api.get('/dzo', getReqOptions());
 }
 
+export async function getAllDzoList() {
+    return  Api.get('/admin/dzo/list', getReqOptions());
+}
+
 export async function addDzo(dzoDto) {
     return Api.post('/admin/dzo', dzoDto, getReqOptions());
 }

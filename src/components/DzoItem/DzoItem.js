@@ -94,7 +94,7 @@ DzoItem.propTypes = {
     webUrl: PropTypes.string,
     behaviorType: PropTypes.string.isRequired,
     categoryList: PropTypes.array.isRequired,
-    applicationList: PropTypes.array.isRequired,
+    applicationList: PropTypes.array,
 };
 
 export default memo(DzoItem);
