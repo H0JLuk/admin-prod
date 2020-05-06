@@ -23,6 +23,7 @@ import { CLOSE, SAVE } from '../../components/Button/ButtonLables';
 import classNames from 'classnames';
 import inputStyles from '../../components/Input/Input.module.css';
 import { isRequired } from '../../utils/validators';
+import {getClientAppCodeHeader} from "../../api/services/sessionService";
 
 const DZO_LIST_GET_ERROR = 'Ошибка получения ДЗО!';
 const DZO_DELETE_ERROR = 'Ошибка удаления ДЗО!';
@@ -192,7 +193,7 @@ class DzoPage extends Component {
     uploadFiles(dzoCode) {
         const { cardFile, screenFile, logoFile, staticUrl } = this.state;
         const promiseArray = [];
-        const imageName = `${DZO_DIR}/${dzoCode}/`;
+        const imageName = `${getClientAppCodeHeader()}/${DZO_DIR}/${dzoCode}/`;
 
         if (cardFile != null) {
             promiseArray.push(uploadFile(cardFile, `${imageName}card/${cardFile.name}`)

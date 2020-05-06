@@ -17,6 +17,7 @@ import cross from '../../static/images/cross.svg';
 import styles from './LandingPage.module.css';
 import { populateFormWithData } from "../../components/Form/formHelper"
 import { CLOSE, SAVE } from '../../components/Button/ButtonLables'
+import {getClientAppCodeHeader} from "../../api/services/sessionService";
 
 const LANDINGS_GET_ERROR = 'Ошибка получения лендингов!';
 const LANDINGS_DELETE_ERROR = 'Ошибка удаления лендинга!';
@@ -160,7 +161,7 @@ class LandingPage extends Component {
             this.reloadLandings(data, this.state.editingLanding.imageUrl)
         } else {
             const imageFile = this.landingRef.current.files[0];
-            const imageName = `${LANDING_DIR}/${imageFile.name}`;
+            const imageName = `${getClientAppCodeHeader()}/${LANDING_DIR}/${imageFile.name}`;
 
             uploadFile(imageFile, imageName)
                 .then(response => {

@@ -4,6 +4,7 @@ import { ROUTE } from './constants/route';
 import LoginPage from './containers/LoginPage/LoginPage';
 import MainPage from './containers/MainPage/MainPage';
 import { isLoggedIn} from './api/services/authService';
+import ClientAppPage from "./containers/ClientAppPage/ClientAppPage";
 
 class App extends React.PureComponent {
     componentDidMount() {
@@ -25,7 +26,8 @@ class App extends React.PureComponent {
                     <Route exact path="/" render={() => <Redirect to={ROUTE.LOGIN}/>}/>
                     <Route path={ROUTE.LOGIN} component={LoginPage} />
                     <Route path={ROUTE.APP} component={this.withRedirect(MainPage)} />
-                    <Route render={() => <Redirect to={ROUTE.APP}/>}/>
+                    <Route path={ROUTE.CLIENT_APPS} component={this.withRedirect(ClientAppPage)}/>
+                    <Route render={() => <Redirect to={ROUTE.CLIENT_APPS}/>}/>
                 </Switch>
             </>
         )

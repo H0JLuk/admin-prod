@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './Menu.module.css';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
+import {ROUTE} from "../../constants/route";
 
 const Menu = (props) => {
 
@@ -16,6 +17,9 @@ const Menu = (props) => {
                 >
                     {item.title}
                 </Link>)}
+                <Link to={ROUTE.CLIENT_APPS} className={styles.clientAppItem}>
+                    {props.code}
+                </Link>
         </div>
     )
 };

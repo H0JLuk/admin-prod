@@ -17,6 +17,7 @@ import cross from '../../static/images/cross.svg';
 import styles from './CategoryPage.module.css';
 import { populateFormWithData } from '../../components/Form/formHelper';
 import { CLOSE, SAVE } from '../../components/Button/ButtonLables';
+import {getClientAppCodeHeader} from "../../api/services/sessionService";
 
 const CATEGORIES_GET_ERROR = 'Ошибка получения категорий!';
 const CATEGORY_DELETE_ERROR = 'Ошибка удаления категории!';
@@ -196,7 +197,7 @@ class CategoryPage extends Component {
             }).catch(error => { console.log(error.message) })
         } else {
             const imageFile = this.categoryRef.current.files[0];
-            const imageName = `${CATEGORY_DIR}/${imageFile.name}`;
+            const imageName = `${getClientAppCodeHeader()}/${CATEGORY_DIR}/${imageFile.name}`;
 
             uploadFile(imageFile, imageName)
                 .then(response => {

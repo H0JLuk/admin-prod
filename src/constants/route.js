@@ -1,6 +1,7 @@
 export const ROUTE = {
     LOGIN:  '/login',
     APP:    '/app',
+    CLIENT_APPS: '/clientApps'
 };
 
 export const APP_ROUTE = {
