@@ -30,5 +30,10 @@ export const navigation = [
         name: 'slider',
         title: 'Слайдер',
         url: APP_ROUTE.SLIDER
+    },
+    {
+        name: 'promoCampaign',
+        title: 'Промо-кампании',
+        url: APP_ROUTE.PROMO_CAMPAIGN
     }
 ];

@@ -14,6 +14,7 @@ import Button from "../../components/Button/Button";
 import {withRouter} from "react-router-dom";
 import {storeClientAppCodeHeader} from "../../api/services/sessionService";
 import {ROUTE} from "../../constants/route";
+import {logout} from "../../api/services/authService";
 
 const CLIENT_APP_LIST_TITLE = 'Клиенские приложения'
 const LOADING_LIST_LABEL = 'Загрузка';
@@ -84,6 +85,12 @@ class ClientAppPage extends Component {
             editingClientApp: {...this.state.editingClientApp, isDeleted: value}
         });
     }
+
+    doLogout = () => {
+        logout().then(() => {
+            this.props.history.push(ROUTE.LOGIN);
+        });
+    };
 
     renderModalForm = () => {
         const {formError, editingClientApp} = this.state;
@@ -203,14 +210,15 @@ class ClientAppPage extends Component {
                     {this.renderModifyModal()}
                     <div className={styles.headerSection}>
                         <h3>{CLIENT_APP_LIST_TITLE}</h3>
-                        <div>
+                        <div className={styles.logout} onClick={this.doLogout}>Выход</div>
+                        {/*<div>
                             <Button
                                 label={ADD_CLIENT_APP_TITLE}
                                 onClick={this.openModal}
                                 font="roboto"
                                 type="green"
                             />
-                        </div>
+                        </div>*/}
                     </div>
                     <div className={styles.clientAppList}>
                         {this.renderClientAppList()}

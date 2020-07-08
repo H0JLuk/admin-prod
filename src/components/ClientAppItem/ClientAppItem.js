@@ -25,7 +25,7 @@ const ClientAppItem = (props) => {
                 </div>
                 <div className={styles.clientAppItemActions}>
                     <Button type="blue" label={ADMINISTRATE} onClick={handleAdministrateClientApp}/>
-                    <Button type="green" label={EDIT} onClick={handleEditClientApp}/>
+                    {/*<Button type="green" label={EDIT} onClick={handleEditClientApp}/>*/}
                 </div>
             </div>
         </div>

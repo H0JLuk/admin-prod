@@ -5,10 +5,11 @@ export const ROUTE = {
 };
 
 export const APP_ROUTE = {
-    USERS:      `${ROUTE.APP}/users`,
-    FILES:      `${ROUTE.APP}/files`,
-    DZO:        `${ROUTE.APP}/dzo`,
-    LANDING:    `${ROUTE.APP}/landing`,
-    CATEGORY:   `${ROUTE.APP}/category`,
-    SLIDER:     `${ROUTE.APP}/slider`,
+    USERS:          `${ROUTE.APP}/users`,
+    FILES:          `${ROUTE.APP}/files`,
+    DZO:            `${ROUTE.APP}/dzo`,
+    LANDING:        `${ROUTE.APP}/landing`,
+    CATEGORY:       `${ROUTE.APP}/category`,
+    SLIDER:         `${ROUTE.APP}/slider`,
+    PROMO_CAMPAIGN: `${ROUTE.APP}/promoCampaign`,
 };
