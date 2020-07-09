@@ -11,6 +11,7 @@ import SliderPage from '../SliderPage/SliderPage';
 import styles from './MainPage.module.css';
 
 import { logout } from '../../api/services/authService';
+import {getClientAppCodeHeader} from "../../api/services/sessionService";
 
 
 const MainPage = (props) => {
@@ -22,7 +23,7 @@ const MainPage = (props) => {
 
     return (
         <Fragment>
-            <Header doLogout={doLogout}/>
+            <Header doLogout={doLogout} code={getClientAppCodeHeader()}/>
             <div className={styles.wrapper}>
                 <Switch>
                     <Route path={APP_ROUTE.FILES} component={FilesPage} />

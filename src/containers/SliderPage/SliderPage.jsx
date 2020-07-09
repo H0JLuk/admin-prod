@@ -15,6 +15,7 @@ import Button from '../../components/Button/Button';
 import cross from '../../static/images/cross.svg';
 import styles from './SliderPage.module.css';
 import { CLOSE, SAVE } from '../../components/Button/ButtonLables'
+import {getClientAppCodeHeader} from "../../api/services/sessionService";
 
 const BANNERS_GET_ERROR = 'Ошибка получения слайдов!';
 const BANNERS_DELETE_ERROR = 'Ошибка удаления слайда!';
@@ -170,7 +171,7 @@ class SliderPage extends Component {
             this.reloadBanners(this.state.editingBanner.url, this.state.editingBanner.dzoId)
         } else {
             const imageFile = this.bannerRef.current.files[0];
-            const imageName = `${BANNER_DIR}/${imageFile.name}`;
+            const imageName = `${getClientAppCodeHeader()}/${BANNER_DIR}/${imageFile.name}`;
 
             uploadFile(imageFile, imageName)
                 .then(response => {

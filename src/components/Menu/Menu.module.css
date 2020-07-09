@@ -21,6 +21,21 @@
     color: #000014;
 }
 
+.clientAppItem {
+    text-decoration: none;
+    flex: 1;
+    font-family: SBSansText, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    text-align: right;
+    color: #0000FF;
+    cursor: pointer;
+}
+
 .menu__item:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }

@@ -14,6 +14,7 @@ import { getOffers, getFeedback, getInstallationUrl, getUsageUrl, uploadFile }
 import { downloadFile } from '../../utils/helper';
 import { OPEN, CLOSE, SAVE } from '../../components/Button/ButtonLables';
 import { PDF_EDIT_FORM } from '../../components/Form/forms';
+import {getClientAppCodeHeader} from "../../api/services/sessionService";
 
 const DATE_FORMAT = 'dd/MM/yyyy';
 
@@ -125,7 +126,7 @@ class FilesPage extends Component {
         }
 
         const pdfFile = this.pdfRef.current.files[0];
-        const pdfName = `${PDF_DIR}/${editingPdf}.pdf`;
+        const pdfName = `${getClientAppCodeHeader()}/${PDF_DIR}/${editingPdf}.pdf`;
 
         uploadFile(pdfFile, pdfName)
             .then( this.closeModal )

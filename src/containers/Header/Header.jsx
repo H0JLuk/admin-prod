@@ -6,7 +6,7 @@ import styles from './Header.module.css';
 const Header = (props) => {
     return (
         <div className={styles.header}>
-            <Menu items={navigation} />
+            <Menu items={navigation} code={props.code}/>
             <div className={styles.logout} onClick={props.doLogout}>Выход</div>
         </div>
     )

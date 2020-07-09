@@ -96,6 +96,49 @@ export const CATEGORY_EDIT_FROM = {
     }
 };
 
+export const CLIENT_APP_ADD_FORM = {
+    name: {
+        label : 'имя',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 128,
+        validators: [isRequired],
+        mask: null
+    },
+    code: {
+        label : 'код',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 40,
+        validators: [isRequired],
+        mask: null
+    }
+}
+
+export const CLIENT_APP_EDIT_FORM = {
+    name: {
+        label : 'имя',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 128,
+        validators: [isRequired],
+        mask: null
+    },
+    code: {
+        label : 'код',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 40,
+        validators: [isRequired],
+        mask: null
+    }
+}
+
+
 export const DZO_ADD_FROM = {
     dzoName: {
         label: 'Имя ДЗО',

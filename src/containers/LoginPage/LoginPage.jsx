@@ -18,7 +18,7 @@ const LoginPage = (props) => {
                 return;
             }
             storeUserData(response.token);
-            props.history.push(ROUTE.APP)
+            props.history.push(ROUTE.CLIENT_APPS)
         }, () => {
             setError(errors.fail);
         })
