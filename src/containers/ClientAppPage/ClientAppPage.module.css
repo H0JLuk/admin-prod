@@ -100,3 +100,17 @@
     color: #f6650a;
     font-family: Roboto, sans-serif;
 }
+
+.logout {
+    flex: 1;
+    font-family: SBSansText, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    text-align: right;
+    color: #f6650a;
+    cursor: pointer;
+}

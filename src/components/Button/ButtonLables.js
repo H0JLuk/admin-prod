@@ -5,4 +5,5 @@ export const CLOSE = 'Закрыть';
 export const OPEN = 'Открыть';
 export const MOVE_UP = 'Переместить вверх';
 export const MOVE_DOWN = 'Переместить вниз';
-export const ADMINISTRATE = 'Администрировать'
+export const ADMINISTRATE = 'Администрировать';
+export const STATISTICS = 'Статистика';
