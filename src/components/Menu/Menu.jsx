@@ -1,33 +1,33 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo } from 'react';
 import { getAppCode, getRole } from '../../api/services/sessionService';
 import { resolveMenuItemsByRole } from '../../constants/menuByRole';
 import { ROUTE } from '../../constants/route';
 import styles from './Menu.module.css';
-import { Link, useLocation } from 'react-router-dom';
-import classnames from 'classnames';
+import { NavLink } from 'react-router-dom';
 
 const Menu = () => {
 
     const role = getRole();
     const menuItems = resolveMenuItemsByRole(role);
     const appCode = getAppCode();
-    const { pathname } = useLocation();
-    const checkActive = useCallback( (path) => pathname.includes(path), [pathname]);
 
     return (
         <div className={ styles.menu }>
             { menuItems.map( (item, index) =>
-                <Link key={ `li${index}` }
-                    className={ classnames(styles.menu__item, {
-                        [styles.active]: checkActive(item.path)
-                    }) }
+                <NavLink
+                    key={ `li${index}` }
                     to={ item.path }
+                    className={ styles.menu__item }
+                    activeClassName={ styles.active }
                 >
                     { item.label }
-                </Link>) }
-            <Link to={ ROUTE.CLIENT_APPS } className={ styles.clientAppItem }>
+                </NavLink>) }
+            <NavLink
+                to={ ROUTE.CLIENT_APPS }
+                className={ styles.clientAppItem }
+            >
                 { appCode }
-            </Link>
+            </NavLink>
         </div>
     );
 };
