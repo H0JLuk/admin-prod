@@ -1,15 +1,31 @@
 export const ROUTE = {
-    LOGIN:  '/login',
-    APP:    '/app',
+    CORE:       '/',
+    APP:        '/app',
+    LOGIN:      '/login',
+    AUDITOR:    '/auditor',
+    ADMIN:      '/admin',
+    PRODUCT:    '/product',
     CLIENT_APPS: '/clientApps'
 };
 
-export const APP_ROUTE = {
-    USERS:          `${ROUTE.APP}/users`,
-    FILES:          `${ROUTE.APP}/files`,
-    DZO:            `${ROUTE.APP}/dzo`,
-    LANDING:        `${ROUTE.APP}/landing`,
-    CATEGORY:       `${ROUTE.APP}/category`,
-    SLIDER:         `${ROUTE.APP}/slider`,
-    PROMO_CAMPAIGN: `${ROUTE.APP}/promoCampaign`,
+export const ROUTE_AUDITOR = {
+    AUDIT:      `${ ROUTE.AUDITOR }/audit`
+};
+
+export const ROUTE_ADMIN = {
+    USERS:          `${ ROUTE.ADMIN }/users`,
+    FILES:          `${ ROUTE.ADMIN }/files`,
+    DZO:            `${ ROUTE.ADMIN }/dzo`,
+    LANDING:        `${ ROUTE.ADMIN }/landing`,
+    CATEGORY:       `${ ROUTE.ADMIN }/category`,
+    SLIDER:         `${ ROUTE.ADMIN }/slider`,
+    PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/promoCampaign`
+};
+
+export const ROUTE_PRODUCT = {
+    DZO:            `${ ROUTE.PRODUCT }/dzo`,
+    LANDING:        `${ ROUTE.PRODUCT }/landing`,
+    CATEGORY:       `${ ROUTE.PRODUCT }/category`,
+    SLIDER:         `${ ROUTE.PRODUCT }/slider`,
+    PROMO_CAMPAIGN: `${ ROUTE.PRODUCT }/promoCampaign`,
 };

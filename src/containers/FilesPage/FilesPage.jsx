@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import { getInstallationUrl, getUsageUrl } from '../../api/services/settingsService';
 import styles from './FilesPage.module.css';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import Button from '../../components/Button/Button';
 import Form from '../../components/Form/Form';
 import cross from '../../static/images/cross.svg';
 import { getErrorText } from '../../constants/errors';
-import { populateFormWithData } from "../../components/Form/formHelper"
-import { getOffers, getFeedback, getInstallationUrl, getUsageUrl, uploadFile }
+import { populateFormWithData } from "../../components/Form/formHelper";
+import { getOffers, getFeedback, uploadFile }
     from '../../api/services/adminService';
 import { downloadFile } from '../../utils/helper';
-import { OPEN, CLOSE, SAVE } from '../../components/Button/ButtonLables';
+import ButtonLabels from '../../components/Button/ButtonLables';
 import { PDF_EDIT_FORM } from '../../components/Form/forms';
-import {getClientAppCodeHeader} from "../../api/services/sessionService";
+import { getAppCode } from "../../api/services/sessionService";
 
 const DATE_FORMAT = 'dd/MM/yyyy';
 
@@ -39,7 +40,6 @@ const TITLES = { [USAGE_NAME]: USAGE_TITLE, [INSTALLATION_NAME]: INSTALLATION_TI
 const UPLOAD_PDF_PLEASE = 'Пожалуйста загрузите pdf-файл!';
 const PDF_UPLOAD_ERROR = 'Ошибка загрузки pdf-файла!';
 const FILTER_ERROR_MESSAGE = 'Введены некоректные данные для фильтра по дате';
-const GET_URL_FROM_SERVER_ERROR = 'Ошибка при получении installationUrl/usageUrl с сервера';
 
 class FilesPage extends Component {
 
@@ -55,7 +55,7 @@ class FilesPage extends Component {
             installationUrl: null,
             usageUrl: null,
             editingPdf: null
-        }
+        };
     }
 
     componentDidMount() {
@@ -64,15 +64,13 @@ class FilesPage extends Component {
         startDate.setDate(startDate.getDate() - 14);
         this.setState({ startDate, endDate: currentDate });
 
-        getUsageUrl().then( usageUrl => {
-            this.setState({ usageUrl });
-            return getInstallationUrl();
-        }).then( installationUrl => {
-            this.setState({ installationUrl });
-        }).catch(() => {
-            console.log(GET_URL_FROM_SERVER_ERROR)
-            this.setState({ usageUrl: null, installationUrl: null });
-        });
+        try {
+            getUsageUrl().then( usageUrl => { this.setState({ usageUrl }); });
+            getInstallationUrl().then( installationUrl => { this.setState({ installationUrl }); });
+        } catch (error) {
+            // Todo send error to backend
+            console.error(`Application list get error: ${error}`);
+        }
     }
 
     getData = (func, name) => () => {
@@ -111,9 +109,9 @@ class FilesPage extends Component {
         this.setState(prevState => ({ isFiltered: !prevState.isFiltered }));
     };
 
-    openModal = () => { this.setState({ isOpen: true }) };
+    openModal = () => { this.setState({ isOpen: true }); };
 
-    closeModal = () => { this.setState({ isOpen: false, editingPdf: null }) };
+    closeModal = () => { this.setState({ isOpen: false, editingPdf: null }); };
 
     onSubmit = () => {
         const { editingPdf } = this.state;
@@ -126,7 +124,7 @@ class FilesPage extends Component {
         }
 
         const pdfFile = this.pdfRef.current.files[0];
-        const pdfName = `${getClientAppCodeHeader()}/${PDF_DIR}/${editingPdf}.pdf`;
+        const pdfName = `${getAppCode()}/${PDF_DIR}/${editingPdf}.pdf`;
 
         uploadFile(pdfFile, pdfName)
             .then( this.closeModal )
@@ -143,42 +141,42 @@ class FilesPage extends Component {
             : PDF_EDIT_FORM;
 
         return (
-            <div className={styles.modalForm}>
+            <div className={ styles.modalForm }>
                 <img
-                    src={cross}
-                    onClick={this.closeModal}
-                    className={styles.crossSvg}
-                    alt={CLOSE}
+                    src={ cross }
+                    onClick={ this.closeModal }
+                    className={ styles.crossSvg }
+                    alt={ ButtonLabels.CLOSE }
                 />
                 <Form
-                    data={formData}
-                    buttonText={SAVE}
-                    onSubmit={this.onSubmit}
-                    formClassName={styles.pdfForm}
-                    fieldClassName={styles.pdfForm__field}
-                    activeLabelClassName={styles.pdfForm__field__activeLabel}
-                    buttonClassName={styles.pdfForm__button}
-                    errorText={getErrorText(formError)}
-                    formError={!!formError}
-                    errorClassName={styles.error}
+                    data={ formData }
+                    buttonText={ ButtonLabels.SAVE }
+                    onSubmit={ this.onSubmit }
+                    formClassName={ styles.pdfForm }
+                    fieldClassName={ styles.pdfForm__field }
+                    activeLabelClassName={ styles.pdfForm__field__activeLabel }
+                    buttonClassName={ styles.pdfForm__button }
+                    errorText={ getErrorText(formError) }
+                    formError={ !!formError }
+                    errorClassName={ styles.error }
                 />
-                <form className={styles.pdfUploadContainer}>
+                <form className={ styles.pdfUploadContainer }>
                     <input
                         type='file'
                         id='pdfInput'
-                        ref={this.pdfRef}
-                        className={styles.pdfUpload}
+                        ref={ this.pdfRef }
+                        className={ styles.pdfUpload }
                         accept='application/pdf'
                     />
                 </form>
             </div>
-        )
+        );
     };
 
     renderModifyModal = () => (
         <CustomModal
-            isOpen={this.state.isOpen}
-            onRequestClose={this.closeModal}>
+            isOpen={ this.state.isOpen }
+            onRequestClose={ this.closeModal }>
             {this.renderModalForm()}
         </CustomModal>
     );
@@ -190,57 +188,57 @@ class FilesPage extends Component {
             this.openModal();
         };
         const picker = isFiltered ?
-            <div className={styles.container__block}>
-                <label className={styles.textFieldFormat}>
+            <div className={ styles.container__block }>
+                <label className={ styles.textFieldFormat }>
                     {START_DATE_LABLE}
                 </label>
                 <DatePicker
-                    className={styles.datepicker}
-                    dateFormat={DATE_FORMAT}
-                    selected={startDate}
-                    onChange={ date => { this.handleChangeDate(date, true) }}
+                    className={ styles.datepicker }
+                    dateFormat={ DATE_FORMAT }
+                    selected={ startDate }
+                    onChange={ date => { this.handleChangeDate(date, true); } }
                 />
 
-                <label className={styles.textFieldFormat}>
+                <label className={ styles.textFieldFormat }>
                     {END_DATE_LABLE}
                 </label>
                 <DatePicker
-                    className={styles.datepicker}
-                    dateFormat={DATE_FORMAT}
-                    selected={endDate}
-                    onChange={ date => { this.handleChangeDate(date, false) }}
+                    className={ styles.datepicker }
+                    dateFormat={ DATE_FORMAT }
+                    selected={ endDate }
+                    onChange={ date => { this.handleChangeDate(date, false); } }
                 />
             </div> : null;
 
         return (
-            <div className={styles.container}>
+            <div className={ styles.container }>
                 <h3>{EXCEL_FILES_TITLE}</h3>
-                <div className={styles.container__block}>
-                    <p className={styles.textFieldFormat}>
+                <div className={ styles.container__block }>
+                    <p className={ styles.textFieldFormat }>
                         {FILTER_TITLE}
                     </p>
                     <input
-                        className={styles.checkbox}
+                        className={ styles.checkbox }
                         type='checkbox'
-                        checked={isFiltered}
-                        onChange={this.handleFilterCheckboxChange}
+                        checked={ isFiltered }
+                        onChange={ this.handleFilterCheckboxChange }
                     />
                 </div>
 
                 {picker}
 
-                <div className={styles.container__block}>
+                <div className={ styles.container__block }>
                     <Button
-                        label={OFFERS_LABLE}
+                        label={ OFFERS_LABLE }
                         onClick={ this.getData(getOffers, OFFERS_NAME) }
-                        className={styles.container__button}
+                        className={ styles.container__button }
                         type='green'
                         font='roboto'
                     />
                     <Button
-                        label={FEEDBACK_LABLE}
+                        label={ FEEDBACK_LABLE }
                         onClick={ this.getData(getFeedback, FEEDBACK_NAME) }
-                        className={styles.container__button}
+                        className={ styles.container__button }
                         type='green'
                         font='roboto'
                     />
@@ -248,39 +246,39 @@ class FilesPage extends Component {
 
                 {this.renderModifyModal()}
 
-                <hr/>
-                <div className={styles.headerSection}>
+                <hr />
+                <div className={ styles.headerSection }>
                     <h3>{USAGE_TITLE}</h3>
-                    <div className={styles.container__block}>
-                        <a href={usageUrl} download={USAGE_NAME}>
-                            {OPEN}
+                    <div className={ styles.container__block }>
+                        <a href={ usageUrl } download={ USAGE_NAME }>
+                            {ButtonLabels.OPEN}
                         </a>
                         <Button
                             onClick={ () => openWithParam(USAGE_NAME) }
-                            label={CHANGE_PDF_TITLE}
+                            label={ CHANGE_PDF_TITLE }
                             font="roboto"
                             type="blue"
                         />
                     </div>
                 </div>
 
-                <hr/>
-                <div className={styles.headerSection}>
+                <hr />
+                <div className={ styles.headerSection }>
                     <h3>{INSTALLATION_TITLE}</h3>
-                    <div className={styles.container__block}>
-                        <a href={installationUrl} download={INSTALLATION_NAME}>
-                            {OPEN}
+                    <div className={ styles.container__block }>
+                        <a href={ installationUrl } download={ INSTALLATION_NAME }>
+                            {ButtonLabels.OPEN}
                         </a>
                         <Button
                             onClick={ () => openWithParam(INSTALLATION_NAME) }
-                            label={CHANGE_PDF_TITLE}
+                            label={ CHANGE_PDF_TITLE }
                             font="roboto"
                             type="blue"
                         />
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
 }

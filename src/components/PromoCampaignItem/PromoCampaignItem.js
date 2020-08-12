@@ -1,21 +1,25 @@
-import React, { memo } from "react";
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import styles from './PromoCampaignItem.module.css';
-import Button from "../Button/Button";
-import { STATISTICS } from "../Button/ButtonLables";
+import Button from '../Button/Button';
+import ButtonLabels from '../Button/ButtonLables';
 
-function PromoCampaignItem(props) {
+function PromoCampaignItem({ webUrl, name, handleStatisticsClick }) {
     return (
         <div className={ styles.promoCampaignItem }>
             <div className={ styles.descrWrapper }>
                 <div className={ styles.fieldsWrapper }>
-                    <p><b>Название:</b> {`"${props.name}"`}</p>
-                    {props.webUrl &&
-                    <p><b>URL:</b> {`"${props.webUrl}"`}</p>
+                    <p><b>Название:</b> { `"${ name }"` }</p>
+                    { webUrl &&
+                        <p><b>URL:</b> { `"${ webUrl }"` }</p>
                     }
                 </div>
                 <div className={ styles.promoCampaignItemActions }>
-                    <Button type="blue" label={ STATISTICS } onClick={ () => props.handleStatisticsClick() } />
+                    <Button
+                        type="blue"
+                        label={ ButtonLabels.STATISTICS }
+                        onClick={ () => handleStatisticsClick() }
+                    />
                 </div>
             </div>
         </div>

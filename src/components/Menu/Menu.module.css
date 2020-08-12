@@ -40,6 +40,6 @@
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.menu__item_active {
+.active {
     color: #08a652;
 }

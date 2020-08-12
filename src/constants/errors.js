@@ -1,12 +1,12 @@
-export const errors = {
-    authority: 'authority',
-    fail: 'fail'
+export const Errors = {
+    AUTHORITY: 'authority',
+    FAIL: 'fail'
 };
 
 export const getErrorText = (type) => {
     switch (type) {
-        case errors.authority: return 'Нет полномочий';
-        case errors.fail: return 'Неверный логин/пароль';
+        case Errors.AUTHORITY: return 'Недостаточно полномочий';
+        case Errors.FAIL: return 'Неверный логин/пароль';
         case null:
         default:
             return '';

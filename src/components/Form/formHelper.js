@@ -4,7 +4,7 @@ export const generateFormState = (obj) => {
     let state = {};
     let errorCount = 0;
 
-    Object.keys(obj).map(key => {
+    Object.keys(obj).forEach( key => {
         const { value, isRequired } = obj[key];
         state[key] = {
             value,
@@ -24,7 +24,7 @@ export const getValues = (obj) => {
     let fields = {};
     for (let key in obj) {
         if (typeof obj[key] === 'object' && obj[key] !== null) {
-            fields[key] = obj[key].value
+            fields[key] = obj[key].value;
         }
     }
 
