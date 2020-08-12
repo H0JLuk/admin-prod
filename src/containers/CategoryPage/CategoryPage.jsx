@@ -60,32 +60,29 @@ class CategoryPage extends Component {
         getCategoryList().then( response => {
             const { categoryList } = response;
             this.setState({ categories: categoryList });
-        }).catch(() => {
-            this.setState({ categories: [] });
-        });
+        }).catch(() => this.setState({ categories: [] }));
     }
 
-    clearState = () => {
-        this.setState({ editingCategory: { id: null, name: null, description: null, url: null, isActive: null } });
-    };
+    clearState = () => this.setState({
+        editingCategory: { id: null, name: null, description: null, url: null, isActive: null }
+    });
 
-    openModal = () => { this.setState({ isOpen: true }); };
+    openModal = () => this.setState({ isOpen: true });
 
-    closeModal = () => { this.setState({ isOpen: false }, this.clearState); };
+    closeModal = () => this.setState({ isOpen: false }, this.clearState);
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
             deleteCategory(id).then(() => {
                 const croppedCategories = this.state.categories.filter(category => category.categoryId !== id);
                 this.setState({ categories: croppedCategories });
-            }).catch(() => { alert(CATEGORY_DELETE_ERROR); });
+            }).catch(() => alert(CATEGORY_DELETE_ERROR));
         }
     };
 
-    handleEdit = (id, name, description, url, isActive ) => {
-        this.setState({
-            editingCategory: { id, name, description, url, isActive } }, () => { this.openModal(); });
-    };
+    handleEdit = (id, name, description, url, isActive ) => this.setState({
+        editingCategory: { id, name, description, url, isActive }
+    }, this.openModal);
 
     handleInputChange(event) {
         const target = event.target;
@@ -109,7 +106,7 @@ class CategoryPage extends Component {
         newCategories.splice(position + direction, 0, item);
         swapPositions(id, categories[position + direction].categoryId, CATEGORY_DIR).then(() => {
             this.setState({ categories: newCategories });
-        }).catch(() => { alert(CATEGORY_MOVE_ERROR); });
+        }).catch(() => alert(CATEGORY_MOVE_ERROR));
     };
 
     renderModalForm = () => {
@@ -194,10 +191,10 @@ class CategoryPage extends Component {
             };
             updateCategory(this.state.editingCategory.id, categoryDto).then(() => {
                 this.reloadCategory(categoryDto);
-            }).catch(error => { console.log(error.message); });
+            }).catch(error => console.error(error.message));
         } else {
             const imageFile = this.categoryRef.current.files[0];
-            const imageName = `${getAppCode()}/${CATEGORY_DIR}/${imageFile.name}`;
+            const imageName = `${ getAppCode() }/${ CATEGORY_DIR }/${ imageFile.name }`;
 
             uploadFile(imageFile, imageName)
                 .then(response => {
@@ -217,7 +214,7 @@ class CategoryPage extends Component {
                 })
                 .catch(error => {
                     alert(IMAGE_UPLOAD_ERROR);
-                    console.log(error.message);
+                    console.error(error.message);
                 });
         }
     };

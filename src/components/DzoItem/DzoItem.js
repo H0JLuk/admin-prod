@@ -9,50 +9,68 @@ import ButtonLabels from '../Button/ButtonLables';
 
 const ADD_EDIT_APP_URL = 'Add/Edit App url';
 
-const DzoItem = (props) => {
-    const { dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList, applicationList } = props;
+const DzoItem = ({
+                     dzoId, dzoName, screenUrl, logoUrl, header,
+                     description, cardUrl, dzoCode, webUrl, behaviorType,
+                     categoryList, applicationList, handleAddAppLink,
+                     handleEdit, handleDelete
+                 }) => {
+
     const [curCardUrl, setCardUrl] = useState(spinner);
     const [curScreenUrl, setScreenUrl] = useState(spinner);
     const [curLogoUrl, setLogoUrl] = useState(spinner);
 
     useEffect(() => {
         loadImageWithPromise(cardUrl, droidSvg)
-            .then(cardUrl => { setCardUrl(cardUrl); })
-            .catch(failUrl => { setCardUrl(failUrl); });
+            .then(setCardUrl)
+            .catch(setCardUrl);
     }, [cardUrl]);
 
     useEffect(() => {
         loadImageWithPromise(screenUrl, droidSvg)
-            .then(screenUrl => { setScreenUrl(screenUrl); })
-            .catch(failUrl => { setScreenUrl(failUrl); });
+            .then(setScreenUrl)
+            .catch(setScreenUrl);
     }, [screenUrl]);
 
     useEffect(() => {
         loadImageWithPromise(logoUrl, droidSvg)
-            .then(logoUrl => { setLogoUrl(logoUrl); })
-            .catch(failUrl => { setLogoUrl(failUrl); });
+            .then(setLogoUrl)
+            .catch(setLogoUrl);
     }, [logoUrl]);
 
 
-    const handleDelete = () => { props.handleDelete(dzoId); };
-    const handleEdit = () => { props.handleEdit(dzoId, dzoName, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList); };
-    const handleAddAppLink = () => {
-        props.handleAddAppLink(dzoId, dzoName, applicationList);
-    };
+    const onDeleteClick = () => handleDelete(dzoId);
+
+    const onEditClick = () => handleEdit(
+        dzoId, dzoName, screenUrl, logoUrl,
+        header, description, cardUrl, dzoCode,
+        webUrl, behaviorType, categoryList
+    );
+
+    const onAddAppClick = () => handleAddAppLink(dzoId, dzoName, applicationList);
 
     return (
         <div className={ styles.dzoItem }>
             <div className={ styles.imagesGroupBlock }>
                 <div className={ styles.imageBlockWrapper }>
                     <p align="center">Card image </p>
-                    <div className={ styles.imageWrapper } style={ { backgroundImage: `url(${curCardUrl})` } } />
+                    <div
+                        className={ styles.imageWrapper }
+                        style={ { backgroundImage: `url(${ curCardUrl })` } }
+                    />
                     <hr />
                     <p align="center">Logo image</p>
-                    <div className={ styles.imageWrapper } style={ { backgroundImage: `url(${curLogoUrl})` } } />
+                    <div
+                        className={ styles.imageWrapper }
+                        style={ { backgroundImage: `url(${ curLogoUrl })` } }
+                    />
                 </div>
                 <div className={ styles.imageBlockWrapper }>
-                    <p align="center">  Screen image </p>
-                    <div className={ styles.screenImageWrapper } style={ { backgroundImage: `url(${curScreenUrl})` } } />
+                    <p align="center">Screen image </p>
+                    <div
+                        className={ styles.screenImageWrapper }
+                        style={ { backgroundImage: `url(${ curScreenUrl })` } }
+                    />
                 </div>
             </div>
             <div className={ styles.descrWrapper }>
@@ -71,9 +89,9 @@ const DzoItem = (props) => {
                     <p className={ styles.textFormat }>{ behaviorType }</p>
                 </div>
                 <div className={ styles.dzoActions }>
-                    <Button type="green" onClick={ handleAddAppLink } label={ ADD_EDIT_APP_URL } />
-                    <Button type="green" onClick={ handleEdit } label={ ButtonLabels.EDIT } />
-                    <Button type="red" onClick={ handleDelete } label={ ButtonLabels.DELETE } />
+                    <Button type="green" onClick={ onAddAppClick } label={ ADD_EDIT_APP_URL } />
+                    <Button type="green" onClick={ onEditClick } label={ ButtonLabels.EDIT } />
+                    <Button type="red" onClick={ onDeleteClick } label={ ButtonLabels.DELETE } />
                 </div>
             </div>
         </div>
@@ -81,7 +99,6 @@ const DzoItem = (props) => {
 };
 
 DzoItem.propTypes = {
-
     dzoId: PropTypes.number.isRequired,
     dzoName: PropTypes.string.isRequired,
     dzoPresentationUrl: PropTypes.string,
@@ -95,6 +112,9 @@ DzoItem.propTypes = {
     behaviorType: PropTypes.string.isRequired,
     categoryList: PropTypes.array.isRequired,
     applicationList: PropTypes.array,
+    handleAddAppLink: PropTypes.func.isRequired,
+    handleEdit: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired
 };
 
 export default memo(DzoItem);

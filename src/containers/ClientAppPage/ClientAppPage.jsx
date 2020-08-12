@@ -37,12 +37,12 @@ class ClientAppPage extends Component {
     state = { ...initialState }
 
     componentDidMount() {
-        getClientAppList().then( response => {
-            const { clientApplicationDtoList } = response;
+        getClientAppList()
+            .then( response => {
+                const { clientApplicationDtoList } = response;
                 this.setState({ clientAppList: clientApplicationDtoList });
-            }).catch( () => {
-                this.setState({ clientAppList: [] });
-            });
+            })
+            .catch(() => this.setState({ clientAppList: [] }));
     }
 
     clearState = () => {
@@ -162,15 +162,12 @@ class ClientAppPage extends Component {
             isDeleted: this.state.editingClientApp.isDeleted
         };
         if (this.state.editingClientApp.id !== null) {
-            updateClientApp(this.state.editingClientApp.id, clientAppDto).then(() => {
-                this.reloadClientApps(clientAppDto);
-            }).catch(error => {
-                console.log(error.message);
-            });
+            updateClientApp(this.state.editingClientApp.id, clientAppDto)
+                .then(() => this.reloadClientApps(clientAppDto))
+                .catch(error => console.log(error.message));
         } else {
-            addClientApp(clientAppDto).then((response) => {
-                this.pushToClientAppList(response.id, clientAppDto);
-            });
+            addClientApp(clientAppDto)
+                .then(response => this.pushToClientAppList(response.id, clientAppDto));
         }
     };
 

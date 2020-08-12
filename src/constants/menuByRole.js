@@ -1,5 +1,5 @@
 import ROLES from './roles';
-import { ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_PRODUCT } from './route';
+import { ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_OWNER } from './route';
 import { menuItemLables as labels } from './lables';
 
 const AUDITOR_MENU_ITEMS = [
@@ -17,11 +17,11 @@ const ADMIN_MENU_ITEMS = [
 ];
 
 const PRODUCT_OWNER_MENU_ITEMS = [
-    { label: labels.DZO, path: ROUTE_PRODUCT.DZO },
-    { label: labels.LANDING, path: ROUTE_PRODUCT.LANDING },
-    { label: labels.CATEGORY, path: ROUTE_PRODUCT.CATEGORY },
-    { label: labels.SLIDER, path: ROUTE_PRODUCT.SLIDER },
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_PRODUCT.PROMO_CAMPAIGN }
+    { label: labels.DZO, path: ROUTE_OWNER.DZO },
+    { label: labels.LANDING, path: ROUTE_OWNER.LANDING },
+    { label: labels.CATEGORY, path: ROUTE_OWNER.CATEGORY },
+    { label: labels.SLIDER, path: ROUTE_OWNER.SLIDER },
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN }
 ];
 
 export const resolveMenuItemsByRole = (role) => {

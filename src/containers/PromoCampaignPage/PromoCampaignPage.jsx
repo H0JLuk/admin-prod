@@ -8,6 +8,8 @@ import cross from "../../static/images/cross.svg";
 import ButtonLabels from "../../components/Button/ButtonLables";
 
 const PROMO_CAMPAIGN_LIST_TITLE = 'Промо-кампании';
+const LIST_ERROR = 'Не удалось получить список промо-кампаний';
+const STATISTICS_ERROR = 'Не удалось получить статистику для промо-кампании';
 
 class PromoCampaignPage extends Component {
     constructor(props) {
@@ -23,19 +25,17 @@ class PromoCampaignPage extends Component {
     }
 
     componentDidMount() {
-        getPromoCampaignList().then(response => {
-            const { promoCampaignDtoList } = response;
-            this.setState({
-                promoCampaignList: promoCampaignDtoList
-            });
-        }).catch(() => {
-            this.setState({ getPromoCampaignList: null, listError: 'Не удалось получить список промо-кампаний' });
-        });
+        getPromoCampaignList()
+            .then(response => {
+                const { promoCampaignDtoList } = response;
+                this.setState({ promoCampaignList: promoCampaignDtoList });
+            })
+            .catch(() => this.setState({ promoCampaignList: null, listError: LIST_ERROR }));
     }
 
-    closeModal = () => {
-        this.setState({ isOpen: false, currentStatistics: null, currentPromoCampaign: null });
-    }
+    closeModal = () => this.setState({
+        isOpen: false, currentStatistics: null, currentPromoCampaign: null
+    });
 
     handleClickStatistics = (promoCampaign) => {
         this.setState({
@@ -50,7 +50,7 @@ class PromoCampaignPage extends Component {
         }).catch(() => this.setState({
             currentStatistics: null,
             isOpen: true,
-            statisticsError: 'Не удалось получить статистику для промо-кампании'
+            statisticsError: STATISTICS_ERROR
         }));
     }
 
@@ -59,8 +59,8 @@ class PromoCampaignPage extends Component {
             isOpen={ this.state.isOpen }
             onRequestClose={ this.closeModal }
         >
-            {this.renderError(this.state.statisticsError)}
-            {this.renderModalChildren()}
+            { this.renderError(this.state.statisticsError) }
+            { this.renderModalChildren() }
         </CustomModal>
     )
 

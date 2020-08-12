@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
-import { ROUTE, ROUTE_PRODUCT } from '../../constants/route';
+import { ROUTE, ROUTE_OWNER } from '../../constants/route';
 import PromoCampaignPage from '../../containers/PromoCampaignPage/PromoCampaignPage';
 import styles from './ProductPage.module.css';
 import Header from '../../components/Header/Header';
@@ -18,15 +18,15 @@ const ProductPage = (props) => {
             <Header history={ history } />
             <div className={ styles.wrapper }>
                 <Switch>
-                    <Route exact path={ ROUTE.PRODUCT } render={ () => <Redirect to={ ROUTE_PRODUCT.DZO } /> } />
+                    <Route exact path={ ROUTE.OWNER } render={ () => <Redirect to={ ROUTE_OWNER.DZO } /> } />
 
-                    <Route path={ ROUTE_PRODUCT.DZO } component={ DzoPage } />
-                    <Route path={ ROUTE_PRODUCT.LANDING } component={ LandingPage } />
-                    <Route path={ ROUTE_PRODUCT.CATEGORY } component={ CategoryPage } />
-                    <Route path={ ROUTE_PRODUCT.SLIDER } component={ SliderPage } />
-                    <Route path={ ROUTE_PRODUCT.PROMO_CAMPAIGN } component={ PromoCampaignPage } />
+                    <Route path={ ROUTE_OWNER.DZO } component={ DzoPage } />
+                    <Route path={ ROUTE_OWNER.LANDING } component={ LandingPage } />
+                    <Route path={ ROUTE_OWNER.CATEGORY } component={ CategoryPage } />
+                    <Route path={ ROUTE_OWNER.SLIDER } component={ SliderPage } />
+                    <Route path={ ROUTE_OWNER.PROMO_CAMPAIGN } component={ PromoCampaignPage } />
 
-                    <Route render={ () => <Redirect to={ ROUTE_PRODUCT.DZO } /> } />
+                    <Route render={ () => <Redirect to={ ROUTE_OWNER.DZO } /> } />
                 </Switch>
             </div>
         </Fragment>

@@ -12,8 +12,8 @@ const BannerItem = (props) => {
     const [url, setUrl] = useState(spinner);
     useEffect(() => {
         loadImageWithPromise(bannerUrl, droidSvg)
-            .then(url => { setUrl(url); })
-            .catch(failUrl => { setUrl(failUrl); });
+            .then(setUrl)
+            .catch(setUrl);
     }, [bannerUrl]);
 
 
@@ -22,10 +22,10 @@ const BannerItem = (props) => {
 
     return (
         <div className={ styles.bannerItem }>
-            <div className={ styles.imageWrapper } style={ { backgroundImage: `url(${url})` } } />
+            <div className={ styles.imageWrapper } style={ { backgroundImage: `url(${ url })` } } />
             <div className={ styles.descrWrapper }>
                 <div className={ styles.fieldsWrapper }>
-                    <p><b>ДЗО:</b> "{ dzoName }"</p>
+                    <p><b>ДЗО:</b>{ ` "${ dzoName }"` }</p>
                 </div>
                 <div className={ styles.bannerActions }>
                     <Button type="green" onClick={ handleEdit } label={ ButtonLabels.EDIT } />

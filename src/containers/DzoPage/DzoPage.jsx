@@ -81,26 +81,26 @@ class DzoPage extends Component {
             const { dzoDtoList } = response;
             this.setState({ dzoList: dzoDtoList });
             return getAllDzoList();
-        }).then( response => {
+        }).then(response => {
             const { dzoDtoList } = response;
             this.setState({ allDzoList: dzoDtoList });
             return getBehaviorTypes();
-        }).then( behaviorTypes => {
+        }).then(behaviorTypes => {
             this.setState({ behaviorTypes: behaviorTypes });
             return getCategoryList();
-        }).then( response => {
+        }).then(response => {
             const { categoryList } = response;
             this.setState({ categories: categoryList });
-        }).catch( () => {
-            this.setState({ dzoList: [], allDzoList: [], behaviorTypes: [], categories: [] });
-        });
+        }).catch(() => this.setState({
+            dzoList: [], allDzoList: [], behaviorTypes: [], categories: []
+        }));
     }
 
-    clearState = () => { this.setState(initialState); };
+    clearState = () => this.setState(initialState);
 
-    openModal = () => { this.setState({ isOpen: true }); };
+    openModal = () => this.setState({ isOpen: true });
 
-    closeModal = () => { this.setState( { isOpen: false }, this.clearState); };
+    closeModal = () => this.setState({ isOpen: false }, this.clearState);
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
@@ -108,7 +108,7 @@ class DzoPage extends Component {
                 const croppedDzoList = this.state.dzoList.filter(dzo => dzo.dzoId !== id);
                 this.setState({ dzoList: croppedDzoList });
             })
-            .catch( () => { alert(DZO_DELETE_ERROR); });
+            .catch(() => alert(DZO_DELETE_ERROR));
         }
     };
 
@@ -425,25 +425,17 @@ class DzoPage extends Component {
                         dzoName: editingDzo.name,
                         dzoCode: editingDzo.dzoCode
                     })
-                        .then(() => {
-                            this.reloadDzo(dzoDto);
-                        })
-                        .catch(error => {
-                            console.log(error.message);
-                        });
+                        .then(() => this.reloadDzo(dzoDto))
+                        .catch(error => console.warn(error.message));
                 } else {
                     addDzo(dzoDto)
-                        .then(dzoId => {
-                            this.pushToDzoList(dzoId, dzoDto);
-                        })
-                        .catch(error => {
-                            console.log(error.message);
-                        });
+                        .then(dzoId => this.pushToDzoList(dzoId, dzoDto))
+                        .catch(error => console.warn(error.message));
                 }
             })
-            .catch( error => {
+            .catch(error => {
                 alert(IMAGE_UPLOAD_ERROR);
-                console.log(error.message);
+                console.error(error.message);
             });
     };
 
@@ -485,9 +477,7 @@ class DzoPage extends Component {
                 }
                 this.setState({ dzoList: newDzoList }, this.closeModal);
             })
-            .catch(error => {
-                console.log(error.message);
-            });
+            .catch(error => console.error(error.message));
     };
 
     renderDzoList = () => {

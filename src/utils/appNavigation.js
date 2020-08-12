@@ -22,7 +22,7 @@ export const goToAdmin = (history) => {
 };
 
 export const goToProduct= (history) => {
-    history.push(ROUTE.PRODUCT);
+    history.push(ROUTE.OWNER);
 };
 
 export const goApp = (history, role) => {

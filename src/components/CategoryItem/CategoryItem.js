@@ -15,8 +15,8 @@ const CategoryItem = (props) => {
 
     useEffect(() => {
         loadImageWithPromise(categoryUrl, droidSvg)
-            .then(categoryUrl => { setUrl(categoryUrl); })
-            .catch(failUrl => { setUrl(failUrl); });
+            .then(setUrl)
+            .catch(setUrl);
     }, [categoryUrl]);
 
 

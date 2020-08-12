@@ -33,19 +33,19 @@ class App extends React.PureComponent {
         };
 
         return (
-            <div className="App">
+            <>
                 <Switch>
                     <Route exact path={ ROUTE.CORE } render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } />
 
                     <Route path={ ROUTE.LOGIN } component={ LoginPage } />
                     <Route path={ ROUTE.CLIENT_APPS } component={ ClientAppPage } />
                     <Route path={ ROUTE.ADMIN } component={ withRedirect( AdminPage, ROLES.ADMIN ) } />
-                    <Route path={ ROUTE.PRODUCT } component={ withRedirect( ProductPage, ROLES.PRODUCT_OWNER ) } />
+                    <Route path={ ROUTE.OWNER } component={ withRedirect( ProductPage, ROLES.PRODUCT_OWNER ) } />
                     <Route path={ ROUTE.AUDITOR } component={ withRedirect( AuditorPage, ROLES.AUDITOR ) } />
 
                     <Route render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } />
                 </Switch>
-            </div>
+            </>
         );
     }
 }

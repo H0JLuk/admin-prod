@@ -55,28 +55,30 @@ class LandingPage extends Component {
     }
 
     componentDidMount() {
-        getLandingList().then(response => {
-            const { landingDtoList } = response;
-            this.setState({ landings: landingDtoList });
-        }).catch(() => {
-            this.setState({ landings: [] });
-        });
+        getLandingList()
+            .then(response => {
+                const { landingDtoList } = response;
+                this.setState({ landings: landingDtoList });
+            })
+            .catch(() => this.setState({ landings: [] }));
     }
 
-    clearState = () => {
-        this.setState({ editingLanding: { landingId: null, header: null, description: null, imageUrl: null } });
-    };
+    clearState = () => this.setState({
+        editingLanding: { landingId: null, header: null, description: null, imageUrl: null }
+    });
 
-    openModal = () => { this.setState({ isOpen: true }); };
+    openModal = () => this.setState({ isOpen: true });
 
-    closeModal = () => { this.setState( { isOpen: false }, this.clearState); };
+    closeModal = () => this.setState( { isOpen: false }, this.clearState);
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
-            deleteLanding(id).then(() => {
-                const croppedLandings = this.state.landings.filter(landing => landing.landingId !== id);
-                this.setState({ landings: croppedLandings });
-            }).catch(() => { alert(LANDINGS_DELETE_ERROR); });
+            deleteLanding(id)
+                .then(() => {
+                    const croppedLandings = this.state.landings.filter(landing => landing.landingId !== id);
+                    this.setState({ landings: croppedLandings });
+                })
+                .catch(() => alert(LANDINGS_DELETE_ERROR));
         }
     };
 
@@ -91,14 +93,14 @@ class LandingPage extends Component {
         const item = landings[position];
         const newLandings = landings.filter((i) => i.landingId !== id);
         newLandings.splice(position + direction, 0, item);
-        swapPositions(id, landings[position + direction].landingId, LANDING_DIR).then(() => {
-            this.setState({ landings: newLandings });
-        }).catch(() => { alert(LANDINGS_MOVE_ERROR); });
+        swapPositions(id, landings[position + direction].landingId, LANDING_DIR)
+            .then(() => this.setState({ landings: newLandings }))
+            .catch(() => alert(LANDINGS_MOVE_ERROR));
     };
 
-    handleEdit = (landingId, header, description, imageUrl) => {
-        this.setState({ editingLanding: { landingId, header, description, imageUrl } }, () => { this.openModal(); });
-    };
+    handleEdit = (landingId, header, description, imageUrl) => this.setState({
+        editingLanding: { landingId, header, description, imageUrl }
+    }, this.openModal);
 
     renderModalForm = () => {
         const { formError, editingLanding } = this.state;
@@ -157,7 +159,7 @@ class LandingPage extends Component {
         if (this.state.editingLanding.landingId !== null && !this.landingRef.current.files.length) {
             landingDto = { ...data, imageUrl: this.state.editingLanding.imageUrl.slice(this.state.staticServerUrl.length) };
             updateLanding(this.state.editingLanding.landingId, landingDto)
-                .catch(error => { console.log(error.message); });
+                .catch(error => console.log(error.message));
             this.reloadLandings(data, this.state.editingLanding.imageUrl);
         } else {
             const imageFile = this.landingRef.current.files[0];

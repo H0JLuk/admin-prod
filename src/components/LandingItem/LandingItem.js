@@ -14,19 +14,19 @@ export const LandingItem = (props) => {
 
     useEffect( () => {
         loadImageWithPromise(imageUrl, droidSvg)
-            .then( url => { setUrl(url); })
-            .catch( failUrl => { setUrl(failUrl); });
+            .then(setUrl)
+            .catch(setUrl);
     }, [imageUrl]);
 
 
-    const handleDelete = () => { props.handleDelete(landingId); };
-    const handleEdit = () => { props.handleEdit(landingId, header, description, imageUrl); };
-    const handleMoveUp = () => { props.handleMove(landingId, UP); };
-    const handleMoveDown = () => { props.handleMove(landingId, DOWN); };
+    const handleDelete = () => props.handleDelete(landingId);
+    const handleEdit = () => props.handleEdit(landingId, header, description, imageUrl);
+    const handleMoveUp = () => props.handleMove(landingId, UP);
+    const handleMoveDown = () => props.handleMove(landingId, DOWN);
 
     return (
         <div className={ styles.landingItem }>
-            <div className={ styles.imageWrapper } style={ { backgroundImage: `url(${url})` } } />
+            <div className={ styles.imageWrapper } style={ { backgroundImage: `url(${ url })` } } />
             <div className={ styles.descrWrapper }>
                 <div className={ styles.textFieldFormat }>
                     <p className={ styles.headerFormat }><b>Заголовок:</b></p>

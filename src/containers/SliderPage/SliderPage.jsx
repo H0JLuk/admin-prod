@@ -31,7 +31,9 @@ const CHOOSE_DZO_PLEASE = 'Пожалуйста выберите ДЗО!';
 const BANNER_DIR = 'banner';
 
 const LoadingStatus = ({ loading }) => (
-    <p className={ styles.loadingLabel }>{ loading ? LOADING_LIST_LABEL : BANNERS_GET_ERROR }</p>
+    <p className={ styles.loadingLabel }>
+        { loading ? LOADING_LIST_LABEL : BANNERS_GET_ERROR }
+    </p>
 );
 
 class SliderPage extends Component {
@@ -63,9 +65,7 @@ class SliderPage extends Component {
         }).then(response => {
             const { bannerDtoList } = response;
             this.setState({ banners: bannerDtoList });
-        }).catch(() => {
-            this.setState({ dzoList: [], banners: [], staticServerUrl: null });
-        });
+        }).catch(() => this.setState({ dzoList: [], banners: [], staticServerUrl: null }));
     }
 
     clearState = () => {
@@ -78,21 +78,26 @@ class SliderPage extends Component {
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
-            deleteBanner(id).then(() => {
-                const croppedBanners = this.state.banners.filter(banner => banner.bannerId !== id);
-                this.setState({ banners: croppedBanners });
-            }).catch(() => { alert(BANNERS_DELETE_ERROR); });
+            deleteBanner(id)
+                .then(() => {
+                    const { banners } = this.state;
+                    const croppedBanners = banners.filter(banner => banner.bannerId !== id);
+                    this.setState({ banners: croppedBanners });
+                })
+                .catch(() => alert(BANNERS_DELETE_ERROR));
         }
     };
 
-    handleEdit = (id, dzoId, url, dzoName) => {
-        this.setState({ editingBanner: { id, dzoId, url, dzoName } }, () => { this.openModal(); });
-    };
+    handleEdit = (id, dzoId, url, dzoName) => this.setState(
+        { editingBanner: { id, dzoId, url, dzoName } }, this.openModal
+    );
 
     handleChangeDzo(event) {
         const { options, selectedIndex, value: dzoId } = event.target;
         const dzoName = options[selectedIndex].text;
-        this.setState(prevState => ({ editingBanner: { ...prevState.editingBanner, dzoId, dzoName } }));
+        this.setState(prevState => ({
+            editingBanner: { ...prevState.editingBanner, dzoId, dzoName }
+        }));
     }
 
     renderModalForm = () => {
@@ -100,7 +105,11 @@ class SliderPage extends Component {
         const formData = {};
         return (
             <div className={ styles.modalForm }>
-                <img src={ cross } onClick={ this.closeModal } className={ styles.crossSvg } alt={ ButtonLabels.CLOSE } />
+                <img
+                    src={ cross }
+                    onClick={ this.closeModal }
+                    className={ styles.crossSvg } alt={ ButtonLabels.CLOSE }
+                />
                 <Form
                     data={ formData }
                     buttonText={ ButtonLabels.SAVE }
@@ -116,17 +125,31 @@ class SliderPage extends Component {
                 <form className={ styles.sliderForm }>
                     <label className={ styles.sliderForm }>
                         <span>ДЗО: </span>
-                        <select value={ this.state.editingBanner.dzoId } onChange={ this.handleChangeDzo }>
-                            <option id={ 0 } key="dzo_0" value={ null }> </option>
+                        <select
+                            value={ this.state.editingBanner.dzoId }
+                            onChange={ this.handleChangeDzo }
+                        >
+                            <option id={ 0 } key="dzo_0" value={ null } />
                             { this.state.dzoList.map(option => {
-                                return <option id={ option } key={ `dzo_${option.dzoId}` } value={ option.dzoId }>{option.dzoName}</option>;
+                                return <option
+                                    id={ option }
+                                    key={ `dzo_${option.dzoId}` }
+                                    value={ option.dzoId }
+                                >
+                                    { option.dzoName }
+                                </option>;
                             })}
                         </select>
                     </label>
                 </form>
                 <form className={ styles.imageUploadContainer }>
                     <label htmlFor="bannerImageInput">Изображение баннера</label>
-                    <input type="file" id="bannerImageInput" ref={ this.bannerRef } className={ styles.imageUpload } />
+                    <input
+                        type="file"
+                        id="bannerImageInput"
+                        ref={ this.bannerRef }
+                        className={ styles.imageUpload }
+                    />
                 </form>
             </div>
         );
@@ -164,9 +187,7 @@ class SliderPage extends Component {
                 bannerUrl: this.state.editingBanner.url.slice(this.state.staticServerUrl.length)
             };
             updateBanner(this.state.editingBanner.id, bannerDto)
-                .catch(error => {
-                    console.log(error.message);
-                });
+                .catch(error => console.log(error.message));
             this.reloadBanners(this.state.editingBanner.url, this.state.editingBanner.dzoId);
         } else {
             const imageFile = this.bannerRef.current.files[0];

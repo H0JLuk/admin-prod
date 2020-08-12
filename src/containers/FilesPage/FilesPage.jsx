@@ -68,8 +68,7 @@ class FilesPage extends Component {
             getUsageUrl().then( usageUrl => { this.setState({ usageUrl }); });
             getInstallationUrl().then( installationUrl => { this.setState({ installationUrl }); });
         } catch (error) {
-            // Todo send error to backend
-            console.error(`Application list get error: ${error}`);
+            console.error(`Application list get error: ${ error }`);
         }
     }
 
@@ -127,10 +126,10 @@ class FilesPage extends Component {
         const pdfName = `${getAppCode()}/${PDF_DIR}/${editingPdf}.pdf`;
 
         uploadFile(pdfFile, pdfName)
-            .then( this.closeModal )
-            .catch( error => {
+            .then(this.closeModal)
+            .catch(error => {
                 alert(PDF_UPLOAD_ERROR);
-                console.log(error.message);
+                console.error(error.message);
             });
     };
 

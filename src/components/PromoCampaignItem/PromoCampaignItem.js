@@ -18,7 +18,7 @@ function PromoCampaignItem({ webUrl, name, handleStatisticsClick }) {
                     <Button
                         type="blue"
                         label={ ButtonLabels.STATISTICS }
-                        onClick={ () => handleStatisticsClick() }
+                        onClick={ handleStatisticsClick }
                     />
                 </div>
             </div>
