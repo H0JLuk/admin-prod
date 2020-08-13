@@ -1,15 +1,42 @@
 export const ROUTE = {
-    LOGIN:  '/login',
-    APP:    '/app',
-    CLIENT_APPS: '/clientApps'
+    CORE:           '/',
+    APP:            '/app',
+    LOGIN:          '/login',
+    AUDITOR:        '/auditor',
+    ADMIN:          '/admin',
+    OWNER:          '/owner',
+    CLIENT_APPS:    '/client-apps'
 };
 
-export const APP_ROUTE = {
-    USERS:          `${ROUTE.APP}/users`,
-    FILES:          `${ROUTE.APP}/files`,
-    DZO:            `${ROUTE.APP}/dzo`,
-    LANDING:        `${ROUTE.APP}/landing`,
-    CATEGORY:       `${ROUTE.APP}/category`,
-    SLIDER:         `${ROUTE.APP}/slider`,
-    PROMO_CAMPAIGN: `${ROUTE.APP}/promoCampaign`,
+const PAGE = {
+    AUDIT:          'audit',
+    CATEGORY:       'category',
+    DZO:            'dzo',
+    FILES:          'files',
+    LANDING:        'landing',
+    PROMO_CAMPAIGN: 'promo-campaign',
+    SLIDER:         'slider',
+    USERS:          'users'
+};
+
+export const ROUTE_AUDITOR = {
+    AUDIT:          `${ ROUTE.AUDITOR }/${ PAGE.AUDIT }`
+};
+
+export const ROUTE_ADMIN = {
+    USERS:          `${ ROUTE.ADMIN }/${ PAGE.USERS }`,
+    FILES:          `${ ROUTE.ADMIN }/${ PAGE.FILES }`,
+    DZO:            `${ ROUTE.ADMIN }/${ PAGE.DZO }`,
+    LANDING:        `${ ROUTE.ADMIN }/${ PAGE.LANDING }`,
+    CATEGORY:       `${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
+    SLIDER:         `${ ROUTE.ADMIN }/${ PAGE.SLIDER }`,
+    PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`
+};
+
+export const ROUTE_OWNER = {
+    DZO:            `${ ROUTE.OWNER }/${ PAGE.DZO }`,
+    LANDING:        `${ ROUTE.OWNER }/${ PAGE.LANDING }`,
+    CATEGORY:       `${ ROUTE.OWNER }/${ PAGE.CATEGORY }`,
+    SLIDER:         `${ ROUTE.OWNER }/${ PAGE.SLIDER }`,
+    PROMO_CAMPAIGN: `${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
 };

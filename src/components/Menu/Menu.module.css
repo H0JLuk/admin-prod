@@ -19,6 +19,7 @@
     line-height: 1.5;
     letter-spacing: -0.3px;
     color: #000014;
+    text-align: center;
 }
 
 .clientAppItem {
@@ -34,12 +35,13 @@
     text-align: right;
     color: #0000FF;
     cursor: pointer;
+    text-align: center;
 }
 
 .menu__item:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.menu__item_active {
+.active {
     color: #08a652;
 }

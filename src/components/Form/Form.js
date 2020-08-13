@@ -32,7 +32,7 @@ class Form extends React.PureComponent {
     onClick = (e) => {
         e.preventDefault();
         const { errorCount } = this.state;
-        const { onSubmit, sent } = this.props;
+        const { onSubmit } = this.props;
 
         if (errorCount > 0) {
             return;
@@ -50,7 +50,7 @@ class Form extends React.PureComponent {
         this.setState({
             [name]: { value: '', valid: isRequired === false, origValue: value },
             errorCount: formHelper.getErrorCounts(valid, errorCount, 'isRequired', isRequired)
-        })
+        });
     };
 
     onFocus = (e) => {
@@ -58,7 +58,7 @@ class Form extends React.PureComponent {
         this.setState({ active: name });
     };
 
-    onBlur = (e) => {
+    onBlur = () => {
         this.setState({ active: null });
     };
 
@@ -77,43 +77,43 @@ class Form extends React.PureComponent {
             iconClassName
         } = this.props;
 
-        const error = formError ? <p className={errorClassName}>{errorText}</p> : null;
+        const error = formError ? <p className={ errorClassName }>{ errorText }</p> : null;
 
         return (
-            <form className={formClassName}>
-                {Object.keys(data).map(key => {
+            <form className={ formClassName }>
+                { Object.keys(data).map(key => {
                     const item = data[key];
                     return (
                         <Input
-                            key={key}
-                            type={item.type}
-                            name={key}
-                            label={item.label}
-                            value={state[key].value}
-                            valid={state[key].valid}
-                            disabled={item.disabled}
-                            active={state.active === key}
-                            formError={formError}
-                            multiline={item.multiline}
-                            onChange={this.updateField}
-                            onClick={this.onClear}
-                            onFocus={this.onFocus}
-                            onBlur={this.onBlur}
-                            fieldClassName={fieldClassName}
-                            activeLabelClassName={activeLabelClassName}
-                            iconClassName={iconClassName}/>
+                            key={ key }
+                            type={ item.type }
+                            name={ key }
+                            label={ item.label }
+                            value={ state[key].value }
+                            valid={ state[key].valid }
+                            disabled={ item.disabled }
+                            active={ state.active === key }
+                            formError={ formError }
+                            multiline={ item.multiline }
+                            onChange={ this.updateField }
+                            onClick={ this.onClear }
+                            onFocus={ this.onFocus }
+                            onBlur={ this.onBlur }
+                            fieldClassName={ fieldClassName }
+                            activeLabelClassName={ activeLabelClassName }
+                            iconClassName={ iconClassName } />
                     );
                 })}
-                {error}
+                { error }
                 <Button
-                    label={buttonText}
-                    className={buttonClassName}
+                    label={ buttonText }
+                    className={ buttonClassName }
                     type='green'
                     font='roboto'
-                    disabled={state.errorCount !== 0}
-                    onClick={this.onClick}/>
+                    disabled={ state.errorCount !== 0 }
+                    onClick={ this.onClick } />
             </form>
-        )
+        );
     }
 }
 

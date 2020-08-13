@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {ROUTE} from "../../constants/route";
+import { ROUTE } from '../../constants/route';
 
 const defaultOptions = {
     headers: {
@@ -15,7 +15,7 @@ export default class ApiClient {
     }
 
     async request(url, reqOptions = {}, responseType = 'json') {
-        const { body, params = {}, ...restOptions } = reqOptions;
+        const { body, ...restOptions } = reqOptions;
         const urlWithParams = new URL(`${this.baseUrl}${url}`);
         const mergedOptions = _.merge(_.cloneDeep(this.options), restOptions);
 
@@ -39,8 +39,8 @@ export default class ApiClient {
             }
 
             if (response.status >= 400) {
-                if (response.status == 403) {
-                    window.location.href = ROUTE.LOGIN
+                if (response.status === 403) {
+                    window.location.href = ROUTE.LOGIN;
                 }
                 return this.errorMessageHandler(response);
             }

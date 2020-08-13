@@ -1,26 +1,33 @@
-const token = 'dzo_token';
-const clientAppCodeHeader = 'clientAppCode'
+const TOKEN = 'dzo_token';
+const ROLE = 'role';
+const APP_CODE = 'appCode';
 
-export function storeUserData(userToken) {
-    window.sessionStorage.setItem(token, userToken);
+export function storeUserData(userToken, userRole) {
+    window.sessionStorage.setItem(TOKEN, userToken);
+    window.sessionStorage.setItem(ROLE, userRole);
 }
 
 export function deleteUserData() {
-    window.sessionStorage.removeItem(token);
+    window.sessionStorage.removeItem(TOKEN);
+    window.sessionStorage.removeItem(ROLE);
 }
 
 export function getSession() {
-    return window.sessionStorage.getItem(token);
+    return window.sessionStorage.getItem(TOKEN);
 }
 
-export function storeClientAppCodeHeader(clientAppCode) {
-    window.sessionStorage.setItem(clientAppCodeHeader, clientAppCode);
+export function getRole() {
+    return window.sessionStorage.getItem(ROLE);
 }
 
-export function deleteClientAppCodeHeader() {
-    window.sessionStorage.removeItem(clientAppCodeHeader);
+export function saveAppCode(appCode) {
+    window.sessionStorage.setItem(APP_CODE, appCode);
 }
 
-export function getClientAppCodeHeader() {
-    return window.sessionStorage.getItem(clientAppCodeHeader);
+export function deleteAppCode() {
+    window.sessionStorage.removeItem(APP_CODE);
+}
+
+export function getAppCode() {
+    return window.sessionStorage.getItem(APP_CODE);
 }

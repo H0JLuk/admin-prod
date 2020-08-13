@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { ROUTE, APP_ROUTE } from '../../constants/route';
-import Header from '../Header/Header';
+import Header from '../../components/Header/Header';
 import FilesPage from '../FilesPage/FilesPage';
 import UsersPage from '../UsersPage/UsersPage';
 import DzoPage from '../DzoPage/DzoPage';
@@ -11,7 +11,6 @@ import SliderPage from '../SliderPage/SliderPage';
 import styles from './MainPage.module.css';
 
 import { logout } from '../../api/services/authService';
-import { getClientAppCodeHeader } from "../../api/services/sessionService";
 import PromoCampaignPage from "../PromoCampaignPage/PromoCampaignPage";
 
 
@@ -24,7 +23,7 @@ const MainPage = (props) => {
 
     return (
         <Fragment>
-            <Header doLogout={ doLogout } code={ getClientAppCodeHeader() } />
+            <Header doLogout={ doLogout } />
             <div className={ styles.wrapper }>
                 <Switch>
                     <Route path={ APP_ROUTE.FILES } component={ FilesPage } />

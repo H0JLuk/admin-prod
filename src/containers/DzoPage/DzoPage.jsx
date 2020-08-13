@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { uploadFile, getStaticUrl } from '../../api/services/adminService';
+import { uploadFile } from '../../api/services/adminService';
 import {
     addDzo,
     deleteDzo,
@@ -7,8 +7,9 @@ import {
     getAllDzoList,
     updateDzo,
     getBehaviorTypes,
-    addApplication} from '../../api/services/dzoService';
+    addApplication } from '../../api/services/dzoService';
 import { getCategoryList } from '../../api/services/categoryService';
+import { getStaticUrl } from '../../api/services/settingsService';
 import { DZO_EDIT_FROM, DZO_ADD_FROM, APP_EDIT_FROM } from '../../components/Form/forms';
 import { getErrorText } from '../../constants/errors';
 import applicationTypes from '../../constants/applicationTypes';
@@ -19,11 +20,11 @@ import Button from '../../components/Button/Button';
 import cross from '../../static/images/cross.svg';
 import styles from './DzoPage.module.css';
 import { populateFormWithData } from '../../components/Form/formHelper';
-import { CLOSE, SAVE } from '../../components/Button/ButtonLables';
+import ButtonLabels from '../../components/Button/ButtonLables';
 import classNames from 'classnames';
 import inputStyles from '../../components/Input/Input.module.css';
 import { isRequired } from '../../utils/validators';
-import {getClientAppCodeHeader} from "../../api/services/sessionService";
+import { getAppCode } from "../../api/services/sessionService";
 
 const DZO_LIST_GET_ERROR = 'Ошибка получения ДЗО!';
 const DZO_DELETE_ERROR = 'Ошибка удаления ДЗО!';
@@ -39,7 +40,7 @@ const SET_APPLICATION_URL = 'Укажите ссылку на приложени
 const DZO_CODE_NOT_UNIQUE = 'ДЗО с таким кодом уже есть!';
 
 const LoadingStatus = ({ loading }) => (
-    <p className={styles.loadingLabel}>{ loading ? LOADING_LIST_LABEL : DZO_LIST_GET_ERROR }</p>
+    <p className={ styles.loadingLabel }>{ loading ? LOADING_LIST_LABEL : DZO_LIST_GET_ERROR }</p>
 );
 
 const initialState = { 
@@ -57,7 +58,7 @@ class DzoPage extends Component {
         super(props);
         this.dzoRef = React.createRef();
         this.state = { ...initialState,
-            staticUrl: null,
+            staticUrl: getStaticUrl(),
             behaviorTypes: [],
             dzoList: [],
             allDzoList: [],
@@ -76,34 +77,30 @@ class DzoPage extends Component {
     }
 
     componentDidMount() {
-        getStaticUrl().then( staticUrl => {
-            this.setState({ staticUrl: staticUrl });
-            return getDzoList();
-        }).then( response => {
+        getDzoList().then( response => {
             const { dzoDtoList } = response;
             this.setState({ dzoList: dzoDtoList });
             return getAllDzoList();
-        }).then( response => {
+        }).then(response => {
             const { dzoDtoList } = response;
-            console.log("AllDzo: ", dzoDtoList)
             this.setState({ allDzoList: dzoDtoList });
             return getBehaviorTypes();
-        }).then( behaviorTypes => {
+        }).then(behaviorTypes => {
             this.setState({ behaviorTypes: behaviorTypes });
             return getCategoryList();
-        }).then( response => {
+        }).then(response => {
             const { categoryList } = response;
             this.setState({ categories: categoryList });
-        }).catch( () => {
-            this.setState({ staticUrl: null, dzoList: [], allDzoList: [], behaviorTypes: [], categories: [] });
-        });
+        }).catch(() => this.setState({
+            dzoList: [], allDzoList: [], behaviorTypes: [], categories: []
+        }));
     }
 
-    clearState = () => { this.setState(initialState) };
+    clearState = () => this.setState(initialState);
 
-    openModal = () => { this.setState({ isOpen: true }) };
+    openModal = () => this.setState({ isOpen: true });
 
-    closeModal = () => { this.setState( {isOpen: false}, this.clearState) };
+    closeModal = () => this.setState({ isOpen: false }, this.clearState);
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
@@ -111,12 +108,16 @@ class DzoPage extends Component {
                 const croppedDzoList = this.state.dzoList.filter(dzo => dzo.dzoId !== id);
                 this.setState({ dzoList: croppedDzoList });
             })
-            .catch( () => { alert(DZO_DELETE_ERROR) });
+            .catch(() => alert(DZO_DELETE_ERROR));
         }
     };
 
-    handleEdit = (id, name, screenUrl, logoUrl, header, description, cardUrl, dzoCode, webUrl, behaviorType, categoryList) => {
-        this.state.behaviorTypes.find( elem => {
+    handleEdit = (
+        id, name, screenUrl, logoUrl, header, description,
+        cardUrl, dzoCode, webUrl, behaviorType, categoryList
+    ) => {
+        const { behaviorTypes } = this.state;
+        behaviorTypes.forEach( elem => {
             if (elem.behaviorType === behaviorType) {
                 this.setState({
                     editingDzo: {
@@ -128,13 +129,13 @@ class DzoPage extends Component {
         });
         const categoryIdList = [];
         categoryList.forEach( elem => {
-            categoryIdList.push(elem.categoryId)
+            categoryIdList.push(elem.categoryId);
         });
-        this.setState({ categoryIdList: categoryIdList }, () => { this.openModal() });
+        this.setState({ categoryIdList: categoryIdList }, () => { this.openModal(); });
     };
 
     handleAddAppLink = (id, name, appList) => {
-        this.setState({ editingDzo: { id: id, name: name }, editingAppList: appList}, () => this.openModal());
+        this.setState({ editingDzo: { id: id, name: name }, editingAppList: appList }, () => this.openModal());
     };
 
     handleChange(event) {
@@ -157,34 +158,34 @@ class DzoPage extends Component {
         } else {
             categoryList.push(event.target.value);
         }
-        this.setState({categoryIdList: categoryList});
+        this.setState({ categoryIdList: categoryList });
     }
 
-    handleAppTypeChange({target: { value } }) {
+    handleAppTypeChange({ target: { value } }) {
         const { editingAppList } = this.state;
         if (!editingAppList) {
-            this.setState({editingAppType: value, editingAppUrl: ''});
+            this.setState({ editingAppType: value, editingAppUrl: '' });
         } else {
             const appItem = editingAppList.find(element => (element.applicationType === value));
             if (appItem) {
-                this.setState({editingAppType: value, editingAppUrl: appItem.applicationUrl});
+                this.setState({ editingAppType: value, editingAppUrl: appItem.applicationUrl });
             } else {
-                this.setState({editingAppType: value, editingAppUrl: ''});
+                this.setState({ editingAppType: value, editingAppUrl: '' });
             }
         }
     }
 
     updateEditingAppUrl(event) {
-        this.setState({ editingAppUrl: event.target.value});
+        this.setState({ editingAppUrl: event.target.value });
     }
 
     handleImageSelect(event) {
         switch (event.target.id) {
-            case ('dzoCardImage') : this.setState({cardFile: event.target.files[0]});
+            case ('dzoCardImage') : this.setState({ cardFile: event.target.files[0] });
                 break;
-            case ('dzoScreenImage') : this.setState({screenFile: event.target.files[0]});
+            case ('dzoScreenImage') : this.setState({ screenFile: event.target.files[0] });
                 break;
-            case ('dzoLogoImage') : this.setState({logoFile: event.target.files[0]});
+            case ('dzoLogoImage') : this.setState({ logoFile: event.target.files[0] });
                 break;
             default : return;
         }
@@ -193,7 +194,7 @@ class DzoPage extends Component {
     uploadFiles(dzoCode) {
         const { cardFile, screenFile, logoFile, staticUrl } = this.state;
         const promiseArray = [];
-        const imageName = `${getClientAppCodeHeader()}/${DZO_DIR}/${dzoCode}/`;
+        const imageName = `${getAppCode()}/${DZO_DIR}/${dzoCode}/`;
 
         if (cardFile != null) {
             promiseArray.push(uploadFile(cardFile, `${imageName}card/${cardFile.name}`)
@@ -201,9 +202,9 @@ class DzoPage extends Component {
                     this.setState( prevState => ({ editingDzo: {
                         ...prevState.editingDzo,
                         cardUrl: staticUrl + response.path
-                    }}));
+                    } }));
                 })
-            )
+            );
         }
         if (screenFile != null) {
             promiseArray.push(uploadFile(screenFile, `${imageName}screen/${screenFile.name}`)
@@ -211,9 +212,9 @@ class DzoPage extends Component {
                     this.setState( prevState => ({ editingDzo: {
                         ...prevState.editingDzo,
                         screenUrl: staticUrl + response.path
-                    }}));
+                    } }));
                 })
-            )
+            );
         }
         if (logoFile != null) {
             promiseArray.push(uploadFile(logoFile, `${imageName}logo/${logoFile.name}`)
@@ -221,15 +222,15 @@ class DzoPage extends Component {
                     this.setState( prevState => ({ editingDzo: {
                         ...prevState.editingDzo,
                         logoUrl: staticUrl + response.path
-                    }}));
+                    } }));
                 })
-            )
+            );
         }
         return promiseArray;
     }
 
     renderModalForm = () => {
-        const {formError, editingDzo, categories, behaviorTypes} = this.state;
+        const { formError, editingDzo, categories, behaviorTypes } = this.state;
         const formData = editingDzo.id != null ? populateFormWithData(DZO_EDIT_FROM, {
             dzoName: editingDzo.name,
             header: editingDzo.header,
@@ -238,50 +239,50 @@ class DzoPage extends Component {
             webUrl: editingDzo.webUrl
         }) : DZO_ADD_FROM;
         return (
-            <div className={styles.modalForm}>
-                <img src={cross} onClick={this.closeModal} className={styles.crossSvg} alt={CLOSE}/>
+            <div className={ styles.modalForm }>
+                <img src={ cross } onClick={ this.closeModal } className={ styles.crossSvg } alt={ ButtonLabels.CLOSE } />
                 <Form
-                    data={formData}
-                    buttonText={SAVE}
-                    onSubmit={this.onSubmit}
-                    formClassName={styles.dzoForm}
-                    fieldClassName={styles.dzoForm__field}
-                    activeLabelClassName={styles.dzoForm__field__activeLabel}
-                    buttonClassName={styles.dzoForm__button}
-                    errorText={getErrorText(formError)}
-                    formError={!!formError}
-                    errorClassName={styles.error}
+                    data={ formData }
+                    buttonText={ ButtonLabels.SAVE }
+                    onSubmit={ this.onSubmit }
+                    formClassName={ styles.dzoForm }
+                    fieldClassName={ styles.dzoForm__field }
+                    activeLabelClassName={ styles.dzoForm__field__activeLabel }
+                    buttonClassName={ styles.dzoForm__button }
+                    errorText={ getErrorText(formError) }
+                    formError={ !!formError }
+                    errorClassName={ styles.error }
                 />
-                <form className={styles.dzoForm}>
-                    <label className={styles.dzoForm__field__activeLabel}>
-                        Категории: <br/>
-                        <select className={styles.dzoForm} value={this.state.categoryIdList} readOnly={true} onClick={this.handleClick} multiple={true}>
-                            {categories.map(option => { return <option id={option} key={`category_${option.categoryId}`} value={option.categoryId.valueOf()}>{option.categoryName}</option>
+                <form className={ styles.dzoForm }>
+                    <label className={ styles.dzoForm__field__activeLabel }>
+                        Категории: <br />
+                        <select className={ styles.dzoForm } value={ this.state.categoryIdList } readOnly={ true } onClick={ this.handleClick } multiple={ true }>
+                            {categories.map(option => { return <option id={ option } key={ `category_${option.categoryId}` } value={ option.categoryId.valueOf() }>{option.categoryName}</option>;
                             })}
                         </select>
                     </label>
                 </form>
-                <form className={styles.dzoForm}>
-                    <label className={styles.dzoForm__field__activeLabel}>
-                        Тип поведения:<br/>
-                        <select className={styles.dzoForm} value={this.state.editingDzo.behaviorId} onChange={this.handleChange}>
-                            <option key={0} value={''}> Не задано </option>
-                            {behaviorTypes.map(option => { return <option id={option} key={`behavior_${option.behaviorId}`} value={option.behaviorId}>{option.behaviorType}</option>
+                <form className={ styles.dzoForm }>
+                    <label className={ styles.dzoForm__field__activeLabel }>
+                        Тип поведения:<br />
+                        <select className={ styles.dzoForm } value={ this.state.editingDzo.behaviorId } onChange={ this.handleChange }>
+                            <option key={ 0 } value=""> Не задано </option>
+                            {behaviorTypes.map(option => { return <option id={ option } key={ `behavior_${option.behaviorId}` } value={ option.behaviorId }>{option.behaviorType}</option>;
                             })}
                         </select>
                     </label>
                 </form>
-                <form className={styles.imageUploadContainer}>
+                <form className={ styles.imageUploadContainer }>
                     <label htmlFor="dzoImageInput">Изображение ДЗО card</label>
-                    <input type="file" id="dzoCardImage" ref={this.dzoRef} className={styles.imageUpload} onChange={this.handleImageSelect}/>
+                    <input type="file" id="dzoCardImage" ref={ this.dzoRef } className={ styles.imageUpload } onChange={ this.handleImageSelect } />
                 </form>
-                <form className={styles.imageUploadContainer}>
+                <form className={ styles.imageUploadContainer }>
                     <label htmlFor="dzoImageInput">Изображение ДЗО screen</label>
-                    <input type="file" id="dzoScreenImage" ref={this.dzoRef} className={styles.imageUpload} onChange={this.handleImageSelect}/>
+                    <input type="file" id="dzoScreenImage" ref={ this.dzoRef } className={ styles.imageUpload } onChange={ this.handleImageSelect } />
                 </form>
-                <form className={styles.imageUploadContainer}>
+                <form className={ styles.imageUploadContainer }>
                     <label htmlFor="dzoImageInput">Изображение ДЗО logo</label>
-                    <input type="file" id="dzoLogoImage" ref={this.dzoRef} className={styles.imageUpload} onChange={this.handleImageSelect}/>
+                    <input type="file" id="dzoLogoImage" ref={ this.dzoRef } className={ styles.imageUpload } onChange={ this.handleImageSelect } />
                 </form>
             </div>
         );
@@ -292,41 +293,41 @@ class DzoPage extends Component {
         const formData = populateFormWithData(APP_EDIT_FROM, { dzoName: editingDzo.name });
 
         return (
-        <div className={styles.modalAppForm}>
-            <img src={cross} onClick={this.closeModal} className={styles.crossSvg} alt={CLOSE}/>
+        <div className={ styles.modalAppForm }>
+            <img src={ cross } onClick={ this.closeModal } className={ styles.crossSvg } alt={ ButtonLabels.CLOSE } />
             <Form
-                data={formData}
-                buttonText={SAVE}
-                onSubmit={this.appUrlSubmit}
-                formClassName={styles.appForm}
-                fieldClassName={styles.appForm__field}
-                activeLabelClassName={styles.appForm__field__activeLabel}
-                buttonClassName={styles.appForm__button}
-                errorText={getErrorText(formError)}
-                formError={!!formError}
-                errorClassName={styles.error}
+                data={ formData }
+                buttonText={ ButtonLabels.SAVE }
+                onSubmit={ this.appUrlSubmit }
+                formClassName={ styles.appForm }
+                fieldClassName={ styles.appForm__field }
+                activeLabelClassName={ styles.appForm__field__activeLabel }
+                buttonClassName={ styles.appForm__button }
+                errorText={ getErrorText(formError) }
+                formError={ !!formError }
+                errorClassName={ styles.error }
             />
-            <div className={styles.appForm}>
-                <div className={classNames(styles.appForm__field, inputStyles.field)}>
-                    <label className={classNames(inputStyles.label,styles.appForm__field__activeLabel)}>
-                        Тип приложения:<br/>
+            <div className={ styles.appForm }>
+                <div className={ classNames(styles.appForm__field, inputStyles.field) }>
+                    <label className={ classNames(inputStyles.label,styles.appForm__field__activeLabel) }>
+                        Тип приложения:<br />
                     </label>
-                    <select className={styles.appForm} value={this.editingAppType} onChange={this.handleAppTypeChange}>
-                        <option key={0} value={''}> Не задано </option>
-                        {applicationTypes.map(option => { return <option id={option.type} key={`application_${option.type}`} value={option.type}>{option.type}</option>
+                    <select className={ styles.appForm } value={ this.editingAppType } onChange={ this.handleAppTypeChange }>
+                        <option key={ 0 } value=""> Не задано </option>
+                        {applicationTypes.map(option => { return <option id={ option.type } key={ `application_${option.type}` } value={ option.type }>{option.type}</option>;
                         })}
                     </select>
                 </div>
-                <div className={classNames(styles.appForm__field, inputStyles.field)}>
-                    <label htmlFor="appUrl" className={classNames(inputStyles.label,styles.appForm__field__activeLabel)}>
-                        Ссылка на приложение:<br/>
+                <div className={ classNames(styles.appForm__field, inputStyles.field) }>
+                    <label htmlFor="appUrl" className={ classNames(inputStyles.label,styles.appForm__field__activeLabel) }>
+                        Ссылка на приложение:<br />
                     </label>
                         <input type='text'
                                id='appUrl'
                                name='appUrl'
-                               className={inputStyles.input}
-                               onChange={this.updateEditingAppUrl}
-                               value={this.state.editingAppUrl}
+                               className={ inputStyles.input }
+                               onChange={ this.updateEditingAppUrl }
+                               value={ this.state.editingAppUrl }
                                required pattern="^[^ ]*"
                         />
                 </div>
@@ -344,30 +345,33 @@ class DzoPage extends Component {
     }
 
     reloadDzo(dzoDto) {
-        const { editingDzo, dzoList, cardFile, screenFile, logoFile, categoryIdList } = this.state;
+        const {
+            editingDzo: { id, cardUrl, screenUrl, logoUrl, name, behaviorType },
+            dzoList, cardFile, screenFile, logoFile, categoryIdList
+        } = this.state;
         const newDzoList = dzoList.slice();
-        newDzoList.find( elem => {
-            if (elem.dzoId === editingDzo.id) {
-                if (cardFile !== null && elem.cardUrl === editingDzo.cardUrl) {
+        newDzoList.forEach( elem => {
+            if (elem.dzoId === id) {
+                if (cardFile !== null && elem.cardUrl === cardUrl) {
                     elem.cardUrl = '';
                 }
-                if (screenFile !== null && elem.screenUrl === editingDzo.screenUrl) {
+                if (screenFile !== null && elem.screenUrl === screenUrl) {
                     elem.screenUrl = '';
                 }
-                if (logoFile !== null && elem.logoUrl === editingDzo.logoUrl) {
+                if (logoFile !== null && elem.logoUrl === logoUrl) {
                     elem.logoUrl = '';
                 }
-                this.setState({ dzoList: newDzoList});
-                elem.name = editingDzo.name;
+                this.setState({ dzoList: newDzoList });
+                elem.name = name;
                 elem.header = dzoDto.header;
                 elem.description = dzoDto.description;
-                elem.cardUrl = editingDzo.cardUrl;
-                elem.screenUrl = editingDzo.screenUrl;
-                elem.logoUrl = editingDzo.logoUrl;
+                elem.cardUrl = cardUrl;
+                elem.screenUrl = screenUrl;
+                elem.logoUrl = logoUrl;
                 elem.webUrl = dzoDto.webUrl;
-                elem.behaviorType = editingDzo.behaviorType;
+                elem.behaviorType = behaviorType;
                 elem.categoryList = categoryIdList.map( value => {
-                    return {categoryId: value};
+                    return { categoryId: value };
                 });
             }
         });
@@ -378,9 +382,9 @@ class DzoPage extends Component {
         const { id } = dzoId;
         const { categoryIdList, editingDzo, dzoList, allDzoList } = this.state;
         const categoryList = categoryIdList.map( value => {
-            return {categoryId: value};
+            return { categoryId: value };
         });
-        const newDzoItem = {...dzoDto, cardUrl: editingDzo.cardUrl, screenUrl: editingDzo.screenUrl,
+        const newDzoItem = { ...dzoDto, cardUrl: editingDzo.cardUrl, screenUrl: editingDzo.screenUrl,
             logoUrl: editingDzo.logoUrl, dzoId: id, behaviorType: editingDzo.behaviorType, categoryList
         };
         const newDzoList = [newDzoItem, ...dzoList];
@@ -421,25 +425,17 @@ class DzoPage extends Component {
                         dzoName: editingDzo.name,
                         dzoCode: editingDzo.dzoCode
                     })
-                        .then(() => {
-                            this.reloadDzo(dzoDto)
-                        })
-                        .catch(error => {
-                            console.log(error.message)
-                        })
+                        .then(() => this.reloadDzo(dzoDto))
+                        .catch(error => console.warn(error.message));
                 } else {
                     addDzo(dzoDto)
-                        .then(dzoId => {
-                            this.pushToDzoList(dzoId, dzoDto)
-                        })
-                        .catch(error => {
-                            console.log(error.message)
-                        })
+                        .then(dzoId => this.pushToDzoList(dzoId, dzoDto))
+                        .catch(error => console.warn(error.message));
                 }
             })
-            .catch( error => {
+            .catch(error => {
                 alert(IMAGE_UPLOAD_ERROR);
-                console.log(error.message);
+                console.error(error.message);
             });
     };
 
@@ -481,9 +477,7 @@ class DzoPage extends Component {
                 }
                 this.setState({ dzoList: newDzoList }, this.closeModal);
             })
-            .catch(error => {
-                console.log(error.message)
-            })
+            .catch(error => console.error(error.message));
     };
 
     renderDzoList = () => {
@@ -496,51 +490,51 @@ class DzoPage extends Component {
                         dzoList.length ?
                             dzoList.map((dzo, i) =>
                                 <DzoItem
-                                    key={`dzoItem-${i}`}
-                                    handleDelete={this.handleDelete}
-                                    handleEdit={this.handleEdit}
-                                    handleAddAppLink={this.handleAddAppLink}
-                                    {...dzo}
+                                    key={ `dzoItem-${i}` }
+                                    handleDelete={ this.handleDelete }
+                                    handleEdit={ this.handleEdit }
+                                    handleAddAppLink={ this.handleAddAppLink }
+                                    { ...dzo }
                                 />
                             ) : <LoadingStatus loading />
                     ) : <LoadingStatus />
                 }
             </Fragment>
-        )
+        );
     };
 
     renderModifyModal = () => (
         <CustomModal
-            isOpen={this.state.isOpen}
-            onRequestClose={this.closeModal}>
+            isOpen={ this.state.isOpen }
+            onRequestClose={ this.closeModal }>
             {(this.state.editingAppList !== null) ? this.renderAppEditModalForm() : this.renderModalForm()}
         </CustomModal>
     );
 
     render() {
         const openWithParam = () => {
-            this.openModal()
+            this.openModal();
         };
         return (
-            <div className={styles.dzoPageWrapper}>
+            <div className={ styles.dzoPageWrapper }>
                 { this.renderModifyModal() }
-                <div className={styles.headerSection}>
+                <div className={ styles.headerSection }>
                     <h3>{DZO_LIST_TITLE}</h3>
                     <div>
                         <Button
-                            onClick={openWithParam}
-                            label={ADD_DZO_TITLE}
+                            onClick={ openWithParam }
+                            label={ ADD_DZO_TITLE }
                             font="roboto"
                             type="green"
                         />
                     </div>
                 </div>
-                <div className={styles.dzoList}>
+                <div className={ styles.dzoList }>
                     {this.renderDzoList()}
                 </div>
             </div>
-        )
+        );
     }
 }
 
-export default DzoPage
+export default DzoPage;

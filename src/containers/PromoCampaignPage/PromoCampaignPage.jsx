@@ -5,9 +5,11 @@ import PromoCampaignItem from "../../components/PromoCampaignItem/PromoCampaignI
 import styles from './PromoCampaignPage.module.css';
 import { withRouter } from "react-router-dom";
 import cross from "../../static/images/cross.svg";
-import { CLOSE } from "../../components/Button/ButtonLables";
+import ButtonLabels from "../../components/Button/ButtonLables";
 
 const PROMO_CAMPAIGN_LIST_TITLE = 'Промо-кампании';
+const LIST_ERROR = 'Не удалось получить список промо-кампаний';
+const STATISTICS_ERROR = 'Не удалось получить статистику для промо-кампании';
 
 class PromoCampaignPage extends Component {
     constructor(props) {
@@ -23,19 +25,17 @@ class PromoCampaignPage extends Component {
     }
 
     componentDidMount() {
-        getPromoCampaignList().then(response => {
-            const { promoCampaignDtoList } = response;
-            this.setState({
-                promoCampaignList: promoCampaignDtoList
-            });
-        }).catch(() => {
-            this.setState({ getPromoCampaignList: null, listError: 'Не удалось получить список промо-кампаний' });
-        });
+        getPromoCampaignList()
+            .then(response => {
+                const { promoCampaignDtoList } = response;
+                this.setState({ promoCampaignList: promoCampaignDtoList });
+            })
+            .catch(() => this.setState({ promoCampaignList: null, listError: LIST_ERROR }));
     }
 
-    closeModal = () => {
-        this.setState({ isOpen: false, currentStatistics: null, currentPromoCampaign: null });
-    }
+    closeModal = () => this.setState({
+        isOpen: false, currentStatistics: null, currentPromoCampaign: null
+    });
 
     handleClickStatistics = (promoCampaign) => {
         this.setState({
@@ -50,7 +50,7 @@ class PromoCampaignPage extends Component {
         }).catch(() => this.setState({
             currentStatistics: null,
             isOpen: true,
-            statisticsError: 'Не удалось получить статистику для промо-кампании'
+            statisticsError: STATISTICS_ERROR
         }));
     }
 
@@ -59,8 +59,8 @@ class PromoCampaignPage extends Component {
             isOpen={ this.state.isOpen }
             onRequestClose={ this.closeModal }
         >
-            {this.renderError(this.state.statisticsError)}
-            {this.renderModalChildren()}
+            { this.renderError(this.state.statisticsError) }
+            { this.renderModalChildren() }
         </CustomModal>
     )
 
@@ -94,23 +94,23 @@ class PromoCampaignPage extends Component {
         }
         return (
             <div className={ styles.modalForm }>
-                <img src={ cross } onClick={ this.closeModal } className={ styles.crossSvg } alt={ CLOSE } />
+                <img src={ cross } onClick={ this.closeModal } className={ styles.crossSvg } alt={ ButtonLabels.CLOSE } />
                 <div>
                     <h3>{title}</h3>
                     <h5>{description}</h5>
-                    {currentPromoCodeType && currentPromoCodeType !== 'NONE' &&
-                    <div className={ styles.promoCampaignStatistics }>
-                        <table>
-                            <tr>
-                                <td><b>Всего промокодов:</b></td>
-                                <td>{totalPromoCodesNumber}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Выдано:</b></td>
-                                <td>{issuedPromoCodesNumber}</td>
-                            </tr>
-                        </table>
-                    </div>
+                    { currentPromoCodeType && currentPromoCodeType !== 'NONE' &&
+                        <div className={ styles.promoCampaignStatistics }>
+                            <table>
+                                <tr>
+                                    <td><b>Всего промокодов:</b></td>
+                                    <td>{ totalPromoCodesNumber }</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Выдано:</b></td>
+                                    <td>{ issuedPromoCodesNumber }</td>
+                                </tr>
+                            </table>
+                        </div>
                     }
                 </div>
             </div>
@@ -122,10 +122,10 @@ class PromoCampaignPage extends Component {
             return;
         }
         const { promoCampaignList } = this.state;
-        const promoCampaignItems = promoCampaignList.map((campaign, i) => {
+        const promoCampaignItems = promoCampaignList.map( (campaign, i) => {
             return (
                 <PromoCampaignItem
-                    key={ `promoCampaignItem-${i}` }
+                    key={ `promoCampaignItem-${ i }` }
                     dzoId={ campaign.dzoId }
                     id={ campaign.id }
                     name={ campaign.name }
@@ -143,7 +143,7 @@ class PromoCampaignPage extends Component {
             return;
         }
         return (
-            <div className={ styles.error }>{error}</div>
+            <div className={ styles.error }>{ error }</div>
         );
     }
 
@@ -151,11 +151,11 @@ class PromoCampaignPage extends Component {
         return (
             <div className={ styles.wrapper }>
                 <div className={ styles.promoCampaignPageWrapper }>
-                    {this.renderStatisticsModal()}
+                    { this.renderStatisticsModal() }
                     <div className={ styles.headerSection }>
                         <h3>{PROMO_CAMPAIGN_LIST_TITLE}</h3>
                     </div>
-                    {this.renderError(this.state.listError)}
+                    { this.renderError(this.state.listError) }
                     <div className={ styles.promoCampaignList }>
                         {this.renderPromoCampaignList()}
                     </div>

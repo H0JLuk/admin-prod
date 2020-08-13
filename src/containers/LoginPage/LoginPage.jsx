@@ -1,45 +1,50 @@
 import React, { useState } from 'react';
+import { goToClientApps } from '../../utils/appNavigation';
 import styles from './LoginPage.module.css';
 import { LOGIN_FORM } from '../../components/Form/forms';
 import Form from '../../components/Form/Form';
 import { login } from '../../api/services/authService';
 import { storeUserData } from '../../api/services/sessionService';
-import { ROUTE } from '../../constants/route';
-import { errors, getErrorText } from '../../constants/errors';
-import { roles } from '../../constants/users';
+import { Errors, getErrorText } from '../../constants/errors';
+import { ROLES } from '../../constants/roles';
+import ButtonLabels from '../../components/Button/ButtonLables';
+
 
 const LoginPage = (props) => {
-    const [error, setError] = useState(null);
+
+    const [ error, setError ] = useState(null);
+    const { history } = props;
 
     const onSubmit = (data) => {
-        login(data).then(response => {
-            if (response.authority !== roles.admin) {
-                setError(errors.authority);
+        login(data).then( response => {
+            const { token, authority } = response;
+            if (!Object.values(ROLES).includes(authority)) {
+                setError(Errors.AUTHORITY);
                 return;
             }
-            storeUserData(response.token);
-            props.history.push(ROUTE.CLIENT_APPS)
+            storeUserData(token, authority);
+            goToClientApps(history);
         }, () => {
-            setError(errors.fail);
-        })
+            setError(Errors.FAIL);
+        });
     };
 
     return (
-        <div className={styles.container}>
+        <div className={ styles.container }>
             <Form
-                data={LOGIN_FORM}
-                buttonText='Вход'
-                onSubmit={onSubmit}
-                formClassName={styles.loginForm}
-                fieldClassName={styles.loginForm__field}
-                activeLabelClassName={styles.loginForm__field__activeLabel}
-                buttonClassName={styles.loginForm__button}
-                errorText={getErrorText(error)}
-                formError={!!error}
-                errorClassName={styles.error}
+                data={ LOGIN_FORM }
+                buttonText={ ButtonLabels.LOGIN }
+                onSubmit={ onSubmit }
+                formClassName={ styles.loginForm }
+                fieldClassName={ styles.loginForm__field }
+                activeLabelClassName={ styles.loginForm__field__activeLabel }
+                buttonClassName={ styles.loginForm__button }
+                errorText={ getErrorText(error) }
+                formError={ !!error }
+                errorClassName={ styles.error }
             />
         </div>
-    )
+    );
 };
 
 export default LoginPage;

@@ -1,5 +1,5 @@
-import {Api} from "../apiClient";
-import {getReqOptions} from "./index";
+import { Api } from '../apiClient';
+import { getReqOptions } from './index';
 
 export async function getBannerList() {
     return  Api.get('/banner/list', getReqOptions());
