@@ -5,6 +5,7 @@ import { useTable, usePagination } from 'react-table';
 import {getReqOptions} from "../../api/services";
 import ReactJson from "react-json-view";
 import SelectColumnFilter from "./SelectColumnFilter";
+import {baseUrl} from "../../api/apiClient";
 
 const initialState = { events: [], totalElements: 0, totalPages: 0,
     numberOfElements: 0, size: 20, number: 0 };
@@ -92,7 +93,7 @@ const AuditPage = () => {
 
     useEffect(() => {
         async function fetchData(pageSize, pageNo) {
-            const url = new URL('http://localhost:8070/distributor/admin/audit/events');
+            const url = new URL(`${baseUrl}/admin/audit/events`);
             url.search = new URLSearchParams({pageNo, pageSize}).toString();
 
             const response = await fetch(url.toString(), getReqOptions());
