@@ -75,3 +75,22 @@
     color: #f6650a;
     font-family: Roboto, sans-serif;
 }
+.table-cell:last-child {
+    border-bottom: 0;
+}
+.table {
+    border-spacing: 0;
+    border: 1px solid black;
+
+}
+
+.table-header, .table-cell {
+    margin: 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.pagination {
+    padding: 0.5rem;
+}

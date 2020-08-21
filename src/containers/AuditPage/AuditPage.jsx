@@ -1,23 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import styles from './AuditPage.module.css';
-import { useTable } from 'react-table';
+import { useTable, usePagination } from 'react-table';
+// import DatePicker from "react-datepicker";
+import {getReqOptions} from "../../api/services";
+import ReactJson from "react-json-view";
+import SelectColumnFilter from "./SelectColumnFilter";
 
-const initialState = { content: [], totalElements: 0, totalPages: 0,
+const initialState = { events: [], totalElements: 0, totalPages: 0,
     numberOfElements: 0, size: 20, number: 0 };
+
+const DATE_FORMAT = 'dd.MM.yyyy';
+
+// const a = (<DatePicker
+//     className={ styles.datepicker }
+//     dateFormat={ DATE_FORMAT }
+//     selected={ endDate }
+//     onChange={ date => { this.handleChangeDate(date, false); } }
+// />)
 const AuditPage = () => {
 
     const [data, setData] = useState(initialState);
-    const { content } = data;
+    const { events, totalPages } = data;
     console.log(data);
-    useEffect(() => {
-        async function fetchData() {
-            const url = new URL(`http://localhost:8070/distributor/audit/list`);
-            const response = await fetch(url.toString());
-            const json = await response.json();
-            setData(json);
-        }
-        fetchData();
-    }, []);
 
     const columns = React.useMemo(
         () => [
@@ -28,6 +32,8 @@ const AuditPage = () => {
             {
                 Header: 'Тип события',
                 accessor: 'type',
+                Filter: SelectColumnFilter,
+                filter: 'includes',
             },
             {
                 Header: 'Пользователь',
@@ -44,62 +50,71 @@ const AuditPage = () => {
             {
                 Header: 'Детали',
                 accessor: 'details',
+                Cell: ({row: {original: {details}}}) => details && (<ReactJson
+                    src={JSON.parse(details)}
+                    name={null}
+                    enableClipboard={false}
+                    displayObjectSize={false}
+                    displayDataTypes={false}
+                    collapsed={true}
+                    iconStyle='circle'
+                />
+                )
             },
             {
                 Header: 'Успешно',
                 accessor: 'success',
+                Cell: ({row: {original: {success}}}) => <span>{success ? 'Успешно' : 'Не успешно'}</span>
             },
-        ],
-        []
-    )
-    const olddata = React.useMemo(
-        () => [
-            {
-                "id": 1,
-                "type": "LOGIN",
-                "clientAppCode": "admin",
-                "userLogin": "000000",
-                "userIp": "0:0:0:0:0:0:0:1",
-                "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36",
-                "happenedAt": "2020-08-17T15:24:07.314+00:00",
-                "details": null,
-                "success": true
-            },
-            {
-                "id": 2,
-                "type": "LOGIN",
-                "clientAppCode": "admin",
-                "userLogin": "000000",
-                "userIp": "0:0:0:0:0:0:0:1",
-                "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36",
-                "happenedAt": "2020-08-17T15:34:07.314+00:00",
-                "details": null,
-                "success": true
-            }
         ],
         []
     )
 
-    const tableInstance = useTable({ columns, data: content });
+    const tableInstance = useTable({ columns, data: events, initialState: { pageIndex: 0 }, manualPagination: true,
+        pageCount: totalPages }, usePagination);
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
         rows,
         prepareRow,
+        page,
+        canPreviousPage,
+        canNextPage,
+        pageOptions,
+        pageCount,
+        gotoPage,
+        nextPage,
+        previousPage,
+        setPageSize,
+        state: { pageIndex, pageSize },
     } = tableInstance
 
+    useEffect(() => {
+        async function fetchData(pageSize, pageNo) {
+            const url = new URL('http://localhost:8070/distributor/admin/audit/events');
+            url.search = new URLSearchParams({pageNo, pageSize}).toString();
+
+            const response = await fetch(url.toString(), getReqOptions());
+            const json = await response.json();
+            setData(json);
+        }
+        fetchData(pageSize, pageIndex);
+    }, [pageIndex, pageSize, totalPages]);
+
+    console.table({pageIndex, pageSize});
     return (
         <div className={ styles.container }>
             <p>Журнал аудита</p>
-            <table {...getTableProps()}>
-                <thead>
+            <table {...getTableProps()} className={styles.table}>
+
+                <thead >
                 {
                     headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             {
                                 headerGroup.headers.map(column => (
-                                    <th {...column.getHeaderProps()}>
+                                    <th {...column.getHeaderProps()} className={styles['table-header']}>
                                         {column.render('Header')}
                                     </th>
                                 ))}
@@ -115,7 +130,7 @@ const AuditPage = () => {
                                 {
                                     row.cells.map(cell => {
                                         return (
-                                            <td {...cell.getCellProps()}>
+                                            <td {...cell.getCellProps()} className={styles['table-cell']}>
                                                 {cell.render('Cell')}
                                             </td>
                                         )
@@ -125,6 +140,30 @@ const AuditPage = () => {
                     })}
                 </tbody>
             </table>
+            <div className="pagination">
+                <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>&lt;&lt;</button>&nbsp;
+                <button onClick={() => previousPage()} disabled={!canPreviousPage}>&lt;</button>&nbsp;
+                <button onClick={() => nextPage()} disabled={!canNextPage}>&gt;</button>&nbsp;
+                <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>&gt;&gt;</button>&nbsp;
+                <span>{`Страница ${pageIndex + 1} из ${pageOptions.length} `}</span>
+                <span>
+                    | Перейти на страницу:&nbsp;
+                    <input
+                        type="number"
+                        defaultValue={pageIndex + 1}
+                        onChange={e => gotoPage(e.target.value ? Number(e.target.value) - 1 : 0)}
+                        style={{ width: '100px' }}
+                    />
+                </span>&nbsp;
+                <select
+                    value={pageSize}
+                    onChange={e => setPageSize(Number(e.target.value))}
+                >
+                    {[10, 20, 30, 40, 50].map(pageSize => (
+                        <option key={pageSize} value={pageSize}>{pageSize}</option>
+                    ))}
+                </select>
+            </div>
         </div>
     );
 }
