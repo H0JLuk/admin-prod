@@ -2,7 +2,8 @@ module.exports = {
     parser: 'babel-eslint',
     extends: [
         'eslint:recommended',
-        'plugin:react/recommended'
+        'plugin:react/recommended',
+        'plugin:react-hooks/recommended'
     ],
     env: {
         browser: true,
@@ -22,6 +23,8 @@ module.exports = {
         'react/jsx-tag-spacing': [ 1, { 'beforeSelfClosing': 'always' } ],  // warn: <Component/>   ok: <Component />
         'react/jsx-curly-brace-presence': [1, { 'props': 'never', 'children': 'ignore' }],
         'semi': 1,      // Always warn on missing semicolon ;
-        'object-curly-spacing': [1, 'always']       // Always warn on missing spaces inside object / destruct literal
+        'object-curly-spacing': [1, 'always'],       // Always warn on missing spaces inside object / destruct literal
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn'
     }
 }
