@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styles from './UsersPage.module.css';
-import Form from '../../components/Form/Form';
-import { NEW_USER_FORM } from '../../components/Form/forms';
-import { addUser } from '../../api/services/adminService';
+import MultiActionForm from '../../components/Form/MultiActionForm';
+import { CHANGE_USER_FORM } from '../../components/Form/forms';
+import { addUser, removeUser } from '../../api/services/adminService';
 import Button from '../../components/Button/Button';
 
 const UsersPage = (props) => {
@@ -20,11 +20,22 @@ const UsersPage = (props) => {
         });
     };
 
+    const onRemoveUser = (data) => {
+        const pn = data.personalNumber;
+        removeUser(pn).then((response) => {
+            setSent(true);
+            setError(false)
+        }, (error) => {
+            setSent(false);
+            setError(true);
+        });
+    };
+
     const renderBody = () => {
-        return !sent ? <Form
-            data={NEW_USER_FORM}
-            buttonText='Добавить пользователя'
-            onSubmit={onAddUser}
+        return !sent ? <MultiActionForm
+            data={CHANGE_USER_FORM}
+            buttonText={['Добавить пользователя', 'Удалить пользователя']}
+            onSubmit={[onAddUser, onRemoveUser]}
             formClassName={styles.userForm}
             fieldClassName={styles.userForm__field}
             activeLabelClassName={styles.userForm__field__activeLabel}
@@ -33,10 +44,10 @@ const UsersPage = (props) => {
             errorText='Ошибка'
             errorClassName={styles.error}/> :
             <div className={styles.successBlock}>
-                <p>Пользователь добавлен</p>
+                <p>Операция выполнена успешно</p>
                 <Button
                     onClick={() => setSent(false)}
-                    label='Добавить еще'
+                    label='Еще'
                     type='green'
                     font='roboto'
                     className={styles.successBlock__button}/>

@@ -21,7 +21,7 @@ export const LOGIN_FORM = {
     }
 };
 
-export const NEW_USER_FORM = {
+export const CHANGE_USER_FORM = {
     personalNumber: {
         label: 'Табельный номер',
         value: '',
