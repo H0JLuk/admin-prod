@@ -5,6 +5,8 @@ import { CHANGE_USER_FORM } from '../../components/Form/forms';
 import { addUser, removeUser } from '../../api/services/adminService';
 import Button from '../../components/Button/Button';
 
+const generatedPassword = 'generatedPassword';
+
 const UsersPage = (props) => {
     const [sent, setSent] = useState(null);
     const [error, setError] = useState(false);
@@ -14,8 +16,8 @@ const UsersPage = (props) => {
         const newUser = { ...data, password: data.personalNumber };
         addUser(newUser).then((response) => {
             setSent(true);
-            setError(false)
-            setMsg("Пользователь создан, пароль: " + response['generatedPassword'])
+            setError(false);
+            setMsg(`Пользователь создан, пароль: ${response[generatedPassword]}`);
         }, (error) => {
             setSent(false);
             setError(true);
@@ -24,7 +26,7 @@ const UsersPage = (props) => {
     };
 
     const onRemoveUser = (data) => {
-        const pn = data.personalNumber;
+        const {personalNumber: pn} = data;
         removeUser(pn).then((response) => {
             setSent(true);
             setError(false);
