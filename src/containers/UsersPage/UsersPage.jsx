@@ -25,17 +25,18 @@ const UsersPage = (props) => {
         });
     };
 
-    const onRemoveUser = (data) => {
+    const onRemoveUser = async data => {
         const {personalNumber: pn} = data;
-        removeUser(pn).then((response) => {
+        try{
+            await removeUser(pn);
             setSent(true);
             setError(false);
             setMsg("Пользователь удален");
-        }, (error) => {
+        } catch (e) {
             setSent(false);
             setError(true);
             setMsg(null);
-        });
+        }
     };
 
     const renderBody = () => {

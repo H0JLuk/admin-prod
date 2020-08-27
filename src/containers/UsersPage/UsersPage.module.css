@@ -9,7 +9,7 @@
 .successBlock {
     background-color: #ffffff;
     border-radius: 16px;
-    height: 180px;
+    height: 200px;
     width: 50%;
     margin: 0 auto;
     display: flex;
@@ -33,7 +33,7 @@
     width: 50%;
     margin: 0 auto;
     border-radius: 16px;
-    height: 180px;
+    height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
