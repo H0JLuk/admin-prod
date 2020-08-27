@@ -39,12 +39,11 @@ const UsersPage = (props) => {
     const renderBody = () => {
         return !sent ? <MultiActionForm
             data={CHANGE_USER_FORM}
-            buttonText={['Добавить пользователя', 'Удалить пользователя']}
-            onSubmit={[onAddUser, onRemoveUser]}
+            actions={[{handler: onAddUser, text: 'Добавить пользователя', buttonClassName: styles.userForm__button},
+                {handler: onRemoveUser, text: 'Удалить пользователя', buttonClassName: styles.userForm__button}]}
             formClassName={styles.userForm}
             fieldClassName={styles.userForm__field}
             activeLabelClassName={styles.userForm__field__activeLabel}
-            buttonClassName={styles.userForm__button}
             formError={error}
             errorText='Ошибка'
             errorClassName={styles.error}/> :

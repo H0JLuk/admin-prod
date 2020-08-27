@@ -9,15 +9,9 @@ class MultiActionForm extends Form {
     state = formHelper.generateFormState(this.props.data);
 
 
-    onClick = (e) => {
+    onClick = handler => e => {
         e.preventDefault();
-        const { errorCount } = this.state;
-        const { onSubmit } = this.props;
-        const { buttonText } = this.props;
-        if (errorCount > 0) {
-            return;
-        }
-        onSubmit[buttonText.indexOf(e.target.textContent)](formHelper.getValues(this.state));
+        this.state.errorCount <= 0 && handler(formHelper.getValues(this.state));
     };
 
     render() {
@@ -27,8 +21,7 @@ class MultiActionForm extends Form {
             formClassName,
             fieldClassName,
             activeLabelClassName,
-            buttonText,
-            buttonClassName,
+            actions,
             formError,
             errorText,
             errorClassName,
@@ -64,14 +57,14 @@ class MultiActionForm extends Form {
                 })}
                 { error }
                 <div>
-                    {buttonText.map((txt, idx) => {
+                    {actions.map((action, idx) => {
                         return (<Button key = { idx }
-                                        label={ txt }
-                                        className={ buttonClassName }
+                                        label={ action.text }
+                                        className={ action.buttonClassName }
                                         type='green'
                                         font='roboto'
                                         disabled={ state.errorCount !== 0 }
-                                        onClick={ this.onClick } />);
+                                        onClick={ this.onClick(action.handler) } />);
                     })}
                 </div>
             </form>
@@ -84,9 +77,7 @@ MultiActionForm.propTypes = {
     formClassName: PropTypes.string,
     fieldClassName: PropTypes.string,
     activeLabelClassName: PropTypes.string,
-    buttonText: PropTypes.arrayOf(PropTypes.string).isRequired,
-    buttonClassName: PropTypes.string,
-    onSubmit: PropTypes.arrayOf(PropTypes.func).isRequired,
+    actions: PropTypes.arrayOf(PropTypes.object).isRequired,
     formError: PropTypes.bool,
     errorText: PropTypes.string,
     errorClassName: PropTypes.string,
