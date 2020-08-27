@@ -8,15 +8,18 @@ import Button from '../../components/Button/Button';
 const UsersPage = (props) => {
     const [sent, setSent] = useState(null);
     const [error, setError] = useState(false);
+    const [msg, setMsg] = useState(null);
 
     const onAddUser = (data) => {
         const newUser = { ...data, password: data.personalNumber };
         addUser(newUser).then((response) => {
             setSent(true);
             setError(false)
+            setMsg("Пользователь создан, пароль: " + response['generatedPassword'])
         }, (error) => {
             setSent(false);
             setError(true);
+            setMsg(null);
         });
     };
 
@@ -24,10 +27,12 @@ const UsersPage = (props) => {
         const pn = data.personalNumber;
         removeUser(pn).then((response) => {
             setSent(true);
-            setError(false)
+            setError(false);
+            setMsg("Пользователь удален");
         }, (error) => {
             setSent(false);
             setError(true);
+            setMsg(null);
         });
     };
 
@@ -44,7 +49,7 @@ const UsersPage = (props) => {
             errorText='Ошибка'
             errorClassName={styles.error}/> :
             <div className={styles.successBlock}>
-                <p>Операция выполнена успешно</p>
+                <p>{msg}</p>
                 <Button
                     onClick={() => setSent(false)}
                     label='Еще'
