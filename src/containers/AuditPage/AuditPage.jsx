@@ -125,7 +125,6 @@ const AuditPage = () => {
     useEffect(() => {
         async function fetchData(pageSize, pageNo, mappedFilters = {}) {
             const url = new URL(`${baseUrl}/admin/audit/events`);
-            // url.search = new URLSearchParams({pageNo, pageSize, ...mappedFilters}).toString();
             url.search = new URLSearchParams({ pageNo, pageSize, ...mappedFilters }).toString();
             const response = await fetch(url.toString(), getReqOptions());
             const json = await response.json();
