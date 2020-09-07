@@ -9,6 +9,10 @@ export async function addClientApp(clientAppDto) {
     return Api.post('/admin/clientApplication', clientAppDto, getReqOptions());
 }
 
+export async function copyClientApp(clientAppDto) {
+    return Api.post('/admin/clientApplication/copy', clientAppDto, getReqOptions());
+}
+
 export async function updateClientApp(id, clientAppDto) {
     return Api.put(`/admin/clientApplication/${id}`, clientAppDto, getReqOptions());
 }

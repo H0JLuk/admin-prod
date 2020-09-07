@@ -114,6 +114,14 @@ export const CLIENT_APP_ADD_FORM = {
         maxLength: 40,
         validators: [isRequired],
         mask: null
+    },
+    existingCode: {
+        label : 'Код исходной витрины',
+        value: '',
+        type: 'text',
+        maxLength: 40,
+        validators: [],
+        mask: null
     }
 }
 

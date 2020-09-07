@@ -35,7 +35,7 @@ const UsersPage = () => {
         const { target: { files: [file] } } = e;
         e.preventDefault();
         dispatch({ type: 'hideMessage' });
-        if(validateFile(file)) {
+        if (validateFile(file)) {
             const data = new FormData();
             data.append('multipartUsersFile', file, file.name);
             const uploadUrl = new URL(`${baseUrl}/admin/user/delete/file`);

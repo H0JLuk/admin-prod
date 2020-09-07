@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { addClientApp, getClientAppList, updateClientApp } from '../../api/services/clientAppService';
+import { addClientApp, copyClientApp, getClientAppList, updateClientApp } from '../../api/services/clientAppService';
 import { getStaticUrl } from '../../api/services/settingsService';
 import { goApp } from '../../utils/appNavigation';
 import styles from './ClientAppPage.module.css';
@@ -15,16 +15,20 @@ import { withRouter } from 'react-router-dom';
 import { getRole, saveAppCode } from '../../api/services/sessionService';
 import { ROUTE } from '../../constants/route';
 import { logout } from '../../api/services/authService';
+import Button from '../../components/Button/Button';
 
 const CLIENT_APP_LIST_TITLE = 'Клиенские приложения';
 const LOADING_LIST_LABEL = 'Загрузка';
 const CLIENT_APPS_GET_ERROR = 'Ошибка получения клиентских приложений!';
 const ENTER_CLIENT_APP_CODE_REQUEST = 'Пожалуйста, введите код клиентского приложения';
 const ENTER_CLIENT_APP_NAME_REQUEST = 'Пожалуйста, введите имя клиентского приложения';
+const ADD_CLIENT_APP_TITLE = 'Добавить клиентское приложение';
+const ADD_CLIENT_APP_ERROR = 'Не удалось добавить клиентское приложение';
+const COPY_CLIENT_APP_ERROR = 'Не удалось скопировать клиентское приложение';
 
 const initialState = {
     editingClientApp: {
-        id: null, name: null, code: null, isDeleted: false
+        id: null, name: null, code: null, existingCode: null, isDeleted: false
     },
     staticUrl: getStaticUrl(), clientAppList: [], isOpen: false, formError: null
 };
@@ -38,7 +42,7 @@ class ClientAppPage extends Component {
 
     componentDidMount() {
         getClientAppList()
-            .then( response => {
+            .then(response => {
                 const { clientApplicationDtoList } = response;
                 this.setState({ clientAppList: clientApplicationDtoList });
             })
@@ -127,7 +131,7 @@ class ClientAppPage extends Component {
     reloadClientApps = (clientAppDto) => {
         const { clientAppList, editingClientApp: { id } } = this.state;
         const newClientAppList = clientAppList.slice();
-        newClientAppList.forEach( app => {
+        newClientAppList.forEach(app => {
             if (app.id === id) {
                 app.name = clientAppDto.name;
                 app.code = clientAppDto.code;
@@ -137,7 +141,7 @@ class ClientAppPage extends Component {
         this.setState({ clientAppList: newClientAppList }, this.closeModal);
     };
 
-    pushToClientAppList(id, clientAppDto) {
+    async pushToClientAppList(id, clientAppDto) {
         const newClientApp = {
             ...clientAppDto,
             id: id
@@ -146,7 +150,7 @@ class ClientAppPage extends Component {
         this.setState({ clientAppList }, this.closeModal);
     }
 
-    onSubmit = (data) => {
+    onSubmit = async (data) => {
         if (!data.code) {
             alert(ENTER_CLIENT_APP_CODE_REQUEST);
             return;
@@ -159,15 +163,32 @@ class ClientAppPage extends Component {
         clientAppDto = {
             code: data.code,
             name: data.name,
+            existingCode: data.existingCode,
             isDeleted: this.state.editingClientApp.isDeleted
         };
         if (this.state.editingClientApp.id !== null) {
-            updateClientApp(this.state.editingClientApp.id, clientAppDto)
-                .then(() => this.reloadClientApps(clientAppDto))
-                .catch(error => console.log(error.message));
+            try {
+                await updateClientApp(this.state.editingClientApp.id, clientAppDto);
+                await this.reloadClientApps(clientAppDto);
+            } catch (e) {
+                console.error(e.message);
+            }
+        } else if (!clientAppDto.existingCode) {
+            try {
+                const response = await addClientApp(clientAppDto);
+                await this.pushToClientAppList(response.id, clientAppDto);
+            } catch (e) {
+                console.error(e.message);
+                alert(ADD_CLIENT_APP_ERROR);
+            }
         } else {
-            addClientApp(clientAppDto)
-                .then(response => this.pushToClientAppList(response.id, clientAppDto));
+            try {
+                const response = await copyClientApp(clientAppDto);
+                await this.pushToClientAppList(response.id, clientAppDto);
+            } catch (e) {
+                console.error(e.message);
+                alert(COPY_CLIENT_APP_ERROR);
+            }
         }
     };
 
@@ -205,6 +226,14 @@ class ClientAppPage extends Component {
                     {this.renderModifyModal()}
                     <div className={ styles.headerSection }>
                         <h3>{CLIENT_APP_LIST_TITLE}</h3>
+                        <div>
+                            <Button
+                                label={ ADD_CLIENT_APP_TITLE }
+                                onClick={ this.openModal }
+                                font="roboto"
+                                type="green"
+                            />
+                        </div>
                         <div className={ styles.logout } onClick={ this.doLogout }>{ ButtonLabels.LOGOUT }</div>
                     </div>
                     <div className={ styles.clientAppList }>
