@@ -16,6 +16,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    padding-left: 5px;
 }
 
 .successBlock p {
@@ -104,6 +105,7 @@
     margin-top: 10px;
     color: #f6650a;
     font-family: Roboto;
+    padding-left: 5px;
 }
 .template__link {
     padding-left: 5px;

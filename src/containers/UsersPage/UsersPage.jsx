@@ -7,7 +7,13 @@ import Button from '../../components/Button/Button';
 import MaterialButton from '@material-ui/core/Button';
 import { baseUrl } from '../../api/apiClient';
 import { getReqOptions } from '../../api/services';
-import { onFileUploadInputChange, usersPageInitialState, usersReducer, validateFile } from './uploadLogic';
+import {
+    onFileUploadInputChange, showError, hideMessage,
+    showErrorMessage, showSuccessMessage, unsetSent,
+    usersPageInitialState,
+    usersReducer,
+    validateFile
+} from './uploadLogic';
 
 const UsersPage = () => {
     const [{ sent, error, msg }, dispatch] = useReducer(usersReducer, usersPageInitialState);
@@ -17,7 +23,7 @@ const UsersPage = () => {
             const response = await addUser(newUser);
             dispatch({ type: 'showSuccessMessage', payload: `Пользователь создан, пароль: ${response.generatedPassword}` });
         } catch (e) {
-            dispatch({ type: 'hideMessage' });
+            dispatch({ type: showErrorMessage, payload: e.message });
         }
     };
 
@@ -25,16 +31,16 @@ const UsersPage = () => {
         const { personalNumber: pn } = data;
         try {
             await removeUser(pn);
-            dispatch({ type: 'showSuccessMessage', payload: 'Пользователь удален' });
+            dispatch({ type: showSuccessMessage, payload: 'Пользователь удален' });
         } catch (e) {
-            dispatch({ type: 'showError' });
+            dispatch({ type: showError });
         }
     };
 
     const onDeleteFileUploadInputChange = async e => {
         const { target: { files: [file] } } = e;
         e.preventDefault();
-        dispatch({ type: 'hideMessage' });
+        dispatch({ type: hideMessage });
         if (validateFile(file)) {
             const data = new FormData();
             data.append('multipartUsersFile', file, file.name);
@@ -43,21 +49,21 @@ const UsersPage = () => {
             try {
                 response = await fetch(uploadUrl, { ...getReqOptions(), method: 'POST', body: data });
                 result = await response.json();
-                dispatch({ type: 'showSuccessMessage', payload: result.message });
+                dispatch({ type: showSuccessMessage, payload: result.message });
             } catch (e) {
-                dispatch({ type: 'showErrorMessage', payload: `Не удалось удалить пользователей ${e.message}` });
+                dispatch({ type: showErrorMessage, payload: `Не удалось удалить пользователей ${e.message}` });
             }
         } else {
-            dispatch({ type: 'showErrorMessage', payload: 'Файл не совпадает с шаблоном' });
+            dispatch({ type: showErrorMessage, payload: 'Файл не совпадает с шаблоном' });
         }
     };
 
     const uploadUsers = async e => {
-        dispatch({ type: 'hideMessage' });
+        dispatch({ type: hideMessage });
         try {
             await onFileUploadInputChange(e);
         } catch (e) {
-            dispatch({ type: 'showErrorMessage', payload: e.message });
+            dispatch({ type: showErrorMessage, payload: e.message });
         }
     };
 
@@ -70,12 +76,12 @@ const UsersPage = () => {
             fieldClassName={ styles.userForm__field }
             activeLabelClassName={ styles.userForm__field__activeLabel }
             formError={ error }
-            errorText='Ошибка'
+            errorText={ msg }
             errorClassName={ styles.error } /> :
             <div className={ styles.successBlock }>
                 <p>{msg}</p>
                 <Button
-                    onClick={ () => dispatch({ type: 'unsetSent' }) }
+                    onClick={ () => dispatch({ type: unsetSent }) }
                     label='Еще'
                     type='green'
                     font='roboto'

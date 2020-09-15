@@ -3,18 +3,28 @@ import { getReqOptions } from '../../api/services';
 
 const initialState = { sent: null, error: false, msg: null };
 
+export const showErrorMessage = 'showErrorMessage';
+
+export const showError = 'showError';
+
+export const showSuccessMessage = 'showSuccessMessage';
+
+export const hideMessage = 'hideMessage';
+
+export const unsetSent = 'unsetSent';
+
 function reducer (state, action) {
     switch (action.type) {
-        case 'showErrorMessage':
-            return { sent: true, error: true, msg: action.payload };
-        case 'showError':
-            return { sent: false, error: true, msg: null };
-        case 'showSuccessMessage':
+        case showErrorMessage:
+            return { sent: false, error: true, msg: action.payload };
+        case showError:
+            return { sent: false, error: true, msg: 'Ошибка' };
+        case showSuccessMessage:
             return { sent: true, error: false, msg: action.payload };
-        case 'hideMessage':
+        case hideMessage:
             return { sent: false, error: false, msg: null };
-        case 'unsetSent':
-            return { ...state, sent: false };
+        case unsetSent:
+            return { ...state, sent: false, error: false };
         default:
             throw new Error();
     }
