@@ -21,7 +21,7 @@ const UsersPage = () => {
         const newUser = { ...data, password: data.personalNumber };
         try {
             const response = await addUser(newUser);
-            dispatch({ type: 'showSuccessMessage', payload: `Пользователь создан, пароль: ${response.generatedPassword}` });
+            dispatch({ type: 'showSuccessMessage', payload: `Пользователь добавлен в приложение, пароль: ${response.generatedPassword}` });
         } catch (e) {
             dispatch({ type: showErrorMessage, payload: e.message });
         }
