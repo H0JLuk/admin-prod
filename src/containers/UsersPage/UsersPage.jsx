@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import styles from './UsersPage.module.css';
 import MultiActionForm from '../../components/Form/MultiActionForm';
 import { CHANGE_USER_FORM } from '../../components/Form/forms';
-import { addUser, removeUser } from '../../api/services/adminService';
+import { addUser, removeUser, resetUser } from '../../api/services/adminService';
 import Button from '../../components/Button/Button';
 import MaterialButton from '@material-ui/core/Button';
 import { baseUrl } from '../../api/apiClient';
@@ -32,6 +32,16 @@ const UsersPage = () => {
         try {
             await removeUser(pn);
             dispatch({ type: showSuccessMessage, payload: 'Пользователь удален' });
+        } catch (e) {
+            dispatch({ type: showError });
+        }
+    };
+
+    const onResetUser = async data => {
+        const { personalNumber: pn } = data;
+        try {
+            const response = await resetUser(pn);
+            dispatch({ type: showSuccessMessage, payload: `Пароль, блокировки и удаление пользователя сброшены. Новый пароль: ${response.generatedPassword}` });
         } catch (e) {
             dispatch({ type: showError });
         }
@@ -70,8 +80,9 @@ const UsersPage = () => {
     const renderBody = () => {
         return !sent ? <MultiActionForm
             data={ CHANGE_USER_FORM }
-            actions={ [{ handler: onAddUser, text: 'Добавить пользователя', buttonClassName: styles.userForm__button },
-                { handler: onRemoveUser, text: 'Удалить пользователя', buttonClassName: styles.userForm__button }] }
+            actions={ [{ handler: onAddUser, text: 'Добавить', buttonClassName: styles.userForm__button },
+                { handler: onRemoveUser, text: 'Удалить', buttonClassName: styles.userForm__button },
+                { handler: onResetUser, text: 'Сбросить', buttonClassName: styles.userForm__button }] }
             formClassName={ styles.userForm }
             fieldClassName={ styles.userForm__field }
             activeLabelClassName={ styles.userForm__field__activeLabel }

@@ -11,6 +11,10 @@ export async function removeUser(pn) {
     return Api.delete(`/admin/user/${pn}`, getReqOptions());
 }
 
+export async function resetUser(pn) {
+    return Api.post(`/admin/user/reset/${pn}`, '', getReqOptions());
+}
+
 const contentType = 'image/jpeg';
 const options = {
     headers: {
