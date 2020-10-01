@@ -49,9 +49,9 @@ const UsersPage = () => {
             try {
                 response = await fetch(uploadUrl, { ...getReqOptions(), method: 'POST', body: data });
                 result = await response.json();
-                dispatch({ type: showSuccessMessage, payload: result.message });
+                dispatch({ type: response.ok ? showSuccessMessage : showErrorMessage, payload: result.message });
             } catch (e) {
-                dispatch({ type: showErrorMessage, payload: `Не удалось удалить пользователей ${e.message}` });
+                dispatch({ type: showErrorMessage, payload: e.message });
             }
         } else {
             dispatch({ type: showErrorMessage, payload: 'Файл не совпадает с шаблоном' });

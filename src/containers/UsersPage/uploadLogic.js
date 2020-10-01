@@ -70,7 +70,7 @@ export const onFileUploadInputChange = async e => {
     if (response.ok) {
         result.message && await downloadResultFile(result.message);
     } else {
-        throw new Error(`Не удалось загрузить пользователей ${JSON.stringify(result)}`);
+        throw new Error(result.message);
     }
 };
 

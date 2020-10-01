@@ -16,7 +16,8 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    padding-left: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .successBlock p {
@@ -40,6 +41,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .userForm__field {
@@ -80,7 +83,7 @@
 .userForm__button, .successBlock__button{
     position: relative;
     padding: 8px 30px;
-    bottom: -50px;
+    bottom: -20px;
     display: inline-block;
 }
 
@@ -105,7 +108,10 @@
     margin-top: 10px;
     color: #f6650a;
     font-family: Roboto;
-    padding-left: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow-wrap: break-word;
+    width: 95%;
 }
 .template__link {
     padding-left: 5px;
