@@ -15,6 +15,10 @@ export async function resetUser(pn) {
     return Api.post(`/admin/user/reset/${pn}`, '', getReqOptions());
 }
 
+export async function unblockUser(pn) {
+    return Api.post(`/admin/user/unblock/${pn}`, '', getReqOptions());
+}
+
 const contentType = 'image/jpeg';
 const options = {
     headers: {

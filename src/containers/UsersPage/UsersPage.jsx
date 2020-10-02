@@ -2,14 +2,18 @@ import React, { useReducer } from 'react';
 import styles from './UsersPage.module.css';
 import MultiActionForm from '../../components/Form/MultiActionForm';
 import { CHANGE_USER_FORM } from '../../components/Form/forms';
-import { addUser, removeUser, resetUser } from '../../api/services/adminService';
+import { addUser, removeUser, resetUser, unblockUser } from '../../api/services/adminService';
 import Button from '../../components/Button/Button';
 import MaterialButton from '@material-ui/core/Button';
 import { baseUrl } from '../../api/apiClient';
 import { getReqOptions } from '../../api/services';
 import {
-    onFileUploadInputChange, showError, hideMessage,
-    showErrorMessage, showSuccessMessage, unsetSent,
+    hideMessage,
+    onFileUploadInputChange,
+    showError,
+    showErrorMessage,
+    showSuccessMessage,
+    unsetSent,
     usersPageInitialState,
     usersReducer,
     validateFile
@@ -43,6 +47,16 @@ const UsersPage = () => {
             const response = await resetUser(pn);
             const message = `Пароль и блокировки пользователя сброшены. Новый пароль: ${response.generatedPassword}`;
             dispatch({ type: showSuccessMessage, payload: message });
+        } catch (e) {
+            dispatch({ type: showErrorMessage, payload: e.message });
+        }
+    };
+
+    const onUnblockUser = async data => {
+        const { personalNumber: pn } = data;
+        try {
+            await unblockUser(pn);
+            dispatch({ type: showSuccessMessage, payload: `Пользователь разблокирован` });
         } catch (e) {
             dispatch({ type: showErrorMessage, payload: e.message });
         }
@@ -83,6 +97,7 @@ const UsersPage = () => {
             data={ CHANGE_USER_FORM }
             actions={ [{ handler: onAddUser, text: 'Добавить', buttonClassName: styles.userForm__button },
                 { handler: onRemoveUser, text: 'Удалить', buttonClassName: styles.userForm__button },
+                { handler: onUnblockUser, text: 'Разблокировать', buttonClassName: styles.userForm__button },
                 { handler: onResetUser, text: 'Сбросить пароль', buttonClassName: styles.userForm__button }] }
             formClassName={ styles.userForm }
             fieldClassName={ styles.userForm__field }
