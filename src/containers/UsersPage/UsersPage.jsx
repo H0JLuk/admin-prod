@@ -83,7 +83,7 @@ const UsersPage = () => {
             data={ CHANGE_USER_FORM }
             actions={ [{ handler: onAddUser, text: 'Добавить', buttonClassName: styles.userForm__button },
                 { handler: onRemoveUser, text: 'Удалить', buttonClassName: styles.userForm__button },
-                { handler: onResetUser, text: 'Разблокировать со сбросом пароля', buttonClassName: styles.userForm__button }] }
+                { handler: onResetUser, text: 'Сбросить пароль', buttonClassName: styles.userForm__button }] }
             formClassName={ styles.userForm }
             fieldClassName={ styles.userForm__field }
             activeLabelClassName={ styles.userForm__field__activeLabel }
