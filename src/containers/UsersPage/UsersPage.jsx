@@ -41,9 +41,10 @@ const UsersPage = () => {
         const { personalNumber: pn } = data;
         try {
             const response = await resetUser(pn);
-            dispatch({ type: showSuccessMessage, payload: `Пароль, блокировки и удаление пользователя сброшены. Новый пароль: ${response.generatedPassword}` });
+            const message = `Пароль и блокировки пользователя сброшены. Новый пароль: ${response.generatedPassword}`;
+            dispatch({ type: showSuccessMessage, payload: message });
         } catch (e) {
-            dispatch({ type: showError });
+            dispatch({ type: showErrorMessage, payload: e.message });
         }
     };
 
