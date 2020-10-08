@@ -3,12 +3,18 @@ module.exports = {
     extends: [
         'eslint:recommended',
         'plugin:react/recommended',
-        'plugin:react-hooks/recommended'
+        'plugin:react-hooks/recommended',
+        'plugin:jest/recommended'
     ],
     env: {
         browser: true,
         node: true,
         es6: true
+    },
+    settings: {
+        react: {
+            version: 'detect'
+        }
     },
     /*      0 = off     1 = warn        2 = error     */
     /**
@@ -23,8 +29,9 @@ module.exports = {
         'react/jsx-tag-spacing': [ 1, { 'beforeSelfClosing': 'always' } ],  // warn: <Component/>   ok: <Component />
         'react/jsx-curly-brace-presence': [1, { 'props': 'never', 'children': 'ignore' }],
         'semi': 1,      // Always warn on missing semicolon ;
-        'object-curly-spacing': [1, 'always'],       // Always warn on missing spaces inside object / destruct literal
-        'react-hooks/rules-of-hooks': 'error',
-        'react-hooks/exhaustive-deps': 'warn'
+        'object-curly-spacing': [1, 'always'],       // Always warn on missing spaces inside object / destruct literal,
+        'quotes': ['error', 'single'],       //
+        'space-in-parens': ['error', 'never'],
+        'keyword-spacing': ['error', { before: true, after: true }]
     }
 }

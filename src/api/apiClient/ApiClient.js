@@ -20,6 +20,10 @@ export default class ApiClient {
         const mergedOptions = _.merge(_.cloneDeep(this.options), restOptions);
 
         try {
+            const contentType = mergedOptions.headers['Content-Type'];
+            if (contentType.startsWith('multipart/form-data')) {
+                delete mergedOptions.headers['Content-Type'];
+            }
             const response = await fetch(urlWithParams.toString(), {
                 ...mergedOptions,
                 body
@@ -67,6 +71,14 @@ export default class ApiClient {
         return this.request(url, {
             ...reqOptions,
             method: 'POST',
+            body
+        });
+    }
+
+    async update(url, body, reqOptions = {}) {
+        return this.request(url, {
+            ...reqOptions,
+            method: 'PUT',
             body
         });
     }

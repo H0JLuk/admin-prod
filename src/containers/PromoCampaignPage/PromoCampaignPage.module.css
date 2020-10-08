@@ -1,68 +1,26 @@
-.wrapper {
-    width: 100%;
-    min-height: calc(100vh - 40px);
-    background-color: #ececec;
+.promoCampaignsLink {
+    display: inline-block;
+    color: #1890ff;
+    background: transparent;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    transition: color 0.3s;
+    margin-left: 4px;
+}
+.promoCampaigns .am-list-header {
+    padding: 15px 15px 9px 10px !important; }
+
+.row-dragging {
+    background: #fafafa;
+    border: 1px solid #ccc;
 }
 
-.promoCampaignPageWrapper {
-    margin: 0 auto;
-    padding-top: 30px;
-    width: 96%;
-    max-width: 1080px;
-    font-family: inherit;
+.row-dragging td {
+    padding: 16px;
+    visibility: hidden;
 }
 
-.promoCampaignList > div:not(:last-child) {
-    margin-bottom: 30px;
-}
-
-.promoCampaignPageWrapper h3 {
-    font-family: inherit;
-    font-size: 25px;
-    font-weight: 500;
-    color: rgb(0, 0, 20);
-}
-
-.promoCampaignPageWrapper .headerSection {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.promoCampaignPageWrapper .loadingLabel {
-    position: relative;
-}
-
-.promoCampaignPageWrapper .loadingLabel:after {
-    position: absolute;
-    content: '';
-    animation: dots 1.6s infinite;
-}
-
-.modalForm {
-    position: relative;
-    padding: 10px 40px 20px 20px;
-}
-
-.modalForm .crossSvg {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 35px;
-}
-
-.promoCampaignStatistics {
-    border-radius: 5px;
-    color: #fff;
-    padding: 10px 14px 10px 10px;
-    position: relative;
-    box-shadow: 0 1px 5px #999;
-    background-color: #8a9bab;
-}
-
-.error {
-    margin-top: 10px;
-    color: #f6650a;
-    font-family: Roboto, sans-serif;
+.row-dragging .drag-visible {
+    visibility: visible;
 }

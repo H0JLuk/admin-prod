@@ -11,7 +11,7 @@ import SliderPage from '../SliderPage/SliderPage';
 import styles from './MainPage.module.css';
 
 import { logout } from '../../api/services/authService';
-import PromoCampaignPage from "../PromoCampaignPage/PromoCampaignPage";
+import PromoCampaignPage from '../PromoCampaignPage/PromoCampaignPage';
 
 
 const MainPage = (props) => {

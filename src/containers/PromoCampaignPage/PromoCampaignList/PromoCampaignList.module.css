@@ -1,0 +1,61 @@
+.wrapper {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: scroll;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.promoCampaigns {
+    margin: 15px;
+}
+
+.promoCampaigns-distr-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.promoCampaigns-header {
+    text-align: left;
+}
+
+.promoCampaigns-header .title {
+    text-align: left;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.promoCampaigns-table {
+    border-left: 1px solid #e8e8e8;
+    border-right: 1px solid #e8e8e8;
+    border-top: 1px solid #e8e8e8;
+}
+
+.promoCampaigns-table table {
+    table-layout: fixed;
+}
+
+.promoCampaignsImg {
+    width: 10vh !important;
+}
+.promoCampaignsImgDark {
+    background-color: #cccccc;
+    width: 10vh !important;
+}
+
+.promoCampaignsLink {
+    display: inline-block;
+    color: #1890ff;
+    background: transparent;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    transition: color 0.3s;
+    margin-left: 4px;
+}
+
+.promoCampaigns .am-list-header {
+    padding: 15px 15px 9px 10px !important;
+}
