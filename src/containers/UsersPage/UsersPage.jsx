@@ -37,7 +37,7 @@ const UsersPage = () => {
             await removeUser(pn);
             dispatch({ type: showSuccessMessage, payload: 'Пользователь удален' });
         } catch (e) {
-            dispatch({ type: showError });
+            dispatch({ type: showErrorMessage, payload: e.message });
         }
     };
 
