@@ -20,3 +20,7 @@ export async function updateClientApp(id, clientAppDto) {
 export async function deleteClientApp(id) {
     return Api.delete(`/admin/clientApplication/${id}`, getReqOptions());
 }
+
+export async function updateProperties(id, properties) {
+    return Api.put(`/admin/clientApplication/${id}/properties`, properties, getReqOptions());
+}

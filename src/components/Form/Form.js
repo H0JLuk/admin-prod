@@ -92,6 +92,7 @@ class Form extends React.PureComponent {
                             value={ state[key].value }
                             valid={ state[key].valid }
                             disabled={ item.disabled }
+                            placeholder={ item.placeholder }
                             active={ state.active === key }
                             formError={ formError }
                             multiline={ item.multiline }
@@ -128,7 +129,8 @@ Form.propTypes = {
     formError: PropTypes.bool,
     errorText: PropTypes.string,
     errorClassName: PropTypes.string,
-    iconClassName: PropTypes.string
+    iconClassName: PropTypes.string,
+    placeholder: PropTypes.string
 };
 
 export default Form;

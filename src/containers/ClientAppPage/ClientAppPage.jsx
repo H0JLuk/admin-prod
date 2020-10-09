@@ -1,5 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { addClientApp, copyClientApp, getClientAppList, updateClientApp } from '../../api/services/clientAppService';
+import {
+    addClientApp,
+    copyClientApp,
+    getClientAppList,
+    updateClientApp,
+    updateProperties
+} from '../../api/services/clientAppService';
 import { getStaticUrl } from '../../api/services/settingsService';
 import { goApp } from '../../utils/appNavigation';
 import styles from './ClientAppPage.module.css';
@@ -10,7 +16,7 @@ import ButtonLabels from '../../components/Button/ButtonLables';
 import cross from '../../static/images/cross.svg';
 import Form from '../../components/Form/Form';
 import { populateFormWithData } from '../../components/Form/formHelper';
-import { CLIENT_APP_ADD_FORM, CLIENT_APP_EDIT_FORM } from '../../components/Form/forms';
+import { CLIENT_APP_ADD_FORM, CLIENT_APP_EDIT_FORM, CLIENT_APP_PROPERTIES_EDIT_FORM } from '../../components/Form/forms';
 import { withRouter } from 'react-router-dom';
 import { getRole, saveAppCode } from '../../api/services/sessionService';
 import { ROUTE } from '../../constants/route';
@@ -25,10 +31,16 @@ const ENTER_CLIENT_APP_NAME_REQUEST = 'Пожалуйста, введите им
 const ADD_CLIENT_APP_TITLE = 'Добавить клиентское приложение';
 const ADD_CLIENT_APP_ERROR = 'Не удалось добавить клиентское приложение';
 const COPY_CLIENT_APP_ERROR = 'Не удалось скопировать клиентское приложение';
+const IS_DELETED = 'Is Deleted:';
 
 const initialState = {
     editingClientApp: {
         id: null, name: null, code: null, existingCode: null, isDeleted: false
+    },
+    clientAppProperties: {
+        clientAppId: null, installationUrl: null, yamToken: null, tokenLifetime: null,
+        inactivityTime: null, promoShowTime: null, privacyPolicy: null,
+        tmpBlockTime: null, maxPasswordAttempts: null, maxPresentsNumber: null
     },
     staticUrl: getStaticUrl(), clientAppList: [], isOpen: false, formError: null
 };
@@ -50,7 +62,8 @@ class ClientAppPage extends Component {
     }
 
     clearState = () => {
-        this.setState(initialState.editingClientApp);
+        const { editingClientApp, clientAppProperties } = initialState;
+        this.setState({ editingClientApp, clientAppProperties });
     };
 
     openModal = () => {
@@ -61,11 +74,12 @@ class ClientAppPage extends Component {
         this.setState({ isOpen: false }, this.clearState);
     };
 
-    handleEdit = (id, name, code, isDeleted) => {
-        this.setState({ editingClientApp: { id, name, code, isDeleted } }, () => {
-            this.openModal();
-        });
-    };
+    handleEdit = (id, name, code, isDeleted) =>
+        this.setState({ editingClientApp: { id, name, code, isDeleted } }, this.openModal);
+
+
+    handleEditProperties = (properties, clientAppId) =>
+        this.setState({ clientAppProperties: { ...properties, clientAppId } }, this.openModal);
 
     handleAdministrate = (code) => {
         const role = getRole();
@@ -90,11 +104,24 @@ class ClientAppPage extends Component {
     };
 
     renderModalForm = () => {
-        const { formError, editingClientApp } = this.state;
-        const formData = editingClientApp.id !== null ? populateFormWithData(CLIENT_APP_EDIT_FORM, {
-            name: editingClientApp.name,
-            code: editingClientApp.code,
-        }) : CLIENT_APP_ADD_FORM;
+        const { formError, editingClientApp, clientAppProperties } = this.state;
+        let formData, onSubmit, isDeletedCheckbox;
+        if (editingClientApp.id !== null) {
+            isDeletedCheckbox = true;
+            formData = populateFormWithData(CLIENT_APP_EDIT_FORM, {
+                name: editingClientApp.name,
+                code: editingClientApp.code,
+            });
+            onSubmit = this.addOrUpdate;
+        } else if (clientAppProperties.clientAppId !== null) {
+            isDeletedCheckbox = false;
+            formData = populateFormWithData(CLIENT_APP_PROPERTIES_EDIT_FORM, { ...clientAppProperties });
+            onSubmit = this.updateProperties;
+        } else {
+            isDeletedCheckbox = true;
+            formData = CLIENT_APP_ADD_FORM;
+            onSubmit = this.addOrUpdate;
+        }
         return (
             <div className={ styles.modalForm }>
                 <img src={ cross }
@@ -105,7 +132,7 @@ class ClientAppPage extends Component {
                 <Form
                     data={ formData }
                     buttonText={ ButtonLabels.SAVE }
-                    onSubmit={ this.onSubmit }
+                    onSubmit={ onSubmit }
                     formClassName={ styles.clientAppForm }
                     fieldClassName={ styles.clientAppForm__field }
                     activeLabelClassName={ styles.clientAppForm__field__activeLabel }
@@ -114,16 +141,19 @@ class ClientAppPage extends Component {
                     formError={ !!formError }
                     errorClassName={ styles.error }
                 />
-                <form className={ styles.clientAppForm }>
-                    <label className={ styles.clientAppForm__field }>
-                        Is Deleted:
-                    </label>
-                    <input
-                        name="Deleted"
-                        type="checkbox"
-                        checked={ editingClientApp.isDeleted }
-                        onChange={ this.handleInputChange } />
-                </form>
+                { isDeletedCheckbox ?
+                    <form className={ styles.clientAppForm }>
+                        <label className={ styles.clientAppForm__field }>
+                            { IS_DELETED }
+                        </label>
+                        <input
+                            name="Deleted"
+                            type="checkbox"
+                            checked={ editingClientApp.isDeleted }
+                            onChange={ this.handleInputChange }
+                        />
+                    </form> : null
+                }
             </div>
         );
     }
@@ -150,7 +180,7 @@ class ClientAppPage extends Component {
         this.setState({ clientAppList }, this.closeModal);
     }
 
-    onSubmit = async (data) => {
+    addOrUpdate = async (data) => {
         if (!data.code) {
             alert(ENTER_CLIENT_APP_CODE_REQUEST);
             return;
@@ -192,6 +222,34 @@ class ClientAppPage extends Component {
         }
     };
 
+    updateProperties = async (data) => {
+        const { clientAppProperties: { clientAppId } } = this.state;
+        const properties = { ...data };
+        try {
+            for (const propName in properties) {
+                const property = properties[propName];
+                if (property == null || property === '') {
+                    delete properties[propName];
+                }
+            }
+            const response = await updateProperties(clientAppId, properties);
+            await this.reloadProperties(clientAppId, response);
+        } catch (e) {
+            console.error(e.message);
+            alert(e.message);
+        }
+    };
+
+    async reloadProperties(clientAppId, properties) {
+        const { clientAppList } = this.state;
+        await clientAppList.forEach(app => {
+           if (app.id === clientAppId) {
+               app.clientApplicationPropertiesDto = properties;
+           }
+        });
+        this.setState({ clientAppList: clientAppList }, this.closeModal);
+    }
+
     renderClientAppList = () => {
         const { clientAppList } = this.state;
         const isSuccess = Array.isArray(clientAppList);
@@ -203,7 +261,9 @@ class ClientAppPage extends Component {
                             <ClientAppItem
                                 key={ `clientAppItem-${i}` }
                                 handleEdit={ this.handleEdit }
+                                handleEditProperties={ this.handleEditProperties }
                                 handleAdministrate={ this.handleAdministrate }
+                                properties={ app.clientApplicationPropertiesDto }
                                 { ...app }
                             />) : <LoadingStatus loading />
                 }

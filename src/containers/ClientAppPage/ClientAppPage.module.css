@@ -61,14 +61,14 @@
 
 .clientAppForm__field input {
     display: block;
-    height: 20px;
-    margin-bottom: 8px;
+    height: 24px;
     bottom: 6px;
     padding-left: 2px;
     width: calc(100% - 30px);
     font-size: 16px;
     font-weight: bold;
     color: rgba(0, 0, 0, 0.55);
+    margin-top: 20px;
 }
 
 .clientAppForm__field label {
@@ -81,7 +81,7 @@
     font-style: normal;
     line-height: 1.29;
     letter-spacing: normal;
-    color: rgba(0, 0, 0, 0.55);
+    color: #046732;
 }
 
 .clientAppForm__field__activeLabel {

@@ -123,7 +123,7 @@ export const CLIENT_APP_ADD_FORM = {
         validators: [],
         mask: null
     }
-}
+};
 
 export const CLIENT_APP_EDIT_FORM = {
     name: {
@@ -144,8 +144,106 @@ export const CLIENT_APP_EDIT_FORM = {
         validators: [isRequired],
         mask: null
     }
-}
+};
 
+export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
+    yamToken: {
+        label : 'Токен яндекс метрики',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 20,
+        validators: [digitValidator],
+        mask: null,
+    },
+    tokenLifetime: {
+        label : 'Сессия сотрудника (в секундах)',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 20,
+        validators: [digitValidator],
+        mask: null,
+        placeholder: '1800 секунд по умолчанию',
+    },
+    inactivityTime: {
+        label : 'Сессия клиента (в секундах)',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 20,
+        validators: [digitValidator],
+        mask: null,
+        placeholder: '15 секунд по умолчанию',
+    },
+    promoShowTime: {
+        label : 'Показ предложения в "карусели" (в секундах)',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 20,
+        validators: [digitValidator],
+        mask: null,
+        placeholder: '20 секунд по умолчанию',
+    },
+    privacyPolicy: {
+        label : 'Политика конфиденциальности',
+        value : '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 4096,
+        validators: [isRequired],
+        mask: null,
+    },
+    tmpBlockTime: {
+        label : 'Временная блокировка пользователя (в секундах)',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 20,
+        validators: [digitValidator],
+        mask: null,
+        placeholder: '1800 секунд по умолчанию',
+    },
+    maxPasswordAttempts: {
+        label : 'Максимальное число попыток ввода пароля',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 2,
+        validators: [digitValidator],
+        mask: null,
+        placeholder: '3 по умолчанию',
+    },
+    maxPresentsNumber: {
+        label : 'Максимальное число подарков',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 2,
+        validators: [digitValidator],
+        mask: null,
+        placeholder: '3 по умолчанию',
+    },
+    installationUrl: {
+        label : 'Путь к инструкции по установке',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 256,
+        validators: [],
+        mask: null,
+    },
+    usageUrl: {
+        label : 'Путь к инструкции по использованию',
+        value : '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 256,
+        validators: [],
+        mask: null,
+    },
+};
 
 export const DZO_ADD_FROM = {
     dzoName: {

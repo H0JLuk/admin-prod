@@ -16,13 +16,14 @@ class Input extends React.PureComponent {
             fieldClassName,
             iconClassName,
             activeLabelClassName,
+            placeholder,
             formError,
             ...restProps
         } = this.props;
 
         const labelClasses = classNames(styles.label, {
             [styles.label_active]: active,
-            [activeLabelClassName]: active || value !== ''
+            [activeLabelClassName]: active || value !== '' || placeholder
         });
 
         const fieldClasses = classNames(fieldClassName, [styles.field], {
@@ -46,6 +47,7 @@ class Input extends React.PureComponent {
                 <label htmlFor={name} className={labelClasses}>{label}</label>
                 <input
                     {...inputProps}
+                    placeholder={placeholder}
                     value={value} />
                 <div className={iconClasses}>
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +79,8 @@ Input.propTypes = {
     onBlur: PropTypes.func,
     fieldClassName: PropTypes.string,
     activeLabelClassName: PropTypes.string,
-    iconClassName: PropTypes.string
+    iconClassName: PropTypes.string,
+    placeholder: PropTypes.string,
 };
 
 export default Input;

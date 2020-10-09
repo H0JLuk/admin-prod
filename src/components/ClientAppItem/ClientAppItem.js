@@ -5,15 +5,15 @@ import Button from '../Button/Button';
 import ButtonLabels from '../Button/ButtonLables';
 
 const ClientAppItem = (props) => {
-    const { /*id, handleEdit,*/ name, code, isDeleted, handleAdministrate } = props;
+    const { id, /*handleEdit,*/ name, code, isDeleted, handleAdministrate, handleEditProperties, properties } = props;
 
     // const handleEditClientApp = () => {
     //     handleEdit(id, name, code, isDeleted);
     // };
 
-    const handleAdministrateClientApp = () => {
-        handleAdministrate(code);
-    };
+    const handleAdministrateClientApp = () => handleAdministrate(code);
+
+    const handleEditPropertiesClientApp = () => handleEditProperties(properties, id);
 
     return (
         <div className={ styles.clientAppItem }>
@@ -24,6 +24,7 @@ const ClientAppItem = (props) => {
                     <p><b>Deleted:</b> {isDeleted.toString()}</p>
                 </div>
                 <div className={ styles.clientAppItemActions }>
+                    <Button type="green" label={ ButtonLabels.PROPERTIES } onClick={ handleEditPropertiesClientApp } />
                     <Button type="blue" label={ ButtonLabels.ADMINISTRATE } onClick={ handleAdministrateClientApp } />
                     {/*<Button type="green" label={EDIT} onClick={handleEditClientApp}/>*/}
                 </div>
@@ -38,6 +39,8 @@ ClientAppItem.propTypes = {
     name: PropTypes.string.isRequired,
     isDeleted: PropTypes.bool,
     handleAdministrate: PropTypes.func.isRequired,
+    handleEditProperties: PropTypes.func.isRequired,
+    properties: PropTypes.object,
     handleEdit: PropTypes.func.isRequired
 };
 
