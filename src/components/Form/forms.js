@@ -27,7 +27,7 @@ export const CHANGE_USER_FORM = {
         value: '',
         type: 'text',
         isRequired: true,
-        maxLength: 30,
+        maxLength: 8,
         validators: [isRequired, digitValidator],
         mask: null
     }
