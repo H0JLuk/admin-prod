@@ -171,7 +171,6 @@ export const PromoCampaignList = ({
             </Panel>
         </Collapse>;
 
-
     const expandedRowRender = (promoCampaign) => {
         return (
         <>

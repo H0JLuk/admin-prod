@@ -72,7 +72,7 @@ class PromoCampaignPage extends Component {
             }).then(response => {
             const { dzoDtoList } = response;
             this.setState({ allDzoList: dzoDtoList });
-        }).catch(() => this.setState({ allDzoList: null, promoCampaignList: null, listError: LIST_ERROR }));
+        }).catch(() => this.setState({ allDzoList: [], promoCampaignList: [], listError: LIST_ERROR }));
     }
 
     handleClickStatistics = (promoCampaign) => {
@@ -289,11 +289,8 @@ class PromoCampaignPage extends Component {
         if (props['data-row-key']) {
             const index = promoCampaignList.findIndex(x => x.id === props['data-row-key']);
             return <SortableItem index={ index } { ...props } />;
-        } else if (props.children._owner.pendingProps.expanded) {
-            const index = props.children.props.children._owner.index + 0.5;
-            return <SortableItem index={ index } { ...props } />;
          } else {
-            return null;
+            return <SortableItem { ...props } />;
         }
     };
 
