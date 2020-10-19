@@ -22,6 +22,7 @@ import { getRole, saveAppCode } from '../../api/services/sessionService';
 import { ROUTE } from '../../constants/route';
 import { logout } from '../../api/services/authService';
 import Button from '../../components/Button/Button';
+import { Switch, Typography } from 'antd';
 
 const CLIENT_APP_LIST_TITLE = 'Клиенские приложения';
 const LOADING_LIST_LABEL = 'Загрузка';
@@ -42,7 +43,7 @@ const initialState = {
         inactivityTime: null, promoShowTime: null, privacyPolicy: null,
         tmpBlockTime: null, maxPasswordAttempts: null, maxPresentsNumber: null
     },
-    staticUrl: getStaticUrl(), clientAppList: [], isOpen: false, formError: null
+    staticUrl: getStaticUrl(), clientAppList: [], showDeleted: false, isOpen: false, formError: null
 };
 
 const LoadingStatus = ({ loading }) => (
@@ -73,6 +74,11 @@ class ClientAppPage extends Component {
     closeModal = () => {
         this.setState({ isOpen: false }, this.clearState);
     };
+
+    onShowDeleted = () => {
+        const { showDeleted } = this.state;
+        this.setState({ showDeleted: !showDeleted });
+    }
 
     handleEdit = (id, name, code, isDeleted) =>
         this.setState({ editingClientApp: { id, name, code, isDeleted } }, this.openModal);
@@ -251,14 +257,25 @@ class ClientAppPage extends Component {
     }
 
     renderClientAppList = () => {
-        const { clientAppList } = this.state;
+        const { clientAppList, showDeleted } = this.state;
         const isSuccess = Array.isArray(clientAppList);
         return (
             <Fragment>
+                <div>
+                    <Typography.Text>Показать удаленные </Typography.Text>
+                    <Switch checked={ showDeleted } onChange={ this.onShowDeleted } />
+                </div>
                 {
                     (isSuccess && clientAppList.length) ?
                         clientAppList.map((app, i) =>
-                            <ClientAppItem
+                            showDeleted ? <ClientAppItem
+                                key={ `clientAppItem-${i}` }
+                                handleEdit={ this.handleEdit }
+                                handleEditProperties={ this.handleEditProperties }
+                                handleAdministrate={ this.handleAdministrate }
+                                properties={ app.clientApplicationPropertiesDto }
+                                { ...app }
+                            /> : !app.isDeleted && <ClientAppItem
                                 key={ `clientAppItem-${i}` }
                                 handleEdit={ this.handleEdit }
                                 handleEditProperties={ this.handleEditProperties }

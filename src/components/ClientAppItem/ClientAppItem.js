@@ -19,6 +19,7 @@ const ClientAppItem = (props) => {
         <div className={ styles.clientAppItem }>
             <div className={ styles.descrWrapper }>
                 <div className={ styles.fieldsWrapper }>
+                    {isDeleted && <p className={ styles.deleted }><b>Приложение удалено!</b></p>}
                     <p><b>Имя:</b>{ ` "${ name }"` }</p>
                     <p><b>Код:</b>{ ` "${ code }"` }</p>
                     <p><b>Deleted:</b> {isDeleted.toString()}</p>

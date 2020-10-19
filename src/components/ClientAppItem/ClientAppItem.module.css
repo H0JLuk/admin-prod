@@ -6,6 +6,12 @@
     background-color: #fff;
 }
 
+.clientAppItem .deleted {
+    text-align: center;
+    font-size: 3vw;
+    color: red;
+}
+
 .clientAppItem .descrWrapper {
     flex: 5;
     display: flex;
