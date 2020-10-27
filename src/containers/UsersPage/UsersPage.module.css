@@ -6,6 +6,10 @@
     position: relative;
 }
 
+.container h3 {
+    margin-top: 20px;
+}
+
 .successBlock {
     background-color: #ffffff;
     border-radius: 16px;
@@ -99,6 +103,22 @@
     padding: 8px 30px;
     display: inline-block;
     bottom: auto;
+}
+
+.packetProcessing__block__button {
+    font-family: Roboto, serif;
+    padding: 8px 15px;
+    border-radius: 16px;
+    line-height: 1.14;
+    color: #fff;
+}
+
+.packetProcessing__block__button_green{
+    background-color: #08a652;
+}
+
+.packetProcessing__block__button_red{
+    background-color: #da7675;
 }
 
 ::-ms-clear, ::-ms-reveal {

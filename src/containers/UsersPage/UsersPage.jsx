@@ -1,10 +1,10 @@
 import React, { useReducer } from 'react';
 import styles from './UsersPage.module.css';
+import classNames from 'classnames';
 import MultiActionForm from '../../components/Form/MultiActionForm';
 import { CHANGE_USER_FORM } from '../../components/Form/forms';
 import { addUser, removeUser, resetUser, unblockUser } from '../../api/services/adminService';
 import Button from '../../components/Button/Button';
-import MaterialButton from '@material-ui/core/Button';
 import { baseUrl } from '../../api/apiClient';
 import { getReqOptions } from '../../api/services';
 import {
@@ -96,7 +96,7 @@ const UsersPage = () => {
         return !sent ? <MultiActionForm
             data={ CHANGE_USER_FORM }
             actions={ [{ handler: onAddUser, text: 'Добавить', buttonClassName: styles.userForm__button },
-                { handler: onRemoveUser, text: 'Удалить', buttonClassName: styles.userForm__button },
+                { handler: onRemoveUser, text: 'Удалить', buttonClassName: styles.userForm__button, color: 'red' },
                 { handler: onUnblockUser, text: 'Разблокировать', buttonClassName: styles.userForm__button },
                 { handler: onResetUser, text: 'Сбросить пароль', buttonClassName: styles.userForm__button }] }
             formClassName={ styles.userForm }
@@ -129,10 +129,10 @@ const UsersPage = () => {
                     accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                     value=''
                 />
-                <label htmlFor='contained-button-file' className={ styles.packetprocessing__block }>
-                    <MaterialButton variant='contained' component='span'>
+                <label htmlFor='contained-button-file' className={ styles.packetProcessing__block }>
+                    <div className={ classNames(styles.packetProcessing__block__button, styles.packetProcessing__block__button_green) }>
                         Загрузка пользователей
-                    </MaterialButton>
+                    </div>
                 </label>
                 <input
                     style={ { display: 'none' } }
@@ -143,9 +143,9 @@ const UsersPage = () => {
                     value=''
                 />
                 <label htmlFor='contained-button-delete-file' className={ styles.packetProcessing__block }>
-                    <MaterialButton variant='contained' component='span'>
+                    <div className={ classNames(styles.packetProcessing__block__button, styles.packetProcessing__block__button_red) }>
                         Удаление пользователей
-                    </MaterialButton>
+                    </div>
                 </label>
                 <div className={ styles.packetProcessing__block }>
                     <a href={ templateLink('user-upload.xlsx') } >Шаблон на загрузку</a>

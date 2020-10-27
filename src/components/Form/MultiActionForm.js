@@ -61,7 +61,7 @@ class MultiActionForm extends Form {
                         return (<Button key = { idx }
                                         label={ action.text }
                                         className={ action.buttonClassName }
-                                        type='green'
+                                        type={ action.color || 'green' }
                                         font='roboto'
                                         disabled={ state.errorCount !== 0 }
                                         onClick={ this.onClick(action.handler) } />);
