@@ -7,25 +7,27 @@
     background-color: #fff;
 }
 
-.categoryItem .descrWrapper {
+.categoryItem .content {
     flex: 5;
     display: flex;
     flex-direction: column;
     padding-left: 20px;
+    justify-content: space-between;
 }
 
-.descrWrapper .fieldsWrapper {
+.content .fieldsWrapper {
     display: flex;
     flex-direction: column;
 }
 
-.descrWrapper .categoryActions {
+.content .categoryActions {
+    max-height: 40px;
     flex: 1;
     display: flex;
     justify-content: flex-end;
 }
 
-.descrWrapper .categoryActions > button:last-child {
+.content .categoryActions > button:last-child {
     margin-left: 20px;
 }
 
@@ -68,4 +70,14 @@
     font-family:Tahoma, sans-serif;
     font-size:16px;
     margin-bottom: 10px;
+}
+
+.text {
+    font-family: Tahoma, sans-serif;
+    font-size: 16px;
+    margin-bottom: 3px;
+}
+
+.bold {
+    font-weight: bold;
 }

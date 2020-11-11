@@ -2,15 +2,21 @@ import React, { memo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { loadImageWithPromise } from '../../utils/helper';
 import Button from '../Button/Button';
-import SimpleDzoItem from '../DzoItem/SimpleDzoItem';
 import droidSvg from '../../static/images/droid.svg';
 import spinner from '../../static/images/loading-spinner.svg';
 import styles from './CategoryItem.module.css';
 import ButtonLabels from '../Button/ButtonLables';
 import { UP, DOWN } from '../../constants/movementDirections';
 
-const CategoryItem = (props) => {
-    const { categoryId, categoryName, categoryDescription, categoryUrl, isActive, dzoList } = props;
+const CATEGORY_HEADER_LABEL = 'Заголовок: ';
+const CATEGORY_DESCRIPTION_LABEL = 'Описание: ';
+const CATEGORY_ACTIVE_LABEL = 'Активная: ';
+
+const CategoryItem = ({
+                          handleDelete, handleEdit, handleMove,
+                          categoryId, categoryName, categoryDescription,
+                          categoryUrl, active
+}) => {
     const [curUrl, setUrl] = useState(spinner);
 
     useEffect(() => {
@@ -19,31 +25,22 @@ const CategoryItem = (props) => {
             .catch(setUrl);
     }, [categoryUrl]);
 
+    const onDeleteClick = () => handleDelete(categoryId);
 
-    const handleDelete = () => { props.handleDelete(categoryId); };
-    const handleEdit = () => { props.handleEdit(categoryId, categoryName, categoryDescription, categoryUrl, isActive); };
-    const handleMoveUp = () => { props.handleMove(categoryId, UP); };
-    const handleMoveDown = () => { props.handleMove(categoryId, DOWN); };
+    const onEditClick = () => handleEdit(categoryId, categoryName, categoryDescription ?? '', categoryUrl, active);
+
+    const handleMoveUp = () => handleMove(categoryId, UP);
+
+    const handleMoveDown = () => handleMove(categoryId, DOWN);
 
     return (
         <div className={ styles.categoryItem }>
             <div className={ styles.imageWrapper } style={ { backgroundImage: `url(${curUrl})` } } />
-            <div className={ styles.descrWrapper }>
+            <div className={ styles.content }>
                 <div className={ styles.textFieldFormat }>
-                    <p className={ styles.headerFormat }><b>Название: </b></p>
-                    <p className={ styles.textFormat }>{ categoryName }</p>
-                    <p className={ styles.headerFormat }><b>Описание: </b></p>
-                    <p className={ styles.textFormat }>{ categoryDescription }</p>
-                    <p className={ styles.headerFormat }><b>Активная: </b></p>
-                    <p className={ styles.textFormat }>{ isActive.toString() }</p>
-                    <span>
-                        <p className={ styles.headerFormat }>
-                            <b>dzoName(dzoCode):</b>
-                        </p>
-                        { dzoList != null ? dzoList.map( (dzo, i) =>
-                            <SimpleDzoItem key={ `dzoItem-${i}` } { ...dzo } />
-                        ): null }
-                    </span>
+                    {generateField(CATEGORY_HEADER_LABEL, `"${categoryName}"`)}
+                    {categoryDescription && generateField(CATEGORY_DESCRIPTION_LABEL, `"${categoryDescription}"`)}
+                    {generateField(CATEGORY_ACTIVE_LABEL, active ? 'да' : 'нет')}
                 </div>
                 <div className={ styles.categoryActions }>
                     <div>
@@ -60,21 +57,29 @@ const CategoryItem = (props) => {
                             className={ styles.arrow_image }
                         />
                     </div>
-                    <Button type="green" onClick={ handleEdit } label={ ButtonLabels.EDIT } />
-                    <Button type="red" onClick={ handleDelete } label={ ButtonLabels.DELETE } />
+                    <Button type="green" onClick={ onEditClick } label={ ButtonLabels.EDIT } />
+                    <Button type="red" onClick={ onDeleteClick } label={ ButtonLabels.DELETE } />
                 </div>
             </div>
         </div>
     );
 };
 
+function generateField(label, value) {
+    return (
+        <p className={ styles.text }>
+            <span className={ styles.bold }>{ label }</span>
+            { value }
+        </p>
+    );
+}
+
 CategoryItem.propTypes = {
     categoryId: PropTypes.number.isRequired,
     categoryName: PropTypes.string.isRequired,
-    categoryDescription: PropTypes.string.isRequired,
+    categoryDescription: PropTypes.string,
     categoryUrl: PropTypes.string.isRequired,
-    isActive: PropTypes.bool.isRequired,
-    dzoList: PropTypes.array.isRequired,
+    active: PropTypes.bool.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleEdit: PropTypes.func.isRequired
 };

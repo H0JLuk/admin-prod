@@ -54,7 +54,7 @@ export const LANDING_EDIT_FORM = {
     }
 };
 
-export const CATEGORY_ADD_FROM = {
+export const CATEGORY_FORM = {
     categoryName: {
         label: 'Имя категории',
         value: '',
@@ -68,30 +68,9 @@ export const CATEGORY_ADD_FROM = {
         label: 'Описание категории',
         value: '',
         type: 'text',
-        isRequired: true,
+        isRequired: false,
         maxLength: 2048,
-        validators: [isRequired],
-        mask: null
-    }
-};
-
-export const CATEGORY_EDIT_FROM = {
-    categoryName: {
-        label: 'Имя категории',
-        value: '',
-        type: 'text',
-        isRequired: true,
-        maxLength: 2048,
-        validators: [isRequired],
-        mask: null
-    },
-    categoryDescription: {
-        label: 'Описание категории',
-        value: '',
-        type: 'text',
-        isRequired: true,
-        maxLength: 2048,
-        validators: [isRequired],
+        validators: [],
         mask: null
     }
 };

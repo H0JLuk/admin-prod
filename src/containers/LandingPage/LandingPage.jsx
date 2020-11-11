@@ -36,17 +36,19 @@ const LoadingStatus = ({ loading }) => (
     <p className={ styles.loadingLabel }>{ loading ? LOADING_LIST_LABEL : LANDINGS_GET_ERROR }</p>
 );
 
+const initialEditingLanding = {
+    landingId: null,
+    header: null,
+    description: null,
+    imageUrl: null,
+};
+
 class LandingPage extends Component {
     constructor(props) {
         super(props);
         this.landingRef = React.createRef();
         this.state = {
-            editingLanding: {
-                landingId: null,
-                header: null,
-                description: null,
-                imageUrl: null,
-            },
+            editingLanding: initialEditingLanding,
             landings: [],
             isOpen: false,
             formError: null,
@@ -63,13 +65,11 @@ class LandingPage extends Component {
             .catch(() => this.setState({ landings: [] }));
     }
 
-    clearState = () => this.setState({
-        editingLanding: { landingId: null, header: null, description: null, imageUrl: null }
-    });
+    clearState = () => this.setState({ editingLanding: initialEditingLanding });
 
     openModal = () => this.setState({ isOpen: true });
 
-    closeModal = () => this.setState( { isOpen: false }, this.clearState);
+    closeModal = () => this.setState({ isOpen: false }, this.clearState);
 
     handleDelete = (id) => {
         if (window.confirm(REMOVE_QUESTION)) {
@@ -136,7 +136,7 @@ class LandingPage extends Component {
     reloadLandings = (data, url) => {
         const { landings, editingLanding: { landingId } } = this.state;
         const newLandings = landings.slice();
-        newLandings.forEach( elem => {
+        newLandings.forEach(elem => {
             if (elem.landingId === landingId) {
                 if (this.landingRef.current.files.length > 0 && elem.imageUrl === url) {
                     elem.imageUrl = '';
@@ -151,16 +151,17 @@ class LandingPage extends Component {
     };
 
     onSubmit = (data) => {
-        if (!this.landingRef.current.files.length && !this.state.editingLanding.imageUrl) {
+        const { editingLanding: { imageUrl, landingId }, staticServerUrl } = this.state;
+        if (!this.landingRef.current.files.length && !imageUrl) {
             alert(UPLOAD_IMAGE_PLEASE);
             return;
         }
         let landingDto;
-        if (this.state.editingLanding.landingId !== null && !this.landingRef.current.files.length) {
-            landingDto = { ...data, imageUrl: this.state.editingLanding.imageUrl.slice(this.state.staticServerUrl.length) };
-            updateLanding(this.state.editingLanding.landingId, landingDto)
+        if (landingId !== null && !this.landingRef.current.files.length) {
+            landingDto = { ...data, imageUrl: imageUrl.slice(staticServerUrl.length) };
+            updateLanding(landingId, landingDto)
                 .catch(error => console.log(error.message));
-            this.reloadLandings(data, this.state.editingLanding.imageUrl);
+            this.reloadLandings(data, imageUrl);
         } else {
             const imageFile = this.landingRef.current.files[0];
             const imageName = `${getAppCode()}/${LANDING_DIR}/${imageFile.name}`;
@@ -168,18 +169,19 @@ class LandingPage extends Component {
             uploadFile(imageFile, imageName)
                 .then(response => {
                     landingDto = { ...data, imageUrl: response.path };
-                    if (this.state.editingLanding.landingId !== null) {
-                        return updateLanding(this.state.editingLanding.landingId, landingDto);
+                    if (landingId !== null) {
+                        return updateLanding(landingId, landingDto);
                     } else {
                         return addLanding(landingDto);
                     }
                 })
                 .then(response => {
-                    if (this.state.editingLanding.landingId !== null) {
-                        this.reloadLandings(data, this.state.staticServerUrl + landingDto.imageUrl);
+                    const imageUrl = `${this.state?.staticServerUrl}${landingDto?.imageUrl}`;
+                    if (landingId !== null) {
+                        this.reloadLandings(data, imageUrl);
                     } else {
                         const { id } = response;
-                        const newLandingItem = { ...landingDto, landingId: id, imageUrl: this.state.staticServerUrl + landingDto.imageUrl };
+                        const newLandingItem = { ...landingDto, landingId: id, imageUrl };
                         const landings = [...this.state.landings, newLandingItem];
                         this.setState({ landings }, this.closeModal);
                     }

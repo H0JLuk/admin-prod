@@ -7,7 +7,7 @@ import {
     updateCategory
 } from '../../api/services/categoryService';
 import { getStaticUrl } from '../../api/services/settingsService';
-import { CATEGORY_EDIT_FROM, CATEGORY_ADD_FROM } from '../../components/Form/forms';
+import { CATEGORY_FORM } from '../../components/Form/forms';
 import { getErrorText } from '../../constants/errors';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import CategoryItem from '../../components/CategoryItem/CategoryItem';
@@ -46,7 +46,7 @@ class CategoryPage extends Component {
                 name: null,
                 description: null,
                 url: null,
-                isActive: null,
+                active: null,
             },
             staticUrl: getStaticUrl(),
             categories: [],
@@ -57,14 +57,15 @@ class CategoryPage extends Component {
     }
 
     componentDidMount() {
-        getCategoryList().then( response => {
-            const { categoryList } = response;
-            this.setState({ categories: categoryList });
-        }).catch(() => this.setState({ categories: [] }));
+        const loadData = async () => {
+            const { categoryList: categories = [] } = await getCategoryList() ?? {};
+            this.setState({ categories });
+        };
+        loadData();
     }
 
     clearState = () => this.setState({
-        editingCategory: { id: null, name: null, description: null, url: null, isActive: null }
+        editingCategory: { id: null, name: null, description: null, url: null, active: null }
     });
 
     openModal = () => this.setState({ isOpen: true });
@@ -80,8 +81,8 @@ class CategoryPage extends Component {
         }
     };
 
-    handleEdit = (id, name, description, url, isActive ) => this.setState({
-        editingCategory: { id, name, description, url, isActive }
+    handleEdit = (id, name, description, url, active) => this.setState({
+        editingCategory: { id, name, description, url, active }
     }, this.openModal);
 
     handleInputChange(event) {
@@ -89,7 +90,7 @@ class CategoryPage extends Component {
         const value = target.type === 'checkbox' ? target.checked : target.value;
 
         this.setState({
-            editingCategory: { ...this.state.editingCategory, isActive : value }
+            editingCategory: { ...this.state.editingCategory, active : value }
         });
     }
 
@@ -110,11 +111,10 @@ class CategoryPage extends Component {
     };
 
     renderModalForm = () => {
-        const { formError, editingCategory } = this.state;
-        const formData = editingCategory.id !== null ? populateFormWithData(CATEGORY_EDIT_FROM, {
-            categoryName: editingCategory.name,
-            categoryDescription: editingCategory.description,
-        }) : CATEGORY_ADD_FROM;
+        const { formError, editingCategory: { id, name, description, active } } = this.state;
+        const formData = id != null
+            ? populateFormWithData(CATEGORY_FORM, { categoryName: name, categoryDescription: description })
+            : CATEGORY_FORM;
         return (
             <div className={ styles.modalForm }>
                 <img src={ cross } onClick={ this.closeModal } className={ styles.crossSvg } alt={ ButtonLabels.CLOSE } />
@@ -137,8 +137,8 @@ class CategoryPage extends Component {
                     <input
                         name="Active"
                         type="checkbox"
-                        disabled={ this.state.editingCategory.id === null }
-                        checked={ editingCategory.id === null ? true : editingCategory.isActive }
+                        disabled={ id == null }
+                        checked={ id == null ? true : active }
                         onChange={ this.handleInputChange } />
                 </form>
                 <form className={ styles.imageUploadContainer }>
@@ -150,9 +150,9 @@ class CategoryPage extends Component {
     };
 
     reloadCategory(categoryDto) {
-        const { categories, staticUrl, editingCategory: { id, url, isActive } } = this.state;
+        const { categories, staticUrl, editingCategory: { id, url, active } } = this.state;
         const newCategories = categories.slice();
-        newCategories.forEach( elem => {
+        newCategories.forEach(elem => {
             if (elem.categoryId === id) {
                 if (this.categoryRef.current.files.length > 0 && elem.categoryUrl === url) {
                     elem.categoryUrl = '';
@@ -161,7 +161,7 @@ class CategoryPage extends Component {
                 elem.categoryName = categoryDto.categoryName;
                 elem.categoryDescription = categoryDto.categoryDescription;
                 elem.categoryUrl = staticUrl + categoryDto.categoryUrl;
-                elem.isActive = isActive;
+                elem.active = active;
             }
         });
         this.setState({ categories: newCategories }, this.closeModal);
@@ -172,7 +172,7 @@ class CategoryPage extends Component {
         const newCategoryItem = {
             ...categoryDto,
             categoryUrl: this.state.staticUrl + categoryDto.categoryUrl,
-            dzoList: null, isActive: true, categoryId: id
+            dzoList: null, active: true, categoryId: id
         };
         const categories = [newCategoryItem, ...this.state.categories];
         this.setState({ categories }, this.closeModal);
@@ -186,7 +186,7 @@ class CategoryPage extends Component {
         let categoryDto;
         if (!this.categoryRef.current.files.length && this.state.editingCategory.id !== null) {
             categoryDto = {
-                ...data, isActive: this.state.editingCategory.isActive,
+                ...data, active: this.state.editingCategory.active,
                 categoryUrl: this.state.editingCategory.url.slice(this.state.staticUrl.length)
             };
             updateCategory(this.state.editingCategory.id, categoryDto).then(() => {
@@ -198,7 +198,7 @@ class CategoryPage extends Component {
 
             uploadFile(imageFile, imageName)
                 .then(response => {
-                    categoryDto = { ...data, isActive: this.state.editingCategory.isActive, categoryUrl: response.path };
+                    categoryDto = { ...data, active: this.state.editingCategory.active, categoryUrl: response.path };
                     if (this.state.editingCategory.id !== null) {
                         return updateCategory(this.state.editingCategory.id, categoryDto);
                     } else {
