@@ -4,6 +4,7 @@ import { loadImageWithPromise } from '../../utils/helper';
 import Button from '../Button/Button';
 import droidSvg from '../../static/images/droid.svg';
 import spinner from '../../static/images/loading-spinner.svg';
+import Field from '../Field/Field';
 import styles from './CategoryItem.module.css';
 import ButtonLabels from '../Button/ButtonLables';
 import { UP, DOWN } from '../../constants/movementDirections';
@@ -14,33 +15,34 @@ const CATEGORY_ACTIVE_LABEL = 'Активная: ';
 
 const CategoryItem = ({
                           handleDelete, handleEdit, handleMove,
-                          categoryId, categoryName, categoryDescription,
-                          categoryUrl, active
+                          categoryId: id, categoryName: name,
+                          categoryDescription: description,
+                          categoryUrl: imageUrl, active
 }) => {
     const [curUrl, setUrl] = useState(spinner);
 
     useEffect(() => {
-        loadImageWithPromise(categoryUrl, droidSvg)
+        loadImageWithPromise(imageUrl, droidSvg)
             .then(setUrl)
             .catch(setUrl);
-    }, [categoryUrl]);
+    }, [imageUrl]);
 
-    const onDeleteClick = () => handleDelete(categoryId);
+    const onDeleteClick = () => handleDelete(id);
 
-    const onEditClick = () => handleEdit(categoryId, categoryName, categoryDescription ?? '', categoryUrl, active);
+    const onEditClick = () => handleEdit(id, name, description ?? '', imageUrl, active);
 
-    const handleMoveUp = () => handleMove(categoryId, UP);
+    const handleMoveUp = () => handleMove(id, UP);
 
-    const handleMoveDown = () => handleMove(categoryId, DOWN);
+    const handleMoveDown = () => handleMove(id, DOWN);
 
     return (
         <div className={ styles.categoryItem }>
             <div className={ styles.imageWrapper } style={ { backgroundImage: `url(${curUrl})` } } />
             <div className={ styles.content }>
                 <div className={ styles.textFieldFormat }>
-                    {generateField(CATEGORY_HEADER_LABEL, `"${categoryName}"`)}
-                    {categoryDescription && generateField(CATEGORY_DESCRIPTION_LABEL, `"${categoryDescription}"`)}
-                    {generateField(CATEGORY_ACTIVE_LABEL, active ? 'да' : 'нет')}
+                    <Field label={ CATEGORY_HEADER_LABEL } value={ `"${name}"` } />
+                    {description && <Field label={ CATEGORY_DESCRIPTION_LABEL } value={ `"${description}"` } />}
+                    <Field label={ CATEGORY_ACTIVE_LABEL } value={ active ? 'да' : 'нет' } />
                 </div>
                 <div className={ styles.categoryActions }>
                     <div>
@@ -64,15 +66,6 @@ const CategoryItem = ({
         </div>
     );
 };
-
-function generateField(label, value) {
-    return (
-        <p className={ styles.text }>
-            <span className={ styles.bold }>{ label }</span>
-            { value }
-        </p>
-    );
-}
 
 CategoryItem.propTypes = {
     categoryId: PropTypes.number.isRequired,

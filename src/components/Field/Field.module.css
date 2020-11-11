@@ -1,0 +1,9 @@
+.text {
+    font-family: Tahoma, sans-serif;
+    font-size: 16px;
+    margin-bottom: 3px;
+}
+
+.bold {
+    font-weight: bold;
+}

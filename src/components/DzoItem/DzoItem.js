@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../Button/Button';
+import Field from '../Field/Field';
 import styles from './DzoItem.module.css';
 import ButtonLabels from '../Button/ButtonLables';
 
@@ -23,12 +24,12 @@ const DzoItem = ({
     return (
         <div className={ styles.dzoItem }>
             <div className={ styles.textFieldFormat }>
-                {generateField(DZO_NAME_LABEL, `"${dzoName}"`)}
-                {generateField(DZO_ID_LABEL, dzoId)}
-                {generateField(DZO_CODE_LABEL, `"${dzoCode}"`)}
-                {generateField(WEB_URL_LABEL, `"${webUrl}"`)}
-                {header && generateField(HEADER_LABEL, `"${header}"`)}
-                {description && generateField(DESCRIPTION_LABEL, `"${description}"`)}
+                <Field label={ DZO_NAME_LABEL } value={ `"${dzoName}"` } />
+                <Field label={ DZO_ID_LABEL } value={ dzoId.toString() } />
+                <Field label={ DZO_CODE_LABEL } value={ `"${dzoCode}"` } />
+                <Field label={ WEB_URL_LABEL } value={ `"${webUrl}"` } />
+                {header && <Field label={ HEADER_LABEL } value={ `"${header}"` } />}
+                {description && <Field label={ DESCRIPTION_LABEL } value={ `"${description}"` } />}
             </div>
             <div className={ styles.dzoActions }>
                 <Button type="green" onClick={ onEditClick } label={ ButtonLabels.EDIT } />
@@ -37,15 +38,6 @@ const DzoItem = ({
         </div>
     );
 };
-
-function generateField(label, value) {
-    return (
-        <p className={ styles.text }>
-            <span className={ styles.bold }>{ label }</span>
-            { value }
-        </p>
-    );
-}
 
 DzoItem.propTypes = {
     dzoId: PropTypes.number.isRequired,
