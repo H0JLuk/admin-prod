@@ -23,33 +23,32 @@ class ActionsMenu extends React.Component {
         const { direction, children } = this.props;
 
         return (
-            <div className="actions-menu" { ...this.props }>
+            <div className="actions-menu">
                 <FloatingMenu
                     className="menu"
                     slideSpeed={ 500 }
                     direction={ direction || 'left' }
                     spacing={ 6 }
                     isOpen={ isOpen }>
-                    <MainButton
-                        iconResting={ <TooltipButton text="Действия" shape="circle" icon={ <EllipsisOutlined /> } /> }
-                        iconActive={ <TooltipButton text="Закрыть" shape="circle" icon={ <CloseOutlined /> } /> }
-                        onClick={ (e) => {
-                            if (e) e.stopPropagation();
-                            this.setState({ isOpen: !isOpen });
-                        } }
-                        size={ 32 }
-                    />
-
-                    {(React.Children.toArray(children))
-                        .filter(o => !_.isEmpty(o))
-                        .reverse()
-                        .map((o, index) =>
-                            <ChildButton key={ index }
-                                         icon={ o }
-                                         size={ 32 }
-                            />
-                        )
+                    {
+                        [
+                            <MainButton
+                                iconResting={ <TooltipButton text="Действия" shape="circle" icon={ <EllipsisOutlined /> } /> }
+                                iconActive={ <TooltipButton text="Закрыть" shape="circle" icon={ <CloseOutlined /> } /> }
+                                onClick={ (e) => {
+                                    if (e) e.stopPropagation();
+                                    this.setState({ isOpen: !isOpen });
+                                } }
+                                size={ 32 }
+                                key="MainButton"
+                            />,
+                            ...React.Children.toArray(children)
+                                .filter(o => !_.isEmpty(o))
+                                .reverse()
+                                .map((o, index) => (<ChildButton key={ index } icon={ o } size={ 32 } />))
+                        ]
                     }
+
                 </FloatingMenu>
             </div>
         );

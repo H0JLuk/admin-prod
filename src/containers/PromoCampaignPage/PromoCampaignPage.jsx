@@ -259,18 +259,7 @@ class PromoCampaignPage extends Component {
 
     getDzoById = (dzoId) => this.state.allDzoList.find(item => item.dzoId === dzoId).dzoName
 
-    getAvailableDzo = () => {
-        const availableDzos = [];
-        const { allDzoList } = this.state;
-        allDzoList.map(item => {
-                if (!item.isDeleted) {
-                    availableDzos.push(item);
-                }
-            }
-        );
-
-        return availableDzos;
-    }
+    getAvailableDzo = () => this.state.allDzoList.filter(item => !item.isDeleted);
 
     onSortEnd = ({ oldIndex, newIndex }) => {
         const { promoCampaignList } = this.state;
@@ -344,8 +333,8 @@ class PromoCampaignPage extends Component {
                         DraggableContainer={ this.DraggableContainer }
                     />
                     : <Empty description={
-                        <span>Нет промо кампаний, но вы можете <div className={ styles.promoCampaignsLink }
-                                                                     onClick={ this.createPromoCampaign }> создать новую!</div> </span>
+                        <span>Нет промо кампаний, но вы можете <span className={ styles.promoCampaignsLink }
+                                                                     onClick={ this.createPromoCampaign }> создать новую!</span> </span>
                     } />}
 
                 <SavePromoCampaignModal

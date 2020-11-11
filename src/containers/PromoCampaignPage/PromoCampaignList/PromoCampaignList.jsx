@@ -15,6 +15,7 @@ import {
     FileImageOutlined,
     FileTextOutlined } from '@ant-design/icons';
 import { sortableHandle } from 'react-sortable-hoc';
+import PROMO_CAMPAIGNS from '../../../constants/promoCampaigns';
 
 const { Panel } = Collapse;
 const DELETE_BUTTON_LABEL = 'Удалить';
@@ -24,6 +25,10 @@ const DragHandle = sortableHandle(() => (
 ));
 const BannerPanelHeader = ({ promoCampaign }) => <Typography.Text strong>Список баннеров {promoCampaign.name}</Typography.Text>;
 const TextPanelHeader = ({ promoCampaign }) => <Typography.Text strong>Список текстовок {promoCampaign.name}</Typography.Text>;
+const onFilterPromoCampaignType = (value, promoCampaign) => promoCampaign.type === value;
+const promoCampaignTypeFilters = Object.values(PROMO_CAMPAIGNS).map(el => ({ ...el, text: el.label }));
+
+const renderPromoCampaignType = (value) => PROMO_CAMPAIGNS[value].label;
 
 export const PromoCampaignList = ({
                                       loading,
@@ -203,11 +208,21 @@ export const PromoCampaignList = ({
                 render={ () => <DragHandle /> }
             />
             <Table.Column
-                width="90%"
+                width="75%"
                 title="Имя промо-кампании"
                 key="name"
                 dataIndex="name"
             />
+            <Table.Column
+                width="15%"
+                title="Тип промо-кампании"
+                key="type"
+                dataIndex="type"
+                render={ renderPromoCampaignType }
+                filters={ promoCampaignTypeFilters }
+                filterMultiple={ false }
+                onFilter={ onFilterPromoCampaignType }
+        />
             <Table.Column width="5%"
                           key="action"
                           render={ (item) => <ActionsMenu>

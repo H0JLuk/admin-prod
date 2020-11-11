@@ -9,11 +9,13 @@ class Confirm extends Component {
     };
 
     render() {
+        const { onConfirm, ...props} = this.props;
+
         return (
             <div onClick={ (e) => {
                 e && e.stopPropagation();
                 this.openModal();
-            } } { ...this.props }>
+            } } { ...props }>
                 {this.props.children}
             </div>
         );
