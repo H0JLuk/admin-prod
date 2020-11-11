@@ -30,23 +30,6 @@ function reducer (state, action) {
     }
 }
 
-export async function downloadResultFile (message) {
-    try {
-        const fileUrl = new URL(`${baseUrl}/admin/user/upload/file/${message}`);
-        const fileResponse = await fetch(fileUrl, getReqOptions());
-        const blob = await fileResponse.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "Загруженные пользователи.xlsx";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-    } catch (e) {
-        throw new Error(`Пользователи загружены. Не удалось получить ответ ${e.message}`);
-    }
-}
-
 export const onFileUploadInputChange = async e => {
     e.preventDefault();
     const { target: { files: [file] } } = e;
@@ -54,7 +37,7 @@ export const onFileUploadInputChange = async e => {
         throw new Error('Файл не совпадает с шаблоном');
     }
     const data = new FormData();
-    data.append("multipartUsersFile", file, file.name);
+    data.append('multipartUsersFile', file, file.name);
     const uploadUrl = new URL(`${baseUrl}/admin/user/upload/file`);
     let result, response;
     try {
@@ -62,14 +45,21 @@ export const onFileUploadInputChange = async e => {
             ...getReqOptions(), method: 'POST',
             body: data
         });
-        result = await response.json();
     } catch (e) {
         throw new Error(`Не удалось загрузить пользователей. ${e.message}`);
     }
 
     if (response.ok) {
-        result.message && await downloadResultFile(result.message);
+        result = await response.blob();
+        const url = window.URL.createObjectURL(result);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Результат загрузки пользователей.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
     } else {
+        result = await response.json();
         throw new Error(result.message);
     }
 };

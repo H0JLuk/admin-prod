@@ -29,8 +29,18 @@ export const CHANGE_USER_FORM = {
         isRequired: true,
         maxLength: 8,
         validators: [isRequired, digitValidator],
-        mask: null
-    }
+        mask: null,
+    },
+    vsp: {
+        label: 'Точка продажи',
+        value: '',
+        type: 'text',
+        isRequired: false,
+        maxLength: 14,
+        validators: [],
+        mask: null,
+    },
+
 };
 
 export const LANDING_EDIT_FORM = {
