@@ -262,7 +262,7 @@ export const DZO_ADD_FROM = {
         mask: null
     },
     webUrl: {
-        label: 'Web адрес ДЗО',
+        label: 'Ссылка на сайт ДЗО',
         value: '',
         type: 'text',
         isRequired: false,
@@ -313,7 +313,7 @@ export const DZO_EDIT_FROM = {
         mask: null
     },
     webUrl: {
-        label: 'Web URL',
+        label: 'Ссылка на сайт ДЗО',
         value: '',
         type: 'text',
         isRequired: false,

@@ -10,7 +10,6 @@ import { getReqOptions } from '../../api/services';
 import {
     hideMessage,
     onFileUploadInputChange,
-    showError,
     showErrorMessage,
     showSuccessMessage,
     unsetSent,
@@ -56,7 +55,7 @@ const UsersPage = () => {
         const { personalNumber: pn } = data;
         try {
             await unblockUser(pn);
-            dispatch({ type: showSuccessMessage, payload: `Пользователь разблокирован` });
+            dispatch({ type: showSuccessMessage, payload: 'Пользователь разблокирован' });
         } catch (e) {
             dispatch({ type: showErrorMessage, payload: e.message });
         }

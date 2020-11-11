@@ -10,7 +10,6 @@ import UsersPage from '../../containers/UsersPage/UsersPage';
 import DzoPage from '../../containers/DzoPage/DzoPage';
 import LandingPage from '../../containers/LandingPage/LandingPage';
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
-import SliderPage from '../../containers/SliderPage/SliderPage';
 
 const AdminPage = (props) => {
     
@@ -28,7 +27,6 @@ const AdminPage = (props) => {
                     <Route path={ ROUTE_ADMIN.DZO } component={ DzoPage } />
                     <Route path={ ROUTE_ADMIN.LANDING } component={ LandingPage } />
                     <Route path={ ROUTE_ADMIN.CATEGORY } component={ CategoryPage } />
-                    <Route path={ ROUTE_ADMIN.SLIDER } component={ SliderPage } />
                     <Route path={ ROUTE_ADMIN.PROMO_CAMPAIGN } component={ PromoCampaignPage } />
 
                     <Route render={ () => <Redirect to={ ROUTE_ADMIN.USERS } /> } />

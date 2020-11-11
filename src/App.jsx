@@ -17,7 +17,7 @@ moment.locale('ru');
 class App extends React.PureComponent {
 
     componentDidMount() {
-        getStaticUrlFromBackend().then( response => {
+        getStaticUrlFromBackend().then(response => {
             saveStaticUrl(response);
         });
     }
@@ -39,9 +39,9 @@ class App extends React.PureComponent {
 
                     <Route path={ ROUTE.LOGIN } component={ LoginPage } />
                     <Route path={ ROUTE.CLIENT_APPS } component={ ClientAppPage } />
-                    <Route path={ ROUTE.ADMIN } component={ withRedirect( AdminPage, ROLES.ADMIN ) } />
-                    <Route path={ ROUTE.OWNER } component={ withRedirect( ProductPage, ROLES.PRODUCT_OWNER ) } />
-                    <Route path={ ROUTE.AUDITOR } component={ withRedirect( AuditorPage, ROLES.AUDITOR ) } />
+                    <Route path={ ROUTE.ADMIN } component={ withRedirect(AdminPage, ROLES.ADMIN) } />
+                    <Route path={ ROUTE.OWNER } component={ withRedirect(ProductPage, ROLES.PRODUCT_OWNER) } />
+                    <Route path={ ROUTE.AUDITOR } component={ withRedirect(AuditorPage, ROLES.AUDITOR) } />
 
                     <Route render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } />
                 </Switch>

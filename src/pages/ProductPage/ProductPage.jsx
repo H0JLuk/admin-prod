@@ -7,7 +7,6 @@ import Header from '../../components/Header/Header';
 import DzoPage from '../../containers/DzoPage/DzoPage';
 import LandingPage from '../../containers/LandingPage/LandingPage';
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
-import SliderPage from '../../containers/SliderPage/SliderPage';
 
 const ProductPage = (props) => {
         
@@ -23,7 +22,6 @@ const ProductPage = (props) => {
                     <Route path={ ROUTE_OWNER.DZO } component={ DzoPage } />
                     <Route path={ ROUTE_OWNER.LANDING } component={ LandingPage } />
                     <Route path={ ROUTE_OWNER.CATEGORY } component={ CategoryPage } />
-                    <Route path={ ROUTE_OWNER.SLIDER } component={ SliderPage } />
                     <Route path={ ROUTE_OWNER.PROMO_CAMPAIGN } component={ PromoCampaignPage } />
 
                     <Route render={ () => <Redirect to={ ROUTE_OWNER.DZO } /> } />
