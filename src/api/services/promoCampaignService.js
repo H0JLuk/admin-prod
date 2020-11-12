@@ -2,7 +2,7 @@ import { getReqOptions } from './index';
 import { Api, FORM_DATA_CONTENT_TYPE } from '../apiClient';
 
 export async function getPromoCampaignList() {
-    return Api.post('/promo-campaign/list/filter', {}, getReqOptions());
+    return Api.post('/promo-campaign/list/filter', { checkVisibility: false }, getReqOptions());
 }
 
 export async function getPromoCampaignStatistics(promoCampaignId) {
@@ -10,7 +10,8 @@ export async function getPromoCampaignStatistics(promoCampaignId) {
 }
 
 export async function createPromoCampaign(promoCampaign) {
-    return Api.post('/admin/promoCampaign', promoCampaign, getReqOptions());
+    // TODO: replace behaviorId with the one selected in promoCampaign (2 - QrBehavior)
+    return Api.post('/admin/promoCampaign', { ...promoCampaign, behaviorId: 2 }, getReqOptions());
 }
 
 export async function editPromoCampaign(promoCampaign) {

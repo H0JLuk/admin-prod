@@ -31,7 +31,7 @@ import FloatingButton from '../../components/TooltipButton/FloatingButton/Floati
 import { Empty, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
-import { getAllDzoList } from '../../api/services/dzoService';
+import { getDzoList } from '../../api/services/dzoService';
 import { errorNotice } from '../../components/toast/Notice';
 import arrayMove from 'array-move';
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
@@ -51,7 +51,7 @@ class PromoCampaignPage extends Component {
             currentPromoCampaign: undefined,
             currentPromoCampaignBanner: undefined,
             currentPromoCampaignText: undefined,
-            promoCampaignList: null,
+            promoCampaignList: [],
             savePromoCampaignModalOpen: false,
             savePromoCampaignBannerModalOpen: false,
             savePromoCampaignTextModalOpen: false,
@@ -68,7 +68,7 @@ class PromoCampaignPage extends Component {
             .then(response => {
                 const { promoCampaignDtoList } = response;
                 this.setState({ promoCampaignList: promoCampaignDtoList });
-                return getAllDzoList();
+                return getDzoList();
             }).then(response => {
             const { dzoDtoList } = response;
             this.setState({ allDzoList: dzoDtoList });
@@ -112,8 +112,9 @@ class PromoCampaignPage extends Component {
                 .then(() => this.pushToPromoCampaignList(editedPromoCampaign))
                 .catch(error => errorNotice(error.message));
         } else {
-            createPromoCampaign(editedPromoCampaign)
-                .then(({ id }) => this.pushToPromoCampaignList({ ...editedPromoCampaign, id }))
+            const newPromoCampaign = { ...editedPromoCampaign, promoCampaignBanners: [], promoCampaignTexts: [] };
+            createPromoCampaign(newPromoCampaign)
+                .then(({ id }) => this.pushToPromoCampaignList({ ...newPromoCampaign, id }))
                 .catch(error => errorNotice(error.message));
         }
     }
