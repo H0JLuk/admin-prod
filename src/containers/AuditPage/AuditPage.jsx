@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import styles from './AuditPage.module.css';
-import { useTable, usePagination, useFilters, useAsyncDebounce } from 'react-table';
+import { useTable, usePagination, useFilters } from 'react-table';
 // import DatePicker from "react-datepicker";
-import { getReqOptions } from "../../api/services";
-import ReactJson from "react-json-view";
-import SelectColumnFilter from "./SelectColumnFilter";
-import { baseUrl } from "../../api/apiClient";
+import { getReqOptions } from '../../api/services';
+import ReactJson from 'react-json-view';
+import SelectColumnFilter from './SelectColumnFilter';
+import { baseUrl } from '../../api/apiClient';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MaUTable from '@material-ui/core/Table';
@@ -16,7 +16,7 @@ import TableRow from '@material-ui/core/TableRow';
 const initialState = { events: [], totalElements: 0, totalPages: 0,
     numberOfElements: 0, size: 20, number: 0 };
 
-const DATE_FORMAT = 'dd.MM.yyyy';
+// const DATE_FORMAT = 'dd.MM.yyyy';
 
 // const a = (<DatePicker
 //     className={ styles.datepicker }

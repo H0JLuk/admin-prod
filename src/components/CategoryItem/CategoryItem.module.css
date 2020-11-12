@@ -72,12 +72,14 @@
     margin-bottom: 10px;
 }
 
-.text {
+.fieldActive {
     font-family: Tahoma, sans-serif;
     font-size: 16px;
+    font-weight: bold;
     margin-bottom: 3px;
+    color: #08a652;
 }
 
-.bold {
-    font-weight: bold;
+.red {
+    color: #da7675;
 }

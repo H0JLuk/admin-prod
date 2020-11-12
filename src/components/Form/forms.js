@@ -230,7 +230,7 @@ export const DZO_ADD_FROM = {
         value: '',
         type: 'text',
         isRequired: true,
-        maxLength: 2048,
+        maxLength: 128,
         validators: [isRequired],
         mask: null
     },
@@ -239,7 +239,7 @@ export const DZO_ADD_FROM = {
         value: '',
         type: 'text',
         isRequired: false,
-        maxLength: 2048,
+        maxLength: 512,
         validators: [],
         mask: null
     },
@@ -248,7 +248,7 @@ export const DZO_ADD_FROM = {
         value: '',
         type: 'text',
         isRequired: false,
-        maxLength: 2048,
+        maxLength: 4096,
         validators: [],
         mask: null
     },
@@ -257,7 +257,7 @@ export const DZO_ADD_FROM = {
         value: '',
         type: 'text',
         isRequired: true,
-        maxLength: 2048,
+        maxLength: 40,
         validators: [isRequired],
         mask: null
     },
@@ -280,7 +280,7 @@ export const DZO_EDIT_FROM = {
         type: 'text',
         disabled: true,
         isRequired: true,
-        maxLength: 2048,
+        maxLength: 128,
         validators: [isRequired],
         mask: null
     },
@@ -289,7 +289,7 @@ export const DZO_EDIT_FROM = {
         value: '',
         type: 'text',
         isRequired: false,
-        maxLength: 2048,
+        maxLength: 512,
         validators: [],
         mask: null
     },
@@ -298,7 +298,7 @@ export const DZO_EDIT_FROM = {
         value: '',
         type: 'text',
         isRequired: false,
-        maxLength: 2048,
+        maxLength: 4096,
         validators: [],
         mask: null
     },
@@ -308,7 +308,7 @@ export const DZO_EDIT_FROM = {
         type: 'text',
         disabled: true,
         isRequired: true,
-        maxLength: 2048,
+        maxLength: 40,
         validators: [isRequired],
         mask: null
     },

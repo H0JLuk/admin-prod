@@ -278,7 +278,7 @@ class PromoCampaignPage extends Component {
         if (props['data-row-key']) {
             const index = promoCampaignList.findIndex(x => x.id === props['data-row-key']);
             return <SortableItem index={ index } { ...props } />;
-         } else {
+        } else {
             return <SortableItem { ...props } />;
         }
     };

@@ -1,5 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { loadImageWithPromise } from '../../utils/helper';
 import Button from '../Button/Button';
 import droidSvg from '../../static/images/droid.svg';
@@ -11,7 +12,6 @@ import { UP, DOWN } from '../../constants/movementDirections';
 
 const CATEGORY_HEADER_LABEL = 'Заголовок: ';
 const CATEGORY_DESCRIPTION_LABEL = 'Описание: ';
-const CATEGORY_ACTIVE_LABEL = 'Активная: ';
 
 const CategoryItem = ({
                           handleDelete, handleEdit, handleMove,
@@ -42,7 +42,9 @@ const CategoryItem = ({
                 <div className={ styles.textFieldFormat }>
                     <Field label={ CATEGORY_HEADER_LABEL } value={ `"${name}"` } />
                     {description && <Field label={ CATEGORY_DESCRIPTION_LABEL } value={ `"${description}"` } />}
-                    <Field label={ CATEGORY_ACTIVE_LABEL } value={ active ? 'да' : 'нет' } />
+                    <p className={ classNames(styles.fieldActive, { [styles.red]: !active }) }>
+                        { active ? 'Активная' : 'Неактивная' }
+                    </p>
                 </div>
                 <div className={ styles.categoryActions }>
                     <div>

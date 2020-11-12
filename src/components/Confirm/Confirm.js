@@ -9,7 +9,8 @@ class Confirm extends Component {
     };
 
     render() {
-        const { onConfirm, ...props} = this.props;
+        // eslint-disable-next-line no-unused-vars
+        const { onConfirm, ...props } = this.props;
 
         return (
             <div onClick={ (e) => {
