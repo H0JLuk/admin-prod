@@ -100,6 +100,7 @@ const UsersPage = () => {
                 { handler: onResetUser, text: 'Сбросить пароль', buttonClassName: styles.userForm__button }] }
             formClassName={ styles.userForm }
             fieldClassName={ styles.userForm__field }
+            actionsPanelClasses={ styles.actionsPanelClasses }
             activeLabelClassName={ styles.userForm__field__activeLabel }
             formError={ error }
             errorText={ msg }

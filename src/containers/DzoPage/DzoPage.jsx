@@ -52,9 +52,13 @@ class DzoPage extends Component {
 
     componentDidMount() {
         const loadData = async () => {
-            const { dzoDtoList: dzoList = [] } = await getDzoList() ?? {};
-            const { dzoDtoList: allDzoList = [] } = await getAllDzoList() ?? {};
-            this.setState({ dzoList, allDzoList });
+            try {
+                const { dzoDtoList: dzoList = [] } = await getDzoList() ?? {};
+                const { dzoDtoList: allDzoList = [] } = await getAllDzoList() ?? {};
+                this.setState({ dzoList, allDzoList });
+            } catch (e) {
+                console.error(e.message);
+            }
         };
         loadData();
     }

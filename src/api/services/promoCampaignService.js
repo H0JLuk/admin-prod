@@ -1,5 +1,8 @@
+import behaviorTypes from '../../constants/behaviorTypes';
 import { getReqOptions } from './index';
 import { Api, FORM_DATA_CONTENT_TYPE } from '../apiClient';
+
+const DEFAULT_OFFER_DURATION = 90;
 
 export async function getPromoCampaignList() {
     return Api.post('/promo-campaign/list/filter', { checkVisibility: false }, getReqOptions());
@@ -9,13 +12,19 @@ export async function getPromoCampaignStatistics(promoCampaignId) {
     return Api.get(`/admin/promoCampaign/${promoCampaignId}/statistics`, getReqOptions());
 }
 
+function normalizePromoCampaign(promoCampaign) {
+    // TODO: send original promoCampaign without changing behaviorType and offerDuration
+    const behaviorType = promoCampaign?.behaviorType ?? behaviorTypes.QR;
+    const offerDuration = promoCampaign?.offerDuration ?? DEFAULT_OFFER_DURATION;
+    return { ...promoCampaign, behaviorType, offerDuration };
+}
+
 export async function createPromoCampaign(promoCampaign) {
-    // TODO: replace behaviorId with the one selected in promoCampaign (2 - QrBehavior)
-    return Api.post('/admin/promoCampaign', { ...promoCampaign, behaviorId: 2 }, getReqOptions());
+    return Api.post('/admin/promoCampaign', normalizePromoCampaign(promoCampaign), getReqOptions());
 }
 
 export async function editPromoCampaign(promoCampaign) {
-    return Api.put(`/admin/promoCampaign/${promoCampaign.id}`, promoCampaign, getReqOptions());
+    return Api.put(`/admin/promoCampaign/${promoCampaign.id}`, normalizePromoCampaign(promoCampaign), getReqOptions());
 }
 
 export async function reorderPromoCampaigns(idMap) {

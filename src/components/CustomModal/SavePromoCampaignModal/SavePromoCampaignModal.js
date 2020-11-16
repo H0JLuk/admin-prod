@@ -30,7 +30,7 @@ class SavePromoCampaignModal extends Component {
         this.state = {
             ...emptyPromoCampaign,
             dzoList: [],
-            dates: null,
+            // dates: null,
         };
     }
 
@@ -40,7 +40,7 @@ class SavePromoCampaignModal extends Component {
             this.setState({
                 ...editingObject,
                 dzoList,
-                dates: [moment(editingObject.startDate), moment(editingObject.finishDate)]
+                // dates: [moment(editingObject.startDate), moment(editingObject.finishDate)]
             });
         }
     }
@@ -97,15 +97,15 @@ class SavePromoCampaignModal extends Component {
                                onChange={ (e) => this.setState({ webUrl: e.target.value }) }
                         />
                     </Form.Item>
-                    <Form.Item label="Период действия промо-кампании">
-                        <Space direction="vertical" size={ 12 }>
-                            <RangePicker disabled value={ dates } onChange={ (dates, dateStrings) => this.setState({
-                                dates,
-                                startDate: dateStrings[0],
-                                finishDate: dateStrings[1]
-                            }) } />
-                        </Space>
-                    </Form.Item>
+                    {/*<Form.Item label="Период действия промо-кампании">*/}
+                    {/*    <Space direction="vertical" size={ 12 }>*/}
+                    {/*        <RangePicker disabled value={ dates } onChange={ (dates, dateStrings) => this.setState({*/}
+                    {/*            dates,*/}
+                    {/*            startDate: dateStrings[0],*/}
+                    {/*            finishDate: dateStrings[1]*/}
+                    {/*        }) } />*/}
+                    {/*    </Space>*/}
+                    {/*</Form.Item>*/}
                     <Form.Item label="Активная">
                         <Checkbox autoFocus
                                   checked={ active }

@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from "./Form";
+import Form from './Form';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import PropTypes from 'prop-types';
@@ -25,7 +25,8 @@ class MultiActionForm extends Form {
             formError,
             errorText,
             errorClassName,
-            iconClassName
+            iconClassName,
+            actionsPanelClasses
         } = this.props;
 
         const error = formError ? <p className={ errorClassName }>{ errorText }</p> : null;
@@ -56,7 +57,7 @@ class MultiActionForm extends Form {
                     );
                 })}
                 { error }
-                <div>
+                <div className={ actionsPanelClasses }>
                     {actions.map((action, idx) => {
                         return (<Button key = { idx }
                                         label={ action.text }
@@ -81,7 +82,8 @@ MultiActionForm.propTypes = {
     formError: PropTypes.bool,
     errorText: PropTypes.string,
     errorClassName: PropTypes.string,
-    iconClassName: PropTypes.string
+    iconClassName: PropTypes.string,
+    actionsPanelClasses: PropTypes.string
 };
 
 export default MultiActionForm;
