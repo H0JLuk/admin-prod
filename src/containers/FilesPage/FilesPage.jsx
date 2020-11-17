@@ -1,32 +1,38 @@
 import React, { Component } from 'react';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 import { getInstallationUrl, getUsageUrl } from '../../api/services/settingsService';
 import styles from './FilesPage.module.css';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import Button from '../../components/Button/Button';
 import Form from '../../components/Form/Form';
 import cross from '../../static/images/cross.svg';
+import classNames from 'classnames';
 import { getErrorText } from '../../constants/errors';
-import { populateFormWithData } from "../../components/Form/formHelper";
+import { populateFormWithData } from '../../components/Form/formHelper';
 import { getOffers, getFeedback, uploadFile }
     from '../../api/services/adminService';
 import { downloadFile } from '../../utils/helper';
 import ButtonLabels from '../../components/Button/ButtonLables';
 import { PDF_EDIT_FORM } from '../../components/Form/forms';
-import { getAppCode } from "../../api/services/sessionService";
+import { getAppCode } from '../../api/services/sessionService';
+import { getDzoList } from '../../api/services/dzoService';
+import { getPromoCampaignList } from '../../api/services/promoCampaignService';
+import { getPromoCodeStatistics } from '../../api/services/promoCodeService';
 
 const DATE_FORMAT = 'dd/MM/yyyy';
 
 const PDF_DIR = 'guide';
 const OFFERS_NAME = 'offers';
+const PROMOCODES_NAME = 'promocodes';
 const FEEDBACK_NAME = 'feedback';
 const USAGE_NAME = 'usage';
 const INSTALLATION_NAME = 'installation';
 
 const OFFERS_LABLE = 'Скачать предложения';
 const FEEDBACK_LABLE = 'Скачать фидбэк';
+const EXPORT_LABLE = 'Скачать выданные промокоды';
 const START_DATE_LABLE = 'с';
 const END_DATE_LABLE = 'по';
 
@@ -35,6 +41,8 @@ const FILTER_TITLE = 'Фильтровать по дате';
 const USAGE_TITLE = 'Инструкция пользователя (usage guide)';
 const INSTALLATION_TITLE = 'Инструкция по установке приложения (installation guide)';
 const CHANGE_PDF_TITLE = 'Заменить pdf';
+const UNSPECIFIED_TITLE = 'Не задано';
+const EXPORT_TITLE = 'Экспорт использованных промокодов';
 const TITLES = { [USAGE_NAME]: USAGE_TITLE, [INSTALLATION_NAME]: INSTALLATION_TITLE };
 
 const UPLOAD_PDF_PLEASE = 'Пожалуйста загрузите pdf-файл!';
@@ -45,6 +53,7 @@ class FilesPage extends Component {
 
     constructor(props) {
         super(props);
+        this.optionRef = React.createRef();
         this.pdfRef = React.createRef();
         this.state = {
             startDate: null,
@@ -54,7 +63,12 @@ class FilesPage extends Component {
             formError: null,
             installationUrl: null,
             usageUrl: null,
-            editingPdf: null
+            editingPdf: null,
+            dzoList: [],
+            dzoId: null,
+            promoCampaignList: [],
+            filteredPromoCampaignList: [],
+            promoCampaignId: null
         };
     }
 
@@ -64,13 +78,30 @@ class FilesPage extends Component {
         startDate.setDate(startDate.getDate() - 14);
         this.setState({ startDate, endDate: currentDate });
 
-        try {
-            getUsageUrl().then( usageUrl => { this.setState({ usageUrl }); });
-            getInstallationUrl().then( installationUrl => { this.setState({ installationUrl }); });
-        } catch (error) {
-            console.error(`Application list get error: ${ error }`);
-        }
+        const loadData = async () => {
+            try {
+                const { dzoDtoList: dzoList = [] } = await getDzoList() ?? {};
+                const { promoCampaignDtoList: promoCampaignList = [] } = await getPromoCampaignList() ?? {};
+                const usageUrl = await getUsageUrl();
+                const installationUrl = await getInstallationUrl();
+                this.setState({ dzoList, promoCampaignList, usageUrl, installationUrl });
+            } catch (e) {
+                console.error(e.message);
+            }
+        };
+        loadData();
     }
+
+    checkDate = (start, end) => {
+        const momentStartDate = moment(start);
+        const momentEndDate = moment(end);
+        if (!momentStartDate.isValid() || !momentEndDate.isValid()
+            || momentStartDate > momentEndDate) {
+            alert(FILTER_ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    };
 
     getData = (func, name) => () => {
         if (typeof(func) !== 'function') {
@@ -78,22 +109,14 @@ class FilesPage extends Component {
         }
         const { startDate, endDate, isFiltered } = this.state;
 
-        if (isFiltered) {
-            const momentStartDate = moment(startDate);
-            const momentEndDate = moment(endDate);
-            if (!momentStartDate.isValid() || !momentEndDate.isValid()
-                    || momentStartDate > momentEndDate) {
-                alert(FILTER_ERROR_MESSAGE);
-                return ;
-            }
+        if (isFiltered && !this.checkDate(startDate, endDate)) {
+            return;
         }
 
         const startTime = isFiltered ? startDate.getTime() : null;
         const endTime = isFiltered ? endDate.getTime() : null;
 
-        func(startTime, endTime).then( data => {
-            downloadFile(data, name);
-        });
+        func(startTime, endTime).then(data => downloadFile(data, name));
     };
 
     handleChangeDate = (date, isStartDate) => {
@@ -103,6 +126,30 @@ class FilesPage extends Component {
             this.setState({ endDate: date });
         }
     };
+
+    downloadPromoCodes = async () => {
+        const { startDate, endDate, dzoId, promoCampaignId } = this.state;
+        if (!this.checkDate(startDate, endDate)) {
+            return;
+        }
+        const momentStartDate = moment(startDate).format('DD.MM.YYYY');
+        const momentEndDate = moment(endDate).format('DD.MM.YYYY');
+        try {
+            const blob = await getPromoCodeStatistics(momentStartDate, momentEndDate, dzoId, promoCampaignId);
+            downloadFile(blob, PROMOCODES_NAME);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    handleDZOSelectChange = (event) => {
+        const dzoId = Number(event.target.value);
+        const filteredPromoCampaignList = this.state.promoCampaignList.filter(item => item.dzoId === dzoId);
+        this.optionRef.current.value = '';
+        this.setState({ dzoId, filteredPromoCampaignList, promoCampaignId: null });
+    };
+
+    handlePromoCampaignSelectChange = (event) => this.setState({ promoCampaignId: event.target.value });
 
     handleFilterCheckboxChange = () => {
         this.setState(prevState => ({ isFiltered: !prevState.isFiltered }));
@@ -186,7 +233,7 @@ class FilesPage extends Component {
             this.setState({ editingPdf });
             this.openModal();
         };
-        const picker = isFiltered ?
+        const picker =
             <div className={ styles.container__block }>
                 <label className={ styles.textFieldFormat }>
                     {START_DATE_LABLE}
@@ -207,7 +254,7 @@ class FilesPage extends Component {
                     selected={ endDate }
                     onChange={ date => { this.handleChangeDate(date, false); } }
                 />
-            </div> : null;
+            </div>;
 
         return (
             <div className={ styles.container }>
@@ -224,7 +271,7 @@ class FilesPage extends Component {
                     />
                 </div>
 
-                {picker}
+                { isFiltered ? picker : null }
 
                 <div className={ styles.container__block }>
                     <Button
@@ -273,6 +320,42 @@ class FilesPage extends Component {
                             label={ CHANGE_PDF_TITLE }
                             font="roboto"
                             type="blue"
+                        />
+                    </div>
+                </div>
+
+                <hr />
+                <div className={ styles.headerSection }>
+                    <h3>{EXPORT_TITLE}</h3>
+                    <div className={ styles.container__block }>
+                        <p>ДЗО<br />
+                            <select className={ classNames(styles.select, styles.datepicker) }
+                                    onChange={ this.handleDZOSelectChange }
+                            >
+                                <option key="dzo_empty" value="">{ UNSPECIFIED_TITLE }</option>
+                                { this.state.dzoList.map((option, index) =>
+                                    <option key={ `dzo_${index}` } value={ option.dzoId }>{ option.dzoName }</option>)
+                                }
+                            </select>
+                        </p>
+                        <p>Промокампания<br />
+                            <select ref={ this.optionRef } className={ classNames(styles.select, styles.datepicker) }
+                                    onChange={ this.handlePromoCampaignSelectChange }
+                            >
+                                <option key="campaign_empty" value="">{ UNSPECIFIED_TITLE }</option>
+                                { this.state.filteredPromoCampaignList.map((option, index) =>
+                                    <option key={ `campaign_${index}` } value={ option.id }>{ option.name }</option>)
+                                }
+                            </select>
+                        </p>
+                    </div>
+                    {picker}
+                    <div className={ styles.container__block }>
+                        <Button
+                            onClick={ this.downloadPromoCodes }
+                            label={ EXPORT_LABLE }
+                            font="roboto"
+                            type="green"
                         />
                     </div>
                 </div>

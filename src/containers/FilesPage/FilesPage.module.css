@@ -25,6 +25,10 @@
     font-size: 15px;
 }
 
+.select {
+    width: 210px;
+}
+
 .textFieldFormat {
     margin-right: 15px;
 }
