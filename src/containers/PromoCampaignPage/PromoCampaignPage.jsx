@@ -340,6 +340,7 @@ class PromoCampaignPage extends Component {
 
                 <SavePromoCampaignModal
                     title={ currentPromoCampaign ? 'Редактирование промо кампании' : 'Добавление промокампании' }
+                    editMode={ !!currentPromoCampaign }
                     open={ savePromoCampaignModalOpen }
                     editingObject={ currentPromoCampaign }
                     dzoList={ this.getAvailableDzo() }

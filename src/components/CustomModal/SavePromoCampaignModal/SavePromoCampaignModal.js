@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { Form, Input, Checkbox, DatePicker, Space, Select, Modal } from 'antd';
+import PropTypes from 'prop-types';
+import {
+    Form, Input, Checkbox, Select, Modal,
+    // DatePicker, Space
+} from 'antd';
 import _ from 'lodash';
 import { warnNotice } from '../../toast/Notice';
-import moment from 'moment';
+// import moment from 'moment';
 import promoCodeTypes from '../../../constants/promoCodeTypes';
 
 const { Option } = Select;
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 const emptyPromoCampaign = {
     name: '',
     webUrl: null,
@@ -71,29 +75,30 @@ class SavePromoCampaignModal extends Component {
             open,
             title,
             onClose,
-            editingObject
+            editingObject,
+            editMode
         } = this.props;
 
         const {
-            name, webUrl, active, dzoId, promoCodeType, dzoList, dates, type
+            name, webUrl, active, dzoId, promoCodeType, dzoList, type,
+            // dates
         } = this.state;
         return (
             <Modal title={ title }
                    visible={ open }
                    onOk={ this.handleSubmit }
                    okText="Сохранить"
-                   onCancel={ onClose }>
+                   onCancel={ onClose }
+            >
                 <Form layout="vertical" onSubmit={ this.handleSubmit }>
-                    <Form.Item required
-                               label="Название">
+                    <Form.Item required label="Название">
                         <Input autoFocus
                                value={ name }
                                onChange={ (e) => this.setState({ name: e.target.value }) }
                         />
                     </Form.Item>
                     <Form.Item label="Ссылка на страницу промо-кампании">
-                        <Input autoFocus
-                               value={ webUrl }
+                        <Input value={ webUrl }
                                onChange={ (e) => this.setState({ webUrl: e.target.value }) }
                         />
                     </Form.Item>
@@ -107,44 +112,48 @@ class SavePromoCampaignModal extends Component {
                     {/*    </Space>*/}
                     {/*</Form.Item>*/}
                     <Form.Item label="Активная">
-                        <Checkbox autoFocus
-                                  checked={ active }
-                                  onChange={ (e) => this.setState({ active: e.target.checked }) } />
+                        <Checkbox checked={ active }
+                                  onChange={ (e) => this.setState({ active: e.target.checked }) }
+                        />
                     </Form.Item>
-                    <Form.Item required
-                               label="Тип промокода">
-                        <Select autoFocus
-                                disabled={ editingObject.promoCodeType }
+                    <Form.Item required label="Тип промокода">
+                        <Select disabled={ editingObject.promoCodeType }
                                 placeholder="Выбирите тип промокодов"
                                 value={ promoCodeType }
-                                onChange={ (promoCodeType) => this.setState({ promoCodeType }) }>
+                                onChange={ (promoCodeType) => this.setState({ promoCodeType }) }
+                        >
                             <Option value={ NONE }>Нет промокодов</Option>
                             <Option value={ PERSONAL }>Персональные (для всех)</Option>
                             <Option value={ COMMON }>Общий (один для всех)</Option>
-                            <Option value={ PERSONAL_CLIENT_POOL } disabled>Персональный (для определенного списка
-                                клиентов)</Option>
-                            <Option value={ COMMON_CLIENT_POOL } disabled>Общий (для определенного списка
-                                клиентов)</Option>
+                            <Option value={ PERSONAL_CLIENT_POOL } disabled>
+                                Персональный (для определенного списка клиентов)
+                            </Option>
+                            <Option value={ COMMON_CLIENT_POOL } disabled>
+                                Общий (для определенного списка клиентов)
+                            </Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item required
-                               label="Тип промо-кампании">
-                        <Select autoFocus
-                                placeholder="Выбирите тип промо-кампании"
+                    <Form.Item required label="Тип промо-кампании">
+                        <Select placeholder="Выбирите тип промо-кампании"
                                 value={ type }
-                                onChange={ (type) => this.setState({ type }) }>
+                                onChange={ (type) => this.setState({ type }) }
+                        >
                             <Option value="NORMAL">Нормальный</Option>
                             <Option value="PRESENT">Подарок</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item required
-                               label="Партнер (ДЗО)">
-                        <Select autoFocus
+                    <Form.Item required label="Партнер (ДЗО)">
+                        <Select
+                                disabled={ editMode }
                                 value={ dzoId }
                                 placeholder="Выберите партнера из списка"
-                                onChange={ (dzoId) => this.setState({ dzoId }) }>
-                            {dzoList.map(option => <Option key={ option.dzoCode }
-                                                           value={ option.dzoId }>{option.dzoName} ({option.dzoCode})</Option>)}
+                                onChange={ (dzoId) => this.setState({ dzoId }) }
+                        >
+                            {dzoList.map(option => (
+                                <Option key={ option.dzoCode } value={ option.dzoId }>
+                                    {option.dzoName} ({option.dzoCode})
+                                </Option>)
+                            )}
                         </Select>
                     </Form.Item>
                 </Form>
@@ -153,8 +162,16 @@ class SavePromoCampaignModal extends Component {
     }
 }
 
+SavePromoCampaignModal.propTypes = {
+    editingObject: PropTypes.object,
+    editMode: PropTypes.bool,
+    dzoList: PropTypes.array,
+    title: PropTypes.string
+};
+
 SavePromoCampaignModal.defaultProps = {
     editingObject: emptyPromoCampaign,
+    editMode: false,
     dzoList: [],
     title: ''
 };
