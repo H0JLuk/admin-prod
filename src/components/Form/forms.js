@@ -32,7 +32,7 @@ export const CHANGE_USER_FORM = {
         mask: null,
     },
     vsp: {
-        label: 'Точка продажи',
+        label: 'Номер ВСП',
         value: '',
         type: 'text',
         isRequired: false,
