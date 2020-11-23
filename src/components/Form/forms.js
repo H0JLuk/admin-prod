@@ -31,8 +31,8 @@ export const CHANGE_USER_FORM = {
         validators: [isRequired, digitValidator],
         mask: null,
     },
-    vsp: {
-        label: 'Номер ВСП',
+    salePointName: {
+        label: 'Точка продажи',
         value: '',
         type: 'text',
         isRequired: false,
