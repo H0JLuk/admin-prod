@@ -39,14 +39,34 @@ export async function deletePromoCampaign(promoCampaignId) {
     return Api.delete(`/admin/promoCampaign/${promoCampaignId}`, getReqOptions());
 }
 
+export function getLocationsByText(value) {
+    return Api.get(`/admin/location/search?name=${value}`, getReqOptions());
+}
+
+export function getSalePointsByText(value) {
+    return Api.get(`/admin/salepoint/search?name=${value}`, getReqOptions());
+}
+
+/**
+ * @param {{
+ *  locationId: number;
+ *  promoCampaignId: number;
+ *  salePointId?: number | undefined;
+ *  visible: boolean;
+ * }} data
+ */
+export function addVisibilitySetting(data) {
+    return Api.post('/admin/visibility-setting', data, getReqOptions());
+}
+
 export function getPromoCampaignVisibilitySettings(promoCampaignId, urlSearchParams) {
-    return Api.get(`/admin/visibility_setting/promoCampaign/${promoCampaignId}?${urlSearchParams}`, getReqOptions());
+    return Api.get(`/admin/visibility-setting/promoCampaign/${promoCampaignId}?${urlSearchParams}`, getReqOptions());
 }
 
 export function editPromoCampaignVisibilitySetting(visibilitySettingId, visibilitySetting) {
-    return Api.put(`/admin/visibility_setting/${visibilitySettingId}`, visibilitySetting, getReqOptions());
+    return Api.put(`/admin/visibility-setting/${visibilitySettingId}`, visibilitySetting, getReqOptions());
 }
 
 export function deletePromoCampaignVisibilitySetting(visibilitySettingId) {
-    return Api.delete(`/admin/visibility_setting/${visibilitySettingId}`, getReqOptions());
+    return Api.delete(`/admin/visibility-setting/${visibilitySettingId}`, getReqOptions());
 }
