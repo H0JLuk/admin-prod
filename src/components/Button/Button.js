@@ -4,9 +4,18 @@ import styles from './Button.module.css';
 import classNames from 'classnames';
 
 class Button extends React.PureComponent {
+    onClick = (e) => {
+        const { onClick, disabled } = this.props;
+
+        if (disabled || typeof onClick !== 'function') {
+            return;
+        }
+
+        onClick(e);
+    }
 
     render() {
-        const {label, font, type, className, children, disabled, ...restProps} = this.props;
+        const { label, font, type, className, children, disabled, ...restProps } = this.props;
 
         const buttonClasses = classNames([
             className,
@@ -18,19 +27,21 @@ class Button extends React.PureComponent {
 
         return (
             <button
-                {...restProps}
-                className={buttonClasses}>
+                { ...restProps }
+                className={ buttonClasses }
+                onClick={ this.onClick }
+            >
                 {label || children}
             </button>
-        )
+        );
     }
 }
 
 Button.propTypes = {
     label: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
-    type: PropTypes.oneOf(["green", "red", "blue", "clear"]),
-    font: PropTypes.oneOf(["roboto", "sfpro"]),
+    type: PropTypes.oneOf(['green', 'red', 'blue', 'clear']),
+    font: PropTypes.oneOf(['roboto', 'sfpro']),
     disabled: PropTypes.bool
 };
 

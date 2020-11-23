@@ -1,0 +1,14 @@
+.page {
+    padding: 0 20px;
+}
+
+.header, .footer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.button_margin {
+    margin-left: 15px
+}

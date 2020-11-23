@@ -13,7 +13,9 @@ import {
     BarChartOutlined,
     UploadOutlined,
     FileImageOutlined,
-    FileTextOutlined } from '@ant-design/icons';
+    FileTextOutlined,
+    SettingOutlined,
+} from '@ant-design/icons';
 import { sortableHandle } from 'react-sortable-hoc';
 import PROMO_CAMPAIGNS from '../../../constants/promoCampaigns';
 
@@ -38,6 +40,7 @@ export const PromoCampaignList = ({
                                       onEditPromoCampaign,
                                       onEditPromoCampaignBanner,
                                       onEditPromoCampaignText,
+                                      onEditPromoCampaignVisibilitySettings,
                                       onDeletePromoCampaign,
                                       onDeletePromoCampaignBanner,
                                       onDeletePromoCampaignText,
@@ -259,6 +262,11 @@ export const PromoCampaignList = ({
                                              type="primary"
                                              icon={ <FileTextOutlined /> }
                                              onClick={ () => onCreatePromoCampaignText(item) } />
+                              <TooltipButton text="Настроить видимость промо-кампании"
+                                             shape="circle"
+                                             type="primary"
+                                             icon={ <SettingOutlined /> }
+                                             onClick={ () => onEditPromoCampaignVisibilitySettings(item) } />
                           </ActionsMenu>
                           }
             />

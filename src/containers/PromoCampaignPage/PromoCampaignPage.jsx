@@ -128,6 +128,12 @@ class PromoCampaignPage extends Component {
             }).catch();
     }
 
+    editPromoCampaignVisibilitySettings = (currentPromoCampaign) => {
+        const { history, match } = this.props;
+
+        history.push(`${match.url}/${currentPromoCampaign.id}/visibility-setting`);
+    }
+
     pushToPromoCampaignList = (promoCampaign) => {
         let { promoCampaignList, currentPromoCampaign } = this.state;
         if (currentPromoCampaign) {
@@ -322,6 +328,7 @@ class PromoCampaignPage extends Component {
                         onEditPromoCampaign={ this.editPromoCampaign }
                         onEditPromoCampaignBanner={ this.editPromoCampaignBanner }
                         onEditPromoCampaignText={ this.editPromoCampaignText }
+                        onEditPromoCampaignVisibilitySettings={ this.editPromoCampaignVisibilitySettings }
                         onDeletePromoCampaign={ this.deletePromoCampaign }
                         onDeletePromoCampaignBanner={ this.deletePromoCampaignBanner }
                         onDeletePromoCampaignText={ this.deletePromoCampaignText }

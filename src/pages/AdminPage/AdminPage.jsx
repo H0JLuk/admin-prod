@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { ROUTE, ROUTE_ADMIN } from '../../constants/route';
-import PromoCampaignPage from '../../containers/PromoCampaignPage/PromoCampaignPage';
 import styles from './AdminPage.module.css';
 
 import Header from '../../components/Header/Header';
@@ -10,6 +9,7 @@ import UsersPage from '../../containers/UsersPage/UsersPage';
 import DzoPage from '../../containers/DzoPage/DzoPage';
 import LandingPage from '../../containers/LandingPage/LandingPage';
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
+import PromoCampaignPageRouter from '../../containers/PromoCampaignPage/PromoCampaignPageRouter';
 
 const AdminPage = (props) => {
     
@@ -27,7 +27,7 @@ const AdminPage = (props) => {
                     <Route path={ ROUTE_ADMIN.DZO } component={ DzoPage } />
                     <Route path={ ROUTE_ADMIN.LANDING } component={ LandingPage } />
                     <Route path={ ROUTE_ADMIN.CATEGORY } component={ CategoryPage } />
-                    <Route path={ ROUTE_ADMIN.PROMO_CAMPAIGN } component={ PromoCampaignPage } />
+                    <Route path={ ROUTE_ADMIN.PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />
 
                     <Route render={ () => <Redirect to={ ROUTE_ADMIN.USERS } /> } />
                 </Switch>

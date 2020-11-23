@@ -38,3 +38,15 @@ export async function uploadPromoCodes(campaignId, data) {
 export async function deletePromoCampaign(promoCampaignId) {
     return Api.delete(`/admin/promoCampaign/${promoCampaignId}`, getReqOptions());
 }
+
+export function getPromoCampaignVisibilitySettings(promoCampaignId, urlSearchParams) {
+    return Api.get(`/admin/visibility_setting/promoCampaign/${promoCampaignId}?${urlSearchParams}`, getReqOptions());
+}
+
+export function editPromoCampaignVisibilitySetting(visibilitySettingId, visibilitySetting) {
+    return Api.put(`/admin/visibility_setting/${visibilitySettingId}`, visibilitySetting, getReqOptions());
+}
+
+export function deletePromoCampaignVisibilitySetting(visibilitySettingId) {
+    return Api.delete(`/admin/visibility_setting/${visibilitySettingId}`, getReqOptions());
+}
