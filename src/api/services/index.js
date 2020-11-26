@@ -1,3 +1,4 @@
+import { Api } from '../apiClient';
 import { getAppCode, getSession } from './sessionService';
 
 const TOKEN_HEADER = 'token';
@@ -15,3 +16,7 @@ export const getReqOptions = (contentType) => {
     contentType && (headers[CONTENT_TYPE] = contentType);
     return { headers };
 };
+
+export function updateTokenLifetime() {
+    return Api.post('/user/token/update', {}, getReqOptions());
+}

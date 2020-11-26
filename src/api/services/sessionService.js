@@ -10,6 +10,7 @@ export function storeUserData(userToken, userRole) {
 export function deleteUserData() {
     window.sessionStorage.removeItem(TOKEN);
     window.sessionStorage.removeItem(ROLE);
+    deleteAppCode();
 }
 
 export function getSession() {

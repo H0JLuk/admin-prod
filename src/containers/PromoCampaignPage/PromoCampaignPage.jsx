@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { updateTokenLifetime } from '../../api/services';
 import {
     createPromoCampaign,
     editPromoCampaign,
@@ -64,6 +65,7 @@ class PromoCampaignPage extends Component {
     }
 
     componentDidMount() {
+        updateTokenLifetime();
         getPromoCampaignList()
             .then(response => {
                 const { promoCampaignDtoList } = response;

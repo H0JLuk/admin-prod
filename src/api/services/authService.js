@@ -7,10 +7,13 @@ export async function login(credentials) {
 }
 
 export async function logout() {
-    return Api.post('/logout','', getReqOptions(), 'text')
-        .then(() => {
-            deleteUserData();
-        });
+    try {
+        await Api.post('/logout','', getReqOptions(), 'text');
+    } catch (e) {
+        console.error(e.message);
+    } finally {
+        deleteUserData();
+    }
 }
 
 export const isLoggedIn = () => !!getSession();

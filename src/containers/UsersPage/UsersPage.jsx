@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { useUpdateTokenLifetime } from '../../hooks/useUpdateTokenLifetime';
 import styles from './UsersPage.module.css';
 import classNames from 'classnames';
 import MultiActionForm from '../../components/Form/MultiActionForm';
@@ -20,6 +21,9 @@ import {
 
 const UsersPage = () => {
     const [{ sent, error, msg }, dispatch] = useReducer(usersReducer, usersPageInitialState);
+
+    useUpdateTokenLifetime();
+
     const onAddUser = async data => {
         const newUser = { ...data, password: data.personalNumber };
         try {
