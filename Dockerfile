@@ -2,9 +2,8 @@ FROM nginx
 RUN apt-get update
 RUN apt-get install -y mc vim nano
 RUN rm /usr/share/nginx/html/*
-COPY nginx.conf /etc/nginx/
-COPY default.conf /etc/nginx/conf.d/
+COPY devops/nginx.conf /etc/nginx/
+COPY devops/default.conf /etc/nginx/conf.d/
 WORKDIR /opt/distributor-web
-COPY maven/build/ .
+COPY build/ .
 RUN cp -r * /usr/share/nginx/html/
-RUN mkdir /usr/share/nginx/html/server-config

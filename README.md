@@ -16,6 +16,13 @@ npm i -g eslint
 npm start
 ```
 
+Можно запустить приложение в контейнере.
+URL бэкенда при сборке контейнера берется из .env.production
+```
+npm run build
+npm run docker-build
+npm run docker-run
+```
 ### Перед созданием PR
 Необходимо прогнать 
 ```
