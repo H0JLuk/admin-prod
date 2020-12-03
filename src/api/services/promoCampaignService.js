@@ -43,8 +43,9 @@ export function getLocationsByText(value) {
     return Api.get(`/admin/location/search?name=${value}`, getReqOptions());
 }
 
-export function getSalePointsByText(value) {
-    return Api.get(`/admin/salepoint/search?name=${value}`, getReqOptions());
+export function getSalePointsByText(value, locationId) {
+    const getString = `?name=${value}${!locationId ? '' : `&locationId=${locationId}`}`;
+    return Api.get(`/admin/salepoint/search${getString}`, getReqOptions());
 }
 
 /**

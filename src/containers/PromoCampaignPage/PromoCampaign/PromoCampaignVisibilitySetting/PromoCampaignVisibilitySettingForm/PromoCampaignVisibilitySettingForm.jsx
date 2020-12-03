@@ -66,18 +66,20 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
 
     const onFinish = useCallback(async () => {
         const { location, salePoint, visibility } = state;
-        if (!location) {
+
+        if (!location && !salePoint) {
             setState({
                 ...state,
                 error: 'Укажите локацию или точку продажи'
             });
             return;
         }
+
         try {
             const { promoCampaignId } = match.params || {};
 
             await addVisibilitySetting({
-                locationId: location.id,
+                locationId: location?.id || undefined,
                 promoCampaignId: Number(promoCampaignId),
                 salePointId: salePoint?.id || undefined,
                 visible: visibility,
@@ -100,7 +102,7 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
      */
     const getSearchResults = useCallback(async (searchValue, typeSearch = 'searchLocation') => {
         try {
-            const searchResult = await getResultsByTextAndType(searchValue, typeSearch);
+            const searchResult = await getResultsByTextAndType(searchValue, typeSearch, state.location?.id);
             setState(state => ({
                 ...state,
                 [typeSearch]: {
@@ -111,7 +113,7 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
         } catch (e) {
             console.error(e);
         }
-    }, []);
+    }, [state.location]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const getResultsDebounced = useCallback(debounce(getSearchResults, 500), [getSearchResults]);
@@ -170,14 +172,13 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
     }, [search]);
 
     const handleSelectLocationOption = useCallback((locationValue, location) => {
-        const { data, data: { salePoints } } = location;
+        const { data } = location;
 
         setState(state => ({
             ...state,
             location: data,
             searchLocation: { ...state.searchLocation, value: locationValue },
             error: '',
-            searchSalePoint: salePoints?.length ? { value: '', results: salePoints } : state.searchSalePoint
         }));
     }, []);
 
@@ -185,7 +186,8 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
         ...state,
         salePoint,
         searchSalePoint: { ...state.searchSalePoint, value },
-        ...createSearchDataAndPassLocation(location),
+        error: '',
+        ...createSearchDataAndPassLocation(location, !!state.location),
     })), []);
 
     /**

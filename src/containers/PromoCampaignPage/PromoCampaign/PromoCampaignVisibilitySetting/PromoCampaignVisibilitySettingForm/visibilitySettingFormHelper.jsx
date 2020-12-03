@@ -6,12 +6,12 @@ import styles from './PromoCampaignVisibilitySettingForm.module.css';
  * @param {string} searchValue
  * @param {'searchLocation' | 'searchSalePoint'} typeSearch
  */
-export function getResultsByTextAndType(searchValue, typeSearch = 'searchLocation') {
+export function getResultsByTextAndType(searchValue, typeSearch = 'searchLocation', locationId) {
     switch (typeSearch) {
         case 'searchLocation':
             return getLocationsByText(searchValue);
         case 'searchSalePoint':
-            return getSalePointsByText(searchValue);
+            return getSalePointsByText(searchValue, locationId);
         default:
             throw Error('Incorrect `typeSearch` param');
     }
@@ -50,8 +50,8 @@ export function highlightSearchingText(value = '', searchValue = '') {
     return <span>{newValue}</span>;
 }
 
-export function createSearchDataAndPassLocation(location) {
-    if (!location) {
+export function createSearchDataAndPassLocation(location, locationExist = false) {
+    if (!location || locationExist) {
         return {};
     }
 
@@ -60,7 +60,6 @@ export function createSearchDataAndPassLocation(location) {
         searchLocation: {
             value: getStringOptionValue(location),
             results: [location],
-            error: '',
         }
     };
 }
