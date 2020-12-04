@@ -1,0 +1,56 @@
+.btn {
+    margin: 0 5px;
+    text-transform: uppercase;
+}
+
+.btnGreen {
+    color: white;
+    background-color: #21ba72;
+    border-color: #21ba72;
+}
+
+.btnRed {
+    border-color: #ec454d;
+    background-color: #ec454d;
+    color: white;
+}
+
+.btnGray {
+    color: white;
+    background-color: #333f48;
+    border-color: #333f48;
+}
+
+.greyButton {
+    background-color: #EDEEEF;
+    color: #000000;
+    box-shadow: none;
+}
+
+.btnMT {
+    margin-top: 15px !important;
+}
+
+.Link:hover {
+    color: black;
+}
+
+.addButton {
+    margin: 0 5px;
+    font-size: 16px;
+    text-transform: uppercase;
+    border: none;
+    outline: none;
+    padding: 8px 30px 8px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.addButton:disabled,
+.addButton[disabled] {
+    border: 1px solid #999999;
+    background-color:#f7f7f7;
+    color: #666666;
+    box-shadow: none;
+    cursor: default;
+}

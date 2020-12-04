@@ -1,0 +1,112 @@
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    flex-wrap: wrap;
+    color: #494949;
+}
+
+.container label {
+    color: #494949;
+}
+
+.container h4 {
+    color: #ababad;
+    font-size: 12px;
+}
+
+.pageWrapper {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-width: 500px;
+}
+
+.pageTitle {
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.userStatus {
+    display: flex;
+    margin-left: 5px;
+}
+
+.formContainer {
+    flex: 1 0 0;
+}
+
+.form {
+    padding-top: 50px;
+}
+
+.formLeft {
+    display: flex !important;
+    align-items: center;
+}
+
+.form label::after {
+    content: '';
+}
+
+form.form input {
+    border-radius: 7px;
+    caret-color: #21ba72;
+}
+
+form.form input.hasError {
+    border-color: #ec464e;
+}
+
+form.form input:hover {
+    border-color: #21ba72;
+}
+
+form.form input:focus {
+    border-color: #21ba72;
+    box-shadow: none;
+}
+
+.form button:not(:last-child) {
+    margin-right: 15px;
+}
+
+.form button {
+    text-transform: uppercase;
+}
+
+.formError {
+    color: #ec454e;
+}
+
+.rightCol {
+    min-width: 250px;
+}
+
+.noEditField {
+    color: #494949;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.labelRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    min-height: 40px;
+}
+
+.buttonsContainer {
+    display: flex;
+}
+
+.center {
+    text-align: center;
+    justify-content: center;
+}
+
+.buttonsContainer :global(.ant-btn[disabled]){
+    color:#ebe8e8 !important;
+}

@@ -1,31 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import debounce from 'lodash/debounce';
-import { Form, Input, Button, Switch, AutoComplete } from 'antd';
+import { Form, Button, Switch } from 'antd';
+import AutocompleteLocationAndSalePoint from '../../../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteLocationAndSalePoint';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
-import {
-    createSearchDataAndPassLocation,
-    getStringOptionValue,
-    highlightSearchingText,
-    getResultsByTextAndType,
-} from './visibilitySettingFormHelper';
 
-import { ReactComponent as Cross } from '../../../../../static/images/cross.svg';
 import styles from './PromoCampaignVisibilitySettingForm.module.css';
 
 const FORM_NAME = 'createVisibilityForm';
-const LOCATION_FIELD = {
-    name: 'location',
-    label: 'Локация',
-    placeholder: 'Область, город...',
-};
-
-const SALE_POINT_FIELD = {
-    name: 'salePoint',
-    label: 'Точка продажи',
-    placeholder: 'Отделение ВСП',
-};
 
 const VISIBILITY_FIELD = {
     name: 'visibility',
@@ -49,29 +31,14 @@ const errorLayout = {
 };
 
 const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) => {
-    const [state, setState] = useState({
-        location: null,
-        salePoint: null,
-        visibility: true,
-        error: '',
-        searchLocation: {
-            value: '',
-            results: [],
-        },
-        searchSalePoint: {
-            value: '',
-            results: [],
-        },
-    });
+    const [location, setLocation] = useState(null);
+    const [salePoint, setSalePoint] = useState(null);
+    const [visibility, setVisibility] = useState(true);
+    const [error, setError] = useState('');
 
     const onFinish = useCallback(async () => {
-        const { location, salePoint, visibility } = state;
-
         if (!location && !salePoint) {
-            setState({
-                ...state,
-                error: 'Укажите локацию или точку продажи'
-            });
+            setError('Укажите локацию или точку продажи');
             return;
         }
 
@@ -90,131 +57,19 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
             // TODO: add handler for error
             console.error(e);
         }
-    }, [onSubmit, state, match.params]);
+    }, [onSubmit, match.params, visibility, location, salePoint]);
 
-    const onVisibilityChange = useCallback((visibility) => {
-        setState(state => ({ ...state, visibility }));
+    const onVisibilityChange = useCallback((visibility) => setVisibility(visibility), []);
+
+    const onLocationChange = useCallback((location) => {
+        setLocation(location);
+        setError('');
     }, []);
 
-    /**
-     * @param {string} searchValue
-     * @param {'searchLocation' | 'searchSalePoint'} typeSearch
-     */
-    const getSearchResults = useCallback(async (searchValue, typeSearch = 'searchLocation') => {
-        try {
-            const searchResult = await getResultsByTextAndType(searchValue, typeSearch, state.location?.id);
-            setState(state => ({
-                ...state,
-                [typeSearch]: {
-                    ...state[typeSearch],
-                    results: searchResult,
-                }
-            }));
-        } catch (e) {
-            console.error(e);
-        }
-    }, [state.location]);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const getResultsDebounced = useCallback(debounce(getSearchResults, 500), [getSearchResults]);
-
-    /**
-     * @param {string} searchValue
-     * @param {'searchLocation' | 'searchSalePoint'} typeSearch
-     */
-    const search = useCallback((searchValue, typeSearch = 'searchLocation') => {
-        if (typeSearch !== 'searchLocation' && typeSearch !== 'searchSalePoint') {
-            throw Error('Incorrect `typeSearch` param');
-        }
-
-        setState(state => ({
-            ...state,
-            [typeSearch]: {
-                ...state[typeSearch],
-                value: searchValue,
-            },
-        }));
-
-        if (!searchValue || (searchValue.length < 2 && typeSearch === 'searchLocation')) {
-            setState(state => ({
-                ...state,
-                [typeSearch]: {
-                    value: searchValue,
-                    results: [],
-                }
-            }));
-            return;
-        }
-
-        getResultsDebounced(searchValue, typeSearch);
-    }, [getResultsDebounced]);
-
-    const handleSearchSalePoint = useCallback((searchValue) => {
-        if (!searchValue) {
-            setState(state => ({
-                ...state,
-                salePoint: null,
-            }));
-        }
-
-        search(searchValue, 'searchSalePoint');
-    }, [search]);
-
-    const handleSearchLocation = useCallback((searchValue) => {
-        if (!searchValue) {
-            setState(state => ({
-                ...state,
-                location: null,
-            }));
-        }
-
-        search(searchValue, 'searchLocation');
-    }, [search]);
-
-    const handleSelectLocationOption = useCallback((locationValue, location) => {
-        const { data } = location;
-
-        setState(state => ({
-            ...state,
-            location: data,
-            searchLocation: { ...state.searchLocation, value: locationValue },
-            error: '',
-        }));
+    const onSalePointChange = useCallback((salePoint) => {
+        setSalePoint(salePoint);
+        setError('');
     }, []);
-
-    const handleSelectSalePointOption = useCallback((value, { data: salePoint, data: { location } }) => setState(state => ({
-        ...state,
-        salePoint,
-        searchSalePoint: { ...state.searchSalePoint, value },
-        error: '',
-        ...createSearchDataAndPassLocation(location, !!state.location),
-    })), []);
-
-    /**
-     * @param {'searchLocation' | 'searchSalePoint'} type
-     */
-    const renderOptionLabel = (option, type) => (
-        <div key={ option.id } className={ styles.autocompleteOption }>
-            <div className={ styles.optionParentName }>
-                { highlightSearchingText(option.parentName, state[type]?.value) }
-            </div>
-            <div className={ styles.optionName }>
-                { highlightSearchingText(option.name, state[type]?.value) }
-            </div>
-        </div>
-    );
-
-    const { visibility, error, searchLocation, searchSalePoint } = state;
-    const locationOptions = searchLocation.results.map((el) => ({
-        label: renderOptionLabel(el, 'searchLocation'),
-        value: getStringOptionValue(el),
-        data: el,
-    }));
-    const salePointOptions = searchSalePoint.results.map((el) => ({
-        label: renderOptionLabel(el, 'searchSalePoint'),
-        value: el.name,
-        data: el,
-    }));
 
     return (
         <div className={ styles.formContainer }>
@@ -225,63 +80,12 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
                 onFinish={ onFinish }
                 requiredMark={ false }
             >
-                <div className={ styles.formRow }>
-                    <div className={ cn(styles.formLeftCol, `ant-col ant-col-${layout.labelCol.span}`) }>
-                        <label htmlFor="rc_select_0">
-                            { LOCATION_FIELD.label }
-                        </label>
-                    </div>
-                    <div className={ cn(`ant-col ant-col-${layout.wrapperCol.span}`) }>
-                        <AutoComplete
-                            className={ styles.autocompleteInput }
-                            dropdownClassName={ styles.autocompleteDropdown }
-                            dropdownMatchSelectWidth={ false }
-                            options={ locationOptions }
-                            filterOption={ false }
-                            notFoundContent={ null }
-                            allowClear
-                            autoFocus
-                            onSearch={ handleSearchLocation }
-                            onSelect={ handleSelectLocationOption }
-                            value={ searchLocation.value }
-                            clearIcon={ <Cross /> }
-                        >
-                            <Input
-                                placeholder={ LOCATION_FIELD.placeholder }
-                                name={ LOCATION_FIELD.name }
-                                size="large"
-                            />
-                        </AutoComplete>
-                    </div>
-                </div>
-                <div className={ styles.formRow }>
-                    <div className={ cn(styles.formLeftCol, `ant-col ant-col-${layout.labelCol.span}`) }>
-                        <label htmlFor="rc_select_1">
-                            { SALE_POINT_FIELD.label }
-                        </label>
-                    </div>
-                    <div className={ cn(`ant-col ant-col-${layout.wrapperCol.span}`) }>
-                        <AutoComplete
-                            className={ styles.autocompleteInput }
-                            dropdownClassName={ styles.autocompleteDropdown }
-                            dropdownMatchSelectWidth={ false }
-                            options={ salePointOptions }
-                            filterOption={ false }
-                            notFoundContent={ null }
-                            allowClear
-                            onSearch={ handleSearchSalePoint }
-                            onSelect={ handleSelectSalePointOption }
-                            value={ searchSalePoint.value }
-                            clearIcon={ <Cross /> }
-                        >
-                            <Input
-                                placeholder={ SALE_POINT_FIELD.placeholder }
-                                name={ SALE_POINT_FIELD.name }
-                                size="large"
-                            />
-                        </AutoComplete>
-                    </div>
-                </div>
+                <AutocompleteLocationAndSalePoint
+                    layout={ layout }
+                    onLocationChange={ onLocationChange }
+                    onSalePointChange={ onSalePointChange }
+                    locationId={ location?.id }
+                />
                 <Form.Item
                     labelAlign="left"
                     label={ VISIBILITY_FIELD.label }

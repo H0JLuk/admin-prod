@@ -1,0 +1,120 @@
+.menu {
+    position: sticky;
+    top: 0;
+    width: 300px;
+    max-height: 100vh;
+    flex-shrink: 0;
+    background-color: #333F48;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.logo {
+    width: 50%;
+    margin-left: 15px;
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+
+.menu__item {
+    flex: 1;
+    display: flex;
+    text-decoration: none;
+    font-family: SBSansText, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    color: #C0C4C7;
+    background-color: transparent;
+    align-items: center;
+    padding: 8px 15px 8px 15px;
+    margin-top: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.menu__item > span {
+    margin-right: 10px;
+}
+
+.menu__item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.active {
+    color: white !important;
+    background-color: #252F36;
+    box-shadow: 0 0 3px rgba(0,0,0,0.5) inset;
+}
+
+.menuTitle > div {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.menu :global(.ant-menu.ant-menu-dark) {
+    border-radius: 5px;
+    background-color: transparent;
+    border: 0;
+    color: white;
+}
+
+.menu :global(.ant-menu-submenu) {
+    color: white !important;
+}
+
+.menu :global(.ant-menu-submenu .ant-menu-sub) {
+    padding-left: 15px;
+}
+
+.menu :global(.ant-menu-sub) {
+    background-color: transparent !important;
+}
+
+.menu :global(.ant-menu-sub:last-child) {
+    margin-bottom: 5px;
+}
+
+.menu :global(.ant-menu-submenu-title) {
+    color: #C0C4C7 !important;
+    font-family: SBSansText, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    padding: 0px 15px 0px 15px !important;
+    border-radius: 5px;
+}
+
+.menu :global(.ant-menu-submenu-title:hover) {
+    color: white !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.menu :global(.ant-menu-item) {
+    height: unset !important;
+    min-height: 40px;
+    white-space: unset;
+    border-radius: 5px;
+    margin: 0 !important;
+    padding-left: 0px !important;
+    padding-right: 0px;
+}
+
+.menu :global(.ant-menu-item-selected) {
+    background-color: transparent !important;
+}
+
+.menu :global(.ant-menu-item-selected > a) {
+    color: #C0C4C7;
+}
+
+.menu :global(.ant-menu-item-selected > a:hover) {
+    color: white !important;
+}

@@ -64,6 +64,38 @@ export const onFileUploadInputChange = async e => {
     }
 };
 
+export async function onDeleteFileUploadInputChange(e) {
+    e.preventDefault();
+    const { target: { files: [file] } } = e;
+
+    if (!validateFile) {
+        throw new Error('Файл не совпадает с шаблоном');
+    }
+
+    const data = new FormData();
+    data.append('multipartUsersFile', file, file.name);
+    const uploadUrl = new URL(`${baseUrl}/admin/user/delete/file`);
+
+    let response;
+    try {
+        response = await fetch(uploadUrl, {
+            ...getReqOptions(),
+            method: 'POST',
+            body: data,
+        });
+    } catch (e) {
+        throw new Error(`Не удалось удалить пользователей. ${e.message}`);
+    }
+
+    const result = await response.json();
+
+    if (response.ok) {
+        console.log(result.message);
+    } else {
+        throw new Error(result.message);
+    }
+}
+
 export function validateFile(file) {
     return file && file.name && file.name.includes('.xlsx');
 }

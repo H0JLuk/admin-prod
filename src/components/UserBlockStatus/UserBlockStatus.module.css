@@ -1,0 +1,16 @@
+.statusOff,
+.statusOn {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.statusOff {
+    background-color: #ff5c6b;
+}
+
+.statusOn {
+    background-color: #86ee82;
+}

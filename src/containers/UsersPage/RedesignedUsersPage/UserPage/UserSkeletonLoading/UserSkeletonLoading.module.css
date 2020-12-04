@@ -1,0 +1,26 @@
+.skeleton {
+    display: flex;
+}
+
+.flexSkeleton {
+    display: flex;
+    flex-direction: column;
+}
+
+.LabelsWrapperSkeleton {
+    margin-top: 30px;
+}
+
+.labelsSkeleton {
+    margin-top: 15px;
+}
+
+.buttonsSkeleton {
+    margin-top: 40px;
+}
+
+.rightSkeleton {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}

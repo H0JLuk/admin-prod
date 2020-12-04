@@ -13,5 +13,9 @@ export const loadImageWithPromise = (url, failUrl) => {
         img.onload = () => resolve(url);
         img.onerror = () => reject(failUrl);
         img.src = url;
-    })
+    });
+};
+
+export function templateLink(filename) {
+    return `${process.env.PUBLIC_URL}/templates/${filename}`;
 }

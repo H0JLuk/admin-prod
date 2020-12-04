@@ -5,7 +5,8 @@ export const ROUTE = {
     AUDITOR:        '/auditor',
     ADMIN:          '/admin',
     OWNER:          '/owner',
-    CLIENT_APPS:    '/client-apps'
+    CLIENT_APPS:    '/client-apps',
+    REDESIGNED:     '/redesigned',
 };
 
 const PAGE = {
@@ -24,6 +25,7 @@ export const ROUTE_AUDITOR = {
 };
 
 export const ROUTE_ADMIN = {
+    REDESIGNED_USERS: `${ROUTE.REDESIGNED}${ ROUTE.ADMIN }/${ PAGE.USERS }`,
     USERS:          `${ ROUTE.ADMIN }/${ PAGE.USERS }`,
     FILES:          `${ ROUTE.ADMIN }/${ PAGE.FILES }`,
     DZO:            `${ ROUTE.ADMIN }/${ PAGE.DZO }`,
@@ -31,6 +33,13 @@ export const ROUTE_ADMIN = {
     CATEGORY:       `${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
     SLIDER:         `${ ROUTE.ADMIN }/${ PAGE.SLIDER }`,
     PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`
+};
+
+export const ROUTE_ADMIN_USERS = {
+    ADD_USER:        `${ ROUTE_ADMIN.REDESIGNED_USERS }/create`,
+    USER_INFO:       `${ ROUTE_ADMIN.REDESIGNED_USERS }/:userId`,
+    EDIT_USER:       `${ ROUTE_ADMIN.REDESIGNED_USERS }/:userId/edit`,
+    EDIT_SOME_USERS: `${ ROUTE_ADMIN.REDESIGNED_USERS }/multiple_edit/:userIds`, // TODO: Продумать как передавать данные пользователей для редактирования пачкой
 };
 
 export const ROUTE_OWNER = {

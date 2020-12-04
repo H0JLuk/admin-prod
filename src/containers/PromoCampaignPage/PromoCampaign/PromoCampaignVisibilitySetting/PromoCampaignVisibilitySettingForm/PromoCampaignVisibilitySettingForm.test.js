@@ -143,7 +143,7 @@ test('Standard behavior', async () => {
     await waitFor(() => {
         const doc = document.querySelectorAll('.ant-select-item-option');
 
-        expect(getResultsByTextAndType).toBeCalledWith('Югра', 'searchLocation');
+        expect(getResultsByTextAndType).toBeCalledWith('Югра', 'searchLocation', undefined);
         expect(doc[0].textContent).toBe('Ханты-Мансийский автономный округ — ЮграМосква');
         expect(doc[1].textContent).toBe('НеЮграНеМосква');
 
@@ -176,7 +176,7 @@ test('Clear input', async () => {
     await waitFor(() => {
         const doc = document.querySelectorAll('.ant-select-item-option');
 
-        expect(getResultsByTextAndType).toBeCalledWith('Югра', 'searchLocation');
+        expect(getResultsByTextAndType).toBeCalledWith('Югра', 'searchLocation', undefined);
         expect(doc[0].textContent).toBe('Ханты-Мансийский автономный округ — ЮграМосква');
         expect(doc[1].textContent).toBe('НеЮграНеМосква');
 
@@ -222,6 +222,47 @@ test('Second input helper', async () => {
 
         expect(inputFirst.value).toBe('Ханты-Мансийский автономный округ — Югра, Москва');
         expect(getResultsByTextAndType).toHaveBeenCalledTimes(1);
+
+        document.body.innerHTML = '';
+    });
+});
+
+test('Second input helper with first input matching', async () => {
+    getResultsByTextAndType.mockImplementation(mockImplementationFunc);
+    CreateVisibilityFormRender();
+    const inputFirst = screen.getAllByRole('combobox')[0];
+
+    inputFirst.value = 'Югра';
+    ReactTestUtils.Simulate.change(inputFirst);
+    ReactTestUtils.Simulate.keyDown(inputFirst, {
+        key: 'Enter',
+        keyCode: 13,
+        which: 13,
+    });
+    ReactTestUtils.Simulate.click(inputFirst);
+
+    await waitFor(() => {
+        const doc = document.querySelectorAll('.ant-select-item-option');
+        userEvent.click(doc[0]);
+    });
+
+    await waitFor(() => {
+        const inputSecond = screen.getAllByRole('combobox')[1];
+
+        inputSecond.value = '055';
+        ReactTestUtils.Simulate.change(inputSecond);
+        ReactTestUtils.Simulate.keyDown(inputSecond, {
+            key: 'Enter',
+            keyCode: 13,
+            which: 13,
+        });
+        ReactTestUtils.Simulate.click(inputSecond);
+
+        const doc = document.querySelectorAll('.ant-select-item-option');
+        userEvent.click(doc[0]);
+
+        expect(getResultsByTextAndType).toHaveBeenCalledTimes(2);
+        expect(getResultsByTextAndType).toHaveBeenLastCalledWith('055', 'searchSalePoint', 163);
 
         document.body.innerHTML = '';
     });
@@ -290,7 +331,7 @@ test('test highlight text',async ()=>{
     await waitFor(()=>{
         const doc = document.querySelectorAll('.ant-select-item-option');
 
-        expect(getResultsByTextAndType).toBeCalledWith('Югра', 'searchLocation');
+        expect(getResultsByTextAndType).toBeCalledWith('Югра', 'searchLocation', undefined);
 
         expect(doc[0].textContent).toBe('Ханты-Мансийский автономный округ — ЮграМосква');
         expect(doc[1].textContent).toBe('НеЮграНеМосква');

@@ -1,0 +1,11 @@
+.pageWrapper {
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+}
+
+.wrapper {
+    width: 100%;
+    padding: 35px;
+    background-color: #F7F7F7;
+}

@@ -8,6 +8,7 @@ import { getRole } from './api/services/sessionService';
 import { isLoggedIn } from './api/services/authService';
 import LoginPage from './containers/LoginPage/LoginPage';
 import AdminPage from './pages/AdminPage/AdminPage';
+import RedesignedAdminPage from './pages/AdminPage/RedesignedAdminPage/AdminPage';
 import AuditorPage from './pages/AuditorPage/AuditorPage';
 import ProductPage from './pages/ProductPage/ProductPage';
 import ClientAppPage from './containers/ClientAppPage/ClientAppPage';
@@ -42,6 +43,8 @@ class App extends React.PureComponent {
                     <Route path={ ROUTE.ADMIN } component={ withRedirect(AdminPage, ROLES.ADMIN) } />
                     <Route path={ ROUTE.OWNER } component={ withRedirect(ProductPage, ROLES.PRODUCT_OWNER) } />
                     <Route path={ ROUTE.AUDITOR } component={ withRedirect(AuditorPage, ROLES.AUDITOR) } />
+
+                    <Route path={ `${ROUTE.REDESIGNED}${ROUTE.ADMIN}` } component={ withRedirect(RedesignedAdminPage, ROLES.ADMIN) } />
 
                     <Route render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } />
                 </Switch>

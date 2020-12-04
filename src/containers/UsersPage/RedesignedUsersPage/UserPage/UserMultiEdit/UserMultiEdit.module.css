@@ -1,0 +1,141 @@
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    flex-wrap: wrap;
+    color: #494949;
+}
+
+.content {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-width: 500px;
+}
+
+.container h4 {
+    color: #ababad;
+    font-size: 12px;
+}
+
+.pageTitle {
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.formContainer {
+    flex: 1 0 0;
+}
+
+.form {
+    width: 80%;
+    padding-top: 50px;
+}
+
+.formLeft {
+    display: flex !important;
+    align-items: center;
+}
+
+.form label::after {
+    content: '';
+}
+
+form.form input {
+    border-radius: 7px;
+    caret-color: #21ba72;
+}
+
+form.form input.hasError {
+    border-color: #ec464e;
+}
+
+form.form input:hover {
+    border-color: #21ba72;
+}
+
+form.form input:focus {
+    border-color: #21ba72;
+    box-shadow: none;
+}
+
+.form button:not(:last-child) {
+    margin-right: 15px;
+}
+
+.form button {
+    text-transform: uppercase;
+}
+
+.formError {
+    color: #ec454e;
+}
+
+.labelRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    min-height: 40px;
+}
+
+.buttonsContainer {
+    display: flex;
+}
+
+.center {
+    text-align: center;
+    justify-content: center;
+}
+
+.cancelButton {
+    height: 45px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    text-transform: uppercase;
+    background: #333f48 !important;
+    border-color: #333f48 !important;
+}
+
+.cancelButton:hover,
+.cancelButton:focus {
+    background: #43525d !important;
+    border-color: #43525d !important;
+}
+
+.submitButton {
+    height: 45px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    text-transform: uppercase;
+    background: #21ba72 !important;
+    border-color: #21ba72 !important;
+}
+
+.submitButton:hover,
+.submitButton:focus {
+    text-transform: uppercase;
+    background: #1fac6a !important;
+    border-color: #1fac6a !important;
+}
+
+.deleteButton {
+    height: 45px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    text-transform: uppercase;
+    background: #ec454d !important;
+    border-color: #ec454d !important;
+}
+
+.deleteButton:hover,
+.deleteButton:focus {
+    text-transform: uppercase;
+    background: #ec454d !important;
+    border-color: #ec454d !important;
+}
+
+.buttonsContainer :global(.ant-btn[disabled]){
+    color:#ebe8e8 !important;
+}

@@ -1,0 +1,46 @@
+.submitButton {
+    height: 45px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    text-transform: uppercase;
+    background: #21ba72 !important;
+    border-color: #21ba72 !important;
+}
+
+.submitButton:hover,
+.submitButton:focus {
+    text-transform: uppercase;
+    background: #1fac6a !important;
+    border-color: #1fac6a !important;
+}
+
+.cancelButton {
+    height: 45px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    text-transform: uppercase;
+    background: #333f48 !important;
+    border-color: #333f48 !important;
+}
+
+.cancelButton:hover,
+.cancelButton:focus {
+    background: #43525d !important;
+    border-color: #43525d !important;
+}
+
+.deleteButton {
+    height: 45px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    text-transform: uppercase;
+    background: #ec454d !important;
+    border-color: #ec454d !important;
+}
+
+.deleteButton:hover,
+.deleteButton:focus {
+    text-transform: uppercase;
+    background: #ec454d !important;
+    border-color: #ec454d !important;
+}

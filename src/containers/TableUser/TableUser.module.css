@@ -1,0 +1,153 @@
+.mainBlock {
+    width: 100%;
+}
+
+.loadingPage {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.label {
+    text-transform: uppercase;
+    color: #333f48;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.cellRight {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.salePointCol,
+.loginCol {
+    max-width: 200px;
+}
+
+.statusFilter {
+    text-align: right;
+    padding: 16px;
+    cursor: pointer;
+}
+
+th.statusCol {
+    padding: 0 !important;
+}
+
+.inputFilter {
+    margin: 0 10px;
+    width: 200px;
+}
+
+.inputFilter,
+.inputFilter:hover,
+.inputFilter:focus {
+    box-shadow: none;
+    border: none;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding-bottom: 60px;
+}
+
+.section {
+    display: flex;
+    align-items: center;
+}
+
+.space {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.downloadButtons {
+    display: flex;
+}
+
+/* GLOBAL */
+.mainBlock :global(.ant-table) {
+    color: #333f48;
+}
+
+.mainBlock :global(.ant-table-cell) {
+    background-color: white;
+}
+
+.mainBlock :global(.ant-checkbox-checked::after) {
+    border-color:  #21ba72;
+}
+
+.mainBlock :global(.ant-table-tbody > tr:hover) {
+    cursor: pointer;
+    background-color: #f5f5f7;
+}
+
+.mainBlock :global(.ant-table-tbody > tr > td) {
+    border-bottom: none;
+}
+
+.mainBlock :global(.ant-select-dropdown) {
+    background-color: #edeeef;
+}
+
+.mainBlock :global(.ant-select-selection-placeholder) {
+    color: black;
+}
+
+.mainBlock :global(.ant-checkbox-indeterminate .ant-checkbox-inner::after) {
+    background-color: #21ba72;
+}
+
+.mainBlock :global(.ant-checkbox-checked .ant-checkbox-inner) {
+    background-color: #21ba72 !important;
+    border-color: #21ba72 !important;
+}
+
+.mainBlock :global(.ant-checkbox-input:hover + .ant-checkbox-inner),
+.mainBlock :global(.ant-checkbox-input:focus + .ant-checkbox-inner) {
+    border-color: #21ba72 !important;
+}
+
+.footer :global(.ant-select-selector) {
+    margin: 0 2.5px;
+    border-radius: 15px !important;
+    background-color: #edeeef !important;
+}
+
+.mainBlock :global(.ant-table-column-has-sorters) {
+    text-align: right;
+}
+
+.mainBlock :global(.ant-select:not(.ant-select-disabled) .ant-select-selector,
+.ant-select:not(.ant-select-disabled):focus .ant-select-selector,
+.ant-select:not(.ant-select-disabled):active .ant-select-selector,
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector) {
+    box-shadow: none;
+    border: none;
+}
+
+.mainBlock :global(.ant-btn-round.ant-btn-lg) {
+    padding: 8px 20px;
+    height: 42px;
+}
