@@ -5,10 +5,10 @@ import Button from '../Button/Button';
 import ButtonLabels from '../Button/ButtonLables';
 
 const ClientAppItem = (props) => {
-    const { id, /*handleEdit,*/ name, code, isDeleted, handleAdministrate, handleEditProperties, properties } = props;
+    const { id, /*handleEdit, displayName,*/ name, code, isDeleted, handleAdministrate, handleEditProperties, properties } = props;
 
     // const handleEditClientApp = () => {
-    //     handleEdit(id, name, code, isDeleted);
+    //     handleEdit(id, name, displayName, code, isDeleted);
     // };
 
     const handleAdministrateClientApp = () => handleAdministrate(code);

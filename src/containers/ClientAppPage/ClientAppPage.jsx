@@ -29,6 +29,7 @@ const LOADING_LIST_LABEL = 'Загрузка';
 const CLIENT_APPS_GET_ERROR = 'Ошибка получения клиентских приложений!';
 const ENTER_CLIENT_APP_CODE_REQUEST = 'Пожалуйста, введите код клиентского приложения';
 const ENTER_CLIENT_APP_NAME_REQUEST = 'Пожалуйста, введите имя клиентского приложения';
+const ENTER_CLIENT_APP_DISPLAY_NAME_REQUEST = 'Пожалуйста, введите отображаемое имя клиентского приложения';
 const ADD_CLIENT_APP_TITLE = 'Добавить клиентское приложение';
 const ADD_CLIENT_APP_ERROR = 'Не удалось добавить клиентское приложение';
 const COPY_CLIENT_APP_ERROR = 'Не удалось скопировать клиентское приложение';
@@ -36,7 +37,7 @@ const IS_DELETED = 'Is Deleted:';
 
 const initialState = {
     editingClientApp: {
-        id: null, name: null, code: null, existingCode: null, isDeleted: false
+        id: null, name: null, displayName: null, code: null, existingCode: null, isDeleted: false
     },
     clientAppProperties: {
         clientAppId: null, installationUrl: null, yamToken: null, tokenLifetime: null,
@@ -80,8 +81,8 @@ class ClientAppPage extends Component {
         this.setState({ showDeleted: !showDeleted });
     }
 
-    handleEdit = (id, name, code, isDeleted) =>
-        this.setState({ editingClientApp: { id, name, code, isDeleted } }, this.openModal);
+    handleEdit = (id, name, displayName, code, isDeleted) =>
+        this.setState({ editingClientApp: { id, name, displayName, code, isDeleted } }, this.openModal);
 
 
     handleEditProperties = (properties, clientAppId) =>
@@ -116,6 +117,7 @@ class ClientAppPage extends Component {
             isDeletedCheckbox = true;
             formData = populateFormWithData(CLIENT_APP_EDIT_FORM, {
                 name: editingClientApp.name,
+                displayName: editingClientApp.displayName,
                 code: editingClientApp.code,
             });
             onSubmit = this.addOrUpdate;
@@ -170,6 +172,7 @@ class ClientAppPage extends Component {
         newClientAppList.forEach(app => {
             if (app.id === id) {
                 app.name = clientAppDto.name;
+                app.displayName = clientAppDto.displayName;
                 app.code = clientAppDto.code;
                 app.isDeleted = clientAppDto.isDeleted;
             }
@@ -195,10 +198,15 @@ class ClientAppPage extends Component {
             alert(ENTER_CLIENT_APP_NAME_REQUEST);
             return;
         }
+        if (!data.displayName) {
+            alert(ENTER_CLIENT_APP_DISPLAY_NAME_REQUEST);
+            return;
+        }
         let clientAppDto;
         clientAppDto = {
             code: data.code,
             name: data.name,
+            displayName: data.displayName,
             existingCode: data.existingCode,
             isDeleted: this.state.editingClientApp.isDeleted
         };

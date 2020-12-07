@@ -87,7 +87,16 @@ export const CATEGORY_FORM = {
 
 export const CLIENT_APP_ADD_FORM = {
     name: {
-        label : 'имя',
+        label : 'Имя',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 128,
+        validators: [isRequired],
+        mask: null
+    },
+    displayName: {
+        label : 'Отображаемое имя',
         value: '',
         type: 'text',
         isRequired: true,
@@ -96,7 +105,7 @@ export const CLIENT_APP_ADD_FORM = {
         mask: null
     },
     code: {
-        label : 'код',
+        label : 'Код',
         value: '',
         type: 'text',
         isRequired: true,
@@ -116,7 +125,16 @@ export const CLIENT_APP_ADD_FORM = {
 
 export const CLIENT_APP_EDIT_FORM = {
     name: {
-        label : 'имя',
+        label : 'Имя',
+        value: '',
+        type: 'text',
+        isRequired: true,
+        maxLength: 128,
+        validators: [isRequired],
+        mask: null
+    },
+    displayName: {
+        label : 'Отображаемое имя',
         value: '',
         type: 'text',
         isRequired: true,
@@ -125,7 +143,7 @@ export const CLIENT_APP_EDIT_FORM = {
         mask: null
     },
     code: {
-        label : 'код',
+        label : 'Код',
         value: '',
         type: 'text',
         isRequired: true,
