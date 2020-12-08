@@ -6,8 +6,16 @@ export async function getUser(pn) {
     return Api.get(`/admin/user/${pn}`, getReqOptions());
 }
 
+export function oldAddUser(data) {
+    return Api.post('/admin/user', data, getReqOptions());
+}
+
 export async function addUser(data) {
     return Api.post('/admin/user/register', data, getReqOptions());
+}
+
+export function oldRemoveUser(pn) {
+    return Api.delete(`/admin/user/${pn}`, getReqOptions());
 }
 
 export async function removeUser(pn) {

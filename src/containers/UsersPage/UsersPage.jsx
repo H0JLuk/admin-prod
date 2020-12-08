@@ -4,7 +4,7 @@ import styles from './UsersPage.module.css';
 import classNames from 'classnames';
 import MultiActionForm from '../../components/Form/MultiActionForm';
 import { CHANGE_USER_FORM } from '../../components/Form/forms';
-import { addUser, removeUser, resetUser, unblockUser } from '../../api/services/adminService';
+import { oldAddUser, oldRemoveUser, resetUser, unblockUser } from '../../api/services/adminService';
 import Button from '../../components/Button/Button';
 import { baseUrl } from '../../api/apiClient';
 import { getReqOptions } from '../../api/services';
@@ -29,7 +29,7 @@ const UsersPage = () => {
     const onAddUser = async data => {
         const newUser = { ...data, password: data.personalNumber };
         try {
-            const response = await addUser(newUser);
+            const response = await oldAddUser(newUser);
             dispatch({ type: 'showSuccessMessage', payload: `Пользователь добавлен в приложение, пароль: ${response.generatedPassword}` });
         } catch (e) {
             dispatch({ type: showErrorMessage, payload: e.message });
@@ -39,7 +39,7 @@ const UsersPage = () => {
     const onRemoveUser = async data => {
         const { personalNumber: pn } = data;
         try {
-            await removeUser(pn);
+            await oldRemoveUser(pn);
             dispatch({ type: showSuccessMessage, payload: 'Пользователь удален' });
         } catch (e) {
             dispatch({ type: showErrorMessage, payload: e.message });
