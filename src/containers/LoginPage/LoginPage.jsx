@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { goToClientApps } from '../../utils/appNavigation';
+import { goToClientApps, goToDashboard } from '../../utils/appNavigation';
 import styles from './LoginPage.module.css';
 import { LOGIN_FORM } from '../../components/Form/forms';
 import Form from '../../components/Form/Form';
@@ -15,18 +15,21 @@ const LoginPage = (props) => {
     const [ error, setError ] = useState(null);
     const { history } = props;
 
-    const onSubmit = (data) => {
-        login(data).then( response => {
-            const { token, authority } = response;
+    const onSubmit = async (data) => {
+        try {
+            const { token, authority } = await login(data) ?? {};
             if (!Object.values(ROLES).includes(authority)) {
                 setError(Errors.AUTHORITY);
                 return;
             }
             storeUserData(token, authority);
-            goToClientApps(history);
-        }, () => {
+            ([ROLES.ADMIN, ROLES.PRODUCT_OWNER].includes(authority))
+                ? goToDashboard(history)
+                : goToClientApps(history);
+        } catch (e) {
+            console.error(e?.message);
             setError(Errors.FAIL);
-        });
+        }
     };
 
     return (

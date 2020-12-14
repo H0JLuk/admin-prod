@@ -1,0 +1,31 @@
+.tag {
+    padding: 5px 10px;
+    border: grey solid 1px;
+    border-right: 0;
+    margin-top: 8px;
+}
+
+.tag:last-child {
+    border: grey solid 1px;
+}
+
+.tag:hover {
+    cursor: pointer;
+}
+
+.text {
+    font-family: SBSansText-Medium, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: -0.27px;
+    text-align: center;
+    color: #171725;
+}
+
+.selected {
+    border-color: green !important;
+    color: green !important;
+}

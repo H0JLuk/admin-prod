@@ -1,0 +1,55 @@
+@font-face {
+    font-family: 'SBSansText';
+    src: url('SBSansText-Regular.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'SBSansText-Regular';
+    src: url('SBSansText-Regular.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'SBSansText-Medium';
+    src: url('SBSansText-Medium.otf') format('opentype');
+    font-style: normal;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'SBSansText-Semibold';
+    src: url('SBSansText-Semibold.otf') format('opentype');
+    font-style: normal;
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'SBSansDisplay';
+    src: url('SBSansDisplay-Regular.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'SBSansDisplay-Regular';
+    src: url('SBSansDisplay-Regular.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'SBSansDisplay-SemiBold';
+    src: url('SBSansDisplay-SemiBold.otf') format('opentype');
+    font-style: normal;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'SBSansDisplay-Bold';
+    src: url('SBSansDisplay-Bold.otf') format('opentype');
+    font-style: normal;
+    font-weight: 600;
+}

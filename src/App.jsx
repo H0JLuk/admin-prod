@@ -1,11 +1,13 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import './static/fonts/fonts.css';
 import moment from 'moment';
 import { getStaticUrlFromBackend, saveStaticUrl } from './api/services/settingsService';
 import { ROUTE } from './constants/route';
 import ROLES from './constants/roles';
 import { getRole } from './api/services/sessionService';
 import { isLoggedIn } from './api/services/authService';
+import Dashboard from './containers/Dashboard';
 import LoginPage from './containers/LoginPage/LoginPage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import RedesignedAdminPage from './pages/AdminPage/RedesignedAdminPage/AdminPage';
@@ -38,6 +40,7 @@ class App extends React.PureComponent {
                 <Switch>
                     <Route exact path={ ROUTE.CORE } render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } />
 
+                    <Route path={ ROUTE.DASHBOARD } component={ Dashboard } />
                     <Route path={ ROUTE.LOGIN } component={ LoginPage } />
                     <Route path={ ROUTE.CLIENT_APPS } component={ ClientAppPage } />
                     <Route path={ ROUTE.ADMIN } component={ withRedirect(AdminPage, ROLES.ADMIN) } />

@@ -7,6 +7,7 @@ export const ROUTE = {
     OWNER:          '/owner',
     CLIENT_APPS:    '/client-apps',
     REDESIGNED:     '/redesigned',
+    DASHBOARD:      '/dashboard',
 };
 
 const PAGE = {

@@ -1,4 +1,5 @@
-import { ROUTE } from '../constants/route';
+import { getRole } from '../api/services/sessionService';
+import { ROUTE, ROUTE_ADMIN, ROUTE_OWNER } from '../constants/route';
 import ROLES from '../constants/roles';
 
 export const goToLogin = (history) => {
@@ -11,6 +12,10 @@ export const goToLogin = (history) => {
 
 export const goToClientApps = (history) => {
     history.push(ROUTE.CLIENT_APPS);
+};
+
+export const goToDashboard = (history) => {
+    history.push(ROUTE.DASHBOARD);
 };
 
 export const goToAudit = (history) => {
@@ -36,6 +41,19 @@ export const goApp = (history, role) => {
         case ROLES.PRODUCT_OWNER:
         default:
             goToProduct(history);
+    }
+};
+
+export const goPromoCampaigns = (history) => {
+    switch (getRole()) {
+        case ROLES.ADMIN:
+            history.push(ROUTE_ADMIN.PROMO_CAMPAIGN);
+            break;
+        case ROLES.PRODUCT_OWNER:
+            history.push(ROUTE_OWNER.PROMO_CAMPAIGN);
+            break;
+        default:
+            return null;
     }
 };
 

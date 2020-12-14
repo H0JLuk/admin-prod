@@ -92,3 +92,6 @@ export async function uploadFile(binaryFile, path) {
     return Api.upload(`/admin/file?path=${path}`, binaryFile, reqOptions());
 }
 
+export async function getDashboardInfo() {
+    return Api.get('/admin/promoCampaign/promoCode/availablePromocodeReport', reqOptions());
+}

@@ -1,5 +1,5 @@
 import ROLES from './roles';
-import { ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_OWNER } from './route';
+import { ROUTE, ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_OWNER } from './route';
 import { menuItemLables as labels } from './lables';
 
 const AUDITOR_MENU_ITEMS = [
@@ -7,33 +7,37 @@ const AUDITOR_MENU_ITEMS = [
 ];
 
 const ADMIN_MENU_ITEMS = [
+    { label: labels.DASHBOARD, path: ROUTE.DASHBOARD },
     { label: labels.USERS, path: ROUTE_ADMIN.USERS },
     { label: labels.FILES, path: ROUTE_ADMIN.FILES },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
     { label: labels.LANDING, path: ROUTE_ADMIN.LANDING },
     { label: labels.CATEGORY, path: ROUTE_ADMIN.CATEGORY },
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN }
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN },
 ];
 
 // Список доступных вкладок для приложений с кодом оканчивающимся на "-point", таких как "promo-point" и "mcdonalds-point"
 const ADMIN_MENU_FOR_POINT_APP = [
+    { label: labels.DASHBOARD, path: ROUTE.DASHBOARD },
     { label: labels.USERS, path: ROUTE_ADMIN.USERS },
     { label: labels.FILES, path: ROUTE_ADMIN.FILES },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN }
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN },
 ];
 
 const PRODUCT_OWNER_MENU_ITEMS = [
+    { label: labels.DASHBOARD, path: ROUTE.DASHBOARD },
     { label: labels.DZO, path: ROUTE_OWNER.DZO },
     { label: labels.LANDING, path: ROUTE_OWNER.LANDING },
     { label: labels.CATEGORY, path: ROUTE_OWNER.CATEGORY },
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN }
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN },
 ];
 
 // Список доступных вкладок для приложений с кодом оканчивающимся на "-point", таких как "promo-point" и "mcdonalds-point"
 const PRODUCT_OWNER_MENU_FOR_POINT_APP = [
+    { label: labels.DASHBOARD, path: ROUTE.DASHBOARD },
     { label: labels.DZO, path: ROUTE_OWNER.DZO },
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN }
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN },
 ];
 
 export const resolveMenuItemsByRoleAndAppCode = (role, appCode) => {

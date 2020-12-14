@@ -1,0 +1,112 @@
+.item {
+    width: calc(50% - 8px);
+    height: 480px;
+    padding: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    background-color: #ffffff;
+}
+
+.item:nth-last-child(-n+2) {
+    margin-bottom: 0;
+}
+
+.item > h3 {
+    margin: 0 40px 12px 0;
+    font-family: SBSansText-Semibold, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: -0.38px;
+    text-align: left;
+    color: #080808;
+}
+
+.tagsBlock {
+    margin-bottom: 8px;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.tag {
+    padding: 5px 16px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+
+    margin-right: 12px;
+    font-family: SBSansText-Medium, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: -0.27px;
+    text-align: center;
+    border-radius: 16px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color: #09a552;
+}
+
+.tag:last-child {
+    margin-right: 0;
+}
+
+.statisticsBlock {
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    flex-flow: row nowrap;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-grow: 1;
+    margin-right: 8px;
+    padding: 146px 42px;
+    border-radius: 6px;
+    background-color: #f0f2f5;
+}
+
+.red {
+    background-color: #fff1f0;
+    color: #dc283a;
+}
+
+.card:last-child {
+    margin-right: 0;
+}
+
+.textBlock {
+    position: absolute;
+    bottom: 35%;
+    display: flex;
+    flex-flow: column nowrap;
+    width: 95%;
+}
+
+.description, .value {
+    width: 100%;
+    height: auto;
+    margin: 0 0 8px;
+    font-family: SBSansText-Regular, sans-serif;
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+
+.value {
+    font-size: 48px;
+    line-height: 1.08;
+    letter-spacing: normal;
+}

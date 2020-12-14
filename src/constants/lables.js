@@ -6,5 +6,6 @@ export const menuItemLables = {
     LANDING: 'Лендинги',
     SLIDER: 'Слайдеры',
     USERS: 'Пользователи',
-    PROMO_CAMPAIGNS: 'Промо-кампании'
+    PROMO_CAMPAIGNS: 'Промо-кампании',
+    DASHBOARD: 'Дашборд'
 };
