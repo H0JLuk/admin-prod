@@ -14,6 +14,7 @@ import RedesignedAdminPage from './pages/AdminPage/RedesignedAdminPage/AdminPage
 import AuditorPage from './pages/AuditorPage/AuditorPage';
 import ProductPage from './pages/ProductPage/ProductPage';
 import ClientAppPage from './containers/ClientAppPage/ClientAppPage';
+import UserManagerPage from './pages/UserManagerPage';
 
 moment.locale('ru');
 
@@ -46,6 +47,7 @@ class App extends React.PureComponent {
                     <Route path={ ROUTE.ADMIN } component={ withRedirect(AdminPage, ROLES.ADMIN) } />
                     <Route path={ ROUTE.OWNER } component={ withRedirect(ProductPage, ROLES.PRODUCT_OWNER) } />
                     <Route path={ ROUTE.AUDITOR } component={ withRedirect(AuditorPage, ROLES.AUDITOR) } />
+                    <Route path={ ROUTE.USER_MANAGER } component={ withRedirect(UserManagerPage, ROLES.USER_MANAGER) } />
 
                     <Route path={ `${ROUTE.REDESIGNED}${ROUTE.ADMIN}` } component={ withRedirect(RedesignedAdminPage, ROLES.ADMIN) } />
 

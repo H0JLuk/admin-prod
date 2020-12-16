@@ -1,9 +1,13 @@
 import ROLES from './roles';
-import { ROUTE, ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_OWNER } from './route';
+import { ROUTE, ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_OWNER, ROUTE_USER_MANAGER } from './route';
 import { menuItemLables as labels } from './lables';
 
 const AUDITOR_MENU_ITEMS = [
     { label: labels.AUDIT, path: ROUTE_AUDITOR.AUDIT }
+];
+
+const USER_MANAGER_MENU_ITEMS = [
+    { label: labels.USERS, path: ROUTE_USER_MANAGER.USERS }
 ];
 
 const ADMIN_MENU_ITEMS = [
@@ -42,15 +46,18 @@ const PRODUCT_OWNER_MENU_FOR_POINT_APP = [
 
 export const resolveMenuItemsByRoleAndAppCode = (role, appCode) => {
     switch (role) {
-        case ROLES.AUDITOR: return AUDITOR_MENU_ITEMS;
-        case ROLES.ADMIN: if (appCode.endsWith('-point') && appCode !== 'greenday-point') {
-            return ADMIN_MENU_FOR_POINT_APP;
-        }
-            return ADMIN_MENU_ITEMS;
-        case ROLES.PRODUCT_OWNER: if (appCode.endsWith('-point') && appCode !== 'greenday-point') {
-            return PRODUCT_OWNER_MENU_FOR_POINT_APP;
-        }
-            return PRODUCT_OWNER_MENU_ITEMS;
+        case ROLES.AUDITOR:
+            return AUDITOR_MENU_ITEMS;
+        case ROLES.ADMIN:
+            return (appCode.endsWith('-point') && appCode !== 'greenday-point')
+                ? ADMIN_MENU_FOR_POINT_APP
+                : ADMIN_MENU_ITEMS;
+        case ROLES.PRODUCT_OWNER:
+            return (appCode.endsWith('-point') && appCode !== 'greenday-point')
+                ? PRODUCT_OWNER_MENU_FOR_POINT_APP
+                : PRODUCT_OWNER_MENU_ITEMS;
+        case ROLES.USER_MANAGER:
+            return USER_MANAGER_MENU_ITEMS;
         default: return [];
     }
 };

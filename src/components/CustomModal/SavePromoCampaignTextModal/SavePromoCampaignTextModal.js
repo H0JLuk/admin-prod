@@ -59,14 +59,14 @@ class SavePromoCampaignTextModal extends Component {
                     <Form layout="vertical" onSubmit={ this.handleSubmit }>
                         <Form.Item required
                                    label="Текст">
-                            <Input autoFocus
+                            <Input.TextArea autoFocus
                                    value={ value }
                                    onChange={ (e) => this.setState({ value: e.target.value }) }
                             />
                         </Form.Item>
                         <Form.Item required
                                    label="Тип текста">
-                            <Input autoFocus
+                            <Input
                                    value={ type }
                                    onChange={ (e) => this.setState({ type: e.target.value }) }
                             />

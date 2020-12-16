@@ -26,6 +26,10 @@ export const goToAdmin = (history) => {
     history.push(ROUTE.ADMIN);
 };
 
+export const goToUserManager = (history) => {
+    history.push(ROUTE.USER_MANAGER);
+};
+
 export const goToProduct= (history) => {
     history.push(ROUTE.OWNER);
 };
@@ -37,6 +41,9 @@ export const goApp = (history, role) => {
             break;
         case ROLES.ADMIN:
             goToAdmin(history);
+            break;
+        case ROLES.USER_MANAGER:
+            goToUserManager(history);
             break;
         case ROLES.PRODUCT_OWNER:
         default:
