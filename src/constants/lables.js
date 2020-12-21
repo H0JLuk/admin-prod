@@ -7,5 +7,7 @@ export const menuItemLables = {
     SLIDER: 'Слайдеры',
     USERS: 'Пользователи',
     PROMO_CAMPAIGNS: 'Промо-кампании',
-    DASHBOARD: 'Дашборд'
+    DASHBOARD: 'Дашборд',
+    PRESENTATION: 'Презентация',
+    INSTRUCTIONS: 'Инструкции',
 };

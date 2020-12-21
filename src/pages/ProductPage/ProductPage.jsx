@@ -9,7 +9,7 @@ import LandingPage from '../../containers/LandingPage/LandingPage';
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
 
 const ProductPage = (props) => {
-        
+
     const { history } = props;
 
     return (

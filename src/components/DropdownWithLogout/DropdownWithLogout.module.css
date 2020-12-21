@@ -1,0 +1,15 @@
+.menu {
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15);
+    padding: 4px 0;
+    background-color: #fff;
+}
+
+.menuItem {
+    min-width: 190px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    color: #2AC673;
+}

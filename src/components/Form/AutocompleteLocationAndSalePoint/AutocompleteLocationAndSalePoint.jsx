@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import debounce from 'lodash/debounce';
 import { AutoComplete, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import AutocompleteOptionLabel from './AutocompleteOptionLabel';
-import {
-    createSearchDataAndPassLocation,
-    getResultsByTextAndType,
-} from './AutocompleteHelper';
+import { createSearchDataAndPassLocation, getResultsByTextAndType } from './AutocompleteHelper';
 import { getStringOptionValue } from '../../../utils/utils';
 
 import { ReactComponent as Cross } from '../../../static/images/cross.svg';
@@ -26,20 +24,14 @@ const SALE_POINT_FIELD = {
     placeholder: 'Отделение ВСП',
 };
 
-const DEFAULT_LAYOUT = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 12 },
-};
-
 function AutocompleteLocationAndSalePoint({
-    rowClassName,
-    layout = DEFAULT_LAYOUT,
+    colClassName,
     locationPlaceholder = LOCATION_FIELD.placeholder,
     locationLabel = LOCATION_FIELD.label,
+    locationLabelClassNames = '',
     salePointPlaceholder = SALE_POINT_FIELD.placeholder,
     salePointLabel = SALE_POINT_FIELD.label,
-    locationHasError = false,
-    salePointHasError = false,
+    salePointLabelClassNames = '',
     locationDisabled = false,
     salePointDisabled = false,
     highlightClassName = styles.highlight,
@@ -49,6 +41,7 @@ function AutocompleteLocationAndSalePoint({
     initialSalePointValue = '',
     autoFocusLocation = true,
     locationId,
+    error = {},
 }) {
     const [state, setState] = useState({
         searchLocation: {
@@ -66,20 +59,22 @@ function AutocompleteLocationAndSalePoint({
      * @param {'searchLocation' | 'searchSalePoint'} typeSearch
      */
     const getSearchResults = useCallback(async (searchValue, typeSearch = 'searchLocation') => {
-        try {
-            const searchResult = await getResultsByTextAndType(searchValue, typeSearch, locationId);
+            try {
+                const searchResult = await getResultsByTextAndType(searchValue, typeSearch, locationId);
 
-            setState(state => ({
-                ...state,
-                [typeSearch]: {
-                    ...state[typeSearch],
-                    results: searchResult,
-                }
-            }));
-        } catch (e) {
-            console.error(e);
-        }
-    }, [locationId]);
+                setState((state) => ({
+                    ...state,
+                    [typeSearch]: {
+                        ...state[typeSearch],
+                        results: searchResult,
+                    },
+                }));
+            } catch (e) {
+                console.error(e);
+            }
+        },
+        [locationId]
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const getResultsDebounced = useCallback(debounce(getSearchResults, 500), [getSearchResults]);
@@ -89,85 +84,94 @@ function AutocompleteLocationAndSalePoint({
      * @param {'searchLocation' | 'searchSalePoint'} typeSearch
      */
     const search = useCallback((searchValue, typeSearch = 'searchLocation') => {
-        if (typeSearch !== 'searchLocation' && typeSearch !== 'searchSalePoint') {
-            throw Error('Incorrect `typeSearch` param');
-        }
+            if (typeSearch !== 'searchLocation' && typeSearch !== 'searchSalePoint') {
+                throw Error('Incorrect `typeSearch` param');
+            }
 
-        setState(state => ({
-            ...state,
-            [typeSearch]: {
-                ...state[typeSearch],
-                value: searchValue,
-            },
-        }));
-
-        if (!searchValue || (searchValue.length < 2 && typeSearch === 'searchLocation')) {
             setState(state => ({
                 ...state,
                 [typeSearch]: {
+                    ...state[typeSearch],
                     value: searchValue,
-                    results: [],
-                }
+                },
             }));
-            return;
-        }
 
-        getResultsDebounced(searchValue, typeSearch);
-    }, [getResultsDebounced]);
+            if (!searchValue || (searchValue.length < 2 && typeSearch === 'searchLocation')) {
+                setState(state => ({
+                    ...state,
+                    [typeSearch]: {
+                        value: searchValue,
+                        results: [],
+                    },
+                }));
+                return;
+            }
+
+            getResultsDebounced(searchValue, typeSearch);
+        },
+        [getResultsDebounced]
+    );
 
     const handleSearchLocation = useCallback((searchValue) => {
-        if (!searchValue) {
-            onLocationChange(null);
-        }
+            if (!searchValue) {
+                onLocationChange(null);
+            }
 
-        search(searchValue, 'searchLocation');
-    }, [onLocationChange, search]);
+            search(searchValue, 'searchLocation');
+        },
+        [onLocationChange, search]
+    );
 
     const handleSearchSalePoint = useCallback((searchValue) => {
-        if (!searchValue) {
-            onSalePointChange(null);
-        }
+            if (!searchValue) {
+                onSalePointChange(null);
+            }
 
-        search(searchValue, 'searchSalePoint');
-    }, [onSalePointChange, search]);
+            search(searchValue, 'searchSalePoint');
+        },
+        [onSalePointChange, search]
+    );
 
     const handleSelectLocationOption = useCallback((value, location) => {
-        const { data } = location;
+            const { data } = location;
 
-        onLocationChange(data);
-        setState((state) => ({
-            ...state,
-            searchLocation: { ...state.searchLocation, value },
-        }));
-    }, [onLocationChange]);
+            onLocationChange(data);
+            setState((state) => ({
+                ...state,
+                searchLocation: { ...state.searchLocation, value },
+            }));
+        },
+        [onLocationChange]
+    );
 
     const handleSelectSalePointOption = useCallback((value, { data: salePoint, data: { location } }) => {
-        const { location: locationData, searchLocation } = createSearchDataAndPassLocation(location, locationId);
+            const { location: locationData, searchLocation } = createSearchDataAndPassLocation(location, locationId);
 
-        if (locationData) {
-            onLocationChange(locationData);
-        }
+            if (locationData) {
+                onLocationChange(locationData);
+            }
 
-        onSalePointChange(salePoint);
-        setState((state) => ({
-            ...state,
-            searchSalePoint: { ...state.searchSalePoint, value },
-            searchLocation: searchLocation ? searchLocation : state.searchLocation,
-        }));
-    }, [onSalePointChange, onLocationChange, locationId]);
+            onSalePointChange(salePoint);
+            setState((state) => ({
+                ...state,
+                searchSalePoint: { ...state.searchSalePoint, value },
+                searchLocation: searchLocation ? searchLocation : state.searchLocation,
+            }));
+        },
+        [onSalePointChange, onLocationChange, locationId]
+    );
 
     /**
      * @param {'searchLocation' | 'searchSalePoint'} type
      */
-    const renderOptionLabelByType = ({ name, parentName }, type) => {
-        return <AutocompleteOptionLabel
+    const renderOptionLabelByType = ({ name, parentName }, type) => (
+        <AutocompleteOptionLabel
             name={ name }
             parentName={ parentName }
             highlightValue={ state[type]?.value }
             highlightClassName={ highlightClassName }
-        />;
-    };
-
+        />
+    );
 
     const { searchLocation, searchSalePoint } = state;
     const locationOptions = searchLocation.results.map((el) => ({
@@ -182,20 +186,21 @@ function AutocompleteLocationAndSalePoint({
         data: el,
     }));
 
-    const rowClassNames = cn(styles.formRow, rowClassName);
-    const leftColClassNames = cn(styles.formLeftCol, `ant-col ant-col-${layout.labelCol.span}`);
+    const colClassNames = cn(styles.formColumn, colClassName);
 
     return (
         <>
-            <div className={ rowClassNames }>
-                <div className={ leftColClassNames }>
-                    <label htmlFor="rc_select_0">
-                        { locationLabel }
-                    </label>
+            <div className={ colClassNames }>
+                <div className={ cn(styles.formLabel, locationLabelClassNames) }>
+                    <label htmlFor="rc_select_0">{ locationLabel }</label>
                 </div>
-                <div className={ `ant-col ant-col-${layout.wrapperCol.span}` }>
+                <div className={ styles.inputWrapper }>
                     <AutoComplete
-                        className={ cn(styles.autocompleteInput, { [styles.hasError]: locationHasError }) }
+                        className={ cn(
+                            styles.autocompleteInput,
+                            { [styles.hasError]: error.location },
+                            { [styles.hideSuffix]: !!searchLocation.value }
+                        ) }
                         dropdownClassName={ styles.autocompleteDropdown }
                         dropdownMatchSelectWidth={ false }
                         options={ locationOptions }
@@ -212,20 +217,23 @@ function AutocompleteLocationAndSalePoint({
                         <Input
                             placeholder={ locationPlaceholder }
                             name={ LOCATION_FIELD.name }
-                            size="large"
+                            suffix={ <SearchOutlined className={ styles.suffix } /> }
                         />
                     </AutoComplete>
+                    { !!error.location && <div className={ styles.formError }>{ error.location }</div> }
                 </div>
             </div>
-            <div className={ rowClassNames }>
-                <div className={ leftColClassNames }>
-                    <label htmlFor="rc_select_1">
-                        { salePointLabel }
-                    </label>
+            <div className={ colClassNames }>
+                <div className={ cn(styles.formLabel, salePointLabelClassNames) }>
+                    <label htmlFor="rc_select_1">{ salePointLabel }</label>
                 </div>
-                <div className={ `ant-col ant-col-${layout.wrapperCol.span}` }>
+                <div>
                     <AutoComplete
-                        className={ cn(styles.autocompleteInput, { [styles.hasError]: salePointHasError }) }
+                        className={ cn(
+                            styles.autocompleteInput,
+                            { [styles.hasError]: error.salePoint },
+                            { [styles.hideSuffix]: !!searchSalePoint.value }
+                        ) }
                         dropdownClassName={ styles.autocompleteDropdown }
                         dropdownMatchSelectWidth={ false }
                         options={ salePointOptions }
@@ -241,9 +249,10 @@ function AutocompleteLocationAndSalePoint({
                         <Input
                             placeholder={ salePointPlaceholder }
                             name={ SALE_POINT_FIELD.name }
-                            size="large"
+                            suffix={ <SearchOutlined className={ styles.suffix } /> }
                         />
                     </AutoComplete>
+                    { !!error.salePoint && <div className={ styles.formError }>{ error.salePoint }</div> }
                 </div>
             </div>
         </>
@@ -251,17 +260,13 @@ function AutocompleteLocationAndSalePoint({
 }
 
 AutocompleteLocationAndSalePoint.propTypes = {
-    rowClassName: PropTypes.string,
-    layout: PropTypes.shape({
-        labelCol: PropTypes.shape({ span: PropTypes.number, offset: PropTypes.number }),
-        wrapperCol: PropTypes.shape({ span: PropTypes.number, offset: PropTypes.number }),
-    }),
+    colClassName: PropTypes.string,
     locationPlaceholder: PropTypes.string,
     locationLabel: PropTypes.string,
+    locationLabelClassNames: PropTypes.string,
     salePointPlaceholder: PropTypes.string,
     salePointLabel: PropTypes.string,
-    locationHasError: PropTypes.bool,
-    salePointHasError: PropTypes.bool,
+    salePointLabelClassNames: PropTypes.string,
     locationDisabled: PropTypes.bool,
     salePointDisabled: PropTypes.bool,
     highlightClassName: PropTypes.string,
@@ -271,6 +276,7 @@ AutocompleteLocationAndSalePoint.propTypes = {
     initialSalePointValue: PropTypes.string,
     autoFocusLocation: PropTypes.bool,
     locationId: PropTypes.number,
+    error: PropTypes.object,
 };
 
 AutocompleteLocationAndSalePoint.defaultProps = {

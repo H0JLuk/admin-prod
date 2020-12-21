@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import cn from 'classnames';
-import { ROUTE_ADMIN_USERS } from '../../../constants/route';
+import { USERS_PAGES } from '../../../constants/route';
 import btnStyles from './ButtonUsers.module.css';
 
 const ButtonAddUser = ({ title, classNames }) => {
-
     const history = useHistory();
+    const { path } = useRouteMatch();
 
     const onAddUser = () => {
-        history.push(ROUTE_ADMIN_USERS.ADD_USER);
+        history.push(`${path}${USERS_PAGES.ADD_USER}`);
     };
 
     return (

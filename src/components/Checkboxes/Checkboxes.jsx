@@ -21,17 +21,12 @@ const CheckBoxCustom = ({ label, name, disabled, onChange, checked }) => {
     );
 };
 
-const Checkboxes = ({
-    checkboxesData = {},
-    onChange = () => {},
-    onChangeAll = () => {},
-    disabledAll = false,
-}) => {
+const Checkboxes = ({ checkboxesData = {}, onChange = () => {}, onChangeAll = () => {}, disabledAll = false }) => {
     const checkboxesKeys = Object.keys(checkboxesData);
     const allAreChecked = checkboxesKeys.every((key) => checkboxesData[key].checked);
 
     return (
-        <div className={ styles.checkbox }>
+        <>
             <div className={ styles.checkboxAllApps }>
                 <CheckBoxCustom
                     label={ ALL_APPS_CHECKBOX_TEXT }
@@ -41,22 +36,23 @@ const Checkboxes = ({
                     name="all"
                 />
             </div>
+            <div className={ styles.checkbox }>
+                {checkboxesKeys.map((key) => {
+                    const { label, disabled, checked } = checkboxesData[key];
 
-            {checkboxesKeys.map((key) => {
-                const { label, disabled, checked } = checkboxesData[key];
-
-                return (
-                    <CheckBoxCustom
-                        name={ key }
-                        label={ label }
-                        disabled={ disabledAll || disabled }
-                        onChange={ onChange }
-                        key = { key }
-                        checked = { checked }
-                    />
-                );
-            })}
-        </div>
+                    return (
+                        <CheckBoxCustom
+                            name={ key }
+                            label={ label }
+                            disabled={ disabledAll || disabled }
+                            onChange={ onChange }
+                            key={ key }
+                            checked={ checked }
+                        />
+                    );
+                })}
+            </div>
+        </>
     );
 };
 

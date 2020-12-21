@@ -1,4 +1,7 @@
 .page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .header {
@@ -46,12 +49,6 @@ button:last-child {
     margin-right: 0 !important;
 }
 
-.exit {
-    background: #ffffff !important;
-    color: black !important;
-    border: grey solid 1px;
-}
-
 .menuFilter {
     display: flex;
     flex-flow: row nowrap;
@@ -82,6 +79,8 @@ button:last-child {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+    align-items: stretch;
+    flex-grow: 1;
     padding: 16px;
     background-color: #f0f2f5;
 }

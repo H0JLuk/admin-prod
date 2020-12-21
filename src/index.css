@@ -7,3 +7,9 @@ body, ul, li, p {
     margin: 0;
     padding: 0;
 }
+
+.required::before{
+    content: '*';
+    color: #ec464e;
+    margin-right: 3px;
+}

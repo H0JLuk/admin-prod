@@ -8,18 +8,26 @@ export const ROUTE = {
     USER_MANAGER:   '/user-manager',
     CLIENT_APPS:    '/client-apps',
     REDESIGNED:     '/redesigned',
-    DASHBOARD:      '/dashboard',
 };
 
 const PAGE = {
     AUDIT:          'audit',
     CATEGORY:       'category',
     DZO:            'dzo',
+    DASHBOARD:      'dashboard',
     FILES:          'files',
     LANDING:        'landing',
     PROMO_CAMPAIGN: 'promo-campaign',
     SLIDER:         'slider',
-    USERS:          'users'
+    USERS:          'users',
+    APPS:           'apps',
+};
+
+export const USERS_PAGES = {
+    ADD_USER:        '/create',
+    USER_INFO:       '/:userId',
+    EDIT_USER:       '/:userId/edit',
+    EDIT_SOME_USERS: '/multiple_edit',
 };
 
 export const ROUTE_AUDITOR = {
@@ -32,26 +40,27 @@ export const ROUTE_USER_MANAGER = {
 
 export const ROUTE_ADMIN = {
     REDESIGNED_USERS: `${ROUTE.REDESIGNED}${ ROUTE.ADMIN }/${ PAGE.USERS }`,
+    DASHBOARD:      `${ROUTE.REDESIGNED}${ ROUTE.ADMIN }/${ PAGE.DASHBOARD }`,
     USERS:          `${ ROUTE.ADMIN }/${ PAGE.USERS }`,
     FILES:          `${ ROUTE.ADMIN }/${ PAGE.FILES }`,
     DZO:            `${ ROUTE.ADMIN }/${ PAGE.DZO }`,
     LANDING:        `${ ROUTE.ADMIN }/${ PAGE.LANDING }`,
     CATEGORY:       `${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
     SLIDER:         `${ ROUTE.ADMIN }/${ PAGE.SLIDER }`,
-    PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`
-};
-
-export const ROUTE_ADMIN_USERS = {
-    ADD_USER:        `${ ROUTE_ADMIN.REDESIGNED_USERS }/create`,
-    USER_INFO:       `${ ROUTE_ADMIN.REDESIGNED_USERS }/:userId`,
-    EDIT_USER:       `${ ROUTE_ADMIN.REDESIGNED_USERS }/:userId/edit`,
-    EDIT_SOME_USERS: `${ ROUTE_ADMIN.REDESIGNED_USERS }/multiple_edit/:userIds`, // TODO: Продумать как передавать данные пользователей для редактирования пачкой
+    PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
+    REDESIGNED_APPS: `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.APPS }`,
 };
 
 export const ROUTE_OWNER = {
+    REDESIGNED_USERS: `${ROUTE.REDESIGNED}${ ROUTE.OWNER }/${ PAGE.USERS }`,
+    DASHBOARD:      `${ROUTE.REDESIGNED}${ ROUTE.OWNER }/${ PAGE.DASHBOARD }`,
     DZO:            `${ ROUTE.OWNER }/${ PAGE.DZO }`,
     LANDING:        `${ ROUTE.OWNER }/${ PAGE.LANDING }`,
     CATEGORY:       `${ ROUTE.OWNER }/${ PAGE.CATEGORY }`,
     SLIDER:         `${ ROUTE.OWNER }/${ PAGE.SLIDER }`,
     PROMO_CAMPAIGN: `${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
+};
+
+export const ROUTE_ADMIN_APPS = {
+    ADD_APP:        `${ ROUTE_ADMIN.REDESIGNED_APPS}/create`,
 };

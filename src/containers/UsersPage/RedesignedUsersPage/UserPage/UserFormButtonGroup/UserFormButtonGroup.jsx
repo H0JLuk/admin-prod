@@ -129,9 +129,7 @@ export default UserFormButtonGroup;
 const CustomButton = ({
     className,
     type,
-    shape,
     htmlType,
-    size,
     onClick,
     disabled,
     children,
@@ -139,9 +137,7 @@ const CustomButton = ({
     <Button
         className={ className }
         type={ type }
-        shape={ shape }
         htmlType={ htmlType }
-        size={ size }
         onClick={ onClick }
         disabled={ disabled }
     >
@@ -151,9 +147,7 @@ const CustomButton = ({
 
 CustomButton.defaultProps = {
     type: 'primary',
-    shape: 'round',
     htmlType: 'button',
-    size: 'large',
     onClick: () => {},
 };
 

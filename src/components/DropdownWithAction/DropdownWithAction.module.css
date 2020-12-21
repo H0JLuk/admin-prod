@@ -1,0 +1,30 @@
+.dropdownMenu {
+    min-width: 250px;
+    padding: 5px 0px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px 0px #cccccc;
+}
+
+button.dropdownButton {
+    display: flex;
+    align-items: center;
+}
+
+button.dropdownButton:hover,
+button.dropdownButton:focus {
+    color: #000;
+    border-color: #21ba72;
+}
+
+.dropdownMenuItem {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdownMenuItem:hover {
+    background-color: #f8f8f8;
+}
+
+.dropdownMenuItem.active {
+    color: #21ba72;
+}

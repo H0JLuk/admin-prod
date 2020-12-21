@@ -19,7 +19,7 @@ import {
     validateFile
 } from './uploadLogic';
 import { NavLink } from 'react-router-dom';
-import { ROUTE_ADMIN } from '../../constants/route';
+import { getLinkForRedesignUsers } from '../../utils/appNavigation';
 
 const UsersPage = () => {
     const [{ sent, error, msg }, dispatch] = useReducer(usersReducer, usersPageInitialState);
@@ -125,7 +125,7 @@ const UsersPage = () => {
     return (
         <div className={ styles.container }>
             <div style={ { textAlign: 'center', marginBottom: '15px' } }>
-                <NavLink to={ ROUTE_ADMIN.REDESIGNED_USERS }>Редизайн</NavLink>
+                <NavLink to={ getLinkForRedesignUsers() }>Редизайн</NavLink>
             </div>
             {renderBody()}
             <form id='uploadform' className={ styles.userForm } style={ { 'marginTop': '20px' } }>

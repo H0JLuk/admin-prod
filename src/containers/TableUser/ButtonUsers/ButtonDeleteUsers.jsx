@@ -20,7 +20,7 @@ const ButtonDeleteUsers = ({ id, label, className = '', onSuccess }) => {
         <ButtonLoadXMLFile
             id={ id }
             label={ label }
-            className={ cn(styles.addButton, styles.btnRed, className) }
+            className={ cn(styles.addButton, className) }
             changeAction={ deleteUsers }
         />
     );

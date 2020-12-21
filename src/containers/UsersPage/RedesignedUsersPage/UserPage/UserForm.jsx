@@ -2,8 +2,8 @@ import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams, generatePath } from 'react-router-dom';
 import cn from 'classnames';
-import { Form, Input } from 'antd';
-import { ROUTE_ADMIN, ROUTE_ADMIN_USERS } from '../../../../constants/route';
+import { Form, Input, notification } from 'antd';
+import { USERS_PAGES } from '../../../../constants/route';
 import { addUser, getUser, removeUser, resetUser, saveUser, unblockUser } from '../../../../api/services/adminService';
 import Header from '../../../../components/Header/Redisegnedheader/Header';
 import AutocompleteLocationAndSalePoint from '../../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteLocationAndSalePoint';
@@ -15,10 +15,10 @@ import { getStringOptionValue } from '../../../../utils/utils';
 import { getClientAppList } from '../../../../api/services/clientAppService';
 import { getUserAppsCheckboxes } from './UserFormHelper';
 
+import { ReactComponent as Cross } from '../../../../static/images/cross.svg';
+
 import styles from './UserForm.module.css';
 
-
-const PAGE_TITLE = 'Пользователи';
 const USER_AVAILABLE_APPS = 'Доступные приложения';
 const NEW_USER_TITLE = 'Новый пользователь';
 
@@ -29,16 +29,16 @@ const LOGIN_FIELD = {
     name: 'login',
     label: 'Логин пользователя',
     placeholder: 'Табельный номер',
-    requiredMark: true,
 };
 
 const LOCATION_FIELD = {
-    label: 'Выберите локацию',
+    label: 'Локация',
+    labelEdit: 'Выберите локацию',
 };
 
 const SALE_POINT_FIELD = {
-    label: 'Выберите точку продажи',
-    requiredMark: true,
+    label: 'Точка продажи',
+    labelEdit: 'Выберите точку продажи',
 };
 
 const layout = {
@@ -46,15 +46,18 @@ const layout = {
     wrapperCol: { span: 12 },
 };
 
-const buttonLayout = {
-    wrapperCol: { span: 24 }
+const DEFAULT_ERRORS = { login: '', location: '', salePoint: '', backend: '' };
+
+const showSuccessfullyInfo = (login, pwd) => {
+    notification.success({
+        message: `Пользователь с табельным номером ${ login } успешно создан`,
+        description: `Пароль пользователя: ${ pwd }`,
+        duration: 0,
+        placement: 'bottomRight',
+    });
 };
 
-const errorLayout = {
-    wrapperCol: { offset: 9, span: 14 }
-};
-
-const UserForm = ({ type }) => {
+const UserForm = ({ type, matchUrl }) => {
     const history = useHistory();
     const params = useParams();
     const { userId } = params;
@@ -67,61 +70,62 @@ const UserForm = ({ type }) => {
     const [location, setLocation] = useState(null);
     const [salePoint, setSalePoint] = useState(null);
     const [checkBoxes, setCheckBoxes] = useState({});
-    const [error, setError] = useState({ login: '', location: '', salePoint: '', backend: '' });
-    const userName = useMemo(() => notNewUser && userData ? `Пользователь ${userData.personalNumber}` : NEW_USER_TITLE , [notNewUser, userData]);
-    const formName = useMemo(() => notNewUser ? FORM_NAME_EDIT_USER : FORM_NAME_NEW_USER, [notNewUser]);
+    const [error, setError] = useState(DEFAULT_ERRORS);
+    const userName = useMemo(
+        () => (notNewUser && userData ? `Пользователь ${userData.personalNumber}` : NEW_USER_TITLE),
+        [notNewUser, userData]
+    );
+    const formName = useMemo(() => (notNewUser ? FORM_NAME_EDIT_USER : FORM_NAME_NEW_USER), [notNewUser]);
+    const redirectToUsersPage = useCallback(() => history.push(matchUrl), [history, matchUrl]);
 
-    const redirectToUsersPage = useCallback(() => {
-        history.push(ROUTE_ADMIN.REDESIGNED_USERS);
-    }, [history]);
+    const getUserData = useCallback(async () => {
+        try {
+            let user;
+            const { clientApplicationDtoList: appList = [] } = await getClientAppList();
+            if (notNewUser) {
+                user = await getUser(userId);
+                setLocation({ id: user.locationId, name: user.locationName });
+                setSalePoint({ id: user.salePointId, name: user.salePointName });
+                setUserData(user);
+            }
+            const filteredApps = appList.filter(({ isDeleted }) => !isDeleted);
+            setClientApps(filteredApps);
+            setCheckBoxes(getUserAppsCheckboxes(filteredApps, user?.clientAppIds));
+            setLoading(false);
+        } catch (e) {
+            redirectToUsersPage();
+            console.warn(e);
+        }
+    }, [notNewUser, redirectToUsersPage, userId]);
 
     useEffect(() => {
         if (notNewUser && (!userId || isNaN(Number(userId)))) {
             redirectToUsersPage();
             return;
         }
+        if (type !== 'info') {
+            getUserData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
+    useEffect(() => {
         (async () => {
-            try {
-                let user;
-                const { clientApplicationDtoList: appList = [] } = await getClientAppList();
-
-                if (notNewUser) {
-                    user = await getUser(userId);
-                    setLocation({ id: user.locationId, name: user.locationName });
-                    setSalePoint({ id: user.salePointId, name: user.salePointName });
-                    setUserData(user);
-                }
-
-                const filteredApps = appList.filter(({ isDeleted }) => !isDeleted);
-                setClientApps(filteredApps);
-                setCheckBoxes(getUserAppsCheckboxes(filteredApps, user?.clientAppIds));
-                setLoading(false);
-            } catch (e) {
-                redirectToUsersPage();
-                console.warn(e);
+            if (type === 'info') {
+                setLoading(true);
+                getUserData();
+                setError(DEFAULT_ERRORS);
             }
         })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [type, getUserData]);
 
     const onSubmit = useCallback(async () => {
         if (!login && !notNewUser) {
-            return setError({
-                login: 'Укажите логин пользователя',
-                location: '',
-                salePoint: '',
-                backend: '',
-            });
+            return setError({ ...DEFAULT_ERRORS, login: 'Укажите логин пользователя' });
         }
 
-        if (!salePoint?.id) {
-            return setError({
-                location: '',
-                login: '',
-                salePoint: 'Выберите локацию или точку продажи',
-                backend: '',
-            });
+        if ((!userData || userData.role === 'User') && !salePoint?.id) {
+            return setError({ ...DEFAULT_ERRORS, salePoint: 'Выберите точку продажи' });
         }
 
         const clientAppIds = Object.values(checkBoxes).reduce((appIds, { id, checked }) => {
@@ -131,35 +135,29 @@ const UserForm = ({ type }) => {
         setIsSendingInfo(true);
 
         try {
-            const requestData = { clientAppIds, salePointId: salePoint.id };
+            const requestData = { clientAppIds, salePointId: salePoint?.id };
 
             if (notNewUser) {
-                await saveUser(userData.id, requestData);
-                const updatedUser = await getUser(userData.id);
-                setUserData(updatedUser);
+                    await saveUser(userData.id, requestData);
             } else {
-                await addUser({ ...requestData, personalNumber: login });
+                const { generatedPassword } =  await addUser({ ...requestData, personalNumber: login });
+                showSuccessfullyInfo(login, generatedPassword);
             }
         } catch (e) {
             setIsSendingInfo(false);
-            return setError({
-                login: '',
-                location: '',
-                salePoint: '',
-                backend: e.message,
-            });
+            return setError({ ...DEFAULT_ERRORS, backend: e.message });
         }
 
         setIsSendingInfo(false);
 
-        setError({ login: '', location: '', salePoint: '', backend: '', });
+        setError(DEFAULT_ERRORS);
 
         if (notNewUser && userData) {
-            history.push(generatePath(ROUTE_ADMIN_USERS.USER_INFO, { userId: userData.id }));
+            history.push(generatePath(`${matchUrl}${USERS_PAGES.USER_INFO}`, { userId: userData.id }));
         } else {
             redirectToUsersPage();
         }
-    }, [login, redirectToUsersPage, notNewUser, history, userData, salePoint, checkBoxes]);
+    }, [login, redirectToUsersPage, notNewUser, history, userData, salePoint, checkBoxes, matchUrl]);
 
     const handleCheckBoxChange = useCallback((checked, name) => {
         setCheckBoxes((state) => ({
@@ -172,14 +170,17 @@ const UserForm = ({ type }) => {
     }, []);
 
     const handleChangeAllCheckbox = useCallback((checked) => {
-        setCheckBoxes(
-            (state) => Object.keys(state).reduce((result, key) => ({
-                ...result,
-                [key]: {
-                    ...state[key],
-                    checked: state[key].disabled ? state[key].checked : checked,
-                },
-            }), {})
+        setCheckBoxes((state) =>
+            Object.keys(state).reduce(
+                (result, key) => ({
+                    ...result,
+                    [key]: {
+                        ...state[key],
+                        checked: state[key].disabled ? state[key].checked : checked,
+                    },
+                }),
+                {}
+            )
         );
     }, []);
 
@@ -187,45 +188,35 @@ const UserForm = ({ type }) => {
         setIsSendingInfo(true);
 
         try {
-            if (userData.blocked) {
+            if (userData.tmpBlocked) {
                 await unblockUser(userData.personalNumber);
-                setUserData({ ...userData, blocked: false });
+                setUserData({ ...userData, tmpBlocked: false });
             } else {
                 await resetUser(userData.personalNumber);
             }
         } catch (err) {
-            setError({
-                login: '',
-                location: '',
-                salePoint: '',
-                backend: err.message,
-            });
+            setError({ ...DEFAULT_ERRORS, backend: err.message });
         }
 
         setIsSendingInfo(false);
     }, [userData]);
 
     const onEditUser = useCallback(() => {
-        setError({
-            login: '',
-            location: '',
-            salePoint: '',
-            backend: '',
-        });
-        history.push(generatePath(ROUTE_ADMIN_USERS.EDIT_USER, { userId }));
-    }, [history, userId]);
+        setError(DEFAULT_ERRORS);
+        history.push(generatePath(`${matchUrl}${USERS_PAGES.EDIT_USER}`, { userId }));
+    }, [history, userId, matchUrl]);
 
     const onCancel = useCallback(async () => {
         if (notNewUser && userData) {
             setCheckBoxes(getUserAppsCheckboxes(clientApps, userData.clientAppIds));
             setLocation({ id: userData.locationId, name: userData.locationName });
             setSalePoint({ id: userData.salePointId, name: userData.salePointName });
-            setError({ location: '', salePoint: '', login: '', backend: '' });
-            history.push(generatePath(ROUTE_ADMIN_USERS.USER_INFO, { userId: userData.id }));
+            setError(DEFAULT_ERRORS);
+            history.push(generatePath(`${matchUrl}${USERS_PAGES.USER_INFO}`, { userId: userData.id }));
         } else {
             redirectToUsersPage();
         }
-    }, [history, notNewUser, userData, redirectToUsersPage, clientApps]);
+    }, [history, notNewUser, userData, redirectToUsersPage, clientApps, matchUrl]);
 
     const onDelete = useCallback(async () => {
         try {
@@ -234,16 +225,12 @@ const UserForm = ({ type }) => {
             redirectToUsersPage();
         } catch (err) {
             setIsSendingInfo(false);
-            setError({
-                login: '',
-                location: '',
-                salePoint: '',
-                backend: err.message,
-            });
+            setError({ ...DEFAULT_ERRORS, backend: err.message });
         }
     }, [userData, redirectToUsersPage]);
 
     const onLoginChange = useCallback((e) => setLogin(e.currentTarget.value), []);
+    const clearLogin = useCallback(() => setLogin(null), []);
 
     const onLocationChange = useCallback((location) => {
         setLocation(location);
@@ -263,8 +250,6 @@ const UserForm = ({ type }) => {
         }));
     }, []);
 
-    const errorText = useMemo(() => Object.values(error).find(Boolean), [error]);
-
     return (
         <>
             <Header />
@@ -273,113 +258,111 @@ const UserForm = ({ type }) => {
             ) : (
                 <div className={ styles.container }>
                     <div className={ styles.pageWrapper }>
-                        <div className={ styles.header }>
-                            <h4>{PAGE_TITLE}</h4>
-                            <div className={ styles.pageTitle }>
-                                {userName}
-                                {notNewUser && (
-                                    <UserBlockStatus
-                                        className={ styles.userStatus }
-                                        blocked={ userData.blocked }
-                                    />
-                                )}
-                            </div>
+                        <div className={ styles.pageTitle }>
+                            {userName}
+                            {notNewUser && (
+                                <UserBlockStatus className={ styles.userStatus } blocked={ userData.tmpBlocked } />
+                            )}
                         </div>
-                        <div className={ styles.formContainer }>
-                            <Form
-                                { ...layout }
-                                className={ styles.form }
-                                name={ formName }
-                                requiredMark={ false }
-                            >
-                                <Form.Item
-                                    className={ styles.formLeft }
-                                    labelAlign="left"
-                                    label={ `${ LOGIN_FIELD.label }${ !notNewUser ? '*' : '' }` }
-                                    name={ LOGIN_FIELD.name }
-                                >
+                        <Form
+                            { ...layout }
+                            className={ styles.formStyle }
+                            name={ formName }
+                        >
+                            <div className={ styles.formWrapper }>
+                                <div className={ styles.loginContainer }>
+                                    <label className={ cn({ required: !notNewUser }) } htmlFor={ LOGIN_FIELD.name }>
+                                        { LOGIN_FIELD.label }
+                                    </label>
                                     {!notNewUser ? (
-                                        <Input
-                                            className={ cn({ [styles.hasError]: !!error.login }) }
-                                            placeholder={ LOGIN_FIELD.placeholder }
-                                            size="large"
-                                            onChange={ onLoginChange }
-                                            autoFocus
-                                            maxLength={ 8 }
-                                        />
+                                        <>
+                                            <Input
+                                                className={ cn({ [styles.hasError]: !!error.login }, styles.loginInput) }
+                                                placeholder={ LOGIN_FIELD.placeholder }
+                                                onChange={ onLoginChange }
+                                                autoFocus
+                                                maxLength={ 8 }
+                                                id={ LOGIN_FIELD.name }
+                                                value={ login }
+                                                suffix={
+                                                    login ? (
+                                                        <Cross
+                                                            className={ styles.suffixStyle }
+                                                            onClick={ clearLogin }
+                                                        />
+                                                    ) : (
+                                                        <span />
+                                                    )
+                                                }
+                                            />
+                                            { !!error.login && <div className={ styles.error }>{ error.login }</div> }
+                                        </>
                                     ) : (
-                                        <div className={ styles.noEditField }>
+                                        <div id="idInput" className={ styles.noEditField }>
                                             { userData.personalNumber }
                                         </div>
                                     )}
-                                </Form.Item>
+                                </div>
                                 {type !== 'info' ? (
                                     <AutocompleteLocationAndSalePoint
-                                        layout={ layout }
-                                        locationLabel={ LOCATION_FIELD.label }
-                                        salePointLabel={ `${SALE_POINT_FIELD.label}*` }
+                                        locationLabel={ LOCATION_FIELD.labelEdit }
+                                        salePointLabel={ SALE_POINT_FIELD.labelEdit }
+                                        salePointLabelClassNames={ userData?.role === 'User' || !userData ? 'required' : '' }
                                         onLocationChange={ onLocationChange }
                                         onSalePointChange={ onSalePointChange }
-                                        locationHasError={ !!error.location }
-                                        salePointHasError={ !!error.salePoint }
                                         locationDisabled={ isSendingInfo }
                                         salePointDisabled={ isSendingInfo }
                                         autoFocusLocation={ type === 'edit' }
                                         initialLocationValue={ getStringOptionValue(location || undefined) }
                                         initialSalePointValue={ salePoint?.name }
                                         locationId={ location?.id }
+                                        error={ error }
                                     />
                                 ) : (
                                     <>
-                                        <div className={ styles.labelRow }>
+                                        <div className={ styles.labelCol }>
                                             <div className={ cn(styles.labelTitle, `ant-col-${layout.labelCol.span}`) }>
                                                 { LOCATION_FIELD.label }
                                             </div>
                                             <div className={ cn(styles.noEditField, `ant-col-${layout.wrapperCol.span}`) }>
-                                                { location.name }
+                                                { location?.name }
                                             </div>
                                         </div>
-                                        <div className={ styles.labelRow }>
+                                        <div className={ styles.labelCol }>
                                             <div className={ cn(styles.labelTitle, `ant-col-${layout.labelCol.span}`) }>
                                                 { SALE_POINT_FIELD.label }
                                             </div>
                                             <div className={ cn(styles.noEditField, `ant-col-${layout.wrapperCol.span}`) }>
-                                                { salePoint.name }
+                                                { salePoint?.name }
                                             </div>
                                         </div>
                                     </>
                                 )}
-                                {!!errorText && (
-                                    <Form.Item { ...errorLayout }>
-                                        <div className={ styles.formError }>
-                                            { errorText }
-                                        </div>
-                                    </Form.Item>
-                                )}
-                                <Form.Item { ...buttonLayout }>
-                                    <div className={ cn(styles.buttonsContainer, { [styles.center]: type === 'new' }) }>
-                                        <UserFormButtonGroup
-                                            type={ type }
-                                            onDelete={ onDelete }
-                                            onCancel={ onCancel }
-                                            onSubmit={ onSubmit }
-                                            onResetPassword={ onResetPassword }
-                                            onEditUser={ onEditUser }
-                                            disableAllButtons={ isSendingInfo }
-                                            userBlocked={ userData?.blocked }
-                                        />
-                                    </div>
-                                </Form.Item>
-                            </Form>
+                            </div>
+                            { !!error.backend && <div className={ styles.formError }>{ error.backend }</div> }
+                        </Form>
+                    </div>
+                    <div className={ styles.checkboxesWrapper }>
+                        <h4 className={ styles.title }>{ USER_AVAILABLE_APPS }</h4>
+                        <div className={ styles.checkBoxesCol }>
+                            <Checkboxes
+                                checkboxesData={ checkBoxes }
+                                onChange={ handleCheckBoxChange }
+                                onChangeAll={ handleChangeAllCheckbox }
+                                disabledAll={ type === 'info' || isSendingInfo }
+                            />
                         </div>
                     </div>
-                    <div className={ styles.rightCol }>
-                        <h4>{ USER_AVAILABLE_APPS }</h4>
-                        <Checkboxes
-                            checkboxesData={ checkBoxes }
-                            onChange={ handleCheckBoxChange }
-                            onChangeAll={ handleChangeAllCheckbox }
-                            disabledAll={ type === 'info' || isSendingInfo }
+                    <div className={ styles.buttonsContainer }>
+                        <UserFormButtonGroup
+                            type={ type }
+                            onDelete={ onDelete }
+                            onCancel={ onCancel }
+                            onSubmit={ onSubmit }
+                            onResetPassword={ onResetPassword }
+                            onEditUser={ onEditUser }
+                            disableAllButtons={ isSendingInfo }
+                            userBlocked={ userData?.tmpBlocked }
                         />
                     </div>
                 </div>
@@ -390,6 +373,7 @@ const UserForm = ({ type }) => {
 
 UserForm.propTypes = {
     type: PropTypes.oneOf(['new', 'edit', 'info']),
+    matchUrl: PropTypes.string,
 };
 
 UserForm.defaultProps = {

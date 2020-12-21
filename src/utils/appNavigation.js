@@ -1,5 +1,5 @@
 import { getRole } from '../api/services/sessionService';
-import { ROUTE, ROUTE_ADMIN, ROUTE_OWNER } from '../constants/route';
+import { ROUTE, ROUTE_ADMIN, ROUTE_OWNER, ROUTE_USER_MANAGER } from '../constants/route';
 import ROLES from '../constants/roles';
 
 export const goToLogin = (history) => {
@@ -14,8 +14,17 @@ export const goToClientApps = (history) => {
     history.push(ROUTE.CLIENT_APPS);
 };
 
-export const goToDashboard = (history) => {
-    history.push(ROUTE.DASHBOARD);
+export const goToDashboard = (history, role) => {
+    switch (role) {
+        case ROLES.ADMIN:
+            history.push(ROUTE_ADMIN.DASHBOARD);
+            break;
+        case ROLES.PRODUCT_OWNER:
+            history.push(ROUTE_OWNER.DASHBOARD);
+            break;
+        default:
+            goToClientApps(history);
+    }
 };
 
 export const goToAudit = (history) => {
@@ -30,7 +39,7 @@ export const goToUserManager = (history) => {
     history.push(ROUTE.USER_MANAGER);
 };
 
-export const goToProduct= (history) => {
+export const goToProduct = (history) => {
     history.push(ROUTE.OWNER);
 };
 
@@ -67,3 +76,16 @@ export const goPromoCampaigns = (history) => {
 export const goBack = (history) => {
     history.goBack();
 };
+
+export function getLinkForRedesignUsers() {
+    switch (getRole()) {
+        case ROLES.ADMIN:
+            return ROUTE_ADMIN.REDESIGNED_USERS;
+        case ROLES.PRODUCT_OWNER:
+            return ROUTE_OWNER.REDESIGNED_USERS;
+        case ROLES.USER_MANAGER:
+            return ROUTE_USER_MANAGER.REDESIGNED_USERS;
+        default:
+            return '';
+    }
+}

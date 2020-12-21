@@ -1,21 +1,58 @@
 .container {
     display: flex;
-    background-color: white;
-    margin-top: -35px;
-    margin-left: -35px;
-    margin-right: -35px;
-    margin-bottom: 35px;
-    padding-left: 35px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 15px 20px;
     font-family: SBSansText, sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     letter-spacing: -0.5px;
     font-weight: 600;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    border-bottom: 1px solid #d4d9de;
+    align-items: center;
 }
 
 .backButton {
     cursor: pointer;
-    float: left;
+    margin-right: 15px;
+}
+
+.backButton :global(.anticon) {
+    font-size: 16px;
+}
+
+.menuItem {
+    text-decoration: none;
+    margin-right: 15px;
+    color: #171725;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.3px;
+    font-weight: 600;
+}
+
+.menuItem:hover {
+    color: #21ba72;
+}
+
+.active {
+    color: #21ba72;
+    position: relative;
+}
+
+.active::after {
+    content: '';
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #21ba72;
+    right: 0;
+    margin: 0 auto;
+    display: block;
+}
+
+.avatar {
+    margin-left: auto;
+    cursor: pointer;
 }

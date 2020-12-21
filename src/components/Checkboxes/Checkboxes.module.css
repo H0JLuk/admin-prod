@@ -1,6 +1,9 @@
 .checkbox {
     display: block;
     margin: 0 !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .checkbox > label {
@@ -8,14 +11,13 @@
 }
 
 .checkbox :global(.ant-checkbox-inner) {
-    width: 25px;
-    height: 25px;
-    border-radius: 7px;
+    width: 18px;
+    height: 18px;
     outline: none;
 }
 
 .checkbox :global(.ant-checkbox-checked .ant-checkbox-inner) {
-    background-color: #21ba72;
+    background-color: #09a552;
     border-color: #d9d9d9;
 }
 
@@ -24,16 +26,17 @@
 }
 
 .checkbox :global(.ant-checkbox-input:hover + .ant-checkbox-inner) {
-    border-color: #21ba72;
+    border-color: #09a552;
 }
 
 .checkbox :global(.ant-checkbox-checked .ant-checkbox-inner)::after {
-    width: 10px;
-    height: 13px;
+    width: 5px;
+    height: 9px;
 }
 
-.checkbox :global(.ant-checkbox-disabled.ant-checkbox-checked .ant-checkbox-inner::after){
-    border-color:#fff;
+.checkbox :global(.ant-checkbox-disabled.ant-checkbox-checked .ant-checkbox-inner::after) {
+    border-color: #fff;
+    left: 25% !important;
 }
 
 .checkbox :global(.ant-checkbox:hover::after),
@@ -41,7 +44,28 @@
     visibility: hidden;
 }
 
+.checkbox :global(.ant-checkbox-checked + span) {
+    color: #494949;
+}
+
+.checkbox :global(.ant-checkbox-wrapper) {
+    flex-basis: 33%;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.checkboxAllApps :global(.ant-checkbox-wrapper) {
+    flex-wrap: nowrap;
+}
+
 .checkboxAllApps {
-    margin-top: 25px;
-    margin-bottom: 30px;
+    flex-basis: 20%;
+    min-width: 135px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.checkboxAllApps > label > span ~ span {
+    min-width: 140px;
 }

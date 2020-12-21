@@ -1,0 +1,107 @@
+.tableWrapper {
+    padding: 20px;
+}
+
+.cellRight {
+    text-align: right;
+    width: 100%;
+}
+
+.tableTitle {
+    color: #697382;
+    font-family: Roboto, sans-serif;
+}
+
+.tableCell {
+    font-weight: 700;
+}
+
+.blocked {
+    border-radius: 50px;
+    background-color: #fff1f0;
+    color: #d43847;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.active {
+    border-radius: 50px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color: #09a552;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.paginationWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.pagination {
+    display: flex;
+    margin: 16px 0;
+    justify-content: flex-end;
+}
+
+.pageSizes {
+    margin-left: 10px;
+}
+
+/* GLOBALS */
+.table :global(.ant-table) {
+    color: #171725;
+}
+
+.table :global(.ant-checkbox-checked::after) {
+    border-color: #21ba72;
+}
+
+.table :global(.ant-table-tbody > tr:hover td) {
+    cursor: pointer;
+    background-color: #f8f8f8;
+}
+
+.table :global(.ant-table-tbody > tr > td) {
+    border-bottom: none;
+}
+
+.table :global(.ant-checkbox-indeterminate .ant-checkbox-inner::after) {
+    background-color: #09a552;
+}
+
+.table :global(.ant-checkbox-checked .ant-checkbox-inner) {
+    background-color: #09a552 !important;
+    border-color: #09a552 !important;
+}
+
+.table :global(.ant-checkbox-input:hover + .ant-checkbox-inner),
+.table :global(.ant-checkbox-input:focus + .ant-checkbox-inner) {
+    border-color: #09a552 !important;
+}
+
+.paginationWrapper :global(.ant-select-focused:not(.ant-select-disabled).ant-select-single .ant-select-selector),
+.pagination :global(.ant-pagination-options-quick-jumper input:focus) {
+    box-shadow: none;
+}
+
+.pagination :global(.ant-pagination-item-active),
+.pagination :global(.ant-pagination-item:hover),
+.pagination :global(.ant-pagination-item:focus),
+.pagination :global(.ant-pagination-prev:hover button:not(:disabled)),
+.pagination :global(.ant-pagination-next:hover button:not(:disabled)),
+.paginationWrapper :global(.ant-select:not(.ant-select-disabled):hover .ant-select-selector),
+.paginationWrapper :global(.ant-select-focused:not(.ant-select-disabled).ant-select-single .ant-select-selector),
+.pagination :global(.ant-pagination-options-quick-jumper input:hover),
+.pagination :global(.ant-pagination-options-quick-jumper input:focus) {
+    border-color: #09a552;
+}
+
+.pagination :global(.ant-pagination-item-active a),
+.pagination :global(.ant-pagination-item:hover a),
+.pagination :global(.ant-pagination-item:focus a),
+.pagination :global(.ant-pagination-prev:hover button:not(:disabled)),
+.pagination :global(.ant-pagination-next:hover button:not(:disabled)) {
+    color: #09a552;
+}
+/* GLOBALS */

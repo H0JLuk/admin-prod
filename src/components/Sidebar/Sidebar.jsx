@@ -1,104 +1,98 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, /* useMemo, */ useState } from 'react';
+import cn from 'classnames';
+import { /* matchPath, */ NavLink, useHistory, /* useLocation */ } from 'react-router-dom';
 import { Menu } from 'antd';
-import { ROUTE, ROUTE_ADMIN } from '../../constants/route';
-import styles from './Sidebar.module.css';
-import { NavLink, useHistory } from 'react-router-dom';
-import { logout } from '../../api/services/authService';
+// import { ROUTE_ADMIN_APPS } from '../../constants/route';
 import { getClientAppList } from '../../api/services/clientAppService';
-import ButtonLabels from '../Button/ButtonLables';
-import { MenuOutlined, BarChartOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { getRole, saveAppCode } from '../../api/services/sessionService';
+import { getAppCode, getRole, saveAppCode } from '../../api/services/sessionService';
 import { goApp } from '../../utils/appNavigation';
+import { resolveRedesignedMenuItemsByRoleAndAppCode } from '../../constants/menuByRole';
 
 import sberLogo from '../../static/images/sber-logo.png';
 
-const MENU_STATEMENT_TEXT = 'Текущее';
-const MENU_USERS_TEXT = 'Пользователи';
-const MENU_DZO_TEXT = 'ДЗО';
+import styles from './Sidebar.module.css';
+
+const APP = 'Приложения';
+// const ADD_NEW = 'Добавить';
+// const NEW_APP = 'Новое приложение';
 
 const Sidebar = () => {
-    const { SubMenu } = Menu;
     const history = useHistory();
-    const rootSubmenuKeys = ['sub1'];
-    const [openKeys, setOpenKeys] = useState(['sub1']);
-    const [subMenu, setSubMenu] = useState([]);
+    // const location = useLocation();
+    const [appsList, setAppsList] = useState([]);
 
-    const onOpenChange = keys => {
-        const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
-        if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-            setOpenKeys(keys);
-        } else {
-            setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-        }
-    };
+    /* const isNewAppPathName = useMemo(() =>
+        !!matchPath(location.pathname, { path: ROUTE_ADMIN_APPS.ADD_APP }
+    ), [location.pathname]); */
+
+    const appCode = getAppCode() || '';
+    const role = getRole();
+    const [menuItems] = resolveRedesignedMenuItemsByRoleAndAppCode(role, appCode);
 
     useEffect(() => {
         (async () => {
-            const response = await getClientAppList();
-            const sortedDtoList = response.clientApplicationDtoList.filter((dzoItem) => !dzoItem.isDeleted);
-            setSubMenu(sortedDtoList);
+            const { clientApplicationDtoList = [] } = await getClientAppList();
+            const sortedDtoList = clientApplicationDtoList.filter(({ isDeleted }) => !isDeleted);
+            /* Временный костыль чтобы можно было перемещаться по приложению без крашей */
+            if (!getAppCode()) {
+                saveAppCode(sortedDtoList[0].code);
+            }
+
+            setAppsList(sortedDtoList);
         })();
     }, []);
 
-    const doLogout = () => {
-        logout().then(() => {
-            history.push(ROUTE.LOGIN);
-        });
-    };
-
-    const handleAdministrate = (dzoItem) => {
-        const role = getRole();
+    const handleAdministrate = useCallback((dzoItem) => {
         saveAppCode(dzoItem.code);
         goApp(history, role);
-    };
+    }, [history, role]);
 
     return (
         <div className={ styles.menu }>
-            <img className={ styles.logo } src={ sberLogo } alt="" />
-            <Menu mode="inline" theme="dark">
-                <Menu.Item key="1">
+            <div className={ styles.blockLogo }>
+                <img className={ styles.logo } src={ sberLogo } alt="sberLogo" />
+            </div>
+            <Menu mode="inline">
+                {menuItems.map((item) => (
+                    <Menu.Item key={ item.label }>
+                        <NavLink
+                            key={ item.label }
+                            to={ item.path }
+                            className={ styles.menu__item }
+                            activeClassName={ styles.active }
+                        >
+                            { item.label }
+                        </NavLink>
+                    </Menu.Item>
+                ))}
+                <div className={ cn(styles.menu__item, styles.app) }>
+                    {APP}
+                </div>
+                {(appsList || []).map((dzoItem) => (
+                    <Menu.Item key={ dzoItem.id }>
+                        {/* TODO: change this to NavLink or add active className after we will know url for apps */}
+                        <div
+                            onClick={ () => handleAdministrate(dzoItem) }
+                            className={ cn(styles.menu__item, { [styles.active]: appCode === dzoItem.code }) }
+                        >
+                            { dzoItem.displayName }
+                        </div>
+                    </Menu.Item>
+                ))}
+                {/* <Menu.Item key="Create">
                     <NavLink
-                        to={ `${ROUTE_ADMIN.USERS}` } //TODO: Добавить роут когда он будет известен
-                        className={ styles.menu__item }
+                        to={ ROUTE_ADMIN_APPS.ADD_APP }
+                        className={
+                            cn(styles.menu__item, {
+                                [styles.addButton]: !isNewAppPathName
+                            })
+                        }
                         activeClassName={ styles.active }
                     >
-                        <BarChartOutlined />{ MENU_STATEMENT_TEXT }
+                        { isNewAppPathName ? NEW_APP : ADD_NEW }
                     </NavLink>
-                </Menu.Item>
-                <Menu.Item key="2">
-                    <NavLink
-                        to={ ROUTE_ADMIN.REDESIGNED_USERS }
-                        className={ styles.menu__item }
-                        activeClassName={ styles.active }
-                    >
-                        <UserOutlined />{ MENU_USERS_TEXT }
-                    </NavLink>
-                </Menu.Item>
-                <Menu.Item key="3">
-                    <NavLink
-                        to={ `${ROUTE_ADMIN.DZO}` } //TODO: Добавить роут когда он будет известен
-                        className={ styles.menu__item }
-                        activeClassName={ styles.active }
-                    >
-                        { MENU_DZO_TEXT }
-                    </NavLink>
-                </Menu.Item>
-                <SubMenu key="sub1" openKeys={ openKeys } onOpenChange={ onOpenChange } icon={ <MenuOutlined /> } title="Приложения">
-                    {
-                        subMenu.length !== 0 && subMenu.map((dzoItem) => (
-                            <Menu.Item key={ dzoItem.id }>
-                                <div
-                                    onClick={ () => handleAdministrate(dzoItem) }
-                                    className={ styles.menu__item }
-                                >
-                                    { dzoItem.displayName }
-                                </div>
-                            </Menu.Item>
-                        ))
-                    }
-                </SubMenu>
+                </Menu.Item> */}
             </Menu>
-            <div className={ styles.menu__item } onClick={ doLogout }><LogoutOutlined />{ ButtonLabels.LOGOUT } </div>
         </div>
     );
 };

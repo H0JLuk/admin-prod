@@ -1,32 +1,41 @@
-.formRow {
+.formColumn {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     color: rgba(0, 0, 0, 0.85);
     font-size: 14px;
-    font-variant: tabular-nums;
-    line-height: 1.5715;
-    list-style: none;
-    -webkit-font-feature-settings: 'tnum';
-    font-feature-settings: 'tnum', "tnum";
-    margin-bottom: 24px;
     vertical-align: top;
+    justify-content: space-between;
+    flex-basis: 37.5%;
 }
 
-.formLeftCol {
+.formLabel {
     display: flex !important;
     align-items: center;
+    min-width: 120px;
+    margin-bottom: 15px;
 }
 
 .autocompleteInput {
     width: 100%;
+    min-width: 240px;
+    max-width: 300px;
+}
+
+.autocompleteInput :global(.ant-input-affix-wrapper:hover),
+.autocompleteInput :global(.ant-input-affix-wrapper:focus),
+.autocompleteInput :global(.ant-input-affix-wrapper-focused) {
+    border-color: #21ba72;
+    box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
 }
 
 .autocompleteInput :global(.ant-select-clear) {
-    top: 15px;
+    top: 10px;
     right: 20px !important;
+    opacity: 1 !important;
 }
 
 .autocompleteOption {
@@ -34,6 +43,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.suffix {
+    color: #aaafb2 !important ;
 }
 
 .optionParentName {
@@ -68,7 +81,35 @@ div.autocompleteDropdown :global(.ant-select-item) {
     color: #21ba72;
 }
 
-.hasError,
-.hasError input {
+.formError {
+    margin-top: 10px;
+    color: #ec464e;
+}
+
+.inputWrapper {
+    margin-right: 10px;
+}
+
+.hasError :global(.ant-input-affix-wrapper) {
     border-color: #ec464e;
+}
+
+.formLabel :global(.ant-input-affix-wrapper:hover),
+.formLabel :global(.ant-input-affix-wrapper:focus),
+.formLabel :global(.ant-input-affix-wrapper-focused) {
+    border-color: #21ba72;
+    box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
+}
+
+.formLabel :global(.ant-input-suffix) {
+    color: #c0c0c0;
+    cursor: auto;
+}
+
+.hideSuffix :global(.ant-input-suffix) {
+    display: none;
+}
+
+.formLabel > label {
+    white-space: nowrap;
 }

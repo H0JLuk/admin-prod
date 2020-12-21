@@ -22,18 +22,8 @@ export async function removeUser(pn) {
     return Api.delete(`/admin/user/delete/${pn}`, getReqOptions());
 }
 
-export async function getUsersList(pageNo = 0, pageSize = 10, filters = {}) {
-    const urlParams = new URLSearchParams();
-
-    urlParams.append('pageNo', pageNo);
-    urlParams.append('pageSize', pageSize);
-    Object.keys(filters).forEach((key) => {
-        if (filters[key] !== '') {
-            urlParams.append(key, filters[key]);
-        }
-    });
-
-    return Api.get(`/admin/user/filtered?${urlParams.toString()}`, getReqOptions());
+export async function getUsersList(searchParams) {
+    return Api.get(`/admin/user/filtered?${searchParams}`, getReqOptions());
 }
 
 /**

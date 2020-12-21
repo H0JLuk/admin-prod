@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import cn from 'classnames';
 import { Menu, Dropdown } from 'antd';
 import { getDashboardInfo } from '../../api/services/adminService';
 import { getClientAppList } from '../../api/services/clientAppService';
 import { getDzoList } from '../../api/services/dzoService';
-import { getAppCode, saveAppCode } from '../../api/services/sessionService';
+import { saveAppCode } from '../../api/services/sessionService';
 import Button from '../../components/Button/Button';
-import { goBack, goPromoCampaigns, goToClientApps } from '../../utils/appNavigation';
+import Header from '../../components/Header/Redisegnedheader/Header';
+import { goPromoCampaigns } from '../../utils/appNavigation';
 import DashboardFilterTag from './DashboardFilterTag';
 import { WITHOUT_FILTER, BY_APP, BY_DZO } from './dashboardFilterTypes';
 import DashboardItem from './DashboardItem';
@@ -16,7 +16,6 @@ import styles from './Dashboard.module.css';
 
 const DEFAULT_FILTER_NAME = 'Фильтровать';
 const RELOAD_BUTTON_LABEL = 'Обновить';
-const CLOSE_BUTTON_LABEL = 'Закрыть';
 
 const DashboardFilterMenu = ({ onClick }) => (
     <Menu onClick={ onClick }>
@@ -105,8 +104,6 @@ const Dashboard = () => {
         }
     }, [list, filterType, dzoList, appList, filterIdList]);
 
-    const onCloseClick = () => getAppCode() ? goBack(history) : goToClientApps(history);
-
     // TODO: сделать переход на конкретную промо-кампанию после редизайна
     const onItemClick = (appCode, promoCampaignId) => {
         // console.log({ currentAppCode: getAppCode(), newAppCode: appCode, promoCampaignId });
@@ -121,6 +118,7 @@ const Dashboard = () => {
 
     return (
         <div className={ styles.page }>
+            <Header buttonBack={ false } />
             <div className={ styles.header } >
                 <h3>Дашборд</h3>
                 <div className={ styles.navigationPanel }>
@@ -136,11 +134,6 @@ const Dashboard = () => {
                             <img src={ downArrowImage } alt="" />
                         </div>
                     </Dropdown>
-                    <Button type="blue"
-                            label={ CLOSE_BUTTON_LABEL }
-                            className={ cn(styles.button, styles.exit) }
-                            onClick={ onCloseClick }
-                    />
                 </div>
                 <DashboardFilterList list={ filterTagList } filterIdList={ filterIdList } onClick={ onFilterTagClick } />
             </div>

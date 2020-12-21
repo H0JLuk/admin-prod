@@ -12,7 +12,7 @@ import CategoryPage from '../../containers/CategoryPage/CategoryPage';
 import PromoCampaignPageRouter from '../../containers/PromoCampaignPage/PromoCampaignPageRouter';
 
 const AdminPage = (props) => {
-    
+
     const { history } = props;
 
     return (

@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { Button, Dropdown } from 'antd';
+import { Button } from 'antd';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { templateLink } from '../../../utils/helper';
 
@@ -11,36 +11,46 @@ const DOWNLOAD_LOAD_TEMPLATE = 'Для загрузки';
 const DOWNLOAD_DELETE_TEMPLATE = 'Для удаления';
 
 const DownloadDropDown = () => {
-    const [templateDropdown, setTemplateDropdown] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const ref = useRef(null);
 
-    const dropdownMenu = useMemo(() => (
-        <div className={ styles.dropdownMenu }>
-            <div className={ styles.dropdownLinkWrapper }>
-                <a href={ templateLink('user-upload.xlsx') }>
-                    { DOWNLOAD_LOAD_TEMPLATE }
-                </a>
-                <a href={ templateLink('user-delete.xlsx') }>
-                    { DOWNLOAD_DELETE_TEMPLATE }
-                </a>
-            </div>
-        </div>
-    ), []);
+    const toggleOpen = useCallback(() => setIsOpen((state) => !state), []);
+
+    const closeWhenClickOutside = useCallback((e) => {
+        if (!ref.current?.contains(e.target)) {
+            setIsOpen(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener('click', closeWhenClickOutside);
+        } else {
+            document.removeEventListener('click', closeWhenClickOutside);
+        }
+
+        return () => document.removeEventListener('click', closeWhenClickOutside);
+    }, [isOpen, closeWhenClickOutside]);
 
     return (
-        <Dropdown
-            overlay={ dropdownMenu }
-            trigger={ ['click'] }
-            visible={ templateDropdown }
-            onVisibleChange={ setTemplateDropdown }
-        >
+        <div className={ styles.dropdown } ref={ ref }>
             <Button
-                className={ cn(styles.dropdownButton, { [styles.dropdownActive]: templateDropdown }) }
-                shape="round"
-                size="large"
+                className={ cn(styles.dropdownButton, { [styles.dropdownActive]: isOpen }) }
+                onClick={ toggleOpen }
             >
-                { DOWNLOAD_TEMPLATE } { !templateDropdown ? <DownOutlined /> : <UpOutlined />}
+                { DOWNLOAD_TEMPLATE } { !isOpen ? <DownOutlined /> : <UpOutlined />}
             </Button>
-        </Dropdown>
+            <div className={ cn(styles.dropdownMenu, { [styles.open]: isOpen }) }>
+                <div className={ styles.dropdownLinkWrapper }>
+                    <a href={ templateLink('user-upload.xlsx') }>
+                        { DOWNLOAD_LOAD_TEMPLATE }
+                    </a>
+                    <a href={ templateLink('user-delete.xlsx') }>
+                        { DOWNLOAD_DELETE_TEMPLATE }
+                    </a>
+                </div>
+            </div>
+        </div>
     );
 };
 

@@ -1,9 +1,7 @@
 .container {
-    display: flex;
     width: 100%;
-    max-width: 1000px;
-    flex-wrap: wrap;
     color: #494949;
+    padding: 25px;
 }
 
 .container label {
@@ -16,17 +14,16 @@
 }
 
 .pageWrapper {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
     min-width: 500px;
 }
 
 .pageTitle {
     display: flex;
     align-items: center;
-    font-size: 25px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #171725;
 }
 
 .userStatus {
@@ -34,79 +31,95 @@
     margin-left: 5px;
 }
 
-.formContainer {
-    flex: 1 0 0;
+.error {
+    margin-top: 10px;
+    color: #ff4d4f;
 }
 
-.form {
-    padding-top: 50px;
+.formStyle {
+    background-color: #f7f7f7;
+    padding: 25px 25px 56px 25px ;
+    margin-bottom: 15px;
 }
 
-.formLeft {
-    display: flex !important;
-    align-items: center;
+.checkboxesWrapper {
+    background-color: #f7f7f7;
+    padding: 25px;
 }
 
-.form label::after {
-    content: '';
+.loginContainer {
+    flex-basis: 30%;
+    margin-right: 10px;
 }
 
-form.form input {
-    border-radius: 7px;
-    caret-color: #21ba72;
-}
-
-form.form input.hasError {
-    border-color: #ec464e;
-}
-
-form.form input:hover {
-    border-color: #21ba72;
-}
-
-form.form input:focus {
-    border-color: #21ba72;
-    box-shadow: none;
-}
-
-.form button:not(:last-child) {
-    margin-right: 15px;
-}
-
-.form button {
-    text-transform: uppercase;
+.hasError {
+    border-color: #ff4d4f;
 }
 
 .formError {
-    color: #ec454e;
+    margin-top: 15px;
+    color: #ff4d4f;
 }
 
-.rightCol {
+.checkBoxesCol {
     min-width: 250px;
+    display: flex;
 }
 
 .noEditField {
     color: #494949;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
+    margin-top: 15px;
+    white-space: nowrap;
 }
 
-.labelRow {
-    display: flex;
-    align-items: center;
-    margin-bottom: 24px;
+.labelCol {
     min-height: 40px;
+    flex-basis: 40%;
 }
 
 .buttonsContainer {
     display: flex;
+    margin-top: 25px;
 }
 
-.center {
-    text-align: center;
-    justify-content: center;
+.buttonsContainer button:not(:last-child) {
+    margin-right: 15px;
 }
 
-.buttonsContainer :global(.ant-btn[disabled]){
-    color:#ebe8e8 !important;
+.buttonsContainer :global(.ant-btn[disabled]) {
+    color: #ebe8e8 !important;
+}
+
+.formWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+    max-width: 1100px;
+}
+
+.formWrapper :global(.ant-input-affix-wrapper:hover),
+.formWrapper :global(.ant-input-affix-wrapper:focus),
+.formWrapper :global(.ant-input-affix-wrapper-focused) {
+    border-color: #21ba72;
+    box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
+}
+
+.title {
+    margin-bottom: 25px;
+    color: #494949 !important ;
+    font-size: 17px !important;
+}
+
+.loginInput {
+    margin-top: 15px;
+    min-width: 200px;
+    max-width: 250px;
+    max-height: 32px;
+}
+
+.suffixStyle {
+    cursor: pointer;
 }

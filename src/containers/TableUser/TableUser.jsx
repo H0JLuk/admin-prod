@@ -1,17 +1,17 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
-import { useHistory, generatePath } from 'react-router-dom';
+import { useHistory, generatePath, useLocation } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 import cn from 'classnames';
-import { Table } from 'antd';
-import Pagination from './Pagination/Pagination';
 import EmptyUsersPage from './EmptyUsersPage/EmptyUsersPage';
 import ButtonLoadUsers from './ButtonUsers/ButtonLoadUsers';
 import ButtonDeleteUsers from './ButtonUsers/ButtonDeleteUsers';
-import ButtonAddUser from './ButtonUsers/ButtonAddUser';
 import DownloadDropDown from './DownloadDropDown/DownloadDropDown';
-import { getUsersList, removeUser, resetUser } from '../../api/services/adminService';
-import { ROUTE_ADMIN_USERS } from '../../constants/route';
-import { getColumnsForTable } from './TableUserHelper';
+import HeaderWithActions from '../../components/HeaderWithActions/HeaderWithActions';
+import Header from '../../components/Header/Redisegnedheader/Header';
+import UsersListTable from './UsersListTable';
+import ModalDeleteUsers from './ModalDeleteUsers/ModalDeleteUsers';
+import { getUsersList, resetUser } from '../../api/services/adminService';
+import { USERS_PAGES } from '../../constants/route';
 
 import styles from './TableUser.module.css';
 import btnStyles from './ButtonUsers/ButtonUsers.module.css';
@@ -21,143 +21,234 @@ const TITLE = 'Пользователи';
 const BUTTON_EDIT = 'Редактировать';
 const BUTTON_CHANGE_PASSWORD = 'Сбросить пароль';
 const BUTTON_ADD = 'Добавить';
-const BUTTON_LOAD = 'Загрузить';
 const BUTTON_CHOOSE = 'Выбрать';
 const BUTTON_CANCEL = 'Отменить';
 const BUTTON_DELETE = 'Удалить';
 
+const SEARCH_INPUT = 'Поиск по логину, локации и точке продажи';
+
 const CHOSEN_USER = 'Выбрано';
 const TITLE_DOWNLOAD_USER = 'Пакетная обработка пользователей';
 
-const SHOW_ON_PAGE_COUNT = [10, 20, 50];
+const DEFAULT_PARAMS = {
+    pageNo: 0,
+    pageSize: 10,
+    sortBy: '',
+    direction: 'ASC',
+    filterText: '',
+    totalElements: 0,
+};
 
-const TableUser = () => {
+// eslint-disable-next-line no-unused-vars
+const getURLSearchParams = ({ totalElements, ...rest }) => new URLSearchParams(rest).toString();
+
+const DROPDOWN_SORT_MENU = [
+    { name: 'personalNumber', label: 'По логину' },
+    { name: 'locationName', label: 'По локации' },
+    { name: 'salePointName', label: 'По точке продажи' },
+];
+
+const TableUser = ({ matchUrl }) => {
     const history = useHistory();
+    const { search } = useLocation();
     const [users, setUsers] = useState([]);
     const [select, setSelect] = useState(false);
     const [selectedRowValues, setSelectedRowValues] = useState([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPage, setTotalPage] = useState(10);
-    const [showOnPageCount, setShowOnPageCount] = useState(10);
     const [loadingPage, setLoadingPage] = useState(true);
     const [loadingTableData, setLoadingTableData] = useState(true);
-    const [filterInput, setFilterInput] = useState({ personalNumber: '', locationName: '', salePointName: '', blocked: '' });
+    const [params, setParams] = useState(DEFAULT_PARAMS);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
 
-    const getUsersData = useCallback(async (pageNumber, onPageCount, filters) => {
-        const { users = [], totalElements } = await getUsersList(pageNumber, onPageCount, filters);
-        const usersAddKey = users.map((user, index) => ({ ...user, key: index }));
-        const totalPageMath = totalElements === 0 ? 0 : Math.ceil(totalElements / onPageCount);
-
-        setUsers(usersAddKey);
-        setTotalPage(totalPageMath);
-
-        return totalPageMath;
-    }, []);
-
-    const updateUsersData = useCallback(async (pageNumber, onPageCount, filters) => {
-        clearSelectedItems();
+    const loadUsersData = useCallback(async (searchParams = DEFAULT_PARAMS) => {
+        const urlSearchParams = getURLSearchParams(searchParams);
         setLoadingTableData(true);
 
-        const totalPageMath = await getUsersData(pageNumber, onPageCount, filters);
+        try {
+            const { users = [], totalElements, pageNo } = await getUsersList(urlSearchParams);
 
-        if (pageNumber !== 0 && pageNumber >= totalPageMath) {
-            setCurrentPage(totalPageMath - 1);
-            await getUsersData(totalPageMath - 1, onPageCount, filters);
+            /* use `replace` instead of `push` for correct work `history.goBack()` */
+            history.replace(`${matchUrl}?${urlSearchParams}`);
+            clearSelectedItems();
+            setParams({
+                ...searchParams,
+                pageNo,
+                totalElements,
+            });
+            setUsers(users);
+        } catch (e) {
+            console.error(e);
         }
-
-        setLoadingPage(false);
         setLoadingTableData(false);
-    }, [getUsersData]);
-
-    useEffect(() => {
-        // Update data when update page number and count users on page
-        updateUsersData(currentPage, showOnPageCount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const getResultsDebounced = useCallback(debounce(updateUsersData, 500), [updateUsersData]);
+    const loadUsersDataDebounced = useCallback(debounce(loadUsersData, 500), [loadUsersData]);
 
-    const handleSearch = useCallback((dataIndex, value = '') => {
+    useEffect(() => {
+        (async () => {
+            const urlSearchParams = new URLSearchParams(search);
+            const searchParamsFromUrl = {};
+            Object.keys(DEFAULT_PARAMS).forEach(key => {
+                const searchValue = urlSearchParams.get(key);
+                searchParamsFromUrl[key] = searchValue || DEFAULT_PARAMS[key];
+            });
+            await loadUsersData(searchParamsFromUrl);
+            setLoadingPage(false);
+        })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loadUsersData]);
+
+    const handleSearch = useCallback((value = '') => {
         if (loadingTableData) {
             return;
         }
 
-        const newFilterState = { ...filterInput, [dataIndex]: value };
-        setFilterInput(newFilterState);
-        getResultsDebounced(currentPage, showOnPageCount, newFilterState);
-    }, [currentPage, showOnPageCount, filterInput, getResultsDebounced, loadingTableData]);
+        const nextParams = { ...params, filterText: value, pageNo: 0 };
+
+        if (value) {
+            loadUsersDataDebounced(nextParams);
+        } else {
+            loadUsersData(nextParams);
+        }
+        setParams(nextParams);
+    }, [loadingTableData, params, loadUsersDataDebounced, loadUsersData]);
+
+    const changeSort = useCallback((sortBy) => {
+        if (typeof sortBy !== 'string') {
+            sortBy = '';
+        }
+
+        if (!sortBy && !params.sortBy) {
+            return;
+        }
+
+        loadUsersData({
+            ...params,
+            sortBy,
+            direction: !sortBy || params.direction === 'DESC' ? 'ASC' : 'DESC',
+        });
+    }, [loadUsersData, params]);
+
+    const onChangePageSize = useCallback((pageSize) => {
+        const nextParams = { ...params, pageSize };
+        const maxPage = Math.ceil(params.totalElements / pageSize);
+
+        if (maxPage < params.pageNo + 1) {
+            nextParams.pageNo = maxPage - 1;
+        }
+
+        loadUsersData(nextParams);
+    }, [loadUsersData, params]);
 
     const clearSelectedItems = () => {
         setSelectedRowKeys([]);
         setSelectedRowValues([]);
     };
 
-    const sorted = useCallback(() => {
-        setFilterInput((state) => {
-            let currentSort = '';
-            switch (state.blocked) {
-                case false: {
-                    currentSort = true;
-                    break;
-                }
-                case true: {
-                    currentSort = '';
-                    break;
-                }
-                default: {
-                    currentSort = false;
-                    break;
-                }
+    const onAddUser = useCallback(() => history.push(`${matchUrl}${USERS_PAGES.ADD_USER}`), [history, matchUrl]);
+
+    const setSelectedRow = useCallback(() => {
+        setSelect((state) => !state);
+        clearSelectedItems();
+    }, []);
+
+    const buttons = useMemo(() => {
+        if (select) {
+            return [
+                { label: BUTTON_CANCEL, onClick: setSelectedRow, disabled: loadingTableData },
+            ];
+        }
+
+        return [
+            { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
+            { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
+        ];
+    }, [select, loadingTableData, setSelectedRow, onAddUser]);
+
+    const searchInput = useMemo(() => ({
+        placeholder: SEARCH_INPUT,
+        value: params.filterText,
+        onChange: handleSearch,
+    }), [params, handleSearch]);
+
+    const sortingBy = useMemo(() => ({
+        menuItems: DROPDOWN_SORT_MENU,
+        onMenuItemClick: changeSort,
+        sortBy: params.sortBy,
+        withReset: params.sortBy !== '',
+    }), [changeSort, params.sortBy]);
+
+    /** @type {import('antd/lib/pagination').PaginationConfig} */
+    const pagination = useMemo(() => ({
+        current: params.pageNo + 1,
+        total: params.totalElements,
+        pageSize: params.pageSize,
+    }), [params.pageNo, params.pageSize, params.totalElements]);
+
+    const onChangePage = useCallback((page) => {
+        loadUsersData({
+            ...params,
+            pageNo: page - 1,
+        });
+    }, [loadUsersData, params]);
+
+    const forceUpdateUsersData = useCallback(() => loadUsersData(params), [params, loadUsersData]);
+
+    const updateSelected = useCallback((keys, rows) => {
+        setSelectedRowKeys(keys);
+        setSelectedRowValues(rows);
+    }, []);
+
+    const rowSelection = useMemo(() => ({
+        selectedRowKeys,
+        onChange: updateSelected,
+    }), [selectedRowKeys, updateSelected]);
+
+    const linkChangePassword = useCallback(async () => {
+        const requestPromises = selectedRowValues.map(({ personalNumber }) => resetUser(personalNumber));
+        setLoadingTableData(true);
+
+        try {
+            await Promise.all(requestPromises);
+            clearSelectedItems();
+        } catch (e) {
+            console.warn(e);
+        }
+
+        setLoadingTableData(false);
+    }, [selectedRowValues]);
+
+    const linkEdit = useCallback(() => {
+        history.push(`${matchUrl}${USERS_PAGES.EDIT_SOME_USERS}`, { users: selectedRowValues });
+    }, [history, selectedRowValues, matchUrl]);
+
+    const refreshTable = useCallback(async () => {
+        await loadUsersData(params);
+        clearSelectedItems();
+    }, [params, loadUsersData]);
+
+    const onRow = useCallback((record) => ({
+        onClick: () => {
+            if (!select) {
+                history.push(generatePath(`${matchUrl}${USERS_PAGES.USER_INFO}`, { userId: record.id }));
+                return;
             }
 
-            handleSearch('blocked', currentSort);
+            const newSelectedItemId = !selectedRowKeys.includes(record.id)
+                ? [...selectedRowKeys, record.id]
+                : selectedRowKeys.filter((selectedItemId) => selectedItemId !== record.id);
+            const newSelectedItem = !selectedRowValues.includes(record)
+                ? [...selectedRowValues, record]
+                : selectedRowValues.filter((selectedItem) => selectedItem.id !== record.id);
 
-            return { ...state, blocked: currentSort };
-        });
-    }, [handleSearch]);
-
-    const columns = useMemo(
-        () => getColumnsForTable({ filterInput, handleSearch, sorted }),
-        [filterInput, handleSearch, sorted]
-    );
-
-    const setSelectedRow = () => {
-        setSelect(!select);
-        clearSelectedItems();
-    };
-
-    const changeShowOnPageCount = useCallback((count) => {
-        clearSelectedItems();
-        setShowOnPageCount(count);
-        updateUsersData(currentPage, count, filterInput);
-    }, [updateUsersData, currentPage, filterInput]);
-
-    const onClickNext = useCallback(() => {
-        if (currentPage + 1 < totalPage) {
-            const newCurrPage = currentPage + 1;
-            setCurrentPage(newCurrPage);
-            updateUsersData(newCurrPage, showOnPageCount, filterInput);
+            setSelectedRowKeys(newSelectedItemId);
+            setSelectedRowValues(newSelectedItem);
         }
+    }), [history, select, selectedRowKeys, selectedRowValues, matchUrl]);
 
-        clearSelectedItems();
-    }, [currentPage, totalPage, filterInput, showOnPageCount, updateUsersData]);
-
-    const onClickPrev = useCallback(() => {
-        if (currentPage + 1 > 1) {
-            const newCurrPage = currentPage - 1;
-            setCurrentPage(newCurrPage);
-            updateUsersData(newCurrPage, showOnPageCount, filterInput);
-        }
-
-        clearSelectedItems();
-    }, [currentPage, filterInput, showOnPageCount, updateUsersData]);
-
-    const forceUpdateUsersData = useCallback(
-        () => updateUsersData(currentPage, showOnPageCount, filterInput),
-        [currentPage, showOnPageCount, filterInput, updateUsersData]
-    );
+    const openModal = useCallback(() => setModalIsOpen(true), []);
 
     if (loadingPage) {
         return (
@@ -167,114 +258,35 @@ const TableUser = () => {
         );
     }
 
-    if (!users.length && loadingPage) {
+    if (!users.length && !loadingPage && !loadingTableData && !params.filterText && !params.pageNo) {
         return <EmptyUsersPage />;
     }
 
-    const onSelectChange = (selectedRowKeys, selectedRowItem) => {
-        setSelectedRowKeys(selectedRowKeys);
-        setSelectedRowValues(selectedRowItem);
-    };
-
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: onSelectChange,
-    };
-
-    const linkChangePassword = async () => {
-        const requestPromises = selectedRowValues.map(({ personalNumber }) => resetUser(personalNumber));
-
-        try {
-            await Promise.all(requestPromises);
-            clearSelectedItems();
-        } catch (e) {
-            console.warn(e);
-        }
-    };
-
-    const linkEdit = () => {
-        const userIds = selectedRowValues.map(({ id }) => id).join();
-        history.push(generatePath(ROUTE_ADMIN_USERS.EDIT_SOME_USERS, { userIds }));
-    };
-
-    const linkDelete = async () => {
-        const requestPromises = selectedRowValues.map(({ id }) => removeUser(id));
-
-        try {
-            await Promise.all(requestPromises);
-            clearSelectedItems();
-            updateUsersData(currentPage, showOnPageCount, filterInput);
-        } catch (e) {
-            console.warn(e);
-        }
-    };
-
-    const onRow = (record, item) => ({
-        onClick: () => {
-            if (!select) {
-                history.push(generatePath(ROUTE_ADMIN_USERS.USER_INFO, { userId: record.id }));
-                return;
-            }
-
-            const newSelectedItemId = !selectedRowKeys.includes(item)
-                ? [...selectedRowKeys, item]
-                : selectedRowKeys.filter((selectedItemId) => selectedItemId !== item);
-            const newSelectedItem = !selectedRowValues.includes(record)
-                ? [...selectedRowValues, record]
-                : selectedRowValues.filter((selectedItem) => selectedItem.id !== record.id);
-
-            setSelectedRowKeys(newSelectedItemId);
-            setSelectedRowValues(newSelectedItem);
-        }
-    });
-
     return (
         <div className={ styles.mainBlock }>
-            <div className={ styles.header }>
-                <div className={ styles.title }>{ TITLE }</div>
-                <div className={ styles.button_section }>
-                    {select ? (
-                        <button
-                            className={ cn(btnStyles.addButton, btnStyles.btnGray) }
-                            onClick={ setSelectedRow }
-                        >
-                            { BUTTON_CANCEL }
-                        </button>
-                    ) : (
-                        <>
-                            <ButtonAddUser title={ BUTTON_ADD } />
-                            <button
-                                className={ cn(btnStyles.addButton, btnStyles.btnGray) }
-                                onClick={ setSelectedRow }
-                            >
-                                { BUTTON_CHOOSE }
-                            </button>
-                        </>
-                    )}
-                </div>
-            </div>
-            <Table
-                loading={ loadingTableData }
-                onRow={ onRow }
-                className={ styles.table }
-                rowSelection={ select && rowSelection }
-                columns={ columns }
-                dataSource={ users }
-                pagination={ false }
+            <Header />
+            <HeaderWithActions
+                title={ TITLE }
+                buttons={ buttons }
+                searchInput={ searchInput }
+                showSearchInput={ true }
+                showSorting
+                sortingBy={ sortingBy }
+                classNameByInput={ styles.inputSearch }
             />
-            <Pagination
-                currentPage={ totalPage === 0 ? currentPage : currentPage + 1 }
-                totalPage={ totalPage }
-                loadTableData={ loadingTableData }
-                showOnPageCount={ SHOW_ON_PAGE_COUNT }
-                onClickNext={ onClickNext }
-                onClickPrev={ onClickPrev }
-                changeShowOnPageCount={ changeShowOnPageCount }
+            <UsersListTable
+                loadingData={ loadingTableData }
+                onRow={ onRow }
+                rowSelection={ select && rowSelection }
+                dataSource={ users }
+                pagination={ pagination }
+                onChangePage={ onChangePage }
+                onChangePageSize={ onChangePageSize }
             />
             <div className={ styles.footer }>
                 {select ? (
-                    <div className={ cn(styles.section, styles.space) }>
-                        <div>
+                    <div className={ styles.space }>
+                        <div className={ styles.section }>
                             <span className={ styles.label }>
                                 { CHOSEN_USER } { selectedRowKeys.length }
                             </span>
@@ -285,8 +297,6 @@ const TableUser = () => {
                             >
                                 { BUTTON_CHANGE_PASSWORD }
                             </button>
-                        </div>
-                        <div className={ styles.button_section }>
                             <button
                                 className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
                                 disabled={ !selectedRowKeys.length }
@@ -294,14 +304,21 @@ const TableUser = () => {
                             >
                                 { BUTTON_EDIT }
                             </button>
-                            <button
-                                className={ cn(btnStyles.addButton, btnStyles.btnRed) }
-                                disabled={ !selectedRowKeys.length }
-                                onClick={ linkDelete }
-                            >
-                                { BUTTON_DELETE }
-                            </button>
                         </div>
+                        <button
+                            className={ cn(btnStyles.addButton, btnStyles.btnRed) }
+                            disabled={ !selectedRowKeys.length }
+                            onClick={ openModal }
+                        >
+                            { BUTTON_DELETE }
+                        </button>
+                        <ModalDeleteUsers
+                            modalOpen={ setModalIsOpen }
+                            visible={ modalIsOpen }
+                            userList={ selectedRowValues }
+                            selectedRowKeys={ selectedRowKeys }
+                            refreshTable={ refreshTable }
+                        />
                     </div>
                 ) : (
                     <div className={ styles.section }>
@@ -311,7 +328,7 @@ const TableUser = () => {
                         <div className={ styles.downloadButtons }>
                             <ButtonLoadUsers
                                 id="contained-button-upload-file"
-                                label={ BUTTON_LOAD }
+                                label={ BUTTON_ADD }
                                 onSuccess={ forceUpdateUsersData }
                             />
                             <ButtonDeleteUsers

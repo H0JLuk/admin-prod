@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { goToClientApps, goToDashboard } from '../../utils/appNavigation';
+import { goToClientApps, goToDashboard, goToUserManager } from '../../utils/appNavigation';
 import styles from './LoginPage.module.css';
 import { LOGIN_FORM } from '../../components/Form/forms';
 import Form from '../../components/Form/Form';
@@ -23,8 +23,13 @@ const LoginPage = (props) => {
                 return;
             }
             storeUserData(token, authority);
+
+            if (ROLES.USER_MANAGER === authority) {
+                return goToUserManager(history);
+            }
+
             ([ROLES.ADMIN, ROLES.PRODUCT_OWNER].includes(authority))
-                ? goToDashboard(history)
+                ? goToDashboard(history, authority)
                 : goToClientApps(history);
         } catch (e) {
             console.error(e?.message);
