@@ -1,0 +1,30 @@
+.menuButton {
+    display: flex;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 1px solid #d4d9de;
+}
+
+.dropdown span[role='img'] {
+    font-size: 30px;
+    color: #9ba3ae;
+}
+
+.dropdownMenu {
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.menuButton:hover,
+.menuButton:focus,
+.menuButton:hover span[role='img'],
+.dropdown :global(.ant-dropdown-open),
+.dropdown :global(.ant-dropdown-open) span[role='img'] {
+    border-color: #000000;
+    color: #000000;
+}
+
+.dropdownMenu :global(.ant-menu-item a:hover),
+.dropdownMenu :global(.ant-menu-item:hover),
+.menuItem:hover {
+    color: #09a552;
+}

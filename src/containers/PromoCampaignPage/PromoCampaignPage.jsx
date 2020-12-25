@@ -20,7 +20,7 @@ import {
     createPromoCampaignText
 } from '../../api/services/promoCampaignTextService';
 import styles from './PromoCampaignPage.module.css';
-import { withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { PromoCampaignList } from './PromoCampaignList/PromoCampaignList';
 import SavePromoCampaignModal from '../../components/CustomModal/SavePromoCampaignModal/SavePromoCampaignModal';
@@ -36,6 +36,7 @@ import { getDzoList } from '../../api/services/dzoService';
 import { errorNotice } from '../../components/toast/Notice';
 import arrayMove from 'array-move';
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
+import { getLinkForRedesignPromoCampaign } from '../../utils/appNavigation';
 
 const PROMO_CAMPAIGN_LIST_TITLE = 'Промо-кампании';
 const LIST_ERROR = 'Не удалось получить список промо-кампаний';
@@ -318,6 +319,7 @@ class PromoCampaignPage extends Component {
         } = this.state;
         return (
             <div className={ styles.promoCampaigns }>
+                <div style={ { textAlign: 'center', padding: 10 } }><NavLink to={ getLinkForRedesignPromoCampaign() }>Редизайн</NavLink></div>
                 <div className={ styles.amListHeader }>
                     <Typography.Text mark strong>{PROMO_CAMPAIGN_LIST_TITLE}</Typography.Text>
                 </div>

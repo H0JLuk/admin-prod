@@ -8,8 +8,20 @@ export async function getPromoCampaignList() {
     return Api.post('/promo-campaign/list/filter', { checkVisibility: false }, getReqOptions());
 }
 
+export function getFilteredPromoCampaignList(data) {
+    if (!data.sortBy) {
+        delete data.sortBy;
+        delete data.direction;
+    }
+    return Api.post('/promo-campaign/list/filter', { ...data, checkVisibility: false }, getReqOptions());
+}
+
 export async function getPromoCampaignStatistics(promoCampaignId) {
     return Api.get(`/admin/promoCampaign/${promoCampaignId}/statistics`, getReqOptions());
+}
+
+export function getPromoCampaignById(id) {
+    return Api.get(`/promo-campaign/list/?id=${id}`, getReqOptions());
 }
 
 function normalizePromoCampaign(promoCampaign) {
@@ -21,6 +33,12 @@ function normalizePromoCampaign(promoCampaign) {
 
 export async function createPromoCampaign(promoCampaign) {
     return Api.post('/admin/promoCampaign', normalizePromoCampaign(promoCampaign), getReqOptions());
+}
+
+export function newPromoCampaign(promoCampaign, appCode) {
+    const options = getReqOptions();
+    options.headers.clientAppCode = appCode;
+    return Api.post('/admin/promoCampaign', normalizePromoCampaign(promoCampaign), options);
 }
 
 export async function editPromoCampaign(promoCampaign) {
@@ -35,7 +53,7 @@ export async function uploadPromoCodes(campaignId, data) {
     return Api.upload(`/admin/promoCampaign/promoCode?campaign-id=${campaignId}`, data, getReqOptions(FORM_DATA_CONTENT_TYPE));
 }
 
-export async function deletePromoCampaign(promoCampaignId) {
+export function deletePromoCampaign(promoCampaignId) {
     return Api.delete(`/admin/promoCampaign/${promoCampaignId}`, getReqOptions());
 }
 
@@ -58,6 +76,12 @@ export function getSalePointsByText(value, locationId) {
  */
 export function addVisibilitySetting(data) {
     return Api.post('/admin/visibility-setting', data, getReqOptions());
+}
+
+export function newVisibilitySetting(data, appCode) {
+    const options = getReqOptions();
+    options.headers.clientAppCode = appCode;
+    return Api.post('/admin/visibility-setting', data, options);
 }
 
 export function getPromoCampaignVisibilitySettings(promoCampaignId, urlSearchParams) {

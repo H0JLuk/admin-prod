@@ -4,6 +4,7 @@ import { ROUTE, ROUTE_ADMIN, ROUTE_ADMIN_APPS } from '../../../constants/route';
 
 import Dashboard from '../../../containers/Dashboard/Dashboard';
 import UserPageRouter from '../../../containers/UsersPage/RedesignedUsersPage/UserPageRouter';
+import PromoCampaignPageRouter from '../../../containers/PromoCampaignPage/RedesignedPromoCampaignPage/PromoCampaignPageRouter';
 import CreateClientAppPage from '../../../containers/ClientAppPage/RedesignedClientAppPage/CreateClientAppPage';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
@@ -19,6 +20,7 @@ const AdminPage = () => (
                 <Route path={ ROUTE_ADMIN.DASHBOARD } component={ Dashboard } />
                 <Route path={ ROUTE_ADMIN_APPS.ADD_APP } component={ CreateClientAppPage } />
                 <Route path={ ROUTE_ADMIN.REDESIGNED_USERS } component={ UserPageRouter } />
+                <Route path={ ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />
 
                 <Route render={ () => <Redirect to={ ROUTE_ADMIN.DASHBOARD } /> } />
             </Switch>

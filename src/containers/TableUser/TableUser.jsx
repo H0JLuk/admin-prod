@@ -30,6 +30,17 @@ const SEARCH_INPUT = 'Поиск по логину, локации и точке
 const CHOSEN_USER = 'Выбрано';
 const TITLE_DOWNLOAD_USER = 'Пакетная обработка пользователей';
 
+const locale = {
+    items_per_page: '',
+    prev_page:      'Назад',
+    next_page:      'Вперед',
+    jump_to:        'Перейти',
+    prev_5:         'Предыдущие 5',
+    next_5:         'Следующие 5',
+    prev_3:         'Предыдущие 3',
+    next_3:         'Следующие 3',
+};
+
 const DEFAULT_PARAMS = {
     pageNo: 0,
     pageSize: 10,
@@ -62,11 +73,11 @@ const TableUser = ({ matchUrl }) => {
 
     const loadUsersData = useCallback(async (searchParams = DEFAULT_PARAMS) => {
         const urlSearchParams = getURLSearchParams(searchParams);
+
         setLoadingTableData(true);
 
         try {
             const { users = [], totalElements, pageNo } = await getUsersList(urlSearchParams);
-
             /* use `replace` instead of `push` for correct work `history.goBack()` */
             history.replace(`${matchUrl}?${urlSearchParams}`);
             clearSelectedItems();
@@ -131,17 +142,6 @@ const TableUser = ({ matchUrl }) => {
         });
     }, [loadUsersData, params]);
 
-    const onChangePageSize = useCallback((pageSize) => {
-        const nextParams = { ...params, pageSize };
-        const maxPage = Math.ceil(params.totalElements / pageSize);
-
-        if (maxPage < params.pageNo + 1) {
-            nextParams.pageNo = maxPage - 1;
-        }
-
-        loadUsersData(nextParams);
-    }, [loadUsersData, params]);
-
     const clearSelectedItems = () => {
         setSelectedRowKeys([]);
         setSelectedRowValues([]);
@@ -180,19 +180,23 @@ const TableUser = ({ matchUrl }) => {
         withReset: params.sortBy !== '',
     }), [changeSort, params.sortBy]);
 
+    const onChangePage = useCallback(async ({ current, pageSize }) => {
+        loadUsersData({
+            ...params,
+            pageNo: current - 1,
+            pageSize,
+        });
+    }, [loadUsersData, params]);
+
     /** @type {import('antd/lib/pagination').PaginationConfig} */
     const pagination = useMemo(() => ({
         current: params.pageNo + 1,
         total: params.totalElements,
         pageSize: params.pageSize,
+        locale,
+        showQuickJumper: true,
+        showSizeChanger: true,
     }), [params.pageNo, params.pageSize, params.totalElements]);
-
-    const onChangePage = useCallback((page) => {
-        loadUsersData({
-            ...params,
-            pageNo: page - 1,
-        });
-    }, [loadUsersData, params]);
 
     const forceUpdateUsersData = useCallback(() => loadUsersData(params), [params, loadUsersData]);
 
@@ -281,7 +285,6 @@ const TableUser = ({ matchUrl }) => {
                 dataSource={ users }
                 pagination={ pagination }
                 onChangePage={ onChangePage }
-                onChangePageSize={ onChangePageSize }
             />
             <div className={ styles.footer }>
                 {select ? (

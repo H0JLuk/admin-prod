@@ -54,35 +54,27 @@ function AutocompleteLocationAndSalePoint({
         },
     });
 
-    /**
-     * @param {string} searchValue
-     * @param {'searchLocation' | 'searchSalePoint'} typeSearch
-     */
+    /** @type {(searchValue: string, typeSearch: 'searchLocation' | 'searchSalePoint') => void} */
     const getSearchResults = useCallback(async (searchValue, typeSearch = 'searchLocation') => {
-            try {
-                const searchResult = await getResultsByTextAndType(searchValue, typeSearch, locationId);
+        try {
+            const searchResult = await getResultsByTextAndType(searchValue, typeSearch, locationId);
 
-                setState((state) => ({
-                    ...state,
-                    [typeSearch]: {
-                        ...state[typeSearch],
-                        results: searchResult,
-                    },
-                }));
-            } catch (e) {
-                console.error(e);
-            }
-        },
-        [locationId]
-    );
+            setState((state) => ({
+                ...state,
+                [typeSearch]: {
+                    ...state[typeSearch],
+                    results: searchResult,
+                },
+            }));
+        } catch (e) {
+            console.error(e);
+        }
+    }, [locationId]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const getResultsDebounced = useCallback(debounce(getSearchResults, 500), [getSearchResults]);
 
-    /**
-     * @param {string} searchValue
-     * @param {'searchLocation' | 'searchSalePoint'} typeSearch
-     */
+    /** @type {(searchValue: string, typeSearch: 'searchLocation' | 'searchSalePoint') => void} */
     const search = useCallback((searchValue, typeSearch = 'searchLocation') => {
             if (typeSearch !== 'searchLocation' && typeSearch !== 'searchSalePoint') {
                 throw Error('Incorrect `typeSearch` param');

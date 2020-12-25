@@ -22,9 +22,9 @@ button.dropdownButton:focus {
 }
 
 .dropdownMenuItem:hover {
-    background-color: #f8f8f8;
+    color: #2ac673;
 }
 
 .dropdownMenuItem.active {
-    color: #21ba72;
+    color: #09a552;
 }

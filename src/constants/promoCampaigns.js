@@ -6,6 +6,10 @@ const PROMO_CAMPAIGNS = {
     PRESENT: {
         value: 'PRESENT',
         label: 'Подарки'
+    },
+    LANDING: {
+        value: 'landing',
+        label: 'Лендинг'
     }
 };
 

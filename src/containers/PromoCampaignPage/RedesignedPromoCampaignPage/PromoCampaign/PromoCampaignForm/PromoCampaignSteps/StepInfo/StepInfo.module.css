@@ -1,0 +1,173 @@
+.containerStep {
+    padding: 0 15px;
+}
+
+.container {
+    background-color: #f8f8f8;
+    padding: 25px;
+    height: 100%;
+}
+
+.container :global(label.ant-form-item-required) {
+    align-items: flex-start;
+}
+
+.formItem {
+    width: 80%;
+}
+
+.promoCampaignName,
+.selectCategories {
+    max-width: 600px;
+}
+
+.flexCenter {
+    display: flex;
+    flex-grow: 1;
+}
+
+.tagSelect {
+    padding: 1px 10px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color:#09a552;
+    border-radius: 25px;
+    margin-right: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.select {
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    display: flex;
+}
+
+.select:active, .select:focus, .select:hover {
+    border-color: #09a552;
+}
+
+.select:global(.ant-select-focused) {
+    border-color: #09a552;
+}
+
+.suffixBlock {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.selectCount {
+    padding: 3px 12px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color:#09a552;
+    border-radius: 25px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.select :global(.ant-select-selector) {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+}
+
+.select :global(.ant-select-arrow) {
+    position: static;
+    margin-top: 0;
+    width: auto;
+    height: auto;
+}
+
+.dropdown {
+    background-color: transparent !important;
+}
+
+.dropdown :global(.ant-checkbox-indeterminate .ant-checkbox-inner::after) {
+    background-color: #09a552;
+}
+
+.dropdown :global(.ant-checkbox-checked .ant-checkbox-inner) {
+    background-color: #09a552 !important;
+    border-color: #09a552 !important;
+}
+
+.dropdown :global(.ant-checkbox-input:hover + .ant-checkbox-inner),
+.dropdown :global(.ant-checkbox-input:focus + .ant-checkbox-inner),
+.dropdown :global(.ant-checkbox-input:active + .ant-checkbox-inner) {
+    border-color: #09a552 !important;
+}
+
+.dropdown :global(.ant-select-item-option-state) {
+    display: none;
+}
+
+.selectText {
+    max-width: 250px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.icon {
+    margin: 0 5px;
+}
+
+.icon :global(svg) {
+    height: 13px;
+    width: 13px;
+}
+
+.blockActive {
+    margin-bottom: 0;
+    align-self: center;
+}
+
+.statusInfo {
+    width: 100%;
+}
+
+.viewInfo {
+    display: flex;
+    width: 55%;
+    min-width: 250px;
+    color: rgba(0, 0, 0, 0.65);
+    justify-content: space-between;
+}
+
+.statusText {
+    width: 180px;
+}
+
+.infoDetail {
+    margin: 10px 0;
+}
+
+.checkbox {
+    margin: 10px 0 !important;
+}
+
+.mrb {
+    margin-bottom: 10px;
+}
+
+.mrr {
+    margin-right: 10px;
+}
+
+.typePromoCampaign {
+    display: flex;
+    flex-direction: column;
+}
+
+.containerStep :global(.ant-form-item-label) {
+    text-align: left;
+    overflow: visible;
+}
+
+.containerStep :global(.ant-switch-checked) {
+    background-color: #09a552;
+}

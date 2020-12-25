@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { LeftOutlined } from '@ant-design/icons';
 import { NavLink, useHistory } from 'react-router-dom';
 import DropdownWithLogout from '../../DropdownWithLogout/DropdownWithLogout';
@@ -30,12 +30,12 @@ const MenuLinks = () => {
     );
 };
 
-const Header = ({ menuMod = false, buttonBack = true }) => {
+const Header = ({ menuMod = false, buttonBack = true, onClickFunc }) => {
     const history = useHistory();
 
-    const onBackButton = () => {
-        history.goBack();
-    };
+    const onBackButton = useCallback(() => {
+        onClickFunc ? onClickFunc() : history.goBack();
+    }, [history, onClickFunc]);
 
     return (
         <div className={ styles.container }>

@@ -1,0 +1,16 @@
+.title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -.38px;
+}
+
+.container {
+    background-color: #f8f8f8;
+    padding: 25px;
+    margin-top: 15px;
+}
+
+.containerStep {
+    padding: 10px 15px 30px;
+}

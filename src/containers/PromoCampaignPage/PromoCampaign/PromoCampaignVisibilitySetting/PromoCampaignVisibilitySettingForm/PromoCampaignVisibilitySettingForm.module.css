@@ -1,73 +1,57 @@
+.container {
+    width: 100%;
+}
+
+.pageTitle {
+    font-family: SBSansText;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    letter-spacing: -0.38px;
+    margin-bottom: 25px;
+}
+
 .formContainer {
     width: 100%;
-    max-width: 800px;
-}
-
-form.form {
-    padding: 50px;
-}
-
-form.form.hasError input {
-    border-color: #ec464e;
-}
-
-form.form label::after {
-    content: none;
-}
-
-form.form input {
-    border-radius: 7px;
-    caret-color: #21ba72;
-}
-
-form.form input:hover {
-    border-color: #21ba72;
-}
-
-form.form input:focus {
-    border-color: #21ba72;
-    box-shadow: none;
-}
-
-.form button:not(:last-child) {
-    margin-right: 15px;
+    padding: 25px 15px;
 }
 
 .switch {
-    background-color: #21ba72 !important;
+    background-color: #09a552 !important;
 }
 
 .cancelButton {
-    height: 45px !important;
-    padding-left: 25px !important;
-    padding-right: 25px !important;
-    text-transform: uppercase;
-    background: #333f48 !important;
-    border-color: #333f48 !important;
+    height: 35px !important;
+    width: 120px !important;
+}
+
+.submitButton {
+    height: 35px !important;
+    width: 120px !important;
+    background: #09a552 !important;
+    border-color: #09a552 !important;
 }
 
 .cancelButton:hover,
 .cancelButton:focus {
-    background: #43525d !important;
-    border-color: #43525d !important;
-}
-
-.submitButton {
-    height: 45px !important;
-    padding-left: 25px !important;
-    padding-right: 25px !important;
-    text-transform: uppercase;
-    background: #21ba72 !important;
-    border-color: #21ba72 !important;
+    border-color: #1fac6a !important;
+    color: #1fac6a !important ;
 }
 
 .submitButton:hover,
 .submitButton:focus {
-    text-transform: uppercase;
     background: #1fac6a !important;
     border-color: #1fac6a !important;
 }
 
 .formError {
     color: #ec464e;
+}
+
+.buttons {
+    margin-top: 25px;
+}
+
+.buttons button:not(:last-child) {
+    margin-right: 15px;
 }

@@ -39,14 +39,14 @@ const HeaderWithActions = ({
 
     const clickClearButton = useCallback(() => searchInput.onChange(''), [searchInput]);
 
-    const dropdownLabel = useMemo(
-        () => sortingBy.menuItems.find((item) => item.name === sortingBy.sortBy)?.label || BUTTON_SORT,
-        [sortingBy.menuItems, sortingBy.sortBy]
-    );
+    const dropdownLabel = useMemo(() => {
+        const { label } = sortingBy.menuItems.find((item) => item.name === sortingBy.sortBy) || {};
+        return label || sortingBy.buttonLabel || BUTTON_SORT;
+    }, [sortingBy.menuItems, sortingBy.sortBy, sortingBy.buttonLabel]);
 
     return (
         <div className={ cn(styles.wrapper, classNames) }>
-            {title && <h1>{ title }</h1>}
+            {title && <div className={ styles.headerTitle }>{ title }</div>}
             <div className={ styles.actions }>
                 <div className={ styles.buttons }>
                     { buttonsBlock }
@@ -55,8 +55,8 @@ const HeaderWithActions = ({
                             className={ cn(styles.searchInput, classNameByInput) }
                             onChange={ onChangeInput }
                             placeholder={ searchInput.placeholder }
-                            prefix={ <SearchOutlined /> }
                             value={ searchInput.value }
+                            prefix={ <SearchOutlined /> }
                             suffix={ searchInput.value !== '' ?
                                 <Cross
                                     className={ styles.crossIcon }
@@ -91,7 +91,7 @@ HeaderWithActions.propTypes = {
     })),
     searchInput: PropTypes.shape({
         placeholder: PropTypes.string,
-        onChange: PropTypes.func,
+        onChange: PropTypes.func.isRequired,
         disabled: PropTypes.bool,
     }),
     showSorting: PropTypes.bool,

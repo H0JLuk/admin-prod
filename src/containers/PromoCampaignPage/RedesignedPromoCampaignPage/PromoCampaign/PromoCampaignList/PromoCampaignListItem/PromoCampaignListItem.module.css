@@ -1,0 +1,93 @@
+.cardWrapper {
+    position: relative;
+    display: flex;
+    margin-top: 15px;
+    font-family: SBSansText-medium;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    letter-spacing: -0.3px;
+}
+
+.cardWrapper:hover {
+    box-shadow: 0 0 2.5px rgba(0, 0, 0, 0.05);
+    background-color: #F8F8F8;
+}
+
+.cardInfo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.cardInfo__header {
+    display: flex;
+}
+
+.cardName {
+    color: #171725;
+    font-size: 16px;
+    flex-grow: 1;
+    padding-right: 25px;
+}
+
+.subInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.subInfo__label {
+    color: #657182;
+    font-size: 16px;
+}
+
+.subInfo__value {
+    color: #171725;
+    font-size: 16px;
+}
+
+.cardName,
+.type,
+.promoCode {
+    flex-basis: 20%;
+}
+
+.startDate,
+.endDate {
+    flex-basis: 10%;
+    margin-right: 10px;
+    min-width: 95px;
+}
+
+.cardAction {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 5%;
+}
+
+.cardInfo__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+.status {
+    padding: 5px 16px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color: #09a552;
+    margin-right: 15px;
+    border-radius: 25px;
+}
+
+.redStatus {
+    background-color:  #fff1f0 !important;
+    color: #dc283a !important;
+}
+
+.cardMenu span[role='img'] {
+    font-size: 30px;
+    color: #9ba3ae;
+}

@@ -4,7 +4,7 @@
 }
 
 .okButton:global(.ant-btn-primary) {
-    background-color: #2ac673;
+    background-color: #09A552;
     border: none;
 }
 
@@ -20,7 +20,7 @@
 
 .cancelButton:global(.ant-btn:hover),
 .cancelButton:global(.ant-btn:focus) {
-    border-color: #21ba72;
-    color:#21ba72;
+    border-color: #09A552;
+    color:#09A552;
 }
 

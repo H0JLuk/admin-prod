@@ -314,7 +314,7 @@ const UserForm = ({ type, matchUrl }) => {
                                         salePointDisabled={ isSendingInfo }
                                         autoFocusLocation={ type === 'edit' }
                                         initialLocationValue={ getStringOptionValue(location || undefined) }
-                                        initialSalePointValue={ salePoint?.name }
+                                        initialSalePointValue={ salePoint?.name ?? '' }
                                         locationId={ location?.id }
                                         error={ error }
                                     />

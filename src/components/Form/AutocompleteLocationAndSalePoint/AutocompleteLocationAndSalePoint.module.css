@@ -13,10 +13,8 @@
 }
 
 .formLabel {
-    display: flex !important;
-    align-items: center;
     min-width: 120px;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 .autocompleteInput {
@@ -28,7 +26,7 @@
 .autocompleteInput :global(.ant-input-affix-wrapper:hover),
 .autocompleteInput :global(.ant-input-affix-wrapper:focus),
 .autocompleteInput :global(.ant-input-affix-wrapper-focused) {
-    border-color: #21ba72;
+    border-color: #09a552;
     box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
 }
 
@@ -36,6 +34,14 @@
     top: 10px;
     right: 20px !important;
     opacity: 1 !important;
+}
+
+.autocompleteInput :global(.ant-input-affix-wrapper) {
+    transition: all 0.3s ease, padding 0s;
+}
+
+.autocompleteInput.hideSuffix :global(.ant-input-affix-wrapper) {
+    padding-right: 30px;
 }
 
 .autocompleteOption {
@@ -78,7 +84,12 @@ div.autocompleteDropdown :global(.ant-select-item) {
 }
 
 .highlight {
-    color: #21ba72;
+    color: #09a552;
+}
+
+.formError {
+    margin-top: 10px;
+    color: #ec464e;
 }
 
 .formError {
@@ -97,7 +108,7 @@ div.autocompleteDropdown :global(.ant-select-item) {
 .formLabel :global(.ant-input-affix-wrapper:hover),
 .formLabel :global(.ant-input-affix-wrapper:focus),
 .formLabel :global(.ant-input-affix-wrapper-focused) {
-    border-color: #21ba72;
+    border-color: #09a552;
     box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
 }
 

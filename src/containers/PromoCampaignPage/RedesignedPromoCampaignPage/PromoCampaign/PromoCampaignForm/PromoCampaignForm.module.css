@@ -1,0 +1,106 @@
+.wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.promoCreateContainer {
+    display: flex;
+}
+
+.containerControl {
+    width: 100%;
+    padding: 20px 15px 15px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e5e8eb;
+}
+
+.headerTitle {
+    font-size: 20px;
+    line-height: 1.4;
+    letter-spacing: -0.38px;
+    font-weight: 600;
+}
+
+.headerSteps {
+    font-size: 16px;
+    color: #868d98;
+    margin-bottom: 10px;
+}
+
+.btnMR {
+    margin-right: 15px;
+}
+
+.error {
+    margin-top: 10px;
+    color: tomato;
+}
+
+.btnCancel:hover,
+.btnCancel:active,
+.btnCancel:focus {
+    color: #09a552 !important;
+    border-color: #09a552 !important;
+}
+
+.wrapper :global(.ant-btn-primary) {
+    background: #09a552 !important;
+    border-color: #09a552 !important;
+}
+
+.wrapper :global(.ant-input:hover),
+.wrapper :global(.ant-input:active),
+.wrapper :global(.ant-input:focus),
+.wrapper :global(.ant-select:hover .ant-select-selector),
+.wrapper :global(.ant-select:active .ant-select-selector),
+.wrapper :global(.ant-select:focus .ant-select-selector),
+.wrapper :global(.ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover) {
+    border-color: #09a552;
+    box-shadow: none;
+}
+
+.wrapper :global(.ant-select-focused:not(.ant-select-disabled).ant-select-single:not(.ant-select-customize-input) .ant-select-selector),
+.wrapper :global(.ant-select-focused:not(.ant-select-disabled).ant-select-multiple .ant-select-selector) {
+    border-color:#09a552;
+    box-shadow: none;
+}
+
+.wrapper :global(.ant-picker-range .ant-picker-active-bar) {
+    background: #09a552;
+    border-color: #09a552;
+    box-shadow: none;
+}
+
+.wrapper :global(.ant-radio-inner::after) {
+    background-color: #09a552;
+}
+
+.wrapper :global(.ant-radio-checked::after) {
+    border-color: #09a552;
+}
+.wrapper :global(.ant-radio-checked .ant-radio-inner) {
+    border-color: #09a552;
+}
+
+.wrapper :global(.ant-radio:hover),
+.wrapper :global(.ant-radio-inner) {
+    border-color:#09a552;
+}
+
+.wrapper :global(.ant-picker-focused),
+.wrapper :global(.ant-picker:hover),
+.wrapper :global(.ant-picker-focused:focus),
+.wrapper :global(.ant-picker-focused:hover) {
+    border-color: #09a552;
+    box-shadow: none;
+}
+
+.wrapper :global(.ant-btn:hover) {
+    border-color: #09a552;
+    box-shadow: none;
+}
+
+.wrapper :global(.ant-btn:focus) {
+    border-color: #09a552;
+    box-shadow: none;
+}

@@ -74,12 +74,12 @@ const REDESIGN_ADMIN_SIDEBAR_MENU_ITEMS = [
     { label: labels.DASHBOARD, path: ROUTE_ADMIN.DASHBOARD },
     { label: labels.USERS, path: ROUTE_ADMIN.REDESIGNED_USERS },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
+    { label: labels.CATEGORY, path: ROUTE_ADMIN.CATEGORY },
 ];
 
 const REDESIGN_ADMIN_TOP_MENU_ITEMS = [
     { label: labels.PRESENTATION, path: ROUTE_ADMIN.DZO }, // temporary
-    { label: labels.CATEGORY, path: ROUTE_ADMIN.CATEGORY },
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN },
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN },
     { label: labels.INSTRUCTIONS, path: ROUTE_ADMIN.DZO }, // temporary
     { label: labels.LANDING, path: ROUTE_ADMIN.LANDING },
     { label: labels.FILES, path: ROUTE_ADMIN.FILES },
@@ -94,7 +94,7 @@ const REDESIGN_ADMIN_SIDEBAR_MENU_FOR_POINT_APP = [
 
 const REDESIGN_ADMIN_TOP_MENU_FOR_POINT_APP = [
     { label: labels.PRESENTATION, path: ROUTE_ADMIN.DZO }, // temporary
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN },
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN },
     { label: labels.INSTRUCTIONS, path: ROUTE_ADMIN.DZO }, // temporary
     { label: labels.FILES, path: ROUTE_ADMIN.FILES },
 ];
@@ -102,11 +102,12 @@ const REDESIGN_ADMIN_TOP_MENU_FOR_POINT_APP = [
 const REDESIGN_PRODUCT_OWNER_SIDEBAR_MENU_ITEMS = [
     { label: labels.DASHBOARD, path: ROUTE_OWNER.DASHBOARD },
     { label: labels.DZO, path: ROUTE_OWNER.DZO },
+    { label: labels.CATEGORY, path: ROUTE_OWNER.CATEGORY },
 ];
 
 const REDESIGN_PRODUCT_OWNER_TOP_MENU_ITEMS = [
-    { label: labels.CATEGORY, path: ROUTE_OWNER.CATEGORY },
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN },
+    { label: labels.PRESENTATION, path: ROUTE_ADMIN.DZO }, // temporary
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN },
     { label: labels.LANDING, path: ROUTE_OWNER.LANDING },
 ];
 
@@ -118,7 +119,7 @@ const REDESIGN_PRODUCT_OWNER_SIDEBAR_FOR_POINT_APP = [
 
 const REDESIGN_PRODUCT_OWNER_TOP_FOR_POINT_APP = [
     { label: labels.PRESENTATION, path: ROUTE_ADMIN.DZO }, // temporary
-    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN },
+    { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN },
     { label: labels.INSTRUCTIONS, path: ROUTE_ADMIN.DZO }, // temporary
 ];
 

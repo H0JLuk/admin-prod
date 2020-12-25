@@ -1,0 +1,29 @@
+.wrapper {
+    padding: 25px 30px;
+    background-color: #f8f8f8;
+}
+
+form.form {
+    display: flex;
+    align-items: flex-start;
+}
+
+form.form > div:nth-child(2) {
+    margin-right: 10px;
+}
+
+.label {
+    min-width: fit-content;
+    margin-right: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.switch:global(.ant-switch-checked) {
+    background-color: #09a552;
+}
+
+.visibility {
+    flex-basis: 30%;
+    margin-top: 35px;
+}

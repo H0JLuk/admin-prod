@@ -30,6 +30,15 @@ export const USERS_PAGES = {
     EDIT_SOME_USERS: '/multiple_edit',
 };
 
+export const PROMO_CAMPAIGN_PAGES = {
+    ADD_PROMO_CAMPAIGN:        '/create',
+    PROMO_CAMPAIGN_INFO:       '/:promoCampaignId/info',
+    PROMO_CAMPAIGN_EDIT:       '/:promoCampaignId/edit',
+    VISIBILITY_SETTINGS:       '/:promoCampaignId/visibility-setting',
+    LOAD_PROMO_CODES:          '/:promoCampaignId/load-promo-codes',
+    PROMO_CODES_STATISTIC:     '/:promoCampaignId/promo-codes-statistic',
+};
+
 export const ROUTE_AUDITOR = {
     AUDIT:          `${ ROUTE.AUDITOR }/${ PAGE.AUDIT }`
 };
@@ -39,8 +48,9 @@ export const ROUTE_USER_MANAGER = {
 };
 
 export const ROUTE_ADMIN = {
-    REDESIGNED_USERS: `${ROUTE.REDESIGNED}${ ROUTE.ADMIN }/${ PAGE.USERS }`,
-    DASHBOARD:      `${ROUTE.REDESIGNED}${ ROUTE.ADMIN }/${ PAGE.DASHBOARD }`,
+    REDESIGNED_USERS: `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.USERS }`,
+    REDESIGNED_PROMO_CAMPAIGN: `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
+    DASHBOARD:      `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.DASHBOARD }`,
     USERS:          `${ ROUTE.ADMIN }/${ PAGE.USERS }`,
     FILES:          `${ ROUTE.ADMIN }/${ PAGE.FILES }`,
     DZO:            `${ ROUTE.ADMIN }/${ PAGE.DZO }`,
@@ -52,8 +62,9 @@ export const ROUTE_ADMIN = {
 };
 
 export const ROUTE_OWNER = {
-    REDESIGNED_USERS: `${ROUTE.REDESIGNED}${ ROUTE.OWNER }/${ PAGE.USERS }`,
-    DASHBOARD:      `${ROUTE.REDESIGNED}${ ROUTE.OWNER }/${ PAGE.DASHBOARD }`,
+    REDESIGNED_USERS: `${ ROUTE.REDESIGNED }${ ROUTE.OWNER }/${ PAGE.USERS }`,
+    REDESIGNED_PROMO_CAMPAIGN: `${ ROUTE.REDESIGNED }${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
+    DASHBOARD:      `${ ROUTE.REDESIGNED }${ ROUTE.OWNER }/${ PAGE.DASHBOARD }`,
     DZO:            `${ ROUTE.OWNER }/${ PAGE.DZO }`,
     LANDING:        `${ ROUTE.OWNER }/${ PAGE.LANDING }`,
     CATEGORY:       `${ ROUTE.OWNER }/${ PAGE.CATEGORY }`,

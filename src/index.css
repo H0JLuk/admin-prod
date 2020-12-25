@@ -8,7 +8,7 @@ body, ul, li, p {
     padding: 0;
 }
 
-.required::before{
+.required::before {
     content: '*';
     color: #ec464e;
     margin-right: 3px;

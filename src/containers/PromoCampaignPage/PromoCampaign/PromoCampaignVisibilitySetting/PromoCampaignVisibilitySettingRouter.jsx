@@ -4,7 +4,7 @@ import PromoCampaignVisibilitySetting from './PromoCampaignVisibilitySetting';
 import PromoCampaignVisibilitySettingForm
     from './PromoCampaignVisibilitySettingForm/PromoCampaignVisibilitySettingForm';
 
-const PromoCampaignVisibilitySettingRouter =() => {
+const PromoCampaignVisibilitySettingRouter = () => {
     const match = useRouteMatch();
     const history = useHistory();
 
@@ -15,9 +15,16 @@ const PromoCampaignVisibilitySettingRouter =() => {
     return (
         <Switch>
             <Route exact path={ `${match.path}` } component={ PromoCampaignVisibilitySetting } />
-            <Route path={ `${match.path}/create` } render={ routeProps=> {
-                return <PromoCampaignVisibilitySettingForm { ...routeProps } onSubmit={ redirectToVisibilitySetting } onCancel={ redirectToVisibilitySetting } />;
-            } } />
+            <Route
+                path={ `${match.path}/create` }
+                render={ routeProps => (
+                    <PromoCampaignVisibilitySettingForm
+                        { ...routeProps }
+                        onSubmit={ redirectToVisibilitySetting }
+                        onCancel={ redirectToVisibilitySetting }
+                    />
+                )}
+            />
             <Redirect to={ `${match.path}` } />
         </Switch>
     );

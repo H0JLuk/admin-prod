@@ -1,0 +1,131 @@
+.container {
+    position: relative;
+}
+
+.container :global(.ant-upload) {
+    background-color: #e9e9e9;
+    height: 180px;
+    overflow: hidden;
+}
+
+.dragContainer {
+    margin-top: 15px;
+    border: 1px solid#d7d8dc !important;
+    position: relative;
+}
+
+.dragContainer :global(.ant-upload) {
+    padding: 0 !important;
+}
+
+.dragContainer :global(.ant-upload .ant-upload-drag-container) {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.dragContainer p {
+    color: rgba(23, 23, 37, 0.25);
+    margin-bottom: 10px;
+}
+
+.title {
+    letter-spacing: -.3px;
+}
+
+.titleBlock {
+    display: flex;
+    align-items: center;
+}
+
+.tooltip :global(.ant-tooltip-inner) {
+    background-color: white;
+}
+
+.tooltip :global(.ant-tooltip-arrow-content) {
+    background-color: white;
+    width: 20px;
+    height: 20px;
+}
+
+.tooltip :global(.ant-tooltip-arrow) {
+    width: 21px;
+    height: 21px;
+}
+
+.tooltipIcon {
+    margin-left: 4px !important;
+    font-size: 19px !important;
+    padding-right: 5px;
+}
+
+.tooltipIcon > svg {
+    fill: #d7d8dc !important;
+}
+
+.noFile {
+    align-self: center;
+}
+
+.btn:hover {
+    color:#09a552;
+}
+
+.banner:global(.ant-upload .ant-upload-drag-container) {
+    align-items: flex-start;
+}
+
+.logo .imgPreviewWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding-bottom: 65px;
+}
+
+.fileName {
+    color: #171725;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.fileSize {
+    color: #d4d9de;
+}
+
+.previewImg {
+    max-width: 100%;
+}
+
+.banner .previewImg {
+    width: 100%;
+}
+
+.tooltipImg {
+    width: 100%;
+}
+
+.cross {
+    position: absolute;
+    right: -10px;
+    top: 27px;
+    z-index: 10;
+    border: 1px solid #d7d8dc;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.cross:hover {
+    cursor: pointer;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    background-color: #efefef;
+    text-align: left;
+    padding: 10px 15px;
+    bottom: 0;
+}

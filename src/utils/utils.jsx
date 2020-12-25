@@ -33,7 +33,7 @@ export function highlightSearchingText(value = '', searchValue = '', highlightCl
 
 export function getStringOptionValue({ parentName = '', name = '' } = {}) {
     if (!parentName) {
-        return name;
+        return name ?? '';
     }
 
     return [parentName, name].join(', ');

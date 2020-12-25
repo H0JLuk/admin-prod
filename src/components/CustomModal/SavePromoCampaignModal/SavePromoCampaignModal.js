@@ -122,13 +122,13 @@ class SavePromoCampaignModal extends Component {
                                 value={ promoCodeType }
                                 onChange={ (promoCodeType) => this.setState({ promoCodeType }) }
                         >
-                            <Option value={ NONE }>Нет промокодов</Option>
-                            <Option value={ PERSONAL }>Персональные (для всех)</Option>
-                            <Option value={ COMMON }>Общий (один для всех)</Option>
-                            <Option value={ PERSONAL_CLIENT_POOL } disabled>
+                            <Option value={ NONE.value }>Нет промокодов</Option>
+                            <Option value={ PERSONAL.value }>Персональные (для всех)</Option>
+                            <Option value={ COMMON.value }>Общий (один для всех)</Option>
+                            <Option value={ PERSONAL_CLIENT_POOL.value } disabled>
                                 Персональный (для определенного списка клиентов)
                             </Option>
-                            <Option value={ COMMON_CLIENT_POOL } disabled>
+                            <Option value={ COMMON_CLIENT_POOL.value } disabled>
                                 Общий (для определенного списка клиентов)
                             </Option>
                         </Select>

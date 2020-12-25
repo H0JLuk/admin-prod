@@ -1,0 +1,17 @@
+.textBlock {
+    margin-bottom: 18px;
+}
+
+.textArea {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    max-height: 80px;
+}
+
+.detail {
+    color:#b5b5b5;
+}
+
+.textBlock :global(.ant-form-item) {
+    margin-bottom: 0;
+}

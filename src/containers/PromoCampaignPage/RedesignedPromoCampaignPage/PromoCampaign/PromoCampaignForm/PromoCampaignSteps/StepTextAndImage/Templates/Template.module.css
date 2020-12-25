@@ -1,0 +1,44 @@
+.image {
+    width: 100%;
+}
+
+.block {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    background-color: #d4d9de;
+}
+
+.col {
+    max-width: 400px;
+    flex-grow: 1;
+}
+
+.row {
+    max-width: 900px;
+    justify-content: space-between;
+}
+
+.title {
+    margin-bottom: 16px;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.imageIcon {
+    margin-top: -70px;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    background-color: #efefef;
+    text-align: left;
+    padding: 10px 15px;
+    bottom: 0;
+}

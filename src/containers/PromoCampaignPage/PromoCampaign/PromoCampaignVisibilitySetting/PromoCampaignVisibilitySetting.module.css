@@ -1,14 +1,39 @@
 .page {
-    padding: 0 20px;
-}
-
-.header, .footer {
+    position: relative;
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    padding: 20px 0;
+    flex-direction: column;
+    height: 100%;
 }
 
-.button_margin {
-    margin-left: 15px
+.tableWrapper {
+    padding: 20px;
+    background-color: #f0f2f5;
+    flex-grow: 1;
+}
+
+.checked {
+    font-weight: bold;
+}
+
+.footer {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding: 20px 15px;
+    background-color: white;
+}
+
+button.redBtn {
+    background:	#dc283a !important;
+    border-color: #dc283a !important;
+}
+
+.nextSettingsTrigger {
+    position: absolute;
+    bottom: 300px;
+    height: 0;
+    width: 100%;
 }

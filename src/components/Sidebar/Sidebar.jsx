@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useEffect, /* useMemo, */ useState } from 'react';
 import cn from 'classnames';
-import { /* matchPath, */ NavLink, useHistory, /* useLocation */ } from 'react-router-dom';
+import { matchPath, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
-// import { ROUTE_ADMIN_APPS } from '../../constants/route';
+import { /* ROUTE_ADMIN_APPS, */ PROMO_CAMPAIGN_PAGES, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
 import { getClientAppList } from '../../api/services/clientAppService';
 import { getAppCode, getRole, saveAppCode } from '../../api/services/sessionService';
 import { goApp } from '../../utils/appNavigation';
@@ -12,13 +12,22 @@ import sberLogo from '../../static/images/sber-logo.png';
 
 import styles from './Sidebar.module.css';
 
+const routesForNonRender = [
+    `${ ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.ADD_PROMO_CAMPAIGN }`,
+    `${ ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_INFO }`,
+    `${ ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT }`,
+    `${ ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.ADD_PROMO_CAMPAIGN }`,
+    `${ ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_INFO }`,
+    `${ ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT }`,
+];
+
 const APP = 'Приложения';
 // const ADD_NEW = 'Добавить';
 // const NEW_APP = 'Новое приложение';
 
 const Sidebar = () => {
     const history = useHistory();
-    // const location = useLocation();
+    const { pathname } = useLocation();
     const [appsList, setAppsList] = useState([]);
 
     /* const isNewAppPathName = useMemo(() =>
@@ -47,6 +56,10 @@ const Sidebar = () => {
         goApp(history, role);
     }, [history, role]);
 
+    if (matchPath(pathname, { path: routesForNonRender })) {
+        return null;
+    }
+
     return (
         <div className={ styles.menu }>
             <div className={ styles.blockLogo }>
@@ -66,7 +79,7 @@ const Sidebar = () => {
                     </Menu.Item>
                 ))}
                 <div className={ cn(styles.menu__item, styles.app) }>
-                    {APP}
+                    { APP }
                 </div>
                 {(appsList || []).map((dzoItem) => (
                     <Menu.Item key={ dzoItem.id }>
