@@ -53,6 +53,7 @@ class PromoCodeStatisticModal extends Component {
                 <Row gutter={ 16 }>
                     <Col span={ 12 }>
                         <Statistic title="Использовано промокодов"
+                                   groupSeparator=""
                                    value={ issuedPromoCodesNumber }
                                    suffix={ `/ ${ totalPromoCodesNumber }` } />
                     </Col>
