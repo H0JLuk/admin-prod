@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'antd';
+import CustomButton from '../../../../../components/CustomButton/CustomButton';
 
 import styles from './UserFormButtonGroup.module.css';
 
@@ -124,43 +124,3 @@ UserFormButtonGroup.defaultProps = {
 };
 
 export default UserFormButtonGroup;
-
-
-const CustomButton = ({
-    className,
-    type,
-    htmlType,
-    onClick,
-    disabled,
-    children,
-}) => (
-    <Button
-        className={ className }
-        type={ type }
-        htmlType={ htmlType }
-        onClick={ onClick }
-        disabled={ disabled }
-    >
-        { children }
-    </Button>
-);
-
-CustomButton.defaultProps = {
-    type: 'primary',
-    htmlType: 'button',
-    onClick: () => {},
-};
-
-CustomButton.propTypes = {
-    className: PropTypes.string,
-    type: PropTypes.string,
-    shape: PropTypes.string,
-    htmlType: PropTypes.string,
-    size: PropTypes.string,
-    onClick: PropTypes.func,
-    disabled: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ]),
-};

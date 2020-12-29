@@ -7,13 +7,14 @@ import {
     updateCategory
 } from '../../api/services/categoryService';
 import { getStaticUrl } from '../../api/services/settingsService';
+import CustomButton from '../../components/CustomButton/CustomButton';
 import { CATEGORY_FORM } from '../../components/Form/forms';
+import Header from '../../components/Header/Redisegnedheader/Header';
 import { getErrorText } from '../../constants/errors';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import CategoryItem from '../../components/CategoryItem/CategoryItem';
 import { UP, DOWN } from '../../constants/movementDirections';
 import Form from '../../components/Form/Form';
-import Button from '../../components/Button/Button';
 import cross from '../../static/images/cross.svg';
 import styles from './CategoryPage.module.css';
 import { populateFormWithData } from '../../components/Form/formHelper';
@@ -256,19 +257,17 @@ class CategoryPage extends Component {
         };
         return (
             <div className={ styles.categoryPageWrapper }>
+                <Header buttonBack={ false } />
                 { this.renderModifyModal() }
                 <div className={ styles.headerSection }>
                     <h3>{CATEGORY_LIST_TITLE}</h3>
                     <div>
-                        <Button
-                            onClick={ openWithParam }
-                            label={ ADD_CATEGORY_TITLE }
-                            font="roboto"
-                            type="green"
-                        />
+                        <CustomButton className={ styles.submitButton } onClick={ openWithParam }>
+                            { ADD_CATEGORY_TITLE }
+                        </CustomButton>
                     </div>
                 </div>
-                <div className={ styles.categoryList }>
+                <div className={ styles.content }>
                     {this.renderCategoriesList()}
                 </div>
             </div>

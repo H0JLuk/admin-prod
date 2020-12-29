@@ -1,27 +1,37 @@
 .dzoPageWrapper {
-    margin: 0 auto;
-    padding-top: 30px;
-    width: 96%;
-    max-width: 1080px;
-    font-family: inherit;
 }
 
-.dzoList > div:not(:last-child) {
+.content {
+    margin: 0 auto;
+    max-width: 1080px;
+    background: #f0f2f5;
+    padding: 30px;
+}
+
+.content > div:not(:last-child) {
     margin-bottom: 30px;
 }
 
 .dzoPageWrapper h3 {
-    font-family: inherit;
-    font-size: 25px;
-    font-weight: 500;
-    color: rgb(0, 0, 20);
+    margin: 0;
+    font-family: SBSansText-Regular, sans-serif;;
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: -0.38px;
+    text-align: left;
+    color: #171725;
 }
 
-.dzoPageWrapper .headerSection {
+.headerSection {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    max-width: 1080px;
+    margin: auto;
+    padding: 30px;
 }
 
 .dzoPageWrapper .loadingLabel {
@@ -37,15 +47,11 @@
 .modalForm {
     position: relative;
     padding: 40px 40px 80px 40px;
-    height: calc(100vh - 300px);
-    overflow-y: auto;
 }
 
 .modalAppForm {
     position: relative;
     padding: 40px 40px 80px 40px;
-    height: 150px;
-    overflow-y: auto;
 }
 
 .modalForm .crossSvg {
@@ -116,18 +122,15 @@
     max-width: 400px;
     width: 100%;
     margin: 0 auto;
-    padding: 5px 0px 5px;
+    padding: 5px 0;
 }
 
 .dzoForm__field {
-    padding-top: 18px;
+    padding-top: 30px;
 }
 
 .dzoForm__field input {
     display: block;
-    height: 20px;
-    margin-bottom: 3px;
-    bottom: 6px;
     padding-left: 2px;
     width: calc(100% - 30px);
     font-size: 16px;
@@ -160,7 +163,7 @@
 
 .dzoForm__button {
     position: absolute;
-    top: 710px;
+    margin-top: 30px;
     padding: 5px 30px;
 }
 
@@ -176,8 +179,7 @@
     margin: 0 auto;
 }
 .appForm__field {
-    margin-bottom: 18px;
-    padding-top: 18px;
+    padding-top: 30px;
 }
 
 .appUrl {
@@ -187,9 +189,6 @@
 }
 .appForm__field input {
     display: block;
-    height: 20px;
-    margin-bottom: 8px;
-    bottom: 6px;
     padding-left: 2px;
     width: calc(100% - 30px);
     font-size: 16px;
@@ -235,3 +234,16 @@ input[type="text"]:disabled + div > svg {
     display: none;
 }
 
+.submitButton {
+    height: 35px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    background: #09a552 !important;
+    border-color: #09a552 !important;
+}
+
+.submitButton:hover,
+.submitButton:focus {
+    background: #1fac6a !important;
+    border-color: #1fac6a !important;
+}

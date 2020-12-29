@@ -2,13 +2,13 @@ import React, { Fragment } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { ROUTE, ROUTE_OWNER } from '../../constants/route';
 import PromoCampaignPage from '../../containers/PromoCampaignPage/PromoCampaignPage';
-import styles from './ProductPage.module.css';
+import styles from './OwnerPage.module.css';
 import Header from '../../components/Header/Header';
 import DzoPage from '../../containers/DzoPage/DzoPage';
 import LandingPage from '../../containers/LandingPage/LandingPage';
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
 
-const ProductPage = (props) => {
+const OwnerPage = (props) => {
 
     const { history } = props;
 
@@ -31,4 +31,4 @@ const ProductPage = (props) => {
     );
 };
 
-export default withRouter(ProductPage);
+export default withRouter(OwnerPage);

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ROUTE, ROUTE_ADMIN, ROUTE_ADMIN_APPS } from '../../../constants/route';
+import CategoryPage from '../../../containers/CategoryPage/CategoryPage';
 
 import Dashboard from '../../../containers/Dashboard/Dashboard';
+import DzoPage from '../../../containers/DzoPage/DzoPage';
 import UserPageRouter from '../../../containers/UsersPage/RedesignedUsersPage/UserPageRouter';
 import PromoCampaignPageRouter from '../../../containers/PromoCampaignPage/RedesignedPromoCampaignPage/PromoCampaignPageRouter';
 import CreateClientAppPage from '../../../containers/ClientAppPage/RedesignedClientAppPage/CreateClientAppPage';
@@ -18,6 +20,8 @@ const AdminPage = () => (
                 <Route exact path={ `${ROUTE.REDESIGNED}${ROUTE.ADMIN}` } render={ () => <Redirect to={ ROUTE_ADMIN.DASHBOARD } /> } />
 
                 <Route path={ ROUTE_ADMIN.DASHBOARD } component={ Dashboard } />
+                <Route path={ ROUTE_ADMIN.DZO } component={ DzoPage } />
+                <Route path={ ROUTE_ADMIN.CATEGORY } component={ CategoryPage } />
                 <Route path={ ROUTE_ADMIN_APPS.ADD_APP } component={ CreateClientAppPage } />
                 <Route path={ ROUTE_ADMIN.REDESIGNED_USERS } component={ UserPageRouter } />
                 <Route path={ ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />

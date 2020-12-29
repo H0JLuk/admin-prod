@@ -268,7 +268,7 @@ const TableUser = ({ matchUrl }) => {
 
     return (
         <div className={ styles.mainBlock }>
-            <Header />
+            <Header buttonBack={ false } />
             <HeaderWithActions
                 title={ TITLE }
                 buttons={ buttons }

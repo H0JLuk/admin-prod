@@ -83,3 +83,32 @@
 .red {
     color: #da7675;
 }
+
+.button {
+    height: 35px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+
+.submitButton {
+    background: #09a552 !important;
+    border-color: #09a552 !important;
+}
+
+.submitButton:hover,
+.submitButton:focus {
+    background: #1fac6a !important;
+    border-color: #1fac6a !important;
+}
+
+
+.deleteButton {
+    background: #da7675 !important;
+    border-color: #da7675 !important;
+}
+
+.deleteButton:hover,
+.deleteButton:focus {
+    background: #da7675 !important;
+    border-color: #da7675 !important;
+}

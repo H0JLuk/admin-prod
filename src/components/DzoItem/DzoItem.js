@@ -1,6 +1,7 @@
+import cn from 'classnames';
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../Button/Button';
+import CustomButton from '../CustomButton/CustomButton';
 import Field from '../Field/Field';
 import styles from './DzoItem.module.css';
 import ButtonLabels from '../Button/ButtonLables';
@@ -11,15 +12,19 @@ const DZO_CODE_LABEL = 'Код: ';
 const HEADER_LABEL = 'Заголовок: ';
 const DESCRIPTION_LABEL = 'Описание: ';
 const WEB_URL_LABEL = 'URL: ';
+const ADD_EDIT_APP_URL = 'Add/Edit App url';
 
 const DzoItem = ({
                      dzoId, dzoName, header,
                      description, dzoCode, webUrl,
-                     handleEdit, handleDelete
+                     handleEdit, handleDelete,
+                     handleAddAppLink, applicationList
                  }) => {
     const onDeleteClick = () => handleDelete(dzoId);
 
     const onEditClick = () => handleEdit(dzoId, dzoName, header ?? '', description ?? '', dzoCode, webUrl);
+
+    const onAddAppClick = () => handleAddAppLink(dzoId, dzoName, applicationList);
 
     return (
         <div className={ styles.dzoItem }>
@@ -32,8 +37,15 @@ const DzoItem = ({
                 {description && <Field label={ DESCRIPTION_LABEL } value={ `"${description}"` } />}
             </div>
             <div className={ styles.dzoActions }>
-                <Button type="green" onClick={ onEditClick } label={ ButtonLabels.EDIT } />
-                <Button type="red" onClick={ onDeleteClick } label={ ButtonLabels.DELETE } />
+                <CustomButton className={ cn(styles.button, styles.submitButton) } onClick={ onAddAppClick }>
+                    { ADD_EDIT_APP_URL }
+                </CustomButton>
+                <CustomButton className={ cn(styles.button, styles.submitButton) } onClick={ onEditClick }>
+                    { ButtonLabels.EDIT }
+                </CustomButton>
+                <CustomButton className={ cn(styles.button, styles.deleteButton) } onClick={ onDeleteClick }>
+                    { ButtonLabels.DELETE }
+                </CustomButton>
             </div>
         </div>
     );
@@ -48,7 +60,9 @@ DzoItem.propTypes = {
     dzoCode: PropTypes.string.isRequired,
     webUrl: PropTypes.string,
     handleEdit: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired
+    handleDelete: PropTypes.func.isRequired,
+    handleAddAppLink: PropTypes.func.isRequired,
+    applicationList: PropTypes.array,
 };
 
 DzoItem.defaultProps = {

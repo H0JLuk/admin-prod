@@ -1,10 +1,10 @@
 import React, { memo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { loadImageWithPromise } from '../../utils/helper';
-import Button from '../Button/Button';
 import droidSvg from '../../static/images/droid.svg';
 import spinner from '../../static/images/loading-spinner.svg';
+import CustomButton from '../CustomButton/CustomButton';
 import Field from '../Field/Field';
 import styles from './CategoryItem.module.css';
 import ButtonLabels from '../Button/ButtonLables';
@@ -42,7 +42,7 @@ const CategoryItem = ({
                 <div className={ styles.textFieldFormat }>
                     <Field label={ CATEGORY_HEADER_LABEL } value={ `"${name}"` } />
                     {description && <Field label={ CATEGORY_DESCRIPTION_LABEL } value={ `"${description}"` } />}
-                    <p className={ classNames(styles.fieldActive, { [styles.red]: !active }) }>
+                    <p className={ cn(styles.fieldActive, { [styles.red]: !active }) }>
                         { active ? 'Активная' : 'Неактивная' }
                     </p>
                 </div>
@@ -61,8 +61,12 @@ const CategoryItem = ({
                             className={ styles.arrow_image }
                         />
                     </div>
-                    <Button type="green" onClick={ onEditClick } label={ ButtonLabels.EDIT } />
-                    <Button type="red" onClick={ onDeleteClick } label={ ButtonLabels.DELETE } />
+                    <CustomButton className={ cn(styles.button, styles.submitButton) } onClick={ onEditClick }>
+                        { ButtonLabels.EDIT }
+                    </CustomButton>
+                    <CustomButton className={ cn(styles.button, styles.deleteButton) } onClick={ onDeleteClick }>
+                        { ButtonLabels.DELETE }
+                    </CustomButton>
                 </div>
             </div>
         </div>

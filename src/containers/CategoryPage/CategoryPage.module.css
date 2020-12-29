@@ -1,27 +1,40 @@
 .categoryPageWrapper {
-    margin: 0 auto;
-    padding-top: 30px;
-    width: 96%;
-    max-width: 1080px;
-    font-family: inherit;
 }
 
-.categoryList > div:not(:last-child) {
-    margin-bottom: 30px;
-}
-
-.categoryPageWrapper h3 {
-    font-family: inherit;
-    font-size: 25px;
-    font-weight: 500;
-    color: rgb(0, 0, 20);
-}
-
-.categoryPageWrapper .headerSection {
+.headerSection {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    max-width: 1080px;
+    margin: auto;
+    padding: 30px;
+}
+
+.headerSection h3 {
+    margin: 0;
+    font-family: SBSansText-Regular, sans-serif;;
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: -0.38px;
+    text-align: left;
+    color: #171725;
+}
+
+.submitButton {
+    height: 35px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    background: #09a552 !important;
+    border-color: #09a552 !important;
+}
+
+.submitButton:hover,
+.submitButton:focus {
+    background: #1fac6a !important;
+    border-color: #1fac6a !important;
 }
 
 .categoryPageWrapper .loadingLabel {
@@ -90,10 +103,17 @@
     100% { content: '' }
 }
 
+.content {
+    margin: 0 auto;
+    max-width: 1080px;
+    font-family: inherit;
+    background: #f0f2f5;
+    padding: 30px;
+}
 
-
-
-
+.content > div:not(:last-child) {
+    margin-bottom: 30px;
+}
 
 .container {
     position: relative;
