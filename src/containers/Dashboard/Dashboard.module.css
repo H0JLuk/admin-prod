@@ -92,3 +92,11 @@ button:last-child {
     align-items: center;
     margin: 8px 0;
 }
+
+.filtersBlock:last-child:after {
+    content: '';
+    background: none;
+    border: none;
+    height: 0;
+    flex-grow: 100;
+}

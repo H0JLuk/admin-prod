@@ -1,8 +1,12 @@
 .tag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 5px 10px;
     border: grey solid 1px;
-    border-right: 0;
+    margin-left: -1px;
     margin-top: 8px;
+    flex-grow: 1;
 }
 
 .tag:last-child {
