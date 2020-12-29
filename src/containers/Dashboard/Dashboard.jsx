@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { generatePath, useHistory } from 'react-router-dom';
 import { Menu, Dropdown } from 'antd';
 import { getDashboardInfo } from '../../api/services/adminService';
 import { getClientAppList } from '../../api/services/clientAppService';
 import { getDzoList } from '../../api/services/dzoService';
-import { saveAppCode } from '../../api/services/sessionService';
+import { getPromoCampaignById } from '../../api/services/promoCampaignService';
+import { getRole, saveAppCode } from '../../api/services/sessionService';
 import Button from '../../components/Button/Button';
 import Header from '../../components/Header/Redisegnedheader/Header';
-import { goPromoCampaigns } from '../../utils/appNavigation';
+import ROLES from '../../constants/roles';
+import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
 import DashboardFilterTag from './DashboardFilterTag';
 import { WITHOUT_FILTER, BY_APP, BY_DZO } from './dashboardFilterTypes';
 import DashboardItem from './DashboardItem';
@@ -88,15 +90,15 @@ const Dashboard = () => {
                 setFilterTagList([]);
         }
         setFilterIdList([]);
-    }, [filterType]);
+    }, [appList, dzoList, filterType]);
 
     useEffect(() => {
         switch (filterType) {
             case BY_APP:
-                setFilteredList(list.filter((elem) => filterIdList.includes(elem?.clientApplicationId)));
+                setFilteredList(list.filter(({ clientApplicationId: id } = {}) => filterIdList.includes(id)));
                 break;
             case BY_DZO:
-                setFilteredList(list.filter((elem) => filterIdList.includes(elem?.dzoId)));
+                setFilteredList(list.filter(({ dzoId } = {}) => filterIdList.includes(dzoId)));
                 break;
             case WITHOUT_FILTER:
             default:
@@ -104,11 +106,21 @@ const Dashboard = () => {
         }
     }, [list, filterType, dzoList, appList, filterIdList]);
 
-    // TODO: сделать переход на конкретную промо-кампанию после редизайна
-    const onItemClick = (appCode, promoCampaignId) => {
-        // console.log({ currentAppCode: getAppCode(), newAppCode: appCode, promoCampaignId });
+    const onItemClick = async (appCode, promoCampaignId) => {
         saveAppCode(appCode);
-        goPromoCampaigns(history);
+        try {
+            const path = generatePath(`${ROUTE.REDESIGNED}${getRole() === ROLES.ADMIN
+                    ? ROUTE_ADMIN.PROMO_CAMPAIGN
+                    : ROUTE_OWNER.PROMO_CAMPAIGN
+            }${PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_INFO}`, { promoCampaignId });
+            const { promoCampaignDtoList = [] } = await getPromoCampaignById(promoCampaignId) ?? {};
+            const promoCampaign = promoCampaignDtoList[0];
+            if (promoCampaign) {
+                history.push(path, { promoCampaign });
+            }
+        } catch (e) {
+            console.error(e?.message);
+        }
     };
 
     const onMenuItemClick = (e) => setFilterType(e?.key);

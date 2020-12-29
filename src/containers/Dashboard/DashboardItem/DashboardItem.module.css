@@ -1,5 +1,6 @@
 .item {
     width: calc(50% - 8px);
+    max-height: 450px;
     padding: 8px;
     margin-bottom: 16px;
     display: flex;
