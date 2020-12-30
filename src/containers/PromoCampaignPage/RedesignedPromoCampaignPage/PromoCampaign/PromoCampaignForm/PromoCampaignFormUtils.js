@@ -182,6 +182,7 @@ export const getDataForSend = ({
     promoCodeType,
     typePromoCampaign,
     categoryIdList,
+    settings,
 }) => ({
     name,
     dzoId,
@@ -191,6 +192,7 @@ export const getDataForSend = ({
     finishDate,
     startDate,
     promoCodeType,
+    settings,
     type: typePromoCampaign,
     categoryIdList,
 });

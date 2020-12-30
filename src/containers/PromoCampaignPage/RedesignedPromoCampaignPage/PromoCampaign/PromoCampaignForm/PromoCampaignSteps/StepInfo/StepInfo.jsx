@@ -18,7 +18,6 @@ const CATEGORY = 'Категории';
 const CATEGORY_PROMO_CAMPAIGN = 'Выберите категорию';
 const TEMPLATE_PROMO_NAME = 'Например: Промо-кампания СберМаркет';
 const URL_PROMO_CAMPAIGN = 'Ссылка на страницу промо-кампании';
-// const COUNT_PROMO_CAMPAIGN = 'Кол-во промокодов';
 const TYPE_PROMO_CAMPAIGN = 'Тип промо-кампании';
 const TYPE_PROMO_CODE = 'Тип промокода';
 const ACTIVE_PERIOD = 'Период действия';
@@ -30,7 +29,11 @@ const STATUS_OFF = 'Промо-кампания отключена';
 const DATE_PICKER_PLACEHOLDER = ['дд.мм.гг', 'дд.мм.гг'];
 const STATUS_TEXT_OFF = 'Пользователи не видят промо-кампанию';
 const STATUS_TEXT_ON = 'Пользователи видят промо-кампанию';
-// const promoCodeCounts = [5, 10, 50, 100];
+const URL_SOURCE_LABEL = 'Источник ссылки';
+const URL_SOURCE_VALUE_DZO = 'DZO';
+const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
+const URL_SOURCE_DZO_LABEL = 'ДЗО';
+const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
 const types_promo = Object.values(promoCodeTypes);
 
 const EXCURSION = 'Экскурсия';
@@ -45,7 +48,7 @@ const selectTagRender = ({ label, onClose }) => (
     </div>
 );
 
-const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) => {
+const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo, changeUrlSource }) => {
 
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -77,6 +80,8 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
     const toggleSelect = useCallback(() => {
         setOpen(!open);
     }, [open]);
+
+    const onUrlSourceChanged = (e) => changeUrlSource(e.target.value === URL_SOURCE_VALUE_PROMO_CAMPAIGN);
 
     const renderSelectSuffix = useMemo(() => (
         <div className={ styles.suffixBlock }>
@@ -135,7 +140,6 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                     className={ styles.selectCategories }
                     name="categoryIdList"
                     initialValue={ state.categoryIdList }
-                    // rules={ [{ required: true, message: 'Категория обязательна' }] }
                 >
                     <Select
                         showSearch={ false }
@@ -165,7 +169,46 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                     </Select>
                 </Form.Item>
                 <Row gutter={ [24, 16] }>
-                    <Col span={ 8 }>
+                    <Col span={ 12 }>
+                        <Form.Item
+                            label={ URL_PROMO_CAMPAIGN }
+                            className={ styles.formItem }
+                            name="webUrl"
+                            rules={ [{ required: state?.settings?.priorityOnWebUrl === true, message: 'Укажите ссылку' }] }
+                            initialValue={ state.webUrl }
+                        >
+                            <Input placeholder={ URL } />
+                        </Form.Item>
+                    </Col>
+                    <Col span={ 12 }>
+                        <Form.Item
+                            name="urlSource"
+                            label={ URL_SOURCE_LABEL }
+                            rules={ [{ required: true, message: 'Укажите источник ссылки для QR-кода' }] }
+                            initialValue={ state?.settings?.priorityOnWebUrl === true
+                                ? URL_SOURCE_VALUE_PROMO_CAMPAIGN
+                                : URL_SOURCE_VALUE_DZO
+                            }
+                        >
+                            <Radio.Group className={ styles.urlSource } onChange={ onUrlSourceChanged }>
+                                <Radio
+                                    className={ styles.checkbox }
+                                    value={ URL_SOURCE_VALUE_DZO }
+                                >
+                                    { URL_SOURCE_DZO_LABEL }
+                                </Radio>
+                                <Radio
+                                    className={ styles.checkbox }
+                                    value={ URL_SOURCE_VALUE_PROMO_CAMPAIGN }
+                                >
+                                    { URL_SOURCE_PROMO_CAMPAIGN_LABEL }
+                                </Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={ [24, 16] }>
+                    <Col span={ 12 }>
                         <Form.Item
                             label={ DZO }
                             className={ styles.formItem }
@@ -182,7 +225,7 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={ 8 }>
+                    <Col span={ 12 }>
                         <Form.Item
                             label={ ACTIVE_PERIOD }
                             className={ styles.formItem }
@@ -192,40 +235,9 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                             <DatePicker.RangePicker placeholder={ DATE_PICKER_PLACEHOLDER } />
                         </Form.Item>
                     </Col>
-                    <Col span={ 8 }>
-                        <Form.Item
-                            label={ URL_PROMO_CAMPAIGN }
-                            className={ styles.formItem }
-                            name="webUrl"
-                            initialValue={ state.webUrl }
-                        >
-                            <Input placeholder={ URL } />
-                        </Form.Item>
-                    </Col>
                 </Row>
                 <Row gutter={ [24, 16] }>
-                    {/* <Col span={ 8 }>
-                        <Form.Item
-                            label={ COUNT_PROMO_CAMPAIGN }
-                            className={ styles.formItem }
-                            name="count"
-                            initialValue={ state.count }
-                            rules={ [{ required: true, message: 'Выберите кол-во промокодов' }] }
-                        >
-                            <Select placeholder={ SELECT }>
-                                {promoCodeCounts.map(count => (
-                                    <Select.Option
-                                        key={ count }
-                                        value={ count }
-                                    >
-                                        { count }
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col> */}
-
-                    <Col span={ 8 }>
+                    <Col span={ 12 }>
                         <Form.Item
                             label={ TYPE_PROMO_CODE }
                             className={ styles.formItem }
@@ -247,7 +259,7 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                         </Form.Item>
                     </Col>
 
-                    <Col span={ 8 } className={ styles.flexCenter }>
+                    <Col span={ 12 } className={ styles.flexCenter }>
                         <div className={ styles.flexCenter }>
                             <div className={ styles.statusInfo }>
                                 <div>
@@ -277,7 +289,7 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
             </div>
 
             <div className={ styles.infoDetail }>
-                <Row gutter={ [16, 16] }>
+                <Row gutter={ [24, 16] }>
                     <Col span={ 12 }>
                         <div className={ styles.container }>
                             <Form.Item

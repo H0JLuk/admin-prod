@@ -101,6 +101,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                         promoCampaign.finishDate ? moment(promoCampaign.finishDate) : undefined,
                     ],
                     appCode: getAppCode(),
+                    settings: promoCampaign.settings,
                 }));
                 setLoading(false);
             })();
@@ -202,6 +203,13 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
         promoCampaignBanners: {},
     })), []);
 
+    const changeUrlSource = useCallback((value) => {
+        setState((prev) => ({
+            ...prev,
+            settings: { ...prev?.settings, priorityOnWebUrl: value },
+        }));
+    }, []);
+
     const StepContainer = useMemo(() => {
         switch (step) {
             case 1:
@@ -210,6 +218,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                             validStepChange={ validStepChange }
                             handlerNextStep={ handlerNextStep }
                             changeTypePromo={ changeTypePromo }
+                            changeUrlSource={ changeUrlSource }
                         />;
             case 2:
                 return <StepTextAndImage

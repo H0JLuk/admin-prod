@@ -163,6 +163,14 @@
     flex-direction: column;
 }
 
+.urlSource {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 250px;
+}
+
 .containerStep :global(.ant-form-item-label) {
     text-align: left;
     overflow: visible;

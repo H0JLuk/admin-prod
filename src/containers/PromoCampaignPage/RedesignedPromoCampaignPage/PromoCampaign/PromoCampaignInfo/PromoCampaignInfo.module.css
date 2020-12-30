@@ -53,6 +53,14 @@
     width: 80%;
 }
 
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 250px;
+}
+
 .checkbox {
     margin: 10px 0;
 }

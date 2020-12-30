@@ -18,6 +18,9 @@ const ACTIVE_PERIOD = 'Период действия';
 const SHOW_PROMO_CAMPAIGN = 'Витрины, в которых отображается промо-кампания';
 const DZO = 'ДЗО';
 const STATUS = 'Активность промо-кампании';
+const URL_SOURCE_LABEL = 'Источник ссылки';
+const URL_SOURCE_DZO_LABEL = 'ДЗО';
+const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
 
 const STATUS_TYPE = {
     ACTIVE: 'Активная',
@@ -50,21 +53,42 @@ const StepInfo = ({ promoCampaign }) => {
                     </Col>
                 </Row>
                 <Row gutter={ [24, 16] }>
-                    <Col span={ 8 }>
+                    <Col span={ 12 }>
+                        <div className={ style.infoTitle }>{ URL_PROMO_CAMPAIGN }</div>
+                        <div className={ style.webLink }>{ promoCampaign.webUrl }</div>
+                    </Col>
+                    <Col span={ 12 }>
+                        <div className={ style.infoTitle }>{ URL_SOURCE_LABEL }</div>
+                        <div className={ style.flexRow }>
+                            <Radio
+                                className={ style.checkbox }
+                                checked={ promoCampaign?.settings?.priorityOnWebUrl !== true }
+                                disabled
+                            >
+                                { URL_SOURCE_DZO_LABEL }
+                            </Radio>
+                            <Radio
+                                className={ style.checkbox }
+                                checked={ promoCampaign?.settings?.priorityOnWebUrl === true }
+                                disabled
+                            >
+                                { URL_SOURCE_PROMO_CAMPAIGN_LABEL }
+                            </Radio>
+                        </div>
+                    </Col>
+                </Row>
+                <Row gutter={ [24, 16] }>
+                    <Col span={ 12 }>
                         <div className={ style.infoTitle }>{ DZO }</div>
                         <div className={ style.infoText }>
                             { promoCampaign.dzoName }
                         </div>
                     </Col>
-                    <Col span={ 8 }>
+                    <Col span={ 12 }>
                         <div className={ style.infoTitle }>{ ACTIVE_PERIOD }</div>
                         <div className={ style.infoText }>
                             { promoCampaign.startDate } - { promoCampaign.finishDate }
                         </div>
-                    </Col>
-                    <Col span={ 8 }>
-                        <div className={ style.infoTitle }>{ URL_PROMO_CAMPAIGN }</div>
-                        <div className={ style.webLink }>{ promoCampaign.webUrl }</div>
                     </Col>
                 </Row>
                 <Row gutter={ [24, 16] }>
