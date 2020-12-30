@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { loadImageWithPromise } from '../../utils/helper';
 import droidSvg from '../../static/images/droid.svg';
 import spinner from '../../static/images/loading-spinner.svg';
-import CustomButton from '../CustomButton/CustomButton';
+import { Button } from 'antd';
 import Field from '../Field/Field';
 import styles from './CategoryItem.module.css';
 import ButtonLabels from '../Button/ButtonLables';
@@ -61,12 +61,12 @@ const CategoryItem = ({
                             className={ styles.arrow_image }
                         />
                     </div>
-                    <CustomButton className={ cn(styles.button, styles.submitButton) } onClick={ onEditClick }>
+                    <Button type="primary" onClick={ onEditClick }>
                         { ButtonLabels.EDIT }
-                    </CustomButton>
-                    <CustomButton className={ cn(styles.button, styles.deleteButton) } onClick={ onDeleteClick }>
+                    </Button>
+                    <Button type="danger" onClick={ onDeleteClick }>
                         { ButtonLabels.DELETE }
-                    </CustomButton>
+                    </Button>
                 </div>
             </div>
         </div>

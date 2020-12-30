@@ -7,7 +7,7 @@ import {
     updateCategory
 } from '../../api/services/categoryService';
 import { getStaticUrl } from '../../api/services/settingsService';
-import CustomButton from '../../components/CustomButton/CustomButton';
+import { Button } from 'antd';
 import { CATEGORY_FORM } from '../../components/Form/forms';
 import Header from '../../components/Header/Redisegnedheader/Header';
 import { getErrorText } from '../../constants/errors';
@@ -262,9 +262,9 @@ class CategoryPage extends Component {
                 <div className={ styles.headerSection }>
                     <h3>{CATEGORY_LIST_TITLE}</h3>
                     <div>
-                        <CustomButton className={ styles.submitButton } onClick={ openWithParam }>
+                        <Button type="primary" onClick={ openWithParam }>
                             { ADD_CATEGORY_TITLE }
-                        </CustomButton>
+                        </Button>
                     </div>
                 </div>
                 <div className={ styles.content }>

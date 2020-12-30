@@ -233,17 +233,3 @@ input[type="text"]:disabled {
 input[type="text"]:disabled + div > svg {
     display: none;
 }
-
-.submitButton {
-    height: 35px !important;
-    padding-left: 25px !important;
-    padding-right: 25px !important;
-    background: #09a552 !important;
-    border-color: #09a552 !important;
-}
-
-.submitButton:hover,
-.submitButton:focus {
-    background: #1fac6a !important;
-    border-color: #1fac6a !important;
-}

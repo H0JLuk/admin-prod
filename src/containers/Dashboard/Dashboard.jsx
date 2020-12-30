@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { generatePath, useHistory } from 'react-router-dom';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Button } from 'antd';
 import { getDashboardInfo } from '../../api/services/adminService';
 import { getClientAppList } from '../../api/services/clientAppService';
 import { getDzoList } from '../../api/services/dzoService';
 import { getPromoCampaignById } from '../../api/services/promoCampaignService';
 import { getRole, saveAppCode } from '../../api/services/sessionService';
-import Button from '../../components/Button/Button';
 import Header from '../../components/Header/Redisegnedheader/Header';
 import ROLES from '../../constants/roles';
 import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
@@ -134,12 +133,9 @@ const Dashboard = () => {
             <div className={ styles.header } >
                 <h3>Дашборд</h3>
                 <div className={ styles.navigationPanel }>
-                    <Button type="green"
-                            label={ RELOAD_BUTTON_LABEL }
-                            className={ styles.button }
-                            onClick={ loadData }
-                            disabled={ loading }
-                    />
+                    <Button type="primary" onClick={ loadData } disabled={ loading }>
+                        { RELOAD_BUTTON_LABEL }
+                    </Button>
                     <Dropdown trigger={ ['click'] } overlay={ <DashboardFilterMenu onClick={ onMenuItemClick } /> }>
                         <div className={ styles.menuFilter }>
                             <p>{filterName}</p>

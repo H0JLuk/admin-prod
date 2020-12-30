@@ -66,18 +66,10 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
                     location={ location }
                 />
                 <div className={ styles.buttons }>
-                    <Button
-                        className={ styles.cancelButton }
-                        htmlType="button"
-                        onClick={ onCancel }
-                    >
+                    <Button type="ghost" htmlType="button" onClick={ onCancel }>
                         { CANCEL_BUTTON_TEXT }
                     </Button>
-                    <Button
-                        onClick={ onFinish }
-                        className={ styles.submitButton }
-                        type="primary"
-                    >
+                    <Button type="primary" onClick={ onFinish }>
                         { SUBMIT_BUTTON_TEXT }
                     </Button>
                 </div>

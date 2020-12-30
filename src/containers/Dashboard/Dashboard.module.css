@@ -55,7 +55,7 @@ button:last-child {
     align-items: center;
     padding: 5px 10px;
     border: grey solid 1px;
-    margin-right: 16px;
+    margin-left: 16px;
 }
 
 .menuFilter:hover {

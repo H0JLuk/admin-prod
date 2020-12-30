@@ -1,7 +1,6 @@
-import cn from 'classnames';
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import CustomButton from '../CustomButton/CustomButton';
+import { Button } from 'antd';
 import Field from '../Field/Field';
 import styles from './DzoItem.module.css';
 import ButtonLabels from '../Button/ButtonLables';
@@ -37,15 +36,15 @@ const DzoItem = ({
                 {description && <Field label={ DESCRIPTION_LABEL } value={ `"${description}"` } />}
             </div>
             <div className={ styles.dzoActions }>
-                <CustomButton className={ cn(styles.button, styles.submitButton) } onClick={ onAddAppClick }>
+                <Button type="primary" onClick={ onAddAppClick }>
                     { ADD_EDIT_APP_URL }
-                </CustomButton>
-                <CustomButton className={ cn(styles.button, styles.submitButton) } onClick={ onEditClick }>
+                </Button>
+                <Button type="primary" onClick={ onEditClick }>
                     { ButtonLabels.EDIT }
-                </CustomButton>
-                <CustomButton className={ cn(styles.button, styles.deleteButton) } onClick={ onDeleteClick }>
+                </Button>
+                <Button type="danger" onClick={ onDeleteClick }>
                     { ButtonLabels.DELETE }
-                </CustomButton>
+                </Button>
             </div>
         </div>
     );

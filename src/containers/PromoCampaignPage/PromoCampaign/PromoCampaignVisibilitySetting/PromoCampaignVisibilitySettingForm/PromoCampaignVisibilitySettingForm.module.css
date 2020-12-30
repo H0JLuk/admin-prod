@@ -3,7 +3,7 @@
 }
 
 .pageTitle {
-    font-family: SBSansText;
+    font-family: SBSansText-Regular, sans-serif;
     font-size: 20px;
     font-weight: 600;
     line-height: 28px;
@@ -18,30 +18,6 @@
 
 .switch {
     background-color: #09a552 !important;
-}
-
-.cancelButton {
-    height: 35px !important;
-    width: 120px !important;
-}
-
-.submitButton {
-    height: 35px !important;
-    width: 120px !important;
-    background: #09a552 !important;
-    border-color: #09a552 !important;
-}
-
-.cancelButton:hover,
-.cancelButton:focus {
-    border-color: #1fac6a !important;
-    color: #1fac6a !important ;
-}
-
-.submitButton:hover,
-.submitButton:focus {
-    background: #1fac6a !important;
-    border-color: #1fac6a !important;
 }
 
 .formError {

@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import {
@@ -8,7 +9,6 @@ import {
     updateDzo,
     addApplication
 } from '../../api/services/dzoService';
-import CustomButton from '../../components/CustomButton/CustomButton';
 import { DZO_EDIT_FROM, DZO_ADD_FROM, APP_EDIT_FROM } from '../../components/Form/forms';
 import Header from '../../components/Header/Redisegnedheader/Header';
 import applicationTypes from '../../constants/applicationTypes';
@@ -57,12 +57,6 @@ class DzoPage extends Component {
     constructor(props) {
         super(props);
         this.state = initialState;
-        this.reloadDzo = this.reloadDzo.bind(this);
-        this.pushToDzoList = this.pushToDzoList.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleEdit = this.handleEdit.bind(this);
-        this.handleAppTypeChange = this.handleAppTypeChange.bind(this);
-        this.updateEditingAppUrl = this.updateEditingAppUrl.bind(this);
     }
 
     componentDidMount() {
@@ -324,9 +318,9 @@ class DzoPage extends Component {
                 { this.renderModifyModal() }
                 <div className={ styles.headerSection }>
                     <h3>{DZO_LIST_TITLE}</h3>
-                    <CustomButton className={ styles.submitButton } onClick={ openWithParam }>
+                    <Button type="primary" onClick={ openWithParam }>
                         { ADD_DZO_TITLE }
-                    </CustomButton>
+                    </Button>
                 </div>
                 <div className={ styles.content }>
                     {this.renderDzoList()}

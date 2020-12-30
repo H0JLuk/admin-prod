@@ -1,8 +1,6 @@
+import { Button } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustomButton from '../../../../../components/CustomButton/CustomButton';
-
-import styles from './UserFormButtonGroup.module.css';
 
 const BUTTON_DELETE_TEXT = 'Удалить';
 const BUTTON_CANCEL_TEXT = 'Отменить';
@@ -25,23 +23,15 @@ const UserFormButtonGroup = ({
     userBlocked,
 }) => {
     const deleteButton = (
-        <CustomButton
-            className={ styles.deleteButton }
-            onClick={ onDelete }
-            disabled={ disableAllButtons }
-        >
+        <Button type="danger" onClick={ onDelete } disabled={ disableAllButtons }>
             { BUTTON_DELETE_TEXT }
-        </CustomButton>
+        </Button>
     );
 
     const cancelButton = (
-        <CustomButton
-            className={ styles.cancelButton }
-            onClick={ onCancel }
-            disabled={ disableAllButtons }
-        >
+        <Button type="ghost" onClick={ onCancel } disabled={ disableAllButtons }>
             { BUTTON_CANCEL_TEXT }
-        </CustomButton>
+        </Button>
     );
 
     switch (type) {
@@ -49,13 +39,9 @@ const UserFormButtonGroup = ({
             return (
                 <>
                     { cancelButton }
-                    <CustomButton
-                        className={ styles.submitButton }
-                        onClick={ onSubmit }
-                        disabled={ disableAllButtons }
-                    >
+                    <Button type="primary" onClick={ onSubmit } disabled={ disableAllButtons }>
                         { BUTTON_ADD_USER_TEXT }
-                    </CustomButton>
+                    </Button>
                 </>
             );
         }
@@ -63,13 +49,9 @@ const UserFormButtonGroup = ({
             return (
                 <>
                     { cancelButton }
-                    <CustomButton
-                        className={ styles.submitButton }
-                        onClick={ onSubmit }
-                        disabled={ disableAllButtons }
-                    >
+                    <Button type="primary" onClick={ onSubmit } disabled={ disableAllButtons }>
                         { BUTTON_SAVE_EDIT_USER_TEXT }
-                    </CustomButton>
+                    </Button>
                     { deleteButton }
                 </>
             );
@@ -77,20 +59,12 @@ const UserFormButtonGroup = ({
         case 'info': {
             return (
                 <>
-                    <CustomButton
-                        className={ styles.submitButton }
-                        onClick={ onResetPassword }
-                        disabled = { disableAllButtons }
-                    >
+                    <Button type="primary" onClick={ onResetPassword } disabled = { disableAllButtons }>
                         {userBlocked ? INFO_USER_BUTTONS.UNBLOCK : INFO_USER_BUTTONS.RESET_PASSWORD }
-                    </CustomButton>
-                    <CustomButton
-                        className={ styles.submitButton }
-                        onClick={ onEditUser }
-                        disabled = { disableAllButtons }
-                    >
+                    </Button>
+                    <Button type="primary" onClick={ onEditUser } disabled = { disableAllButtons }>
                         { INFO_USER_BUTTONS.EDIT }
-                    </CustomButton>
+                    </Button>
                     { deleteButton }
                 </>
             );
