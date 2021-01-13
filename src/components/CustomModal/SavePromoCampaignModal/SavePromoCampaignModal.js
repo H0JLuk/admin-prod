@@ -88,6 +88,7 @@ class SavePromoCampaignModal extends Component {
                    visible={ open }
                    onOk={ this.handleSubmit }
                    okText="Сохранить"
+                   cancelText="Отменить"
                    onCancel={ onClose }
             >
                 <Form layout="vertical" onSubmit={ this.handleSubmit }>

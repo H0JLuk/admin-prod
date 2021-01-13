@@ -26,7 +26,7 @@ export const EXCURSION_TYPE_ROWS = [
             type: 'logo',
             tooltipImg: logo_on_screen_with_phone,
             access_type: '.svg',
-            rules: [{ required: true, message: 'Заполните поле' }],
+            // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
     {
@@ -46,7 +46,7 @@ export const EXCURSION_TYPE_ROWS = [
             tooltipImg: logo_on_screen_with_qr_code,
             access_type: '.svg',
             type: 'logo',
-            rules: [{ required: true, message: 'Заполните поле' }],
+            // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
     {
