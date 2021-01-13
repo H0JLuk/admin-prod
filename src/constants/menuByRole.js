@@ -1,6 +1,7 @@
 import ROLES from './roles';
 import { ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_OWNER, ROUTE_USER_MANAGER } from './route';
 import { menuItemLables as labels } from './lables';
+import { getDefaultAppCode } from '../api/services/clientAppService';
 
 const AUDITOR_MENU_ITEMS = [
     { label: labels.AUDIT, path: ROUTE_AUDITOR.AUDIT }
@@ -45,6 +46,10 @@ const PRODUCT_OWNER_MENU_FOR_POINT_APP = [
 ];
 
 export const resolveMenuItemsByRoleAndAppCode = (role, appCode) => {
+    if (!appCode) {
+        appCode = getDefaultAppCode(); // TODO: remove getDefaultAppCode after second phase
+    }
+
     switch (role) {
         case ROLES.AUDITOR:
             return AUDITOR_MENU_ITEMS;
@@ -129,6 +134,10 @@ const REDESIGN_PRODUCT_OWNER_TOP_FOR_POINT_APP = [
  * @returns {{label: string; path: string;}[][]}
  */
 export const resolveRedesignedMenuItemsByRoleAndAppCode = (role, appCode = '') => {
+    if (!appCode) {
+        appCode = getDefaultAppCode(); // TODO: remove getDefaultAppCode after second phase
+    }
+
     switch (role) {
         // case ROLES.AUDITOR:
         //     return AUDITOR_MENU_ITEMS;

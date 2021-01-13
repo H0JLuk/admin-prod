@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { matchPath, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 import { /* ROUTE_ADMIN_APPS, */ PROMO_CAMPAIGN_PAGES, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
-import { getClientAppList } from '../../api/services/clientAppService';
+import { getClientAppList, setDefaultAppCode } from '../../api/services/clientAppService';
 import { getAppCode, getRole, saveAppCode } from '../../api/services/sessionService';
 import { goApp } from '../../utils/appNavigation';
 import { resolveRedesignedMenuItemsByRoleAndAppCode } from '../../constants/menuByRole';
@@ -44,7 +44,7 @@ const Sidebar = () => {
             const sortedDtoList = clientApplicationDtoList.filter(({ isDeleted }) => !isDeleted);
             /* Временный костыль чтобы можно было перемещаться по приложению без крашей */
             if (!getAppCode()) {
-                saveAppCode(sortedDtoList[0].code);
+                setDefaultAppCode(sortedDtoList[0].code);
             }
 
             setAppsList(sortedDtoList);

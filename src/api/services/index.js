@@ -1,4 +1,5 @@
 import { Api } from '../apiClient';
+import { getDefaultAppCode } from './clientAppService';
 import { getAppCode, getSession } from './sessionService';
 
 const TOKEN_HEADER = 'token';
@@ -8,7 +9,7 @@ const ACCEPT = 'Accept';
 
 export const getReqOptions = (contentType) => {
     const token = getSession();
-    const appCode = getAppCode();
+    const appCode = getAppCode() || getDefaultAppCode(); // TODO: remove getDefaultAppCode after second phase
     const headers = {};
     token && (headers[TOKEN_HEADER] = token);
     appCode && (headers[APP_CODE_HEADER] = appCode);

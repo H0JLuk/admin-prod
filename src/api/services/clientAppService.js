@@ -24,3 +24,18 @@ export async function deleteClientApp(id) {
 export async function updateProperties(id, properties) {
     return Api.put(`/admin/clientApplication/${id}/properties`, properties, getReqOptions());
 }
+
+/** TODO: remove DEFAULT_APP and functions after second phase */
+const DEFAULT_APP = 'DEFAULT_APP';
+
+export function setDefaultAppCode(appCode) {
+    sessionStorage.setItem(DEFAULT_APP, appCode);
+}
+
+export function getDefaultAppCode() {
+    return sessionStorage.getItem(DEFAULT_APP);
+}
+
+export function removeDefaultAppCode() {
+    sessionStorage.removeItem(DEFAULT_APP);
+}
