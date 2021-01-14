@@ -1,33 +1,65 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import styles from './AuditPage.module.css';
-import { useTable, usePagination, useFilters } from 'react-table';
-// import DatePicker from "react-datepicker";
-import { getReqOptions } from '../../api/services';
-import ReactJson from 'react-json-view';
-import SelectColumnFilter from './SelectColumnFilter';
-import { baseUrl } from '../../api/apiClient';
-
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { useTable, usePagination } from 'react-table';
+import { Select, Spin, Collapse } from 'antd';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MaUTable from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
+import { getReqOptions } from '../../api/services';
+import ReactJson from 'react-json-view';
+import { baseUrl } from '../../api/apiClient';
+import AuditFilter from './AuditFilter';
+
+import styles from './AuditPage.module.css';
+
 const initialState = { events: [], totalElements: 0, totalPages: 0,
     numberOfElements: 0, size: 20, number: 0 };
 
-// const DATE_FORMAT = 'dd.MM.yyyy';
+const sortItems = [
+    {
+        label: 'Тип события',
+        value: 'type'
+    },
+    {
+        label: 'Пользователь',
+        value: 'userLogin'
+    },
+    {
+        label: 'IP пользователя',
+        value: 'userIp'
+    },
+    {
+        label: 'Дата',
+        value: 'happenedAt'
+    },
+    {
+        label: 'Статус события',
+        value: 'success'
+    }
+];
 
-// const a = (<DatePicker
-//     className={ styles.datepicker }
-//     dateFormat={ DATE_FORMAT }
-//     selected={ endDate }
-//     onChange={ date => { this.handleChangeDate(date, false); } }
-// />)
+const sortDirectionItems = [
+    {
+        label: 'По возрастанию',
+        value: 'ASC'
+    },
+    {
+        label: 'По убыванию',
+        value: 'DESC'
+    },
+];
+
 
 const AuditPage = () => {
 
     const [data, setData] = useState(initialState);
+    const [sortItem, setSortItem] = useState('happenedAt');
+    const [sortDirection, setSortDirection] = useState('DESC');
+    const [loading, setLoading] = useState(false);
+    const [filtersObject, setFiltersObject] = useState({});
     const { events, totalPages } = data;
     const defaultColumn = useMemo(
         () => ({
@@ -45,19 +77,17 @@ const AuditPage = () => {
             {
                 Header: 'Тип события',
                 accessor: 'type',
-                Filter: SelectColumnFilter,
-                filter: 'includes',
             },
             {
                 Header: 'Пользователь',
                 accessor: 'userLogin',
             },
             {
-                Header: 'ip пользователя',
+                Header: 'IP пользователя',
                 accessor: 'userIp',
             },
             {
-                Header: 'Время',
+                Header: 'Дата',
                 accessor: 'happenedAt',
             },
             {
@@ -75,9 +105,9 @@ const AuditPage = () => {
                 )
             },
             {
-                Header: 'Успешно',
+                Header: 'Статус события',
                 accessor: 'success',
-                Cell: ({ row: { original: { success } } }) => <span>{success ? 'Успешно' : 'Не успешно'}</span>
+                Cell: ({ row: { original: { success } } }) => <span>{success ? 'Успешно' : 'Ошибка'}</span>
             },
         ],
         []
@@ -96,9 +126,8 @@ const AuditPage = () => {
         autoResetGroupBy: !skipPageResetRef.current,
         autoResetSelectedRows: !skipPageResetRef.current,
         autoResetSortBy: !skipPageResetRef.current,
-        autoResetFilters: !skipPageResetRef.current,
         autoResetRowState: !skipPageResetRef.current,
-    }, useFilters, usePagination);
+    }, usePagination);
     const {
         getTableProps,
         getTableBodyProps,
@@ -113,109 +142,117 @@ const AuditPage = () => {
         nextPage,
         previousPage,
         setPageSize,
-        state: { pageIndex, pageSize, filters },
+        state: { pageIndex, pageSize },
     } = tableInstance;
 
 
-    const filtersHash = useMemo(() => filters.reduce((sum, cur) => sum + cur.value, ''), [filters]);
-    const filtersObject = useMemo(() => filters.map(el => ({ [el.id]: el.value }))
-        .reduce((result, cur) => ({ ...result, ...cur }), {}), [filtersHash]);
-    // console.log(filtersHash);
-
     useEffect(() => {
         async function fetchData(pageSize, pageNo, mappedFilters = {}) {
+            setLoading(true);
             const url = new URL(`${baseUrl}/admin/audit/events`);
-            url.search = new URLSearchParams({ pageNo, pageSize, ...mappedFilters }).toString();
+            url.search = new URLSearchParams({ pageNo, pageSize, sortBy: sortItem, direction: sortDirection, ...mappedFilters }).toString();
             const response = await fetch(url.toString(), getReqOptions());
             const json = await response.json();
             //Без данного ограничения обновление props'ов Таблички приводит к сбросу внутреннего state'а
             skipPageResetRef.current = true;
             setData(json);
+            setLoading(false);
         }
         fetchData(pageSize, pageIndex, filtersObject);
-    }, [pageIndex, pageSize, filtersObject]);
+    }, [pageIndex, pageSize, filtersObject, sortDirection, sortItem]);
+    
+    const onSubmitAuditFilter = useCallback((filtersData = {}) => {
+        setFiltersObject(filtersData);
+    }, []);
 
-    // console.table({pageIndex, pageSize, filters});
     return (
         <div className={ styles.container }>
-            <CssBaseline />
-            <MaUTable { ...getTableProps() }>
-
-                <TableHead >
-                {
-                    headerGroups.map(headerGroup => (
-                        <TableRow { ...headerGroup.getHeaderGroupProps() }>
+            <Spin tip="Загрузка..." spinning={ loading }>
+                <Collapse accordion>
+                    <Collapse.Panel header="Фильтры" key="1">
+                        <AuditFilter submit={ onSubmitAuditFilter } />
+                    </Collapse.Panel>
+                </Collapse>
+                <CssBaseline />
+                <div className={ styles.sort }>
+                    <div>
+                        Сортировать по: {' '}
+                        <Select onSelect={ setSortItem } value={ sortItem } className={ styles.sortSelect }>
                             {
-                                headerGroup.headers.map(column => (
-                                    <TableCell { ...column.getHeaderProps() }>
-                                        {column.render('Header')}
-                                        {column.canFilter ? column.render('Filter') : null}
-                                    </TableCell>
-                                ))}
-                        </TableRow>
-                    ))}
-                </TableHead>
-                <TableBody { ...getTableBodyProps() }>
-                {
-                    rows.map(row => {
-                        prepareRow(row);
-                        return (
-                            <TableRow { ...row.getRowProps() }>
+                                sortItems.map(({ label, value }) => <Select.Option key={ value } value={ value }>{label}</Select.Option>)
+                            }
+                        </Select>
+                    </div>
+                    <div>
+                        Направление сортировки: {' '}
+                        <Select onSelect={ setSortDirection } value={ sortDirection } className={ styles.sortSelect }>
+                            {
+                                sortDirectionItems.map(({ label, value }) => <Select.Option key={ value } value={ value }>{label}</Select.Option>)
+                            }
+                        </Select>
+                    </div>
+                </div>
+                <MaUTable { ...getTableProps() }>
+    
+                    <TableHead >
+                    {
+                        headerGroups.map(headerGroup => (
+                            <TableRow { ...headerGroup.getHeaderGroupProps() }>
                                 {
-                                    row.cells.map(cell => {
-                                        return (
-                                            <TableCell { ...cell.getCellProps() }>
-                                                {cell.render('Cell')}
-                                            </TableCell>
-                                        );
-                                    })}
+                                    headerGroup.headers.map(column => (
+                                        <TableCell { ...column.getHeaderProps() }>
+                                            {column.render('Header')}
+                                        </TableCell>
+                                    ))}
                             </TableRow>
-                        );
-                    })}
-                </TableBody>
-            </MaUTable>
-            <div className="pagination">
-                <button onClick={ () => gotoPage(0) } disabled={ !canPreviousPage }>&lt;&lt;</button>&nbsp;
-                <button onClick={ () => previousPage() } disabled={ !canPreviousPage }>&lt;</button>&nbsp;
-                <button onClick={ () => nextPage() } disabled={ !canNextPage }>&gt;</button>&nbsp;
-                <button onClick={ () => gotoPage(pageCount - 1) } disabled={ !canNextPage }>&gt;&gt;</button>&nbsp;
-                <span>{`Страница ${pageIndex + 1} из ${pageOptions.length} `}</span>
-                <span>
-                    | Перейти на страницу:&nbsp;
-                    <input
-                        type="number"
-                        defaultValue={ pageIndex + 1 }
-                        onChange={ e => gotoPage(e.target.value ? Number(e.target.value) - 1 : 0) }
-                        style={ { width: '100px' } }
-                    />
-                </span>&nbsp;
-                <select
-                    value={ pageSize }
-                    onChange={ e => setPageSize(Number(e.target.value)) }
-                >
-                    {[10, 20, 30, 40, 50].map(pageSize => (
-                        <option key={ pageSize } value={ pageSize }>{pageSize}</option>
-                    ))}
-                </select>
-            </div>
+                        ))}
+                    </TableHead>
+                    <TableBody { ...getTableBodyProps() }>
+                    {
+                        rows.map(row => {
+                            prepareRow(row);
+                            return (
+                                <TableRow { ...row.getRowProps() }>
+                                    {
+                                        row.cells.map(cell => {
+                                            return (
+                                                <TableCell { ...cell.getCellProps() }>
+                                                    {cell.render('Cell')}
+                                                </TableCell>
+                                            );
+                                        })}
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </MaUTable>
+                <div className="pagination">
+                    <button onClick={ () => gotoPage(0) } disabled={ !canPreviousPage }>&lt;&lt;</button>&nbsp;
+                    <button onClick={ () => previousPage() } disabled={ !canPreviousPage }>&lt;</button>&nbsp;
+                    <button onClick={ () => nextPage() } disabled={ !canNextPage }>&gt;</button>&nbsp;
+                    <button onClick={ () => gotoPage(pageCount - 1) } disabled={ !canNextPage }>&gt;&gt;</button>&nbsp;
+                    <span>{`Страница ${pageIndex + 1} из ${pageOptions.length} `}</span>
+                    <span>
+                        | Перейти на страницу:&nbsp;
+                        <input
+                            type="number"
+                            defaultValue={ pageIndex + 1 }
+                            onChange={ e => gotoPage(e.target.value ? Number(e.target.value) - 1 : 0) }
+                            style={ { width: '100px' } }
+                        />
+                    </span>&nbsp;
+                    <select
+                        value={ pageSize }
+                        onChange={ e => setPageSize(Number(e.target.value)) }
+                    >
+                        {[10, 20, 30, 40, 50].map(pageSize => (
+                            <option key={ pageSize } value={ pageSize }>{pageSize}</option>
+                        ))}
+                    </select>
+                </div>
+            </Spin>
         </div>
     );
 };
-
-//
-// function DefaultColumnFilter({
-//                                  column: { filterValue, preFilteredRows, setFilter },
-//                              }) {
-//     const count = preFilteredRows.length
-//
-//     return (
-//         <input
-//             value={filterValue || ''}
-//             onChange={e => {
-//                 setFilter(e.target.value || undefined)
-//             }}
-//         />
-//     )
-// }
 
 export default AuditPage;

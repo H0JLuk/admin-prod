@@ -94,3 +94,18 @@
 .pagination {
     padding: 0.5rem;
 }
+
+.sort {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 25px;
+    margin-bottom: 9px;
+}
+
+.sort > div:first-child {
+    margin-right: 15px;
+}
+
+.sortSelect {
+    width: 180px;
+}
