@@ -18,6 +18,7 @@ const DropdownWithAction = ({
     onMenuItemClick,
     menuItems = [],
     withReset,
+    resetLabel = RESET_LABEL,
 }) => {
     const [dropdownActive, setDropdownActive] = useState(false);
 
@@ -42,11 +43,11 @@ const DropdownWithAction = ({
                     className={ styles.dropdownMenuItem }
                     onClick={ menuItemClickHandler }
                 >
-                    { RESET_LABEL }
+                    { resetLabel }
                 </div>
             )}
         </div>
-    ), [menuItems, menuItemClickHandler, withReset]);
+    ), [menuItems, menuItemClickHandler, withReset, resetLabel]);
 
     return (
         <Dropdown

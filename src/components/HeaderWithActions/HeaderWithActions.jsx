@@ -20,6 +20,7 @@ const HeaderWithActions = ({
     sortingBy,
     classNameByInput,
     classNames,
+    resetLabel,
 }) => {
     const buttonsBlock = useMemo(() => (buttons || []).map((button) => (
         <Button
@@ -74,6 +75,7 @@ const HeaderWithActions = ({
                         menuItems={ sortingBy.menuItems }
                         onMenuItemClick={ sortingBy.onMenuItemClick }
                         withReset={ sortingBy.withReset }
+                        resetLabel={ resetLabel }
                     />
                 )}
             </div>

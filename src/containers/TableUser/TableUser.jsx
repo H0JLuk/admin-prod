@@ -33,6 +33,8 @@ const SEARCH_INPUT = 'Поиск по логину, локации и точке
 const CHOSEN_USER = 'Выбрано';
 const TITLE_DOWNLOAD_USER = 'Пакетная обработка пользователей';
 
+const RESET_LABEL = 'По умолчанию';
+
 const locale = {
     items_per_page: '',
     prev_page:      'Назад',
@@ -329,6 +331,7 @@ const TableUser = ({ matchUrl }) => {
                 showSorting
                 sortingBy={ sortingBy }
                 classNameByInput={ styles.inputSearch }
+                resetLabel={ RESET_LABEL }
             />
             <UsersListTable
                 loadingData={ loadingTableData }

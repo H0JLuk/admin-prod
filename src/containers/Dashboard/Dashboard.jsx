@@ -18,11 +18,17 @@ import styles from './Dashboard.module.css';
 const DEFAULT_FILTER_NAME = 'Фильтровать';
 const RELOAD_BUTTON_LABEL = 'Обновить';
 
+const menuObj = [
+    { label: BY_APP, value: 'По приложению' },
+    { label: BY_DZO, value: 'По ДЗО' },
+    { label: WITHOUT_FILTER, value: 'По умолчанию' },
+];
+
 const DashboardFilterMenu = ({ onClick }) => (
     <Menu onClick={ onClick }>
-        <Menu.Item key={ BY_APP }>По приложению</Menu.Item>
-        <Menu.Item key={ BY_DZO }>По ДЗО</Menu.Item>
-        <Menu.Item key={ WITHOUT_FILTER }>Сбросить</Menu.Item>
+        {menuObj.map(({ label, value }) => (
+            <Menu.Item key={ label }>{ value }</Menu.Item>
+        ))}
     </Menu>
 );
 
