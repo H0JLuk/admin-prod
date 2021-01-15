@@ -1,3 +1,5 @@
+import { removeDefaultAppCode } from './clientAppService';
+
 const TOKEN = 'dzo_token';
 const ROLE = 'role';
 const APP_CODE = 'appCode';
@@ -11,6 +13,7 @@ export function deleteUserData() {
     window.sessionStorage.removeItem(TOKEN);
     window.sessionStorage.removeItem(ROLE);
     deleteAppCode();
+    removeDefaultAppCode(); /* TODO: remove this after second phase */
 }
 
 export function getSession() {

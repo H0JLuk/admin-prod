@@ -33,7 +33,7 @@ export function setDefaultAppCode(appCode) {
 }
 
 export function getDefaultAppCode() {
-    return sessionStorage.getItem(DEFAULT_APP);
+    return sessionStorage.getItem(DEFAULT_APP) || '';
 }
 
 export function removeDefaultAppCode() {
