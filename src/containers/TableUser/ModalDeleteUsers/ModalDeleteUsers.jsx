@@ -16,6 +16,11 @@ const modalBodyStyle = {
     maxHeight: 500,
 };
 
+const showErrorAmount = (requestErrors) => {
+    const errorsAmount = `(${requestErrors.length})`;
+    return `${ERRORS_DELETE}${errorsAmount}`;
+};
+
 const ModalDeleteUsers = ({
     userList,
     visible,
@@ -26,8 +31,8 @@ const ModalDeleteUsers = ({
     const [loading, setLoading] = useState(false);
     const [loadData, setLoadData] = useState(false);
     const [requestData, setRequestData] = useState({
-        errors: { message: '' },
-        users: [],
+        errorsDelete: [],
+        deletedUsers: [],
     });
 
     const handleOk = useCallback(async () => {
@@ -35,16 +40,22 @@ const ModalDeleteUsers = ({
         setLoading(true);
 
         try {
-            const response = await Promise.all(requestPromises);
-            const requestUsersResult = response.reduce((requestInfoData, { status }, index) => {
+            const response = await Promise.allSettled(requestPromises);
+            const { deletedUsers, errorsDelete } = response.reduce((requestInfoData, { status, reason =  {} }, index) => {
                 const { personalNumber } = userList[index];
-                requestInfoData.push({ user: personalNumber, status });
+                const { message } = reason;
+                if (status === 'rejected') {
+                    requestInfoData.errorsDelete.push({ user: personalNumber, message });
+                } else {
+                    requestInfoData.deletedUsers.push({ user: personalNumber });
+                }
                 return requestInfoData;
-            }, []);
-            setRequestData((prev) => ({ ...prev, users: requestUsersResult }));
+
+            }, { deletedUsers:[], errorsDelete:[] });
+            setRequestData((prev) => ({ ...prev, deletedUsers, errorsDelete }));
         } catch (e) {
             const { message } = e;
-            setRequestData((prev) => ({ ...prev, errors:{ message } }));
+            setRequestData((prev) => ({ ...prev, errorsDelete: [{ message }] }));
             console.warn(e);
         }
 
@@ -54,7 +65,7 @@ const ModalDeleteUsers = ({
 
     const handleClose = useCallback(() => {
         modalOpen(false);
-        setRequestData({ errors: { message: '' }, users: [] });
+        setRequestData({ errorsDelete: [], deletedUsers: [] });
         setLoadData(false);
         refreshTable();
     }, [modalOpen, refreshTable]);
@@ -77,24 +88,30 @@ const ModalDeleteUsers = ({
             centered
             destroyOnClose
         >
-            {Boolean(userList.length) && !loadData && (
+            {!!userList.length && !loadData && (
                 <ul className={ styles.list }>
                     {userList.map((el, index) => (
                         <li key={ index }>{ el.personalNumber }</li>
                     ))}
                 </ul>
             )}
-            {Boolean(requestData.users.length) && (
+            {!!requestData.deletedUsers.length && (
                 <RemovedUsersList
-                    usersList={ requestData.users }
+                    usersList={ requestData.deletedUsers }
                     message={ SUCCESS_DELETE }
                 />
             )}
-            {requestData.errors.message && (
-                <div>
-                    <p className={ styles.failed }>{ ERRORS_DELETE }</p>
-                    <span>{ requestData.errors.message }</span>
-                </div>
+            {!!requestData.errorsDelete.length && (
+                <ul className={ styles.list }>
+                    <p className={ styles.failed }>
+                        { showErrorAmount(requestData.errorsDelete) }
+                    </p>
+                    {requestData.errorsDelete.map(({ message }, index) => (
+                        <li key={ index }>
+                            {message}
+                        </li>
+                    ))}
+                </ul>
             )}
         </Modal>
     );

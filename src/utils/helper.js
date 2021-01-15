@@ -59,3 +59,15 @@ export function getFormattedDate(date, format = 'DD.MM.YYYY') {
 
     return moment(date).format(format);
 }
+
+export function generateCsvFile(data, defaultFields = ['Табельный номер пользователя', 'Пароль']) {
+    const contentType = 'data:text/csv;charset=utf-8,';
+    const csvData = data.reduce((prev, item) => ([...prev, Object.values(item)]),[]);
+    const finalCsv = [defaultFields,...csvData].map(item => item.join(',')).join('\n');
+    let encodedUri = encodeURI(contentType + finalCsv);
+    let link = document.createElement('a');
+        link.href = encodedUri;
+        link.download = 'restoredUsers.csv';
+        document.body.appendChild(link);
+    return link;
+}

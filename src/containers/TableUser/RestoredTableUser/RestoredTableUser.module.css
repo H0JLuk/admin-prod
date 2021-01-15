@@ -1,0 +1,33 @@
+.titleRestored {
+    font-weight: 700;
+}
+
+.table {
+    width: 100%;
+    min-width: 360px;
+}
+
+.usersList {
+    margin-bottom: 10px;
+    max-width: 350px;
+}
+
+
+.passwordColumn{
+    text-align: right;
+}
+
+.error{
+    color:red;
+}
+
+.buttonWrapper {
+    text-align: center;
+}
+
+.button:global(.ant-btn){
+    background: #09a552;
+    border-color:#09a552;
+    font-family: 'SBSansText';
+    color: white;
+}

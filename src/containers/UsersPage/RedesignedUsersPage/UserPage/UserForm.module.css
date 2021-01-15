@@ -123,3 +123,7 @@
 .suffixStyle {
     cursor: pointer;
 }
+
+.copyable :global(.ant-typography-copy) {
+    color: #09a552;
+}

@@ -2,6 +2,8 @@ import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useHistory, generatePath, useLocation } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 import cn from 'classnames';
+import { notification } from 'antd';
+import RestoredTableUser from './RestoredTableUser/RestoredTableUser';
 import EmptyUsersPage from './EmptyUsersPage/EmptyUsersPage';
 import ButtonLoadUsers from './ButtonUsers/ButtonLoadUsers';
 import ButtonDeleteUsers from './ButtonUsers/ButtonDeleteUsers';
@@ -58,6 +60,25 @@ const DROPDOWN_SORT_MENU = [
     { name: 'locationName', label: 'По локации' },
     { name: 'salePointName', label: 'По точке продажи' },
 ];
+
+
+const showRestoredUsersNotification = (users) => {
+    notification.success({
+        message: <RestoredTableUser users={ users } />,
+        duration: 0,
+        placement: 'bottomRight',
+        style:{ width: '100%' },
+    });
+};
+
+const showRestoredErrorsNotification = (message) => {
+    notification.error({
+        message,
+        duration:0,
+        placement:'bottomRight',
+    });
+};
+
 
 const TableUser = ({ matchUrl }) => {
     const history = useHistory();
@@ -215,9 +236,28 @@ const TableUser = ({ matchUrl }) => {
         setLoadingTableData(true);
 
         try {
-            await Promise.all(requestPromises);
+            const response = await Promise.allSettled(requestPromises);
+            const { users, errors } = response.reduce((prev, { status, value = {}, reason =  {} }, index) => {
+                const { personalNumber } = selectedRowValues[index];
+                const { generatedPassword } = value;
+                const { message } = reason;
+                if (status === 'rejected') {
+                    prev.errors.push(message);
+                } else {
+                    prev.users.push({ personalNumber, generatedPassword });
+                }
+                return prev;
+            }, { users: [], errors: [] });
+            if (users.length) {
+                showRestoredUsersNotification(users);
+            }
+            if (errors.length) {
+                showRestoredErrorsNotification(errors);
+            }
             clearSelectedItems();
         } catch (e) {
+            const { message } = e;
+            showRestoredErrorsNotification(message);
             console.warn(e);
         }
 

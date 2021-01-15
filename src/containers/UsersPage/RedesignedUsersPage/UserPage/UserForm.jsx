@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams, generatePath } from 'react-router-dom';
 import cn from 'classnames';
-import { Form, Input, notification } from 'antd';
+import { Form, Input, notification ,Typography } from 'antd';
 import { USERS_PAGES } from '../../../../constants/route';
 import { addUser, getUser, removeUser, resetUser, saveUser, unblockUser } from '../../../../api/services/adminService';
 import Header from '../../../../components/Header/Redisegnedheader/Header';
@@ -18,6 +18,8 @@ import { getUserAppsCheckboxes } from './UserFormHelper';
 import { ReactComponent as Cross } from '../../../../static/images/cross.svg';
 
 import styles from './UserForm.module.css';
+
+const { Paragraph } = Typography;
 
 const USER_AVAILABLE_APPS = 'Доступные приложения';
 const NEW_USER_TITLE = 'Новый пользователь';
@@ -48,13 +50,78 @@ const layout = {
 
 const DEFAULT_ERRORS = { login: '', location: '', salePoint: '', backend: '' };
 
-const showSuccessfullyInfo = (login, pwd) => {
-    notification.success({
-        message: `Пользователь с табельным номером ${ login } успешно создан`,
-        description: `Пароль пользователя: ${ pwd }`,
-        duration: 0,
-        placement: 'bottomRight',
-    });
+
+const CREATE = 'CREATE';
+const RESTORED = 'RESTORED';
+const DELETE = 'DELETE';
+const ERROR = 'ERROR';
+const USER_PASSWORD = 'Пароль пользователя';
+const NEW_USER_PASSWORD = 'Новый пароль пользователя';
+const COPY = 'Копировать';
+const ON_COPY = 'Скопировано';
+
+const userMessage = (login, pwd, mode, errorMessage) => {
+    switch (mode) {
+        case CREATE: {
+            return {
+                message: `Пользователь с табельным номером ${ login } успешно создан`,
+                description: (
+                    <Paragraph copyable={ { text: pwd, tooltips: [ COPY, ON_COPY ] } } className={ styles.copyable }>
+                        { USER_PASSWORD }: { pwd }
+                    </Paragraph>
+                ),
+            };
+        }
+        case RESTORED: {
+            return {
+                message: `Пароль пользователя с табельным номером ${ login } успешно сброшен`,
+                description: (
+                    <Paragraph copyable={ { text: pwd, tooltips: [ COPY, ON_COPY ] } } className={ styles.copyable } >
+                        { NEW_USER_PASSWORD }: { pwd }
+                    </Paragraph>
+                ),
+            };
+        }
+        case DELETE: {
+            return {
+                message: `Пользователь с табельным номером ${ login } успешно удален`,
+                description: '',
+            };
+        }
+        case ERROR: {
+            return {
+                message: errorMessage,
+                description:'',
+            };
+        }
+        default: {
+            return {
+                message: '',
+                description: '',
+            };
+        }
+    }
+};
+
+const showNotify = ({ login, pwd, mode, errorMessage }) => {
+    const config = {
+        duration:0,
+        placement:'bottomRight'
+    };
+    const { message, description } = userMessage(login, pwd, mode, errorMessage);
+    if (mode === ERROR){
+        return notification.error({
+            message,
+            description,
+            ...config,
+        });
+    }
+        notification.success({
+            message,
+            description,
+            style:{ minWidth:'400px' },
+            ...config
+        });
 };
 
 const UserForm = ({ type, matchUrl }) => {
@@ -141,7 +208,7 @@ const UserForm = ({ type, matchUrl }) => {
                     await saveUser(userData.id, requestData);
             } else {
                 const { generatedPassword } =  await addUser({ ...requestData, personalNumber: login });
-                showSuccessfullyInfo(login, generatedPassword);
+                showNotify({ login, pwd: generatedPassword, mode: CREATE });
             }
         } catch (e) {
             setIsSendingInfo(false);
@@ -192,9 +259,11 @@ const UserForm = ({ type, matchUrl }) => {
                 await unblockUser(userData.personalNumber);
                 setUserData({ ...userData, tmpBlocked: false });
             } else {
-                await resetUser(userData.personalNumber);
+                const { generatedPassword } =  await resetUser(userData.personalNumber);
+                showNotify({ login: userData.personalNumber , pwd: generatedPassword, mode: RESTORED });
             }
         } catch (err) {
+            showNotify({ mode: ERROR, errorMessage: err.message });
             setError({ ...DEFAULT_ERRORS, backend: err.message });
         }
 
@@ -222,8 +291,10 @@ const UserForm = ({ type, matchUrl }) => {
         try {
             setIsSendingInfo(true);
             await removeUser(userData.id);
+            showNotify({ login: userData.personalNumber, mode: DELETE });
             redirectToUsersPage();
         } catch (err) {
+            showNotify({ mode: ERROR, errorMessage: err.message });
             setIsSendingInfo(false);
             setError({ ...DEFAULT_ERRORS, backend: err.message });
         }
