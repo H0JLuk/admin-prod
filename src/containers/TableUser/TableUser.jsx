@@ -25,6 +25,7 @@ const BUTTON_CHANGE_PASSWORD = 'Сбросить пароль';
 const BUTTON_ADD = 'Добавить';
 const BUTTON_CHOOSE = 'Выбрать';
 const BUTTON_CANCEL = 'Отменить';
+const BUTTON_SELECT_ALL = 'Выбрать все';
 const BUTTON_DELETE = 'Удалить';
 
 const SEARCH_INPUT = 'Поиск по логину, локации и точке продажи';
@@ -175,9 +176,20 @@ const TableUser = ({ matchUrl }) => {
         clearSelectedItems();
     }, []);
 
+    const selectAll = useCallback(() => {
+        if (users.length !== selectedRowValues.length) {
+            setSelectedRowKeys(users.map(({ id }) => id));
+            setSelectedRowValues([...users]);
+            return;
+        } else {
+            clearSelectedItems();
+        }
+    }, [selectedRowValues, users]);
+
     const buttons = useMemo(() => {
         if (select) {
             return [
+                { type: 'primary', label: BUTTON_SELECT_ALL, onClick: selectAll, disabled: loadingTableData },
                 { label: BUTTON_CANCEL, onClick: setSelectedRow, disabled: loadingTableData },
             ];
         }
@@ -186,7 +198,7 @@ const TableUser = ({ matchUrl }) => {
             { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
             { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
         ];
-    }, [select, loadingTableData, setSelectedRow, onAddUser]);
+    }, [select, loadingTableData, setSelectedRow, onAddUser, selectAll]);
 
     const searchInput = useMemo(() => ({
         placeholder: SEARCH_INPUT,
