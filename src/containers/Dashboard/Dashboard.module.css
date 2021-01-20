@@ -80,8 +80,7 @@ button:last-child {
     flex-flow: row wrap;
     justify-content: space-between;
     align-items: stretch;
-    flex-grow: 1;
-    padding: 16px;
+    padding: 16px 8px;
     background-color: #f0f2f5;
 }
 

@@ -8,10 +8,9 @@ import * as formHelper from './formHelper';
 class MultiActionForm extends Form {
     state = formHelper.generateFormState(this.props.data);
 
-
-    onClick = handler => e => {
+    onClick = (handler, callback) => e => {
         e.preventDefault();
-        this.state.errorCount <= 0 && handler(formHelper.getValues(this.state));
+        this.state.errorCount <= 0 && handler(callback, formHelper.getValues(this.state));
     };
 
     render() {
@@ -26,7 +25,8 @@ class MultiActionForm extends Form {
             errorText,
             errorClassName,
             iconClassName,
-            actionsPanelClasses
+            actionsPanelClasses,
+            loading
         } = this.props;
 
         const error = formError ? <p className={ errorClassName }>{ errorText }</p> : null;
@@ -53,19 +53,23 @@ class MultiActionForm extends Form {
                             onBlur={ this.onBlur }
                             fieldClassName={ fieldClassName }
                             activeLabelClassName={ activeLabelClassName }
-                            iconClassName={ iconClassName } />
+                            iconClassName={ iconClassName }
+                        />
                     );
                 })}
                 { error }
                 <div className={ actionsPanelClasses }>
                     {actions.map((action, idx) => {
-                        return (<Button key = { idx }
-                                        label={ action.text }
-                                        className={ action.buttonClassName }
-                                        type={ action.color || 'green' }
-                                        font='roboto'
-                                        disabled={ state.errorCount !== 0 }
-                                        onClick={ this.onClick(action.handler) } />);
+                        return (
+                            <Button
+                                key = { idx }
+                                label={ action.text }
+                                className={ action.buttonClassName }
+                                type={ action.color || 'green' }
+                                font='roboto'
+                                disabled={ state.errorCount !== 0 || loading }
+                                onClick={ this.onClick(action.handler, action.callback) }
+                            />);
                     })}
                 </div>
             </form>

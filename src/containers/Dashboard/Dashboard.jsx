@@ -1,3 +1,4 @@
+import { RedoOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { generatePath, useHistory } from 'react-router-dom';
 import { Menu, Dropdown, Button } from 'antd';
@@ -9,6 +10,8 @@ import { getRole, saveAppCode } from '../../api/services/sessionService';
 import Header from '../../components/Header/Redisegnedheader/Header';
 import ROLES from '../../constants/roles';
 import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
+import { DEFAULT_SLEEP_TIME } from '../../constants/time';
+import { sleep } from '../../utils/utils';
 import DashboardFilterTag from './DashboardFilterTag';
 import { WITHOUT_FILTER, BY_APP, BY_DZO } from './dashboardFilterTypes';
 import DashboardItem from './DashboardItem';
@@ -71,6 +74,7 @@ const Dashboard = () => {
         } catch (e) {
             console.error(e?.message);
         } finally {
+            await sleep(DEFAULT_SLEEP_TIME);
             setLoading(false);
         }
     };
@@ -139,7 +143,7 @@ const Dashboard = () => {
             <div className={ styles.header } >
                 <h3>Дашборд</h3>
                 <div className={ styles.navigationPanel }>
-                    <Button type="primary" onClick={ loadData } disabled={ loading }>
+                    <Button type="primary" onClick={ loadData } loading={ loading } icon={ <RedoOutlined /> }>
                         { RELOAD_BUTTON_LABEL }
                     </Button>
                     <Dropdown trigger={ ['click'] } overlay={ <DashboardFilterMenu onClick={ onMenuItemClick } /> }>

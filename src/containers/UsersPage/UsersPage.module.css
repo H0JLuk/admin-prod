@@ -17,16 +17,15 @@
     width: 50%;
     margin: 0 auto;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: column;
     align-items: center;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
 }
 
 .successBlock p {
     margin-top: 50px;
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -68,7 +67,7 @@
 .userForm__field label {
     display: block;
     bottom: 8px;
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -118,6 +117,10 @@
     background-color: #08a652;
 }
 
+.disabled {
+    background-color: #c2c2c2;
+}
+
 .packetProcessing__block__button_red{
     background-color: #da7675;
 }
@@ -129,7 +132,7 @@
 .error {
     margin-top: 10px;
     color: #f6650a;
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     padding-left: 10px;
     padding-right: 10px;
     overflow-wrap: break-word;

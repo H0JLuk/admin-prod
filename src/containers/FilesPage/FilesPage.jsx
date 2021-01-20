@@ -3,6 +3,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import { getInstallationUrl, getUsageUrl } from '../../api/services/settingsService';
+import { DEFAULT_SLEEP_TIME } from '../../constants/time';
+import { sleep } from '../../utils/utils';
 import styles from './FilesPage.module.css';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import Button from '../../components/Button/Button';
@@ -68,7 +70,8 @@ class FilesPage extends Component {
             dzoId: null,
             promoCampaignList: [],
             filteredPromoCampaignList: [],
-            promoCampaignId: null
+            promoCampaignId: null,
+            loading: false
         };
     }
 
@@ -103,7 +106,7 @@ class FilesPage extends Component {
         return true;
     };
 
-    getData = (func, name) => () => {
+    getData = (func, name) => async () => {
         if (typeof(func) !== 'function') {
             return;
         }
@@ -115,8 +118,15 @@ class FilesPage extends Component {
 
         const startTime = isFiltered ? startDate.getTime() : null;
         const endTime = isFiltered ? endDate.getTime() : null;
-
-        func(startTime, endTime).then(data => downloadFile(data, name));
+        try {
+            this.setState({ loading: true });
+            func(startTime, endTime).then(data => downloadFile(data, name));
+        } catch (e) {
+            console.error(e);
+        } finally {
+            await sleep(DEFAULT_SLEEP_TIME);
+            this.setState({ loading: false });
+        }
     };
 
     handleChangeDate = (date, isStartDate) => {
@@ -135,10 +145,14 @@ class FilesPage extends Component {
         const momentStartDate = moment(startDate).format('DD.MM.YYYY');
         const momentEndDate = moment(endDate).format('DD.MM.YYYY');
         try {
+            this.setState({ loading: true });
             const blob = await getPromoCodeStatistics(momentStartDate, momentEndDate, dzoId, promoCampaignId);
             downloadFile(blob, PROMOCODES_NAME);
         } catch (e) {
             console.error(e);
+        } finally {
+            await sleep(DEFAULT_SLEEP_TIME);
+            this.setState({ loading: false });
         }
     };
 
@@ -228,7 +242,7 @@ class FilesPage extends Component {
     );
 
     render() {
-        const { startDate, endDate, isFiltered, usageUrl, installationUrl } = this.state;
+        const { startDate, endDate, isFiltered, usageUrl, installationUrl, loading } = this.state;
         const openWithParam = editingPdf => {
             this.setState({ editingPdf });
             this.openModal();
@@ -280,6 +294,7 @@ class FilesPage extends Component {
                         className={ styles.container__button }
                         type='green'
                         font='roboto'
+                        disabled={ loading }
                     />
                     <Button
                         label={ FEEDBACK_LABLE }
@@ -287,6 +302,7 @@ class FilesPage extends Component {
                         className={ styles.container__button }
                         type='green'
                         font='roboto'
+                        disabled={ loading }
                     />
                 </div>
 
@@ -356,6 +372,7 @@ class FilesPage extends Component {
                             label={ EXPORT_LABLE }
                             font="roboto"
                             type="green"
+                            disabled={ loading }
                         />
                     </div>
                 </div>

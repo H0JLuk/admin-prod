@@ -1,13 +1,15 @@
 .item {
-    width: calc(50% - 8px);
-    max-height: 450px;
+    width: calc(50% - 16px);
+    min-width: 300px;
     padding: 8px;
-    margin-bottom: 16px;
+    margin: 0 8px 16px;
     display: flex;
+    flex-grow: 1;
     flex-flow: column nowrap;
     align-items: flex-start;
     background-color: #ffffff;
 }
+
 
 .item:last-child:nth-child(odd) {
     margin-bottom: 0;
@@ -19,7 +21,7 @@
 }
 
 .item > h3 {
-    margin: 0 40px 12px 0;
+    margin: 0 40px 12px 8px;
     font-family: SBSansText-Semibold, sans-serif;
     font-size: 20px;
     font-weight: 600;
@@ -70,6 +72,8 @@
 .card {
     position: relative;
     display: flex;
+    align-self: flex-end;
+    height: 376px;
     justify-content: center;
     align-items: stretch;
     flex-grow: 1;

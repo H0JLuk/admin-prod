@@ -38,3 +38,7 @@ export function getStringOptionValue({ parentName = '', name = '' } = {}) {
 
     return [parentName, name].join(', ');
 }
+
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

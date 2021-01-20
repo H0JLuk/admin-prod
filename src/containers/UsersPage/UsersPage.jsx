@@ -1,5 +1,7 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
+import { DEFAULT_SLEEP_TIME } from '../../constants/time';
 import { useUpdateTokenLifetime } from '../../hooks/useUpdateTokenLifetime';
+import { sleep } from '../../utils/utils';
 import styles from './UsersPage.module.css';
 import classNames from 'classnames';
 import MultiActionForm from '../../components/Form/MultiActionForm';
@@ -23,14 +25,23 @@ import { getLinkForRedesignUsers } from '../../utils/appNavigation';
 
 const UsersPage = () => {
     const [{ sent, error, msg }, dispatch] = useReducer(usersReducer, usersPageInitialState);
+    const [loading, setLoading] = useState(false);
 
     useUpdateTokenLifetime();
+
+    const preventMultiplePressButton = async (callback, data) => {
+        setLoading(true);
+        await callback(data);
+        await sleep(DEFAULT_SLEEP_TIME);
+        setLoading(false);
+    };
 
     const onAddUser = async data => {
         const newUser = { ...data, password: data.personalNumber };
         try {
             const response = await oldAddUser(newUser);
-            dispatch({ type: 'showSuccessMessage', payload: `Пользователь добавлен в приложение, пароль: ${response.generatedPassword}` });
+            const message = `Пользователь добавлен в приложение, пароль: ${response.generatedPassword}`;
+            dispatch({ type: 'showSuccessMessage', payload: message });
         } catch (e) {
             dispatch({ type: showErrorMessage, payload: e.message });
         }
@@ -98,19 +109,23 @@ const UsersPage = () => {
     };
 
     const renderBody = () => {
-        return !sent ? <MultiActionForm
-            data={ CHANGE_USER_FORM }
-            actions={ [{ handler: onAddUser, text: 'Добавить', buttonClassName: styles.userForm__button },
-                { handler: onRemoveUser, text: 'Удалить', buttonClassName: styles.userForm__button, color: 'red' },
-                { handler: onUnblockUser, text: 'Разблокировать', buttonClassName: styles.userForm__button },
-                { handler: onResetUser, text: 'Сбросить пароль', buttonClassName: styles.userForm__button }] }
-            formClassName={ styles.userForm }
-            fieldClassName={ styles.userForm__field }
-            actionsPanelClasses={ styles.actionsPanelClasses }
-            activeLabelClassName={ styles.userForm__field__activeLabel }
-            formError={ error }
-            errorText={ msg }
-            errorClassName={ styles.error } /> :
+        return !sent ? (
+            <MultiActionForm
+                data={ CHANGE_USER_FORM }
+                actions={ [{ handler: preventMultiplePressButton, callback: onAddUser, text: 'Добавить', buttonClassName: styles.userForm__button },
+                    { handler: preventMultiplePressButton, callback: onRemoveUser, text: 'Удалить', buttonClassName: styles.userForm__button, color: 'red' },
+                    { handler: preventMultiplePressButton, callback: onUnblockUser, text: 'Разблокировать', buttonClassName: styles.userForm__button },
+                    { handler: preventMultiplePressButton, callback: onResetUser, text: 'Сбросить пароль', buttonClassName: styles.userForm__button }] }
+                formClassName={ styles.userForm }
+                fieldClassName={ styles.userForm__field }
+                actionsPanelClasses={ styles.actionsPanelClasses }
+                activeLabelClassName={ styles.userForm__field__activeLabel }
+                formError={ error }
+                errorText={ msg }
+                errorClassName={ styles.error }
+                loading={ loading }
+            />
+        ) : (
             <div className={ styles.successBlock }>
                 <p>{msg}</p>
                 <Button
@@ -118,8 +133,11 @@ const UsersPage = () => {
                     label='Еще'
                     type='green'
                     font='roboto'
-                    className={ styles.successBlock__button } />
-            </div>;
+                    className={ styles.successBlock__button }
+                    disabled={ loading }
+                />
+            </div>
+        );
     };
 
     return (
@@ -134,12 +152,16 @@ const UsersPage = () => {
                     style={ { display: 'none' } }
                     id='contained-button-file'
                     type='file'
-                    onChange={ uploadUsers }
+                    onChange={ data => preventMultiplePressButton(uploadUsers, data) }
                     accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                     value=''
+                    disabled={ loading }
                 />
                 <label htmlFor='contained-button-file' className={ styles.packetProcessing__block }>
-                    <div className={ classNames(styles.packetProcessing__block__button, styles.packetProcessing__block__button_green) }>
+                    <div className={ classNames(styles.packetProcessing__block__button, loading
+                        ? styles.disabled
+                        : styles.packetProcessing__block__button_green) }
+                    >
                         Загрузка пользователей
                     </div>
                 </label>
@@ -147,12 +169,16 @@ const UsersPage = () => {
                     style={ { display: 'none' } }
                     id='contained-button-delete-file'
                     type='file'
-                    onChange={ onDeleteFileUploadInputChange }
+                    onChange={ data => preventMultiplePressButton(onDeleteFileUploadInputChange, data) }
                     accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                     value=''
+                    disabled={ loading }
                 />
                 <label htmlFor='contained-button-delete-file' className={ styles.packetProcessing__block }>
-                    <div className={ classNames(styles.packetProcessing__block__button, styles.packetProcessing__block__button_red) }>
+                    <div className={ classNames(styles.packetProcessing__block__button, loading
+                        ? styles.disabled
+                        : styles.packetProcessing__block__button_red) }
+                    >
                         Удаление пользователей
                     </div>
                 </label>
