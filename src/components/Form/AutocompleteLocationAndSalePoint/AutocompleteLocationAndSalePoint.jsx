@@ -54,10 +54,10 @@ function AutocompleteLocationAndSalePoint({
         },
     });
 
-    /** @type {(searchValue: string, typeSearch: 'searchLocation' | 'searchSalePoint') => void} */
-    const getSearchResults = useCallback(async (searchValue, typeSearch = 'searchLocation') => {
+    /** @type {(searchValue: string, typeSearch: 'searchLocation' | 'searchSalePoint', newLocationId: number) => Promise<void>} */
+    const getSearchResults = useCallback(async (searchValue, typeSearch = 'searchLocation', newLocationId = locationId) => {
         try {
-            const searchResult = await getResultsByTextAndType(searchValue, typeSearch, locationId);
+            const searchResult = await getResultsByTextAndType(searchValue, typeSearch, newLocationId);
 
             setState((state) => ({
                 ...state,
@@ -88,20 +88,32 @@ function AutocompleteLocationAndSalePoint({
                 },
             }));
 
-            if (!searchValue || (searchValue.length < 2 && typeSearch === 'searchLocation')) {
-                setState(state => ({
-                    ...state,
-                    [typeSearch]: {
-                        value: searchValue,
-                        results: [],
-                    },
-                }));
-                return;
+            if (typeSearch === 'searchLocation') {
+                if (!searchValue && !state.searchSalePoint.value) {
+                    setState(state => ({
+                        ...state,
+                        searchSalePoint: {
+                            ...state.searchSalePoint,
+                            results: [],
+                        },
+                    }));
+                }
+
+                if (searchValue.length < 2) {
+                    setState(state => ({
+                        ...state,
+                        [typeSearch]: {
+                            value: searchValue,
+                            results: [],
+                        },
+                    }));
+                    return;
+                }
             }
 
             getResultsDebounced(searchValue, typeSearch);
         },
-        [getResultsDebounced]
+        [getResultsDebounced, state.searchSalePoint.value]
     );
 
     const handleSearchLocation = useCallback((searchValue) => {
@@ -127,13 +139,17 @@ function AutocompleteLocationAndSalePoint({
     const handleSelectLocationOption = useCallback((value, location) => {
             const { data } = location;
 
+            if (!state.searchSalePoint.value) {
+                getSearchResults('', 'searchSalePoint', data.id);
+            }
+
             onLocationChange(data);
             setState((state) => ({
                 ...state,
                 searchLocation: { ...state.searchLocation, value },
             }));
         },
-        [onLocationChange]
+        [onLocationChange, state.searchSalePoint.value, getSearchResults]
     );
 
     const handleSelectSalePointOption = useCallback((value, { data: salePoint, data: { location } }) => {

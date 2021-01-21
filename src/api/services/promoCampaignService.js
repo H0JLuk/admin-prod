@@ -61,9 +61,20 @@ export function getLocationsByText(value) {
     return Api.get(`/admin/location/search?name=${value}`, getReqOptions());
 }
 
+function getSalePointParams(name, locationId) {
+    const params = Object.entries({ name, locationId }).reduce((result, [key, val]) => {
+        if (!val) {
+            return result;
+        }
+
+        return { ...result, [key]: val };
+    }, {});
+
+    return new URLSearchParams(params).toString();
+}
+
 export function getSalePointsByText(value, locationId) {
-    const getString = `?name=${value}${!locationId ? '' : `&locationId=${locationId}`}`;
-    return Api.get(`/admin/salepoint/search${getString}`, getReqOptions());
+    return Api.get(`/admin/salepoint/search?${getSalePointParams(value, locationId)}`, getReqOptions());
 }
 
 /**
