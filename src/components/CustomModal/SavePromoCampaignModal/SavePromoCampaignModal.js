@@ -4,9 +4,11 @@ import {
     Form, Input, Checkbox, Select, Modal,
     // DatePicker, Space
 } from 'antd';
+import { getUnissuedPromoCodeStatistics } from '../../../api/services/promoCodeService';
 import _ from 'lodash';
 import { warnNotice } from '../../toast/Notice';
 // import moment from 'moment';
+import callConfirmModalForPromoCodeTypeChanging from '../../../containers/PromoCampaignPage/RedesignedPromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging/ConfirmModalForPromoCodeTypeChanging';
 import promoCodeTypes from '../../../constants/promoCodeTypes';
 
 const { Option } = Select;
@@ -49,9 +51,26 @@ class SavePromoCampaignModal extends Component {
         }
     }
 
+    handleOk = async () => {
+        const { id: promoCampaignId } = this.props.editingObject;
+        const { promoCodeType } = this.state;
+
+        await getUnissuedPromoCodeStatistics(promoCampaignId, promoCodeType);
+        this.savePromoCampaign({ ...this.state, promoCodeType });
+    }
+
     handleSubmit = (e) => {
         e && e.preventDefault();
-        this.savePromoCampaign(this.state);
+
+        const oldValue = this.props.editingObject.promoCodeType;
+        const newValue = this.state.promoCodeType;
+
+        if (newValue !== oldValue) {
+            const changingValue =`${oldValue}_TO_${newValue}`;
+            callConfirmModalForPromoCodeTypeChanging(this.handleOk, changingValue);
+        } else {
+            this.savePromoCampaign(this.state);
+        }
     };
 
     savePromoCampaign = (promoCampaign) => {
@@ -60,14 +79,16 @@ class SavePromoCampaignModal extends Component {
         if (length < 3 || length > 62) {
             return warnNotice('Введите корректное название!');
         }
-         else if (!promoCampaign.promoCodeType) {
-            return warnNotice('Выбирите промокод из списка!');
+        else if (!promoCampaign.promoCodeType) {
+            return warnNotice('Выберите промокод из списка!');
         }
         else if (!promoCampaign.dzoId) {
-            return warnNotice('Выбирите партнера из списка!');
+            return warnNotice('Выберите партнера из списка!');
         }
         const result = this.props.editingObject || {};
-        this.props.onSave(this.state, result.id);
+        // eslint-disable-next-line no-unused-vars
+        const { dzoList, ...promoCampaignState } = this.state;
+        this.props.onSave(promoCampaignState, result.id);
     };
 
     render() {
@@ -75,32 +96,38 @@ class SavePromoCampaignModal extends Component {
             open,
             title,
             onClose,
-            editingObject,
             editMode
         } = this.props;
 
         const {
-            name, webUrl, active, dzoId, promoCodeType, dzoList, type,
+            name,
+            webUrl,
+            active,
+            dzoId,
+            promoCodeType,
+            dzoList,
+            type,
             // dates
         } = this.state;
+
         return (
             <Modal title={ title }
-                   visible={ open }
-                   onOk={ this.handleSubmit }
-                   okText="Сохранить"
-                   cancelText="Отменить"
-                   onCancel={ onClose }
+                visible={ open }
+                onOk={ this.handleSubmit }
+                okText="Сохранить"
+                cancelText="Отменить"
+                onCancel={ onClose }
             >
                 <Form layout="vertical" onSubmit={ this.handleSubmit }>
                     <Form.Item required label="Название">
                         <Input autoFocus
-                               value={ name }
-                               onChange={ (e) => this.setState({ name: e.target.value }) }
+                            value={ name }
+                            onChange={ (e) => this.setState({ name: e.target.value }) }
                         />
                     </Form.Item>
                     <Form.Item label="Ссылка на страницу промо-кампании">
                         <Input value={ webUrl }
-                               onChange={ (e) => this.setState({ webUrl: e.target.value }) }
+                            onChange={ (e) => this.setState({ webUrl: e.target.value }) }
                         />
                     </Form.Item>
                     {/*<Form.Item label="Период действия промо-кампании">*/}
@@ -114,12 +141,11 @@ class SavePromoCampaignModal extends Component {
                     {/*</Form.Item>*/}
                     <Form.Item label="Активная">
                         <Checkbox checked={ active }
-                                  onChange={ (e) => this.setState({ active: e.target.checked }) }
+                                onChange={ (e) => this.setState({ active: e.target.checked }) }
                         />
                     </Form.Item>
                     <Form.Item required label="Тип промокода">
-                        <Select disabled={ editingObject.promoCodeType }
-                                placeholder="Выбирите тип промокодов"
+                        <Select placeholder="Выберите тип промокодов"
                                 value={ promoCodeType }
                                 onChange={ (promoCodeType) => this.setState({ promoCodeType }) }
                         >
@@ -135,7 +161,7 @@ class SavePromoCampaignModal extends Component {
                         </Select>
                     </Form.Item>
                     <Form.Item required label="Тип промо-кампании">
-                        <Select placeholder="Выбирите тип промо-кампании"
+                        <Select placeholder="Выберите тип промо-кампании"
                                 value={ type }
                                 onChange={ (type) => this.setState({ type }) }
                         >

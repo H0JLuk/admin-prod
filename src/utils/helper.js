@@ -1,12 +1,8 @@
 import moment from 'moment';
 
 export const downloadFile = (data, name) => {
-    let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-    let link = document.createElement('a');
-    link.download = `${name}.xlsx`;
-    link.href = URL.createObjectURL(blob);
-    document.body.appendChild(link);
-    link.click();
+    const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+    downloadFileFunc(URL.createObjectURL(blob), name, 'xlsx');
 };
 
 export const loadImageWithPromise = (url, failUrl) => {
@@ -60,14 +56,24 @@ export function getFormattedDate(date, format = 'DD.MM.YYYY') {
     return moment(date).format(format);
 }
 
-export function generateCsvFile(data, defaultFields = ['Табельный номер пользователя', 'Пароль']) {
+/**
+ * @param {string[][]} data
+ * @param {string[]} columns
+ */
+export function generateCsvFile(data, columns = ['Табельный номер пользователя', 'Пароль']) {
     const contentType = 'data:text/csv;charset=utf-8,';
-    const csvData = data.reduce((prev, item) => ([...prev, Object.values(item)]),[]);
-    const finalCsv = [defaultFields,...csvData].map(item => item.join(',')).join('\n');
-    let encodedUri = encodeURI(contentType + finalCsv);
-    let link = document.createElement('a');
-        link.href = encodedUri;
-        link.download = 'restoredUsers.csv';
+    const finalCsv = [columns, ...data].map(item => item.join(',')).join('\n');
+    const encodedUri = encodeURI(contentType + finalCsv);
+    downloadFileFunc(encodedUri, 'restoredUsers', 'csv');
+}
+
+export function downloadFileFunc(dataObj, name = 'file', fileExtension = 'csv') {
+    if (dataObj) {
+        const link = window.document.createElement('a');
+        link.setAttribute('href', dataObj);
+        link.setAttribute('download', `${name}.${fileExtension}`);
         document.body.appendChild(link);
-    return link;
+        link.click();
+        document.body.removeChild(link);
+    }
 }

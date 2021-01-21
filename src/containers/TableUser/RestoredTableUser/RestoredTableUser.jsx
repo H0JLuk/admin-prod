@@ -9,7 +9,7 @@ const EXPORT = 'Экспорт паролей';
 const RestoredTableUser = ({ users }) => {
 
     const exportCSV = () => {
-        generateCsvFile(users).click();
+        generateCsvFile(users.reduce((prev, item) => ([...prev, Object.values(item)]), []));
     };
     return (
         <>

@@ -7,6 +7,7 @@ import StepInfo from './PromoCampaignSteps/StepInfo/StepInfo';
 import StepVisibility from './PromoCampaignSteps/StepVisibility/StepVisibility';
 import StepTextAndImage from './PromoCampaignSteps/StepTextAndImage/StepTextAndImage';
 import PromoCampaignSideBar from '../PromoCampaignSideBar/PromoCampaignSideBar';
+import callConfirmModalForPromoCodeTypeChanging from './PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging/ConfirmModalForPromoCodeTypeChanging';
 import Header from '../../../../../components/Header/Redisegnedheader/Header';
 import { allStep, CANCEL, COMPLETE, modes, modsTitle, NEXT, STEP, steps } from './PromoCampaignFormConstants';
 import {
@@ -20,6 +21,7 @@ import {
     makeImg,
     makeText,
 } from './PromoCampaignFormUtils';
+import { getUnissuedPromoCodeStatistics } from '../../../../../api/services/promoCodeService';
 import { editPromoCampaign, newPromoCampaign } from '../../../../../api/services/promoCampaignService';
 import { getAppCode } from '../../../../../api/services/sessionService';
 
@@ -125,7 +127,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
         });
     }, []);
 
-    const handlerEdit = useCallback(async () => {
+    const editPromoCampaignHandler = useCallback(async () => {
         const { promoCampaign } = stateFromLocation || {};
         const dataForSend = getDataForSend(state);
         setLoading(true);
@@ -144,7 +146,26 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
         }
     }, [state, stateFromLocation, history, matchUrl, changedImgs]);
 
-    const handlerSave = useCallback(async () => {
+    const handleOk = useCallback(async () => {
+        const { promoCampaign : { id: promoCampaignId } } = stateFromLocation || {};
+
+        await getUnissuedPromoCodeStatistics(promoCampaignId, state.promoCodeType);
+        await editPromoCampaignHandler();
+    }, [editPromoCampaignHandler, state.promoCodeType, stateFromLocation]);
+
+    const handleEdit = useCallback(async () => {
+        const { promoCampaign : { promoCodeType: oldValue } } = stateFromLocation || {};
+        const newValue = state.promoCodeType;
+
+        if (oldValue !== newValue) {
+            const changingValue =`${oldValue}_TO_${newValue}`;
+            callConfirmModalForPromoCodeTypeChanging(handleOk, changingValue);
+        } else {
+            editPromoCampaignHandler();
+        }
+    }, [editPromoCampaignHandler, state.promoCodeType, stateFromLocation, handleOk]);
+
+    const handleSave = useCallback(async () => {
         const { visibilitySettings } = state;
 
         if (!visibilitySettings[0].salePoint) {
@@ -177,12 +198,12 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
         }
     }, [history, state, matchUrl]);
 
-    const handlerNextStep = useCallback((val) => {
+    const handleNextStep = useCallback((val) => {
             setState(prevState => ({ ...prevState, ...val }));
             step < allStep && setStep(step + 1);
         }, [step]);
 
-    const handlerCancel = useCallback(() => history.push(matchUrl), [history, matchUrl]);
+    const handleCancel = useCallback(() => history.push(matchUrl), [history, matchUrl]);
     const handleBackClick = useCallback(() => setStep((prev) => prev - 1), []);
 
     const validStepChange = useCallback((step, finish = true) => {
@@ -216,7 +237,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                 return <StepInfo
                             state={ state }
                             validStepChange={ validStepChange }
-                            handlerNextStep={ handlerNextStep }
+                            handlerNextStep={ handleNextStep }
                             changeTypePromo={ changeTypePromo }
                             changeUrlSource={ changeUrlSource }
                         />;
@@ -224,7 +245,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                 return <StepTextAndImage
                             state={ state }
                             validStepChange={ validStepChange }
-                            handlerNextStep={ handlerNextStep }
+                            handlerNextStep={ handleNextStep }
                             addChangedImg = { addChangedImg }
                         />;
             case 3:
@@ -237,7 +258,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
             default:
                 return null;
         }
-    }, [step, state, onChangeState, handlerNextStep, onDeleteState, changeTypePromo, validStepChange, mode, addChangedImg]);
+    }, [step, state, onChangeState, handleNextStep, onDeleteState, changeTypePromo, validStepChange, mode, addChangedImg]);
 
     return (
         <div className={ styles.promoCreateContainer }>
@@ -253,7 +274,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                     <p className={ styles.headerTitle }>{ modsTitle[mode] }</p>
                     <p className={ styles.headerSteps }>{ STEP } { step } из { allStep }</p>
                     <Button
-                        onClick={ handlerCancel }
+                        onClick={ handleCancel }
                         className={ cn(styles.btnMR, styles.btnCancel) }
                     >
                         { CANCEL }
@@ -269,7 +290,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                     ) : (
                         <Button
                             type="primary"
-                            onClick={ mode === modes.create ? handlerSave : handlerEdit }
+                            onClick={ mode === modes.create ? handleSave : handleEdit }
                         >
                             { COMPLETE }
                         </Button>
