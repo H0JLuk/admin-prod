@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import { Table } from 'antd';
+import { Empty, Table } from 'antd';
 
 import styles from './UsersListTable.module.css';
 
@@ -9,6 +9,17 @@ const USER_BLOCKED = 'Заблокирован';
 const LOGIN = 'Логин';
 const LOCATION = 'Локация';
 const SALE_POINT = 'Точка продажи';
+const EMPTY_TABLE = {
+    firstMessagePart: 'Мы ничего не нашли.',
+    secondMessagePart: 'Измените значение поиска и попробуйте еще раз',
+};
+
+const EmptyMessage = (
+    <Empty description={ null } >
+        <div>{EMPTY_TABLE.firstMessagePart}</div>
+        <div>{EMPTY_TABLE.secondMessagePart}</div>
+    </Empty>
+);
 
 const UsersListTable = ({
     loadingData,
@@ -29,6 +40,7 @@ const UsersListTable = ({
             pagination={ pagination }
             showHeader={ false }
             onChange={ onChangePage }
+            locale={ { emptyText: EmptyMessage } }
         >
             <Table.Column
                 width="25%"
