@@ -1,0 +1,66 @@
+.noFile {
+    align-self: center;
+}
+
+.imgPreviewWrap {
+    display: flex;
+    width: 100%;
+}
+
+.fileName {
+    color: #171725;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    background-color: #efefef;
+    text-align: left;
+    padding: 10px 15px;
+    bottom: 0;
+}
+
+.fileSize {
+    color: #d4d9de;
+}
+
+.previewImg {
+    max-width: 100%;
+}
+
+.btn:hover {
+    color:#09a552;
+}
+
+.uploadButton:hover {
+    color: #09a552;
+    border-color: #09a552 !important;
+}
+
+.uploadButton:global(.ant-upload-drag-hover) {
+    border-color: #09a552 !important;
+}
+
+.banner {
+    width: 100%;
+}
+
+.banner:global(.ant-upload .ant-upload-drag-container) {
+    align-items: flex-start;
+}
+
+.imageLogo {
+    transform: translateY(-45%);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+

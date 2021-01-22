@@ -28,48 +28,16 @@ export const modsTitle = {
     edit: 'Редактирование промо-кампании',
 };
 
-export const imgTypes = {
-    card: 'CARD',
-    logo_main: 'LOGO_MAIN',
-    logo_icon: 'LOGO_ICON',
-    screen: 'SCREEN',
-    logo_secondary: 'LOGO_SECONDARY',
-};
-
-export const textTypes = {
-    excursionConditions: 'excursionConditions',
-    excursionTitleQR: 'excursionTitleQR',
-    giftTextOption: 'giftTextOption',
-    giftText: 'giftText',
-    rules: 'RULES',
-    header: 'HEADER',
-    description: 'DESCRIPTION',
-};
-
-export const bannerTypes = {
-    main_banner: 'main_banner',
-    presents_main_banner: 'presents_main_banner',
-    logo_on_screen_with_phone: 'logo_on_screen_with_phone',
-    landing: 'landing',
-    logo_on_screen_with_qr_code: 'logo_on_screen_with_qr_code',
-    presents_scan_icon: 'presents_scan_icon',
-    presents_main_logo_1: 'presents_main_logo_1',
-};
-
 export const promoCampaignTextTypes = {
-    [textTypes.excursionConditions]: textTypes.rules,
-    [textTypes.excursionTitleQR]: textTypes.header,
-    [textTypes.giftText]: textTypes.header,
-    [textTypes.giftTextOption]: textTypes.description,
+    RULES: 'RULES',
+    HEADER: 'HEADER',
+    DESCRIPTION: 'DESCRIPTION',
 };
 
 export const promoCampaignBannerTypes = {
-    [bannerTypes.main_banner]: imgTypes.card,
-    [bannerTypes.presents_main_banner]: imgTypes.card,
-    [bannerTypes.logo_on_screen_with_phone]: imgTypes.logo_secondary,
-    [bannerTypes.landing]: imgTypes.screen,
-    [bannerTypes.logo_on_screen_with_qr_code]: imgTypes.logo_main,
-    [bannerTypes.presents_scan_icon]: imgTypes.logo_icon,
-    [bannerTypes.presents_main_logo_1]: imgTypes.logo_main,
+    CARD: 'CARD',
+    LOGO_MAIN: 'LOGO_MAIN',
+    LOGO_ICON: 'LOGO_ICON',
+    SCREEN: 'SCREEN',
+    LOGO_SECONDARY: 'LOGO_SECONDARY',
 };
-

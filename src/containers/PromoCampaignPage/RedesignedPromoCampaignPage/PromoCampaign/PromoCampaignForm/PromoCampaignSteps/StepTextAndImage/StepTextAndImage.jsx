@@ -10,27 +10,25 @@ const templateTypes = {
     gift: 'gift',
 };
 
-const StepTextAndImage = ({ state, handlerNextStep, validStepChange, addChangedImg }) => {
+const StepTextAndImage = ({
+    typePromoCampaign,
+    handlerNextStep,
+    validStepChange,
+    addChangedImg,
+    banners,
+    texts,
+}) => {
     const [form] = Form.useForm();
-    const { typePromoCampaign } = state;
 
     const onFinish = useCallback((val) => {
-        validStepChange(steps.visibility);
-        handlerNextStep(Object.keys(val).reduce((result, key) => {
-            const [fieldType, fieldName] = key.split('.');
-            const value = val[key];
-
-            return {
-                ...result,
-                [fieldType]: {
-                    ...result[fieldType],
-                    [fieldName]: value
-                }
-            };
-        }, {}));
+        validStepChange(steps.landing);
+        handlerNextStep(val);
     }, [handlerNextStep, validStepChange]);
 
-    const onRemoveImg = useCallback((name) => form.setFieldsValue({ [name]: [] }), [form]);
+    const onRemoveImg = useCallback((name) => {
+        form.setFields([{ name, value: [] }]);
+        addChangedImg(name[1]);
+    }, [form, addChangedImg]);
 
     /** @type {import('antd/lib/form').FormProps['onFieldsChange']} */
     const isChanged = useCallback(changedFields => {
@@ -39,11 +37,16 @@ const StepTextAndImage = ({ state, handlerNextStep, validStepChange, addChangedI
         }
 
         if (changedFields.length === 1) {
-            const [fieldName] = changedFields[0].name;
-            const [, imgTypeName] = String(fieldName).split('.');
-            addChangedImg(imgTypeName);
+            const [, fieldName] = changedFields[0].name;
+            addChangedImg(fieldName);
         }
     }, [validStepChange, addChangedImg]);
+
+    const templateProps = {
+        banners,
+        texts,
+        onRemoveImg,
+    };
 
     return (
         <Form
@@ -52,6 +55,7 @@ const StepTextAndImage = ({ state, handlerNextStep, validStepChange, addChangedI
             className={ styles.containerStep }
             onFinish={ onFinish }
             onFieldsChange={ isChanged }
+            layout='vertical'
         >
             <div className={ styles.containerStep }>
                 {typePromoCampaign === PROMO_CAMPAIGNS.NORMAL.value && (
@@ -59,10 +63,8 @@ const StepTextAndImage = ({ state, handlerNextStep, validStepChange, addChangedI
                         <div className={ styles.title }>{ PROMO_CAMPAIGNS.NORMAL.label }</div>
                         <div className={ styles.container }>
                             <Template
-                                banners={ state.promoCampaignBanners }
-                                texts={ state.promoCampaignTexts }
-                                onRemoveImg={ onRemoveImg }
-                                type= { templateTypes.excursion }
+                                { ...templateProps }
+                                type={ templateTypes.excursion }
                             />
                         </div>
                     </div>
@@ -72,10 +74,8 @@ const StepTextAndImage = ({ state, handlerNextStep, validStepChange, addChangedI
                         <div className={ styles.title }>{ PROMO_CAMPAIGNS.PRESENT.label }</div>
                         <div className={ styles.container }>
                             <Template
-                                banners={ state.promoCampaignBanners }
-                                texts={ state.promoCampaignTexts }
-                                onRemoveImg={ onRemoveImg }
-                                type= { templateTypes.gift }
+                                { ...templateProps }
+                                type={ templateTypes.gift }
                             />
                         </div>
                     </div>

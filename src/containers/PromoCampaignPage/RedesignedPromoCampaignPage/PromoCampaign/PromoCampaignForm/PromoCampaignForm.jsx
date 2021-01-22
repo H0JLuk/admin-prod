@@ -11,15 +11,13 @@ import callConfirmModalForPromoCodeTypeChanging from './PromoCampaignSteps/Confi
 import Header from '../../../../../components/Header/Redisegnedheader/Header';
 import { allStep, CANCEL, COMPLETE, modes, modsTitle, NEXT, STEP, steps } from './PromoCampaignFormConstants';
 import {
+    arrayToObject,
     createImgBanners,
     createTexts,
     createVisibilities,
     EditImgBanners,
     editTextBanners,
     getDataForSend,
-    getImages,
-    makeImg,
-    makeText,
 } from './PromoCampaignFormUtils';
 import { getUnissuedPromoCodeStatistics } from '../../../../../api/services/promoCodeService';
 import { editPromoCampaign, newPromoCampaign } from '../../../../../api/services/promoCampaignService';
@@ -84,7 +82,8 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
             // setValidStep(() => (Object.keys(promoCampaign.promoCampaignBanners).length < 4 ? 2 : 3));
 
             (async () => {
-                const blobs = await getImages(promoCampaign.promoCampaignBanners);
+                const { promoCampaignBanners = [], promoCampaignTexts = [] } = promoCampaign;
+
                 setState((prev) => ({
                     ...prev,
                     name: promoCampaign.name,
@@ -96,8 +95,8 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                     categoryIdList: promoCampaign.categoryList.reduce((prev, curr) => (
                         [...prev, curr.categoryId]
                     ), []),
-                    promoCampaignBanners: makeImg(blobs, promoCampaign.type, promoCampaign.promoCampaignBanners),
-                    promoCampaignTexts: makeText(promoCampaign.type, promoCampaign.promoCampaignTexts),
+                    promoCampaignBanners: arrayToObject(promoCampaignBanners, 'type', 'url'),
+                    promoCampaignTexts: arrayToObject(promoCampaignTexts, 'type', 'value'),
                     datePicker: [
                         promoCampaign.startDate ? moment(promoCampaign.startDate) : undefined,
                         promoCampaign.finishDate ? moment(promoCampaign.finishDate) : undefined,
@@ -243,7 +242,9 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                         />;
             case 2:
                 return <StepTextAndImage
-                            state={ state }
+                            texts={ state.promoCampaignTexts }
+                            banners={ state.promoCampaignBanners }
+                            typePromoCampaign={ state.typePromoCampaign }
                             validStepChange={ validStepChange }
                             handlerNextStep={ handleNextStep }
                             addChangedImg = { addChangedImg }

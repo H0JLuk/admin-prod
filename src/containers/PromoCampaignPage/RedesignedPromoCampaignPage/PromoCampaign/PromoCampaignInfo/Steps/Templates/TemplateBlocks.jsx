@@ -18,13 +18,13 @@ export const ImageBlock = ({ label, type, src, size }) => (
         <div className={ styles.block }>
             <div
                 className={ cn({
-                    [styles.icon]: type === 'icon',
+                    [styles.logo]: type === 'logo',
                 }) }
             >
                 <img
                     className={ cn({
-                        [styles.image]: type === 'image',
-                        [styles.imageIcon]: type === 'icon',
+                        [styles.banner]: type === 'banner',
+                        [styles.imageLogo]: type === 'logo',
                     }) }
                     src={ src }
                     alt=""

@@ -1,4 +1,4 @@
-.image {
+.banner {
     width: 100%;
 }
 
@@ -23,15 +23,15 @@
     margin-bottom: 16px;
 }
 
-.icon {
+.logo {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
 }
 
-.imageIcon {
-    margin-top: -70px;
+.imageLogo {
+    transform: translateY(-45%);
 }
 
 .footer {

@@ -1,0 +1,38 @@
+.title {
+    letter-spacing: -.3px;
+    padding: 0;
+}
+
+.titleBlock {
+    display: flex;
+    align-items: center;
+}
+
+.tooltip :global(.ant-tooltip-inner) {
+    background-color: white;
+}
+
+.tooltip :global(.ant-tooltip-arrow-content) {
+    background-color: white;
+    width: 20px;
+    height: 20px;
+}
+
+.tooltip :global(.ant-tooltip-arrow) {
+    width: 21px;
+    height: 21px;
+}
+
+.tooltipIcon {
+    margin-left: 4px !important;
+    font-size: 19px !important;
+    padding-right: 5px;
+}
+
+.tooltipIcon > svg {
+    fill: #d7d8dc !important;
+}
+
+.tooltipImg {
+    width: 100%;
+}

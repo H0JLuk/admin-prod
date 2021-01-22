@@ -12,9 +12,6 @@ const Template = ({ banners, texts, type }) => {
 
     useEffect(() => {
         const resultBanners = banners.reduce((result, { type, url }) => {
-            if (Object.prototype.hasOwnProperty.call(result, type)) {
-                return result;
-            }
             return { ...result, [type]: url };
         }, {});
         const resultTexts = texts.reduce((result, { type, value }) => {
@@ -41,7 +38,7 @@ const Template = ({ banners, texts, type }) => {
                     className={ styles.col }
                     span={ 12 }
                 >
-                    { ['image', 'icon'].includes(row[key].type) && (
+                    { ['banner', 'logo'].includes(row[key].type) && (
                         <ImageBlock
                             label={ row[key].label }
                             type={ row[key].type }

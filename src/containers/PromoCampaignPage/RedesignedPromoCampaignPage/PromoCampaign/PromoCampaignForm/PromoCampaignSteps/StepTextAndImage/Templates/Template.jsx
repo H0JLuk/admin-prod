@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row } from 'antd';
-import ImgBlock from '../ImgBlock/ImgBlock';
+import UploadFile from '../../StepLanding/FormControllers/UploadFile/UploadFile';
+import { getLabel } from '../../../../../../../../components/LabelWithTooltipImg/LabelWithTooltipImg';
 import TextBlock from '../TextBlock/TextBlock';
 import { INFO_ROWS } from './templateConstants';
 
 import styles from './Template.module.css';
+
+const ADD = 'Добавить';
 
 const Template = ({ banners, texts, type, onRemoveImg }) => {
     const [infoRows, setInfoRows] = useState([]);
@@ -26,17 +29,18 @@ const Template = ({ banners, texts, type, onRemoveImg }) => {
                     span={ 12 }
                 >
                     { ['logo', 'banner'].includes(row[key].type) && (
-                        <ImgBlock
-                            title={ row[key].title }
+                        <UploadFile
                             description={ row[key].description }
                             setting={ row[key].setting }
-                            tooltipImg={ row[key].tooltipImg }
-                            access_type={ row[key].access_type }
-                            name={ `promoCampaignBanners.${key}` }
+                            accept={ row[key].access_type }
+                            name={ ['promoCampaignBanners', key] }
                             initialValue={ banners[key] }
                             rules={ row[key].rules }
                             onRemoveImg={ onRemoveImg }
                             type={ row[key].type }
+                            label={ getLabel(row[key].title, row[key].tooltipImg) }
+                            uploadButtonText={ ADD }
+                            footer
                         />
                     ) }
                     { row[key].type === 'text' && (
@@ -45,7 +49,7 @@ const Template = ({ banners, texts, type, onRemoveImg }) => {
                             placeholder={ row[key].placeholder }
                             maxLength={ row[key]?.maxLength }
                             rules={ row[key].rules }
-                            name={ `promoCampaignTexts.${key}` }
+                            name={ ['promoCampaignTexts', key] }
                             initialValue={ texts[key] }
                         />
                     ) }

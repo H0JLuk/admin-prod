@@ -1,11 +1,11 @@
 export const EXCURSION_TYPE_ROWS = [
     {
-        CARD: { label: 'Баннер на главной', type: 'image' },
-        LOGO_SECONDARY: { label: 'Логотип на экране с номером', type: 'icon' },
+        CARD: { label: 'Баннер на главной', type: 'banner' },
+        LOGO_MAIN: { label: 'Логотип на экране с номером', type: 'logo' },
     },
     {
-        SCREEN: { label: 'Лендинг', type: 'image' },
-        LOGO_MAIN: { label: 'Логотип на экране с QR', type: 'icon' },
+        SCREEN: { label: 'Лендинг', type: 'banner' },
+        LOGO_SECONDARY: { label: 'Логотип на экране с QR', type: 'logo' },
     },
     {
         RULES: { label: 'Условия', type: 'text' },
@@ -15,12 +15,12 @@ export const EXCURSION_TYPE_ROWS = [
 
 export const GIFT_TYPE_ROWS = [
     {
-        CARD: { label: 'Карточка на главной', type: 'image' },
-        LOGO_MAIN: { label: 'Логотип на главной', type: 'icon' },
+        CARD: { label: 'Карточка на главной', type: 'banner' },
+        LOGO_MAIN: { label: 'Логотип на главной', type: 'logo' },
     },
     {
-        LOGO_ICON: { label: 'Иконка приложения', type: 'icon' },
-        SCREEN: { label: 'Лендинг', type: 'image' },
+        LOGO_SECONDARY: { label: 'Иконка приложения', type: 'logo' },
+        // SCREEN: { label: 'Лендинг', type: 'banner' },
     },
     {
         HEADER: { label: 'Текст заголовка', type: 'text' },

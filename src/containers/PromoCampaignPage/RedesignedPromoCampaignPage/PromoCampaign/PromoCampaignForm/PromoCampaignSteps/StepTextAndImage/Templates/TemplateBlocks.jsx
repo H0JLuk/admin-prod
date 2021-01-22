@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'classnames';
-
 import styles from './Template.module.css';
 
 export const TextBlock = ({ label, text }) => (
@@ -18,13 +17,13 @@ export const ImageBlock = ({ label, type, src, size }) => (
         <div className={ styles.block }>
             <div
                 className={ cn({
-                    [styles.icon]: type === 'icon',
+                    [styles.logo]: type === 'logo',
                 }) }
             >
                 <img
                     className={ cn({
-                        [styles.image]: type === 'image',
-                        [styles.imageIcon]: type === 'icon',
+                        [styles.banner]: type === 'banner',
+                        [styles.imageLogo]: type === 'logo',
                     }) }
                     src={ src }
                     alt=""
@@ -34,7 +33,7 @@ export const ImageBlock = ({ label, type, src, size }) => (
                 <div className={ styles.fileName }>
                     { (src || '').split('/').pop() }
                 </div>
-                {/* TODO: Добавить размер файла, когда определимся откуда мы его будем брать (с бэка или из Blob?) */}
+                {/* FIXME: Добавить размер файла, когда определимся откуда мы его будем брать (с бэка или из Blob?) */}
                 <div className={ styles.fileSize }>{ size }</div>
             </div>
         </div>
