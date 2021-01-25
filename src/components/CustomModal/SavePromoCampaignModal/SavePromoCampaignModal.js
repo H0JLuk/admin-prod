@@ -64,8 +64,9 @@ class SavePromoCampaignModal extends Component {
 
         const oldValue = this.props.editingObject.promoCodeType;
         const newValue = this.state.promoCodeType;
+        const { editMode } = this.props;
 
-        if (newValue !== oldValue) {
+        if (newValue !== oldValue && editMode) {
             const changingValue =`${oldValue}_TO_${newValue}`;
             callConfirmModalForPromoCodeTypeChanging(this.handleOk, changingValue);
         } else {
