@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Dropdown, Button } from 'antd';
@@ -16,7 +16,7 @@ const DROPDOWN_ARROW_STYLE = {
 const DropdownWithAction = ({
     dropdownLabel,
     onMenuItemClick,
-    menuItems = [],
+    menuItems,
     withReset,
     resetLabel = RESET_LABEL,
 }) => {
@@ -81,4 +81,4 @@ DropdownWithAction.propTypes = {
     withReset: PropTypes.bool,
 };
 
-export default DropdownWithAction;
+export default memo(DropdownWithAction);

@@ -26,6 +26,7 @@ const BUTTON_ADD = 'Добавить';
 const BUTTON_CHOOSE = 'Выбрать';
 const BUTTON_CANCEL = 'Отменить';
 const BUTTON_SELECT_ALL = 'Выбрать все';
+const BUTTON_UNSELECT_ALL = 'Отменить выбор';
 const BUTTON_DELETE = 'Удалить';
 
 const SEARCH_INPUT = 'Поиск по логину, локации и точке продажи';
@@ -70,15 +71,15 @@ const showRestoredUsersNotification = (users) => {
         message: <RestoredTableUser users={ users } />,
         duration: 0,
         placement: 'bottomRight',
-        style:{ width: '100%' },
+        style: { width: '100%' },
     });
 };
 
 const showRestoredErrorsNotification = (message) => {
     notification.error({
         message,
-        duration:0,
-        placement:'bottomRight',
+        duration: 0,
+        placement: 'bottomRight',
     });
 };
 
@@ -188,33 +189,6 @@ const TableUser = ({ matchUrl }) => {
         }
     }, [selectedRowValues, users]);
 
-    const buttons = useMemo(() => {
-        if (select) {
-            return [
-                { type: 'primary', label: BUTTON_SELECT_ALL, onClick: selectAll, disabled: loadingTableData },
-                { label: BUTTON_CANCEL, onClick: setSelectedRow, disabled: loadingTableData },
-            ];
-        }
-
-        return [
-            { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
-            { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
-        ];
-    }, [select, loadingTableData, setSelectedRow, onAddUser, selectAll]);
-
-    const searchInput = useMemo(() => ({
-        placeholder: SEARCH_INPUT,
-        value: params.filterText,
-        onChange: handleSearch,
-    }), [params, handleSearch]);
-
-    const sortingBy = useMemo(() => ({
-        menuItems: DROPDOWN_SORT_MENU,
-        onMenuItemClick: changeSort,
-        sortBy: params.sortBy,
-        withReset: params.sortBy !== '',
-    }), [changeSort, params.sortBy]);
-
     const onChangePage = useCallback(async ({ current, pageSize }) => {
         loadUsersData({
             ...params,
@@ -244,43 +218,6 @@ const TableUser = ({ matchUrl }) => {
         selectedRowKeys,
         onChange: updateSelected,
     }), [selectedRowKeys, updateSelected]);
-
-    const linkChangePassword = useCallback(async () => {
-        const requestPromises = selectedRowValues.map(({ personalNumber }) => resetUser(personalNumber));
-        setLoadingTableData(true);
-
-        try {
-            const response = await Promise.allSettled(requestPromises);
-            const { users, errors } = response.reduce((prev, { status, value = {}, reason =  {} }, index) => {
-                const { personalNumber } = selectedRowValues[index];
-                const { generatedPassword } = value;
-                const { message } = reason;
-                if (status === 'rejected') {
-                    prev.errors.push(message);
-                } else {
-                    prev.users.push({ personalNumber, generatedPassword });
-                }
-                return prev;
-            }, { users: [], errors: [] });
-            if (users.length) {
-                showRestoredUsersNotification(users);
-            }
-            if (errors.length) {
-                showRestoredErrorsNotification(errors);
-            }
-            clearSelectedItems();
-        } catch (e) {
-            const { message } = e;
-            showRestoredErrorsNotification(message);
-            console.warn(e);
-        }
-
-        setLoadingTableData(false);
-    }, [selectedRowValues]);
-
-    const linkEdit = useCallback(() => {
-        history.push(`${matchUrl}${USERS_PAGES.EDIT_SOME_USERS}`, { users: selectedRowValues });
-    }, [history, selectedRowValues, matchUrl]);
 
     const refreshTable = useCallback(async () => {
         await loadUsersData(params);
@@ -319,6 +256,83 @@ const TableUser = ({ matchUrl }) => {
     if (!users.length && !loadingPage && !loadingTableData && !params.filterText && !params.pageNo) {
         return <EmptyUsersPage />;
     }
+
+    /* no useCallback needed, because function is set to <button /> onClick */
+    const linkChangePassword = async () => {
+        const requestPromises = selectedRowValues.map(({ personalNumber }) => resetUser(personalNumber));
+        setLoadingTableData(true);
+
+        try {
+            const response = await Promise.allSettled(requestPromises);
+            const { users, errors } = response.reduce((prev, { status, value = {}, reason =  {} }, index) => {
+                const { personalNumber } = selectedRowValues[index];
+                const { generatedPassword } = value;
+                const { message } = reason;
+                if (status === 'rejected') {
+                    prev.errors.push(message);
+                } else {
+                    prev.users.push({ personalNumber, generatedPassword });
+                }
+                return prev;
+            }, { users: [], errors: [] });
+            if (users.length) {
+                showRestoredUsersNotification(users);
+            }
+            if (errors.length) {
+                showRestoredErrorsNotification(errors);
+            }
+            clearSelectedItems();
+        } catch (e) {
+            const { message } = e;
+            showRestoredErrorsNotification(message);
+            console.warn(e);
+        }
+
+        setLoadingTableData(false);
+    };
+
+    /* no useCallback needed, because function is set to <button /> onClick */
+    const linkEdit = () => {
+        history.push(`${matchUrl}${USERS_PAGES.EDIT_SOME_USERS}`, { users: selectedRowValues });
+    };
+
+    const buttons = [];
+
+    /* no useMemo needed, because almost every render we get new object */
+    if (select) {
+        const selectedAll = users.length === selectedRowKeys.length;
+        buttons.push({
+            type: 'primary',
+            label: selectedAll ? BUTTON_UNSELECT_ALL : BUTTON_SELECT_ALL,
+            onClick: selectAll,
+            disabled: loadingTableData
+        },
+        {
+            label: BUTTON_CANCEL,
+            onClick: setSelectedRow,
+            disabled: loadingTableData
+        });
+    } else {
+        buttons.push(
+            { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
+            { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
+        );
+    }
+
+    /* no useMemo needed, because almost every render we get new object for `buttons` */
+    const searchInput = {
+        placeholder: SEARCH_INPUT,
+        value: params.filterText,
+        onChange: handleSearch,
+    };
+
+    /* no useMemo needed, because almost every render we get new object for `buttons` */
+    const sortingBy = {
+        menuItems: DROPDOWN_SORT_MENU,
+        onMenuItemClick: changeSort,
+        sortBy: params.sortBy,
+        withReset: params.sortBy !== '',
+    };
 
     return (
         <div className={ styles.mainBlock }>

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Button, Input } from 'antd';
@@ -22,7 +22,7 @@ const HeaderWithActions = ({
     classNames,
     resetLabel,
 }) => {
-    const buttonsBlock = useMemo(() => (buttons || []).map((button) => (
+    const buttonsBlock = (buttons || []).map((button) => (
         <Button
             className={ cn(styles.button, { [styles.btn_primary]: button.type === 'primary' }) }
             key={ button.label }
@@ -32,13 +32,13 @@ const HeaderWithActions = ({
         >
             { button.label }
         </Button>
-    )), [buttons]);
+    ));
 
-    const onChangeInput = useCallback(({ target: { value } }) => {
+    const onChangeInput = ({ target: { value } }) => {
         searchInput.onChange(value);
-    }, [searchInput]);
+    };
 
-    const clickClearButton = useCallback(() => searchInput.onChange(''), [searchInput]);
+    const clickClearButton = () => searchInput.onChange('');
 
     const dropdownLabel = useMemo(() => {
         const { label } = sortingBy.menuItems.find((item) => item.name === sortingBy.sortBy) || {};
