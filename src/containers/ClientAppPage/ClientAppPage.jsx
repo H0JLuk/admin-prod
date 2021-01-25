@@ -4,9 +4,8 @@ import {
     copyClientApp,
     getClientAppList,
     updateClientApp,
-    updateProperties
 } from '../../api/services/clientAppService';
-import { getStaticUrl } from '../../api/services/settingsService';
+import { addSetting, getSettingsList, getStaticUrl, updateSettingsList } from '../../api/services/settingsService';
 import { goApp } from '../../utils/appNavigation';
 import styles from './ClientAppPage.module.css';
 import CustomModal from '../../components/CustomModal/CustomModal';
@@ -24,7 +23,9 @@ import { logout } from '../../api/services/authService';
 import Button from '../../components/Button/Button';
 import { Switch, Typography } from 'antd';
 
-const CLIENT_APP_LIST_TITLE = 'Клиенские приложения';
+import { ReactComponent as LoadingSpinner } from '../../static/images/loading-spinner.svg';
+
+const CLIENT_APP_LIST_TITLE = 'Клиентские приложения';
 const LOADING_LIST_LABEL = 'Загрузка';
 const CLIENT_APPS_GET_ERROR = 'Ошибка получения клиентских приложений!';
 const ENTER_CLIENT_APP_CODE_REQUEST = 'Пожалуйста, введите код клиентского приложения';
@@ -44,7 +45,13 @@ const initialState = {
         inactivityTime: null, promoShowTime: null, privacyPolicy: null,
         tmpBlockTime: null, maxPasswordAttempts: null, maxPresentsNumber: null
     },
-    staticUrl: getStaticUrl(), clientAppList: [], showDeleted: false, isOpen: false, formError: null
+    staticUrl: getStaticUrl(), clientAppList: [], showDeleted: false, isOpen: false, formError: null,
+    loading: false,
+};
+
+const updateValueType = {
+    edit: 'edit',
+    create: 'create',
 };
 
 const LoadingStatus = ({ loading }) => (
@@ -85,8 +92,23 @@ class ClientAppPage extends Component {
         this.setState({ editingClientApp: { id, name, displayName, code, isDeleted } }, this.openModal);
 
 
-    handleEditProperties = (properties, clientAppId) =>
-        this.setState({ clientAppProperties: { ...properties, clientAppId } }, this.openModal);
+    handleEditProperties = async (clientAppCode) =>{
+        this.setState({ loading: true }, this.openModal);
+        const unformattedSettings = await getSettingsList(clientAppCode);
+
+        const settings = unformattedSettings.settingDtoList.length && unformattedSettings.settingDtoList.reduce((result, elem) => {
+            return { ...result, [elem.key]: elem.value };
+        }, {});
+
+        const url = getStaticUrl();
+        const installation_url = settings.installation_url && settings.installation_url.replace(url, '');
+        const usage_url = settings.usage_url && settings.usage_url.replace(url, '');
+
+        this.setState({
+            clientAppProperties: { ...settings, installation_url, usage_url, clientAppCode },
+            loading: false,
+        });
+    }
 
     handleAdministrate = (code) => {
         const role = getRole();
@@ -236,33 +258,51 @@ class ClientAppPage extends Component {
         }
     };
 
-    updateProperties = async (data) => {
-        const { clientAppProperties: { clientAppId } } = this.state;
-        const properties = { ...data };
-        try {
-            for (const propName in properties) {
-                const property = properties[propName];
-                if (property == null || property === '') {
-                    delete properties[propName];
-                }
+    createOrUpdateKey = async (changedParams) => {
+        const updateSettings = [];
+        const addSettings = [];
+
+        changedParams.forEach((changedValueObject) => {
+            const { type, ...params } = changedValueObject;
+            type === updateValueType.edit ? updateSettings.push(params) : addSettings.push(params);
+        });
+
+        updateSettings.length && (await updateSettingsList(updateSettings));
+
+        const addKeysPromises = addSettings.map(addSetting);
+        addKeysPromises.length && (await Promise.all(addKeysPromises));
+    }
+
+    updateProperties = async (dataFromForm) => {
+        this.setState({ loading: true });
+        const {
+            clientAppProperties,
+            clientAppProperties: { clientAppCode },
+        } = this.state;
+
+        const changedParams = Object.keys(dataFromForm).reduce((result, key) => {
+            const valueFromServer = clientAppProperties[key];
+            const valueInForm = dataFromForm[key];
+
+            if (valueFromServer === undefined && valueInForm) {
+                return [...result, { clientAppCode, key, value: valueInForm, type: updateValueType.create }];
             }
-            const response = await updateProperties(clientAppId, properties);
-            await this.reloadProperties(clientAppId, response);
+
+            if ((!valueFromServer && valueInForm) || (valueFromServer && valueInForm !== valueFromServer)) {
+                return [...result, { clientAppCode, key, value: valueInForm, type: updateValueType.edit }];
+            }
+            return result;
+        }, []);
+
+        try {
+            await this.createOrUpdateKey(changedParams);
         } catch (e) {
             console.error(e.message);
             alert(e.message);
+        } finally {
+            this.setState({ loading: false }, this.closeModal);
         }
     };
-
-    async reloadProperties(clientAppId, properties) {
-        const { clientAppList } = this.state;
-        await clientAppList.forEach(app => {
-           if (app.id === clientAppId) {
-               app.clientApplicationPropertiesDto = properties;
-           }
-        });
-        this.setState({ clientAppList: clientAppList }, this.closeModal);
-    }
 
     renderClientAppList = () => {
         const { clientAppList, showDeleted } = this.state;
@@ -300,7 +340,7 @@ class ClientAppPage extends Component {
         <CustomModal
             isOpen={ this.state.isOpen }
             onRequestClose={ this.closeModal }>
-            {this.renderModalForm()}
+            { this.state.loading ? <LoadingSpinner /> : this.renderModalForm() }
         </CustomModal>
     );
 

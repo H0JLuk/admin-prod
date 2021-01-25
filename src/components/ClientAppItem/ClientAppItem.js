@@ -5,7 +5,7 @@ import Button from '../Button/Button';
 import ButtonLabels from '../Button/ButtonLables';
 
 const ClientAppItem = (props) => {
-    const { id, /*handleEdit, displayName,*/ name, code, isDeleted, handleAdministrate, handleEditProperties, properties } = props;
+    const { /*handleEdit, displayName,*/ name, code, isDeleted, handleAdministrate, handleEditProperties } = props;
 
     // const handleEditClientApp = () => {
     //     handleEdit(id, name, displayName, code, isDeleted);
@@ -13,7 +13,7 @@ const ClientAppItem = (props) => {
 
     const handleAdministrateClientApp = () => handleAdministrate(code);
 
-    const handleEditPropertiesClientApp = () => handleEditProperties(properties, id);
+    const handleEditPropertiesClientApp = () => handleEditProperties(code);
 
     return (
         <div className={ styles.clientAppItem }>

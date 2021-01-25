@@ -154,7 +154,7 @@ export const CLIENT_APP_EDIT_FORM = {
 };
 
 export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
-    yamToken: {
+    ym_token: {
         label : 'Токен яндекс метрики',
         value : '',
         type: 'text',
@@ -163,7 +163,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         validators: [digitValidator],
         mask: null,
     },
-    tokenLifetime: {
+    token_lifetime: {
         label : 'Сессия сотрудника (в секундах)',
         value : '',
         type: 'text',
@@ -173,7 +173,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
         placeholder: '1800 секунд по умолчанию',
     },
-    inactivityTime: {
+    inactivity_time: {
         label : 'Сессия клиента (в секундах)',
         value : '',
         type: 'text',
@@ -183,7 +183,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
         placeholder: '15 секунд по умолчанию',
     },
-    promoShowTime: {
+    promo_show_time: {
         label : 'Показ предложения в "карусели" (в секундах)',
         value : '',
         type: 'text',
@@ -193,7 +193,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
         placeholder: '20 секунд по умолчанию',
     },
-    privacyPolicy: {
+    privacy_policy: {
         label : 'Политика конфиденциальности',
         value : '',
         type: 'text',
@@ -202,7 +202,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         validators: [isRequired],
         mask: null,
     },
-    tmpBlockTime: {
+    tmp_block_time: {
         label : 'Временная блокировка пользователя (в секундах)',
         value : '',
         type: 'text',
@@ -212,7 +212,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
         placeholder: '1800 секунд по умолчанию',
     },
-    maxPasswordAttempts: {
+    max_password_attempts: {
         label : 'Максимальное число попыток ввода пароля',
         value : '',
         type: 'text',
@@ -222,7 +222,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
         placeholder: '3 по умолчанию',
     },
-    maxPresentsNumber: {
+    max_presents_number: {
         label : 'Максимальное число подарков',
         value : '',
         type: 'text',
@@ -232,7 +232,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
         placeholder: '3 по умолчанию',
     },
-    installationUrl: {
+    installation_url: {
         label : 'Путь к инструкции по установке',
         value : '',
         type: 'text',
@@ -241,7 +241,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         validators: [],
         mask: null,
     },
-    usageUrl: {
+    usage_url: {
         label : 'Путь к инструкции по использованию',
         value : '',
         type: 'text',
