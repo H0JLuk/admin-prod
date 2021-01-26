@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getStaticUrlFromBackend, saveStaticUrl } from '../../api/services/settingsService';
 import { goToClientApps, goToDashboard, goToUserManager } from '../../utils/appNavigation';
 import styles from './LoginPage.module.css';
 import { LOGIN_FORM } from '../../components/Form/forms';
@@ -23,6 +24,7 @@ const LoginPage = (props) => {
                 return;
             }
             storeUserData(token, authority);
+            saveStaticUrl(await getStaticUrlFromBackend());
 
             if (ROLES.USER_MANAGER === authority) {
                 return goToUserManager(history);

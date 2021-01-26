@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import './static/fonts/fonts.css';
 import moment from 'moment';
-import { getStaticUrlFromBackend, saveStaticUrl } from './api/services/settingsService';
 import { ROUTE } from './constants/route';
 import ROLES from './constants/roles';
 import { getRole } from './api/services/sessionService';
@@ -19,12 +18,6 @@ import UserManagerPage from './pages/UserManagerPage';
 moment.locale('ru');
 
 class App extends React.PureComponent {
-
-    componentDidMount() {
-        getStaticUrlFromBackend().then(response => {
-            saveStaticUrl(response);
-        });
-    }
 
     render() {
         const withRedirect = (Component, requiredRole) => (props) => {
