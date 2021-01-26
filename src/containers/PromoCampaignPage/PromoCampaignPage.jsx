@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Empty, Typography, notification } from 'antd';
+import cn from 'classnames';
 import { updateTokenLifetime } from '../../api/services';
 import {
     createPromoCampaign,
@@ -29,7 +31,6 @@ import SavePromoCampaignTextModal from '../../components/CustomModal/SavePromoCa
 import PromoCodeStatisticModal from '../../components/CustomModal/PromoCodeStatisticModal/PromoCodeStatisticModal';
 import UploadPromoCodesModal from '../../components/CustomModal/UploadPromoCodesModal/UploadPromoCodesModal';
 import FloatingButton from '../../components/TooltipButton/FloatingButton/FloatingButton';
-import { Empty, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import { getDzoList } from '../../api/services/dzoService';
@@ -41,6 +42,38 @@ import { getLinkForRedesignPromoCampaign } from '../../utils/appNavigation';
 const PROMO_CAMPAIGN_LIST_TITLE = 'Промо-кампании';
 const LIST_ERROR = 'Не удалось получить список промо-кампаний';
 const STATISTICS_ERROR = 'Не удалось получить статистику для промо-кампании';
+const ON_PROMOCODES_LOADED = 'Промокоды успешно загружены';
+const MODE_CREATE = 'create';
+const MODE_BANNER = 'Баннер';
+const MODE_TEXT = 'Текст';
+
+const onPromoLoadedWithTextAndBanner = (type, promoCampaignName, mode) => {
+    return (
+        <p>
+            { mode } с типом <span className={ styles.bold }>{ type }</span> успешно загружен для
+            <span className={ cn(styles.bold, styles.promoCampaignName) }>{ promoCampaignName }</span>
+        </p>
+    );
+};
+
+const onPromoCampaignSave = (name, mode) => {
+    const modeText = mode === 'create' ? 'создана' : 'сохранена';
+    const promoCampaignName = name.replace('Промо-кампания', '');
+    return (
+        <p>
+            Промо-кампания <span className={ styles.bold }>{ promoCampaignName }</span> успешно { modeText }
+        </p>
+    );
+};
+
+const showSuccessNotification = (message) => {
+    notification.success({
+        duration: 0,
+        message,
+        placement: 'bottomRight',
+    });
+};
+
 const SortableItem = sortableElement(props => <tr { ...props } />);
 const SortableContainer = sortableContainer(props => <tbody { ...props } />);
 
@@ -113,11 +146,13 @@ class PromoCampaignPage extends Component {
         if (currentPromoCampaign) {
             editPromoCampaign(editedPromoCampaign)
                 .then(() => this.pushToPromoCampaignList(editedPromoCampaign))
+                .then(() => showSuccessNotification(onPromoCampaignSave(editedPromoCampaign.name)))
                 .catch(error => errorNotice(error.message));
         } else {
             const newPromoCampaign = { ...editedPromoCampaign, promoCampaignBanners: [], promoCampaignTexts: [] };
             createPromoCampaign(newPromoCampaign)
                 .then(({ id }) => this.pushToPromoCampaignList({ ...newPromoCampaign, id }))
+                .then(() => showSuccessNotification(onPromoCampaignSave(editedPromoCampaign.name, MODE_CREATE)))
                 .catch(error => errorNotice(error.message));
         }
     }
@@ -162,15 +197,17 @@ class PromoCampaignPage extends Component {
         this.setState({ savePromoCampaignBannerModalOpen: true, currentPromoCampaignBanner, currentPromoCampaign });
     }
 
-    savePromoCampaignBanner = (formData) => {
-        const { currentPromoCampaignBanner } = this.state;
+    savePromoCampaignBanner = (formData, type) => {
+        const { currentPromoCampaignBanner, currentPromoCampaign } = this.state;
         if (currentPromoCampaignBanner) {
             editPromoCampaignBanner(currentPromoCampaignBanner.id, formData)
                 .then(banner => this.pushToPromoCampaignBannerList(banner))
+                .then(() => showSuccessNotification(onPromoLoadedWithTextAndBanner(type, currentPromoCampaign.name, MODE_BANNER)))
                 .catch(error => errorNotice(error.message));
         } else {
             createPromoCampaignBanner(formData)
                 .then(banner => this.pushToPromoCampaignBannerList(banner))
+                .then(() => showSuccessNotification(onPromoLoadedWithTextAndBanner(type, currentPromoCampaign.name, MODE_BANNER)))
                 .catch(error => errorNotice(error.message));
         }
     }
@@ -222,15 +259,33 @@ class PromoCampaignPage extends Component {
     }
 
     savePromoCampaignText = (editedPromoCampaignText) => {
-        const { currentPromoCampaignText } = this.state;
+        const { currentPromoCampaignText, currentPromoCampaign } = this.state;
         if (currentPromoCampaignText) {
             editPromoCampaignText(currentPromoCampaignText.id, editedPromoCampaignText)
-                .then(text => this.pushToPromoCampaignTextList(text))
-                .catch(error => errorNotice(error.message));
+                .then((text) => this.pushToPromoCampaignTextList(text))
+                .then(() =>
+                    showSuccessNotification(
+                        onPromoLoadedWithTextAndBanner(
+                            editedPromoCampaignText.type,
+                            currentPromoCampaign.name,
+                            MODE_TEXT
+                        )
+                    )
+                )
+                .catch((error) => errorNotice(error.message));
         } else {
             createPromoCampaignText(editedPromoCampaignText)
-                .then(text => this.pushToPromoCampaignTextList(text))
-                .catch(error => errorNotice(error.message));
+                .then((text) => this.pushToPromoCampaignTextList(text))
+                .then(() =>
+                    showSuccessNotification(
+                        onPromoLoadedWithTextAndBanner(
+                            editedPromoCampaignText.type,
+                            currentPromoCampaign.name,
+                            MODE_TEXT
+                        )
+                    )
+                )
+                .catch((error) => errorNotice(error.message));
         }
     }
 
@@ -254,6 +309,7 @@ class PromoCampaignPage extends Component {
         const { currentPromoCampaign } = this.state;
         uploadPromoCodes(currentPromoCampaign.id, data)
             .then(() => this.closeUploadPromoCodesModal())
+            .then(()=> showSuccessNotification(ON_PROMOCODES_LOADED))
             .catch(error => errorNotice(error.message));
     }
 

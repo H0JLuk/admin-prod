@@ -45,7 +45,7 @@ class SavePromoCampaignBannerModal extends Component {
         if (file) {
             formData.append('image', file, file.name);
         }
-        this.savePromoCampaignBanner(formData);
+        this.savePromoCampaignBanner(formData, promoCampaignBanner.type);
     };
 
     handleSubmit = (e) => {
@@ -53,9 +53,9 @@ class SavePromoCampaignBannerModal extends Component {
         this.handleUpload();
     };
 
-    savePromoCampaignBanner = (formData) => {
+    savePromoCampaignBanner = (formData, type) => {
         if (!this.state.editedPromoCampaignBanner && !this.state.file) {
-             return warnNotice('Выберите файл для загрузки!');
+            return warnNotice('Выберите файл для загрузки!');
         }
         else if (this.state.fileList.length > 1) {
             return warnNotice('Можно загрузить только один файл за раз!');
@@ -67,7 +67,7 @@ class SavePromoCampaignBannerModal extends Component {
             !this.state.file.name.endsWith('.svg')) {
             return warnNotice('Файл для типа LOGO должен иметь расширение .svg!');
         }
-        this.props.onSave(formData);
+        this.props.onSave(formData, type);
     };
 
     render() {

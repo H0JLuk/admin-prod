@@ -24,3 +24,12 @@
 .row-dragging .drag-visible {
     visibility: visible;
 }
+
+.bold {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.promoCampaignName {
+    margin-left: 4px;
+}
