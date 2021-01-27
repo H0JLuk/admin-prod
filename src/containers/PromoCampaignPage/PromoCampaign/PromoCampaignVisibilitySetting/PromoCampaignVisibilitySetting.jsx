@@ -40,6 +40,7 @@ const BUTTON_ADD = 'Добавить';
 const HEADER_TITLE = 'Настройки видимости промо-кампании';
 const BUTTON_CHOOSE = 'Выбрать';
 const BUTTON_CHOOSE_ALL = 'Выбрать все';
+const BUTTON_UNSELECT_ALL = 'Отменить выбор';
 const BUTTON_CANCEL = 'Отмена';
 const CHOSEN = 'Выбрано';
 const BUTTON_DELETE = 'Удалить';
@@ -193,6 +194,7 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true , hideHeader 
     }), [changeSort, params.sortBy]);
 
     const onChangePage = useCallback(async ({ pageSize, current }) => {
+        setSelectedSettings([]);
         setLoading(true);
         await loadData({
             ...params,
@@ -213,6 +215,7 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true , hideHeader 
     }), [params.pageNo, params.pageSize, params.totalElements]);
 
     const buttons = useMemo(() => {
+        const isSelectAll = selectedSettings?.length === visibilitySettings.length;
         if (selectedSettings === null) {
             return [
                 { type: 'primary', label: BUTTON_ADD, onClick: onCreate, disabled: loading },
@@ -221,10 +224,10 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true , hideHeader 
         }
 
         return [
-            { type: 'primary', label: BUTTON_CHOOSE_ALL, onClick: selectAll, disabled: loading },
+            { type: 'primary', label:  isSelectAll ? BUTTON_UNSELECT_ALL : BUTTON_CHOOSE_ALL , onClick: selectAll, disabled: loading },
             { label: BUTTON_CANCEL, onClick: onDisableSelection, disabled: loading },
         ];
-    }, [selectedSettings, loading, onCreate, onEnableSelection, selectAll, onDisableSelection]);
+    }, [selectedSettings, loading, onCreate, onEnableSelection, selectAll, onDisableSelection, visibilitySettings]);
 
     const searchInput = useMemo(() => ({
         placeholder: SEARCH_SETTING,
