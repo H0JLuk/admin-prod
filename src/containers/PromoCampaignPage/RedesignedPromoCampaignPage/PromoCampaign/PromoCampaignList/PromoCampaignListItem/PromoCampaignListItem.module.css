@@ -4,7 +4,6 @@
     margin-top: 15px;
     font-family: SBSansText-medium;
     background-color: #ffffff;
-    padding: 20px;
     border-radius: 5px;
     cursor: pointer;
     letter-spacing: -0.3px;
@@ -18,11 +17,17 @@
 .cardInfo {
     display: flex;
     flex-direction: column;
+    padding: 20px;
     width: 100%;
 }
 
 .cardInfo__header {
     display: flex;
+}
+
+.cardInfo__header,
+.cardInfo__footer {
+    width: 95%;
 }
 
 .cardName {
@@ -61,10 +66,10 @@
 }
 
 .cardAction {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-basis: 5%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 3%;
 }
 
 .cardInfo__footer {

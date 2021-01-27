@@ -1,7 +1,6 @@
 import { message } from 'antd';
 
-
-const duration = 2;
+const duration = 6;
 
 export const infoNotice = (msg) => showMessage(msg, message.info);
 

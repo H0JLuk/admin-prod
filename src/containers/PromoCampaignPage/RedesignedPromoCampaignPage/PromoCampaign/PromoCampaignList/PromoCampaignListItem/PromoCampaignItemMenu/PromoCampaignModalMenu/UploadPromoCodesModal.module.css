@@ -1,0 +1,18 @@
+.dragContainer {
+    border: 1px solid#d7d8dc !important;
+    position: relative;
+}
+.dragContainer:hover {
+    border-color: green;
+}
+
+.dragContainer p {
+    color: rgba(23, 23, 37, 0.25);
+    margin-bottom: 10px;
+}
+
+.btn:hover, .btn:focus {
+    cursor: pointer;
+    border-color: green;
+    color: inherit;
+}

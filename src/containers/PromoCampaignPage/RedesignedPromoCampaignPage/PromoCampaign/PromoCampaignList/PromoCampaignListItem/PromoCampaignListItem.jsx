@@ -46,8 +46,8 @@ const PromoCampaignItem = ({ promoCampaign, onDeleteItem, sortable, matchUrl }) 
     }, [history, id, promoCampaign, matchUrl]);
 
     return (
-        <div className={ style.cardWrapper } onClick={ onCardClick }>
-            <div className={ style.cardInfo }>
+        <div className={ style.cardWrapper }>
+            <div className={ style.cardInfo } onClick={ onCardClick }>
                 <div className={ style.cardInfo__header }>
                     <div className={ style.cardName }>
                         { name }

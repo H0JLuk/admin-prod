@@ -25,6 +25,9 @@
 
 .dropdownMenu :global(.ant-menu-item a:hover),
 .dropdownMenu :global(.ant-menu-item:hover),
+.dropdownMenu :global(.ant-menu-item-selected){
+    color:#09a552;
+}
 .menuItem:hover {
     color: #09a552;
 }
