@@ -1,39 +1,39 @@
-import React, { Fragment } from 'react';
-import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
-import { ROUTE, ROUTE_ADMIN } from '../../constants/route';
+import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { ROUTE, ROUTE_ADMIN, ROUTE_ADMIN_APPS } from '../../constants/route';
+
+import CategoryPage from '../../containers/CategoryPage/CategoryPage';
+import Dashboard from '../../containers/Dashboard/Dashboard';
+import DzoPage from '../../containers/DzoPage/DzoPage';
+import UserPageRouter from '../../containers/UsersPage/UserPageRouter';
+import FilesPage from '../../containers/FilesPage/FilesPage';
+import PresentationPage from '../../containers/PresentationPage/PresentationPage';
+import PromoCampaignPageRouter from '../../containers/PromoCampaignPage/PromoCampaignPageRouter';
+import CreateClientAppPage from '../../containers/ClientAppPage/RedesignedClientAppPage/CreateClientAppPage';
+import Sidebar from '../../components/Sidebar/Sidebar';
+
 import styles from './AdminPage.module.css';
 
-import Header from '../../components/Header/Header';
-import FilesPage from '../../containers/FilesPage/FilesPage';
-import UsersPage from '../../containers/UsersPage/UsersPage';
-import DzoPage from '../../containers/DzoPage/DzoPage';
-import LandingPage from '../../containers/LandingPage/LandingPage';
-import CategoryPage from '../../containers/CategoryPage/CategoryPage';
-import PromoCampaignPageRouter from '../../containers/PromoCampaignPage/PromoCampaignPageRouter';
+const AdminPage = () => (
+    <div className={ styles.pageWrapper }>
+        <Sidebar />
+        <div className={ styles.wrapper }>
+            <Switch>
+                <Route exact path={ ROUTE.ADMIN } render={ () => <Redirect to={ ROUTE_ADMIN.DASHBOARD } /> } />
 
-const AdminPage = (props) => {
+                <Route path={ ROUTE_ADMIN.DASHBOARD } component={ Dashboard } />
+                <Route path={ ROUTE_ADMIN.FILES } component={ FilesPage } />
+                <Route path={ ROUTE_ADMIN.DZO } component={ DzoPage } />
+                <Route path={ ROUTE_ADMIN.CATEGORY } component={ CategoryPage } />
+                <Route path={ ROUTE_ADMIN.PRESENTATION } component={ PresentationPage } />
+                <Route path={ ROUTE_ADMIN_APPS.ADD_APP } component={ CreateClientAppPage } />
+                <Route path={ ROUTE_ADMIN.USERS } component={ UserPageRouter } />
+                <Route path={ ROUTE_ADMIN.PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />
 
-    const { history } = props;
+                <Route render={ () => <Redirect to={ ROUTE_ADMIN.DASHBOARD } /> } />
+            </Switch>
+        </div>
+    </div>
+);
 
-    return (
-        <Fragment>
-            <Header history={ history } />
-            <div className={ styles.wrapper }>
-                <Switch>
-                    <Route exact path={ ROUTE.ADMIN } render={ () => <Redirect to={ ROUTE_ADMIN.USERS } /> } />
-
-                    <Route path={ ROUTE_ADMIN.USERS } component={ UsersPage } />
-                    <Route path={ ROUTE_ADMIN.FILES } component={ FilesPage } />
-                    <Route path={ ROUTE_ADMIN.DZO } component={ DzoPage } />
-                    <Route path={ ROUTE_ADMIN.LANDING } component={ LandingPage } />
-                    <Route path={ ROUTE_ADMIN.CATEGORY } component={ CategoryPage } />
-                    <Route path={ ROUTE_ADMIN.PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />
-
-                    <Route render={ () => <Redirect to={ ROUTE_ADMIN.USERS } /> } />
-                </Switch>
-            </div>
-        </Fragment>
-    );
-};
-
-export default withRouter(AdminPage);
+export default AdminPage;

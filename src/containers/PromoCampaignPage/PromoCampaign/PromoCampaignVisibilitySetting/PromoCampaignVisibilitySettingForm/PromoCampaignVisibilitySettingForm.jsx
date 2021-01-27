@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'antd';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
-import PromoCampaignVisibilitySettingInput from '../../../PromoCampaignVisibilitySettingInput/PromoCampaignVisibilitySettingInput';
-import Header from '../../../../../components/Header/Redisegnedheader/Header';
+import PromoCampaignVisibilitySettingInput from '../../PromoCampaignVisibilitySettingInput/PromoCampaignVisibilitySettingInput';
+import Header from '../../../../../components/Header/Header';
 
 import styles from './PromoCampaignVisibilitySettingForm.module.css';
 

@@ -8,7 +8,7 @@ import { getUnissuedPromoCodeStatistics } from '../../../api/services/promoCodeS
 import _ from 'lodash';
 import { warnNotice } from '../../toast/Notice';
 // import moment from 'moment';
-import callConfirmModalForPromoCodeTypeChanging from '../../../containers/PromoCampaignPage/RedesignedPromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging/ConfirmModalForPromoCodeTypeChanging';
+import callConfirmModalForPromoCodeTypeChanging from '../../../containers/PromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging/ConfirmModalForPromoCodeTypeChanging';
 import promoCodeTypes from '../../../constants/promoCodeTypes';
 
 const { Option } = Select;

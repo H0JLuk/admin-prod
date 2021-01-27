@@ -22,6 +22,7 @@ import { getAppCode } from '../../api/services/sessionService';
 import { getDzoList } from '../../api/services/dzoService';
 import { getPromoCampaignList } from '../../api/services/promoCampaignService';
 import { getPromoCodeStatistics } from '../../api/services/promoCodeService';
+import Header from '../../components/Header/Header';
 
 const DATE_FORMAT = 'dd/MM/yyyy';
 
@@ -272,108 +273,111 @@ class FilesPage extends Component {
 
         return (
             <div className={ styles.container }>
-                <h3>{EXCEL_FILES_TITLE}</h3>
-                <div className={ styles.container__block }>
-                    <p className={ styles.textFieldFormat }>
-                        {FILTER_TITLE}
-                    </p>
-                    <input
-                        className={ styles.checkbox }
-                        type='checkbox'
-                        checked={ isFiltered }
-                        onChange={ this.handleFilterCheckboxChange }
-                    />
-                </div>
-
-                { isFiltered ? picker : null }
-
-                <div className={ styles.container__block }>
-                    <Button
-                        label={ OFFERS_LABLE }
-                        onClick={ this.getData(getOffers, OFFERS_NAME) }
-                        className={ styles.container__button }
-                        type='green'
-                        font='roboto'
-                        disabled={ loading }
-                    />
-                    <Button
-                        label={ FEEDBACK_LABLE }
-                        onClick={ this.getData(getFeedback, FEEDBACK_NAME) }
-                        className={ styles.container__button }
-                        type='green'
-                        font='roboto'
-                        disabled={ loading }
-                    />
-                </div>
-
-                {this.renderModifyModal()}
-
-                <hr />
-                <div className={ styles.headerSection }>
-                    <h3>{USAGE_TITLE}</h3>
+                <Header buttonBack={ false } menuMode />
+                <div className={ styles.filesContainer }>
+                    <h3>{EXCEL_FILES_TITLE}</h3>
                     <div className={ styles.container__block }>
-                        <a href={ usageUrl } download={ USAGE_NAME }>
-                            {ButtonLabels.OPEN}
-                        </a>
-                        <Button
-                            onClick={ () => openWithParam(USAGE_NAME) }
-                            label={ CHANGE_PDF_TITLE }
-                            font="roboto"
-                            type="blue"
+                        <p className={ styles.textFieldFormat }>
+                            {FILTER_TITLE}
+                        </p>
+                        <input
+                            className={ styles.checkbox }
+                            type='checkbox'
+                            checked={ isFiltered }
+                            onChange={ this.handleFilterCheckboxChange }
                         />
                     </div>
-                </div>
 
-                <hr />
-                <div className={ styles.headerSection }>
-                    <h3>{INSTALLATION_TITLE}</h3>
-                    <div className={ styles.container__block }>
-                        <a href={ installationUrl } download={ INSTALLATION_NAME }>
-                            {ButtonLabels.OPEN}
-                        </a>
-                        <Button
-                            onClick={ () => openWithParam(INSTALLATION_NAME) }
-                            label={ CHANGE_PDF_TITLE }
-                            font="roboto"
-                            type="blue"
-                        />
-                    </div>
-                </div>
+                    { isFiltered ? picker : null }
 
-                <hr />
-                <div className={ styles.headerSection }>
-                    <h3>{EXPORT_TITLE}</h3>
-                    <div className={ styles.container__block }>
-                        <p>ДЗО<br />
-                            <select className={ classNames(styles.select, styles.datepicker) }
-                                    onChange={ this.handleDZOSelectChange }
-                            >
-                                <option key="dzo_empty" value="">{ UNSPECIFIED_TITLE }</option>
-                                { this.state.dzoList.map((option, index) =>
-                                    <option key={ `dzo_${index}` } value={ option.dzoId }>{ option.dzoName }</option>)
-                                }
-                            </select>
-                        </p>
-                        <p>Промокампания<br />
-                            <select ref={ this.optionRef } className={ classNames(styles.select, styles.datepicker) }
-                                    onChange={ this.handlePromoCampaignSelectChange }
-                            >
-                                <option key="campaign_empty" value="">{ UNSPECIFIED_TITLE }</option>
-                                { this.state.filteredPromoCampaignList.map((option, index) =>
-                                    <option key={ `campaign_${index}` } value={ option.id }>{ option.name }</option>)
-                                }
-                            </select>
-                        </p>
-                    </div>
-                    {picker}
                     <div className={ styles.container__block }>
                         <Button
-                            onClick={ this.downloadPromoCodes }
-                            label={ EXPORT_LABLE }
-                            font="roboto"
-                            type="green"
+                            label={ OFFERS_LABLE }
+                            onClick={ this.getData(getOffers, OFFERS_NAME) }
+                            className={ styles.container__button }
+                            type='green'
+                            font='roboto'
                             disabled={ loading }
                         />
+                        <Button
+                            label={ FEEDBACK_LABLE }
+                            onClick={ this.getData(getFeedback, FEEDBACK_NAME) }
+                            className={ styles.container__button }
+                            type='green'
+                            font='roboto'
+                            disabled={ loading }
+                        />
+                    </div>
+
+                    {this.renderModifyModal()}
+
+                    <hr />
+                    <div className={ styles.headerSection }>
+                        <h3>{USAGE_TITLE}</h3>
+                        <div className={ styles.container__block }>
+                            <a href={ usageUrl } download={ USAGE_NAME }>
+                                {ButtonLabels.OPEN}
+                            </a>
+                            <Button
+                                onClick={ () => openWithParam(USAGE_NAME) }
+                                label={ CHANGE_PDF_TITLE }
+                                font="roboto"
+                                type="blue"
+                            />
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div className={ styles.headerSection }>
+                        <h3>{INSTALLATION_TITLE}</h3>
+                        <div className={ styles.container__block }>
+                            <a href={ installationUrl } download={ INSTALLATION_NAME }>
+                                {ButtonLabels.OPEN}
+                            </a>
+                            <Button
+                                onClick={ () => openWithParam(INSTALLATION_NAME) }
+                                label={ CHANGE_PDF_TITLE }
+                                font="roboto"
+                                type="blue"
+                            />
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div className={ styles.headerSection }>
+                        <h3>{EXPORT_TITLE}</h3>
+                        <div className={ styles.container__block }>
+                            <p>ДЗО<br />
+                                <select className={ classNames(styles.select, styles.datepicker) }
+                                        onChange={ this.handleDZOSelectChange }
+                                >
+                                    <option key="dzo_empty" value="">{ UNSPECIFIED_TITLE }</option>
+                                    { this.state.dzoList.map((option, index) =>
+                                        <option key={ `dzo_${index}` } value={ option.dzoId }>{ option.dzoName }</option>)
+                                    }
+                                </select>
+                            </p>
+                            <p>Промокампания<br />
+                                <select ref={ this.optionRef } className={ classNames(styles.select, styles.datepicker) }
+                                        onChange={ this.handlePromoCampaignSelectChange }
+                                >
+                                    <option key="campaign_empty" value="">{ UNSPECIFIED_TITLE }</option>
+                                    { this.state.filteredPromoCampaignList.map((option, index) =>
+                                        <option key={ `campaign_${index}` } value={ option.id }>{ option.name }</option>)
+                                    }
+                                </select>
+                            </p>
+                        </div>
+                        {picker}
+                        <div className={ styles.container__block }>
+                            <Button
+                                onClick={ this.downloadPromoCodes }
+                                label={ EXPORT_LABLE }
+                                font="roboto"
+                                type="green"
+                                disabled={ loading }
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

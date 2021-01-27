@@ -6,17 +6,16 @@ import { getDashboardInfo } from '../../api/services/adminService';
 import { getClientAppList } from '../../api/services/clientAppService';
 import { getDzoList } from '../../api/services/dzoService';
 import { getPromoCampaignById } from '../../api/services/promoCampaignService';
-import { getRole, saveAppCode } from '../../api/services/sessionService';
+import { saveAppCode } from '../../api/services/sessionService';
 import useBodyClassForSidebar from '../../hooks/useBodyClassForSidebar';
-import Header from '../../components/Header/Redisegnedheader/Header';
-import ROLES from '../../constants/roles';
-import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
+import Header from '../../components/Header/Header';
 import { DEFAULT_SLEEP_TIME } from '../../constants/time';
 import { sleep } from '../../utils/utils';
 import DashboardFilterTag from './DashboardFilterTag';
 import { WITHOUT_FILTER, BY_APP, BY_DZO } from './dashboardFilterTypes';
 import DashboardItem from './DashboardItem';
 import downArrowImage from '../../static/svgs/arrow-down.svg';
+import { getPathForPromoCampaignInfo } from '../../utils/appNavigation';
 import styles from './Dashboard.module.css';
 
 const DEFAULT_FILTER_NAME = 'Фильтровать';
@@ -129,10 +128,7 @@ const Dashboard = () => {
     const onItemClick = async (appCode, promoCampaignId) => {
         saveAppCode(appCode);
         try {
-            const path = generatePath(`${ROUTE.REDESIGNED}${getRole() === ROLES.ADMIN
-                    ? ROUTE_ADMIN.PROMO_CAMPAIGN
-                    : ROUTE_OWNER.PROMO_CAMPAIGN
-            }${PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_INFO}`, { promoCampaignId });
+            const path = generatePath(`${ getPathForPromoCampaignInfo() }`, { promoCampaignId });
             const { promoCampaignDtoList = [] } = await getPromoCampaignById(promoCampaignId) ?? {};
             const promoCampaign = promoCampaignDtoList[0];
             if (promoCampaign) {

@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { getAppCode, getRole } from '../../api/services/sessionService';
-import { resolveMenuItemsByRoleAndAppCode } from '../../constants/menuByRole';
+import { resolveOldMenuItemsByRoleAndAppCode } from '../../constants/menuByRole';
 import { ROUTE } from '../../constants/route';
 import styles from './Menu.module.css';
 import { NavLink } from 'react-router-dom';
@@ -9,7 +9,7 @@ const Menu = () => {
 
     const role = getRole();
     const appCode = getAppCode();
-    const menuItems = resolveMenuItemsByRoleAndAppCode(role, appCode);
+    const menuItems = resolveOldMenuItemsByRoleAndAppCode(role, appCode);
 
     return (
         <div className={ styles.menu }>

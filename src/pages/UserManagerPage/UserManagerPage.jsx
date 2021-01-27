@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ROUTE, ROUTE_USER_MANAGER } from '../../constants/route';
 
-import UserPageRouter from '../../containers/UsersPage/RedesignedUsersPage/UserPageRouter';
+import UserPageRouter from '../../containers/UsersPage/UserPageRouter';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
 import styles from './UserManagerPage.module.css';

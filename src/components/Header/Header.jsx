@@ -1,22 +1,53 @@
-import React from 'react';
-import Menu from '../Menu/Menu';
+import React, { useCallback } from 'react';
+import { LeftOutlined } from '@ant-design/icons';
+import { NavLink, useHistory } from 'react-router-dom';
+import DropdownWithLogout from '../DropdownWithLogout/DropdownWithLogout';
+import { getAppCode, getRole } from '../../api/services/sessionService';
+import { resolveMenuItemsByRoleAndAppCode } from '../../constants/menuByRole';
+
 import styles from './Header.module.css';
-import { logout } from '../../api/services/authService';
-import { ROUTE } from '../../constants/route';
-import ButtonLabels from '../Button/ButtonLables';
 
-const Header = ({ history }) => {
+const BACK_BUTTON_TEXT = ' Назад';
 
-    const doLogout = () => {
-        logout().then(() => {
-            history.push(ROUTE.LOGIN);
-        });
-    };
+const MenuLinks = () => {
+    const appCode = getAppCode() || '';
+    const role = getRole();
+    const [, menuItems] = resolveMenuItemsByRoleAndAppCode(role, appCode);
 
     return (
-        <div className={ styles.header }>
-            <Menu />
-            <div className={ styles.logout } onClick={ doLogout }>{ ButtonLabels.LOGOUT } </div>
+        <div>
+            {menuItems.map((item) => (
+                <NavLink
+                    key={ item.label }
+                    to={ item.path }
+                    className={ styles.menuItem }
+                    activeClassName={ styles.active }
+                >
+                    { item.label }
+                </NavLink>
+            ))}
+        </div>
+    );
+};
+
+const Header = ({ menuMode = false, buttonBack = true, onClickFunc }) => {
+    const history = useHistory();
+
+    const onBackButton = useCallback(() => {
+        onClickFunc ? onClickFunc() : history.goBack();
+    }, [history, onClickFunc]);
+
+    return (
+        <div className={ styles.container }>
+            { buttonBack && (
+                <div className={ styles.backButton } onClick={ onBackButton }>
+                    <LeftOutlined /> { BACK_BUTTON_TEXT }
+                </div>
+            )}
+            { menuMode && <MenuLinks /> }
+            <div className={ styles.avatar }>
+                <DropdownWithLogout />
+            </div>
         </div>
     );
 };

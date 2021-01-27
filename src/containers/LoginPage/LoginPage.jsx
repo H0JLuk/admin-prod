@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
+import { goToStartPage } from '../../utils/appNavigation';
 import { getStaticUrlFromBackend, saveStaticUrl } from '../../api/services/settingsService';
-import { goToClientApps, goToDashboard, goToUserManager } from '../../utils/appNavigation';
-import styles from './LoginPage.module.css';
 import { LOGIN_FORM } from '../../components/Form/forms';
 import Form from '../../components/Form/Form';
 import { login } from '../../api/services/authService';
@@ -9,6 +8,8 @@ import { storeUserData } from '../../api/services/sessionService';
 import { Errors, getErrorText } from '../../constants/errors';
 import { ROLES } from '../../constants/roles';
 import ButtonLabels from '../../components/Button/ButtonLables';
+
+import styles from './LoginPage.module.css';
 
 
 const LoginPage = (props) => {
@@ -23,16 +24,10 @@ const LoginPage = (props) => {
                 setError(Errors.AUTHORITY);
                 return;
             }
+
             storeUserData(token, authority);
             saveStaticUrl(await getStaticUrlFromBackend());
-
-            if (ROLES.USER_MANAGER === authority) {
-                return goToUserManager(history);
-            }
-
-            ([ROLES.ADMIN, ROLES.PRODUCT_OWNER].includes(authority))
-                ? goToDashboard(history, authority)
-                : goToClientApps(history);
+            goToStartPage(history, authority);
         } catch (e) {
             console.error(e?.message);
             setError(Errors.FAIL);

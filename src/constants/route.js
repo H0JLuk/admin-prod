@@ -7,7 +7,7 @@ export const ROUTE = {
     OWNER:          '/owner',
     USER_MANAGER:   '/user-manager',
     CLIENT_APPS:    '/client-apps',
-    REDESIGNED:     '/redesigned',
+    OLD_DESIGN:     '/old_design',
 };
 
 const PAGE = {
@@ -16,9 +16,8 @@ const PAGE = {
     DZO:            'dzo',
     DASHBOARD:      'dashboard',
     FILES:          'files',
-    LANDING:        'landing',
+    PRESENTATION:   'presentation',
     PROMO_CAMPAIGN: 'promo-campaign',
-    SLIDER:         'slider',
     USERS:          'users',
     APPS:           'apps',
 };
@@ -48,29 +47,28 @@ export const ROUTE_USER_MANAGER = {
 };
 
 export const ROUTE_ADMIN = {
-    REDESIGNED_USERS: `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.USERS }`,
-    REDESIGNED_PROMO_CAMPAIGN: `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
-    DASHBOARD:      `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.DASHBOARD }`,
+    OLD_DESIGN_USERS: `${ ROUTE.OLD_DESIGN }${ ROUTE.ADMIN }/${ PAGE.USERS }`,
+    OLD_DESIGN_PROMO_CAMPAIGN: `${ ROUTE.OLD_DESIGN }${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
+    DASHBOARD:      `${ ROUTE.ADMIN }/${ PAGE.DASHBOARD }`,
     USERS:          `${ ROUTE.ADMIN }/${ PAGE.USERS }`,
     FILES:          `${ ROUTE.ADMIN }/${ PAGE.FILES }`,
-    DZO:            `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.DZO }`,
-    LANDING:        `${ ROUTE.ADMIN }/${ PAGE.LANDING }`,
-    CATEGORY:       `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
-    SLIDER:         `${ ROUTE.ADMIN }/${ PAGE.SLIDER }`,
+    DZO:            `${ ROUTE.ADMIN }/${ PAGE.DZO }`,
+    PRESENTATION:   `${ ROUTE.ADMIN }/${ PAGE.PRESENTATION }`,
+    CATEGORY:       `${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
-    REDESIGNED_APPS: `${ ROUTE.REDESIGNED }${ ROUTE.ADMIN }/${ PAGE.APPS }`,
+    APPS:           `${ ROUTE.ADMIN }/${ PAGE.APPS }`,
 };
 
 export const ROUTE_OWNER = {
-    REDESIGNED_PROMO_CAMPAIGN: `${ ROUTE.REDESIGNED }${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
-    DASHBOARD:      `${ ROUTE.REDESIGNED }${ ROUTE.OWNER }/${ PAGE.DASHBOARD }`,
-    DZO:            `${ ROUTE.REDESIGNED }${ ROUTE.OWNER }/${ PAGE.DZO }`,
-    LANDING:        `${ ROUTE.OWNER }/${ PAGE.LANDING }`,
-    CATEGORY:       `${ ROUTE.REDESIGNED }${ ROUTE.OWNER }/${ PAGE.CATEGORY }`,
-    SLIDER:         `${ ROUTE.OWNER }/${ PAGE.SLIDER }`,
+    OLD_DESIGN_PROMO_CAMPAIGN: `${ ROUTE.OLD_DESIGN }${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
+    DASHBOARD:      `${ ROUTE.OWNER }/${ PAGE.DASHBOARD }`,
+    DZO:            `${ ROUTE.OWNER }/${ PAGE.DZO }`,
+    PRESENTATION:   `${ ROUTE.OWNER }/${ PAGE.PRESENTATION }`,
+    FILES:          `${ ROUTE.OWNER }/${ PAGE.FILES }`,
+    CATEGORY:       `${ ROUTE.OWNER }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
 };
 
 export const ROUTE_ADMIN_APPS = {
-    ADD_APP:        `${ ROUTE_ADMIN.REDESIGNED_APPS}/create`,
+    ADD_APP:        `${ ROUTE_ADMIN.APPS}/create`,
 };

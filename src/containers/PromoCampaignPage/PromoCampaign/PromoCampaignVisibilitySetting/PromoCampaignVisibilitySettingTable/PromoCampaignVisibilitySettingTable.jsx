@@ -21,29 +21,29 @@ const PromoCampaignVisibilitySettingTable = ({
     selectRow,
     pagination,
     onChange,
-}) =>  (
-        <Table
-            className={ styles.table }
-            loading={ loading }
-            rowKey="id"
-            pagination={ pagination }
-            rowSelection={ rowSelection }
-            dataSource={ dataSource }
-            showHeader={ false }
-            onRow={ (record) => ({ onClick: () => selectRow(record.id) }) }
-            onChange={ onChange }
-        >
+}) => (
+    <Table
+        className={ styles.table }
+        loading={ loading }
+        rowKey="id"
+        pagination={ pagination }
+        rowSelection={ rowSelection }
+        dataSource={ dataSource }
+        showHeader={ false }
+        onRow={ (record) => ({ onClick: () => selectRow(record.id) }) }
+        onChange={ onChange }
+    >
         <Table.Column
             width="40%"
             key="locationName"
             dataIndex="locationName"
-            render = { (item) => ColumnRender(item, LOCATION) }
+            render={ (item) => ColumnRender(item, LOCATION) }
         />
         <Table.Column
             width="40%"
             key="salePointName"
             dataIndex="salePointName"
-            render = { (item) => ColumnRender(item, SALE_POINT) }
+            render={ (item) => ColumnRender(item, SALE_POINT) }
         />
         <Table.Column
             width="20%"
@@ -51,7 +51,7 @@ const PromoCampaignVisibilitySettingTable = ({
             className={ styles.switch }
             render={ (item) => <Switch checked={ item.visible } onClick={ () => onChangeVisible({ ...item, visible: !item.visible }) } /> }
         />
-        </Table>
+    </Table>
 );
 
 export default PromoCampaignVisibilitySettingTable;

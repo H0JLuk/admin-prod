@@ -23,7 +23,7 @@ const PromoCampaignVisibilitySettingRouter = () => {
                         onSubmit={ redirectToVisibilitySetting }
                         onCancel={ redirectToVisibilitySetting }
                     />
-                )}
+                ) }
             />
             <Redirect to={ `${match.path}` } />
         </Switch>

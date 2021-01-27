@@ -1,29 +1,63 @@
-.header {
+.container {
+    position: sticky;
+    top: 0;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     background-color: #ffffff;
-    width: 96%;
-    max-width: 1080px;
-    padding: 0 2%;
-    margin: 0 auto;
-}
-
-.header > div:first-child {
-    flex: 9;
-    padding-right: 100px;
-}
-
-.logout {
-    flex: 1;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e5e8ea;
     font-family: SBSansText, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 24px;
     letter-spacing: -0.3px;
-    text-align: right;
-    color: #f6650a;
+    font-weight: 600;
+    align-items: center;
+    overflow: hidden;
+    z-index: 20;
+}
+
+.backButton {
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.backButton :global(.anticon) {
+    font-size: 16px;
+}
+
+.menuItem {
+    text-decoration: none;
+    margin-right: 15px;
+    color: #171725;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.3px;
+    font-weight: 600;
+}
+
+.menuItem:hover {
+    color: #09a552;
+}
+
+.active {
+    color: #21a038;
+    position: relative;
+}
+
+.active::after {
+    content: '';
+    position: absolute;
+    bottom: -21px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #09a552;
+    right: 0;
+    margin: 0 auto;
+    display: block;
+}
+
+.avatar {
+    margin-left: auto;
     cursor: pointer;
 }

@@ -1,0 +1,29 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    width: 96%;
+    max-width: 1080px;
+    padding: 0 2%;
+    margin: 0 auto;
+}
+
+.header > div:first-child {
+    flex: 9;
+    padding-right: 100px;
+}
+
+.logout {
+    flex: 1;
+    font-family: SBSansText, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    text-align: right;
+    color: #f6650a;
+    cursor: pointer;
+}

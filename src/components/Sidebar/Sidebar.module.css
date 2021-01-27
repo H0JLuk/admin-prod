@@ -13,6 +13,17 @@
     margin-bottom: 15px;
 }
 
+/* TODO: temporary fix for scroll client apps. Remove after redesign sidebar's app list */
+.blockLogo + ul {
+    overflow: auto;
+    height: calc(100vh - 65px);
+    padding-bottom: 30px;
+}
+
+.blockLogo + ul::-webkit-scrollbar {
+    display: none;
+}
+
 .logo {
     width: 45%;
     padding: 17px;
@@ -70,8 +81,8 @@ body:not(:global(.not_highlight_app)) .activeApp,
     color: white;
 }
 
-.menu :global(.ant-menu-item) {
-    height: unset !important;
+.menu :global(.ant-menu-inline .ant-menu-item) {
+    height: unset;
     min-height: 40px;
     white-space: unset;
     margin: 0 !important;
@@ -79,7 +90,7 @@ body:not(:global(.not_highlight_app)) .activeApp,
     padding-right: 0px;
 }
 
-.menu :global(.ant-menu-item::after) {
+.menu :global(.ant-menu-inline .ant-menu-item::after) {
     border: none;
 }
 
@@ -94,4 +105,11 @@ body:not(:global(.not_highlight_app)) .activeApp,
 
 .menu :global(.ant-menu-item a:hover) {
     color: black;
+}
+
+a.oldDesignLink {
+    display: block;
+    margin-top: 30px;
+    padding-left: 20px;
+    color: #999;
 }

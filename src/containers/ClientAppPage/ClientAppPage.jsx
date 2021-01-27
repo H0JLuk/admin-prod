@@ -137,7 +137,7 @@ class ClientAppPage extends Component {
         const role = getRole();
         const { history } = this.props;
         saveAppCode(code);
-        goApp(history, role);
+        goApp(history, role, true);
     };
 
     handleInputChange = (event) => {

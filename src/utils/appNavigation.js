@@ -10,8 +10,8 @@ export const goToLogin = (history) => {
     window.location.href = ROUTE.LOGIN;
 };
 
-export const goToClientApps = (history) => {
-    history.push(ROUTE.CLIENT_APPS);
+export const goToClientApps = (history, redirect) => {
+    (redirect ? history.replace : history.push)(ROUTE.CLIENT_APPS);
 };
 
 export const goToDashboard = (history, role) => {
@@ -27,73 +27,86 @@ export const goToDashboard = (history, role) => {
     }
 };
 
-export const goToAudit = (history) => {
-    history.push(ROUTE.AUDITOR);
+export function goToStartPage(history, redirect, role = getRole()) {
+    switch (role) {
+        case ROLES.ADMIN: {
+            const url = ROUTE_ADMIN.DASHBOARD;
+            (redirect ? history.replace : history.push)(url);
+            return;
+        }
+        case ROLES.PRODUCT_OWNER: {
+            const url = ROUTE_OWNER.DASHBOARD;
+            (redirect ? history.replace : history.push)(url);
+            return;
+        }
+        case ROLES.AUDITOR: {
+            goToAudit(history, redirect);
+            return;
+        }
+        case ROLES.USER_MANAGER: {
+            goToUserManager(history, redirect);
+            return;
+        }
+        case null:
+        case '': {
+            goToLogin(history);
+            return;
+        }
+        default:
+            goToClientApps(history, redirect);
+    }
+}
+
+export const goToAudit = (history, redirect) => {
+    (redirect ? history.replace : history.push)(ROUTE.AUDITOR);
 };
 
-export const goToAdmin = (history, toRedesign) => {
-    if (toRedesign) {
-        history.push(ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN);
+export const goToAdmin = (history, oldDesign) => {
+    if (oldDesign) {
+        history.push(`${ROUTE.OLD_DESIGN}${ROUTE.ADMIN}`);
         return;
     }
-    history.push(ROUTE.ADMIN);
+    history.push(ROUTE_ADMIN.PROMO_CAMPAIGN);
 };
 
-export const goToUserManager = (history) => {
-    history.push(ROUTE.USER_MANAGER);
+export const goToUserManager = (history, redirect) => {
+    (redirect ? history.replace : history.push)(ROUTE_USER_MANAGER.USERS);
 };
 
-export const goToProduct = (history, toRedesign) => {
-    if (toRedesign) {
-        history.push(ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN);
+export const goToProduct = (history, oldDesign) => {
+    if (oldDesign) {
+        history.push(`${ROUTE.OLD_DESIGN}${ROUTE.OWNER}`);
         return;
     }
-    history.push(ROUTE.OWNER);
+    history.push(ROUTE_OWNER.PROMO_CAMPAIGN);
 };
 
-export const goApp = (history, role, toRedesign) => {
+export const goApp = (history, role, oldDesign) => {
     switch (role) {
         case ROLES.AUDITOR:
             goToAudit(history);
             break;
         case ROLES.ADMIN:
-            goToAdmin(history, toRedesign);
+            goToAdmin(history, oldDesign);
             break;
         case ROLES.USER_MANAGER:
             goToUserManager(history);
             break;
         case ROLES.PRODUCT_OWNER:
         default:
-            goToProduct(history, toRedesign);
+            goToProduct(history, oldDesign);
     }
-};
-
-export const goPromoCampaigns = (history) => {
-    switch (getRole()) {
-        case ROLES.ADMIN:
-            history.push(ROUTE_ADMIN.PROMO_CAMPAIGN);
-            break;
-        case ROLES.PRODUCT_OWNER:
-            history.push(ROUTE_OWNER.PROMO_CAMPAIGN);
-            break;
-        default:
-            return null;
-    }
-};
-
-export const goBack = (history) => {
-    history.goBack();
 };
 
 // TODO: remove after delete old user page
-export function getLinkForRedesignUsers() {
+export function getLinkForUsersPage() {
     switch (getRole()) {
         case ROLES.ADMIN:
-            return ROUTE_ADMIN.REDESIGNED_USERS;
+            return ROUTE_ADMIN.USERS;
         case ROLES.PRODUCT_OWNER:
-            return ROUTE_OWNER.REDESIGNED_USERS;
+            return ROUTE_OWNER.USERS;
         case ROLES.USER_MANAGER:
-            return ROUTE_USER_MANAGER.REDESIGNED_USERS;
+            return ROUTE_USER_MANAGER.USERS;
         default:
             return '';
     }
@@ -102,9 +115,20 @@ export function getLinkForRedesignUsers() {
 export function getLinkForCreatePromoCampaign() {
     switch (getRole()) {
         case ROLES.ADMIN:
-            return `${ ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.ADD_PROMO_CAMPAIGN }`;
+            return `${ ROUTE_ADMIN.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.ADD_PROMO_CAMPAIGN }`;
         case ROLES.PRODUCT_OWNER:
-            return `${ ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.ADD_PROMO_CAMPAIGN }`;
+            return `${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.ADD_PROMO_CAMPAIGN }`;
+        default:
+            return '';
+    }
+}
+
+export function getPathForPromoCampaignInfo() {
+    switch (getRole()) {
+        case ROLES.ADMIN:
+            return `${ ROUTE_ADMIN.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_INFO }`;
+        case ROLES.PRODUCT_OWNER:
+            return `${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_INFO }`;
         default:
             return '';
     }
@@ -113,21 +137,32 @@ export function getLinkForCreatePromoCampaign() {
 export function getPathForCreatePromoCampaignVisibititySetting() {
     switch (getRole()) {
         case ROLES.ADMIN:
-            return `${ ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }/create`;
+            return `${ ROUTE_ADMIN.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }/create`;
         case ROLES.PRODUCT_OWNER:
-            return `${ ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }/create`;
+            return `${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }/create`;
+        default:
+            return '';
+    }
+}
+
+export function getPathForPromoCampaignVisibititySettings() {
+    switch (getRole()) {
+        case ROLES.ADMIN:
+            return `${ ROUTE_ADMIN.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }`;
+        case ROLES.PRODUCT_OWNER:
+            return `${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }`;
         default:
             return '';
     }
 }
 
 // TODO: remove after delete old promo-campaign page
-export function getLinkForRedesignPromoCampaign() {
+export function getLinkForPromoCampaignPage() {
     switch (getRole()) {
         case ROLES.ADMIN:
-            return ROUTE_ADMIN.REDESIGNED_PROMO_CAMPAIGN;
+            return ROUTE_ADMIN.PROMO_CAMPAIGN;
         case ROLES.PRODUCT_OWNER:
-            return ROUTE_OWNER.REDESIGNED_PROMO_CAMPAIGN;
+            return ROUTE_OWNER.PROMO_CAMPAIGN;
         default:
             return '';
     }

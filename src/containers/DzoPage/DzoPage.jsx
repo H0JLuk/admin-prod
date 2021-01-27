@@ -10,7 +10,7 @@ import {
     addApplication
 } from '../../api/services/dzoService';
 import { DZO_EDIT_FROM, DZO_ADD_FROM, APP_EDIT_FROM } from '../../components/Form/forms';
-import Header from '../../components/Header/Redisegnedheader/Header';
+import Header from '../../components/Header/Header';
 import applicationTypes from '../../constants/applicationTypes';
 import { getErrorText } from '../../constants/errors';
 import CustomModal from '../../components/CustomModal/CustomModal';

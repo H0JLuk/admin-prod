@@ -5,7 +5,7 @@ import PromoCampaignVisibilitySettingTable
     from './PromoCampaignVisibilitySettingTable/PromoCampaignVisibilitySettingTable';
 import { Button } from 'antd';
 import debounce from 'lodash/debounce';
-import Header from '../../../../components/Header/Redisegnedheader/Header';
+import Header from '../../../../components/Header/Header';
 import {
     deletePromoCampaignVisibilitySetting,
     editPromoCampaignVisibilitySetting,
@@ -54,7 +54,7 @@ const DROPDOWN_SORT_MENU = [
 // eslint-disable-next-line no-unused-vars
 const getURLSearchParams = ({ totalElements, ...rest }) => new URLSearchParams(rest).toString();
 
-function PromoCampaignVisibilitySetting({ searchAndSortMode = true , hideHeader }) {
+function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }) {
     const match = useRouteMatch();
     const { search, state } = useLocation();
     const history = useHistory();

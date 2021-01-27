@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { ROUTE, ROUTE_AUDITOR } from '../../constants/route';
 import styles from './AuditorPage.module.css';
-import Header from '../../components/Header/Header';
+import Header from '../../components/Header/OldHeader/Header';
 import AuditPage from '../../containers/AuditPage/AuditPage';
 
 const AuditorPage = (props) => {
