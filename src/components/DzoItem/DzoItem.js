@@ -11,7 +11,7 @@ const DZO_CODE_LABEL = 'Код: ';
 const HEADER_LABEL = 'Заголовок: ';
 const DESCRIPTION_LABEL = 'Описание: ';
 const WEB_URL_LABEL = 'URL: ';
-const ADD_EDIT_APP_URL = 'Add/Edit App url';
+const ADD_EDIT_APP_URL = 'Редактировать ссылку';
 
 const DzoItem = ({
                      dzoId, dzoName, header,
