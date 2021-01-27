@@ -104,16 +104,24 @@ const Dashboard = () => {
     useEffect(() => {
         switch (filterType) {
             case BY_APP:
-                setFilteredList(list.filter(({ clientApplicationId: id } = {}) => filterIdList.includes(id)));
+                setFilteredList(
+                    filterIdList.length
+                        ? list.filter(({ clientApplicationId: id } = {}) => filterIdList.includes(id))
+                        : list
+                );
                 break;
             case BY_DZO:
-                setFilteredList(list.filter(({ dzoId } = {}) => filterIdList.includes(dzoId)));
+                setFilteredList(
+                    filterIdList.length
+                        ? list.filter(({ dzoId } = {}) => filterIdList.includes(dzoId))
+                        : list
+                );
                 break;
             case WITHOUT_FILTER:
             default:
                 setFilteredList(list);
         }
-    }, [list, filterType, dzoList, appList, filterIdList]);
+    }, [list, filterType, filterIdList]);
 
     const onItemClick = async (appCode, promoCampaignId) => {
         saveAppCode(appCode);
