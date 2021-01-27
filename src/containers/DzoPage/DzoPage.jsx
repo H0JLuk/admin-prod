@@ -19,6 +19,7 @@ import Form from '../../components/Form/Form';
 import cross from '../../static/images/cross.svg';
 import { isRequired } from '../../utils/validators';
 import styles from './DzoPage.module.css';
+import { addBodyClassForSidebar, removeBodyClassForSidebar } from '../../hooks/useBodyClassForSidebar';
 import { populateFormWithData } from '../../components/Form/formHelper';
 import ButtonLabels from '../../components/Button/ButtonLables';
 import inputStyles from '../../components/Input/Input.module.css';
@@ -60,6 +61,7 @@ class DzoPage extends Component {
     }
 
     componentDidMount() {
+        addBodyClassForSidebar();
         const loadData = async () => {
             try {
                 const { dzoDtoList: dzoList = [] } = await getDzoList() ?? {};
@@ -70,6 +72,10 @@ class DzoPage extends Component {
             }
         };
         loadData();
+    }
+
+    componentWillUnmount() {
+        removeBodyClassForSidebar();
     }
 
     clearState = () => this.setState({ editingDzo: initialEditingDzo, editingAppList: null,

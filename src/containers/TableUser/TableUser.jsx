@@ -12,6 +12,7 @@ import HeaderWithActions from '../../components/HeaderWithActions/HeaderWithActi
 import Header from '../../components/Header/Redisegnedheader/Header';
 import UsersListTable from './UsersListTable';
 import ModalDeleteUsers from './ModalDeleteUsers/ModalDeleteUsers';
+import useBodyClassForSidebar from '../../hooks/useBodyClassForSidebar';
 import { getUsersList, resetUser } from '../../api/services/adminService';
 import { USERS_PAGES } from '../../constants/route';
 
@@ -95,6 +96,8 @@ const TableUser = ({ matchUrl }) => {
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [params, setParams] = useState(DEFAULT_PARAMS);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    useBodyClassForSidebar();
 
     const loadUsersData = useCallback(async (searchParams = DEFAULT_PARAMS) => {
         const urlSearchParams = getURLSearchParams(searchParams);

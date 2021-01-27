@@ -39,6 +39,7 @@
     margin-right: 10px;
 }
 
+body:not(:global(.not_highlight_app)) .activeApp,
 .active {
     color: #09a552 !important;
     background-color: #f8f8f8;
@@ -80,6 +81,11 @@
 
 .menu :global(.ant-menu-item::after) {
     border: none;
+}
+
+.menu :global(.ant-menu-item-selected) {
+    color: #09A552 !important;
+    background-color: #F8F8F8 !important;
 }
 
 .menu :global(.ant-menu-item:hover) {

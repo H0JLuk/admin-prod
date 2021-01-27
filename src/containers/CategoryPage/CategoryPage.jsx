@@ -20,6 +20,7 @@ import styles from './CategoryPage.module.css';
 import { populateFormWithData } from '../../components/Form/formHelper';
 import ButtonLabels from '../../components/Button/ButtonLables';
 import { getAppCode } from '../../api/services/sessionService';
+import { addBodyClassForSidebar, removeBodyClassForSidebar } from '../../hooks/useBodyClassForSidebar';
 
 
 const CATEGORIES_GET_ERROR = 'Ошибка получения категорий!';
@@ -58,11 +59,16 @@ class CategoryPage extends Component {
     }
 
     componentDidMount() {
+        addBodyClassForSidebar();
         const loadData = async () => {
             const { categoryList: categories = [] } = await getCategoryList() ?? {};
             this.setState({ categories });
         };
         loadData();
+    }
+
+    componentWillUnmount() {
+        removeBodyClassForSidebar();
     }
 
     clearState = () => this.setState({

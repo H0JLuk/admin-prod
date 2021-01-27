@@ -7,6 +7,7 @@ import { getClientAppList } from '../../api/services/clientAppService';
 import { getDzoList } from '../../api/services/dzoService';
 import { getPromoCampaignById } from '../../api/services/promoCampaignService';
 import { getRole, saveAppCode } from '../../api/services/sessionService';
+import useBodyClassForSidebar from '../../hooks/useBodyClassForSidebar';
 import Header from '../../components/Header/Redisegnedheader/Header';
 import ROLES from '../../constants/roles';
 import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
@@ -61,6 +62,8 @@ const Dashboard = () => {
     const [appList, setAppList] = useState([]);
     const [dzoList, setDzoList] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    useBodyClassForSidebar();
 
     const loadData = async () => {
         setLoading(true);

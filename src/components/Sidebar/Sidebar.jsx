@@ -86,7 +86,7 @@ const Sidebar = () => {
                         {/* TODO: change this to NavLink or add active className after we will know url for apps */}
                         <div
                             onClick={ () => handleAdministrate(dzoItem) }
-                            className={ cn(styles.menu__item, { [styles.active]: appCode === dzoItem.code }) }
+                            className={ cn(styles.menu__item, { [styles.activeApp]: appCode === dzoItem.code }) }
                         >
                             { dzoItem.displayName }
                         </div>
