@@ -46,6 +46,10 @@
     padding: 40px 40px 80px 40px;
 }
 
+.checkboxes{
+    display: flex;
+}
+
 .modalForm .crossSvg {
     position: absolute;
     top: 10px;
@@ -94,6 +98,12 @@
     position: absolute;
     bottom: 35px;
     padding: 5px 30px;
+}
+
+.mechanics_title {
+    color: #046732;
+    font-weight: bold;
+    margin-top: 5px;
 }
 
 .error {

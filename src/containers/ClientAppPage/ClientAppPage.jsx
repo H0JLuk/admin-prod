@@ -35,18 +35,33 @@ const ADD_CLIENT_APP_TITLE = 'Добавить клиентское прилож
 const ADD_CLIENT_APP_ERROR = 'Не удалось добавить клиентское приложение';
 const COPY_CLIENT_APP_ERROR = 'Не удалось скопировать клиентское приложение';
 const IS_DELETED = 'Is Deleted:';
+const MECHANICS = 'Механики';
+const MECHANICS_ERROR = 'Необходимо выбрать хотя бы одну обязательную механику (Подарки или Продукты)';
+
+const MECHANICS_NAMES = {
+    presents: 'PRESENTS',
+    ecosystem: 'ECOSYSTEM',
+    presentation: 'PRESENTATION',
+};
+
+const MECHANICS_CHECKBOXES = [
+    { label: 'Подарки', name: MECHANICS_NAMES.presents },
+    { label: 'Продукты', name: MECHANICS_NAMES.ecosystem },
+    { label: 'Экскурсия', name: MECHANICS_NAMES.presentation },
+];
 
 const initialState = {
     editingClientApp: {
-        id: null, name: null, displayName: null, code: null, existingCode: null, isDeleted: false
+        id: null, name: null, displayName: null, code: null, existingCode: null, isDeleted: false,
+        mechanics: MECHANICS_CHECKBOXES.reduce((result, { name }) => ({ ...result, [name]: false }), {}),
     },
     clientAppProperties: {
         clientAppId: null, installationUrl: null, yamToken: null, tokenLifetime: null,
         inactivityTime: null, promoShowTime: null, privacyPolicy: null,
-        tmpBlockTime: null, maxPasswordAttempts: null, maxPresentsNumber: null
+        tmpBlockTime: null, maxPasswordAttempts: null, maxPresentsNumber: null,
     },
     staticUrl: getStaticUrl(), clientAppList: [], showDeleted: false, isOpen: false, formError: null,
-    loading: false,
+    loading: false, mechanicsError: null,
 };
 
 const updateValueType = {
@@ -94,9 +109,9 @@ class ClientAppPage extends Component {
 
     handleEditProperties = async (clientAppCode) =>{
         this.setState({ loading: true }, this.openModal);
-        const unformattedSettings = await getSettingsList(clientAppCode);
-
-        const settings = unformattedSettings.settingDtoList.length && unformattedSettings.settingDtoList.reduce((result, elem) => {
+        const { settingDtoList } = await getSettingsList(clientAppCode);
+        const { value = '[]' } = settingDtoList.find(({ key }) => key === 'mechanics') || {};
+        const settings = settingDtoList.length && settingDtoList.reduce((result, elem) => {
             return { ...result, [elem.key]: elem.value };
         }, {});
 
@@ -107,6 +122,14 @@ class ClientAppPage extends Component {
         this.setState({
             clientAppProperties: { ...settings, installation_url, usage_url, clientAppCode },
             loading: false,
+            editingClientApp: {
+                ...this.state.editingClientApp,
+                mechanics: {
+                    PRESENTS: value.includes(MECHANICS_NAMES.presents),
+                    ECOSYSTEM: value.includes(MECHANICS_NAMES.ecosystem),
+                    PRESENTATION: value.includes(MECHANICS_NAMES.presentation),
+                },
+            },
         });
     }
 
@@ -126,6 +149,24 @@ class ClientAppPage extends Component {
         });
     }
 
+    changeMechanicHandler = ({ target }) => {
+        const { name, checked } = target;
+
+        if ([MECHANICS_NAMES.ecosystem, MECHANICS_NAMES.presents].includes(name) && checked) {
+            this.setState({ mechanicsError: null });
+        }
+
+        this.setState({
+            editingClientApp: {
+                ...this.state.editingClientApp,
+                mechanics: {
+                    ...this.state.editingClientApp.mechanics,
+                    [name]: checked,
+                },
+            }
+        });
+    }
+
     doLogout = () => {
         logout().then(() => {
             this.props.history.push(ROUTE.LOGIN);
@@ -133,8 +174,9 @@ class ClientAppPage extends Component {
     };
 
     renderModalForm = () => {
-        const { formError, editingClientApp, clientAppProperties } = this.state;
-        let formData, onSubmit, isDeletedCheckbox;
+        const { formError, editingClientApp, clientAppProperties, mechanicsError } = this.state;
+        const { mechanics } = editingClientApp;
+        let formData, onSubmit, isDeletedCheckbox, isMechanics;
         if (editingClientApp.id !== null) {
             isDeletedCheckbox = true;
             formData = populateFormWithData(CLIENT_APP_EDIT_FORM, {
@@ -145,10 +187,12 @@ class ClientAppPage extends Component {
             onSubmit = this.addOrUpdate;
         } else if (clientAppProperties.clientAppId !== null) {
             isDeletedCheckbox = false;
+            isMechanics = true;
             formData = populateFormWithData(CLIENT_APP_PROPERTIES_EDIT_FORM, { ...clientAppProperties });
             onSubmit = this.updateProperties;
         } else {
             isDeletedCheckbox = true;
+            isMechanics = true;
             formData = CLIENT_APP_ADD_FORM;
             onSubmit = this.addOrUpdate;
         }
@@ -184,6 +228,22 @@ class ClientAppPage extends Component {
                         />
                     </form> : null
                 }
+                { isMechanics &&
+            (<div className={ styles.clientAppForm }>
+                <h3 className={ styles.mechanics_title } >{ MECHANICS }</h3>
+                { MECHANICS_CHECKBOXES.map(({ label, name }) => (
+                    <div key={ name }>
+                        <label className={ styles.clientAppForm__field }>{ label }</label>
+                        <input
+                            name={ name }
+                            type="checkbox"
+                            checked={ mechanics[name] }
+                            onChange={ this.changeMechanicHandler }
+                        />
+                    </div>
+                )) }
+                {mechanicsError && <span className={ styles.error }>{ mechanicsError }</span>}
+            </div>) }
             </div>
         );
     }
@@ -212,6 +272,7 @@ class ClientAppPage extends Component {
     }
 
     addOrUpdate = async (data) => {
+        const { PRESENTS, ECOSYSTEM } = this.state.editingClientApp.mechanics;
         if (!data.code) {
             alert(ENTER_CLIENT_APP_CODE_REQUEST);
             return;
@@ -222,6 +283,10 @@ class ClientAppPage extends Component {
         }
         if (!data.displayName) {
             alert(ENTER_CLIENT_APP_DISPLAY_NAME_REQUEST);
+            return;
+        }
+        if (!(PRESENTS || ECOSYSTEM) && !data.existingCode) {
+            this.setState({ mechanicsError: MECHANICS_ERROR });
             return;
         }
         let clientAppDto;
@@ -242,6 +307,12 @@ class ClientAppPage extends Component {
         } else if (!clientAppDto.existingCode) {
             try {
                 const response = await addClientApp(clientAppDto);
+                const mechanics = {
+                    clientAppCode: clientAppDto.code,
+                    value: this.getMechanicString(),
+                    key: 'mechanics',
+                };
+                JSON.parse(mechanics.value).length && await addSetting(mechanics);
                 await this.pushToClientAppList(response.id, clientAppDto);
             } catch (e) {
                 console.error(e.message);
@@ -273,12 +344,26 @@ class ClientAppPage extends Component {
         addKeysPromises.length && (await Promise.all(addKeysPromises));
     }
 
+    getMechanicString = () => {
+        const stateMechanics = this.state.editingClientApp.mechanics || {};
+        const mechanics = Object.keys(stateMechanics).filter(key => stateMechanics[key]);
+        return JSON.stringify(mechanics);
+    }
+
     updateProperties = async (dataFromForm) => {
+        const { PRESENTS, ECOSYSTEM } = this.state.editingClientApp.mechanics;
+
+        if (!(PRESENTS || ECOSYSTEM)) {
+            this.setState({ mechanicsError: MECHANICS_ERROR });
+            return;
+        }
         this.setState({ loading: true });
         const {
             clientAppProperties,
             clientAppProperties: { clientAppCode },
         } = this.state;
+
+        dataFromForm.mechanics = this.getMechanicString();
 
         const changedParams = Object.keys(dataFromForm).reduce((result, key) => {
             const valueFromServer = clientAppProperties[key];
