@@ -103,3 +103,7 @@
     background-color: #dd283b;
     border-color: #dd283b;
 }
+
+.containerStep :global(.ant-switch-checked) {
+    background-color: #09a552;
+}

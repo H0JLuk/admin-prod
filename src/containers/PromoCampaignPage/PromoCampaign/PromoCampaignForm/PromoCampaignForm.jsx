@@ -57,6 +57,10 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
         typePromoCampaign: '',
         categoryIdList: [],
         appCode: null,
+        settings: {
+            priorityOnWebUrl: false,
+            alternativeOfferMechanic: false,
+        },
     });
 
     const onChangeState = useCallback((type, val, index, input) => {
@@ -223,13 +227,6 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
         promoCampaignBanners: {},
     })), []);
 
-    const changeUrlSource = useCallback((value) => {
-        setState((prev) => ({
-            ...prev,
-            settings: { ...prev?.settings, priorityOnWebUrl: value },
-        }));
-    }, []);
-
     const StepContainer = useMemo(() => {
         switch (step) {
             case 1:
@@ -238,7 +235,6 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                             validStepChange={ validStepChange }
                             handlerNextStep={ handleNextStep }
                             changeTypePromo={ changeTypePromo }
-                            changeUrlSource={ changeUrlSource }
                         />;
             case 2:
                 return <StepTextAndImage

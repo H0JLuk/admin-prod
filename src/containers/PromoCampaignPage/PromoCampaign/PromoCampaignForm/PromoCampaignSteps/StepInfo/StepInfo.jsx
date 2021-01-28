@@ -34,12 +34,15 @@ const URL_SOURCE_VALUE_DZO = 'DZO';
 const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
 const URL_SOURCE_DZO_LABEL = 'ДЗО';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
+const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
 const types_promo = Object.values(promoCodeTypes);
+
+const namePathPriorityOnWebUrl = ['settings', 'priorityOnWebUrl'];
+const namePathAlternativeOfferMechanic = [ 'settings', 'alternativeOfferMechanic' ];
 
 const EXCURSION = 'Экскурсия';
 const GIFT = 'Подарок';
 // const LANDING = 'Лендинг';
-
 
 const selectTagRender = ({ label, onClose }) => (
     <div className={ styles.tagSelect }>
@@ -48,7 +51,7 @@ const selectTagRender = ({ label, onClose }) => (
     </div>
 );
 
-const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo, changeUrlSource }) => {
+const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) => {
 
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -81,8 +84,6 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo, ch
         setOpen(!open);
     }, [open]);
 
-    const onUrlSourceChanged = (e) => changeUrlSource(e.target.value === URL_SOURCE_VALUE_PROMO_CAMPAIGN);
-
     const renderSelectSuffix = useMemo(() => (
         <div className={ styles.suffixBlock }>
             { open ?
@@ -107,6 +108,10 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo, ch
             startDate: startDate?.toISOString(),
             finishDate: finishDate?.toISOString(),
             offerDuration: finishDate?.diff(startDate, 'days') + 1,
+            settings: {
+                ...val.settings,
+                priorityOnWebUrl: val.settings.priorityOnWebUrl === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
+            },
         });
     }, [handlerNextStep, validStepChange]);
 
@@ -170,27 +175,31 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo, ch
                 </Form.Item>
                 <Row gutter={ [24, 16] }>
                     <Col span={ 12 }>
-                        <Form.Item
-                            label={ URL_PROMO_CAMPAIGN }
-                            className={ styles.formItem }
-                            name="webUrl"
-                            rules={ [{ required: state?.settings?.priorityOnWebUrl === true, message: 'Укажите ссылку' }] }
-                            initialValue={ state.webUrl }
-                        >
-                            <Input placeholder={ URL } />
+                        <Form.Item dependencies={ [namePathPriorityOnWebUrl] }>
+                            { ({ getFieldValue }) => (
+                                <Form.Item
+                                    label={ URL_PROMO_CAMPAIGN }
+                                    className={ styles.formItem }
+                                    name="webUrl"
+                                    rules={ [{ required: getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN, message: 'Укажите ссылку' }] }
+                                    initialValue={ state.webUrl }
+                                >
+                                    <Input placeholder={ URL } />
+                                </Form.Item>
+                            ) }
                         </Form.Item>
                     </Col>
                     <Col span={ 12 }>
                         <Form.Item
-                            name="urlSource"
+                            name={ namePathPriorityOnWebUrl }
                             label={ URL_SOURCE_LABEL }
                             rules={ [{ required: true, message: 'Укажите источник ссылки для QR-кода' }] }
-                            initialValue={ state?.settings?.priorityOnWebUrl === true
+                            initialValue={ state.settings.priorityOnWebUrl === true
                                 ? URL_SOURCE_VALUE_PROMO_CAMPAIGN
                                 : URL_SOURCE_VALUE_DZO
                             }
                         >
-                            <Radio.Group className={ styles.urlSource } onChange={ onUrlSourceChanged }>
+                            <Radio.Group className={ styles.urlSource }>
                                 <Radio
                                     className={ styles.checkbox }
                                     value={ URL_SOURCE_VALUE_DZO }
@@ -225,6 +234,19 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo, ch
                             </Select>
                         </Form.Item>
                     </Col>
+                    <Col span={ 12 }>
+                        <Form.Item
+                            label={ SHOW_GO_TO_LINK_LABEL }
+                            className={ styles.formItem }
+                            name={ namePathAlternativeOfferMechanic }
+                            initialValue={ state.settings.alternativeOfferMechanic }
+                            valuePropName="checked"
+                        >
+                            <Switch />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={ [24, 16] }>
                     <Col span={ 12 }>
                         <Form.Item
                             label={ ACTIVE_PERIOD }

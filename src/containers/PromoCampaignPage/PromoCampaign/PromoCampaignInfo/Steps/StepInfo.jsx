@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
-import { Col, Radio, Row } from 'antd';
+import { Col, Radio, Row, Switch } from 'antd';
 import { getClientAppList } from '../../../../../api/services/clientAppService';
 import { getAppCode } from '../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../constants/promoCodeTypes';
@@ -20,6 +20,7 @@ const DZO = 'ДЗО';
 const STATUS = 'Активность промо-кампании';
 const URL_SOURCE_LABEL = 'Источник ссылки';
 const URL_SOURCE_DZO_LABEL = 'ДЗО';
+const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
 
 const STATUS_TYPE = {
@@ -84,6 +85,12 @@ const StepInfo = ({ promoCampaign }) => {
                             { promoCampaign.dzoName }
                         </div>
                     </Col>
+                    <Col span = { 12 } >
+                        <div className={ style.infoTitle }>{ SHOW_GO_TO_LINK_LABEL }</div>
+                        <Switch disabled checked={ promoCampaign.settings?.alternativeOfferMechanic } />
+                    </Col>
+                </Row>
+                <Row gutter={ [24, 16] }>
                     <Col span={ 12 }>
                         <div className={ style.infoTitle }>{ ACTIVE_PERIOD }</div>
                         <div className={ style.infoText }>
