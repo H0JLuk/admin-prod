@@ -1,4 +1,6 @@
+import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../constants/jsxConstants';
 import { isRequired, digitValidator } from '../../utils/validators';
+import { getLabel } from '../LabelWithTooltip/LabelWithTooltip';
 
 export const LOGIN_FORM = {
     personalNumber: {
@@ -290,7 +292,7 @@ export const DZO_ADD_FROM = {
         mask: null
     },
     webUrl: {
-        label: 'Ссылка на сайт ДЗО',
+        label: getLabel('Ссылка на сайт ДЗО', TOOLTIP_TEXT_FOR_URL_LABEL),
         value: '',
         type: 'text',
         isRequired: false,
@@ -341,7 +343,7 @@ export const DZO_EDIT_FROM = {
         mask: null
     },
     webUrl: {
-        label: 'Ссылка на сайт ДЗО',
+        label: getLabel('Ссылка на сайт ДЗО', TOOLTIP_TEXT_FOR_URL_LABEL),
         value: '',
         type: 'text',
         isRequired: false,

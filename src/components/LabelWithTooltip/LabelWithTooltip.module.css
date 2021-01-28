@@ -8,6 +8,10 @@
     align-items: center;
 }
 
+.tooltip.text {
+    max-width: 500px;
+}
+
 .tooltip :global(.ant-tooltip-inner) {
     background-color: white;
 }
@@ -20,7 +24,7 @@
 
 .tooltip :global(.ant-tooltip-arrow) {
     width: 21px;
-    height: 21px;
+    height: 19px;
 }
 
 .tooltipIcon {
@@ -35,4 +39,10 @@
 
 .tooltipImg {
     width: 100%;
+}
+
+.tooltipText {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 13px;
+    line-height: 18px;
 }

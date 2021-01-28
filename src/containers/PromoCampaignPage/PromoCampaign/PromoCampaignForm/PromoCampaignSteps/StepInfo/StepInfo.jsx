@@ -6,6 +6,8 @@ import { getClientAppList } from '../../../../../../api/services/clientAppServic
 import { getCategoryList } from '../../../../../../api/services/categoryService';
 import { steps } from '../../PromoCampaignFormConstants';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
+import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
+import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWithTooltip';
 
 import { ReactComponent as Cross } from '../../../../../../static/images/cross.svg';
 
@@ -178,7 +180,7 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                         <Form.Item dependencies={ [namePathPriorityOnWebUrl] }>
                             { ({ getFieldValue }) => (
                                 <Form.Item
-                                    label={ URL_PROMO_CAMPAIGN }
+                                    label={ getLabel(URL_PROMO_CAMPAIGN, TOOLTIP_TEXT_FOR_URL_LABEL) }
                                     className={ styles.formItem }
                                     name="webUrl"
                                     rules={ [{ required: getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN, message: 'Укажите ссылку' }] }

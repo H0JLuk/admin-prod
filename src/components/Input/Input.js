@@ -68,7 +68,7 @@ class Input extends React.PureComponent {
 Input.propTypes = {
     type: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    label: PropTypes.string,
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     value: PropTypes.string.isRequired,
     valid: PropTypes.bool,
     active: PropTypes.bool,

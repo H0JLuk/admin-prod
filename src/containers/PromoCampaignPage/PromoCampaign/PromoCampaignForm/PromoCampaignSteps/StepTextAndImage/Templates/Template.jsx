@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row } from 'antd';
 import UploadFile from '../../StepLanding/FormControllers/UploadFile/UploadFile';
-import { getLabel } from '../../../../../../../components/LabelWithTooltipImg/LabelWithTooltipImg';
+import { getLabel } from '../../../../../../../components/LabelWithTooltip/LabelWithTooltip';
 import TextBlock from '../TextBlock/TextBlock';
 import { INFO_ROWS } from './templateConstants';
 
@@ -38,7 +38,7 @@ const Template = ({ banners, texts, type, onRemoveImg }) => {
                             rules={ row[key].rules }
                             onRemoveImg={ onRemoveImg }
                             type={ row[key].type }
-                            label={ getLabel(row[key].title, row[key].tooltipImg) }
+                            label={ getLabel(row[key].title, row[key].tooltipImg, true) }
                             uploadButtonText={ ADD }
                             footer
                         />

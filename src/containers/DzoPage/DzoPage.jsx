@@ -23,6 +23,8 @@ import { addBodyClassForSidebar, removeBodyClassForSidebar } from '../../hooks/u
 import { populateFormWithData } from '../../components/Form/formHelper';
 import ButtonLabels from '../../components/Button/ButtonLables';
 import inputStyles from '../../components/Input/Input.module.css';
+import { getLabel } from '../../components/LabelWithTooltip/LabelWithTooltip';
+import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../constants/jsxConstants';
 
 const DZO_LIST_GET_ERROR = 'Ошибка получения ДЗО!';
 const DZO_DELETE_ERROR = 'Ошибка удаления ДЗО!';
@@ -173,7 +175,7 @@ class DzoPage extends Component {
                     </div>
                     <div className={ classNames(styles.appForm__field, inputStyles.field) }>
                         <label htmlFor="appUrl" className={ classNames(inputStyles.label,styles.appForm__field__activeLabel) }>
-                            Ссылка на приложение:<br />
+                            { getLabel('Ссылка на приложение:', TOOLTIP_TEXT_FOR_URL_LABEL) }
                         </label>
                         <input type='text'
                                id='appUrl'

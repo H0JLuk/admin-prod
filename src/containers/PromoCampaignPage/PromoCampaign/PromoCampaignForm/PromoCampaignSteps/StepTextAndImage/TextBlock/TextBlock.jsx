@@ -21,8 +21,8 @@ const TextBlock = ({
 
     return (
         <div className={ styles.textBlock }>
-            <div className={ styles.title }>{ title }</div>
             <Form.Item
+                label={ title }
                 name={ name }
                 initialValue={ initialValue }
                 rules={ rules }
