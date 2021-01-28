@@ -191,7 +191,7 @@ const UserForm = ({ type, matchUrl }) => {
             return setError({ ...DEFAULT_ERRORS, login: 'Укажите логин пользователя' });
         }
 
-        if ((!userData || userData.role === 'User') && !salePoint?.id) {
+        if ((!userData || userData.role === 'User') && typeof salePoint?.id !== 'number') {
             return setError({ ...DEFAULT_ERRORS, salePoint: 'Выберите точку продажи' });
         }
 
