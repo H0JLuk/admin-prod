@@ -19,11 +19,21 @@ body, ul, li, p {
 .ant-btn-primary:focus {
     background-color: #09a552 !important;
     border-color: #09a552 !important;
+    color: #ffffff !important;
+}
+
+.ant-btn:hover,
+.ant-btn:focus {
+    border-color: #09a552 !important;
+    color: #09a552;
 }
 
 .ant-btn-danger,
 .ant-btn-danger:hover,
-.ant-btn-danger:focus {
+.ant-btn-danger:focus,
+.ant-btn-dangerous.ant-btn-primary,
+.ant-btn-dangerous.ant-btn-primary:hover,
+.ant-btn-dangerous.ant-btn-primary:focus {
     background-color: #dd283b !important;
     border-color: #dd283b !important;
 }

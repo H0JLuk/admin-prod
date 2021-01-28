@@ -1,4 +1,6 @@
 
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Modal } from 'antd';
 import React from 'react';
 
 export function highlightSearchingText(value = '', searchValue = '', highlightClassName) {
@@ -41,4 +43,21 @@ export function getStringOptionValue({ parentName = '', name = '' } = {}) {
 
 export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * @param {import('antd/lib/modal').ModalFuncProps} data
+ */
+export function confirmModal({
+    onOk,
+    title = 'Вы уверены?',
+    icon: customIcon,
+    content = '',
+    okText = 'Да',
+    cancelText = 'Отмена',
+    centered = true,
+    ...restOptions
+}) {
+    const icon = customIcon ? customIcon : <ExclamationCircleOutlined />;
+    Modal.confirm({ onOk, title, icon, content, okText, cancelText, centered, ...restOptions });
 }

@@ -22,6 +22,8 @@ const STATUS = {
     INACTIVE: 'Неактивная',
 };
 
+const sortableIcon = <MenuOutlined className={ style.sortableIcon } />;
+
 const PromoCampaignItem = ({ promoCampaign, onDeleteItem, sortable, matchUrl }) => {
     const history = useHistory();
     const {
@@ -95,7 +97,7 @@ const PromoCampaignItem = ({ promoCampaign, onDeleteItem, sortable, matchUrl }) 
             <div className={ style.cardAction }>
                 <div className={ style.cardMenu }>
                     { sortable ? (
-                        <MenuOutlined style={ { fontSize: 25 } } />
+                        { sortableIcon }
                     ) : (
                         <PromoCampaignItemMenu
                             promoCampaign={ promoCampaign }

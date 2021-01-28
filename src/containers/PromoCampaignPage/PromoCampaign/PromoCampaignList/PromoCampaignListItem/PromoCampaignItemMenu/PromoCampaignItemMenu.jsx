@@ -5,8 +5,10 @@ import { EllipsisOutlined } from '@ant-design/icons';
 import PromoCodeStatisticModal from './PromoCampaignModalMenu/PromoCodeStatisticModal';
 import { errorNotice } from '../../../../../../components/toast/Notice';
 import UploadPromoCodesModal from './PromoCampaignModalMenu/UploadPromoCodesModal';
-import { deletePromoCampaign, uploadPromoCodes } from '../../../../../../api/services/promoCampaignService';
+import { uploadPromoCodes } from '../../../../../../api/services/promoCampaignService';
 import { PROMO_CAMPAIGN_PAGES } from '../../../../../../constants/route';
+import { confirmModal } from '../../../../../../utils/utils';
+import { getDeleteTitleConfirm, onConfirmDeletePromoCampaign } from '../../../../PromoCampaignUtils';
 
 import styles from './PromoCampaignItemMenu.module.css';
 
@@ -25,19 +27,23 @@ const PromoCampaignItemMenu = ({ onDeleteItem, promoCampaign, matchUrl }) => {
     const [showModalStatistic, setShowModalStatistic] = useState(false);
     const [showPromoCodesModal, setShowPromoCodesModal] = useState(false);
 
-    const onDeletePromoCampaign = useCallback(async () => {
+    const onConfirmDelete = useCallback(async () => {
         try {
-            await deletePromoCampaign(promoCampaign.id);
+            await onConfirmDeletePromoCampaign(promoCampaign.id, promoCampaign.name);
             onDeleteItem();
-        } catch (e) {
-            // TODO: add error handler
-            console.error(e);
+        } catch (err) {
+            console.warn(err);
         }
+    }, [promoCampaign.id, promoCampaign.name, onDeleteItem]);
+
+    const onDeleteClick = useCallback(() => {
+        confirmModal({
+            onOk: onConfirmDelete,
+            title: getDeleteTitleConfirm(promoCampaign.name),
+        });
 
         setDropdownVisible(false);
-    }, [promoCampaign.id, onDeleteItem]);
-
-    const onMenuClick = useCallback((e) => e.stopPropagation(), []);
+    }, [promoCampaign.name, onConfirmDelete]);
 
     const onShowStatistic = useCallback((e) => {
         e.stopPropagation();
@@ -75,8 +81,7 @@ const PromoCampaignItemMenu = ({ onDeleteItem, promoCampaign, matchUrl }) => {
                 overlay={
                     <DropdownMenu
                         promoCampaign={ promoCampaign }
-                        onDelete={ onDeletePromoCampaign }
-                        onClickItem={ onMenuClick }
+                        onDelete={ onDeleteClick }
                         onShowStatistic={ onShowStatistic }
                         onPromoCodeUpload={ onPromoCodeUpload }
                         matchUrl={ matchUrl }
@@ -86,7 +91,7 @@ const PromoCampaignItemMenu = ({ onDeleteItem, promoCampaign, matchUrl }) => {
                 visible={ dropdownVisible }
                 onVisibleChange={ setDropdownVisible }
             >
-                <div className={ styles.menuButton } onClick={ onMenuClick }>
+                <div className={ styles.menuButton }>
                     <EllipsisOutlined />
                 </div>
             </Dropdown>
@@ -118,7 +123,6 @@ const MENU = {
 
 const DropdownMenu = ({
     onDelete,
-    onClickItem,
     promoCampaign,
     matchUrl,
     onShowStatistic,
@@ -137,7 +141,6 @@ const DropdownMenu = ({
         </Menu.Item>
         <Menu.Item key="2">
             <Link
-                onClick={ onClickItem }
                 to={ generatePath(
                     `${ matchUrl }${PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS}`,
                     { promoCampaignId: promoCampaign.id }
@@ -148,7 +151,6 @@ const DropdownMenu = ({
         </Menu.Item>
         <Menu.Item key="3">
             <Link
-                onClick={ onClickItem }
                 to={ {
                     pathname: generatePath(
                         `${ matchUrl }${PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT}`,

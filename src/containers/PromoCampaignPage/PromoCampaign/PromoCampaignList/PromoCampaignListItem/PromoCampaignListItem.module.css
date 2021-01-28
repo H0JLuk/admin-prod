@@ -1,3 +1,7 @@
+.sortableIcon {
+    font-size: 25px;
+}
+
 .cardWrapper {
     position: relative;
     display: flex;

@@ -1,8 +1,5 @@
-import React from 'react';
-import { Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { confirmModal } from '../../../../../../utils/utils';
 
-const CANCEL_TITLE = 'Отменить';
 const OK_TITLE = 'Ок';
 const CONFIRM_CHANGE_TITLE = 'Тип промокода был изменён';
 
@@ -16,14 +13,11 @@ const modalText = {
 };
 
 const callConfirmModalForPromoCodeTypeChanging = (handleOk, text) =>
-    Modal.confirm({
+    confirmModal({
         title: CONFIRM_CHANGE_TITLE,
-        icon: <ExclamationCircleOutlined />,
         content: `${modalText.firstPart} ${modalText[text] || ''} ${modalText.thirdPart}`,
         okText: OK_TITLE,
         onOk: handleOk,
-        centered: true,
-        cancelText: CANCEL_TITLE,
     });
 
 export default callConfirmModalForPromoCodeTypeChanging;

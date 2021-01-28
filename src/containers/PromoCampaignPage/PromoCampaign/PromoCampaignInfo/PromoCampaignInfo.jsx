@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { generatePath, useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'antd';
-import { deletePromoCampaign } from '../../../../api/services/promoCampaignService';
 import { getFormattedDate } from '../../../../utils/helper';
 import { PROMO_CAMPAIGN_PAGES } from '../../../../constants/route';
 import Header from '../../../../components/Header/Header';
@@ -9,6 +8,8 @@ import PromoCampaignSideBar from '../PromoCampaignSideBar/PromoCampaignSideBar';
 import StepInfo from './Steps/StepInfo';
 import StepTextAndImage from './Steps/StepTextAndImage';
 import StepVisibility from './Steps/StepVisibility';
+import { confirmModal } from '../../../../utils/utils';
+import { onConfirmDeletePromoCampaign, getDeleteTitleConfirm } from '../../PromoCampaignUtils';
 
 import styles from './PromoCampaignInfo.module.css';
 
@@ -41,10 +42,20 @@ const PromoCampaignInfo = ({ matchUrl }) => {
         history.push(generatePath(path, { promoCampaignId: promoCampaign.id }), { promoCampaign });
     }, [history, matchUrl, stateFromLocation]);
 
-    const onDelete = useCallback(() => {
-        deletePromoCampaign(promoCampaign.id);
-        history.push(matchUrl);
-    }, [promoCampaign.id, history, matchUrl]);
+    const onConfirmDelete = useCallback(async () => {
+        try {
+            await onConfirmDeletePromoCampaign(promoCampaign.id, promoCampaign.name);
+            history.push(matchUrl);
+        } catch (e) {
+            console.warn(e);
+        }
+    }, [promoCampaign.id, promoCampaign.name, history, matchUrl]);
+
+    const onDeleteClick = useCallback(() => confirmModal({
+        onOk: onConfirmDelete,
+        title: getDeleteTitleConfirm(promoCampaign.name),
+        centered: false,
+    }), [promoCampaign.name, onConfirmDelete]);
 
     const StepContainer = useMemo(() => {
         switch (step) {
@@ -82,10 +93,9 @@ const PromoCampaignInfo = ({ matchUrl }) => {
                                 { EDIT }
                             </Button>
                             <Button
-                                className={ styles.deleteBtn }
                                 type="primary"
                                 danger
-                                onClick={ onDelete }
+                                onClick={ onDeleteClick }
                             >
                                 { DELETE }
                             </Button>
