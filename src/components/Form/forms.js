@@ -197,9 +197,9 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         label : 'Политика конфиденциальности',
         value : '',
         type: 'text',
-        isRequired: true,
+        isRequired: false,
         maxLength: 4096,
-        validators: [isRequired],
+        validators: [],
         mask: null,
     },
     tmp_block_time: {

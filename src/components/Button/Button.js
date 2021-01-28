@@ -8,6 +8,7 @@ class Button extends React.PureComponent {
         const { onClick, disabled } = this.props;
 
         if (disabled || typeof onClick !== 'function') {
+            e.preventDefault();
             return;
         }
 
@@ -30,6 +31,7 @@ class Button extends React.PureComponent {
                 { ...restProps }
                 className={ buttonClasses }
                 onClick={ this.onClick }
+                disabled={ disabled }
             >
                 {label || children}
             </button>
