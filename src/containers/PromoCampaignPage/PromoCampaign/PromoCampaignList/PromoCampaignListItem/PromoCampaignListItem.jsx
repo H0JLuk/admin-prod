@@ -96,9 +96,7 @@ const PromoCampaignItem = ({ promoCampaign, onDeleteItem, sortable, matchUrl }) 
             </div>
             <div className={ style.cardAction }>
                 <div className={ style.cardMenu }>
-                    { sortable ? (
-                        { sortableIcon }
-                    ) : (
+                    { sortable ? sortableIcon : (
                         <PromoCampaignItemMenu
                             promoCampaign={ promoCampaign }
                             onDeleteItem={ onDeleteItem }
