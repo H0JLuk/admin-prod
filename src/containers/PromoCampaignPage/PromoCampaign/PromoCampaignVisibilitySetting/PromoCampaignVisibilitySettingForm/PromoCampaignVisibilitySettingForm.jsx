@@ -27,9 +27,9 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
             const { promoCampaignId } = match.params || {};
 
             await addVisibilitySetting({
-                locationId: location?.id || undefined,
+                locationId: location?.id ?? undefined,
                 promoCampaignId: Number(promoCampaignId),
-                salePointId: salePoint?.id || undefined,
+                salePointId: salePoint?.id ?? undefined,
                 visible: visibility,
             });
 
