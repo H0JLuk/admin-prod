@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
-import styles from './RestoredTableUser.module.css';
 import { generateCsvFile } from '../../../../../utils/helper';
+
+import styles from './RestoredTableUser.module.css';
 
 const TITLE = 'Пароль успешно сброшен для:';
 const EXPORT = 'Экспорт паролей';
@@ -20,7 +21,10 @@ const RestoredTableUser = ({ users }) => {
                 { users.map(({ personalNumber }) => personalNumber).join(', ') }
             </p>
             <div className={ styles.buttonWrapper }>
-                <Button onClick={ exportCSV } className={ styles.button }>
+                <Button
+                    type="primary"
+                    onClick={ exportCSV }
+                >
                     { EXPORT }
                 </Button>
             </div>
