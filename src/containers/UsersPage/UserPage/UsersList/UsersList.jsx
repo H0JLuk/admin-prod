@@ -5,15 +5,14 @@ import cn from 'classnames';
 import { notification } from 'antd';
 import RestoredTableUser from './RestoredTableUser/RestoredTableUser';
 import EmptyUsersPage from './EmptyUsersPage/EmptyUsersPage';
-import ButtonLoadUsers from './ButtonUsers/ButtonLoadUsers';
-import ButtonDeleteUsers from './ButtonUsers/ButtonDeleteUsers';
 import DownloadDropDown from './DownloadDropDown/DownloadDropDown';
 import HeaderWithActions from '../../../../components/HeaderWithActions/HeaderWithActions';
 import Header from '../../../../components/Header/Header';
 import UsersListTable from './UsersListTable';
 import ModalDeleteUsers from './ModalDeleteUsers/ModalDeleteUsers';
 import useBodyClassForSidebar from '../../../../hooks/useBodyClassForSidebar';
-import { getUsersList, resetUser } from '../../../../api/services/adminService';
+import TemplateUploadButtonsWithModal from '../../../../components/ButtonWithModal/TemplateUploadButtonsWithModal';
+import { getUsersList, resetUser } from '../../../../api/services/usersService';
 import { USERS_PAGES } from '../../../../constants/route';
 
 import styles from './UsersList.module.css';
@@ -401,16 +400,7 @@ const UserList = ({ matchUrl }) => {
                             { TITLE_DOWNLOAD_USER }
                         </span>
                         <div className={ styles.downloadButtons }>
-                            <ButtonLoadUsers
-                                id="contained-button-upload-file"
-                                label={ BUTTON_ADD }
-                                onSuccess={ forceUpdateUsersData }
-                            />
-                            <ButtonDeleteUsers
-                                id="contained-button-delete-file"
-                                label={ BUTTON_DELETE }
-                                onSuccess={ forceUpdateUsersData }
-                            />
+                            <TemplateUploadButtonsWithModal onSuccess={ forceUpdateUsersData } />
                         </div>
                         <DownloadDropDown />
                     </div>

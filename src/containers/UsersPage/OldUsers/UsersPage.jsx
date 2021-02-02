@@ -6,7 +6,7 @@ import styles from './UsersPage.module.css';
 import classNames from 'classnames';
 import MultiActionForm from '../../../components/Form/MultiActionForm';
 import { CHANGE_USER_FORM } from '../../../components/Form/forms';
-import { oldAddUser, oldRemoveUser, resetUser, unblockUser } from '../../../api/services/adminService';
+import { oldAddUser, oldRemoveUser, resetUser, unblockUser } from '../../../api/services/usersService';
 import Button from '../../../components/Button/Button';
 import { baseUrl } from '../../../api/apiClient';
 import { getReqOptions } from '../../../api/services';

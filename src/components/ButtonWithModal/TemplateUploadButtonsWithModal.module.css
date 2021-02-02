@@ -1,0 +1,11 @@
+.form :global(.ant-upload.ant-upload-select) {
+    display: block;
+}
+
+.formItem:global(.ant-form-item-has-error) .uploadBtn {
+    border-color: #ff4d4f;
+}
+
+.uploadBtn {
+    width: 100%;
+}

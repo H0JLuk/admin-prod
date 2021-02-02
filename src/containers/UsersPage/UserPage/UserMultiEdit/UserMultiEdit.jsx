@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Form } from 'antd';
+import { editLocationAndSalePointUsers, removeUser } from '../../../../api/services/usersService';
 import Header from '../../../../components/Header/Header';
 import AutocompleteLocationAndSalePoint from '../../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteLocationAndSalePoint';
 import UserFormButtonGroup from '../UserFormButtonGroup/UserFormButtonGroup';
-import { editLocationAndSalePointUsers, removeUser } from '../../../../api/services/adminService';
 
 import styles from './UserMultiEdit.module.css';
 

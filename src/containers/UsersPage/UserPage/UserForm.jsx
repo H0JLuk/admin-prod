@@ -4,7 +4,7 @@ import { useHistory, useParams, generatePath } from 'react-router-dom';
 import cn from 'classnames';
 import { Form, Input, notification ,Typography } from 'antd';
 import { USERS_PAGES } from '../../../constants/route';
-import { addUser, getUser, removeUser, resetUser, saveUser, unblockUser } from '../../../api/services/adminService';
+import { addUser, getUser, removeUser, resetUser, saveUser, unblockUser } from '../../../api/services/usersService';
 import Header from '../../../components/Header/Header';
 import AutocompleteLocationAndSalePoint from '../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteLocationAndSalePoint';
 import UserBlockStatus from '../../../components/UserBlockStatus/UserBlockStatus';

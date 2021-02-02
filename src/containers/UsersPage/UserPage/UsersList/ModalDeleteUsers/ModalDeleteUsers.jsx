@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Modal } from 'antd';
+import { removeUser } from '../../../../../api/services/usersService';
 import RemovedUsersList from './RemovedUsersList/RemovedUsersList';
-import { removeUser } from '../../../../../api/services/adminService';
 
 import styles from './ModalDeleteUsers.module.css';
 

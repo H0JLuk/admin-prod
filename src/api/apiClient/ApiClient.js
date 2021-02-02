@@ -69,12 +69,12 @@ export default class ApiClient {
         }, responseType);
     }
 
-    async upload(url, body, reqOptions = {}) {
+    async upload(url, body, reqOptions = {}, responseType = 'json') {
         return this.request(url, {
             ...reqOptions,
             method: 'POST',
             body
-        });
+        }, responseType);
     }
 
     async update(url, body, reqOptions = {}) {
