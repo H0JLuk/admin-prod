@@ -1,8 +1,8 @@
 import moment from 'moment';
 
 export const downloadFile = (data, name) => {
-    const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-    downloadFileFunc(URL.createObjectURL(blob), name, 'xlsx');
+    const blob = new Blob([data], { type: 'text/csv' });
+    downloadFileFunc(URL.createObjectURL(blob), name, 'csv');
 };
 
 export const loadImageWithPromise = (url, failUrl) => {
