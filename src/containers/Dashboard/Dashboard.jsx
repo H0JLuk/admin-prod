@@ -36,6 +36,7 @@ const DashboardFilterMenu = ({ onClick }) => (
 );
 
 const DashboardFilterList = ({ list, filterIdList, onClick }) => {
+
     return (
         <div className={ styles.filtersBlock }>
             {list.map((elem, index) => (
@@ -70,9 +71,9 @@ const Dashboard = () => {
             const response = await getDashboardInfo();
             setList(response);
             const { clientApplicationDtoList: clientAppList = [] } = await getClientAppList() ?? {};
-            setAppList(clientAppList.map(({ id, name }) => ({ id, name })));
+            setAppList(clientAppList.map(({ id, displayName }) => ({ id, displayName })));
             const { dzoDtoList = [] } = await getDzoList() ?? {};
-            setDzoList(dzoDtoList.map(({ dzoId: id, dzoName: name }) => ({ id, name })));
+            setDzoList(dzoDtoList.map(({ dzoId: id, dzoName: displayName }) => ({ id, displayName })));
         } catch (e) {
             console.error(e?.message);
         } finally {

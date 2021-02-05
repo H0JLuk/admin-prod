@@ -128,7 +128,7 @@ const StepInfo = ({ promoCampaign }) => {
                         <div className={ style.container }>
                             <div className={ style.infoTitle }>{ SHOW_PROMO_CAMPAIGN }</div>
                             <div className={ style.infoText }>
-                                { clientApp && clientApp.name }
+                                { clientApp && clientApp.displayName }
                             </div>
                         </div>
                     </Col>

@@ -323,9 +323,9 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                                 rules={ [{ required: true, message: 'Выберите витрину' }] }
                             >
                                 <Select placeholder={ CHOOSE_SHOWCASE }>
-                                    { clientApps.map(({ code, name }) => (
+                                    { clientApps.map(({ code, displayName }) => (
                                         <Select.Option value={ code } key={ code }>
-                                            { name }
+                                            { displayName }
                                         </Select.Option>
                                     )) }
                                 </Select>

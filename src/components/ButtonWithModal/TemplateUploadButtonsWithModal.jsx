@@ -51,7 +51,7 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
         setIsModalVisible(true);
         if (!appList.length) {
             const { clientApplicationDtoList: clientAppList = [] } = await getClientAppList() ?? {};
-            setAppList(clientAppList.map(({ name, code }) => ({ value: code, label: name })));
+            setAppList(clientAppList.map(({ displayName, code }) => ({ value: code, label: displayName })));
         }
     };
 

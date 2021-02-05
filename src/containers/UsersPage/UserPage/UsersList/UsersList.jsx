@@ -148,6 +148,7 @@ const UserList = ({ matchUrl }) => {
         if (value) {
             loadUsersDataDebounced(nextParams);
         } else {
+            loadUsersDataDebounced.cancel();
             loadUsersData(nextParams);
         }
         setParams(nextParams);

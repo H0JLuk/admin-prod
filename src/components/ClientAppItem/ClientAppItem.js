@@ -5,7 +5,7 @@ import Button from '../Button/Button';
 import ButtonLabels from '../Button/ButtonLables';
 
 const ClientAppItem = (props) => {
-    const { /*handleEdit, displayName,*/ name, code, isDeleted, handleAdministrate, handleEditProperties } = props;
+    const { /*handleEdit, name,*/ displayName, code, isDeleted, handleAdministrate, handleEditProperties } = props;
 
     // const handleEditClientApp = () => {
     //     handleEdit(id, name, displayName, code, isDeleted);
@@ -20,7 +20,7 @@ const ClientAppItem = (props) => {
             <div className={ styles.descrWrapper }>
                 <div className={ styles.fieldsWrapper }>
                     {isDeleted && <p className={ styles.deleted }><b>Приложение удалено!</b></p>}
-                    <p><b>Имя:</b>{ ` "${ name }"` }</p>
+                    <p><b>Имя:</b>{ ` "${ displayName }"` }</p>
                     <p><b>Код:</b>{ ` "${ code }"` }</p>
                     <p><b>Deleted:</b> {isDeleted.toString()}</p>
                 </div>
