@@ -183,7 +183,11 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                                     label={ getLabel(URL_PROMO_CAMPAIGN, TOOLTIP_TEXT_FOR_URL_LABEL) }
                                     className={ styles.formItem }
                                     name="webUrl"
-                                    rules={ [{ required: getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN, message: 'Укажите ссылку' }] }
+                                    validateTrigger="onSubmit"
+                                    rules={ [
+                                        { required: getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN, message: 'Укажите ссылку' },
+                                        { type: 'url', message: 'Поле содержит недопустимые символы' },
+                                    ] }
                                     initialValue={ state.webUrl }
                                 >
                                     <Input placeholder={ URL } />
