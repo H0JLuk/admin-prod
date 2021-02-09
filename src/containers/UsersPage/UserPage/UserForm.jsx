@@ -70,6 +70,7 @@ const userMessage = (login, pwd, mode, errorMessage) => {
                         { USER_PASSWORD }: { pwd }
                     </Paragraph>
                 ),
+                placement: 'topRight',
             };
         }
         case RESTORED: {
@@ -80,6 +81,7 @@ const userMessage = (login, pwd, mode, errorMessage) => {
                         { NEW_USER_PASSWORD }: { pwd }
                     </Paragraph>
                 ),
+                placement: 'topRight',
             };
         }
         case DELETE: {
@@ -108,19 +110,20 @@ const showNotify = ({ login, pwd, mode, errorMessage }) => {
         duration:0,
         placement:'bottomRight'
     };
-    const { message, description } = userMessage(login, pwd, mode, errorMessage);
+    const { message, description, placement } = userMessage(login, pwd, mode, errorMessage);
     if (mode === ERROR){
         return notification.error({
+            ...config,
             message,
             description,
-            ...config,
         });
     }
         notification.success({
+            ...config,
             message,
             description,
+            placement,
             style:{ minWidth:'400px' },
-            ...config
         });
 };
 
