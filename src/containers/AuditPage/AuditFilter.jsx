@@ -40,14 +40,14 @@ const initialValues = {
     success: null
 };
 
-const AuditFilter = ({ submit }) => {
+const AuditFilter = ({ submit, applications }) => {
     const [form] = Form.useForm();
 
     const onReset = useCallback(() => {
         form.resetFields();
         submit();
     }, [form, submit]);
-    
+
     const onSubmit = useCallback((fieldsValue) => {
         const { date, ...otherFieldsValue } = fieldsValue;
         let data = {};
@@ -68,7 +68,6 @@ const AuditFilter = ({ submit }) => {
 
         submit(data);
     }, [submit]);
-    
     return (
         <Form { ...layout } form={ form } onFinish={ onSubmit } initialValues={ initialValues }>
             <Form.Item label="Тип события" name="type">
@@ -77,6 +76,9 @@ const AuditFilter = ({ submit }) => {
                         auditEventTypes.map(el => <Select.Option key={ el } value={ el }>{el}</Select.Option>)
                     }
                 </Select>
+            </Form.Item>
+            <Form.Item label="Витрина" name="clientAppCode">
+                <Select mode='multiple' options={ applications } />
             </Form.Item>
             <Form.Item label="Пользователь" name="userLogin">
                 <Input autoComplete="off" />

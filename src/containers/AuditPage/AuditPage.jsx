@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useTable, usePagination } from 'react-table';
 import { Select, Spin, Collapse } from 'antd';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,7 @@ import { getReqOptions } from '../../api/services';
 import ReactJson from 'react-json-view';
 import { baseUrl } from '../../api/apiClient';
 import AuditFilter from './AuditFilter';
+import { getClientAppList } from '../../api/services/clientAppService';
 
 import styles from './AuditPage.module.css';
 
@@ -22,6 +23,10 @@ const sortItems = [
     {
         label: 'Тип события',
         value: 'type'
+    },
+    {
+        label: 'Приложение',
+        value: 'clientAppCode',
     },
     {
         label: 'Пользователь',
@@ -52,66 +57,66 @@ const sortDirectionItems = [
     },
 ];
 
+const columns = [
+    {
+        Header: 'ID',
+        accessor: 'id',
+    },
+    {
+        Header: 'Тип события',
+        accessor: 'type',
+    },
+    {
+        Header: 'Приложение',
+        accessor: 'clientAppCode',
+    },
+    {
+        Header: 'Пользователь',
+        accessor: 'userLogin',
+    },
+    {
+        Header: 'IP пользователя',
+        accessor: 'userIp',
+    },
+    {
+        Header: 'Дата',
+        accessor: 'happenedAt',
+    },
+    {
+        Header: 'Детали',
+        accessor: 'details',
+        Cell: ({ row: { original: { details } } }) => details && (<ReactJson
+            src={ JSON.parse(details) }
+            name={ null }
+            enableClipboard={ false }
+            displayObjectSize={ false }
+            displayDataTypes={ false }
+            collapsed={ true }
+            iconStyle='circle'
+        />
+        )
+    },
+    {
+        Header: 'Статус события',
+        accessor: 'success',
+        Cell: ({ row: { original: { success } } }) => <span>{success ? 'Успешно' : 'Ошибка'}</span>
+    },
+];
+
+const defaultColumn = {
+    Filter: () => null,
+};
 
 const AuditPage = () => {
 
     const [data, setData] = useState(initialState);
+    const [applications, setApplications] = useState([]);
     const [sortItem, setSortItem] = useState('happenedAt');
     const [sortDirection, setSortDirection] = useState('DESC');
     const [loading, setLoading] = useState(false);
     const [filtersObject, setFiltersObject] = useState({});
     const { events, totalPages } = data;
-    const defaultColumn = useMemo(
-        () => ({
-            Filter: () => null,
-        }),
-        []
-    );
 
-    const columns = useMemo(
-        () => [
-            {
-                Header: 'ID',
-                accessor: 'id',
-            },
-            {
-                Header: 'Тип события',
-                accessor: 'type',
-            },
-            {
-                Header: 'Пользователь',
-                accessor: 'userLogin',
-            },
-            {
-                Header: 'IP пользователя',
-                accessor: 'userIp',
-            },
-            {
-                Header: 'Дата',
-                accessor: 'happenedAt',
-            },
-            {
-                Header: 'Детали',
-                accessor: 'details',
-                Cell: ({ row: { original: { details } } }) => details && (<ReactJson
-                    src={ JSON.parse(details) }
-                    name={ null }
-                    enableClipboard={ false }
-                    displayObjectSize={ false }
-                    displayDataTypes={ false }
-                    collapsed={ true }
-                    iconStyle='circle'
-                />
-                )
-            },
-            {
-                Header: 'Статус события',
-                accessor: 'success',
-                Cell: ({ row: { original: { success } } }) => <span>{success ? 'Успешно' : 'Ошибка'}</span>
-            },
-        ],
-        []
-    );
     const skipPageResetRef = React.useRef();
 
     useEffect(() => {
@@ -119,8 +124,13 @@ const AuditPage = () => {
         skipPageResetRef.current = false;
     });
 
-    const tableInstance = useTable({ columns, data: events, initialState: { pageIndex: 0 }, manualPagination: true,
-        pageCount: totalPages, defaultColumn,
+    const tableInstance = useTable({
+        columns,
+        data: events,
+        initialState: { pageIndex: 0 },
+        manualPagination: true,
+        pageCount: totalPages,
+        defaultColumn,
         autoResetPage: !skipPageResetRef.current,
         autoResetExpanded: !skipPageResetRef.current,
         autoResetGroupBy: !skipPageResetRef.current,
@@ -145,6 +155,13 @@ const AuditPage = () => {
         state: { pageIndex, pageSize },
     } = tableInstance;
 
+    useEffect(() => {
+        (async () => {
+            const { clientApplicationDtoList: appList = [] } = await getClientAppList();
+            const appOptions = appList.map(({ displayName: label, code: value }) => ({ label, value }));
+            setApplications([{ label: 'admin', value: 'admin' }, ...appOptions]);
+        })();
+    }, []);
 
     useEffect(() => {
         async function fetchData(pageSize, pageNo, mappedFilters = {}) {
@@ -160,7 +177,7 @@ const AuditPage = () => {
         }
         fetchData(pageSize, pageIndex, filtersObject);
     }, [pageIndex, pageSize, filtersObject, sortDirection, sortItem]);
-    
+
     const onSubmitAuditFilter = useCallback((filtersData = {}) => {
         setFiltersObject(filtersData);
     }, []);
@@ -170,30 +187,22 @@ const AuditPage = () => {
             <Spin tip="Загрузка..." spinning={ loading }>
                 <Collapse accordion>
                     <Collapse.Panel header="Фильтры" key="1">
-                        <AuditFilter submit={ onSubmitAuditFilter } />
+                        <AuditFilter submit={ onSubmitAuditFilter } applications={ applications } />
                     </Collapse.Panel>
                 </Collapse>
                 <CssBaseline />
                 <div className={ styles.sort }>
                     <div>
                         Сортировать по: {' '}
-                        <Select onSelect={ setSortItem } value={ sortItem } className={ styles.sortSelect }>
-                            {
-                                sortItems.map(({ label, value }) => <Select.Option key={ value } value={ value }>{label}</Select.Option>)
-                            }
-                        </Select>
+                        <Select onSelect={ setSortItem } value={ sortItem } className={ styles.sortSelect } options={ sortItems } />
                     </div>
                     <div>
                         Направление сортировки: {' '}
-                        <Select onSelect={ setSortDirection } value={ sortDirection } className={ styles.sortSelect }>
-                            {
-                                sortDirectionItems.map(({ label, value }) => <Select.Option key={ value } value={ value }>{label}</Select.Option>)
-                            }
-                        </Select>
+                        <Select onSelect={ setSortDirection } value={ sortDirection } className={ styles.sortSelect } options={ sortDirectionItems } />
                     </div>
                 </div>
                 <MaUTable { ...getTableProps() }>
-    
+
                     <TableHead >
                     {
                         headerGroups.map(headerGroup => (
