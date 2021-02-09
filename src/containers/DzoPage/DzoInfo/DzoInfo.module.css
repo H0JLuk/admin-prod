@@ -1,0 +1,42 @@
+.dzoWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 60px 0px 15px;
+}
+
+.infoWrapper {
+    padding: 30px;
+    background-color: #f8f8f8;
+    margin-bottom: 25px;
+}
+
+.dzoInfo {
+    max-width: 800px;
+}
+
+.title {
+    margin-bottom: 10px;
+}
+
+.dzoTitle {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -.38px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+.text {
+    font-weight: 600;
+}
+
+.footer {
+    margin-bottom: 25px;
+}

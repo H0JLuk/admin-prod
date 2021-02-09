@@ -8,23 +8,23 @@ import {
     getAllDzoList,
     updateDzo,
     addApplication
-} from '../../api/services/dzoService';
-import { DZO_EDIT_FROM, DZO_ADD_FROM, APP_EDIT_FROM } from '../../components/Form/forms';
-import Header from '../../components/Header/Header';
-import applicationTypes from '../../constants/applicationTypes';
-import { getErrorText } from '../../constants/errors';
-import CustomModal from '../../components/CustomModal/CustomModal';
-import DzoItem from '../../components/DzoItem/DzoItem';
-import Form from '../../components/Form/Form';
-import cross from '../../static/images/cross.svg';
-import { isRequired } from '../../utils/validators';
+} from '../../../api/services/dzoService';
+import { DZO_EDIT_FROM, DZO_ADD_FROM, APP_EDIT_FROM } from '../../../components/Form/forms';
+import Header from '../../../components/Header/Header';
+import applicationTypes from '../../../constants/applicationTypes';
+import { getErrorText } from '../../../constants/errors';
+import CustomModal from '../../../components/CustomModal/CustomModal';
+import DzoItem from '../../../components/DzoItem/DzoItem';
+import Form from '../../../components/Form/Form';
+import cross from '../../../static/images/cross.svg';
+import { isRequired } from '../../../utils/validators';
 import styles from './DzoPage.module.css';
-import { addBodyClassForSidebar, removeBodyClassForSidebar } from '../../hooks/useBodyClassForSidebar';
-import { populateFormWithData } from '../../components/Form/formHelper';
-import ButtonLabels from '../../components/Button/ButtonLables';
-import inputStyles from '../../components/Input/Input.module.css';
-import { getLabel } from '../../components/LabelWithTooltip/LabelWithTooltip';
-import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../constants/jsxConstants';
+import { addBodyClassForSidebar, removeBodyClassForSidebar } from '../../../hooks/useBodyClassForSidebar';
+import { populateFormWithData } from '../../../components/Form/formHelper';
+import ButtonLabels from '../../../components/Button/ButtonLables';
+import inputStyles from '../../../components/Input/Input.module.css';
+import { getLabel } from '../../../components/LabelWithTooltip/LabelWithTooltip';
+import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../constants/jsxConstants';
 
 const DZO_LIST_GET_ERROR = 'Ошибка получения ДЗО!';
 const DZO_DELETE_ERROR = 'Ошибка удаления ДЗО!';

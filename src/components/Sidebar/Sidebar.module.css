@@ -10,7 +10,6 @@
 
 .blockLogo {
     border-bottom: 1px solid #d4d9de;
-    margin-bottom: 15px;
 }
 
 /* TODO: temporary fix for scroll client apps. Remove after redesign sidebar's app list */
@@ -18,6 +17,7 @@
     overflow: auto;
     height: calc(100vh - 65px);
     padding-bottom: 30px;
+    padding-top: 15px;
 }
 
 .blockLogo + ul::-webkit-scrollbar {

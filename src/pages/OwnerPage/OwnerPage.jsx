@@ -5,7 +5,7 @@ import { ROUTE, ROUTE_OWNER } from '../../constants/route';
 import PromoCampaignPageRouter from '../../containers/PromoCampaignPage/PromoCampaignPageRouter';
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
 import Dashboard from '../../containers/Dashboard/Dashboard';
-import DzoPage from '../../containers/DzoPage/DzoPage';
+import DzoPageRouter from '../../containers/DzoPage/DzoPageRouter';
 import FilesPage from '../../containers/FilesPage/FilesPage';
 import PresentationPage from '../../containers/PresentationPage/PresentationPage';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -20,7 +20,7 @@ const OwnerPage = () => (
                 <Route exact path={ ROUTE.OWNER } render={ () => <Redirect to={ ROUTE_OWNER.DASHBOARD } /> } />
 
                 <Route path={ ROUTE_OWNER.DASHBOARD } component={ Dashboard } />
-                <Route path={ ROUTE_OWNER.DZO } component={ DzoPage } />
+                <Route path={ ROUTE_OWNER.DZO } component={ DzoPageRouter } />
                 <Route path={ ROUTE_OWNER.FILES } component={ FilesPage } />
                 <Route path={ ROUTE_OWNER.PRESENTATION } component={ PresentationPage } />
                 <Route path={ ROUTE_OWNER.CATEGORY } component={ CategoryPage } />

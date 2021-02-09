@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import 'antd/dist/antd.css'; // Ant styles will be here, before another styles imports
 import './static/fonts/fonts.css';
 import moment from 'moment';
 import { ROUTE } from './constants/route';

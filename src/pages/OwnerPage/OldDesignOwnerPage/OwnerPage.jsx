@@ -3,7 +3,7 @@ import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { ROUTE, ROUTE_OWNER } from '../../../constants/route';
 import PromoCampaignPage from '../../../containers/PromoCampaignPage/OldPromoCampaign/PromoCampaignPage';
 import Header from '../../../components/Header/OldHeader/Header';
-import DzoPage from '../../../containers/DzoPage/DzoPage';
+import DzoPage from '../../../containers/DzoPage/OldDzoPage/DzoPage';
 import PresentationPage from '../../../containers/PresentationPage/PresentationPage';
 import CategoryPage from '../../../containers/CategoryPage/CategoryPage';
 import FilesPage from '../../../containers/FilesPage/FilesPage';

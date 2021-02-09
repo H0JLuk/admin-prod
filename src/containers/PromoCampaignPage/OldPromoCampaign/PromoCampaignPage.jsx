@@ -32,7 +32,6 @@ import PromoCodeStatisticModal from '../../../components/CustomModal/PromoCodeSt
 import UploadPromoCodesModal from '../../../components/CustomModal/UploadPromoCodesModal/UploadPromoCodesModal';
 import FloatingButton from '../../../components/TooltipButton/FloatingButton/FloatingButton';
 import { PlusOutlined } from '@ant-design/icons';
-import 'antd/dist/antd.css';
 import { getDzoList } from '../../../api/services/dzoService';
 import { errorNotice } from '../../../components/toast/Notice';
 import arrayMove from 'array-move';

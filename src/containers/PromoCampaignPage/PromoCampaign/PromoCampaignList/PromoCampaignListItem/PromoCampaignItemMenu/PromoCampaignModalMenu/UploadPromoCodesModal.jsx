@@ -87,6 +87,7 @@ const UploadPromoCodesModal = ({ open, onClose, onSave }) => {
             clearState();
             onClose();
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

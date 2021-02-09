@@ -38,6 +38,12 @@ export const PROMO_CAMPAIGN_PAGES = {
     PROMO_CODES_STATISTIC:     '/:promoCampaignId/promo-codes-statistic',
 };
 
+export const DZO_PAGES = {
+    ADD_DZO:        '/create',
+    DZO_INFO:       '/:dzoId/info',
+    DZO_EDIT:       '/:dzoId/edit',
+};
+
 export const ROUTE_AUDITOR = {
     AUDIT:          `${ ROUTE.AUDITOR }/${ PAGE.AUDIT }`
 };

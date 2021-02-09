@@ -7,12 +7,12 @@ import RestoredTableUser from './RestoredTableUser/RestoredTableUser';
 import EmptyUsersPage from './EmptyUsersPage/EmptyUsersPage';
 import DownloadDropDown from './DownloadDropDown/DownloadDropDown';
 import HeaderWithActions from '../../../../components/HeaderWithActions/HeaderWithActions';
+import TableDeleteModal from '../../../../components/TableDeleteModal/TableDeleteModal';
 import Header from '../../../../components/Header/Header';
 import UsersListTable from './UsersListTable';
-import ModalDeleteUsers from './ModalDeleteUsers/ModalDeleteUsers';
 import useBodyClassForSidebar from '../../../../hooks/useBodyClassForSidebar';
 import TemplateUploadButtonsWithModal from '../../../../components/ButtonWithModal/TemplateUploadButtonsWithModal';
-import { getUsersList, resetUser } from '../../../../api/services/usersService';
+import { getUsersList, removeUser, resetUser } from '../../../../api/services/usersService';
 import { USERS_PAGES } from '../../../../constants/route';
 
 import styles from './UsersList.module.css';
@@ -35,6 +35,9 @@ const CHOSEN_USER = 'Выбрано';
 const TITLE_DOWNLOAD_USER = 'Пакетная обработка пользователей';
 
 const RESET_LABEL = 'По умолчанию';
+
+const MODAL_TITLE = 'Вы уверены что хотите удалить этих пользователей?';
+const MODAL_SUCCESS_TITLE = 'Результат удаления пользователей';
 
 const locale = {
     items_per_page: '',
@@ -83,14 +86,14 @@ const showRestoredErrorsNotification = (message) => {
     });
 };
 
+const defaultSelected = { rowValues: [], rowKeys: [] };
 
 const UserList = ({ matchUrl }) => {
     const history = useHistory();
     const { search } = useLocation();
     const [users, setUsers] = useState([]);
     const [select, setSelect] = useState(false);
-    const [selectedRowValues, setSelectedRowValues] = useState([]);
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [selectedItems, setSelectedItems] = useState(defaultSelected);
     const [loadingPage, setLoadingPage] = useState(true);
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [params, setParams] = useState(DEFAULT_PARAMS);
@@ -171,8 +174,7 @@ const UserList = ({ matchUrl }) => {
     }, [loadUsersData, params]);
 
     const clearSelectedItems = () => {
-        setSelectedRowKeys([]);
-        setSelectedRowValues([]);
+        setSelectedItems(defaultSelected);
     };
 
     const onAddUser = useCallback(() => history.push(`${matchUrl}${USERS_PAGES.ADD_USER}`), [history, matchUrl]);
@@ -183,14 +185,13 @@ const UserList = ({ matchUrl }) => {
     }, []);
 
     const selectAll = useCallback(() => {
-        if (users.length !== selectedRowValues.length) {
-            setSelectedRowKeys(users.map(({ id }) => id));
-            setSelectedRowValues([...users]);
+        if (users.length !== selectedItems.rowValues.length) {
+            setSelectedItems({ rowKeys: users.map(({ id }) => id), rowValues: users });
             return;
         } else {
             clearSelectedItems();
         }
-    }, [selectedRowValues, users]);
+    }, [selectedItems.rowValues, users]);
 
     const onChangePage = useCallback(async ({ current, pageSize }) => {
         loadUsersData({
@@ -212,15 +213,15 @@ const UserList = ({ matchUrl }) => {
 
     const forceUpdateUsersData = useCallback(() => loadUsersData(params), [params, loadUsersData]);
 
-    const updateSelected = useCallback((keys, rows) => {
-        setSelectedRowKeys(keys);
-        setSelectedRowValues(rows);
+    const updateSelected = useCallback((rowKeys, rowValues) => {
+
+        setSelectedItems({ rowKeys, rowValues });
     }, []);
 
     const rowSelection = useMemo(() => ({
-        selectedRowKeys,
+        selectedRowKeys: selectedItems.rowKeys,
         onChange: updateSelected,
-    }), [selectedRowKeys, updateSelected]);
+    }), [selectedItems.rowKeys, updateSelected]);
 
     const refreshTable = useCallback(async () => {
         await loadUsersData(params);
@@ -234,19 +235,18 @@ const UserList = ({ matchUrl }) => {
                 return;
             }
 
-            const newSelectedItemId = !selectedRowKeys.includes(record.id)
-                ? [...selectedRowKeys, record.id]
-                : selectedRowKeys.filter((selectedItemId) => selectedItemId !== record.id);
-            const newSelectedItem = !selectedRowValues.includes(record)
-                ? [...selectedRowValues, record]
-                : selectedRowValues.filter((selectedItem) => selectedItem.id !== record.id);
+            const rowKeys = !selectedItems.rowKeys.includes(record.id)
+                ? [...selectedItems.rowKeys, record.id]
+                : selectedItems.rowKeys.filter((selectedItemId) => selectedItemId !== record.id);
+            const rowValues = !selectedItems.rowValues.includes(record)
+                ? [...selectedItems.rowValues, record]
+                : selectedItems.rowValues.filter((selectedItem) => selectedItem.id !== record.id);
 
-            setSelectedRowKeys(newSelectedItemId);
-            setSelectedRowValues(newSelectedItem);
+                setSelectedItems({ rowKeys, rowValues });
         }
-    }), [history, select, selectedRowKeys, selectedRowValues, matchUrl]);
+    }), [select, selectedItems.rowKeys, selectedItems.rowValues, history, matchUrl]);
 
-    const openModal = useCallback(() => setModalIsOpen(true), []);
+    const toggleModal = useCallback(() => setModalIsOpen(!modalIsOpen), [modalIsOpen]);
 
     if (loadingPage) {
         return (
@@ -262,13 +262,13 @@ const UserList = ({ matchUrl }) => {
 
     /* no useCallback needed, because function is set to <button /> onClick */
     const linkChangePassword = async () => {
-        const requestPromises = selectedRowValues.map(({ personalNumber }) => resetUser(personalNumber));
+        const requestPromises = selectedItems.rowValues.map(({ personalNumber }) => resetUser(personalNumber));
         setLoadingTableData(true);
 
         try {
             const response = await Promise.allSettled(requestPromises);
             const { users, errors } = response.reduce((prev, { status, value = {}, reason =  {} }, index) => {
-                const { personalNumber } = selectedRowValues[index];
+                const { personalNumber } = selectedItems.rowValues[index];
                 const { generatedPassword } = value;
                 const { message } = reason;
                 if (status === 'rejected') {
@@ -296,14 +296,14 @@ const UserList = ({ matchUrl }) => {
 
     /* no useCallback needed, because function is set to <button /> onClick */
     const linkEdit = () => {
-        history.push(`${matchUrl}${USERS_PAGES.EDIT_SOME_USERS}`, { users: selectedRowValues });
+        history.push(`${matchUrl}${USERS_PAGES.EDIT_SOME_USERS}`, { users: selectedItems.rowValues });
     };
 
     const buttons = [];
 
     /* no useMemo needed, because almost every render we get new object */
     if (select) {
-        const selectedAll = users.length === selectedRowKeys.length;
+        const selectedAll = users.length === selectedItems.rowKeys.length;
         buttons.push({
             type: 'primary',
             label: selectedAll ? BUTTON_UNSELECT_ALL : BUTTON_SELECT_ALL,
@@ -363,18 +363,18 @@ const UserList = ({ matchUrl }) => {
                     <div className={ styles.space }>
                         <div className={ styles.section }>
                             <span className={ styles.label }>
-                                { CHOSEN_USER } { selectedRowKeys.length }
+                                { CHOSEN_USER } { selectedItems.rowKeys.length }
                             </span>
                             <button
                                 className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
-                                disabled={ !selectedRowKeys.length }
+                                disabled={ !selectedItems.rowKeys.length }
                                 onClick={ linkChangePassword }
                             >
                                 { BUTTON_CHANGE_PASSWORD }
                             </button>
                             <button
                                 className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
-                                disabled={ !selectedRowKeys.length }
+                                disabled={ !selectedItems.rowKeys.length }
                                 onClick={ linkEdit }
                             >
                                 { BUTTON_EDIT }
@@ -382,17 +382,21 @@ const UserList = ({ matchUrl }) => {
                         </div>
                         <button
                             className={ cn(btnStyles.addButton, btnStyles.btnRed) }
-                            disabled={ !selectedRowKeys.length }
-                            onClick={ openModal }
+                            disabled={ !selectedItems.rowKeys.length }
+                            onClick={ toggleModal }
                         >
                             { BUTTON_DELETE }
                         </button>
-                        <ModalDeleteUsers
-                            modalOpen={ setModalIsOpen }
-                            visible={ modalIsOpen }
-                            userList={ selectedRowValues }
-                            selectedRowKeys={ selectedRowKeys }
+                        <TableDeleteModal
+                            modalClose={ toggleModal }
+                            sourceForRemove={ selectedItems.rowValues }
+                            listIdForRemove={ selectedItems.rowKeys }
+                            deleteFunction={ removeUser }
                             refreshTable={ refreshTable }
+                            modalSuccessTitle={ MODAL_SUCCESS_TITLE }
+                            visible={ modalIsOpen }
+                            modalTitle={ MODAL_TITLE }
+                            listNameKey='personalNumber'
                         />
                     </div>
                 ) : (

@@ -61,3 +61,35 @@ export function confirmModal({
     const icon = customIcon ? customIcon : <ExclamationCircleOutlined />;
     Modal.confirm({ onOk, title, icon, content, okText, cancelText, centered, ...restOptions });
 }
+
+/**
+ * @param {import('antd/lib/modal').ModalFuncProps} data
+ */
+export function successModal({
+    onOk,
+    title = 'Готово',
+    okText = 'ОК',
+    cancelText = 'Отмена',
+    centered = true,
+    cancelButtonProps = { hidden: true },
+    maskClosable = false,
+    ...restOptions
+}) {
+    Modal.success({ onOk, title, okText, cancelText, centered, cancelButtonProps, maskClosable, ...restOptions });
+}
+
+/**
+ * @param {import('antd/lib/modal').ModalFuncProps} data
+ */
+export function errorModal({
+    onOk,
+    title = 'Готово',
+    okText = 'ОК',
+    cancelText = 'Отмена',
+    centered = true,
+    cancelButtonProps = { hidden: true },
+    maskClosable = false,
+    ...restOptions
+}) {
+    Modal.error({ onOk, title, okText, cancelText, centered, cancelButtonProps, maskClosable, ...restOptions });
+}

@@ -32,6 +32,9 @@ module.exports = {
         'object-curly-spacing': [1, 'always'],       // Always warn on missing spaces inside object / destruct literal,
         'quotes': ['error', 'single'],       //
         'space-in-parens': ['error', 'never'],
-        'keyword-spacing': ['error', { before: true, after: true }]
+        'keyword-spacing': ['error', { before: true, after: true }],
+        'no-multi-spaces': 'error',
+        'no-var': 'error',
+        'prefer-const': 'warn',
     }
 }

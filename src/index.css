@@ -37,6 +37,13 @@ body, ul, li, p {
     background-color: #dd283b !important;
     border-color: #dd283b !important;
 }
+.ant-input-clear-icon > svg{
+    fill: transparent;
+    width: 20px;
+    height: 20px;
+    background: url(./static/images/cross.svg);
+    margin-bottom: 3px;
+}
 
 /*.ant-btn-ghost,*/
 /*.ant-btn-ghost:hover,*/

@@ -2,11 +2,11 @@ import { Api } from '../apiClient';
 import { getReqOptions } from './index';
 
 export async function getDzoList() {
-    return  Api.get('/dzo', getReqOptions());
+    return Api.get('/dzo', getReqOptions());
 }
 
 export async function getAllDzoList() {
-    return  Api.get('/admin/dzo/list', getReqOptions());
+    return Api.get('/admin/dzo/list', getReqOptions());
 }
 
 export async function addDzo(dzoDto) {
@@ -27,4 +27,12 @@ export async function getBehaviorTypes() {
 
 export async function addApplication(newApplication) {
     return Api.post('/admin/application', newApplication, getReqOptions());
+}
+
+export function deleteApp (applicationId) {
+    return Api.delete(`/admin/application/${applicationId}`, getReqOptions());
+}
+
+export function updateApp (updateAppObject) {
+    return Api.put('/admin/application', updateAppObject, getReqOptions());
 }

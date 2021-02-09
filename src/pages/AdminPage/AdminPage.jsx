@@ -4,7 +4,7 @@ import { ROUTE, ROUTE_ADMIN, ROUTE_ADMIN_APPS } from '../../constants/route';
 
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
 import Dashboard from '../../containers/Dashboard/Dashboard';
-import DzoPage from '../../containers/DzoPage/DzoPage';
+import DzoPageRouter from '../../containers/DzoPage/DzoPageRouter';
 import UserPageRouter from '../../containers/UsersPage/UserPageRouter';
 import FilesPage from '../../containers/FilesPage/FilesPage';
 import PresentationPage from '../../containers/PresentationPage/PresentationPage';
@@ -23,7 +23,7 @@ const AdminPage = () => (
 
                 <Route path={ ROUTE_ADMIN.DASHBOARD } component={ Dashboard } />
                 <Route path={ ROUTE_ADMIN.FILES } component={ FilesPage } />
-                <Route path={ ROUTE_ADMIN.DZO } component={ DzoPage } />
+                <Route path={ ROUTE_ADMIN.DZO } component={ DzoPageRouter } />
                 <Route path={ ROUTE_ADMIN.CATEGORY } component={ CategoryPage } />
                 <Route path={ ROUTE_ADMIN.PRESENTATION } component={ PresentationPage } />
                 <Route path={ ROUTE_ADMIN_APPS.ADD_APP } component={ CreateClientAppPage } />

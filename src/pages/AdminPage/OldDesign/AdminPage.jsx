@@ -6,7 +6,7 @@ import styles from './AdminPage.module.css';
 import Header from '../../../components/Header/OldHeader/Header';
 import FilesPage from '../../../containers/FilesPage/FilesPage';
 import UsersPage from '../../../containers/UsersPage/OldUsers/UsersPage';
-import DzoPage from '../../../containers/DzoPage/DzoPage';
+import DzoPage from '../../../containers/DzoPage/OldDzoPage/DzoPage';
 import PresentationPage from '../../../containers/PresentationPage/PresentationPage';
 import CategoryPage from '../../../containers/CategoryPage/CategoryPage';
 import PromoCampaignPageRouter from '../../../containers/PromoCampaignPage/OldPromoCampaign/PromoCampaignPageRouter';
