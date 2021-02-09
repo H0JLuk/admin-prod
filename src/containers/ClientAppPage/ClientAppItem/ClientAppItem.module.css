@@ -1,0 +1,58 @@
+.cardWrapper {
+    position: relative;
+    display: flex;
+    margin-top: 15px;
+    font-family: SBSansText-medium;
+    background-color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    letter-spacing: -0.3px;
+}
+
+.cardWrapper:hover {
+    box-shadow: 0 0 2.5px rgba(0, 0, 0, 0.05);
+    background-color: #F8F8F8;
+}
+
+.cardInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    width: 100%;
+}
+
+.cardName {
+    color: #171725;
+    font-size: 16px;
+    padding-right: 25px;
+    flex-basis: 45%;
+}
+
+.cardCode {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 45%;
+}
+
+.cardCodeLabel {
+    color: #657182;
+    font-size: 16px;
+}
+
+.cardCodeValue {
+    color: #171725;
+    font-size: 16px;
+}
+
+.cardAction {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 3%;
+}
+
+.cardMenu span[role='img'] {
+    font-size: 26px;
+    color: #9ba3ae;
+}

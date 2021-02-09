@@ -19,7 +19,7 @@ const PAGE = {
     PRESENTATION:   'presentation',
     PROMO_CAMPAIGN: 'promo-campaign',
     USERS:          'users',
-    APPS:           'apps',
+    APPS:           'client-apps',
 };
 
 export const USERS_PAGES = {
@@ -36,6 +36,11 @@ export const PROMO_CAMPAIGN_PAGES = {
     VISIBILITY_SETTINGS:       '/:promoCampaignId/visibility-setting',
     LOAD_PROMO_CODES:          '/:promoCampaignId/load-promo-codes',
     PROMO_CODES_STATISTIC:     '/:promoCampaignId/promo-codes-statistic',
+};
+
+export const CLIENT_APPS_PAGES = {
+    ADD_APP:        '/create-app',
+    EDIT_APP:       '/app-properties',
 };
 
 export const DZO_PAGES = {
@@ -62,7 +67,9 @@ export const ROUTE_ADMIN = {
     PRESENTATION:   `${ ROUTE.ADMIN }/${ PAGE.PRESENTATION }`,
     CATEGORY:       `${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
+    OLD_DESIGN_APPS: `${ ROUTE.OLD_DESIGN }${ ROUTE.ADMIN }/${ PAGE.APPS }`,
     APPS:           `${ ROUTE.ADMIN }/${ PAGE.APPS }`,
+    APP_SETTINGS:   `${ ROUTE.ADMIN }/${ PAGE.APPS }${ CLIENT_APPS_PAGES.EDIT_APP }`,
 };
 
 export const ROUTE_OWNER = {
@@ -73,8 +80,6 @@ export const ROUTE_OWNER = {
     FILES:          `${ ROUTE.OWNER }/${ PAGE.FILES }`,
     CATEGORY:       `${ ROUTE.OWNER }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
-};
-
-export const ROUTE_ADMIN_APPS = {
-    ADD_APP:        `${ ROUTE_ADMIN.APPS}/create`,
+    OLD_DESIGN_APPS: `${ ROUTE.OLD_DESIGN }${ ROUTE.OWNER }/${ PAGE.APPS }`,
+    APPS:           `${ ROUTE.OWNER }/${ PAGE.APPS }`,
 };

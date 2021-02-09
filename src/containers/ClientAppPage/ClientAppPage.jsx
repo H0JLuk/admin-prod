@@ -1,458 +1,221 @@
-import React, { Component, Fragment } from 'react';
-import {
-    addClientApp,
-    copyClientApp,
-    getClientAppList,
-    updateClientApp,
-} from '../../api/services/clientAppService';
-import { addSetting, getSettingsList, getStaticUrl, updateSettingsList } from '../../api/services/settingsService';
-import { goApp } from '../../utils/appNavigation';
-import styles from './ClientAppPage.module.css';
-import CustomModal from '../../components/CustomModal/CustomModal';
-import ClientAppItem from '../../components/ClientAppItem/ClientAppItem';
-import { getErrorText } from '../../constants/errors';
-import ButtonLabels from '../../components/Button/ButtonLables';
-import cross from '../../static/images/cross.svg';
-import Form from '../../components/Form/Form';
-import { populateFormWithData } from '../../components/Form/formHelper';
-import { CLIENT_APP_ADD_FORM, CLIENT_APP_EDIT_FORM, CLIENT_APP_PROPERTIES_EDIT_FORM } from '../../components/Form/forms';
-import { withRouter } from 'react-router-dom';
-import { getRole, saveAppCode } from '../../api/services/sessionService';
-import { ROUTE } from '../../constants/route';
-import { logout } from '../../api/services/authService';
-import Button from '../../components/Button/Button';
-import { Switch, Typography } from 'antd';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import { arrayMove, SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { SyncOutlined } from '@ant-design/icons';
 
-import { ReactComponent as LoadingSpinner } from '../../static/images/loading-spinner.svg';
+import Header from '../../components/Header/Header';
+import HeaderWithActions from '../../components/HeaderWithActions/HeaderWithActions';
+import ClientAppItem from './ClientAppItem/ClientAppItem';
 
-const CLIENT_APP_LIST_TITLE = 'Клиентские приложения';
-const LOADING_LIST_LABEL = 'Загрузка';
-const CLIENT_APPS_GET_ERROR = 'Ошибка получения клиентских приложений!';
-const ENTER_CLIENT_APP_CODE_REQUEST = 'Пожалуйста, введите код клиентского приложения';
-const ENTER_CLIENT_APP_NAME_REQUEST = 'Пожалуйста, введите имя клиентского приложения';
-const ENTER_CLIENT_APP_DISPLAY_NAME_REQUEST = 'Пожалуйста, введите отображаемое имя клиентского приложения';
-const ADD_CLIENT_APP_TITLE = 'Добавить клиентское приложение';
-const ADD_CLIENT_APP_ERROR = 'Не удалось добавить клиентское приложение';
-const COPY_CLIENT_APP_ERROR = 'Не удалось скопировать клиентское приложение';
-const IS_DELETED = 'Is Deleted:';
-const MECHANICS = 'Механики';
-const MECHANICS_ERROR = 'Необходимо выбрать хотя бы одну обязательную механику (Подарки или Продукты)';
+import { getClientAppList, reorderClientApp } from '../../api/services/clientAppService';
+import { sortItemsBySearchParams } from '../../utils/helper';
+import { CLIENT_APPS_PAGES } from '../../constants/route';
+import { getRole } from '../../api/services/sessionService';
+import ROLES from '../../constants/roles';
 
-const MECHANICS_NAMES = {
-    presents: 'PRESENTS',
-    ecosystem: 'ECOSYSTEM',
-    presentation: 'PRESENTATION',
+import style from './ClientAppPage.module.css';
+
+const SortableContainerList = SortableContainer(props => <div>{ props.children }</div>);
+const SortableElementItem = SortableElement(ClientAppItem);
+
+
+const SEARCH_INPUT_PLACEHOLDER = 'Поиск по названию';
+
+const BUTTON_TEXT = {
+    SAVE: 'Сохранить',
+    ADD: 'Добавить',
+    CHANGE_ORDER: 'Изменить порядок',
+    CANCEL: 'Отменить',
 };
 
-const MECHANICS_CHECKBOXES = [
-    { label: 'Подарки', name: MECHANICS_NAMES.presents },
-    { label: 'Продукты', name: MECHANICS_NAMES.ecosystem },
-    { label: 'Экскурсия', name: MECHANICS_NAMES.presentation },
+const DROPDOWN_SORT_MENU = [
+    { name: 'displayName', label: 'По названию' },
+    { name: 'code', label: 'По коду' },
 ];
 
-const initialState = {
-    editingClientApp: {
-        id: null, name: null, displayName: null, code: null, existingCode: null, isDeleted: false,
-        mechanics: MECHANICS_CHECKBOXES.reduce((result, { name }) => ({ ...result, [name]: false }), {}),
-    },
-    clientAppProperties: {
-        clientAppId: null, installationUrl: null, yamToken: null, tokenLifetime: null,
-        inactivityTime: null, promoShowTime: null, privacyPolicy: null,
-        tmpBlockTime: null, maxPasswordAttempts: null, maxPresentsNumber: null,
-    },
-    staticUrl: getStaticUrl(), clientAppList: [], showDeleted: false, isOpen: false, formError: null,
-    loading: false, mechanicsError: null,
+const defaultSearchParams = {
+    sortBy: '',
+    direction: 'ASC',
+    filterText: '',
 };
 
-const updateValueType = {
-    edit: 'edit',
-    create: 'create',
-};
+const getURLSearchParams = ({ ...rest }) => new URLSearchParams(rest).toString();
 
-const LoadingStatus = ({ loading }) => (
-    <p className={ styles.loadingLabel }>{ loading ? LOADING_LIST_LABEL : CLIENT_APPS_GET_ERROR }</p>
-);
+const ClientAppPage = ({ matchPath, history }) => {
+    const { search } = useLocation();
 
-class ClientAppPage extends Component {
-    state = { ...initialState }
+    const [itemList, setItemList] = useState([]);
+    const [copyOfItemList, setCopyOfItemList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSortable, setIsSortable] = useState(false);
+    const [params, setParams] = useState(defaultSearchParams);
 
-    componentDidMount() {
-        getClientAppList()
-            .then(response => {
-                const { clientApplicationDtoList } = response;
-                this.setState({ clientAppList: clientApplicationDtoList });
-            })
-            .catch(() => this.setState({ clientAppList: [] }));
-    }
+    const role = useMemo(() => getRole(), []);
 
-    clearState = () => {
-        const { editingClientApp, clientAppProperties } = initialState;
-        this.setState({ editingClientApp, clientAppProperties });
-    };
-
-    openModal = () => {
-        this.setState({ isOpen: true });
-    };
-
-    closeModal = () => {
-        this.setState({ isOpen: false }, this.clearState);
-    };
-
-    onShowDeleted = () => {
-        const { showDeleted } = this.state;
-        this.setState({ showDeleted: !showDeleted });
-    }
-
-    handleEdit = (id, name, displayName, code, isDeleted) =>
-        this.setState({ editingClientApp: { id, name, displayName, code, isDeleted } }, this.openModal);
-
-
-    handleEditProperties = async (clientAppCode) =>{
-        this.setState({ loading: true }, this.openModal);
-        const { settingDtoList } = await getSettingsList(clientAppCode);
-        const { value = '[]' } = settingDtoList.find(({ key }) => key === 'mechanics') || {};
-        const settings = settingDtoList.length && settingDtoList.reduce((result, elem) => {
-            return { ...result, [elem.key]: elem.value };
-        }, {});
-
-        const url = getStaticUrl();
-        const installation_url = settings.installation_url && settings.installation_url.replace(url, '');
-        const usage_url = settings.usage_url && settings.usage_url.replace(url, '');
-
-        this.setState({
-            clientAppProperties: { ...settings, installation_url, usage_url, clientAppCode },
-            loading: false,
-            editingClientApp: {
-                ...this.state.editingClientApp,
-                mechanics: {
-                    PRESENTS: value.includes(MECHANICS_NAMES.presents),
-                    ECOSYSTEM: value.includes(MECHANICS_NAMES.ecosystem),
-                    PRESENTATION: value.includes(MECHANICS_NAMES.presentation),
-                },
-            },
-        });
-    }
-
-    handleAdministrate = (code) => {
-        const role = getRole();
-        const { history } = this.props;
-        saveAppCode(code);
-        goApp(history, role, true);
-    };
-
-    handleInputChange = (event) => {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-
-        this.setState({
-            editingClientApp: { ...this.state.editingClientApp, isDeleted: value }
-        });
-    }
-
-    changeMechanicHandler = ({ target }) => {
-        const { name, checked } = target;
-
-        if ([MECHANICS_NAMES.ecosystem, MECHANICS_NAMES.presents].includes(name) && checked) {
-            this.setState({ mechanicsError: null });
-        }
-
-        this.setState({
-            editingClientApp: {
-                ...this.state.editingClientApp,
-                mechanics: {
-                    ...this.state.editingClientApp.mechanics,
-                    [name]: checked,
-                },
-            }
-        });
-    }
-
-    doLogout = () => {
-        logout().then(() => {
-            this.props.history.push(ROUTE.LOGIN);
-        });
-    };
-
-    renderModalForm = () => {
-        const { formError, editingClientApp, clientAppProperties, mechanicsError } = this.state;
-        const { mechanics } = editingClientApp;
-        let formData, onSubmit, isDeletedCheckbox, isMechanics;
-        if (editingClientApp.id !== null) {
-            isDeletedCheckbox = true;
-            formData = populateFormWithData(CLIENT_APP_EDIT_FORM, {
-                name: editingClientApp.name,
-                displayName: editingClientApp.displayName,
-                code: editingClientApp.code,
-            });
-            onSubmit = this.addOrUpdate;
-        } else if (clientAppProperties.clientAppId !== null) {
-            isDeletedCheckbox = false;
-            isMechanics = true;
-            formData = populateFormWithData(CLIENT_APP_PROPERTIES_EDIT_FORM, { ...clientAppProperties });
-            onSubmit = this.updateProperties;
-        } else {
-            isDeletedCheckbox = true;
-            isMechanics = true;
-            formData = CLIENT_APP_ADD_FORM;
-            onSubmit = this.addOrUpdate;
-        }
-        return (
-            <div className={ styles.modalForm }>
-                <img src={ cross }
-                     onClick={ this.closeModal }
-                     className={ styles.crossSvg }
-                     alt={ ButtonLabels.CLOSE }
-                />
-                <Form
-                    data={ formData }
-                    buttonText={ ButtonLabels.SAVE }
-                    onSubmit={ onSubmit }
-                    formClassName={ styles.clientAppForm }
-                    fieldClassName={ styles.clientAppForm__field }
-                    activeLabelClassName={ styles.clientAppForm__field__activeLabel }
-                    buttonClassName={ styles.clientAppForm__button }
-                    errorText={ getErrorText(formError) }
-                    formError={ !!formError }
-                    errorClassName={ styles.error }
-                />
-                { isDeletedCheckbox ?
-                    <form className={ styles.clientAppForm }>
-                        <label className={ styles.clientAppForm__field }>
-                            { IS_DELETED }
-                        </label>
-                        <input
-                            name="Deleted"
-                            type="checkbox"
-                            checked={ editingClientApp.isDeleted }
-                            onChange={ this.handleInputChange }
-                        />
-                    </form> : null
-                }
-                { isMechanics &&
-            (<div className={ styles.clientAppForm }>
-                <h3 className={ styles.mechanics_title } >{ MECHANICS }</h3>
-                { MECHANICS_CHECKBOXES.map(({ label, name }) => (
-                    <div key={ name }>
-                        <label className={ styles.clientAppForm__field }>{ label }</label>
-                        <input
-                            name={ name }
-                            type="checkbox"
-                            checked={ mechanics[name] }
-                            onChange={ this.changeMechanicHandler }
-                        />
-                    </div>
-                )) }
-                {mechanicsError && <span className={ styles.error }>{ mechanicsError }</span>}
-            </div>) }
-            </div>
-        );
-    }
-
-    reloadClientApps = (clientAppDto) => {
-        const { clientAppList, editingClientApp: { id } } = this.state;
-        const newClientAppList = clientAppList.slice();
-        newClientAppList.forEach(app => {
-            if (app.id === id) {
-                app.name = clientAppDto.name;
-                app.displayName = clientAppDto.displayName;
-                app.code = clientAppDto.code;
-                app.isDeleted = clientAppDto.isDeleted;
-            }
-        });
-        this.setState({ clientAppList: newClientAppList }, this.closeModal);
-    };
-
-    async pushToClientAppList(id, clientAppDto) {
-        const newClientApp = {
-            ...clientAppDto,
-            id: id
-        };
-        const clientAppList = [...this.state.clientAppList, newClientApp];
-        this.setState({ clientAppList }, this.closeModal);
-    }
-
-    addOrUpdate = async (data) => {
-        const { PRESENTS, ECOSYSTEM } = this.state.editingClientApp.mechanics;
-        if (!data.code) {
-            alert(ENTER_CLIENT_APP_CODE_REQUEST);
+    const sortClientApp = useCallback((searchParams = defaultSearchParams) => {
+        setParams(searchParams);
+        history.replace(`${matchPath}?${getURLSearchParams(searchParams)}`);
+        if (!searchParams.filterText && !searchParams.sortBy) {
+            setItemList(copyOfItemList);
             return;
         }
-        if (!data.name) {
-            alert(ENTER_CLIENT_APP_NAME_REQUEST);
-            return;
-        }
-        if (!data.displayName) {
-            alert(ENTER_CLIENT_APP_DISPLAY_NAME_REQUEST);
-            return;
-        }
-        if (!(PRESENTS || ECOSYSTEM) && !data.existingCode) {
-            this.setState({ mechanicsError: MECHANICS_ERROR });
-            return;
-        }
-        let clientAppDto;
-        clientAppDto = {
-            code: data.code,
-            name: data.name,
-            displayName: data.displayName,
-            existingCode: data.existingCode,
-            isDeleted: this.state.editingClientApp.isDeleted
-        };
-        if (this.state.editingClientApp.id !== null) {
-            try {
-                await updateClientApp(this.state.editingClientApp.id, clientAppDto);
-                await this.reloadClientApps(clientAppDto);
-            } catch (e) {
-                console.error(e.message);
-            }
-        } else if (!clientAppDto.existingCode) {
-            try {
-                const response = await addClientApp(clientAppDto);
-                const mechanics = {
-                    clientAppCode: clientAppDto.code,
-                    value: this.getMechanicString(),
-                    key: 'mechanics',
-                };
-                JSON.parse(mechanics.value).length && await addSetting(mechanics);
-                await this.pushToClientAppList(response.id, clientAppDto);
-            } catch (e) {
-                console.error(e.message);
-                alert(ADD_CLIENT_APP_ERROR);
-            }
-        } else {
-            try {
-                const response = await copyClientApp(clientAppDto);
-                await this.pushToClientAppList(response.id, clientAppDto);
-            } catch (e) {
-                console.error(e.message);
-                alert(COPY_CLIENT_APP_ERROR);
-            }
-        }
-    };
 
-    createOrUpdateKey = async (changedParams) => {
-        const updateSettings = [];
-        const addSettings = [];
+        setItemList(sortItemsBySearchParams(searchParams, copyOfItemList, 'displayName'));
+    }, [copyOfItemList, history, matchPath]);
 
-        changedParams.forEach((changedValueObject) => {
-            const { type, ...params } = changedValueObject;
-            type === updateValueType.edit ? updateSettings.push(params) : addSettings.push(params);
-        });
-
-        updateSettings.length && (await updateSettingsList(updateSettings));
-
-        const addKeysPromises = addSettings.map(addSetting);
-        addKeysPromises.length && (await Promise.all(addKeysPromises));
-    }
-
-    getMechanicString = () => {
-        const stateMechanics = this.state.editingClientApp.mechanics || {};
-        const mechanics = Object.keys(stateMechanics).filter(key => stateMechanics[key]);
-        return JSON.stringify(mechanics);
-    }
-
-    updateProperties = async (dataFromForm) => {
-        const { PRESENTS, ECOSYSTEM } = this.state.editingClientApp.mechanics;
-
-        if (!(PRESENTS || ECOSYSTEM)) {
-            this.setState({ mechanicsError: MECHANICS_ERROR });
-            return;
-        }
-        this.setState({ loading: true });
-        const {
-            clientAppProperties,
-            clientAppProperties: { clientAppCode },
-        } = this.state;
-
-        dataFromForm.mechanics = this.getMechanicString();
-
-        const changedParams = Object.keys(dataFromForm).reduce((result, key) => {
-            const valueFromServer = clientAppProperties[key];
-            const valueInForm = dataFromForm[key];
-
-            if (valueFromServer === undefined && valueInForm) {
-                return [...result, { clientAppCode, key, value: valueInForm, type: updateValueType.create }];
-            }
-
-            if ((!valueFromServer && valueInForm) || (valueFromServer && valueInForm !== valueFromServer)) {
-                return [...result, { clientAppCode, key, value: valueInForm, type: updateValueType.edit }];
-            }
-            return result;
-        }, []);
+    const loadData = useCallback(async (params = defaultSearchParams) => {
+        setIsLoading(true);
 
         try {
-            await this.createOrUpdateKey(changedParams);
-        } catch (e) {
-            console.error(e.message);
-            alert(e.message);
-        } finally {
-            this.setState({ loading: false }, this.closeModal);
+            history.replace(`${matchPath}?${getURLSearchParams(params)}`);
+            const { clientApplicationDtoList: appList = [] } = await getClientAppList();
+            const withoutDeletedApps = appList.filter(({ isDeleted }) => !isDeleted);
+            setItemList(sortItemsBySearchParams(params, withoutDeletedApps, 'displayName'));
+            setCopyOfItemList(withoutDeletedApps);
+        } catch (error) {
+            console.warn(error);
         }
+
+        setIsLoading(false);
+    }, [history, matchPath]);
+
+    useEffect(() => {
+        const urlSearchParams = new URLSearchParams(search);
+        const searchParamsFromUrl = {};
+
+        Object.keys(defaultSearchParams).forEach((key) => {
+            const searchValue = urlSearchParams.get(key);
+            searchParamsFromUrl[key] = searchValue || defaultSearchParams[key];
+        });
+
+        loadData(searchParamsFromUrl);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loadData]);
+
+    const onSearchInput = (filterText = '') => {
+        const paramsCopy = {
+            ...params,
+            filterText
+        };
+
+        sortClientApp(paramsCopy);
     };
 
-    renderClientAppList = () => {
-        const { clientAppList, showDeleted } = this.state;
-        const isSuccess = Array.isArray(clientAppList);
-        return (
-            <Fragment>
-                <div>
-                    <Typography.Text>Показать удаленные </Typography.Text>
-                    <Switch checked={ showDeleted } onChange={ this.onShowDeleted } />
+    const toggleSortable = () => setIsSortable((state) => !state);
+
+    const onSortEnd = useCallback(({ oldIndex, newIndex }) => {
+        setItemList((state) => arrayMove(state, oldIndex, newIndex));
+    }, []);
+
+    const onCancelSortable = async () => {
+        setItemList(copyOfItemList);
+        setIsSortable(false);
+    };
+
+    const onSave = async () => {
+        const idMap = itemList.reduce((result, elem, index) => ({ ...result, [elem.id]: index }), {});
+
+        setIsLoading(true);
+        try {
+            await reorderClientApp({ idMap });
+            await loadData();
+        } catch (error) {
+            console.warn(error);
+        }
+
+        setIsLoading(false);
+        setIsSortable(false);
+    };
+
+    const onAddClick = () => history.push(`${ matchPath }${ CLIENT_APPS_PAGES.ADD_APP }`);
+
+    const onSortChange = useCallback((sortBy) => {
+        if (typeof sortBy !== 'string') {
+            sortBy = '';
+        }
+
+        if (!sortBy && !params.sortBy) return;
+
+        const searchParams = {
+            ...params, sortBy,
+            direction: !sortBy || params.direction === 'DESC' ? 'ASC' : 'DESC',
+        };
+
+        sortClientApp(searchParams);
+    }, [params, sortClientApp]);
+
+    const buttons = [];
+
+    if (role === ROLES.ADMIN) {
+
+        if (isSortable) {
+            buttons.push(
+                { type: 'primary', label: BUTTON_TEXT.SAVE, onClick: onSave },
+                { label: BUTTON_TEXT.CANCEL, onClick: onCancelSortable },
+            );
+        } else {
+            buttons.push(
+                { type: 'primary', label: BUTTON_TEXT.ADD, onClick: onAddClick },
+                { label: BUTTON_TEXT.CHANGE_ORDER, onClick: toggleSortable, disabled: !(!params.sortBy && !params.filterText) },
+            );
+        }
+    }
+
+    const searchInput = {
+        placeholder: SEARCH_INPUT_PLACEHOLDER,
+        onChange: onSearchInput,
+        value: params.filterText,
+    };
+
+    const sortingBy = {
+        menuItems: DROPDOWN_SORT_MENU,
+        onMenuItemClick: onSortChange,
+        withReset: true,
+        sortBy: params.sortBy,
+    };
+
+    return (
+        <>
+            {isLoading && (
+                <div className={ style.loadingContainer }>
+                    <div className={ style.loading }>
+                        <SyncOutlined spin />
+                    </div>
                 </div>
-                {
-                    (isSuccess && clientAppList.length) ?
-                        clientAppList.map((app, i) =>
-                            showDeleted ? <ClientAppItem
-                                key={ `clientAppItem-${i}` }
-                                handleEdit={ this.handleEdit }
-                                handleEditProperties={ this.handleEditProperties }
-                                handleAdministrate={ this.handleAdministrate }
-                                properties={ app.clientApplicationPropertiesDto }
-                                { ...app }
-                            /> : !app.isDeleted && <ClientAppItem
-                                key={ `clientAppItem-${i}` }
-                                handleEdit={ this.handleEdit }
-                                handleEditProperties={ this.handleEditProperties }
-                                handleAdministrate={ this.handleAdministrate }
-                                properties={ app.clientApplicationPropertiesDto }
-                                { ...app }
-                            />) : <LoadingStatus loading />
-                }
-            </Fragment>
-        );
-    };
-
-    renderModifyModal = () => (
-        <CustomModal
-            isOpen={ this.state.isOpen }
-            onRequestClose={ this.closeModal }>
-            { this.state.loading ? <LoadingSpinner /> : this.renderModalForm() }
-        </CustomModal>
-    );
-
-    render() {
-        return (
-            <div className={ styles.wrapper }>
-                <div className={ styles.clientAppPageWrapper }>
-                    {this.renderModifyModal()}
-                    <div className={ styles.headerSection }>
-                        <h3>{CLIENT_APP_LIST_TITLE}</h3>
-                        <div>
-                            <Button
-                                label={ ADD_CLIENT_APP_TITLE }
-                                onClick={ this.openModal }
-                                font="roboto"
-                                type="green"
+            )}
+            <div className={ style.container }>
+                <Header buttonBack={ false } />
+                <HeaderWithActions
+                    buttons={ buttons }
+                    searchInput={ searchInput }
+                    showSearchInput={ !isSortable }
+                    showSorting={ !isSortable }
+                    sortingBy={ sortingBy }
+                    classNameByInput={ style.searchInput }
+                />
+                <div className={ style.content }>
+                    <SortableContainerList
+                        useWindowAsScrollContainer
+                        onSortEnd={ onSortEnd }
+                    >
+                        { itemList.map((item, index) => (
+                            <SortableElementItem
+                                key={ item.id }
+                                item={ item }
+                                isSortable={ isSortable }
+                                disabled={ !isSortable }
+                                index={ index }
+                                matchUrl={ matchPath }
+                                history={ history }
+                                forceUpdate={ loadData }
+                                tooltipIsVisible={ role === ROLES.ADMIN }
                             />
-                        </div>
-                        <div className={ styles.logout } onClick={ this.doLogout }>{ ButtonLabels.LOGOUT }</div>
-                    </div>
-                    <div className={ styles.clientAppList }>
-                        {this.renderClientAppList()}
-                    </div>
+                        )) }
+                    </SortableContainerList>
                 </div>
             </div>
-        );
-    }
-}
+        </>
+    );
+};
 
-export default withRouter(ClientAppPage);
+export default ClientAppPage;

@@ -6,7 +6,8 @@ import DzoListTable from './Table/DzoListTable';
 import Header from '../../../components/Header/Header';
 import TableDeleteModal from '../../../components/TableDeleteModal/TableDeleteModal';
 import HeaderWithActions from '../../../components/HeaderWithActions/HeaderWithActions';
-import { sortDzoListBySearchParams } from './DzoList.helper';
+
+import { sortItemsBySearchParams } from '../../../utils/helper';
 import { DZO_PAGES } from '../../../constants/route';
 
 import styles from './DzoList.module.css';
@@ -55,9 +56,9 @@ const DzoPage = ({ matchPath }) => {
     const [select, setSelect] = useState(false);
     const [selectedItems, setSelectedItems] = useState(defaultSelected);
     const [isModalView,setIsModalView] = useState(false);
-    const dzoNames = useRef();
+    const dzoCodes = useRef([]);
 
-    const onAddDzo = () => history.push(generatePath(`${matchPath}${DZO_PAGES.ADD_DZO}`),{ dzoNames : dzoNames.current });
+    const onAddDzo = () => history.push(generatePath(`${matchPath}${DZO_PAGES.ADD_DZO}`), { dzoCodes: dzoCodes.current });
 
     const loadDzoList = useCallback(async (searchParams = defaultSearchParams) => {
         const urlSearchParams = getURLSearchParams(searchParams);
@@ -65,14 +66,12 @@ const DzoPage = ({ matchPath }) => {
         try {
             const { dzoDtoList = [] } = await getDzoList();
             const { dzoDtoList: allDzo = [] } = await getAllDzoList();
-            dzoNames.current = allDzo.reduce((res, elem) => {
-                return [...res, elem.dzoCode];
-            }, []);
+            dzoCodes.current = allDzo.map(({ dzoCode }) => dzoCode);
             history.replace(`${matchPath}?${urlSearchParams}`);
             clearSelectedItems();
             setParams({ ...searchParams });
             setCopyDzoList(dzoDtoList);
-            setDzoList(sortDzoListBySearchParams(searchParams, dzoDtoList));
+            setDzoList(sortItemsBySearchParams(searchParams, dzoDtoList, 'dzoName'));
         } catch (e) {
             console.warn(e);
         }
@@ -105,7 +104,7 @@ const DzoPage = ({ matchPath }) => {
         const urlSearchParams = getURLSearchParams(searchParams);
         history.replace(`${matchPath}?${urlSearchParams}`);
 
-        setDzoList(sortDzoListBySearchParams(searchParams, copyDzoList));
+        setDzoList(sortItemsBySearchParams(searchParams, copyDzoList, 'dzoName'));
     }, [copyDzoList, history, matchPath]);
 
     const clearSelectedItems = () => {

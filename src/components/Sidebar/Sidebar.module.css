@@ -50,6 +50,15 @@
     margin-right: 10px;
 }
 
+.menu :global(.ant-menu-inline) .appLink.firstApp {
+    margin-top: 15px !important;
+}
+
+.appLink .menu__item {
+    padding-left: 30px;
+    color: #757575;
+}
+
 body:not(:global(.not_highlight_app)) .activeApp,
 .active {
     color: #09a552 !important;
@@ -96,7 +105,11 @@ body:not(:global(.not_highlight_app)) .activeApp,
 
 .menu :global(.ant-menu-item-selected) {
     color: #09A552 !important;
-    background-color: #F8F8F8 !important;
+    background-color: transparent !important;
+}
+
+.menu :global(.ant-menu-item-selected) a {
+    color: rgba(0, 0, 0, 0.85);
 }
 
 .menu :global(.ant-menu-item:hover) {

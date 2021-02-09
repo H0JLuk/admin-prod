@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { ROUTE, ROUTE_ADMIN, ROUTE_ADMIN_APPS } from '../../constants/route';
+import { ROUTE, ROUTE_ADMIN } from '../../constants/route';
 
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
 import Dashboard from '../../containers/Dashboard/Dashboard';
@@ -9,7 +9,7 @@ import UserPageRouter from '../../containers/UsersPage/UserPageRouter';
 import FilesPage from '../../containers/FilesPage/FilesPage';
 import PresentationPage from '../../containers/PresentationPage/PresentationPage';
 import PromoCampaignPageRouter from '../../containers/PromoCampaignPage/PromoCampaignPageRouter';
-import CreateClientAppPage from '../../containers/ClientAppPage/RedesignedClientAppPage/CreateClientAppPage';
+import ClientAppPageRouter from '../../containers/ClientAppPage/ClientAppPageRouter';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
 import styles from './AdminPage.module.css';
@@ -26,7 +26,7 @@ const AdminPage = () => (
                 <Route path={ ROUTE_ADMIN.DZO } component={ DzoPageRouter } />
                 <Route path={ ROUTE_ADMIN.CATEGORY } component={ CategoryPage } />
                 <Route path={ ROUTE_ADMIN.PRESENTATION } component={ PresentationPage } />
-                <Route path={ ROUTE_ADMIN_APPS.ADD_APP } component={ CreateClientAppPage } />
+                <Route path={ ROUTE_ADMIN.APPS } component={ ClientAppPageRouter } />
                 <Route path={ ROUTE_ADMIN.USERS } component={ UserPageRouter } />
                 <Route path={ ROUTE_ADMIN.PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />
 

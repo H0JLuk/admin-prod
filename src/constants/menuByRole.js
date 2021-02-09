@@ -83,10 +83,12 @@ const ADMIN_SIDEBAR_MENU_ITEMS = [
     { label: labels.USERS, path: ROUTE_ADMIN.USERS },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
     { label: labels.CATEGORY, path: ROUTE_ADMIN.CATEGORY },
+    { label: labels.APP, path: ROUTE_ADMIN.APPS }
 ];
 
 const ADMIN_TOP_MENU_ITEMS = [
     { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN },
+    { label: labels.SETTINGS, path: ROUTE_ADMIN.APP_SETTINGS },
     // { label: labels.INSTRUCTIONS, path: ROUTE_ADMIN.DZO }, // temporary
     { label: labels.PRESENTATION, path: ROUTE_ADMIN.PRESENTATION },
     { label: labels.FILES, path: ROUTE_ADMIN.FILES },
@@ -97,10 +99,12 @@ const ADMIN_SIDEBAR_MENU_FOR_POINT_APP = [
     { label: labels.DASHBOARD, path: ROUTE_ADMIN.DASHBOARD },
     { label: labels.USERS, path: ROUTE_ADMIN.USERS },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
+    { label: labels.APP, path: ROUTE_ADMIN.APPS },
 ];
 
 const ADMIN_TOP_MENU_FOR_POINT_APP = [
     { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN },
+    { label: labels.SETTINGS, path: ROUTE_ADMIN.APP_SETTINGS },
     // { label: labels.INSTRUCTIONS, path: ROUTE_ADMIN.DZO }, // temporary
     { label: labels.FILES, path: ROUTE_ADMIN.FILES },
 ];
@@ -109,6 +113,7 @@ const PRODUCT_OWNER_SIDEBAR_MENU_ITEMS = [
     { label: labels.DASHBOARD, path: ROUTE_OWNER.DASHBOARD },
     { label: labels.DZO, path: ROUTE_OWNER.DZO },
     { label: labels.CATEGORY, path: ROUTE_OWNER.CATEGORY },
+    { label: labels.APP, path: ROUTE_OWNER.APPS }
 ];
 
 const PRODUCT_OWNER_TOP_MENU_ITEMS = [
@@ -122,6 +127,7 @@ const PRODUCT_OWNER_TOP_MENU_ITEMS = [
 const PRODUCT_OWNER_SIDEBAR_FOR_POINT_APP = [
     { label: labels.DASHBOARD, path: ROUTE_OWNER.DASHBOARD },
     { label: labels.DZO, path: ROUTE_OWNER.DZO },
+    { label: labels.APP, path: ROUTE_OWNER.APPS },
 ];
 
 const PRODUCT_OWNER_TOP_FOR_POINT_APP = [

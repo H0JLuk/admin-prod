@@ -97,7 +97,7 @@ const DzoForm = ({ type, matchPath }) => {
     const [form] = Form.useForm();
     const history = useHistory();
     const { state: stateFromLocation } = useLocation();
-    const { dzoData, dzoNames } = stateFromLocation || {};
+    const { dzoData, dzoCodes } = stateFromLocation || {};
     const [dzoState] = useState(getInitialValue(dzoData));
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -203,7 +203,7 @@ const DzoForm = ({ type, matchPath }) => {
     const handleCancel = () => history.push(matchPath);
 
     const checkUniqCode = (_, value) => {
-        if (dzoNames.includes(value)) {
+        if (dzoCodes.includes(value)) {
             return Promise.reject(DZO_CODE_NOT_UNIQUE);
         }
         return Promise.resolve();

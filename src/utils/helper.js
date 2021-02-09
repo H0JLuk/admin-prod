@@ -77,3 +77,47 @@ export function downloadFileFunc(dataObj, name = 'file', fileExtension = 'csv') 
         document.body.removeChild(link);
     }
 }
+
+export function sortItemsBySearchParams({ sortBy, direction, filterText }, list, filterKey) {
+    return (!filterText
+        ? list.slice()
+        : list.filter((item) => item[filterKey].toLowerCase().includes(filterText.toLowerCase()))
+    ).sort((a, b) => sortItems(sortBy, direction, [a, b]));
+}
+
+function sortItems(type, direction, sortableItems) {
+    const [a, b] = sortableItems;
+
+    switch (typeof a[type]) {
+        case 'number': {
+            return getNumberSort(direction, a[type], b[type]);
+        }
+        case 'string': {
+            return getStringSort(direction, a[type], b[type]);
+        }
+        default: {
+            return 0;
+        }
+    }
+}
+
+function getStringSort(direction, a, b) {
+    const aLowerCase = stringToLowerCase(a);
+    const bLowerCase = stringToLowerCase(b);
+
+    if (aLowerCase === bLowerCase) return 0;
+
+    const ASC_SORT = aLowerCase < bLowerCase ? -1 : 1;
+    const DESC_SORT = bLowerCase > aLowerCase ? 1 : -1;
+
+    return direction === 'ASC' ? ASC_SORT : DESC_SORT;
+}
+
+function getNumberSort(direction, a, b) {
+
+    return direction === 'ASC' ? a - b : b - a;
+}
+
+function stringToLowerCase(value) {
+    return value.toLowerCase();
+}

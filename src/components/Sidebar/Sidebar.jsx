@@ -22,19 +22,15 @@ const routesForNonRender = [
     `${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT }`,
 ];
 
-const APP = 'Приложения';
-// const ADD_NEW = 'Добавить';
-// const NEW_APP = 'Новое приложение';
+const routesForApps = [
+    `${ROUTE_ADMIN.APPS}`,
+    `${ROUTE_OWNER.APPS}`
+];
 
 const Sidebar = () => {
     const history = useHistory();
     const { pathname } = useLocation();
     const [appsList, setAppsList] = useState([]);
-
-    /* const isNewAppPathName = useMemo(() =>
-        // TODO: change `ROUTE_ADMIN_APPS` to array of path
-        !!matchPath(location.pathname, { path: ROUTE_ADMIN_APPS.ADD_APP }
-    ), [location.pathname]); */
 
     const appCode = getAppCode() || '';
     const role = getRole();
@@ -85,13 +81,8 @@ const Sidebar = () => {
                         </NavLink>
                     </Menu.Item>
                 ))}
-                { (appsList || []).length > 0 && (
-                    <div className={ cn(styles.menu__item, styles.app) }>
-                        { APP }
-                    </div>
-                ) }
-                {(appsList || []).map((dzoItem) => (
-                    <Menu.Item key={ dzoItem.id }>
+                {!(matchPath(pathname, { path: routesForApps })) && (appsList || []).map((dzoItem, index) => (
+                    <Menu.Item key={ dzoItem.id } className={ cn(styles.appLink, { [styles.firstApp]: !index }) }>
                         {/* TODO: change this to NavLink or add active className after we will know url for apps */}
                         <div
                             onClick={ () => handleAdministrate(dzoItem) }
@@ -101,19 +92,6 @@ const Sidebar = () => {
                         </div>
                     </Menu.Item>
                 ))}
-                {/* <Menu.Item key="Create">
-                    <NavLink
-                        to={ ROUTE_ADMIN_APPS.ADD_APP }
-                        className={
-                            cn(styles.menu__item, {
-                                [styles.addButton]: !isNewAppPathName
-                            })
-                        }
-                        activeClassName={ styles.active }
-                    >
-                        { isNewAppPathName ? NEW_APP : ADD_NEW }
-                    </NavLink>
-                </Menu.Item> */}
                 { role !== ROLES.USER_MANAGER && (
                     <Menu.Item key="oldDesign">
                         <NavLink to={ `${ ROUTE.OLD_DESIGN }${ pathname }` } className={ styles.oldDesignLink }>

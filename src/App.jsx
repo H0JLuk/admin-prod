@@ -13,7 +13,7 @@ import AdminPage from './pages/AdminPage';
 import AuditorPage from './pages/AuditorPage/AuditorPage';
 import OldDesignOwnerPage from './pages/OwnerPage/OldDesignOwnerPage/OwnerPage';
 import OwnerPage from './pages/OwnerPage';
-import ClientAppPage from './containers/ClientAppPage/ClientAppPage';
+import ClientAppPage from './containers/ClientAppPage/OldClientAppPage/ClientAppPage';
 import UserManagerPage from './pages/UserManagerPage';
 import { goToStartPage } from './utils/appNavigation';
 

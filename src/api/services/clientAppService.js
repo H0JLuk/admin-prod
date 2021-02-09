@@ -25,6 +25,10 @@ export async function updateProperties(id, properties) {
     return Api.put(`/admin/clientApplication/${id}/properties`, properties, getReqOptions());
 }
 
+export async function reorderClientApp(idMap) {
+    return Api.put('/admin/clientApplication/reorder', idMap, getReqOptions());
+}
+
 /** TODO: remove DEFAULT_APP and functions after second phase */
 const DEFAULT_APP = 'DEFAULT_APP';
 

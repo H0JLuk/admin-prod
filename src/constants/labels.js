@@ -8,4 +8,6 @@ export const menuItemLabels = {
     DASHBOARD: 'Дашборд',
     PRESENTATION: 'Презентация',
     INSTRUCTIONS: 'Инструкции',
+    SETTINGS: 'Настройки',
+    APP: 'Приложения',
 };

@@ -1,0 +1,127 @@
+.wrapper {
+    width: 100%;
+    min-height: calc(100vh - 40px);
+    background-color: #ececec;
+}
+
+.clientAppPageWrapper {
+    margin: 0 auto;
+    padding-top: 30px;
+    width: 96%;
+    max-width: 1080px;
+    font-family: inherit;
+}
+
+.clientAppList > div:not(:last-child) {
+    margin-bottom: 30px;
+}
+
+.clientAppPageWrapper h3 {
+    font-family: inherit;
+    font-size: 25px;
+    font-weight: 500;
+    color: rgb(0, 0, 20);
+    margin-right: 25px;
+}
+
+.clientAppPageWrapper .headerSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.clientAppPageWrapper .loadingLabel {
+    position: relative;
+}
+
+.clientAppPageWrapper .loadingLabel:after {
+    position: absolute;
+    content: '';
+    animation: dots 1.6s infinite;
+}
+
+.modalForm {
+    position: relative;
+    padding: 40px 40px 80px 40px;
+}
+
+.checkboxes{
+    display: flex;
+}
+
+.modalForm .crossSvg {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 35px;
+}
+
+.clientAppForm {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.clientAppForm__field input {
+    display: block;
+    height: 24px;
+    bottom: 6px;
+    padding-left: 2px;
+    width: calc(100% - 30px);
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.55);
+    margin-top: 20px;
+}
+
+.clientAppForm__field label {
+    display: block;
+    bottom: 0;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #046732;
+}
+
+.clientAppForm__field__activeLabel {
+    font-size: 14px;
+    transform: translateY(calc(-1 * 26px));
+    -ms-transform: translateY(calc(-1 * 26px));
+}
+
+.clientAppForm__button {
+    position: absolute;
+    bottom: 35px;
+    padding: 5px 30px;
+}
+
+.mechanics_title {
+    color: #046732;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.error {
+    margin-top: 10px;
+    color: #f6650a;
+    font-family: Roboto, sans-serif;
+}
+
+.logout {
+    flex: 1;
+    font-family: SBSansText, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    text-align: right;
+    color: #f6650a;
+    cursor: pointer;
+}
