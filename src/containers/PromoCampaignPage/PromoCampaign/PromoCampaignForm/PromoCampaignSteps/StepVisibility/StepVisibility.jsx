@@ -23,7 +23,7 @@ const StepVisibility = ({
     const onChange = (val, idx, input) => {
         onChangeState('visibilitySettings', val, idx, input);
 
-        if (input === 'salePoint') {
+        if (input === 'location') {
             onChangeState('visibilitySettings', {}, idx, 'errors');
         }
     };

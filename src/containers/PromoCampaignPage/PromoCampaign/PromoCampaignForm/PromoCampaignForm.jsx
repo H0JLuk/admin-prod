@@ -34,7 +34,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     const [loading, setLoading] = useState(true);
     const [validStep, setValidStep] = useState(1);
     const [messageError, setMessageError] = useState('');
-    const changedImgs  = useRef([]);
+    const changedImgs = useRef([]);
     const [state, setState] = useState({
         name: '',
         dzoId: null,
@@ -139,12 +139,12 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     const validateVisibilitySettings = useCallback(() => {
         const { visibilitySettings } = state;
 
-        if (!visibilitySettings[0].salePoint) {
+        if (!visibilitySettings[0].location) {
             const [setting] = visibilitySettings;
             const nextState = { ...state };
             nextState.visibilitySettings[0] = {
                 ...setting,
-                errors: { salePoint: 'Укажите точку продажи' },
+                errors: { location: 'Укажите локацию' },
             };
 
             setState(nextState);

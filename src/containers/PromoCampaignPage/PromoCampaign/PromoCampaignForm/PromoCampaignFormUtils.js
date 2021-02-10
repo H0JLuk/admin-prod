@@ -44,12 +44,12 @@ export async function createImgBanners(promoCampaignBanners, promoCampaignId, ap
 
 export function createVisibilities(visibilitySettings, promoCampaignId, appCode) {
     return visibilitySettings
-        .filter(({ salePoint }) => Boolean(salePoint))
+        .filter(({ salePoint, location }) => !!salePoint || !!location)
         .map(setting => newVisibilitySetting(
             {
                 promoCampaignId,
                 locationId: setting.location?.id,
-                salePointId: setting.salePoint.id,
+                salePointId: setting.salePoint?.id,
                 visible: setting.visible,
             },
             appCode

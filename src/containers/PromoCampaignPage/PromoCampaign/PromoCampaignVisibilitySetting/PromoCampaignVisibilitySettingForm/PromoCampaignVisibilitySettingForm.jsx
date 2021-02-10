@@ -19,8 +19,8 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
     const [error, setError] = useState(DEFAULT_ERRORS);
 
     const onFinish = useCallback(async () => {
-        if (!salePoint) {
-            return setError({ salePoint: 'Укажите точку продажи' });
+        if (!location) {
+            return setError({ location: 'Укажите локацию' });
         }
 
         try {

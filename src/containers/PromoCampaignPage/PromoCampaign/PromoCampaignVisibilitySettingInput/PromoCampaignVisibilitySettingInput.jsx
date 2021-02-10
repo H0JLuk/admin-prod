@@ -31,7 +31,7 @@ const PromoCampaignVisibilitySettingInput = ({
             <AutocompleteLocationAndSalePoint
                 onLocationChange={ onLocationChange }
                 onSalePointChange={ onSalePointChange }
-                salePointLabelClassNames="required"
+                locationLabelClassNames="required"
                 locationId={ location?.id }
                 initialLocationValue={ getStringOptionValue(location || undefined) }
                 initialSalePointValue={ salePoint?.name ?? '' }
