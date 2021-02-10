@@ -13,6 +13,7 @@ import { getDeleteTitleConfirm, onConfirmDeletePromoCampaign } from '../../../..
 import styles from './PromoCampaignItemMenu.module.css';
 
 const ON_PROMO_CODES_LOADED = 'Промокоды успешно загружены';
+const NONE_PROMO_CODES = 'NONE';
 
 const showSuccessNotification = (message) => {
     notification.success({
@@ -129,16 +130,20 @@ const DropdownMenu = ({
     onPromoCodeUpload,
 }) => (
     <Menu>
-        <Menu.Item key="0">
-            <div className={ styles.menuItem } onClick={ onPromoCodeUpload }>
-                { MENU.LOAD_PROMO_CODE}
-            </div>
-        </Menu.Item>
-        <Menu.Item key="1" >
-            <div className={ styles.menuItem } onClick={ onShowStatistic }>
-                { MENU.STATISTICS }
-            </div>
-        </Menu.Item>
+        {promoCampaign.promoCodeType !== NONE_PROMO_CODES && (
+            <>
+                <Menu.Item key='0'>
+                    <div className={ styles.menuItem } onClick={ onPromoCodeUpload }>
+                        {MENU.LOAD_PROMO_CODE}
+                    </div>
+                </Menu.Item>
+                <Menu.Item key='1'>
+                    <div className={ styles.menuItem } onClick={ onShowStatistic }>
+                        {MENU.STATISTICS}
+                    </div>
+                </Menu.Item>
+            </>
+        )}
         <Menu.Item key="2">
             <Link
                 to={ generatePath(
