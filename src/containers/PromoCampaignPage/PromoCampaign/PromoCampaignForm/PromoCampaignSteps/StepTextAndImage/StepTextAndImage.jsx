@@ -17,13 +17,14 @@ const StepTextAndImage = ({
     addChangedImg,
     banners,
     texts,
+    isCopy,
 }) => {
     const [form] = Form.useForm();
 
     const onFinish = useCallback((val) => {
         validStepChange(steps.landing);
-        handlerNextStep(val);
-    }, [handlerNextStep, validStepChange]);
+        handlerNextStep(val, isCopy);
+    }, [handlerNextStep, validStepChange, isCopy]);
 
     const onRemoveImg = useCallback((name) => {
         form.setFields([{ name, value: [] }]);

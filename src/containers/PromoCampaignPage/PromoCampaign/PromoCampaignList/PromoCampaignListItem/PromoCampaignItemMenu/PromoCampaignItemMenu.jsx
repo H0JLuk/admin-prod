@@ -5,6 +5,7 @@ import { EllipsisOutlined } from '@ant-design/icons';
 import PromoCodeStatisticModal from './PromoCampaignModalMenu/PromoCodeStatisticModal';
 import { errorNotice } from '../../../../../../components/toast/Notice';
 import UploadPromoCodesModal from './PromoCampaignModalMenu/UploadPromoCodesModal';
+import PromoCampaignCopyModal from '../../../PromoCampaignCopyModal';
 import { uploadPromoCodes } from '../../../../../../api/services/promoCampaignService';
 import { PROMO_CAMPAIGN_PAGES } from '../../../../../../constants/route';
 import { confirmModal } from '../../../../../../utils/utils';
@@ -37,29 +38,25 @@ const PromoCampaignItemMenu = ({ onDeleteItem, promoCampaign, matchUrl }) => {
         }
     }, [promoCampaign.id, promoCampaign.name, onDeleteItem]);
 
+    const closeDropdown = useCallback(() => setDropdownVisible(false), []);
+
     const onDeleteClick = useCallback(() => {
         confirmModal({
             onOk: onConfirmDelete,
             title: getDeleteTitleConfirm(promoCampaign.name),
         });
-
-        setDropdownVisible(false);
     }, [promoCampaign.name, onConfirmDelete]);
 
-    const onShowStatistic = useCallback((e) => {
-        e.stopPropagation();
+    const onShowStatistic = useCallback(() => {
         setShowModalStatistic(true);
-        setDropdownVisible(false);
     }, []);
 
     const onHideStatistic = useCallback(() => {
         setShowModalStatistic(false);
     }, []);
 
-    const onPromoCodeUpload = useCallback((e) => {
-        e.stopPropagation();
+    const onPromoCodeUpload = useCallback(() => {
         setShowPromoCodesModal(true);
-        setDropdownVisible(false);
     }, []);
 
     const closeUploadPromoCodesModal = useCallback(() => {
@@ -73,7 +70,6 @@ const PromoCampaignItemMenu = ({ onDeleteItem, promoCampaign, matchUrl }) => {
             .catch(error => errorNotice(error.message));
     }, [closeUploadPromoCodesModal, promoCampaign.id]);
 
-
     return (
         <>
             <Dropdown
@@ -86,6 +82,7 @@ const PromoCampaignItemMenu = ({ onDeleteItem, promoCampaign, matchUrl }) => {
                         onShowStatistic={ onShowStatistic }
                         onPromoCodeUpload={ onPromoCodeUpload }
                         matchUrl={ matchUrl }
+                        closeDropdown={ closeDropdown }
                     />
                 }
                 trigger={ ['click'] }
@@ -119,6 +116,7 @@ const MENU = {
     STATISTICS: 'Статистика использования промо-кодов',
     VISIBILITY_SETTINGS: 'Настроить видимость промо-кампании',
     EDIT_PROMO_CAMPAIGN: 'Редактировать промо-кампанию',
+    COPY_PROMO: 'Копировать промо-кампанию',
     DELETE: 'Удалить',
 };
 
@@ -128,22 +126,23 @@ const DropdownMenu = ({
     matchUrl,
     onShowStatistic,
     onPromoCodeUpload,
+    closeDropdown,
 }) => (
-    <Menu>
-        {promoCampaign.promoCodeType !== NONE_PROMO_CODES && (
+    <Menu onClick={ closeDropdown }>
+        { promoCampaign.promoCodeType !== NONE_PROMO_CODES && (
             <>
-                <Menu.Item key='0'>
+                <Menu.Item key="0">
                     <div className={ styles.menuItem } onClick={ onPromoCodeUpload }>
-                        {MENU.LOAD_PROMO_CODE}
+                        { MENU.LOAD_PROMO_CODE }
                     </div>
                 </Menu.Item>
-                <Menu.Item key='1'>
+                <Menu.Item key="1">
                     <div className={ styles.menuItem } onClick={ onShowStatistic }>
-                        {MENU.STATISTICS}
+                        { MENU.STATISTICS }
                     </div>
                 </Menu.Item>
             </>
-        )}
+        ) }
         <Menu.Item key="2">
             <Link
                 to={ generatePath(
@@ -166,6 +165,13 @@ const DropdownMenu = ({
             >
                 { MENU.EDIT_PROMO_CAMPAIGN }
             </Link>
+        </Menu.Item>
+        <Menu.Item key="copyPromoCampaign">
+            <PromoCampaignCopyModal promoCampaignData={ promoCampaign }>
+                <div className={ styles.menuItem }>
+                    { MENU.COPY_PROMO }
+                </div>
+            </PromoCampaignCopyModal>
         </Menu.Item>
         <Menu.Item key="4">
             <div className={ styles.menuItem } onClick={ onDelete }>

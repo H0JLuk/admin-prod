@@ -8,12 +8,14 @@ import PromoCampaignSideBar from '../PromoCampaignSideBar/PromoCampaignSideBar';
 import StepInfo from './Steps/StepInfo';
 import StepTextAndImage from './Steps/StepTextAndImage';
 import StepVisibility from './Steps/StepVisibility';
+import PromoCampaignCopyModal from '../PromoCampaignCopyModal';
 import { confirmModal } from '../../../../utils/utils';
 import { onConfirmDeletePromoCampaign, getDeleteTitleConfirm } from '../../PromoCampaignUtils';
 
 import styles from './PromoCampaignInfo.module.css';
 
 const EDIT = 'Редактировать';
+const COPY = 'Копировать';
 const DELETE = 'Удалить';
 
 const PromoCampaignInfo = ({ matchUrl }) => {
@@ -24,7 +26,7 @@ const PromoCampaignInfo = ({ matchUrl }) => {
 
     useEffect(() => {
         const { promoCampaign } = stateFromLocation || {};
-        if (!stateFromLocation) {
+        if (!promoCampaign) {
             return history.push(matchUrl);
         }
         setPromoCampaign({
@@ -84,7 +86,7 @@ const PromoCampaignInfo = ({ matchUrl }) => {
                 <Header />
                 { step !== 3 && (
                     <div className={ styles.header }>
-                        <div className={ styles.title }>{ promoCampaign.name }</div>
+                        <div className={ styles.title }>{ promoCampaign?.name }</div>
                         <div className={ styles.buttonGroup }>
                             <Button
                                 type="primary"
@@ -92,6 +94,11 @@ const PromoCampaignInfo = ({ matchUrl }) => {
                             >
                                 { EDIT }
                             </Button>
+                            <PromoCampaignCopyModal promoCampaignData={ stateFromLocation?.promoCampaign }>
+                                <Button type="primary">
+                                    { COPY }
+                                </Button>
+                            </PromoCampaignCopyModal>
                             <Button
                                 type="primary"
                                 danger

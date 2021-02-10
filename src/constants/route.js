@@ -31,6 +31,7 @@ export const USERS_PAGES = {
 
 export const PROMO_CAMPAIGN_PAGES = {
     ADD_PROMO_CAMPAIGN:        '/create',
+    PROMO_CAMPAIGN_COPY:       '/copy',
     PROMO_CAMPAIGN_INFO:       '/:promoCampaignId/info',
     PROMO_CAMPAIGN_EDIT:       '/:promoCampaignId/edit',
     VISIBILITY_SETTINGS:       '/:promoCampaignId/visibility-setting',

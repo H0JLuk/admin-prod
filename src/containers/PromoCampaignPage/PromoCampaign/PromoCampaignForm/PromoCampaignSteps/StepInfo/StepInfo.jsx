@@ -53,7 +53,14 @@ const selectTagRender = ({ label, onClose }) => (
     </div>
 );
 
-const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) => {
+const StepInfo = ({
+    state,
+    handlerNextStep,
+    validStepChange,
+    changeTypePromo,
+    isCopy,
+    oldName,
+}) => {
 
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -105,7 +112,7 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
     const onFinish = useCallback((val) => {
         const [startDate, finishDate] = val.datePicker || [];
         validStepChange(steps.textAndBanners);
-        handlerNextStep({
+        const mainInfoData = {
             ...val,
             startDate: startDate?.toISOString(),
             finishDate: finishDate?.toISOString(),
@@ -114,7 +121,14 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                 ...val.settings,
                 priorityOnWebUrl: val.settings.priorityOnWebUrl === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
             },
-        });
+        };
+
+        if (!finishDate) {
+            delete mainInfoData.offerDuration;
+            delete mainInfoData.startDate;
+            delete mainInfoData.finishDate;
+        }
+        handlerNextStep(mainInfoData);
     }, [handlerNextStep, validStepChange]);
 
     const isChanged = useCallback(changedFields => {
@@ -138,7 +152,18 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                     className={ styles.promoCampaignName }
                     name="name"
                     initialValue={ state.name }
-                    rules={ [{ required: true, message: 'Укажите название промо-кампании' }] }
+                    rules={ [
+                        { required: true, message: 'Укажите название промо-кампании' },
+                        {
+                            validator: (_, value) => {
+                                if (isCopy && value.trim() === oldName) {
+                                    return Promise.reject('Нельзя создать копию промо-кампании с таким же названием');
+                                }
+                                return Promise.resolve();
+                            },
+                            validateTrigger: 'onSubmit',
+                        }
+                    ] }
                 >
                     <Input placeholder={ TEMPLATE_PROMO_NAME } />
                 </Form.Item>
@@ -188,7 +213,7 @@ const StepInfo = ({ state, handlerNextStep, validStepChange, changeTypePromo }) 
                                         { required: getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN, message: 'Укажите ссылку' },
                                         { type: 'url', message: 'Поле содержит недопустимые символы' },
                                     ] }
-                                    initialValue={ state.webUrl }
+                                    initialValue={ decodeURI(state.webUrl || '') }
                                 >
                                     <Input placeholder={ URL } />
                                 </Form.Item>

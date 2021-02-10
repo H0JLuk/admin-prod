@@ -6,7 +6,7 @@ import styles from './Template.module.css';
 export const TextBlock = ({ label, text }) => (
     <>
         <div className={ styles.title }>{ label }</div>
-        <div>{ text }</div>
+        <div className={ styles.text }>{ text }</div>
     </>
 );
 

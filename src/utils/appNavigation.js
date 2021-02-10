@@ -123,6 +123,17 @@ export function getLinkForCreatePromoCampaign() {
     }
 }
 
+export function getPathForCopyPromoCampaign() {
+    switch (getRole()) {
+        case ROLES.ADMIN:
+            return `${ ROUTE_ADMIN.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_COPY }`;
+        case ROLES.PRODUCT_OWNER:
+            return `${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_COPY }`;
+        default:
+            return '';
+    }
+}
+
 export function getPathForPromoCampaignInfo() {
     switch (getRole()) {
         case ROLES.ADMIN:

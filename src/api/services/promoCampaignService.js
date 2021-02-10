@@ -45,6 +45,10 @@ export async function editPromoCampaign(promoCampaign) {
     return Api.put(`/admin/promoCampaign/${promoCampaign.id}`, normalizePromoCampaign(promoCampaign), getReqOptions());
 }
 
+export function copyPromoCampaign(id, promoCampaign) {
+    return Api.post(`/admin/promoCampaign/${id}`, normalizePromoCampaign(promoCampaign), getReqOptions());
+}
+
 export async function reorderPromoCampaigns(idMap) {
     return Api.post('/admin/promoCampaign/reorder/', { idMap }, getReqOptions());
 }

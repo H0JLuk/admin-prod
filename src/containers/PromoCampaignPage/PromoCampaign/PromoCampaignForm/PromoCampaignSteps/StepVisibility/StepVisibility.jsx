@@ -11,23 +11,30 @@ const TITLE_OF_STEP = 'Настройки видимости';
 const ADD_SETTING = 'Добавить настройку';
 const emptyLocation = { location: null, salePoint: null, visible: false, errors: {} };
 
-const StepVisibility = ({ visibilitySettings = [], onChangeState, onDeleteState, viewMode }) => {
+const StepVisibility = ({
+    visibilitySettings = [],
+    onChangeState,
+    onDeleteState,
+    viewMode,
+    isCopy,
+    copyVisibilitySettings,
+}) => {
 
-    const onChange = useCallback((val, idx, input) => {
+    const onChange = (val, idx, input) => {
         onChangeState('visibilitySettings', val, idx, input);
 
         if (input === 'salePoint') {
             onChangeState('visibilitySettings', {}, idx, 'errors');
         }
-    }, [onChangeState]);
+    };
 
     const addVS = useCallback(() => {
         onChangeState('visibilitySettings', { ...emptyLocation }, visibilitySettings.length);
     }, [visibilitySettings, onChangeState]);
 
-    const deleteBlock = useCallback((idx) => onDeleteState('visibilitySettings', idx), [onDeleteState]);
+    const deleteBlock = (idx) => onDeleteState('visibilitySettings', idx);
 
-    return viewMode ? (
+    return viewMode && !isCopy && !copyVisibilitySettings ? (
         <PromoCampaignVisibilitySetting
             searchAndSortMode={ false }
             hideHeader

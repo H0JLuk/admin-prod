@@ -23,6 +23,10 @@
     margin-bottom: 16px;
 }
 
+.text {
+    white-space: pre-line;
+}
+
 .logo {
     display: flex;
     align-items: center;

@@ -21,6 +21,10 @@ function PromoCampaignRouter() {
                 render={ routeProps => <PromoCampaignForm { ...routeProps } matchUrl={ match.path } mode='edit' /> }
             />
             <Route
+                path={ `${ match.path }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_COPY }` }
+                render={ routeProps => <PromoCampaignForm { ...routeProps } matchUrl={ match.path } mode='edit' isCopy /> }
+            />
+            <Route
                 path={ `${ match.path }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_INFO }` }
                 render={ routeProps => <PromoCampaignInfo { ...routeProps } matchUrl={ match.path } /> }
             />

@@ -155,3 +155,23 @@ export const getDataForSend = ({
     type: typePromoCampaign,
     categoryIdList,
 });
+
+export function getPromoCampaignForCopy(promoCampaign, copyVisibilitySettings) {
+    return {
+        active: promoCampaign.active,
+        behaviorType: promoCampaign.behaviorType,
+        categoryIdList: promoCampaign.categoryIdList,
+        dzoId: promoCampaign.dzoId,
+        name: promoCampaign.name,
+        externalId: promoCampaign.externalId,
+        finishDate: promoCampaign.finishDate,
+        startDate: promoCampaign.startDate,
+        offerDuration: promoCampaign.offerDuration,
+        oneLinkAppUrl: promoCampaign.oneLinkAppUrl,
+        promoCodeType: promoCampaign.promoCodeType,
+        settings: promoCampaign.settings,
+        type: promoCampaign.type,
+        webUrl: promoCampaign.webUrl,
+        copyVisibilitySettings,
+    };
+}

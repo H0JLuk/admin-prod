@@ -18,22 +18,22 @@ import {
     EditImgBanners,
     editTextBanners,
     getDataForSend,
+    getPromoCampaignForCopy,
 } from './PromoCampaignFormUtils';
 import { getUnissuedPromoCodeStatistics } from '../../../../api/services/promoCodeService';
-import { editPromoCampaign, newPromoCampaign } from '../../../../api/services/promoCampaignService';
+import { editPromoCampaign, newPromoCampaign, copyPromoCampaign } from '../../../../api/services/promoCampaignService';
 import { getAppCode } from '../../../../api/services/sessionService';
 
 import { ReactComponent as LoadingSpinner } from '../../../../static/images/loading-spinner.svg';
 
 import styles from './PromoCampaignForm.module.css';
 
-const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
+const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     const history = useHistory();
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(true);
     const [validStep, setValidStep] = useState(1);
     const [messageError, setMessageError] = useState('');
-    const { state: stateFromLocation } = useLocation();
     const changedImgs  = useRef([]);
     const [state, setState] = useState({
         name: '',
@@ -62,6 +62,10 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
             alternativeOfferMechanic: false,
         },
     });
+    const { state: stateFromLocation } = useLocation();
+    const { promoCampaign, copyVisibilitySettings } = stateFromLocation || {};
+
+    const stepsCount = !copyVisibilitySettings ? allStep : allStep - 1;
 
     const onChangeState = useCallback((type, val, index, input) => {
         setState((prevState) => {
@@ -77,7 +81,6 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
 
     useEffect(() => {
         if (mode === modes.edit) {
-            const { promoCampaign } = stateFromLocation || {};
             if (!promoCampaign) {
                 return history.push(matchUrl);
             }
@@ -110,7 +113,10 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                 }));
                 setLoading(false);
             })();
-            setValidStep(steps.visibility);
+
+            if (!isCopy) {
+                setValidStep(steps.visibility);
+            }
         } else {
             setLoading(false);
         }
@@ -130,45 +136,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
         });
     }, []);
 
-    const editPromoCampaignHandler = useCallback(async () => {
-        const { promoCampaign } = stateFromLocation || {};
-        const dataForSend = getDataForSend(state);
-        setLoading(true);
-
-        try {
-            const textEditPromises = editTextBanners(state.promoCampaignTexts, promoCampaign, state.appCode);
-
-            await Promise.all(textEditPromises);
-            await EditImgBanners(state.promoCampaignBanners, promoCampaign, changedImgs.current, state.appCode);
-            await editPromoCampaign({ ...dataForSend, id: promoCampaign.id });
-
-            history.push(matchUrl);
-        } catch (error) {
-            setMessageError(error.message);
-            setLoading(false);
-        }
-    }, [state, stateFromLocation, history, matchUrl, changedImgs]);
-
-    const handleOk = useCallback(async () => {
-        const { promoCampaign : { id: promoCampaignId } } = stateFromLocation || {};
-
-        await getUnissuedPromoCodeStatistics(promoCampaignId, state.promoCodeType);
-        await editPromoCampaignHandler();
-    }, [editPromoCampaignHandler, state.promoCodeType, stateFromLocation]);
-
-    const handleEdit = useCallback(async () => {
-        const { promoCampaign : { promoCodeType: oldValue } } = stateFromLocation || {};
-        const newValue = state.promoCodeType;
-
-        if (oldValue !== newValue) {
-            const changingValue =`${oldValue}_TO_${newValue}`;
-            callConfirmModalForPromoCodeTypeChanging(handleOk, changingValue);
-        } else {
-            editPromoCampaignHandler();
-        }
-    }, [editPromoCampaignHandler, state.promoCodeType, stateFromLocation, handleOk]);
-
-    const handleSave = useCallback(async () => {
+    const validateVisibilitySettings = useCallback(() => {
         const { visibilitySettings } = state;
 
         if (!visibilitySettings[0].salePoint) {
@@ -179,12 +147,80 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                 errors: { salePoint: 'Укажите точку продажи' },
             };
 
-            return setState(nextState);
+            setState(nextState);
+            return false;
+        }
+
+        return true;
+    }, [state]);
+
+    const editPromoCampaignHandler = useCallback(async (newValue = {}) => {
+        const currentData = { ...state, ...newValue };
+        const dataForSend = getDataForSend(currentData);
+
+        if (isCopy && !copyVisibilitySettings && !validateVisibilitySettings()) {
+            return;
         }
 
         setLoading(true);
 
         try {
+            let oldPromoCampaignData = promoCampaign;
+
+            if (isCopy) {
+
+                const dataForCopy = getPromoCampaignForCopy({ ...promoCampaign, ...currentData }, copyVisibilitySettings);
+                oldPromoCampaignData = await copyPromoCampaign(promoCampaign.id, dataForCopy);
+
+                if (!copyVisibilitySettings) {
+                    const { visibilitySettings } = currentData;
+                    const visibilityPromises = createVisibilities(visibilitySettings, oldPromoCampaignData.id, state.appCode);
+                    await Promise.all(visibilityPromises);
+                }
+            }
+
+            const textEditPromises = editTextBanners(currentData.promoCampaignTexts, oldPromoCampaignData, currentData.appCode);
+
+            await Promise.all(textEditPromises);
+            await EditImgBanners(currentData.promoCampaignBanners, oldPromoCampaignData, changedImgs.current, currentData.appCode);
+
+            if (!isCopy) {
+                await editPromoCampaign({ ...dataForSend, id: promoCampaign.id });
+            }
+
+            history.push(matchUrl);
+        } catch (error) {
+            setMessageError(error.message);
+            setLoading(false);
+        }
+    }, [state, promoCampaign, history, matchUrl, changedImgs, isCopy, copyVisibilitySettings, validateVisibilitySettings]);
+
+    const handleOk = async () => {
+        await getUnissuedPromoCodeStatistics(promoCampaign.id, state.promoCodeType);
+        await editPromoCampaignHandler();
+    };
+
+    const handleEdit = async () => {
+        const oldValue = promoCampaign.promoCodeType;
+        const newValue = state.promoCodeType;
+
+        if (oldValue !== newValue && !isCopy) {
+            const changingValue =`${oldValue}_TO_${newValue}`;
+            callConfirmModalForPromoCodeTypeChanging(handleOk, changingValue);
+        } else {
+            editPromoCampaignHandler();
+        }
+    };
+
+    const handleSave = async () => {
+        if (!validateVisibilitySettings()) {
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const { visibilitySettings } = state;
             const dataForSend = getDataForSend(state);
             const { id } = await newPromoCampaign(dataForSend, state.appCode);
             const textPromises = createTexts(state.promoCampaignTexts, id, state.appCode);
@@ -199,27 +235,32 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
             setMessageError(error.message);
             setLoading(false);
         }
-    }, [history, state, matchUrl]);
+    };
 
-    const handleNextStep = useCallback((val) => {
-            setState(prevState => ({ ...prevState, ...val }));
-            step < allStep && setStep(step + 1);
-        }, [step]);
+    const handleNextStep = useCallback((val, sendRequest) => {
+        setState(prevState => ({ ...prevState, ...val }));
 
-    const handleCancel = useCallback(() => history.push(matchUrl), [history, matchUrl]);
+        if (sendRequest && copyVisibilitySettings) {
+            editPromoCampaignHandler(val);
+        } else {
+            step < stepsCount && setStep(step + 1);
+        }
+    }, [step, stepsCount, editPromoCampaignHandler, copyVisibilitySettings]);
+
+    const handleCancel = () => history.push(matchUrl);
     const handleBackClick = useCallback(() => setStep((prev) => prev - 1), []);
 
     const validStepChange = useCallback((step, finish = true) => {
         if (validStep !== step && !(step < validStep && finish)) {
             setValidStep(step);
         }
-    }, [validStep, setValidStep]);
+    }, [validStep]);
 
     const addChangedImg = useCallback((imgName) => {
         if (imgName && !changedImgs.current.includes(imgName)) {
             changedImgs.current.push(imgName);
         }
-    }, [changedImgs]);
+    }, []);
 
     const changeTypePromo = useCallback(() => setState((prev) => ({
         ...prev,
@@ -227,6 +268,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
         promoCampaignBanners: {},
     })), []);
 
+    // TODO: need refactoring for StepContainer
     const StepContainer = useMemo(() => {
         switch (step) {
             case 1:
@@ -235,6 +277,8 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                             validStepChange={ validStepChange }
                             handlerNextStep={ handleNextStep }
                             changeTypePromo={ changeTypePromo }
+                            isCopy={ isCopy }
+                            oldName={ promoCampaign?.name }
                         />;
             case 2:
                 return <StepTextAndImage
@@ -244,6 +288,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                             validStepChange={ validStepChange }
                             handlerNextStep={ handleNextStep }
                             addChangedImg = { addChangedImg }
+                            isCopy={ isCopy }
                         />;
             case 3:
                 return <StepVisibility
@@ -251,11 +296,53 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                             onChangeState={ onChangeState }
                             onDeleteState={ onDeleteState }
                             viewMode={ mode === modes.edit }
+                            isCopy={ isCopy }
+                            copyVisibilitySettings={ copyVisibilitySettings }
                         />;
             default:
                 return null;
         }
-    }, [step, state, onChangeState, handleNextStep, onDeleteState, changeTypePromo, validStepChange, mode, addChangedImg]);
+    }, [
+        step,
+        state,
+        onChangeState,
+        handleNextStep,
+        onDeleteState,
+        changeTypePromo,
+        validStepChange,
+        mode,
+        addChangedImg,
+        isCopy,
+        copyVisibilitySettings,
+        promoCampaign?.name,
+    ]);
+
+    const nextButton = (
+        <Button
+            type="primary"
+            htmlType="submit"
+            form="info"
+        >
+            { NEXT }
+        </Button>
+    );
+
+    const doneButton = isCopy && copyVisibilitySettings ? (
+        <Button
+            type="primary"
+            htmlType="submit"
+            form="info"
+        >
+            { COMPLETE }
+        </Button>
+    ) : (
+        <Button
+            type="primary"
+            onClick={ mode === modes.create ? handleSave : handleEdit }
+        >
+            { COMPLETE }
+        </Button>
+    );
 
     return (
         <div className={ styles.promoCreateContainer }>
@@ -264,34 +351,25 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl }) => {
                 validStep={ validStep }
                 onClick={ setStep }
                 newPromoCampaign={ mode === modes.create }
+                hideLastStep={ copyVisibilitySettings }
             />
             <div className={ styles.wrapper }>
                 <Header onClickFunc={ step !== 1 && handleBackClick } />
                 <div className={ styles.containerControl }>
-                    <p className={ styles.headerTitle }>{ modsTitle[mode] }</p>
-                    <p className={ styles.headerSteps }>{ STEP } { step } из { allStep }</p>
+                    <p className={ styles.headerTitle }>
+                        { isCopy && mode === modes.edit
+                            ? `Копия: ${promoCampaign?.name}`
+                            : modsTitle[mode]
+                        }
+                    </p>
+                    <p className={ styles.headerSteps }>{ STEP } { step } из { stepsCount }</p>
                     <Button
                         onClick={ handleCancel }
                         className={ cn(styles.btnMR, styles.btnCancel) }
                     >
                         { CANCEL }
                     </Button>
-                    {step < allStep ? (
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            form="info"
-                        >
-                            { NEXT }
-                        </Button>
-                    ) : (
-                        <Button
-                            type="primary"
-                            onClick={ mode === modes.create ? handleSave : handleEdit }
-                        >
-                            { COMPLETE }
-                        </Button>
-                    )}
+                    { step < stepsCount ? nextButton : doneButton }
                     <div className={ styles.error }>{ messageError }</div>
                 </div>
                 { loading ? <LoadingSpinner /> : StepContainer }
