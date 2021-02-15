@@ -15,8 +15,6 @@ import { getStringOptionValue } from '../../../utils/utils';
 import { getClientAppList } from '../../../api/services/clientAppService';
 import { getUserAppsCheckboxes } from './UserFormHelper';
 
-import { ReactComponent as Cross } from '../../../static/images/cross.svg';
-
 import styles from './UserForm.module.css';
 
 const { Paragraph } = Typography;
@@ -194,6 +192,10 @@ const UserForm = ({ type, matchUrl }) => {
             return setError({ ...DEFAULT_ERRORS, login: 'Укажите логин пользователя' });
         }
 
+        if (login.length !== 8 && login.length !== 13) {
+            return setError({ ...DEFAULT_ERRORS, login: 'Логин пользователя должен содержать 8 либо 13 символов' });
+        }
+
         if ((!userData || userData.role === 'User') && typeof salePoint?.id !== 'number') {
             return setError({ ...DEFAULT_ERRORS, salePoint: 'Выберите точку продажи' });
         }
@@ -206,11 +208,10 @@ const UserForm = ({ type, matchUrl }) => {
 
         try {
             const requestData = { clientAppIds, salePointId: salePoint?.id };
-
             if (notNewUser) {
                     await saveUser(userData.id, requestData);
             } else {
-                const { generatedPassword } =  await addUser({ ...requestData, personalNumber: login });
+                const { generatedPassword } = await addUser({ ...requestData, personalNumber: login });
                 showNotify({ login, pwd: generatedPassword, mode: CREATE });
             }
         } catch (e) {
@@ -262,7 +263,7 @@ const UserForm = ({ type, matchUrl }) => {
                 await unblockUser(userData.personalNumber);
                 setUserData({ ...userData, tmpBlocked: false });
             } else {
-                const { generatedPassword } =  await resetUser(userData.personalNumber);
+                const { generatedPassword } = await resetUser(userData.personalNumber);
                 showNotify({ login: userData.personalNumber , pwd: generatedPassword, mode: RESTORED });
             }
         } catch (err) {
@@ -304,7 +305,6 @@ const UserForm = ({ type, matchUrl }) => {
     }, [userData, redirectToUsersPage]);
 
     const onLoginChange = useCallback((e) => setLogin(e.currentTarget.value), []);
-    const clearLogin = useCallback(() => setLogin(null), []);
 
     const onLocationChange = useCallback((location) => {
         setLocation(location);
@@ -355,19 +355,10 @@ const UserForm = ({ type, matchUrl }) => {
                                                 placeholder={ LOGIN_FIELD.placeholder }
                                                 onChange={ onLoginChange }
                                                 autoFocus
-                                                maxLength={ 8 }
+                                                maxLength={ 13 }
                                                 id={ LOGIN_FIELD.name }
                                                 value={ login }
-                                                suffix={
-                                                    login ? (
-                                                        <Cross
-                                                            className={ styles.suffixStyle }
-                                                            onClick={ clearLogin }
-                                                        />
-                                                    ) : (
-                                                        <span />
-                                                    )
-                                                }
+                                                allowClear
                                             />
                                             { !!error.login && <div className={ styles.error }>{ error.login }</div> }
                                         </>

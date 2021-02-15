@@ -1,4 +1,4 @@
-import { APP_MECHANICS, MECHANICS_ERROR, MECHANICS_CHECKBOXES } from '../../../constants/clientAppsConstants';
+import { APP_MECHANICS, MECHANICS_ERROR, MECHANICS_CHECKBOXES, APP_LOGIN_TYPES } from '../../../constants/clientAppsConstants';
 
 export const CREATE_APP_TITLE = 'Новое приложение';
 export const CANCEL_BUTTON_TITLE = 'Отменить';
@@ -35,6 +35,9 @@ export const RULES = {
             message: 'Значение может быть только числовым',
         },
     ],
+    CHECKBOX_REQUIRED : [
+        { type: 'array', required: true, message: 'Это обязательное поле', validateTrigger: 'onSubmit' },
+    ],
     CHECKBOX: [
         { type: 'array', required: true, message: 'Это обязательное поле', validateTrigger: 'onSubmit' },
         { type: 'array', validator: checkBoxValidator, validateTrigger: 'onSubmit' },
@@ -42,7 +45,7 @@ export const RULES = {
     REQUIRED: [{ required: true, message: 'Это обязательное поле', validateTrigger: 'onSubmit' }],
     REQUIRED_ENGLISH_AND_NUMBER: [
         { required: true, message: 'Это обязательное поле' },
-        { pattern: appCodeRegex, message: 'Можно использовать только латиницу', validateTrigger: 'onSubmit' }, //TODO уточнить формат APPCODE
+        { pattern: appCodeRegex, message: 'Можно использовать только латиницу', validateTrigger: 'onSubmit' },
     ],
 };
 
@@ -103,7 +106,7 @@ export const formElements = [
             rules: RULES.STANDARD_NUMBER,
             name: 'ym_token',
             placeholder: 'Токен',
-            maxLen: 12,
+            maxLength: 12,
         },
         {
             label: 'Сессия сотрудника (в секундах)',
@@ -112,7 +115,7 @@ export const formElements = [
             rules: RULES.STANDARD_NUMBER,
             name: 'token_lifetime',
             placeholder: '1800 секунд по умолчанию',
-            maxLen: 12,
+            maxLength: 12,
         },
         {
             label: 'Сессия клиента (в секундах)',
@@ -121,7 +124,7 @@ export const formElements = [
             rules: RULES.STANDARD_NUMBER,
             name: 'inactivity_time',
             placeholder: '15 секунд по умолчанию',
-            maxLen: 12,
+            maxLength: 12,
         },
     ],
 
@@ -133,7 +136,7 @@ export const formElements = [
             rules: RULES.STANDARD_NUMBER,
             name: 'promo_show_time',
             placeholder: '20 секунд по умолчанию',
-            maxLen: 12,
+            maxLength: 12,
         },
         {
             label: 'Максимальное число попыток входа',
@@ -142,7 +145,7 @@ export const formElements = [
             rules: RULES.TWO_DIGITS_NUMBER,
             name: 'max_password_attempts',
             placeholder: '3 по умолчанию',
-            maxLen: 2,
+            maxLength: 2,
         },
         {
             label: 'Временная блокировка пользователя (в секундах)',
@@ -151,7 +154,7 @@ export const formElements = [
             rules: RULES.STANDARD_NUMBER,
             name: 'tmp_block_time',
             placeholder: '1800 секунд по умолчанию',
-            maxLen: 12,
+            maxLength: 12,
         },
     ],
 
@@ -163,7 +166,7 @@ export const formElements = [
             rules: RULES.TWO_DIGITS_NUMBER,
             name: 'max_presents_number',
             placeholder: '3 по умолчанию',
-            maxLen: 2,
+            maxLength: 2,
         },
         {
             label: 'Путь к инструкции по установке',
@@ -188,9 +191,19 @@ export const formElements = [
             label: 'Политика конфиденциальности',
             type: FORM_TYPES.TEXT_BLOCK,
             span: 13,
+            rows: 3,
             rules: RULES.STANDARD,
             name: 'privacyPolicy',
             placeholder: 'Описание ДЗО',
+        },
+        {
+            label: 'Способ авторизации в витрине',
+            type: FORM_TYPES.CHECKBOX_GROUP,
+            options: APP_LOGIN_TYPES,
+            rules: RULES.CHECKBOX_REQUIRED,
+            columnMode: true,
+            span: 11,
+            name: 'login_types',
         },
     ],
     [

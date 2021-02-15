@@ -19,7 +19,6 @@ import {
 } from './ClientAppFormConstants';
 import Header from '../../../components/Header/Header';
 
-import { ReactComponent as Cross } from '../../../static/images/cross.svg';
 import { ReactComponent as LoadingSpinner } from '../../../static/images/loading-spinner.svg';
 
 import styles from './ClientAppForm.module.css';
@@ -62,10 +61,11 @@ const ClientAppForm = ({ type, matchPath }) => {
                 settings.installation_url = settings.installation_url && settings.installation_url.replace(url, '');
                 settings.usage_url = settings.usage_url && settings.usage_url.replace(url, '');
 
-                const { mechanics = '[]', ...restSettings } = settings;
+                const { mechanics = '[]', login_types = '[]', ...restSettings } = settings;
                 const mechanicsCheckBox = JSON.parse(mechanics);
+                const loginCheckBoxes = JSON.parse(login_types);
 
-                setInitialData({ code, name, displayName, mechanics: mechanicsCheckBox, ...restSettings });
+                setInitialData({ code, name, displayName, mechanics: mechanicsCheckBox, login_types: loginCheckBoxes, ...restSettings });
                 setLoading(false);
             })();
         }
@@ -92,15 +92,29 @@ const ClientAppForm = ({ type, matchPath }) => {
 
         try {
             if (!isEdit) {
-                const { code, name, mechanics, displayName, ...restData } = formData;
+                const {
+                    code,
+                    name,
+                    mechanics,
+                    displayName,
+                    login_types,
+                    ...restData
+                } = formData;
 
                 await addClientApp({ code, displayName, isDeleted: false, name });
 
-                const settings = [{
-                    clientAppCode: code,
-                    value: JSON.stringify(mechanics),
-                    key: 'mechanics',
-                }];
+                const settings = [
+                    {
+                        clientAppCode: code,
+                        value: JSON.stringify(mechanics),
+                        key: 'mechanics',
+                    },
+                    {
+                        clientAppCode: code,
+                        value: JSON.stringify(login_types),
+                        key: 'login_types',
+                    },
+                ];
                 Object.keys(restData).forEach((key) => {
                     const value = restData[key];
                     value && settings.push({ clientAppCode: code, value, key });
@@ -109,9 +123,14 @@ const ClientAppForm = ({ type, matchPath }) => {
                 await Promise.all(settings.map(addSetting));
             } else {
                 const clientAppCode = getAppCode();
+                const keysToString = ['mechanics', 'login_types'];
                 const changedParams = Object.keys(formData).reduce((result, key) => {
-                    const valueFromServer = key === 'mechanics' ? JSON.stringify(initialData[key]) : initialData[key];
-                    const valueInForm = key === 'mechanics' ? JSON.stringify(formData[key]) : formData[key];
+                    const valueFromServer = keysToString.includes(key)
+                        ? JSON.stringify(initialData[key])
+                        : initialData[key];
+                    const valueInForm = keysToString.includes(key)
+                        ? JSON.stringify(formData[key])
+                        : formData[key];
 
                     if (valueFromServer === undefined && valueInForm) {
                         return [...result, { clientAppCode, key, value: valueInForm, type: SETTINGS_TYPES.CREATE }];
@@ -134,10 +153,6 @@ const ClientAppForm = ({ type, matchPath }) => {
         }
     };
 
-    const handleClear = (fieldName) => {
-        form.setFieldsValue({ [fieldName]: '' });
-    };
-
     const handleCancel = () => {
         history.push(matchPath);
     };
@@ -150,7 +165,10 @@ const ClientAppForm = ({ type, matchPath }) => {
             <div className={ styles.header }>
                 <div className={ styles.title }>
                     { !loading ? title : (
-                        <Skeleton.Input active className={ styles.skeletonTitle } />
+                        <Skeleton.Input
+                            active
+                            className={ styles.skeletonTitle }
+                        />
                     ) }
                 </div>
                 <div className={ styles.buttonGroup }>
@@ -181,67 +199,17 @@ const ClientAppForm = ({ type, matchPath }) => {
                 >
                     <div className={ styles.container }>
                         { mainInfoElements.map((row, index) => (
-                            <Row
-                                className={ styles.row }
+                            <AppFormConstructor
                                 key={ index }
-                                gutter={ [24] }
-                            >
-                                { row.map(({ label, span, rules, name, type, options, placeholder }) => (
-                                    <Col
-                                        className={ styles.colFlex }
-                                        key={ label }
-                                        span={ span }
-                                    >
-                                        <Form.Item
-                                            rules={ rules }
-                                            required={ !isEdit }
-                                            name={ name }
-                                            className={ cn({ [styles.labelBold]: isEdit }) }
-                                            label={ label }
-                                        >
-                                            <FormInputByType
-                                                inputType={ type }
-                                                options={ options }
-                                                placeholder={ placeholder }
-                                                name={ name }
-                                                isEdit={ isEdit }
-                                                onClear={ handleClear }
-                                            />
-                                        </Form.Item>
-                                    </Col>
-                                )) }
-                            </Row>
+                                row={ row }
+                                isEdit={ isEdit }
+                            />
                         )) }
                     </div>
                     <div className={ styles.subTitle }>{ PROPERTIES_TITLE }</div>
                     <div className={ styles.container }>
                         { formElements.map((row, index) => (
-                            <Row className={ styles.propertiesRow } key={ index } gutter={ [24] }>
-                                { row.map(({ label, span, rules, name, type, options, placeholder, maxLen }) => (
-                                    <Col
-                                        className={ styles.colFlex }
-                                        key={ label }
-                                        span={ span }
-                                    >
-                                        <Form.Item
-                                            rules={ rules }
-                                            name={ name }
-                                            label={ label }
-                                            validateFirst
-                                        >
-                                            <FormInputByType
-                                                inputType={ type }
-                                                options={ options }
-                                                placeholder={ placeholder }
-                                                name={ name }
-                                                maxLen={ maxLen }
-                                                isEdit={ isEdit }
-                                                onClear={ handleClear }
-                                            />
-                                        </Form.Item>
-                                    </Col>
-                                )) }
-                            </Row>
+                            <AppFormConstructor key={ index } row={ row } />
                         )) }
                     </div>
                 </Form>
@@ -254,43 +222,45 @@ export default ClientAppForm;
 
 function FormInputByType({
     isEdit,
-    inputType,
-    options,
-    placeholder,
-    name,
-    maxLen,
-    onClear,
-    value,
+    type,
+    columnMode,
     ...restProps
 }) {
-    const onClearClick = () => onClear(name);
 
-    switch (inputType) {
+    switch (type) {
         case FORM_TYPES.CHECKBOX_GROUP:
-            return <Checkbox.Group options={ options } value={ value } { ...restProps } />;
-        case FORM_TYPES.TEXT_BLOCK:
-            return <Input.TextArea value={ value } { ...restProps } />;
-        case FORM_TYPES.MAIN_INFO_INPUT:
-            if (!isEdit) {
-                return (
-                    <Input
-                        placeholder={ placeholder }
-                        suffix={ <Cross className={ styles.cross } onClick={ onClearClick } /> }
-                        value={ value }
-                        { ...restProps }
-                    />
-                );
-            }
-            return <div className={ styles.infoText }>{ value }</div>;
-        default:
             return (
-                <Input
-                    maxLength={ maxLen }
-                    placeholder={ placeholder }
-                    suffix={ <Cross className={ styles.cross } onClick={ onClearClick } /> }
-                    value={ value }
+                <Checkbox.Group
+                    className={ cn({ [styles.checkboxColumn]: columnMode }) }
                     { ...restProps }
                 />
             );
+        case FORM_TYPES.TEXT_BLOCK:
+            return <Input.TextArea { ...restProps } />;
+        default:
+            if (!isEdit) {
+                return <Input allowClear { ...restProps } />;
+            }
+            return <div className={ styles.infoText }>{ restProps.value }</div>;
     }
+}
+
+function AppFormConstructor({ row, isEdit }) {
+    return (
+        <Row className={ styles.propertiesRow } gutter={ [24] }>
+            { row.map(({ label, span, rules, name, ...restProps }) => (
+                <Col className={ styles.colFlex } key={ label } span={ span }>
+                    <Form.Item
+                        rules={ rules }
+                        name={ name }
+                        className={ cn({ [styles.labelBold]: isEdit }) }
+                        label={ label }
+                        validateFirst
+                    >
+                        <FormInputByType isEdit={ isEdit } { ...restProps } />
+                    </Form.Item>
+                </Col>
+            )) }
+        </Row>
+    );
 }

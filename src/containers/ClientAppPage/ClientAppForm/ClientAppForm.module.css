@@ -49,9 +49,16 @@
     max-width: 800px;
 }
 
+.propertiesRow:not(:nth-last-child(2)) {
+    align-items: flex-end;
+}
+
 .propertiesRow {
     max-width: 950px;
-    align-items: flex-end;
+}
+
+.checkboxColumn {
+    flex-direction: column;
 }
 
 .colFlex :global(.ant-checkbox-group) {
@@ -64,13 +71,6 @@
 
 .colFlex :global(input:placeholder-shown ~ span) {
     display: none;
-}
-
-.colFlex :global(.ant-checkbox-input:hover + .ant-checkbox-inner),
-.colFlex :global(textarea.ant-input:hover),
-.colFlex :global(textarea.ant-input:focus) {
-    border-color: #09a552;
-    box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
 }
 
 .colFlex :global(.ant-checkbox-checked .ant-checkbox-inner) {
@@ -89,14 +89,12 @@
 
 .colFlex :global(.ant-input-affix-wrapper:hover),
 .colFlex :global(.ant-input-affix-wrapper:focus),
-.colFlex :global(.ant-input-affix-wrapper-focused) {
+.colFlex :global(.ant-input-affix-wrapper-focused),
+.colFlex :global(.ant-checkbox-input:hover + .ant-checkbox-inner),
+.colFlex :global(textarea.ant-input:hover),
+.colFlex :global(textarea.ant-input:focus) {
     border-color: #09a552;
     box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
-}
-
-.cross {
-    cursor: pointer;
-    height: 22px;
 }
 
 .infoText {
@@ -126,4 +124,8 @@
 
 .labelBold > div > label {
     font-weight: bold;
+}
+
+.labelBold > div > label::before {
+    content: none !important;
 }

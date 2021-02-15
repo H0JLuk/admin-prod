@@ -9,4 +9,10 @@ export const MECHANICS_CHECKBOXES = Object.keys(APP_MECHANICS).map(key => ({
     label: APP_MECHANICS[key].label,
 }));
 
+export const APP_LOGIN_TYPES = [
+    { label: 'Логин/Пароль', value: 'PASSWORD' },
+    { label: 'СБОЛ ПРО', value: 'SBOL_PRO' },
+    { label: 'Ссылка', value: 'DIRECT_LINK' },
+];
+
 export const MECHANICS_ERROR = `Необходимо выбрать хотя бы одну обязательную механику (${APP_MECHANICS.PRESENTS.label} или ${APP_MECHANICS.ECOSYSTEM.label})`;
