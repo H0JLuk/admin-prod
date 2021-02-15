@@ -304,6 +304,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
                             changeTypePromo={ changeTypePromo }
                             isCopy={ isCopy }
                             oldName={ promoCampaign?.name }
+                            mode={ mode }
                         />;
             case 2:
                 return <StepTextAndImage
@@ -404,4 +405,3 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
 };
 
 export default PromoCampaignForm;
-

@@ -16,6 +16,14 @@ export function getFilteredPromoCampaignList(data) {
     return Api.post('/promo-campaign/list/filter', { ...data, checkVisibility: false }, getReqOptions());
 }
 
+export function getExactFilteredPromoCampaignList(filterText, appCode) {
+    const options = getReqOptions();
+    if (appCode) {
+        options.headers.clientAppCode = appCode;
+    }
+    return Api.post('/promo-campaign/list/filter', { filterText, checkVisibility: false, exactMatch: true }, options);
+}
+
 export async function getPromoCampaignStatistics(promoCampaignId) {
     return Api.get(`/admin/promoCampaign/${promoCampaignId}/statistics`, getReqOptions());
 }

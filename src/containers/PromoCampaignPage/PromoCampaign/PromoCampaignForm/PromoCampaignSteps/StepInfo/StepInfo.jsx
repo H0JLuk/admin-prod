@@ -4,6 +4,7 @@ import { CloseOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { getDzoList } from '../../../../../../api/services/dzoService';
 import { getClientAppList } from '../../../../../../api/services/clientAppService';
 import { getCategoryList } from '../../../../../../api/services/categoryService';
+import { getExactFilteredPromoCampaignList } from '../../../../../../api/services/promoCampaignService';
 import { steps } from '../../PromoCampaignFormConstants';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
@@ -60,8 +61,8 @@ const StepInfo = ({
     changeTypePromo,
     isCopy,
     oldName,
+    mode
 }) => {
-
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
     const [clientApps, setClientApps] = useState([]);
@@ -152,17 +153,38 @@ const StepInfo = ({
                     className={ styles.promoCampaignName }
                     name="name"
                     initialValue={ state.name }
+                    validateFirst
                     rules={ [
                         { required: true, message: 'Укажите название промо-кампании' },
                         {
+                            message: 'Нельзя создать копию промо-кампании с таким же названием',
                             validator: (_, value) => {
                                 if (isCopy && value.trim() === oldName) {
-                                    return Promise.reject('Нельзя создать копию промо-кампании с таким же названием');
+                                    return Promise.reject();
                                 }
                                 return Promise.resolve();
                             },
                             validateTrigger: 'onSubmit',
-                        }
+                        },
+                        ({ getFieldValue }) => ({
+                            validator: async (_, value) => {
+                                const isModeCreate = mode === 'create';
+                                const isModeEditAndValueChanged = mode === 'edit' && value.trim() !== oldName;
+
+                                if (isModeCreate || isModeEditAndValueChanged) {
+                                    const appCode = getFieldValue('appCode');
+
+                                    if (!appCode) {
+                                        return Promise.reject('Для проверки имени нужно выбрать витрину!');
+                                    }
+
+                                    const { promoCampaignDtoList = [] } = await getExactFilteredPromoCampaignList(value, appCode);
+
+                                    return !promoCampaignDtoList.length ? Promise.resolve() : Promise.reject('Промо кампания с таким именем уже существует! Введите другое имя');
+                                }
+                            },
+                            validateTrigger: 'onSubmit',
+                        }),
                     ] }
                 >
                     <Input placeholder={ TEMPLATE_PROMO_NAME } />
@@ -210,7 +232,12 @@ const StepInfo = ({
                                     name="webUrl"
                                     validateTrigger="onSubmit"
                                     rules={ [
-                                        { required: getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN, message: 'Укажите ссылку' },
+                                        {
+                                            required: (
+                                                getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN
+                                            ),
+                                            message: 'Укажите ссылку'
+                                        },
                                         { type: 'url', message: 'Поле содержит недопустимые символы' },
                                     ] }
                                     initialValue={ decodeURI(state.webUrl || '') }
