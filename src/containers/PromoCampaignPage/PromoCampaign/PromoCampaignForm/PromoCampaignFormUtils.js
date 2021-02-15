@@ -175,3 +175,58 @@ export function getPromoCampaignForCopy(promoCampaign, copyVisibilitySettings) {
         copyVisibilitySettings,
     };
 }
+
+export function checkUniqVisibilitySettings(setting) {
+    const samePositions = [];
+    const filteredSettings = setting.filter(({ location, salePoint }) => location || salePoint);
+    filteredSettings
+        .map(({ location, salePoint }) => `${location?.id ?? ''}${salePoint?.id ?? ''}`)
+        .filter((el, i, array) => {
+            const indexInArray = array.indexOf(el);
+            const elemIsUniq = indexInArray === i;
+            if (!elemIsUniq) {
+                samePositions.push([indexInArray, i]);
+            }
+            return elemIsUniq;
+        });
+
+    return samePositions;
+}
+
+export function getVisibilitySettingsWithDoubleError(visibilitySettings, samePositions) {
+    const nextVisibilitySettings = [...visibilitySettings];
+    samePositions.map(([firstRepeat, repeat]) => {
+        const locationName = visibilitySettings[firstRepeat].location?.name ?? '';
+        const salePointName = visibilitySettings[firstRepeat].salePoint?.name ?? '';
+        const locationText = locationName ? `локацией '${locationName}'` : '';
+        const salePointText = salePointName ? `${locationName ? ' и ' : ''} точкой продажи '${salePointName}'` : '';
+        const errors = { server: `Нельзя добавить одинаковые настройки видимости с ${locationText} ${salePointText}` };
+        nextVisibilitySettings[firstRepeat] = { ...nextVisibilitySettings[firstRepeat], errors };
+        nextVisibilitySettings[repeat] = { ...nextVisibilitySettings[repeat], errors };
+    });
+
+    return nextVisibilitySettings;
+}
+
+export function getVisibilitySettingsWithUpdatedErrors(settings, idx, needUpdate) {
+    if (needUpdate) {
+        settings = settings.slice();
+        const errorMessage = settings[idx].errors.server;
+        const countSettingsWithError = settings.filter(
+            (setting) => setting.errors?.server === errorMessage
+        ).length;
+
+        if (countSettingsWithError > 2) {
+            settings[idx].errors = {};
+        } else {
+            settings = settings.map((setting) => {
+                if (setting.errors?.server === errorMessage) {
+                    return { ...setting, errors: {} };
+                }
+                return setting;
+            });
+        }
+    }
+
+    return settings;
+}

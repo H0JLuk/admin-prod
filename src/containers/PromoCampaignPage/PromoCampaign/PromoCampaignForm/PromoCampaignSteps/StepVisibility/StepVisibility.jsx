@@ -9,7 +9,7 @@ import styles from './StepVisibility.module.css';
 
 const TITLE_OF_STEP = 'Настройки видимости';
 const ADD_SETTING = 'Добавить настройку';
-const emptyLocation = { location: null, salePoint: null, visible: false, errors: {} };
+const EMPTY_SETTING = { location: null, salePoint: null, visible: false, errors: {} };
 
 const StepVisibility = ({
     visibilitySettings = [],
@@ -20,19 +20,18 @@ const StepVisibility = ({
     copyVisibilitySettings,
 }) => {
 
-    const onChange = (val, idx, input) => {
-        onChangeState('visibilitySettings', val, idx, input);
+    const onChange = (val, idx, input, error = {}) => {
+        const hasErrors = !!Object.keys(error).length;
+        onChangeState(val, idx, input, hasErrors);
 
         if (input === 'location') {
-            onChangeState('visibilitySettings', {}, idx, 'errors');
+            onChangeState({}, idx, 'errors', hasErrors);
         }
     };
 
     const addVS = useCallback(() => {
-        onChangeState('visibilitySettings', { ...emptyLocation }, visibilitySettings.length);
+        onChangeState({ ...EMPTY_SETTING, id: Date.now() }, visibilitySettings.length);
     }, [visibilitySettings, onChangeState]);
-
-    const deleteBlock = (idx) => onDeleteState('visibilitySettings', idx);
 
     return viewMode && !isCopy && !copyVisibilitySettings ? (
         <PromoCampaignVisibilitySetting
@@ -43,19 +42,19 @@ const StepVisibility = ({
         <div className={ styles.containerStep }>
             <div className={ styles.titleStep }>{ TITLE_OF_STEP }</div>
             { visibilitySettings.map((setting, idx) => (
-                <div key={ idx } className={ styles.content }>
+                <div key={ setting.id } className={ styles.content }>
                     { idx !== 0 && (
                         <img
                             src={ cross }
                             alt="delete"
                             className={ styles.deleteBlock }
-                            onClick={ () => deleteBlock(idx) }
+                            onClick={ () => onDeleteState(idx, !!Object.keys(setting.errors).length) }
                         />
                     ) }
                     <PromoCampaignVisibilitySettingInput
                         error={ setting.errors }
-                        onLocationChange={ (loc) => onChange(loc, idx, 'location') }
-                        onSalePointChange={ (salePoint) => onChange(salePoint, idx, 'salePoint') }
+                        onLocationChange={ (loc) => onChange(loc, idx, 'location', setting.errors) }
+                        onSalePointChange={ (salePoint) => onChange(salePoint, idx, 'salePoint', setting.errors) }
                         visibility={ setting.visible }
                         onVisibilityChange={ () => onChange(!setting.visible, idx, 'visible') }
                         location={ setting.location }

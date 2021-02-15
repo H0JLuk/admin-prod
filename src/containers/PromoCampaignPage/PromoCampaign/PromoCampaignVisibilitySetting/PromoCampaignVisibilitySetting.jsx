@@ -3,7 +3,7 @@ import { useParams, useRouteMatch, useHistory, useLocation, generatePath } from 
 import HeaderWithActions from '../../../../components/HeaderWithActions/HeaderWithActions';
 import PromoCampaignVisibilitySettingTable
     from './PromoCampaignVisibilitySettingTable/PromoCampaignVisibilitySettingTable';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import debounce from 'lodash/debounce';
 import Header from '../../../../components/Header/Header';
 import {
@@ -95,17 +95,18 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
     }, [loadData]);
 
     const changeVisible = useCallback(async (visibilitySetting) => {
-        const { id, locationId, salePointId, visible } = visibilitySetting;
+        const { id, visible } = visibilitySetting;
         setLoading(true);
 
         try {
-            await editPromoCampaignVisibilitySetting(id, { promoCampaignId: Number(promoCampaignId), locationId, salePointId, visible });
+            await editPromoCampaignVisibilitySetting(id, { promoCampaignId: Number(promoCampaignId), visible });
             setVisibilitySettings((prev) => {
                 const index = prev.findIndex((setting) => setting.id === id);
                 return [...prev.slice(0, index), { ...prev[index], visible }, ...prev.slice(index + 1)];
             });
         } catch (e) {
             console.error(e);
+            message.error(e.message);
         } finally {
             setLoading(false);
         }
@@ -194,7 +195,7 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
     }), [changeSort, params.sortBy]);
 
     const onChangePage = useCallback(async ({ pageSize, current }) => {
-        setSelectedSettings([]);
+        setSelectedSettings((prev) => !prev ? prev : []);
         setLoading(true);
         await loadData({
             ...params,
@@ -224,7 +225,7 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
         }
 
         return [
-            { type: 'primary', label:  isSelectAll ? BUTTON_UNSELECT_ALL : BUTTON_CHOOSE_ALL , onClick: selectAll, disabled: loading },
+            { type: 'primary', label:  isSelectAll ? BUTTON_UNSELECT_ALL : BUTTON_CHOOSE_ALL, onClick: selectAll, disabled: loading },
             { label: BUTTON_CANCEL, onClick: onDisableSelection, disabled: loading },
         ];
     }, [selectedSettings, loading, onCreate, onEnableSelection, selectAll, onDisableSelection, visibilitySettings]);
@@ -238,13 +239,13 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
 
     return (
         <div className={ styles.page }>
-            {!hideHeader && <Header />}
+            { !hideHeader && <Header /> }
             <HeaderWithActions
                 title={ HEADER_TITLE }
                 buttons={ buttons }
                 searchInput={ searchInput }
                 showSorting = { searchAndSortMode }
-                showSearchInput={ searchAndSortMode && selectedSettings === null  }
+                showSearchInput={ searchAndSortMode && selectedSettings === null }
                 sortingBy={ sortingBy }
             />
             <div className={ styles.tableWrapper }>
@@ -258,12 +259,12 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
                     onChange={ onChangePage }
                 />
             </div>
-            {selectedSettings && (
+            { selectedSettings && (
                 <div className={ styles.footer }>
                     <div className={ styles.checked }>
                         { CHOSEN } { selectedSettings.length }
                     </div>
-                    {selectedSettings.length > 0 && (
+                    { selectedSettings.length > 0 && (
                         <Button
                             className={ styles.redBtn }
                             onClick={ onDelete }
@@ -272,9 +273,9 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
                         >
                             { BUTTON_DELETE }
                         </Button>
-                    )}
+                    ) }
                 </div>
-            )}
+            ) }
         </div>
     );
 }

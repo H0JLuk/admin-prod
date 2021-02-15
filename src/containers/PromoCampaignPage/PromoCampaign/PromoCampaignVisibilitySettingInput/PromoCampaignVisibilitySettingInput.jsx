@@ -49,6 +49,7 @@ const PromoCampaignVisibilitySettingInput = ({
                 />
             </div>
         </Form>
+        { error.server && <div className={ styles.error }>{ error.server } </div> }
     </div>
 );
 

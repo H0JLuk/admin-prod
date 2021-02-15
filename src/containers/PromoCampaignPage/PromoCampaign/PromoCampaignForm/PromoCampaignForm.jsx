@@ -12,6 +12,7 @@ import Header from '../../../../components/Header/Header';
 import { allStep, CANCEL, COMPLETE, modes, modsTitle, NEXT, STEP, steps } from './PromoCampaignFormConstants';
 import {
     arrayToObject,
+    checkUniqVisibilitySettings,
     createImgBanners,
     createTexts,
     createVisibilities,
@@ -19,6 +20,8 @@ import {
     editTextBanners,
     getDataForSend,
     getPromoCampaignForCopy,
+    getVisibilitySettingsWithDoubleError,
+    getVisibilitySettingsWithUpdatedErrors,
 } from './PromoCampaignFormUtils';
 import { getUnissuedPromoCodeStatistics } from '../../../../api/services/promoCodeService';
 import { editPromoCampaign, newPromoCampaign, copyPromoCampaign } from '../../../../api/services/promoCampaignService';
@@ -47,6 +50,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
         finishDate: '',
         startDate: '',
         visibilitySettings: [{
+            id: Date.now(),
             location: null,
             salePoint: null,
             visible: false,
@@ -67,15 +71,24 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
 
     const stepsCount = !copyVisibilitySettings ? allStep : allStep - 1;
 
-    const onChangeState = useCallback((type, val, index, input) => {
+    const onChangeState = useCallback((val, index, input, hasErrors) => {
         setState((prevState) => {
-            if (index !== undefined) {
-                const newState = { ...prevState };
-                const newVal = input !== undefined ? { [input]: val } || val : val;
-                newState[type][index] = { ...newState[type][index], ...newVal };
-                return newState;
+            const visibilitySettings = getVisibilitySettingsWithUpdatedErrors(
+                prevState.visibilitySettings,
+                index,
+                hasErrors
+            );
+
+            const newState = { ...prevState, visibilitySettings };
+            const newVal = input !== undefined ? { [input]: val } || val : val;
+            const prevVal = newState.visibilitySettings[index];
+
+            if (prevVal) {
+                newState.visibilitySettings.splice(index, 1, { ...prevVal, ...newVal });
+                return { ...newState, visibilitySettings: [...newState.visibilitySettings] };
             }
-            return { ...prevState, [type]: val };
+
+            return { ...newState, visibilitySettings: [...newState.visibilitySettings, newVal] };
         });
     }, []);
 
@@ -123,16 +136,18 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const onDeleteState = useCallback((type, index) => {
+    const onDeleteState = useCallback((index, hasErrors) => {
         setState(prevState => {
             if (index !== undefined) {
-                const newState = { ...prevState };
-                if (newState[type].indexOf(newState[type][index]) !== -1) {
-                    newState[type].splice(newState[type].indexOf(newState[type][index]), 1);
-                }
-                return newState;
+                const visibilitySettings = getVisibilitySettingsWithUpdatedErrors(
+                    prevState.visibilitySettings,
+                    index,
+                    hasErrors
+                );
+                return { ...prevState, visibilitySettings: visibilitySettings.filter((_, idx) => idx !== index) };
             }
-            return { ...prevState };
+
+            return prevState;
         });
     }, []);
 
@@ -148,6 +163,16 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             };
 
             setState(nextState);
+            return false;
+        }
+
+        const samePositions = checkUniqVisibilitySettings(visibilitySettings);
+
+        if (samePositions.length) {
+            setState((prev)=> ({
+                ...prev,
+                visibilitySettings: getVisibilitySettingsWithDoubleError(visibilitySettings, samePositions),
+            }));
             return false;
         }
 

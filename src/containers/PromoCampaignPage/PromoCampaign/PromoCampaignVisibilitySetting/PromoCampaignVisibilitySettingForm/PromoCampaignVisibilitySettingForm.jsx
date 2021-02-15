@@ -10,7 +10,7 @@ import styles from './PromoCampaignVisibilitySettingForm.module.css';
 const CANCEL_BUTTON_TEXT = 'Отменить';
 const SUBMIT_BUTTON_TEXT = 'Добавить';
 const PAGE_TITLE = 'Новая настройка видимости';
-const DEFAULT_ERRORS = { location: '', salePoint: '' };
+const DEFAULT_ERRORS = { location: '', salePoint: '', server: '' };
 
 const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) => {
     const [location, setLocation] = useState(null);
@@ -35,8 +35,7 @@ const PromoCampaignVisibilitySettingForm = ({ onCancel, onSubmit, match = {} }) 
 
             onSubmit({ location, salePoint, visibility });
         } catch (e) {
-            // TODO: add handler for error
-            console.error(e);
+            setError({ server: e.message });
         }
     }, [onSubmit, match.params, visibility, location, salePoint]);
 

@@ -1,11 +1,11 @@
 export const EXCURSION_TYPE_ROWS = [
     {
         CARD: { label: 'Баннер на главной', type: 'banner' },
-        LOGO_MAIN: { label: 'Логотип на экране с номером', type: 'logo' },
+        LOGO_SECONDARY: { label: 'Логотип на экране с номером (белый)', type: 'logo' },
     },
     {
         SCREEN: { label: 'Лендинг', type: 'banner' },
-        LOGO_SECONDARY: { label: 'Логотип на экране с QR', type: 'logo' },
+        LOGO_MAIN: { label: 'Логотип на экране с QR', type: 'logo' },
     },
     {
         RULES: { label: 'Условия', type: 'text' },

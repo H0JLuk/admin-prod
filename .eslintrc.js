@@ -24,7 +24,7 @@ module.exports = {
     rules: {
         'no-console': 0,        // Allows calls to methods of the console object.
         'react/prop-types': 0,      // Disabled checking of prop-types
-        'react/jsx-curly-spacing': [1, 'always'],       // warn: <App {...props} />   ok: <App { ...props } />
+        'react/jsx-curly-spacing': [1, { when: 'always', children: true }],       // warn: <App {...props} />   ok: <App { ...props } />    warn: <App>{children}</App>     ok: <App>{ children }</App>
         'react/jsx-key': 1,     // Always warn on missing jsx-key inside iterator functions
         'react/jsx-tag-spacing': [ 1, { 'beforeSelfClosing': 'always' } ],  // warn: <Component/>   ok: <Component />
         'react/jsx-curly-brace-presence': [1, { 'props': 'never', 'children': 'ignore' }],
@@ -35,6 +35,8 @@ module.exports = {
         'keyword-spacing': ['error', { before: true, after: true }],
         'no-multi-spaces': 'error',
         'no-var': 'error',
-        'prefer-const': 'warn',
+        'prefer-const': ['warn', { destructuring: 'all' }],
+        'comma-spacing': 'error',
+        'no-trailing-spaces': "error",
     }
 }
