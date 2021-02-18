@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Col, Form, Row, Input, Select, Button } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { addApplication, addDzo, deleteApp, deleteDzo, updateApp } from '../../../api/services/dzoService';
@@ -81,7 +81,7 @@ const defaultDzo = {
 
 const defaultApp = { applicationType: undefined, applicationUrl: '' };
 
-function getInitialValue({ dzoName, dzoCode, description, applicationList } = {}) {
+function getInitialValue({ dzoName, dzoCode, description, applicationList, dzoId } = {}) {
     const appList = (applicationList || []).map((el) => ({ ...el, applicationUrl: decodeURI(el.applicationUrl) }));
 
     return {
@@ -89,6 +89,7 @@ function getInitialValue({ dzoName, dzoCode, description, applicationList } = {}
         dzoName,
         dzoCode,
         description,
+        dzoId,
         applicationList: appList.length < APP_OPTIONS.length ? [...appList, defaultApp] : appList,
     };
 }
@@ -98,7 +99,7 @@ const DzoForm = ({ type, matchPath }) => {
     const history = useHistory();
     const { state: stateFromLocation } = useLocation();
     const { dzoData, dzoCodes } = stateFromLocation || {};
-    const [dzoState] = useState(getInitialValue(dzoData));
+    const initialData = useRef(getInitialValue(dzoData));
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const isEdit = type === 'edit';
@@ -127,7 +128,7 @@ const DzoForm = ({ type, matchPath }) => {
                     const appPromises = appDataFromForm.map(addApplication);
                     await Promise.all(appPromises);
                 } else {
-                    const appFromServer = dzoState.applicationList;
+                    const appFromServer = initialData.current.applicationList;
 
                     //delete
                     const appsToDelete = appFromServer.reduce((result, applicationFromServer) => {
@@ -181,7 +182,7 @@ const DzoForm = ({ type, matchPath }) => {
                             !appFromServer.find(({ applicationType }) => applicationType === app.applicationType) &&
                             app.applicationUrl
                         ) {
-                            return [...result, { ...app, dzoId: dzoState.dzoId }];
+                            return [...result, { ...app, dzoId: appFromServer.dzoId }];
                         }
                         return result;
                     }, []);
@@ -197,7 +198,8 @@ const DzoForm = ({ type, matchPath }) => {
                 setLoading(false);
             }
         },
-        [dzoState.dzoId, history, matchPath, isEdit, dzoState.applicationList]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [initialData.current, history, matchPath, isEdit]
     );
 
     const handleCancel = () => history.push(matchPath);
@@ -212,14 +214,19 @@ const DzoForm = ({ type, matchPath }) => {
     const handleDelete = () => {
         confirmModal({
             onOk: deleteDZO,
-            title: `${ DELETE_CONFIRMATION_MODAL_TITLE } ${dzoState.dzoName}?`,
+            title: `${ DELETE_CONFIRMATION_MODAL_TITLE } ${initialData.current.dzoName}?`,
         });
     };
 
     const deleteDZO = async () => {
         setLoading(true);
-        await deleteDzo(dzoState.dzoId);
-        history.push(matchPath);
+        try {
+            await deleteDzo(initialData.current.dzoId);
+            history.push(matchPath);
+        } catch (e) {
+            setLoading(false);
+            setError(e.message);
+        }
     };
 
     const onChangeAppUrl = ({ target }, index, add, remove) => {
@@ -250,7 +257,7 @@ const DzoForm = ({ type, matchPath }) => {
             ) }
             <div className={ styles.container }>
                     <div className={ styles.title }>
-                        {isEdit? dzoState.dzoName : NEW_DZO_TITLE}
+                        { isEdit? initialData.current.dzoName : NEW_DZO_TITLE }
                     </div>
                 <div className={ styles.formWrapper }>
                     <Form
@@ -259,14 +266,14 @@ const DzoForm = ({ type, matchPath }) => {
                         layout="vertical"
                         className={ styles.formContainer }
                         onFinish={ onFinish }
-                        initialValues={ dzoState }
+                        initialValues={ initialData.current }
                     >
-                        {(formElements || []).map((row, index) => (
+                        { (formElements || []).map((row, index) => (
                             <Row key={ index } gutter={ [24] }>
-                                {(row || []).map((props) => (
+                                { (row || []).map((props) => (
                                     <Col key={ props.label } span={ 24 / row.length }>
                                         <FormItem
-                                            dzoValue={ props.name ==='dzoCode' && isEdit && dzoState.dzoCode }
+                                            dzoValue={ props.name ==='dzoCode' && isEdit && initialData.current.dzoCode }
                                             rules={ props.name === 'dzoCode' && !isEdit &&
                                                 [
                                                     ...RULES.STANDARD_REQUIRED,
@@ -281,9 +288,9 @@ const DzoForm = ({ type, matchPath }) => {
                                             { ...props }
                                         />
                                     </Col>
-                                ))}
+                                )) }
                             </Row>
-                        ))}
+                        )) }
                         <Form.List name={ DZO_APPLICATION_LIST_NAME }>
                             { (fields, { add, remove }) => fields.map((field) => (
                                 <Row gutter={ [24] } key={ field.name }>
@@ -322,11 +329,11 @@ const DzoForm = ({ type, matchPath }) => {
                             )) }
                         </Form.List>
                     </Form>
-                    {error && <span className={ styles.error }>{ error }</span>}
+                    { error && <span className={ styles.error }>{ error }</span> }
                 </div>
                 <div className={ styles.btnGroup }>
                     <Button type="default" onClick={ handleCancel }>
-                        {CANCEL_BUTTON_TITLE}
+                        { CANCEL_BUTTON_TITLE }
                     </Button>
                     <Button htmlType="submit" form="info" type="primary">
                         { isEdit ? SAVE_BUTTON_TITLE : ADD_BUTTON_TITLE }
@@ -349,7 +356,7 @@ function FormItem({ label, type, rules, name, placeholder, options, dzoValue }) 
         switch (type) {
             case TYPES.INPUT:
                 return dzoValue ? (
-                    <div> {dzoValue} </div>
+                    <div> { dzoValue } </div>
                 ) : (
                         <Input allowClear placeholder={ placeholder } />
                     );
@@ -368,7 +375,7 @@ function FormItem({ label, type, rules, name, placeholder, options, dzoValue }) 
             name={ name }
             rules={ rules }
         >
-            {formItemInput}
+            { formItemInput }
         </Form.Item>
     );
 }

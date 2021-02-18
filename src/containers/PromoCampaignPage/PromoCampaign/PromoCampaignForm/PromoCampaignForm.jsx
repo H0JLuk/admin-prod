@@ -49,6 +49,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
         offerDuration: 0,
         finishDate: '',
         startDate: '',
+        externalId: '',
         visibilitySettings: [{
             id: Date.now(),
             location: null,
@@ -123,6 +124,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
                     ],
                     appCode: getAppCode(),
                     settings: promoCampaign.settings,
+                    externalId: isCopy ? '' : promoCampaign.externalId,
                 }));
                 setLoading(false);
             })();
@@ -304,6 +306,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
                             changeTypePromo={ changeTypePromo }
                             isCopy={ isCopy }
                             oldName={ promoCampaign?.name }
+                            oldExternalId={ promoCampaign?.externalId }
                             mode={ mode }
                         />;
             case 2:

@@ -4,10 +4,11 @@ import { CloseOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { getDzoList } from '../../../../../../api/services/dzoService';
 import { getClientAppList } from '../../../../../../api/services/clientAppService';
 import { getCategoryList } from '../../../../../../api/services/categoryService';
-import { getExactFilteredPromoCampaignList } from '../../../../../../api/services/promoCampaignService';
+import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList } from '../../../../../../api/services/promoCampaignService';
 import { steps } from '../../PromoCampaignFormConstants';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
+import { URL_REGEXP } from '../../../../../../constants/common';
 import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWithTooltip';
 
 import { ReactComponent as Cross } from '../../../../../../static/images/cross.svg';
@@ -38,6 +39,9 @@ const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
 const URL_SOURCE_DZO_LABEL = 'ДЗО';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
 const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
+const EXTERNAL_ID_LABEL = 'Внешний ID';
+const EXTERNAL_ID_PLACEHOLDER = 'Введите внешний ID';
+const EXTERNAL_ID_DUPLICATE = 'Введенный внешний ID уже используется в другой промо-кампании';
 const types_promo = Object.values(promoCodeTypes);
 
 const namePathPriorityOnWebUrl = ['settings', 'priorityOnWebUrl'];
@@ -61,7 +65,8 @@ const StepInfo = ({
     changeTypePromo,
     isCopy,
     oldName,
-    mode
+    mode,
+    oldExternalId,
 }) => {
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -106,7 +111,7 @@ const StepInfo = ({
                     onClick={ clearSelect('categoryIdList') }
                 />
             }
-            { Boolean(selectCategory.length) && <div className={ styles.selectCount }>{selectCategory.length}</div> }
+            { Boolean(selectCategory.length) && <div className={ styles.selectCount }>{ selectCategory.length }</div> }
         </div>
     ), [open, toggleSelect, selectCategory.length, clearSelect]);
 
@@ -153,9 +158,10 @@ const StepInfo = ({
                     className={ styles.promoCampaignName }
                     name="name"
                     initialValue={ state.name }
+                    normalize={ (value) => !value.trim() ? value.trim() : value }
                     validateFirst
                     rules={ [
-                        { required: true, message: 'Укажите название промо-кампании' },
+                        { required: true, message: 'Укажите название промо-кампании', validateTrigger: 'onSubmit' },
                         {
                             message: 'Нельзя создать копию промо-кампании с таким же названием',
                             validator: (_, value) => {
@@ -222,9 +228,13 @@ const StepInfo = ({
                         )) }
                     </Select>
                 </Form.Item>
+
                 <Row gutter={ [24, 16] }>
                     <Col span={ 12 }>
-                        <Form.Item dependencies={ [namePathPriorityOnWebUrl] }>
+                        <Form.Item
+                            noStyle
+                            dependencies={ [namePathPriorityOnWebUrl] }
+                        >
                             { ({ getFieldValue }) => (
                                 <Form.Item
                                     label={ getLabel(URL_PROMO_CAMPAIGN, TOOLTIP_TEXT_FOR_URL_LABEL) }
@@ -238,7 +248,7 @@ const StepInfo = ({
                                             ),
                                             message: 'Укажите ссылку'
                                         },
-                                        { type: 'url', message: 'Поле содержит недопустимые символы' },
+                                        { pattern: URL_REGEXP, message: 'Введите url в формате site.ru', validateTrigger: 'onSubmit' },
                                     ] }
                                     initialValue={ decodeURI(state.webUrl || '') }
                                 >
@@ -247,6 +257,7 @@ const StepInfo = ({
                             ) }
                         </Form.Item>
                     </Col>
+
                     <Col span={ 12 }>
                         <Form.Item
                             name={ namePathPriorityOnWebUrl }
@@ -274,6 +285,7 @@ const StepInfo = ({
                         </Form.Item>
                     </Col>
                 </Row>
+
                 <Row gutter={ [24, 16] }>
                     <Col span={ 12 }>
                         <Form.Item
@@ -284,14 +296,15 @@ const StepInfo = ({
                             rules={ [{ required: true, message: 'Выберите ДЗО' }] }
                         >
                             <Select placeholder={ SELECT }>
-                                {dzoList.map(option => (
+                                { dzoList.map(option => (
                                     <Select.Option key={ option.dzoCode } value={ option.dzoId }>
                                         { option.dzoName } ({ option.dzoCode })
                                     </Select.Option>
-                                ))}
+                                )) }
                             </Select>
                         </Form.Item>
                     </Col>
+
                     <Col span={ 12 }>
                         <Form.Item
                             label={ SHOW_GO_TO_LINK_LABEL }
@@ -304,6 +317,7 @@ const StepInfo = ({
                         </Form.Item>
                     </Col>
                 </Row>
+
                 <Row gutter={ [24, 16] }>
                     <Col span={ 12 }>
                         <Form.Item
@@ -316,6 +330,7 @@ const StepInfo = ({
                         </Form.Item>
                     </Col>
                 </Row>
+
                 <Row gutter={ [24, 16] }>
                     <Col span={ 12 }>
                         <Form.Item
@@ -326,7 +341,7 @@ const StepInfo = ({
                             rules={ [{ required: true, message: 'Выберите тип промокодов' }] }
                         >
                             <Select placeholder={ SELECT }>
-                                {types_promo.map(type => (
+                                { types_promo.map(type => (
                                     <Select.Option
                                         key={ type.value }
                                         value={ type.value }
@@ -334,7 +349,7 @@ const StepInfo = ({
                                     >
                                         { `${type.label} ${type.description}` }
                                     </Select.Option>
-                                ))}
+                                )) }
                             </Select>
                         </Form.Item>
                     </Col>
@@ -366,6 +381,46 @@ const StepInfo = ({
                         </div>
                     </Col>
                 </Row>
+
+                <Row gutter={ [24, 16] }>
+                    <Col span={ 12 }>
+                        <Form.Item
+                            label={ EXTERNAL_ID_LABEL }
+                            className={ styles.formItem }
+                            name="externalId"
+                            initialValue={ state.externalId }
+                            validateFirst
+                            normalize={ (value) => value.trim() }
+                            rules={ [
+                                {
+                                    validator: (_, value) => {
+                                        if (isCopy && value.trim() === oldExternalId) {
+                                            return Promise.reject();
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                    message: EXTERNAL_ID_DUPLICATE,
+                                    validateTrigger: 'onSubmit',
+                                },
+                                {
+                                    validator: async (_, formValue) => {
+                                        const value = formValue.trim();
+                                        if (value) {
+                                            const { promoCampaignDtoList = [] } = await getExactExternalIDPromoCampaignList(value);
+                                            if (promoCampaignDtoList.length && value !== oldExternalId) {
+                                                throw new Error();
+                                            }
+                                        }
+                                    },
+                                    message: EXTERNAL_ID_DUPLICATE,
+                                    validateTrigger: 'onSubmit',
+                                },
+                            ] }
+                        >
+                            <Input maxLength="64" placeholder={ EXTERNAL_ID_PLACEHOLDER } />
+                        </Form.Item>
+                    </Col>
+                </Row>
             </div>
 
             <div className={ styles.infoDetail }>
@@ -388,6 +443,7 @@ const StepInfo = ({
                             </Form.Item>
                         </div>
                     </Col>
+
                     <Col span={ 12 }>
                         <div className={ styles.container }>
                             <Form.Item
@@ -409,12 +465,12 @@ const StepInfo = ({
                                     >
                                         { GIFT }
                                     </Radio>
-                                    {/* <Radio
+                                    { /* <Radio
                                         className={ styles.checkbox }
                                         value="landing"
                                     >
                                         { LANDING }
-                                    </Radio> */}
+                                    </Radio> */ }
                                 </Radio.Group>
                             </Form.Item>
                         </div>

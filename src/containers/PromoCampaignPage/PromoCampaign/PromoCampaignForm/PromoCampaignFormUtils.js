@@ -142,6 +142,7 @@ export const getDataForSend = ({
     typePromoCampaign,
     categoryIdList,
     settings,
+    externalId
 }) => ({
     name,
     dzoId,
@@ -154,6 +155,7 @@ export const getDataForSend = ({
     settings,
     type: typePromoCampaign,
     categoryIdList,
+    externalId: externalId || null,
 });
 
 export function getPromoCampaignForCopy(promoCampaign, copyVisibilitySettings) {
@@ -163,7 +165,7 @@ export function getPromoCampaignForCopy(promoCampaign, copyVisibilitySettings) {
         categoryIdList: promoCampaign.categoryIdList,
         dzoId: promoCampaign.dzoId,
         name: promoCampaign.name,
-        externalId: promoCampaign.externalId,
+        externalId: promoCampaign.externalId || null,
         finishDate: promoCampaign.finishDate,
         startDate: promoCampaign.startDate,
         offerDuration: promoCampaign.offerDuration,

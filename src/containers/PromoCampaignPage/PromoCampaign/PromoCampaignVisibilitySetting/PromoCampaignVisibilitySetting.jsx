@@ -95,11 +95,11 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
     }, [loadData]);
 
     const changeVisible = useCallback(async (visibilitySetting) => {
-        const { id, visible } = visibilitySetting;
+        const { id, locationId, salePointId, visible } = visibilitySetting;
         setLoading(true);
 
         try {
-            await editPromoCampaignVisibilitySetting(id, { promoCampaignId: Number(promoCampaignId), visible });
+            await editPromoCampaignVisibilitySetting(id, { promoCampaignId: Number(promoCampaignId), locationId, salePointId, visible });
             setVisibilitySettings((prev) => {
                 const index = prev.findIndex((setting) => setting.id === id);
                 return [...prev.slice(0, index), { ...prev[index], visible }, ...prev.slice(index + 1)];

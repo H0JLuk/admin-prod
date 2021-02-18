@@ -24,6 +24,10 @@ export function getExactFilteredPromoCampaignList(filterText, appCode) {
     return Api.post('/promo-campaign/list/filter', { filterText, checkVisibility: false, exactMatch: true }, options);
 }
 
+export function getExactExternalIDPromoCampaignList(externalId) {
+    return Api.post('/promo-campaign/list/filter', { externalId, checkVisibility: false, ignoreAppCode: true }, getReqOptions());
+}
+
 export async function getPromoCampaignStatistics(promoCampaignId) {
     return Api.get(`/admin/promoCampaign/${promoCampaignId}/statistics`, getReqOptions());
 }
@@ -117,4 +121,8 @@ export function editPromoCampaignVisibilitySetting(visibilitySettingId, visibili
 
 export function deletePromoCampaignVisibilitySetting(visibilitySettingId) {
     return Api.delete(`/admin/visibility-setting/${visibilitySettingId}`, getReqOptions());
+}
+
+export function getPromoCampaignByExternalId(externalId) {
+    return Api.get(`/promo-campaign/external/${externalId}`, getReqOptions(), 'text');
 }
