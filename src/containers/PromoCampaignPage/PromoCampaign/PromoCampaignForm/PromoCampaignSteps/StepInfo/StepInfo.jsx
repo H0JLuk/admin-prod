@@ -165,7 +165,7 @@ const StepInfo = ({
                         {
                             message: 'Нельзя создать копию промо-кампании с таким же названием',
                             validator: (_, value) => {
-                                if (isCopy && value.trim() === oldName) {
+                                if (isCopy && value === oldName) {
                                     return Promise.reject();
                                 }
                                 return Promise.resolve();
@@ -175,7 +175,7 @@ const StepInfo = ({
                         ({ getFieldValue }) => ({
                             validator: async (_, value) => {
                                 const isModeCreate = mode === 'create';
-                                const isModeEditAndValueChanged = mode === 'edit' && value.trim() !== oldName;
+                                const isModeEditAndValueChanged = mode === 'edit' && value !== oldName;
 
                                 if (isModeCreate || isModeEditAndValueChanged) {
                                     const appCode = getFieldValue('appCode');
@@ -394,7 +394,7 @@ const StepInfo = ({
                             rules={ [
                                 {
                                     validator: (_, value) => {
-                                        if (isCopy && value.trim() === oldExternalId) {
+                                        if (isCopy && value === oldExternalId) {
                                             return Promise.reject();
                                         }
                                         return Promise.resolve();
@@ -403,8 +403,7 @@ const StepInfo = ({
                                     validateTrigger: 'onSubmit',
                                 },
                                 {
-                                    validator: async (_, formValue) => {
-                                        const value = formValue.trim();
+                                    validator: async (_, value) => {
                                         if (value) {
                                             const { promoCampaignDtoList = [] } = await getExactExternalIDPromoCampaignList(value);
                                             if (promoCampaignDtoList.length && value !== oldExternalId) {
