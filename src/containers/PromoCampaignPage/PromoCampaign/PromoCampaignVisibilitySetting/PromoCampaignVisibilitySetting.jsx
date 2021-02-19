@@ -164,7 +164,8 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
         );
     }, [visibilitySettings]);
 
-    const rowSelection = useMemo(() => selectedSettings !== null ? {
+    const rowSelection = useMemo(() => selectedSettings !== null
+        ? {
             selectedRowKeys: selectedSettings,
             onChange: setSelectedSettings,
         } : undefined,
@@ -212,7 +213,7 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
         setLoading(false);
     }, [loadData, params]);
 
-     /** @type {import('antd/lib/pagination').PaginationConfig} */
+    /** @type {import('antd/lib/pagination').PaginationConfig} */
     const pagination = useMemo(() => ({
         current: params.pageNo + 1,
         total: params.totalElements,

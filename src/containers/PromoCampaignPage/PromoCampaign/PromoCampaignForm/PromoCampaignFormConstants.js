@@ -6,6 +6,7 @@ export const IMAGE = 'image';
 export const BANNER_REQUEST = 'bannerRequest';
 export const APPLICATION_JSON_TYPE = 'application/json';
 export const allStep = 3;
+export const SAVE = 'Сохранить';
 
 export const modes = {
     create: 'create',
@@ -41,3 +42,5 @@ export const promoCampaignBannerTypes = {
     SCREEN: 'SCREEN',
     LOGO_SECONDARY: 'LOGO_SECONDARY',
 };
+
+export const bannersFields = 'promoCampaignBanners';

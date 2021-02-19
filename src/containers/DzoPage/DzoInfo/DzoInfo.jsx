@@ -83,10 +83,10 @@ const DzoInfo = ({ matchPath }) => {
     const onDeleteClick = () => {
         confirmModal({
             title: (
-                    <span>
-                        { DELETE_CONFIRMATION_MODAL_TITLE } <span className={ styles.text }>{ `${dzoData.dzoName}?` }</span>
-                    </span>
-                ),
+                <span>
+                    { DELETE_CONFIRMATION_MODAL_TITLE } <span className={ styles.text }>{ `${dzoData.dzoName}?` }</span>
+                </span>
+            ),
             okText: DELETE,
             onOk: onDelete,
             okButtonProps: { danger: true },
@@ -97,9 +97,9 @@ const DzoInfo = ({ matchPath }) => {
         <div className={ styles.dzoWrapper }>
             <Header />
             <div className={ styles.container }>
-                    <div className={ styles.dzoTitle }>
-                        { dzoData.dzoName }
-                    </div>
+                <div className={ styles.dzoTitle }>
+                    { dzoData.dzoName }
+                </div>
                 <div className={ styles.infoWrapper }>
                     <div className={ styles.dzoInfo }>
                         { DZO_INFO_TEMPLATE_DATA.map((row, index) => (

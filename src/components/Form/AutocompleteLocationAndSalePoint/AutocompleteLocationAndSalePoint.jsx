@@ -88,98 +88,88 @@ function AutocompleteLocationAndSalePoint({
 
     /** @type {(searchValue: string, typeSearch: 'searchLocation' | 'searchSalePoint') => void} */
     const search = useCallback((searchValue, typeSearch = 'searchLocation') => {
-            if (typeSearch !== 'searchLocation' && typeSearch !== 'searchSalePoint') {
-                throw Error('Incorrect `typeSearch` param');
+        if (typeSearch !== 'searchLocation' && typeSearch !== 'searchSalePoint') {
+            throw Error('Incorrect `typeSearch` param');
+        }
+
+        setState(state => ({
+            ...state,
+            [typeSearch]: {
+                ...state[typeSearch],
+                value: searchValue,
+            },
+        }));
+
+        if (typeSearch === 'searchLocation') {
+            if (!searchValue && !state.searchSalePoint.value) {
+                setState(state => ({
+                    ...state,
+                    searchSalePoint: {
+                        ...state.searchSalePoint,
+                        results: [],
+                    },
+                }));
             }
 
-            setState(state => ({
-                ...state,
-                [typeSearch]: {
-                    ...state[typeSearch],
-                    value: searchValue,
-                },
-            }));
-
-            if (typeSearch === 'searchLocation') {
-                if (!searchValue && !state.searchSalePoint.value) {
-                    setState(state => ({
-                        ...state,
-                        searchSalePoint: {
-                            ...state.searchSalePoint,
-                            results: [],
-                        },
-                    }));
-                }
-
-                if (searchValue.length < 2) {
-                    setState(state => ({
-                        ...state,
-                        [typeSearch]: {
-                            value: searchValue,
-                            results: [],
-                        },
-                    }));
-                    return;
-                }
+            if (searchValue.length < 2) {
+                setState(state => ({
+                    ...state,
+                    [typeSearch]: {
+                        value: searchValue,
+                        results: [],
+                    },
+                }));
+                return;
             }
+        }
 
-            getResultsDebounced(searchValue, typeSearch);
-        },
-        [getResultsDebounced, state.searchSalePoint.value]
-    );
+        getResultsDebounced(searchValue, typeSearch);
+    }, [getResultsDebounced, state.searchSalePoint.value]);
 
     const handleSearchLocation = useCallback((searchValue) => {
-            if (!searchValue) {
-                changeLocation(null);
-            }
+        if (!searchValue) {
+            changeLocation(null);
+        }
 
-            search(searchValue, 'searchLocation');
-        },
-        [changeLocation, search]
-    );
+        search(searchValue, 'searchLocation');
+    }, [changeLocation, search]);
 
     const handleSearchSalePoint = useCallback((searchValue) => {
-            if (!searchValue) {
-                changeSalePoint(null);
-            }
+        if (!searchValue) {
+            changeSalePoint(null);
+        }
 
-            search(searchValue, 'searchSalePoint');
-        },
-        [changeSalePoint, search]
-    );
+        search(searchValue, 'searchSalePoint');
+    }, [changeSalePoint, search]);
 
     const handleSelectLocationOption = useCallback((value, location) => {
-            const { data } = location;
+        const { data } = location;
 
-            if (!state.searchSalePoint.value) {
-                getSearchResults('', 'searchSalePoint', data.id);
-            }
+        if (!state.searchSalePoint.value) {
+            getSearchResults('', 'searchSalePoint', data.id);
+        }
 
-            changeLocation(data);
-            setState((state) => ({
-                ...state,
-                searchLocation: { ...state.searchLocation, value },
-            }));
-        },
-        [changeLocation, state.searchSalePoint.value, getSearchResults]
-    );
+        changeLocation(data);
+        setState((state) => ({
+            ...state,
+            searchLocation: { ...state.searchLocation, value },
+        }));
+    }, [changeLocation, state.searchSalePoint.value, getSearchResults]);
 
     const handleSelectSalePointOption = useCallback((value, { data: salePoint, data: { location } }) => {
-            const { location: locationData, searchLocation } = createSearchDataAndPassLocation(location, locationId);
+        const { location: locationData, searchLocation } = createSearchDataAndPassLocation(location, locationId);
 
-            if (locationData) {
-                changeLocation(locationData);
-            }
+        if (locationData) {
+            changeLocation(locationData);
+        }
 
-            changeSalePoint(salePoint);
-            setState((state) => ({
-                ...state,
-                searchSalePoint: { ...state.searchSalePoint, value },
-                searchLocation: searchLocation ? searchLocation : state.searchLocation,
-            }));
-        },
-        [changeSalePoint, changeLocation, locationId]
-    );
+        changeSalePoint(salePoint);
+        setState((state) => ({
+            ...state,
+            searchSalePoint: { ...state.searchSalePoint, value },
+            searchLocation: searchLocation ? searchLocation : state.searchLocation,
+        }));
+    }, [changeSalePoint, changeLocation, locationId]);
 
     const handleBlurSalePoint = () => {
         const { searchSalePoint: { value } } = state;

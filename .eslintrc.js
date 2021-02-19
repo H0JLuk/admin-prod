@@ -39,5 +39,6 @@ module.exports = {
         'prefer-const': ['warn', { destructuring: 'all' }],
         'comma-spacing': 'error',
         'no-trailing-spaces': "error",
+        'indent': ['warn', 4, { SwitchCase: 1 }],
     }
 }

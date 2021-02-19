@@ -13,11 +13,19 @@ const modalText = {
 };
 
 const callConfirmModalForPromoCodeTypeChanging = (handleOk, text) =>
-    confirmModal({
-        title: CONFIRM_CHANGE_TITLE,
-        content: `${modalText.firstPart} ${modalText[text] || ''} ${modalText.thirdPart}`,
-        okText: OK_TITLE,
-        onOk: handleOk,
+    new Promise((resolve) => {
+        const onOk = async () => {
+            await handleOk();
+            resolve(true);
+        };
+        const onCancel = () => resolve(false);
+        confirmModal({
+            title: CONFIRM_CHANGE_TITLE,
+            content: `${modalText.firstPart} ${modalText[text] || ''} ${modalText.thirdPart}`,
+            okText: OK_TITLE,
+            onOk,
+            onCancel,
+        });
     });
 
 export default callConfirmModalForPromoCodeTypeChanging;

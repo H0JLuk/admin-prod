@@ -116,13 +116,13 @@ const showNotify = ({ login, pwd, mode, errorMessage }) => {
             description,
         });
     }
-        notification.success({
-            ...config,
-            message,
-            description,
-            placement,
-            style:{ minWidth:'400px' },
-        });
+    notification.success({
+        ...config,
+        message,
+        description,
+        placement,
+        style:{ minWidth: '400px' },
+    });
 };
 
 const UserForm = ({ type, matchUrl }) => {
@@ -209,7 +209,7 @@ const UserForm = ({ type, matchUrl }) => {
         try {
             const requestData = { clientAppIds, salePointId: salePoint?.id };
             if (notNewUser) {
-                    await saveUser(userData.id, requestData);
+                await saveUser(userData.id, requestData);
             } else {
                 const { generatedPassword } = await addUser({ ...requestData, personalNumber: login });
                 showNotify({ login, pwd: generatedPassword, mode: CREATE });

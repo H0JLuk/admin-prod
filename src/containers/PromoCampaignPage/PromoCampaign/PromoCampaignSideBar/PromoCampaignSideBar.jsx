@@ -31,7 +31,7 @@ const PromoCampaignSideBar = ({ active, onClick, validStep, newPromoCampaign, hi
                 />
             )) }
         </div>
-        );
+    );
 };
 
 export default PromoCampaignSideBar;

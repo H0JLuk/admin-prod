@@ -7,21 +7,21 @@
     background-color: #fff;
 }
 
-form.form {
+.form {
     display: flex;
     align-items: flex-start;
 }
 
-form.form > div:nth-child(2) {
+.form > div:nth-child(2) {
     margin-right: 10px;
 }
 
-form.columnForm {
+.form.columnForm {
     flex-direction: column;
     align-items: stretch;
 }
 
-form.columnForm > div:nth-child(2) {
+.form.columnForm > div:nth-child(2) {
     margin-right: 0;
 }
 
@@ -30,10 +30,6 @@ form.columnForm > div:nth-child(2) {
     margin-right: 10px;
     cursor: pointer;
     user-select: none;
-}
-
-.switch:global(.ant-switch-checked) {
-    background-color: #09a552;
 }
 
 .visibility {

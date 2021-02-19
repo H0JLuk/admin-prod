@@ -242,7 +242,7 @@ const UserList = ({ matchUrl }) => {
                 ? [...selectedItems.rowValues, record]
                 : selectedItems.rowValues.filter((selectedItem) => selectedItem.id !== record.id);
 
-                setSelectedItems({ rowKeys, rowValues });
+            setSelectedItems({ rowKeys, rowValues });
         }
     }), [select, selectedItems.rowKeys, selectedItems.rowValues, history, matchUrl]);
 

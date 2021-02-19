@@ -257,7 +257,7 @@ const DzoForm = ({ type, matchPath }) => {
             ) }
             <div className={ styles.container }>
                 <div className={ styles.title }>
-                    { isEdit? initialData.current.dzoName : NEW_DZO_TITLE }
+                    { isEdit ? initialData.current.dzoName : NEW_DZO_TITLE }
                 </div>
                 <div className={ styles.formWrapper }>
                     <Form

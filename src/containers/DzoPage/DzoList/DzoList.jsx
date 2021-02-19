@@ -150,7 +150,7 @@ const DzoPage = ({ matchPath }) => {
             const rowValues = !selectedItems.rowValues.includes(dzoData)
                 ? [...selectedItems.rowValues, dzoData]
                 : selectedItems.rowValues.filter((selectedItem) => selectedItem.dzoId !== dzoId);
-                setSelectedItems({ rowKeys, rowValues });
+            setSelectedItems({ rowKeys, rowValues });
         },
     }), [select, selectedItems.rowKeys, selectedItems.rowValues, history, matchPath]);
 

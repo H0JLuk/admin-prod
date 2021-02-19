@@ -11,6 +11,10 @@
     margin-top: 15px;
 }
 
+.container > :global(.ant-row):last-child {
+    margin-top: 15px;
+}
+
 .containerStep {
-    padding: 10px 15px 30px;
+    padding-bottom: 30px;
 }

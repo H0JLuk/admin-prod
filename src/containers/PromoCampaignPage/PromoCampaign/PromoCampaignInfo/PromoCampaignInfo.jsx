@@ -64,11 +64,13 @@ const PromoCampaignInfo = ({ matchUrl }) => {
             case 1:
                 return <StepInfo promoCampaign={ promoCampaign } />;
             case 2:
-                return <StepTextAndImage
-                            type={ promoCampaign.type }
-                            banners={ promoCampaign.promoCampaignBanners }
-                            texts={ promoCampaign.promoCampaignTexts }
-                        />;
+                return (
+                    <StepTextAndImage
+                        type={ promoCampaign.type }
+                        banners={ promoCampaign.promoCampaignBanners }
+                        texts={ promoCampaign.promoCampaignTexts }
+                    />
+                );
             case 3:
                 return <StepVisibility />;
             default:

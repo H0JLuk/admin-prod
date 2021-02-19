@@ -5,11 +5,11 @@ import { getDzoList } from '../../../../../../api/services/dzoService';
 import { getClientAppList } from '../../../../../../api/services/clientAppService';
 import { getCategoryList } from '../../../../../../api/services/categoryService';
 import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList } from '../../../../../../api/services/promoCampaignService';
-import { steps } from '../../PromoCampaignFormConstants';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
 import { URL_REGEXP } from '../../../../../../constants/common';
 import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWithTooltip';
+import { getAppCode } from '../../../../../../api/services/sessionService';
 
 import { ReactComponent as Cross } from '../../../../../../static/images/cross.svg';
 
@@ -60,98 +60,65 @@ const selectTagRender = ({ label, onClose }) => (
 
 const StepInfo = ({
     state,
-    handlerNextStep,
-    validStepChange,
     changeTypePromo,
     isCopy,
     oldName,
     mode,
+    setFieldsValue,
+    copyPromoCampaignId,
     oldExternalId,
 }) => {
+
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
     const [clientApps, setClientApps] = useState([]);
-    const [active, setActive] = useState(false);
-    const [selectCategory, setSelectCategory] = useState([]);
+    const [active, setActive] = useState(state.active ?? false);
+    const [selectCategory, setSelectCategory] = useState(state.categoryIdList ?? []);
     const [open, setOpen] = useState(false);
-    const [form] = Form.useForm();
 
-    useEffect(()=> {
-        (async ()=> {
+    useEffect(() => {
+        (async () => {
             const { dzoDtoList = [] } = await getDzoList();
             const { categoryList = [] } = await getCategoryList();
             const { clientApplicationDtoList: allApps = [] } = await getClientAppList();
             setDzoList(dzoDtoList.filter(item => !item.isDeleted));
             setCategories(categoryList.filter(({ active }) => active));
             setClientApps(allApps.filter(({ isDeleted }) => !isDeleted));
-            setSelectCategory(state.categoryIdList);
-            setActive(state.active);
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // TODO: remove this after change multi-select component
     const clearSelect = useCallback((name) => () => {
-        form.setFieldsValue({ [name]: [] });
+        setFieldsValue({ [name]: [] });
         setSelectCategory([]);
-    }, [form]);
+    }, [setFieldsValue]);
 
-    const toggleSelect = useCallback(() => {
-        setOpen(!open);
-    }, [open]);
+    const toggleSelect = useCallback(() => setOpen(prev => !prev), []);
 
+    // TODO: remove this after change multi-select component
     const renderSelectSuffix = useMemo(() => (
         <div className={ styles.suffixBlock }>
-            { open ?
-                <UpOutlined className={ styles.icon } onClick={ toggleSelect } />:
-                <DownOutlined className={ styles.icon } onClick={ toggleSelect } />
+            { open
+                ? <UpOutlined className={ styles.icon } onClick={ toggleSelect } />
+                : <DownOutlined className={ styles.icon } onClick={ toggleSelect } />
             }
-            { Boolean(selectCategory.length) &&
-                <CloseOutlined
-                    className={ styles.icon }
-                    onClick={ clearSelect('categoryIdList') }
-                />
-            }
-            { Boolean(selectCategory.length) && <div className={ styles.selectCount }>{ selectCategory.length }</div> }
+            { Boolean(selectCategory.length) && (
+                <>
+                    <CloseOutlined
+                        className={ styles.icon }
+                        onClick={ clearSelect('categoryIdList') }
+                    />
+                    <div className={ styles.selectCount }>
+                        { selectCategory.length }
+                    </div>
+                </>
+            ) }
         </div>
     ), [open, toggleSelect, selectCategory.length, clearSelect]);
 
-    const onFinish = useCallback((val) => {
-        const [startDate, finishDate] = val.datePicker || [];
-        validStepChange(steps.textAndBanners);
-        const mainInfoData = {
-            ...val,
-            startDate: startDate?.toISOString(),
-            finishDate: finishDate?.toISOString(),
-            offerDuration: finishDate?.diff(startDate, 'days') + 1,
-            settings: {
-                ...val.settings,
-                priorityOnWebUrl: val.settings.priorityOnWebUrl === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
-            },
-        };
-
-        if (!finishDate) {
-            delete mainInfoData.offerDuration;
-            delete mainInfoData.startDate;
-            delete mainInfoData.finishDate;
-        }
-        handlerNextStep(mainInfoData);
-    }, [handlerNextStep, validStepChange]);
-
-    const isChanged = useCallback(changedFields => {
-        if (changedFields.some(({ touched }) => touched)) {
-            validStepChange(steps.main_info, false);
-        }
-    }, [validStepChange]);
-
     return (
-        <Form
-            id="info"
-            form={ form }
-            layout="vertical"
-            className={ styles.containerStep }
-            onFieldsChange={ isChanged }
-            onFinish={ onFinish }
-        >
+        <>
             <div className={ styles.container }>
                 <Form.Item
                     label={ NAME_PROMO_CAMPAIGN }
@@ -162,31 +129,40 @@ const StepInfo = ({
                     validateFirst
                     rules={ [
                         { required: true, message: 'Укажите название промо-кампании', validateTrigger: 'onSubmit' },
-                        {
+                        ({ getFieldValue }) => ({
                             message: 'Нельзя создать копию промо-кампании с таким же названием',
                             validator: (_, value) => {
-                                if (isCopy && value === oldName) {
-                                    return Promise.reject();
+                                if (isCopy && typeof copyPromoCampaignId !== 'number' && value.trim() === oldName) {
+                                    const appCode = getFieldValue('appCode');
+                                    return appCode === getAppCode() ? Promise.reject() : Promise.resolve();
                                 }
+
                                 return Promise.resolve();
                             },
                             validateTrigger: 'onSubmit',
-                        },
+                        }),
                         ({ getFieldValue }) => ({
                             validator: async (_, value) => {
+                                const appCode = getFieldValue('appCode');
+
+                                if (!appCode) {
+                                    throw new Error('Для проверки имени нужно выбрать витрину!');
+                                }
+
                                 const isModeCreate = mode === 'create';
-                                const isModeEditAndValueChanged = mode === 'edit' && value !== oldName;
+                                const nameChanged = value.trim() !== (oldName ?? '').trim();
+                                const isCopyCampaign = isCopy && typeof copyPromoCampaignId !== 'number';
+                                const isModeEditAndValueChanged = mode === 'edit' && nameChanged;
 
-                                if (isModeCreate || isModeEditAndValueChanged) {
-                                    const appCode = getFieldValue('appCode');
+                                if (isModeCreate || isModeEditAndValueChanged || (isCopyCampaign && !nameChanged && appCode !== getAppCode())) {
+                                    const { promoCampaignDtoList = [] } = await getExactFilteredPromoCampaignList(
+                                        value,
+                                        appCode
+                                    );
 
-                                    if (!appCode) {
-                                        return Promise.reject('Для проверки имени нужно выбрать витрину!');
+                                    if (promoCampaignDtoList.length) {
+                                        throw new Error('Промо кампания с таким именем уже существует! Введите другое имя');
                                     }
-
-                                    const { promoCampaignDtoList = [] } = await getExactFilteredPromoCampaignList(value, appCode);
-
-                                    return !promoCampaignDtoList.length ? Promise.resolve() : Promise.reject('Промо кампания с таким именем уже существует! Введите другое имя');
                                 }
                             },
                             validateTrigger: 'onSubmit',
@@ -269,16 +245,10 @@ const StepInfo = ({
                             }
                         >
                             <Radio.Group className={ styles.urlSource }>
-                                <Radio
-                                    className={ styles.checkbox }
-                                    value={ URL_SOURCE_VALUE_DZO }
-                                >
+                                <Radio value={ URL_SOURCE_VALUE_DZO }>
                                     { URL_SOURCE_DZO_LABEL }
                                 </Radio>
-                                <Radio
-                                    className={ styles.checkbox }
-                                    value={ URL_SOURCE_VALUE_PROMO_CAMPAIGN }
-                                >
+                                <Radio value={ URL_SOURCE_VALUE_PROMO_CAMPAIGN }>
                                     { URL_SOURCE_PROMO_CAMPAIGN_LABEL }
                                 </Radio>
                             </Radio.Group>
@@ -394,7 +364,9 @@ const StepInfo = ({
                             rules={ [
                                 {
                                     validator: (_, value) => {
-                                        if (isCopy && value === oldExternalId) {
+                                        const copyIdExists = typeof copyPromoCampaignId !== 'number';
+
+                                        if (value && isCopy && value === oldExternalId && copyIdExists) {
                                             return Promise.reject();
                                         }
                                         return Promise.resolve();
@@ -476,7 +448,7 @@ const StepInfo = ({
                     </Col>
                 </Row>
             </div>
-        </Form>
+        </>
     );
 };
 

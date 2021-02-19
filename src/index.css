@@ -14,18 +14,18 @@ body, ul, li, p {
     margin-right: 3px;
 }
 
+.ant-btn:hover,
+.ant-btn:focus {
+    border-color: #09a552;
+    color: #09a552;
+}
+
 .ant-btn-primary,
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-    background-color: #09a552 !important;
-    border-color: #09a552 !important;
-    color: #ffffff !important;
-}
-
-.ant-btn:hover,
-.ant-btn:focus {
-    border-color: #09a552 !important;
-    color: #09a552;
+    background-color: #09a552;
+    border-color: #09a552;
+    color: #ffffff;
 }
 
 .ant-btn-danger,
@@ -37,7 +37,61 @@ body, ul, li, p {
     background-color: #dd283b !important;
     border-color: #dd283b !important;
 }
-.ant-input-clear-icon > svg {
+
+.ant-btn:disabled {
+    background-color: #f5f5f5 !important;
+    border-color: #d9d9d9 !important;
+    color: rgba(0, 0, 0, 0.25) !important;
+    box-shadow:inherit !important;
+}
+
+.ant-switch-checked {
+    background-color: #09a552;
+}
+
+.ant-picker-focused,
+.ant-picker:hover,
+.ant-picker-focused:focus,
+.ant-picker-focused:hover {
+    border-color: #09a552;
+    box-shadow: none;
+}
+
+.ant-picker-range .ant-picker-active-bar {
+    background: #09a552;
+    border-color: #09a552;
+    box-shadow: none;
+}
+
+.ant-checkbox-input:hover + .ant-checkbox-inner,
+.ant-checkbox-input:focus + .ant-checkbox-inner,
+.ant-checkbox-input:active + .ant-checkbox-inner {
+    border-color: #09a552;
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #09a552;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #09a552;
+    border-color: #09a552;
+}
+
+.ant-radio-inner::after {
+    background-color: #09a552;
+}
+
+.ant-radio:hover,
+.ant-radio:hover .ant-radio-inner,
+.ant-radio-checked .ant-radio-inner,
+.ant-radio-input:focus + .ant-radio-inner,
+.ant-radio-checked::after {
+    border-color: #09a552;
+}
+
+.ant-input-clear-icon > svg,
+.ant-picker-clear svg {
     fill: transparent;
     width: 19px;
     height: 19px;

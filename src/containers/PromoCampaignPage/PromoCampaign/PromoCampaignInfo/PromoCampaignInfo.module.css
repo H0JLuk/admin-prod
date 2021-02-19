@@ -4,7 +4,11 @@
 }
 
 .header {
-    padding: 22px 15px 16px;
+    position: sticky;
+    top: 63px;
+    z-index: 1;
+    background-color: #ffffff;
+    padding: 15px;
     border-bottom: 1px solid #e5e8eb;
 }
 
@@ -34,7 +38,7 @@
 }
 
 .infoDetail {
-    margin: 10px 0;
+    padding-bottom: 15px;
 }
 
 .containerStep {
@@ -45,6 +49,10 @@
     background-color: #f8f8f8;
     padding: 20px 30px;
     height: 100%;
+}
+
+.container + .infoDetail {
+    margin-top: 15px;
 }
 
 .flex {
@@ -61,8 +69,8 @@
     max-width: 250px;
 }
 
-.checkbox {
-    margin: 10px 0;
+.checkbox:not(:last-child) {
+    margin-bottom: 10px;
 }
 
 .status {
@@ -75,8 +83,8 @@
 }
 
 .redStatus {
-    background-color:  #fff1f0 !important;
-    color: #dc283a !important;
+    background-color: #fff1f0;
+    color: #dc283a;
 }
 
 .webLink {
@@ -92,8 +100,4 @@
 
 .buttonGroup button:not(:last-child) {
     margin-right: 15px;
-}
-
-.containerStep :global(.ant-switch-checked) {
-    background-color: #09a552;
 }

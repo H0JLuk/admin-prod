@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import { Form, Switch } from 'antd';
+import { Switch } from 'antd';
 import AutocompleteLocationAndSalePoint from '../../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteLocationAndSalePoint';
 import { getStringOptionValue } from '../../../../utils/utils';
 
@@ -10,8 +10,6 @@ const VISIBILITY_FIELD = {
     name: 'visibility',
     label: 'Включить видимость',
 };
-
-const FORM_NAME = 'createVisibilityForm';
 
 const PromoCampaignVisibilitySettingInput = ({
     error,
@@ -24,11 +22,7 @@ const PromoCampaignVisibilitySettingInput = ({
     columnMode,
 }) => (
     <div className={ cn(styles.wrapper, { [styles.columnWrapper]: columnMode }) }>
-        <Form
-            className={ cn(styles.form, { [styles.columnForm]: columnMode }) }
-            name={ FORM_NAME }
-            requiredMark={ false }
-        >
+        <div className={ cn(styles.form, { [styles.columnForm]: columnMode }) }>
             <AutocompleteLocationAndSalePoint
                 onLocationChange={ onLocationChange }
                 onSalePointChange={ onSalePointChange }
@@ -50,8 +44,8 @@ const PromoCampaignVisibilitySettingInput = ({
                     id={ VISIBILITY_FIELD.name }
                 />
             </div>
-        </Form>
-        { error.server && <div className={ styles.error }>{ error.server } </div> }
+        </div>
+        { error.server && <div className={ styles.error }>{ error.server }</div> }
     </div>
 );
 

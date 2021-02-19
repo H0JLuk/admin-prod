@@ -16,7 +16,7 @@ export function highlightSearchingText(value = '', searchValue = '', highlightCl
             searchValue
                 .trim()
                 .toLocaleUpperCase()
-            );
+        );
 
     if (index + 1) {
         newValue.push(value.substring(0, index));

@@ -3,6 +3,10 @@ import { newVisibilitySetting } from '../../../../api/services/promoCampaignServ
 import { deletePromoCampaignText, newEditPromoCampaignText, newPromoCampaignText } from '../../../../api/services/promoCampaignTextService';
 import { getStaticUrl } from '../../../../api/services/settingsService';
 import { APPLICATION_JSON_TYPE, BANNER_REQUEST, IMAGE, promoCampaignBannerTypes } from './PromoCampaignFormConstants';
+import moment from 'moment';
+import { getAppCode } from '../../../../api/services/sessionService';
+
+const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
 
 export function arrayToObject(array, keyForKey, keyForValue) {
     return array.reduce((result, item) => ({ ...result, [item[keyForKey]]: item[keyForValue] }), {});
@@ -14,7 +18,7 @@ export function createTexts(promoCampaignTexts, promoCampaignId, appCode) {
         .map(type => {
             const value = promoCampaignTexts[type];
             return newPromoCampaignText({ promoCampaignId, type, value }, appCode);
-    });
+        });
 }
 
 export async function createImgBanners(promoCampaignBanners, promoCampaignId, appCode) {
@@ -56,7 +60,8 @@ export function createVisibilities(visibilitySettings, promoCampaignId, appCode)
         ));
 }
 
-export function editTextBanners(promoCampaignTexts, promoCampaign, appCode) {
+export function editTextBanners(promoCampaignTexts, promoCampaign, appCode, onDelete) {
+
     return Object.keys(promoCampaignTexts).map((type) => {
         const textWithType = promoCampaign.promoCampaignTexts.find(text => text.type === type);
         const newValue = promoCampaignTexts[type];
@@ -67,6 +72,8 @@ export function editTextBanners(promoCampaignTexts, promoCampaign, appCode) {
 
             if (textId) {
                 if (!newValue?.trim()) {
+
+                    typeof onDelete === 'function' && onDelete(textId, type);
                     return deletePromoCampaignText(textId);
                 }
 
@@ -92,6 +99,9 @@ export function editTextBanners(promoCampaignTexts, promoCampaign, appCode) {
 }
 
 export async function EditImgBanners(promoCampaignBanners, promoCampaign, changedImgs, appCode) {
+    const banners = [];
+    const deletedBannersId = [];
+
     for (const formBannerType of Object.keys(promoCampaignBanners)) {
         const formData = new FormData();
         const bannerType = promoCampaignBannerTypes[formBannerType];
@@ -106,9 +116,13 @@ export async function EditImgBanners(promoCampaignBanners, promoCampaign, change
 
             if (bannerId && !bannerFile) {
                 await deletePromoCampaignBanner(bannerId);
+                deletedBannersId.push(bannerId);
                 continue;
             }
-            if (!bannerFile) continue;
+
+            if (!bannerFile || typeof bannerFile === 'string') {
+                continue;
+            }
 
             formData.append(IMAGE, bannerFile.originFileObj, bannerFile.name);
             formData.append(
@@ -120,14 +134,66 @@ export async function EditImgBanners(promoCampaignBanners, promoCampaign, change
             const request = bannerId
                 ? newEditPromoCampaignBanner(bannerId, formData, appCode)
                 : newCreatePromoCampaignBanner(formData, appCode);
-            await request;
+            const response = await request;
+            banners.push(response);
         }
     }
+
+    return { banners, deletedBannersId };
 }
 
 export function getFileURL(file) {
     const staticUrl = getStaticUrl();
     return `${ staticUrl }${ file }`;
+}
+
+export function normalizeFirstStepValue(val) {
+    const [startDate, finishDate] = val.datePicker || [];
+    const mainInfoData = {
+        ...val,
+        startDate: startDate?.toISOString(),
+        finishDate: finishDate?.toISOString(),
+        offerDuration: finishDate?.diff(startDate, 'days') + 1,
+        settings: {
+            ...val.settings,
+            priorityOnWebUrl: val.settings.priorityOnWebUrl === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
+        },
+    };
+    if (!finishDate) {
+        delete mainInfoData.offerDuration;
+        delete mainInfoData.startDate;
+        delete mainInfoData.finishDate;
+    }
+
+    return mainInfoData;
+}
+
+
+export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
+    if (!promoCampaign && typeof promoCampaign !== 'object') return {};
+
+    const { promoCampaignBanners = [], promoCampaignTexts = [] } = promoCampaign;
+
+    return {
+        name: promoCampaign.name,
+        webUrl: promoCampaign.webUrl,
+        promoCodeType: promoCampaign.promoCodeType,
+        active: promoCampaign.active,
+        dzoId: promoCampaign.dzoId,
+        typePromoCampaign: promoCampaign.type,
+        categoryIdList: promoCampaign.categoryList.reduce((prev, curr) => (
+            [...prev, curr.categoryId]
+        ), []),
+        promoCampaignBanners: arrayToObject(promoCampaignBanners, 'type', 'url'),
+        promoCampaignTexts: arrayToObject(promoCampaignTexts, 'type', 'value'),
+        datePicker: [
+            promoCampaign.startDate ? moment(promoCampaign.startDate) : undefined,
+            promoCampaign.finishDate ? moment(promoCampaign.finishDate) : undefined,
+        ],
+        appCode: appCode ?? getAppCode(),
+        settings: promoCampaign.settings,
+        externalId: isCopy ? '' : promoCampaign.externalId,
+    };
 }
 
 export const getDataForSend = ({
@@ -231,4 +297,17 @@ export function getVisibilitySettingsWithUpdatedErrors(settings, idx, needUpdate
     }
 
     return settings;
+}
+
+export function checkPromoCodes(promoCampaignRef, promoCampaignFromLocation) {
+
+    if (promoCampaignRef.promoCodeType !== promoCampaignFromLocation?.promoCodeType) {
+        return promoCampaignRef.promoCodeType;
+    } else {
+        return promoCampaignFromLocation.promoCodeType;
+    }
+}
+
+export function getPromoCampaignValue(promoCampaign, refPromoCampaign) {
+    return refPromoCampaign ?? promoCampaign;
 }

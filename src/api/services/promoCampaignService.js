@@ -57,8 +57,12 @@ export async function editPromoCampaign(promoCampaign) {
     return Api.put(`/admin/promoCampaign/${promoCampaign.id}`, normalizePromoCampaign(promoCampaign), getReqOptions());
 }
 
-export function copyPromoCampaign(id, promoCampaign) {
-    return Api.post(`/admin/promoCampaign/${id}`, normalizePromoCampaign(promoCampaign), getReqOptions());
+export function copyPromoCampaign(id, promoCampaign, appCode) {
+    const options = getReqOptions();
+    if (appCode) {
+        options.headers.clientAppCode = appCode;
+    }
+    return Api.post(`/admin/promoCampaign/${id}`, normalizePromoCampaign(promoCampaign), options);
 }
 
 export async function reorderPromoCampaigns(idMap) {
