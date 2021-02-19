@@ -166,7 +166,7 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
                                 disabled={ fileList.length }
                                 icon={ <UploadOutlined /> }
                             >
-                                {DOWNLOAD_BUTTON_TITLE}
+                                { DOWNLOAD_BUTTON_TITLE }
                             </Button>
                         </Upload>
                     </Form.Item>

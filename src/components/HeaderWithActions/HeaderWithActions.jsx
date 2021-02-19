@@ -47,11 +47,11 @@ const HeaderWithActions = ({
 
     return (
         <div className={ cn(styles.wrapper, classNames) }>
-            {title && <div className={ styles.headerTitle }>{ title }</div>}
+            { title && <div className={ styles.headerTitle }>{ title }</div> }
             <div className={ styles.actions }>
                 <div className={ styles.buttons }>
                     { buttonsBlock }
-                    {searchInput && showSearchInput && (
+                    { searchInput && showSearchInput && (
                         <Input
                             className={ cn(styles.searchInput, classNameByInput) }
                             onChange={ onChangeInput }
@@ -67,9 +67,9 @@ const HeaderWithActions = ({
                             }
                             disabled={ searchInput.disabled }
                         />
-                    )}
+                    ) }
                 </div>
-                {sortingBy && showSorting && (
+                { sortingBy && showSorting && (
                     <DropdownWithAction
                         dropdownLabel={ dropdownLabel }
                         menuItems={ sortingBy.menuItems }
@@ -77,7 +77,7 @@ const HeaderWithActions = ({
                         withReset={ sortingBy.withReset }
                         resetLabel={ resetLabel }
                     />
-                )}
+                ) }
             </div>
         </div>
     );

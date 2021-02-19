@@ -16,7 +16,7 @@ const CheckBoxCustom = ({ label, name, disabled, onChange, checked }) => {
             checked={ checked }
             disabled={ disabled }
         >
-            {label}
+            { label }
         </Checkbox>
     );
 };
@@ -37,7 +37,7 @@ const Checkboxes = ({ checkboxesData = {}, onChange = () => {}, onChangeAll = ()
                 />
             </div>
             <div className={ styles.checkbox }>
-                {checkboxesKeys.map((key) => {
+                { checkboxesKeys.map((key) => {
                     const { label, disabled, checked } = checkboxesData[key];
 
                     return (
@@ -50,7 +50,7 @@ const Checkboxes = ({ checkboxesData = {}, onChange = () => {}, onChangeAll = ()
                             checked={ checked }
                         />
                     );
-                })}
+                }) }
             </div>
         </>
     );

@@ -71,7 +71,7 @@ const Sidebar = () => {
                 <img className={ styles.logo } src={ sberLogo } alt="sberLogo" />
             </div>
             <Menu mode="inline">
-                {menuItems.map((item) => (
+                { menuItems.map((item) => (
                     <Menu.Item key={ item.label }>
                         <NavLink
                             key={ item.label }
@@ -82,10 +82,10 @@ const Sidebar = () => {
                             { item.label }
                         </NavLink>
                     </Menu.Item>
-                ))}
-                {!(matchPath(pathname, { path: routesForApps })) && (appsList || []).map((dzoItem, index) => (
+                )) }
+                { !(matchPath(pathname, { path: routesForApps })) && (appsList || []).map((dzoItem, index) => (
                     <Menu.Item key={ dzoItem.id } className={ cn(styles.appLink, { [styles.firstApp]: !index }) }>
-                        {/* TODO: change this to NavLink or add active className after we will know url for apps */}
+                        { /* TODO: change this to NavLink or add active className after we will know url for apps */ }
                         <div
                             onClick={ () => handleAdministrate(dzoItem) }
                             className={ cn(styles.menu__item, { [styles.activeApp]: appCode === dzoItem.code }) }
@@ -93,7 +93,7 @@ const Sidebar = () => {
                             { dzoItem.displayName }
                         </div>
                     </Menu.Item>
-                ))}
+                )) }
                 { role !== ROLES.USER_MANAGER && (
                     <Menu.Item key="oldDesign">
                         <NavLink to={ `${ ROUTE.OLD_DESIGN }${ pathname }` } className={ styles.oldDesignLink }>

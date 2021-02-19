@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import debounce from 'lodash/debounce';
@@ -54,6 +54,17 @@ function AutocompleteLocationAndSalePoint({
             results: [],
         },
     });
+    const selectedValues = useRef({ location: null, salePoint: null });
+
+    const changeLocation = useCallback((location) => {
+        selectedValues.current = { ...selectedValues.current, location };
+        onLocationChange(location);
+    }, [onLocationChange]);
+
+    const changeSalePoint = useCallback((salePoint) => {
+        selectedValues.current = { ...selectedValues.current, salePoint };
+        onSalePointChange(salePoint);
+    }, [onSalePointChange]);
 
     /** @type {(searchValue: string, typeSearch: 'searchLocation' | 'searchSalePoint', newLocationId: number) => Promise<void>} */
     const getSearchResults = useCallback(async (searchValue, typeSearch = 'searchLocation', newLocationId = locationId) => {
@@ -119,22 +130,22 @@ function AutocompleteLocationAndSalePoint({
 
     const handleSearchLocation = useCallback((searchValue) => {
             if (!searchValue) {
-                onLocationChange(null);
+                changeLocation(null);
             }
 
             search(searchValue, 'searchLocation');
         },
-        [onLocationChange, search]
+        [changeLocation, search]
     );
 
     const handleSearchSalePoint = useCallback((searchValue) => {
             if (!searchValue) {
-                onSalePointChange(null);
+                changeSalePoint(null);
             }
 
             search(searchValue, 'searchSalePoint');
         },
-        [onSalePointChange, search]
+        [changeSalePoint, search]
     );
 
     const handleSelectLocationOption = useCallback((value, location) => {
@@ -144,31 +155,47 @@ function AutocompleteLocationAndSalePoint({
                 getSearchResults('', 'searchSalePoint', data.id);
             }
 
-            onLocationChange(data);
+            changeLocation(data);
             setState((state) => ({
                 ...state,
                 searchLocation: { ...state.searchLocation, value },
             }));
         },
-        [onLocationChange, state.searchSalePoint.value, getSearchResults]
+        [changeLocation, state.searchSalePoint.value, getSearchResults]
     );
 
     const handleSelectSalePointOption = useCallback((value, { data: salePoint, data: { location } }) => {
             const { location: locationData, searchLocation } = createSearchDataAndPassLocation(location, locationId);
 
             if (locationData) {
-                onLocationChange(locationData);
+                changeLocation(locationData);
             }
 
-            onSalePointChange(salePoint);
+            changeSalePoint(salePoint);
             setState((state) => ({
                 ...state,
                 searchSalePoint: { ...state.searchSalePoint, value },
                 searchLocation: searchLocation ? searchLocation : state.searchLocation,
             }));
         },
-        [onSalePointChange, onLocationChange, locationId]
+        [changeSalePoint, changeLocation, locationId]
     );
+
+    const handleBlurSalePoint = () => {
+        const { searchSalePoint: { value } } = state;
+        if (value.trim()) {
+            const exactSalePoints = state.searchSalePoint.results.filter(({ name }) => name.toLowerCase() === value.toLowerCase());
+
+            if (exactSalePoints.length) {
+                const { salePoint } = selectedValues.current;
+                const [firstExactElem] = exactSalePoints;
+
+                if (salePoint?.name !== firstExactElem.name) {
+                    handleSelectSalePointOption(value, { data: firstExactElem });
+                }
+            }
+        }
+    };
 
     /**
      * @param {'searchLocation' | 'searchSalePoint'} type
@@ -186,12 +213,14 @@ function AutocompleteLocationAndSalePoint({
     const locationOptions = searchLocation.results.map((el) => ({
         label: renderOptionLabelByType(el, 'searchLocation'),
         value: getStringOptionValue(el),
+        key: el.id,
         data: el,
     }));
 
     const salePointOptions = searchSalePoint.results.map((el) => ({
         label: renderOptionLabelByType(el, 'searchSalePoint'),
         value: el.name,
+        key: el.id,
         data: el,
     }));
 
@@ -255,6 +284,7 @@ function AutocompleteLocationAndSalePoint({
                         notFoundContent={ null }
                         onSearch={ handleSearchSalePoint }
                         onSelect={ handleSelectSalePointOption }
+                        onBlur={ handleBlurSalePoint }
                         value={ searchSalePoint.value }
                         allowClear
                         clearIcon={ <Cross /> }

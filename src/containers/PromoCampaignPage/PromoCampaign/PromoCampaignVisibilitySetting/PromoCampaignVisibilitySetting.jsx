@@ -276,7 +276,7 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
                     title={ HEADER_TITLE }
                     buttons={ buttons }
                     searchInput={ searchInput }
-                    showSorting = { searchAndSortMode }
+                    showSorting={ searchAndSortMode }
                     showSearchInput={ searchAndSortMode && selectedSettings === null }
                     sortingBy={ sortingBy }
                 />
@@ -311,7 +311,7 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
             </div>
             { addNewByModal && (
                 <PromoCampaignVisibilitySettingModal
-                    forceUpdate= { forceUpdate }
+                    forceUpdate={ forceUpdate }
                     promoCampaignId={ promoCampaignId }
                     closeModal={ closeModal }
                     isModalVisible={ isModalVisible }

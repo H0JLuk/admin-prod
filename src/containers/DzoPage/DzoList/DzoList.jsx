@@ -55,7 +55,7 @@ const DzoPage = ({ matchPath }) => {
     const [copyDzoList, setCopyDzoList] = useState([]);
     const [select, setSelect] = useState(false);
     const [selectedItems, setSelectedItems] = useState(defaultSelected);
-    const [isModalView,setIsModalView] = useState(false);
+    const [isModalView, setIsModalView] = useState(false);
     const dzoCodes = useRef([]);
 
     const onAddDzo = () => history.push(generatePath(`${matchPath}${DZO_PAGES.ADD_DZO}`), { dzoCodes: dzoCodes.current });
@@ -243,7 +243,7 @@ const DzoPage = ({ matchPath }) => {
                     onRow={ onRow }
                 />
                 <div className={ styles.footer }>
-                    {select && (
+                    { select && (
                         <div className={ styles.space }>
                             <div className={ styles.section }>
                                 <span className={ styles.label }>
@@ -259,7 +259,7 @@ const DzoPage = ({ matchPath }) => {
                                 { BUTTON_TEXT.DELETE }
                             </Button>
                         </div>
-                    )}
+                    ) }
                 </div>
             </div>
             <TableDeleteModal

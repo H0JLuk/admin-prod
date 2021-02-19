@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams, generatePath } from 'react-router-dom';
 import cn from 'classnames';
-import { Form, Input, notification ,Typography } from 'antd';
+import { Form, Input, notification, Typography } from 'antd';
 import { USERS_PAGES } from '../../../constants/route';
 import { addUser, getUser, removeUser, resetUser, saveUser, unblockUser } from '../../../api/services/usersService';
 import Header from '../../../components/Header/Header';
@@ -264,7 +264,7 @@ const UserForm = ({ type, matchUrl }) => {
                 setUserData({ ...userData, tmpBlocked: false });
             } else {
                 const { generatedPassword } = await resetUser(userData.personalNumber);
-                showNotify({ login: userData.personalNumber , pwd: generatedPassword, mode: RESTORED });
+                showNotify({ login: userData.personalNumber, pwd: generatedPassword, mode: RESTORED });
             }
         } catch (err) {
             showNotify({ mode: ERROR, errorMessage: err.message });
@@ -327,16 +327,16 @@ const UserForm = ({ type, matchUrl }) => {
     return (
         <>
             <Header />
-            {loading ? (
+            { loading ? (
                 <UserSkeletonLoading />
             ) : (
                 <div className={ styles.container }>
                     <div className={ styles.pageWrapper }>
                         <div className={ styles.pageTitle }>
-                            {userName}
-                            {notNewUser && (
+                            { userName }
+                            { notNewUser && (
                                 <UserBlockStatus className={ styles.userStatus } blocked={ userData.tmpBlocked } />
-                            )}
+                            ) }
                         </div>
                         <Form
                             { ...layout }
@@ -348,7 +348,7 @@ const UserForm = ({ type, matchUrl }) => {
                                     <label className={ cn({ required: !notNewUser }) } htmlFor={ LOGIN_FIELD.name }>
                                         { LOGIN_FIELD.label }
                                     </label>
-                                    {!notNewUser ? (
+                                    { !notNewUser ? (
                                         <>
                                             <Input
                                                 className={ cn({ [styles.hasError]: !!error.login }, styles.loginInput) }
@@ -366,9 +366,9 @@ const UserForm = ({ type, matchUrl }) => {
                                         <div id="idInput" className={ styles.noEditField }>
                                             { userData.personalNumber }
                                         </div>
-                                    )}
+                                    ) }
                                 </div>
-                                {type !== 'info' ? (
+                                { type !== 'info' ? (
                                     <AutocompleteLocationAndSalePoint
                                         locationLabel={ LOCATION_FIELD.labelEdit }
                                         salePointLabel={ SALE_POINT_FIELD.labelEdit }
@@ -402,7 +402,7 @@ const UserForm = ({ type, matchUrl }) => {
                                             </div>
                                         </div>
                                     </>
-                                )}
+                                ) }
                             </div>
                             { !!error.backend && <div className={ styles.formError }>{ error.backend }</div> }
                         </Form>
@@ -431,7 +431,7 @@ const UserForm = ({ type, matchUrl }) => {
                         />
                     </div>
                 </div>
-            )}
+            ) }
         </>
     );
 };

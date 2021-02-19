@@ -16,8 +16,8 @@ const EMPTY_TABLE = {
 
 const EmptyMessage = (
     <Empty description={ null } >
-        <div>{EMPTY_TABLE.firstMessagePart}</div>
-        <div>{EMPTY_TABLE.secondMessagePart}</div>
+        <div>{ EMPTY_TABLE.firstMessagePart }</div>
+        <div>{ EMPTY_TABLE.secondMessagePart }</div>
     </Empty>
 );
 

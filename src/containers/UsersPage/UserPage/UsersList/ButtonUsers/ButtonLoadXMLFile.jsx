@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ButtonLoadXMLFile = ({ id,  label, changeAction, className }) => (
+const ButtonLoadXMLFile = ({ id, label, changeAction, className }) => (
     <>
         <input
             style={ { display: 'none' } }

@@ -29,7 +29,7 @@ const DropdownWithAction = ({
 
     const overlay = useMemo(() => (
         <div className={ styles.dropdownMenu }>
-            {menuItems.map((item) => (
+            { menuItems.map((item) => (
                 <div
                     key={ item.name }
                     className={ cn(styles.dropdownMenuItem, { [styles.active]: item.active }) }
@@ -37,15 +37,15 @@ const DropdownWithAction = ({
                 >
                     { item.label }
                 </div>
-            ))}
-            {withReset && (
+            )) }
+            { withReset && (
                 <div
                     className={ styles.dropdownMenuItem }
                     onClick={ menuItemClickHandler }
                 >
                     { resetLabel }
                 </div>
-            )}
+            ) }
         </div>
     ), [menuItems, menuItemClickHandler, withReset, resetLabel]);
 

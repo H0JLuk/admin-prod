@@ -25,7 +25,7 @@ class App extends React.PureComponent {
         return (
             <>
                 <Switch>
-                    {/* <Route exact path={ ROUTE.CORE } render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } /> */}
+                    { /* <Route exact path={ ROUTE.CORE } render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } /> */ }
                     <Route exact path={ ROUTE.CORE } component={ CorePage } />
 
                     <Route path={ ROUTE.LOGIN } component={ LoginPage } />
@@ -38,7 +38,7 @@ class App extends React.PureComponent {
                     <Route path={ ROUTE.ADMIN } component={ withRedirect(AdminPage, ROLES.ADMIN) } />
                     <Route path={ ROUTE.OWNER } component={ withRedirect(OwnerPage, ROLES.PRODUCT_OWNER) } />
 
-                    {/* <Route render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } /> */}
+                    { /* <Route render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } /> */ }
                     <Route component={ CorePage } />
                 </Switch>
             </>

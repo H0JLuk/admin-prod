@@ -15,7 +15,7 @@ const MENU = {
 
 const getDeleteTitleConfirm = (appName) => (
     <span>
-        Вы уверены, что хотите удалить приложение <b>{appName}</b>?
+        Вы уверены, что хотите удалить приложение <b>{ appName }</b>?
     </span>
 );
 
@@ -78,7 +78,7 @@ const DropdownMenu = ({
             <div
                 onClick={ redirectToEditPage }
             >
-                { MENU.PROPERTIES}
+                { MENU.PROPERTIES }
             </div>
         </Menu.Item>
         <Menu.Item key="1" >

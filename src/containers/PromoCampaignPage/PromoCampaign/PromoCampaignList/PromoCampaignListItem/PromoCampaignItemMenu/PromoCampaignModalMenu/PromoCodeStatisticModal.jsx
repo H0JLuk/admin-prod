@@ -50,7 +50,7 @@ const PromoCodeStatisticModal = ({ onClose, open, id, promoCodeType }) => {
             okText={ OK_TEXT }
             centered
         >
-            <Title level={ 3 }>{description}</Title>
+            <Title level={ 3 }>{ description }</Title>
             <Row gutter={ 16 }>
                 <Col span={ 12 }>
                     <Statistic

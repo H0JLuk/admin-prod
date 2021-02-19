@@ -176,13 +176,13 @@ const ClientAppPage = ({ matchPath, history }) => {
 
     return (
         <>
-            {isLoading && (
+            { isLoading && (
                 <div className={ style.loadingContainer }>
                     <div className={ style.loading }>
                         <SyncOutlined spin />
                     </div>
                 </div>
-            )}
+            ) }
             <div className={ style.container }>
                 <Header buttonBack={ false } />
                 <HeaderWithActions

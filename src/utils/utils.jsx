@@ -5,7 +5,7 @@ import React from 'react';
 
 export function highlightSearchingText(value = '', searchValue = '', highlightClassName) {
     if (!searchValue || !value) {
-        return <span>{value}</span>;
+        return <span>{ value }</span>;
     }
 
     const newValue = [];
@@ -22,7 +22,7 @@ export function highlightSearchingText(value = '', searchValue = '', highlightCl
         newValue.push(value.substring(0, index));
         newValue.push(
             <span key={ index } className={ highlightClassName }>
-                {value.substring(index, index + searchValue.length)}
+                { value.substring(index, index + searchValue.length) }
             </span>
         );
         newValue.push(value.substring(index + searchValue.length));
@@ -30,7 +30,7 @@ export function highlightSearchingText(value = '', searchValue = '', highlightCl
         newValue.push(value);
     }
 
-    return <span>{newValue}</span>;
+    return <span>{ newValue }</span>;
 }
 
 export function getStringOptionValue({ parentName = '', name = '' } = {}) {

@@ -59,10 +59,10 @@ const UserFormButtonGroup = ({
         case 'info': {
             return (
                 <>
-                    <Button type="primary" onClick={ onResetPassword } disabled = { disableAllButtons }>
-                        {userBlocked ? INFO_USER_BUTTONS.UNBLOCK : INFO_USER_BUTTONS.RESET_PASSWORD }
+                    <Button type="primary" onClick={ onResetPassword } disabled={ disableAllButtons }>
+                        { userBlocked ? INFO_USER_BUTTONS.UNBLOCK : INFO_USER_BUTTONS.RESET_PASSWORD }
                     </Button>
-                    <Button type="primary" onClick={ onEditUser } disabled = { disableAllButtons }>
+                    <Button type="primary" onClick={ onEditUser } disabled={ disableAllButtons }>
                         { INFO_USER_BUTTONS.EDIT }
                     </Button>
                     { deleteButton }

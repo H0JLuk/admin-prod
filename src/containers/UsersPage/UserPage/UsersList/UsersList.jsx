@@ -267,7 +267,7 @@ const UserList = ({ matchUrl }) => {
 
         try {
             const response = await Promise.allSettled(requestPromises);
-            const { users, errors } = response.reduce((prev, { status, value = {}, reason =  {} }, index) => {
+            const { users, errors } = response.reduce((prev, { status, value = {}, reason = {} }, index) => {
                 const { personalNumber } = selectedItems.rowValues[index];
                 const { generatedPassword } = value;
                 const { message } = reason;
@@ -359,7 +359,7 @@ const UserList = ({ matchUrl }) => {
                 onChangePage={ onChangePage }
             />
             <div className={ styles.footer }>
-                {select ? (
+                { select ? (
                     <div className={ styles.space }>
                         <div className={ styles.section }>
                             <span className={ styles.label }>
@@ -409,7 +409,7 @@ const UserList = ({ matchUrl }) => {
                         </div>
                         <DownloadDropDown />
                     </div>
-                )}
+                ) }
             </div>
         </div>
     );

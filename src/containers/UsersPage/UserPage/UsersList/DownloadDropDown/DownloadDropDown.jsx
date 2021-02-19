@@ -38,7 +38,7 @@ const DownloadDropDown = () => {
                 className={ cn(styles.dropdownButton, { [styles.dropdownActive]: isOpen }) }
                 onClick={ toggleOpen }
             >
-                { DOWNLOAD_TEMPLATE } { !isOpen ? <DownOutlined /> : <UpOutlined />}
+                { DOWNLOAD_TEMPLATE } { !isOpen ? <DownOutlined /> : <UpOutlined /> }
             </Button>
             <div className={ cn(styles.dropdownMenu, { [styles.open]: isOpen }) }>
                 <div className={ styles.dropdownLinkWrapper }>

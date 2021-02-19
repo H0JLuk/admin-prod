@@ -6,7 +6,7 @@ import { onFileUploadInputChange } from '../../uploadLogic';
 
 import styles from './ButtonUsers.module.css';
 
-const ButtonLoadUsers = ({ id,  label, classNames, onSuccess }) => {
+const ButtonLoadUsers = ({ id, label, classNames, onSuccess }) => {
     const uploadUsers = useCallback(async (e) => {
         try {
             await onFileUploadInputChange(e);

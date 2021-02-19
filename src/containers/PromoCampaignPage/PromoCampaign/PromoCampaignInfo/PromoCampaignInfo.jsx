@@ -108,7 +108,7 @@ const PromoCampaignInfo = ({ matchUrl }) => {
                             </Button>
                         </div>
                     </div>
-                )}
+                ) }
                 { StepContainer }
             </div>
         </div>

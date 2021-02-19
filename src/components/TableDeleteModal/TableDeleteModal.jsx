@@ -90,27 +90,27 @@ const TableDeleteModal = ({
         >
             { !dataIsLoaded && (
                 <ul className={ styles.list }>
-                    {sourceForRemove.map((item = {}, index) => (
+                    { sourceForRemove.map((item = {}, index) => (
                         <li key={ index }>{ item[listNameKey] }</li>
-                    ))}
+                    )) }
                 </ul>
             ) }
             { hasDeleted && (
                 <ul className={ styles.list }>
                     <span className={ styles.success }>{ SUCCESSFULLY_DELETED }</span>
-                    <span>({request.deleted.length})</span>
-                    {request.deleted.map(({ item }, index) => (
+                    <span>({ request.deleted.length })</span>
+                    { request.deleted.map(({ item }, index) => (
                         <li key={ index }>{ item }</li>
-                    ))}
+                    )) }
                 </ul>
             ) }
             { hasErrors && (
                 <ul className={ styles.list }>
                     <span className={ styles.failed }> { FAILED_DELETE }</span>
-                    <span>({request.errors.length})</span>
-                    {request.errors.map(({ message, item }, index) => (
+                    <span>({ request.errors.length })</span>
+                    { request.errors.map(({ message, item }, index) => (
                         <li key={ index }><b>{ item }</b> - { message }</li>
-                    ))}
+                    )) }
                 </ul>
             ) }
         </Modal>

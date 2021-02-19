@@ -110,9 +110,9 @@ const UploadFile = ({
 
     return (
         <div className={ cn(styles.container) }>
-            {(file || imgURL) && removeIconView && (
+            { (file || imgURL) && removeIconView && (
                 <Cross className={ styles.cross } onClick={ removeImg } />
-            )}
+            ) }
             <Form.Item
                 label={ label }
                 name={ name }

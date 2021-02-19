@@ -8,7 +8,7 @@ const GIFT = 'Подарок';
 
 const StepTextAndImage = ({ banners, texts, type }) => (
     <div className={ styles.containerStep }>
-        {type === 'NORMAL' && (
+        { type === 'NORMAL' && (
             <div className={ styles.infoDetail }>
                 <div className={ styles.title }>{ EXCURSION }</div>
                 <div className={ styles.container }>
@@ -19,8 +19,8 @@ const StepTextAndImage = ({ banners, texts, type }) => (
                     />
                 </div>
             </div>
-        )}
-        {type === 'PRESENT' && (
+        ) }
+        { type === 'PRESENT' && (
             <div className={ styles.infoDetail }>
                 <div className={ styles.title }>{ GIFT }</div>
                 <div className={ styles.container }>
@@ -31,7 +31,7 @@ const StepTextAndImage = ({ banners, texts, type }) => (
                     />
                 </div>
             </div>
-        )}
+        ) }
     </div>
 );
 

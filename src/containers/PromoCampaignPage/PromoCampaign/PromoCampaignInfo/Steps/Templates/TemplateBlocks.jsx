@@ -34,7 +34,7 @@ export const ImageBlock = ({ label, type, src, size }) => (
                 <div className={ styles.fileName }>
                     { (src || '').split('/').pop() }
                 </div>
-                {/* TODO: Добавить размер файла, когда определимся откуда мы его будем брать (с бэка или из Blob?) */}
+                { /* TODO: Добавить размер файла, когда определимся откуда мы его будем брать (с бэка или из Blob?) */ }
                 <div className={ styles.fileSize }>{ size }</div>
             </div>
         </div>

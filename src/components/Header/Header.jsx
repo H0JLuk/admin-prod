@@ -16,7 +16,7 @@ const MenuLinks = () => {
 
     return (
         <div>
-            {menuItems.map((item) => (
+            { menuItems.map((item) => (
                 <NavLink
                     key={ item.label }
                     to={ item.path }
@@ -25,7 +25,7 @@ const MenuLinks = () => {
                 >
                     { item.label }
                 </NavLink>
-            ))}
+            )) }
         </div>
     );
 };
@@ -43,7 +43,7 @@ const Header = ({ menuMode = false, buttonBack = true, onClickFunc }) => {
                 <div className={ styles.backButton } onClick={ onBackButton }>
                     <LeftOutlined /> { BACK_BUTTON_TEXT }
                 </div>
-            )}
+            ) }
             { menuMode && <MenuLinks /> }
             <div className={ styles.avatar }>
                 <DropdownWithLogout />

@@ -5,13 +5,13 @@ import { deletePromoCampaign } from '../../api/services/promoCampaignService';
 
 export const getDeleteTitleConfirm = (promoCampaignName) => (
     <span>
-        Вы уверены, что хотите удалить промо-кампанию <b>{promoCampaignName}</b>?
+        Вы уверены, что хотите удалить промо-кампанию <b>{ promoCampaignName }</b>?
     </span>
 );
 
 export const getSuccessDeleteMessage = (promoCampaignName) => (
     <span>
-        Промо-кампания <b>{promoCampaignName}</b> успешно удалена
+        Промо-кампания <b>{ promoCampaignName }</b> успешно удалена
     </span>
 );
 

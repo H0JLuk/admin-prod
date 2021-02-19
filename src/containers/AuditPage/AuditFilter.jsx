@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import  { Form, Input, Select, DatePicker, Button } from 'antd';
+import { Form, Input, Select, DatePicker, Button } from 'antd';
 import 'moment/locale/ru';
 import locale from 'antd/es/date-picker/locale/ru_RU';
 
@@ -73,7 +73,7 @@ const AuditFilter = ({ submit, applications }) => {
             <Form.Item label="Тип события" name="type">
                 <Select mode='multiple'>
                     {
-                        auditEventTypes.map(el => <Select.Option key={ el } value={ el }>{el}</Select.Option>)
+                        auditEventTypes.map(el => <Select.Option key={ el } value={ el }>{ el }</Select.Option>)
                     }
                 </Select>
             </Form.Item>
@@ -92,7 +92,7 @@ const AuditFilter = ({ submit, applications }) => {
             <Form.Item label="Статус события" name="success">
                 <Select>
                     {
-                        auditEventStatus.map(({ label, value }) => <Select.Option key={ label } value={ value }>{label}</Select.Option>)
+                        auditEventStatus.map(({ label, value }) => <Select.Option key={ label } value={ value }>{ label }</Select.Option>)
                     }
                 </Select>
             </Form.Item>

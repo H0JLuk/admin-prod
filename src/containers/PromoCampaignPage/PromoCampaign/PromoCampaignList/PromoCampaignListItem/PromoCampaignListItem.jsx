@@ -102,7 +102,7 @@ const PromoCampaignItem = ({ promoCampaign, onDeleteItem, sortable, matchUrl }) 
                             onDeleteItem={ onDeleteItem }
                             matchUrl={ matchUrl }
                         />
-                    )}
+                    ) }
                 </div>
             </div>
         </div>

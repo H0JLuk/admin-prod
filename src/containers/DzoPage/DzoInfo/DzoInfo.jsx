@@ -156,9 +156,9 @@ export default DzoInfo;
 function DzoInfoBlock({ label, value, type, colSpan }) {
     return (
         <Col span={ colSpan }>
-            <div className={ styles.title }>{label}</div>
+            <div className={ styles.title }>{ label }</div>
             <span className={ styles.text }>
-                {type === 'url' ? decodeURI(value) : value}
+                { type === 'url' ? decodeURI(value) : value }
             </span>
         </Col>
     );

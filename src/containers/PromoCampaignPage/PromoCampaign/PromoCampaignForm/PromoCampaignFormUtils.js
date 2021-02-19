@@ -197,7 +197,7 @@ export function checkUniqVisibilitySettings(setting) {
 
 export function getVisibilitySettingsWithDoubleError(visibilitySettings, samePositions) {
     const nextVisibilitySettings = [...visibilitySettings];
-    samePositions.map(([firstRepeat, repeat]) => {
+    samePositions.forEach(([firstRepeat, repeat]) => {
         const locationName = visibilitySettings[firstRepeat].location?.name ?? '';
         const salePointName = visibilitySettings[firstRepeat].salePoint?.name ?? '';
         const locationText = locationName ? `локацией '${locationName}'` : '';

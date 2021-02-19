@@ -22,8 +22,8 @@ const ImagesBlock = ({
     if (!originFileObj && !imgURL) {
         return (
             <div className={ styles.noFile }>
-                { description && <div>{ description }</div>}
-                { setting && <p>{ setting }</p>}
+                { description && <div>{ description }</div> }
+                { setting && <p>{ setting }</p> }
                 <Button className={ styles.uploadButton } icon={ iconButton ?? null }>
                     { textButton }
                 </Button>
@@ -43,14 +43,14 @@ const ImagesBlock = ({
             />
             { footer && (
                 <div className={ styles.footer }>
-                    {!imgURL ? (
+                    { !imgURL ? (
                         <>
                             <div>{ originFileObj.name }</div>
                             <div>{ (originFileObj.size / 1024).toFixed(2) }КБ</div>
                         </>
                     ) : (
                         <div>{ getFileName(imgURL) }</div>
-                    )}
+                    ) }
                 </div>
             ) }
         </div>

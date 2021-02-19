@@ -30,7 +30,7 @@ const ClientAppItem = ({ item, isSortable, matchUrl, forceUpdate, history, toolt
                     <span className={ style.cardCodeLabel }>{ LABEL.CODE }</span>
                     <span className={ style.cardCodeValue }>{ code }</span>
                 </div>
-                {/* Empty div needed for correct `justify-content: space-between;` for `cardInfo` block */}
+                { /* Empty div needed for correct `justify-content: space-between;` for `cardInfo` block */ }
                 <div />
             </div>
             { tooltipIsVisible && (
@@ -43,7 +43,7 @@ const ClientAppItem = ({ item, isSortable, matchUrl, forceUpdate, history, toolt
                                 forceUpdate={ forceUpdate }
                                 history={ history }
                             />
-                        )}
+                        ) }
                     </div>
                 </div>
             ) }

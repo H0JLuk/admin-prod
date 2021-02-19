@@ -256,9 +256,9 @@ const DzoForm = ({ type, matchPath }) => {
                 </div>
             ) }
             <div className={ styles.container }>
-                    <div className={ styles.title }>
-                        { isEdit? initialData.current.dzoName : NEW_DZO_TITLE }
-                    </div>
+                <div className={ styles.title }>
+                    { isEdit? initialData.current.dzoName : NEW_DZO_TITLE }
+                </div>
                 <div className={ styles.formWrapper }>
                     <Form
                         id="info"
@@ -356,10 +356,10 @@ function FormItem({ label, type, rules, name, placeholder, options, dzoValue }) 
         switch (type) {
             case TYPES.INPUT:
                 return dzoValue ? (
-                    <div> { dzoValue } </div>
+                    <div>{ dzoValue }</div>
                 ) : (
-                        <Input allowClear placeholder={ placeholder } />
-                    );
+                    <Input allowClear placeholder={ placeholder } />
+                );
             case TYPES.TEXT_BLOCK:
                 return <Input.TextArea placeholder={ placeholder } />;
             case TYPES.SELECT:

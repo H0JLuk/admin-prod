@@ -28,6 +28,7 @@ module.exports = {
         'react/jsx-key': 1,     // Always warn on missing jsx-key inside iterator functions
         'react/jsx-tag-spacing': [ 1, { 'beforeSelfClosing': 'always' } ],  // warn: <Component/>   ok: <Component />
         'react/jsx-curly-brace-presence': [1, { 'props': 'never', 'children': 'ignore' }],
+        'react/jsx-equals-spacing': [1, 'never'],
         'semi': 1,      // Always warn on missing semicolon ;
         'object-curly-spacing': [1, 'always'],       // Always warn on missing spaces inside object / destruct literal,
         'quotes': ['error', 'single'],       //

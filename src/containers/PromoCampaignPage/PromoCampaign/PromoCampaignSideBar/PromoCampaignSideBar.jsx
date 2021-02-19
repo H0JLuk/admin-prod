@@ -29,7 +29,7 @@ const PromoCampaignSideBar = ({ active, onClick, validStep, newPromoCampaign, hi
                     active={ index === active - 1 }
                     index={ index }
                 />
-            ))}
+            )) }
         </div>
         );
 };

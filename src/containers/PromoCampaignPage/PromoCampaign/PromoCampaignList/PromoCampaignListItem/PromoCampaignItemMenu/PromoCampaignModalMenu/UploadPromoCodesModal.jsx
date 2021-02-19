@@ -36,12 +36,14 @@ const UploadPromoCodesModal = ({ open, onClose, onSave }) => {
     const handleUpload = () => {
         const { file } = state;
         setState((prev) => ({ ...prev, uploading: true }));
+
         if (!state.file) {
             return warnNotice('Выберите файл для загрузки!');
         } else if (state.fileList.length > 1) {
             return warnNotice('Можно загрузить только один файл за раз!');
         }
-        let formData = new FormData();
+
+        const formData = new FormData();
         formData.append('file', file, file.name);
         onSave(formData);
         clearState();

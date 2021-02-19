@@ -8,7 +8,7 @@ const STATUS_ACTIVE = 'Активен';
 
 const UserBlockStatus = ({ blocked, withText, className = '' }) => (
     <div className={ className }>
-        {withText && (
+        { withText && (
             blocked ? STATUS_BLOCKED : STATUS_ACTIVE
         ) }
         <div

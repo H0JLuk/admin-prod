@@ -157,13 +157,13 @@ const PromoCampaignList = () => {
 
     return (
         <>
-            {loading && (
+            { loading && (
                 <div className={ style.loadingContainer }>
                     <div className={ style.loading }>
                         <SyncOutlined spin />
                     </div>
                 </div>
-            )}
+            ) }
             <div className={ style.container }>
                 <Header menuMode buttonBack={ false } />
                 <HeaderWithActions
@@ -179,7 +179,7 @@ const PromoCampaignList = () => {
                         useWindowAsScrollContainer
                         onSortEnd={ onSortEnd }
                     >
-                        {items.map((promoCampaign, index) => (
+                        { items.map((promoCampaign, index) => (
                             <SortableElementItem
                                 key={ promoCampaign.id }
                                 promoCampaign={ promoCampaign }
@@ -189,7 +189,7 @@ const PromoCampaignList = () => {
                                 sortable={ sortable }
                                 matchUrl={ match.url }
                             />
-                        ))}
+                        )) }
                     </SortableContainerList>
                 </div>
             </div>

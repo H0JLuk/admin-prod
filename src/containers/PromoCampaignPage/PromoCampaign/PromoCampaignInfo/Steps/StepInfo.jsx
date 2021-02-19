@@ -89,8 +89,7 @@ const StepInfo = ({ promoCampaign }) => {
                             { promoCampaign.dzoName }
                         </div>
                     </Col>
-
-                    <Col span = { 12 } >
+                    <Col span={ 12 }>
                         <div className={ style.infoTitle }>{ SHOW_GO_TO_LINK_LABEL }</div>
                         <Switch disabled checked={ promoCampaign.settings?.alternativeOfferMechanic } />
                     </Col>
