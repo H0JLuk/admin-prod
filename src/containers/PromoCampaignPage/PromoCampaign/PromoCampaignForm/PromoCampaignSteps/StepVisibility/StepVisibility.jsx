@@ -37,6 +37,7 @@ const StepVisibility = ({
         <PromoCampaignVisibilitySetting
             searchAndSortMode={ false }
             hideHeader
+            addNewByModal
         />
     ) : (
         <div className={ styles.containerStep }>

@@ -3,6 +3,10 @@
     background-color: #f8f8f8;
 }
 
+.columnWrapper {
+    background-color: #fff;
+}
+
 form.form {
     display: flex;
     align-items: flex-start;
@@ -10,6 +14,15 @@ form.form {
 
 form.form > div:nth-child(2) {
     margin-right: 10px;
+}
+
+form.columnForm {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+form.columnForm > div:nth-child(2) {
+    margin-right: 0;
 }
 
 .label {

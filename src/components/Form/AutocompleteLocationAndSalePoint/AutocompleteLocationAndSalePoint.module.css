@@ -12,6 +12,10 @@
     flex-basis: 37.5%;
 }
 
+.salePointColumn {
+    margin-top: 20px;
+}
+
 .formLabel {
     min-width: 120px;
     margin-bottom: 8px;
@@ -21,6 +25,10 @@
     width: 100%;
     min-width: 240px;
     max-width: 300px;
+}
+
+.autocompleteInputColumn {
+    max-width: none;
 }
 
 .autocompleteInput :global(.ant-input-affix-wrapper:hover),
@@ -99,6 +107,10 @@ div.autocompleteDropdown :global(.ant-select-item) {
 
 .inputWrapper {
     margin-right: 10px;
+}
+
+.inputWrapperColumn {
+    margin-right: 0;
 }
 
 .hasError :global(.ant-input-affix-wrapper) {

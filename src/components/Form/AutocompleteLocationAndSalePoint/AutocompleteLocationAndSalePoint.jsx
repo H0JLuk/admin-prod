@@ -42,6 +42,7 @@ function AutocompleteLocationAndSalePoint({
     autoFocusLocation = true,
     locationId,
     error = {},
+    columnMode,
 }) {
     const [state, setState] = useState({
         searchLocation: {
@@ -202,12 +203,16 @@ function AutocompleteLocationAndSalePoint({
                 <div className={ cn(styles.formLabel, locationLabelClassNames) }>
                     <label htmlFor="rc_select_0">{ locationLabel }</label>
                 </div>
-                <div className={ styles.inputWrapper }>
+                <div className={ cn(
+                    styles.inputWrapper,
+                    { [styles.inputWrapperColumn]: columnMode },
+                ) }>
                     <AutoComplete
                         className={ cn(
                             styles.autocompleteInput,
+                            { [styles.autocompleteInputColumn]: columnMode },
                             { [styles.hasError]: error.location },
-                            { [styles.hideSuffix]: !!searchLocation.value }
+                            { [styles.hideSuffix]: !!searchLocation.value },
                         ) }
                         dropdownClassName={ styles.autocompleteDropdown }
                         dropdownMatchSelectWidth={ false }
@@ -231,7 +236,7 @@ function AutocompleteLocationAndSalePoint({
                     { !!error.location && <div className={ styles.formError }>{ error.location }</div> }
                 </div>
             </div>
-            <div className={ colClassNames }>
+            <div className={ cn(colClassNames, { [styles.salePointColumn]: columnMode }) }>
                 <div className={ cn(styles.formLabel, salePointLabelClassNames) }>
                     <label htmlFor="rc_select_1">{ salePointLabel }</label>
                 </div>
@@ -239,8 +244,9 @@ function AutocompleteLocationAndSalePoint({
                     <AutoComplete
                         className={ cn(
                             styles.autocompleteInput,
+                            { [styles.autocompleteInputColumn]: columnMode },
                             { [styles.hasError]: error.salePoint },
-                            { [styles.hideSuffix]: !!searchSalePoint.value }
+                            { [styles.hideSuffix]: !!searchSalePoint.value },
                         ) }
                         dropdownClassName={ styles.autocompleteDropdown }
                         dropdownMatchSelectWidth={ false }

@@ -6,6 +6,7 @@ import PromoCampaignVisibilitySettingTable
 import { Button, message } from 'antd';
 import debounce from 'lodash/debounce';
 import Header from '../../../../components/Header/Header';
+import PromoCampaignVisibilitySettingModal from './PromoCampaignVisibilitySettingModal/PromoCampaignVisibilitySettingModal';
 import {
     deletePromoCampaignVisibilitySetting,
     editPromoCampaignVisibilitySetting,
@@ -42,7 +43,6 @@ const BUTTON_CHOOSE = 'Выбрать';
 const BUTTON_CHOOSE_ALL = 'Выбрать все';
 const BUTTON_UNSELECT_ALL = 'Отменить выбор';
 const BUTTON_CANCEL = 'Отмена';
-const CHOSEN = 'Выбрано';
 const BUTTON_DELETE = 'Удалить';
 
 const DROPDOWN_SORT_MENU = [
@@ -54,7 +54,7 @@ const DROPDOWN_SORT_MENU = [
 // eslint-disable-next-line no-unused-vars
 const getURLSearchParams = ({ totalElements, ...rest }) => new URLSearchParams(rest).toString();
 
-function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }) {
+function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, addNewByModal, }) {
     const match = useRouteMatch();
     const { search, state } = useLocation();
     const history = useHistory();
@@ -63,6 +63,11 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
     const [ loading, setLoading ] = useState(false);
     const [ visibilitySettings, setVisibilitySettings ] = useState([]);
     const [ params, setParams ] = useState(defaultParams);
+    const [ isModalVisible, setIsModalVisible ] = useState(false);
+
+    const showModal = useCallback(() => setIsModalVisible(true), []);
+
+    const closeModal = useCallback(() => setIsModalVisible(false), []);
 
     const loadData = useCallback(async (searchParams = defaultParams) => {
         const urlSearchParams = getURLSearchParams(searchParams);
@@ -79,6 +84,8 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadDataDebounced = useCallback(debounce(loadData, 500), [loadData]);
+
+    const forceUpdate = useCallback(() => loadData(params), [loadData, params]);
 
     useEffect(() => {
         (async () => {
@@ -218,17 +225,41 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
     const buttons = useMemo(() => {
         const isSelectAll = selectedSettings?.length === visibilitySettings.length;
         if (selectedSettings === null) {
+
             return [
-                { type: 'primary', label: BUTTON_ADD, onClick: onCreate, disabled: loading },
-                { label: BUTTON_CHOOSE, onClick: onEnableSelection, disabled: loading },
+                {
+                    type: 'primary',
+                    label: BUTTON_ADD,
+                    onClick: addNewByModal ? showModal : onCreate,
+                    disabled: loading,
+                },
+                {
+                    label: BUTTON_CHOOSE,
+                    onClick: onEnableSelection,
+                    disabled: loading,
+                },
             ];
         }
 
         return [
-            { type: 'primary', label:  isSelectAll ? BUTTON_UNSELECT_ALL : BUTTON_CHOOSE_ALL, onClick: selectAll, disabled: loading },
+            {
+                type: 'primary',
+                label:  isSelectAll ? BUTTON_UNSELECT_ALL : BUTTON_CHOOSE_ALL,
+                onClick: selectAll, disabled: loading,
+            },
             { label: BUTTON_CANCEL, onClick: onDisableSelection, disabled: loading },
         ];
-    }, [selectedSettings, loading, onCreate, onEnableSelection, selectAll, onDisableSelection, visibilitySettings]);
+    }, [
+        selectedSettings,
+        loading,
+        onEnableSelection,
+        selectAll,
+        onDisableSelection,
+        visibilitySettings,
+        addNewByModal,
+        onCreate,
+        showModal
+    ]);
 
     const searchInput = useMemo(() => ({
         placeholder: SEARCH_SETTING,
@@ -238,45 +269,55 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader }
     }), [onSearchInputChange, loading, params.filterText]);
 
     return (
-        <div className={ styles.page }>
-            { !hideHeader && <Header /> }
-            <HeaderWithActions
-                title={ HEADER_TITLE }
-                buttons={ buttons }
-                searchInput={ searchInput }
-                showSorting = { searchAndSortMode }
-                showSearchInput={ searchAndSortMode && selectedSettings === null }
-                sortingBy={ sortingBy }
-            />
-            <div className={ styles.tableWrapper }>
-                <PromoCampaignVisibilitySettingTable
-                    dataSource={ visibilitySettings }
-                    selectRow={ selectRow }
-                    onChangeVisible={ changeVisible }
-                    loading={ loading }
-                    rowSelection={ rowSelection }
-                    pagination={ pagination }
-                    onChange={ onChangePage }
+        <>
+            <div className={ styles.page }>
+                { !hideHeader && <Header /> }
+                <HeaderWithActions
+                    title={ HEADER_TITLE }
+                    buttons={ buttons }
+                    searchInput={ searchInput }
+                    showSorting = { searchAndSortMode }
+                    showSearchInput={ searchAndSortMode && selectedSettings === null }
+                    sortingBy={ sortingBy }
                 />
-            </div>
-            { selectedSettings && (
-                <div className={ styles.footer }>
-                    <div className={ styles.checked }>
-                        { CHOSEN } { selectedSettings.length }
-                    </div>
-                    { selectedSettings.length > 0 && (
-                        <Button
-                            className={ styles.redBtn }
-                            onClick={ onDelete }
-                            disabled={ loading }
-                            type="primary"
-                        >
-                            { BUTTON_DELETE }
-                        </Button>
-                    ) }
+                <div className={ styles.tableWrapper }>
+                    <PromoCampaignVisibilitySettingTable
+                        dataSource={ visibilitySettings }
+                        selectRow={ selectRow }
+                        onChangeVisible={ changeVisible }
+                        loading={ loading }
+                        rowSelection={ rowSelection }
+                        pagination={ pagination }
+                        onChange={ onChangePage }
+                    />
                 </div>
+                { selectedSettings && (
+                    <div className={ styles.footer }>
+                        <div className={ styles.checked }>
+                            { `Выбрано настроек: ${ selectedSettings.length }` }
+                        </div>
+                        { selectedSettings.length > 0 && (
+                            <Button
+                                className={ styles.redBtn }
+                                onClick={ onDelete }
+                                disabled={ loading }
+                                type="primary"
+                            >
+                                { BUTTON_DELETE }
+                            </Button>
+                        ) }
+                    </div>
+                ) }
+            </div>
+            { addNewByModal && (
+                <PromoCampaignVisibilitySettingModal
+                    forceUpdate= { forceUpdate }
+                    promoCampaignId={ promoCampaignId }
+                    closeModal={ closeModal }
+                    isModalVisible={ isModalVisible }
+                />
             ) }
-        </div>
+        </>
     );
 }
 

@@ -21,10 +21,11 @@ const PromoCampaignVisibilitySettingInput = ({
     onVisibilityChange,
     location,
     salePoint,
+    columnMode,
 }) => (
-    <div className={ styles.wrapper }>
+    <div className={ cn(styles.wrapper, { [styles.columnWrapper]: columnMode }) }>
         <Form
-            className={ styles.form }
+            className={ cn(styles.form, { [styles.columnForm]: columnMode }) }
             name={ FORM_NAME }
             requiredMark={ false }
         >
@@ -36,6 +37,7 @@ const PromoCampaignVisibilitySettingInput = ({
                 initialLocationValue={ getStringOptionValue(location || undefined) }
                 initialSalePointValue={ salePoint?.name ?? '' }
                 error={ error }
+                columnMode={ columnMode }
             />
             <div className={ styles.visibility }>
                 <label htmlFor={ VISIBILITY_FIELD.name } className={ styles.label }>
