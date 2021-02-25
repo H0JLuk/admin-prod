@@ -11,7 +11,11 @@ const appCodeRegex = /^[a-z0-9-_]+$/gmi;
 const numberTransform = value => value ? Number(value) : '';
 
 const checkBoxValidator = (_, value) => {
-    if (value.includes(APP_MECHANICS.PRESENTS.value) || value.includes(APP_MECHANICS.ECOSYSTEM.value)){
+    if (
+        value.includes(APP_MECHANICS.PRESENTS.value) ||
+        value.includes(APP_MECHANICS.ECOSYSTEM.value) ||
+        value.includes(APP_MECHANICS.BUNDLE.value)
+    ) {
         return Promise.resolve();
     }
     return Promise.reject(MECHANICS_ERROR);

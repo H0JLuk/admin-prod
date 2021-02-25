@@ -2,6 +2,7 @@ export const APP_MECHANICS = {
     PRESENTS: { value: 'PRESENTS', label: 'Подарки' },
     ECOSYSTEM: { value: 'ECOSYSTEM', label: 'Продукты' },
     PRESENTATION: { value: 'PRESENTATION', label: 'Экскурсия' },
+    BUNDLE: { value: 'BUNDLE', label: 'WOW' },
 };
 
 export const MECHANICS_CHECKBOXES = Object.keys(APP_MECHANICS).map(key => ({
@@ -15,4 +16,4 @@ export const APP_LOGIN_TYPES = [
     { label: 'Ссылка', value: 'DIRECT_LINK' },
 ];
 
-export const MECHANICS_ERROR = `Необходимо выбрать хотя бы одну обязательную механику (${APP_MECHANICS.PRESENTS.label} или ${APP_MECHANICS.ECOSYSTEM.label})`;
+export const MECHANICS_ERROR = `Необходимо выбрать хотя бы одну обязательную механику (${APP_MECHANICS.PRESENTS.label}, ${APP_MECHANICS.ECOSYSTEM.label} или ${APP_MECHANICS.BUNDLE.label})`;

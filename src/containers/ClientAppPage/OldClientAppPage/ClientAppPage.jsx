@@ -117,6 +117,7 @@ class ClientAppPage extends Component {
                     PRESENTS: value.includes(APP_MECHANICS.PRESENTS.value),
                     ECOSYSTEM: value.includes(APP_MECHANICS.ECOSYSTEM.value),
                     PRESENTATION: value.includes(APP_MECHANICS.PRESENTATION.value),
+                    BUNDLE: value.includes(APP_MECHANICS.BUNDLE.value),
                 },
             },
         });
@@ -261,7 +262,7 @@ class ClientAppPage extends Component {
     }
 
     addOrUpdate = async (data) => {
-        const { PRESENTS, ECOSYSTEM } = this.state.editingClientApp.mechanics;
+        const { PRESENTS, ECOSYSTEM, BUNDLE } = this.state.editingClientApp.mechanics;
         if (!data.code) {
             alert(ENTER_CLIENT_APP_CODE_REQUEST);
             return;
@@ -274,7 +275,7 @@ class ClientAppPage extends Component {
             alert(ENTER_CLIENT_APP_DISPLAY_NAME_REQUEST);
             return;
         }
-        if (!(PRESENTS || ECOSYSTEM) && !data.existingCode) {
+        if (!(PRESENTS || ECOSYSTEM || BUNDLE) && !data.existingCode) {
             this.setState({ mechanicsError: MECHANICS_ERROR });
             return;
         }
@@ -340,9 +341,9 @@ class ClientAppPage extends Component {
     }
 
     updateProperties = async (dataFromForm) => {
-        const { PRESENTS, ECOSYSTEM } = this.state.editingClientApp.mechanics;
+        const { PRESENTS, ECOSYSTEM, BUNDLE } = this.state.editingClientApp.mechanics;
 
-        if (!(PRESENTS || ECOSYSTEM)) {
+        if (!(PRESENTS || ECOSYSTEM || BUNDLE)) {
             this.setState({ mechanicsError: MECHANICS_ERROR });
             return;
         }
