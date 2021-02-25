@@ -15,6 +15,10 @@
     font-weight: bold;
 }
 
+.checked > button {
+    margin-left: 10px;
+}
+
 .footer {
     position: sticky;
     bottom: 0;
@@ -24,11 +28,6 @@
     margin-top: auto;
     padding: 20px 15px;
     background-color: white;
-}
-
-button.redBtn {
-    background:	#dc283a !important;
-    border-color: #dc283a !important;
 }
 
 .nextSettingsTrigger {

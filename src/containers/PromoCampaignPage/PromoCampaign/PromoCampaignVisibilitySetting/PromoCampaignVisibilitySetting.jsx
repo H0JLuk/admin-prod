@@ -11,6 +11,7 @@ import {
     deletePromoCampaignVisibilitySetting,
     editPromoCampaignVisibilitySetting,
     getPromoCampaignVisibilitySettings,
+    changeVisibleOfVisibilitySettings
 } from '../../../../api/services/promoCampaignService';
 import { getPathForCreatePromoCampaignVisibititySetting } from '../../../../utils/appNavigation';
 
@@ -44,6 +45,8 @@ const BUTTON_CHOOSE_ALL = 'Выбрать все';
 const BUTTON_UNSELECT_ALL = 'Отменить выбор';
 const BUTTON_CANCEL = 'Отмена';
 const BUTTON_DELETE = 'Удалить';
+const TURN_ON_ALL = 'Включить все';
+const TURN_OFF_ALL = 'Выключить все';
 
 const DROPDOWN_SORT_MENU = [
     { name: 'locationName', label: 'По локации' },
@@ -114,10 +117,41 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
         } catch (e) {
             console.error(e);
             message.error(e.message);
-        } finally {
-            setLoading(false);
         }
+
+        setLoading(false);
     }, [promoCampaignId]);
+
+    const changeVisibleAll = useCallback(async (visible) => {
+        const accessSettings = selectedSettings.reduce((result, settingId) => {
+            const index = visibilitySettings.findIndex(({ id }) => id === settingId);
+            if (visibilitySettings[index].visible !== visible) {
+                return [...result, {
+                    ...visibilitySettings[index],
+                    visible,
+                    index,
+                }];
+            }
+
+            return result;
+        }, []);
+
+        setLoading(true);
+
+        try {
+            const settings = accessSettings.reduce((setting, { id }) => ({ ...setting, [id]: visible }), {});
+            await changeVisibleOfVisibilitySettings(settings);
+            setVisibilitySettings((prev) => {
+                const nextState = prev.slice();
+                accessSettings.forEach(setting => nextState[setting.index] = { ...nextState[setting.index], visible });
+                return nextState;
+            });
+        } catch (e) {
+            message.error(e.message);
+        }
+
+        setLoading(false);
+    }, [selectedSettings, visibilitySettings]);
 
     const onDelete = useCallback(async () => {
         setLoading(true);
@@ -296,6 +330,19 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
                     <div className={ styles.footer }>
                         <div className={ styles.checked }>
                             { `Выбрано настроек: ${ selectedSettings.length }` }
+                            { selectedSettings.length > 0 && (
+                                <>
+                                    <Button
+                                        type="primary"
+                                        onClick={ () => changeVisibleAll(true) }
+                                    >
+                                        { TURN_ON_ALL }
+                                    </Button>
+                                    <Button onClick={ () => changeVisibleAll(false) }>
+                                        { TURN_OFF_ALL }
+                                    </Button>
+                                </>
+                            ) }
                         </div>
                         { selectedSettings.length > 0 && (
                             <Button

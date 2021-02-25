@@ -127,6 +127,10 @@ export function deletePromoCampaignVisibilitySetting(visibilitySettingId) {
     return Api.delete(`/admin/visibility-setting/${visibilitySettingId}`, getReqOptions());
 }
 
+export function changeVisibleOfVisibilitySettings(settings) {
+    return Api.post('/admin/visibility-setting/change-visibility/', { settings }, getReqOptions());
+}
+
 export function getPromoCampaignByExternalId(externalId) {
     return Api.get(`/promo-campaign/external/${externalId}`, getReqOptions(), 'text');
 }

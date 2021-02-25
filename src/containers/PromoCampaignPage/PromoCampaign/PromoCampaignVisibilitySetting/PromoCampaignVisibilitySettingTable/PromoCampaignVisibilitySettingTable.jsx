@@ -49,7 +49,15 @@ const PromoCampaignVisibilitySettingTable = ({
             width="20%"
             key="visible"
             className={ styles.switch }
-            render={ (item) => <Switch checked={ item.visible } onClick={ () => onChangeVisible({ ...item, visible: !item.visible }) } /> }
+            render={ (item) => (
+                <Switch
+                    checked={ item.visible }
+                    onClick={ (_, e) => {
+                        e.stopPropagation();
+                        onChangeVisible({ ...item, visible: !item.visible });
+                    } }
+                />
+            ) }
         />
     </Table>
 );
