@@ -29,9 +29,9 @@ const menuObj = [
 
 const DashboardFilterMenu = ({ onClick }) => (
     <Menu onClick={ onClick }>
-        {menuObj.map(({ label, value }) => (
+        { menuObj.map(({ label, value }) => (
             <Menu.Item key={ label }>{ value }</Menu.Item>
-        ))}
+        )) }
     </Menu>
 );
 
@@ -39,14 +39,14 @@ const DashboardFilterList = ({ list, filterIdList, onClick }) => {
 
     return (
         <div className={ styles.filtersBlock }>
-            {list.map((elem, index) => (
+            { list.map((elem, index) => (
                 <DashboardFilterTag
                     key={ index }
                     { ...elem }
                     handleClick={ onClick }
                     selected={ filterIdList.includes(elem.id) }
                 />
-            ))}
+            )) }
         </div>
     );
 };
@@ -76,10 +76,9 @@ const Dashboard = () => {
             setDzoList(dzoDtoList.map(({ dzoId: id, dzoName: displayName }) => ({ id, displayName })));
         } catch (e) {
             console.error(e?.message);
-        } finally {
-            await sleep(DEFAULT_SLEEP_TIME);
-            setLoading(false);
         }
+        await sleep(DEFAULT_SLEEP_TIME);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -156,7 +155,7 @@ const Dashboard = () => {
                     </Button>
                     <Dropdown trigger={ ['click'] } overlay={ <DashboardFilterMenu onClick={ onMenuItemClick } /> }>
                         <div className={ styles.menuFilter }>
-                            <p>{filterName}</p>
+                            <p>{ filterName }</p>
                             <img src={ downArrowImage } alt="" />
                         </div>
                     </Dropdown>
@@ -164,9 +163,9 @@ const Dashboard = () => {
                 <DashboardFilterList list={ filterTagList } filterIdList={ filterIdList } onClick={ onFilterTagClick } />
             </div>
             <div className={ styles.content }>
-                {filteredList.map((elem, index) => (
+                { filteredList.map((elem, index) => (
                     <DashboardItem key={ index } handleClick={ onItemClick } { ...elem } />
-                ))}
+                )) }
             </div>
         </div>
     );
