@@ -43,4 +43,4 @@ export const promoCampaignBannerTypes = {
     LOGO_SECONDARY: 'LOGO_SECONDARY',
 };
 
-export const bannersFields = 'promoCampaignBanners';
+export const bannersFields = 'banners';

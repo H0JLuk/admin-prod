@@ -33,7 +33,7 @@ const Template = ({ banners, texts, type, onRemoveImg }) => {
                             description={ row[key].description }
                             setting={ row[key].setting }
                             accept={ row[key].access_type }
-                            name={ ['promoCampaignBanners', key] }
+                            name={ ['banners', key] }
                             initialValue={ banners[key] }
                             rules={ row[key].rules }
                             onRemoveImg={ onRemoveImg }
@@ -49,7 +49,7 @@ const Template = ({ banners, texts, type, onRemoveImg }) => {
                             placeholder={ row[key].placeholder }
                             maxLength={ row[key]?.maxLength }
                             rules={ row[key].rules }
-                            name={ ['promoCampaignTexts', key] }
+                            name={ ['texts', key] }
                             initialValue={ texts[key] }
                         />
                     ) }

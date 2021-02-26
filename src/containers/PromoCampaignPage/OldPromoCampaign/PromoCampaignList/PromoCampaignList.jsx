@@ -58,11 +58,11 @@ export const PromoCampaignList = ({
         <Collapse>
             <Panel key={ 1 }
                    header={ <BannerPanelHeader promoCampaign={ promoCampaign } /> }>
-            {!_.isEmpty(promoCampaign.promoCampaignBanners)
+            { !_.isEmpty(promoCampaign.banners)
                 ? <Table loading={ loading }
                          className={ styles.promoCampaignsTable }
                          pagination={ false }
-                         dataSource={ promoCampaign.promoCampaignBanners }>
+                         dataSource={ promoCampaign.banners }>
                     <Table.Column
                         width="70%"
                         title={
@@ -125,11 +125,11 @@ export const PromoCampaignList = ({
         <Collapse>
             <Panel key={ 1 }
                    header={ <TextPanelHeader promoCampaign={ promoCampaign } /> }>
-                {!_.isEmpty(promoCampaign.promoCampaignTexts)
+                {!_.isEmpty(promoCampaign.texts)
                     ? <Table loading={ loading }
                              className={ styles.promoCampaignsTable }
                              pagination={ false }
-                             dataSource={ promoCampaign.promoCampaignTexts }>
+                             dataSource={ promoCampaign.texts }>
                         <Table.Column
                             width="70%"
                             title="Текст промо-кампании"

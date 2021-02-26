@@ -72,8 +72,8 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             visible: false,
             errors: {},
         }],
-        promoCampaignTexts: {},
-        promoCampaignBanners: {},
+        texts: {},
+        banners: {},
         typePromoCampaign: '',
         categoryIdList: [],
         appCode: null,
@@ -127,14 +127,14 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             savePromoCampaignData({
                 ...state,
                 ...normalizeData,
-                promoCampaignBanners: promoCampaign.promoCampaignBanners,
-                promoCampaignTexts: promoCampaign.promoCampaignTexts,
+                banners: promoCampaign.banners,
+                texts: promoCampaign.texts,
                 id: promoCampaign.id,
             });
 
             textAndBannersRef.current = {
-                promoCampaignBanners: normalizeData.promoCampaignBanners,
-                promoCampaignTexts: normalizeData.promoCampaignTexts,
+                banners: normalizeData.banners,
+                texts: normalizeData.texts,
             };
             setLoading(false);
 
@@ -228,14 +228,14 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             }
 
             const textEditPromises = editTextBanners(
-                currentData.promoCampaignTexts,
+                currentData.texts,
                 oldPromoCampaignData,
                 currentData.appCode
             );
 
             await Promise.all(textEditPromises);
             await EditImgBanners(
-                currentData.promoCampaignBanners,
+                currentData.banners,
                 oldPromoCampaignData,
                 changedImgs.current,
                 currentData.appCode
@@ -287,11 +287,11 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             const { visibilitySettings } = state;
             const dataForSend = getDataForSend(state);
             const { id } = await newPromoCampaign(dataForSend, state.appCode);
-            const textPromises = createTexts(state.promoCampaignTexts, id, state.appCode);
+            const textPromises = createTexts(state.texts, id, state.appCode);
             const visibilityPromises = createVisibilities(visibilitySettings, id, state.appCode);
 
             await Promise.all(textPromises);
-            await createImgBanners(state.promoCampaignBanners, id, state.appCode);
+            await createImgBanners(state.banners, id, state.appCode);
             await Promise.all(visibilityPromises);
 
             history.push(matchUrl);
@@ -331,8 +331,8 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     const changeTypePromo = useCallback(() =>
         setState((prev) => ({
             ...prev,
-            promoCampaignTexts: {},
-            promoCampaignBanners: {},
+            texts: {},
+            banners: {},
         })), []);
 
     const StepContainer = (() => {
@@ -353,8 +353,8 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             case steps.textAndBanners:
                 return (
                     <StepTextAndImage
-                        texts={ state.promoCampaignTexts }
-                        banners={ state.promoCampaignBanners }
+                        texts={ state.texts }
+                        banners={ state.banners }
                         typePromoCampaign={ state.typePromoCampaign }
                         addChangedImg={ addChangedImg }
                         setFields={ form.setFields }
@@ -394,7 +394,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
         setLoading(true);
         try {
             const { id } = await newPromoCampaign(dataForSend, appCode);
-            savePromoCampaignData({ ...dataForSend, id, promoCampaignTexts: [], promoCampaignBanners: [] });
+            savePromoCampaignData({ ...dataForSend, id, texts: [], banners: [] });
         } catch ({ message }) {
             setMessageError(message);
         }
@@ -407,19 +407,19 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
 
     // Сохраняет баннеры и текса в отдельный ref, эти данные используются в форме.
     // Так же по этим данным идет проверка текстов и баннеров при удалении.
-    const saveTextAndBanners = (text, banners) => {
-        const { promoCampaignTexts, promoCampaignBanners } = textAndBannersRef.current;
+    const saveTextAndBanners = (textsToSave, bannersToSave) => {
+        const { texts, banners } = textAndBannersRef.current;
 
         return textAndBannersRef.current = {
-            promoCampaignTexts: {
-                ...state.promoCampaignTexts,
-                ...promoCampaignTexts,
-                ...arrayToObject(text, 'type', 'value'),
+            texts: {
+                ...state.texts,
+                ...texts,
+                ...arrayToObject(textsToSave, 'type', 'value'),
             },
-            promoCampaignBanners: {
-                ...state.promoCampaignBanners,
-                ...promoCampaignBanners,
-                ...arrayToObject(banners, 'type', 'url'),
+            banners: {
+                ...state.banners,
+                ...banners,
+                ...arrayToObject(bannersToSave, 'type', 'url'),
             },
         };
     };
@@ -461,9 +461,9 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     // Проверяет удаленные текста, сохраняет их в ref и обновляет поля формы
     const onTextDelete = (id, type) => {
         savePromoCampaignData(deleteText(savedPromoCampaignData.current, id));
-        textAndBannersRef.current.promoCampaignTexts[type] = '';
+        textAndBannersRef.current.texts[type] = '';
 
-        form.setFieldsValue({ promoCampaignTexts: { [type]: '' } });
+        form.setFieldsValue({ texts: { [type]: '' } });
     };
 
     // Делает запрос на редактирование баннеров и текстов,
@@ -472,36 +472,36 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
         setLoading(true);
 
         const textPromises = editTextBanners(
-            val.promoCampaignTexts,
+            val.texts,
             savedPromoCampaignData.current,
             appCode,
             onTextDelete
         );
 
-        const texts = (await Promise.all(textPromises)).filter(Boolean);
-        const { banners, deletedBannersId } = await EditImgBanners(
-            val.promoCampaignBanners,
+        const editedTexts = (await Promise.all(textPromises)).filter(Boolean);
+        const { banners: editedBanners, deletedBannersId } = await EditImgBanners(
+            val.banners,
             savedPromoCampaignData.current,
             changedImgs.current,
             appCode
         );
 
-        const { promoCampaignTexts, promoCampaignBanners } = saveTextAndBanners(texts, banners);
-        const promoCampaignSavedData = filterBanner(savedPromoCampaignData.current, deletedBannersId, texts);
+        const { texts, banners } = saveTextAndBanners(editedTexts, editedBanners);
+        const promoCampaignSavedData = filterBanner(savedPromoCampaignData.current, deletedBannersId, editedTexts);
 
         // обновляем поля в форме, после того как создали и отфильтровали старые данные в ref
-        form.setFieldsValue({ promoCampaignTexts, promoCampaignBanners });
+        form.setFieldsValue({ texts, banners });
 
         // обновляем данные в ref, для того чтобы проверять новые текста и баннеры на изменения.
         savePromoCampaignData({
             ...promoCampaignSavedData,
-            promoCampaignBanners: [...promoCampaignSavedData.promoCampaignBanners, ...banners],
-            promoCampaignTexts: [...promoCampaignSavedData.promoCampaignTexts, ...texts],
+            banners: [...promoCampaignSavedData.banners, ...editedBanners],
+            texts: [...promoCampaignSavedData.texts, ...editedTexts],
         });
 
         clearImgRef();
 
-        setState((prev) => ({ ...prev, promoCampaignBanners, promoCampaignTexts }));
+        setState((prev) => ({ ...prev, banners, texts }));
     };
 
     const onEditCopyPromoCampaign = async (newValue = {}) => {
@@ -536,8 +536,8 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             });
 
             textAndBannersRef.current = {
-                promoCampaignBanners: normalizeData.promoCampaignBanners,
-                promoCampaignTexts: normalizeData.promoCampaignTexts,
+                banners: normalizeData.banners,
+                texts: normalizeData.texts,
             };
         } else {
             await handleEditPromoCampaign(dataForSend, copyPromoCampaignId);

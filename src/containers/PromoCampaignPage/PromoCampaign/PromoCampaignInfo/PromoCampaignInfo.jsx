@@ -67,8 +67,8 @@ const PromoCampaignInfo = ({ matchUrl }) => {
                 return (
                     <StepTextAndImage
                         type={ promoCampaign.type }
-                        banners={ promoCampaign.promoCampaignBanners }
-                        texts={ promoCampaign.promoCampaignTexts }
+                        banners={ promoCampaign.banners }
+                        texts={ promoCampaign.texts }
                     />
                 );
             case 3:

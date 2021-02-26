@@ -63,7 +63,7 @@ export function createVisibilities(visibilitySettings, promoCampaignId, appCode)
 export function editTextBanners(promoCampaignTexts, promoCampaign, appCode, onDelete) {
 
     return Object.keys(promoCampaignTexts).map((type) => {
-        const textWithType = promoCampaign.promoCampaignTexts.find(text => text.type === type);
+        const textWithType = promoCampaign.texts.find(text => text.type === type);
         const newValue = promoCampaignTexts[type];
         const prevValue = textWithType?.value;
 
@@ -111,7 +111,7 @@ export async function EditImgBanners(promoCampaignBanners, promoCampaign, change
         };
 
         if (changedImgs.includes(formBannerType)) {
-            const bannerId = promoCampaign.promoCampaignBanners.find(banner => banner.type === bannerType)?.id;
+            const bannerId = promoCampaign.banners.find(banner => banner.type === bannerType)?.id;
             const [bannerFile] = promoCampaignBanners[formBannerType];
 
             if (bannerId && !bannerFile) {
@@ -172,7 +172,7 @@ export function normalizeFirstStepValue(val) {
 export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
     if (!promoCampaign && typeof promoCampaign !== 'object') return {};
 
-    const { promoCampaignBanners = [], promoCampaignTexts = [] } = promoCampaign;
+    const { banners = [], texts = [] } = promoCampaign;
 
     return {
         name: promoCampaign.name,
@@ -184,8 +184,8 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
         categoryIdList: promoCampaign.categoryList.reduce((prev, curr) => (
             [...prev, curr.categoryId]
         ), []),
-        promoCampaignBanners: arrayToObject(promoCampaignBanners, 'type', 'url'),
-        promoCampaignTexts: arrayToObject(promoCampaignTexts, 'type', 'value'),
+        banners: arrayToObject(banners, 'type', 'url'),
+        texts: arrayToObject(texts, 'type', 'value'),
         datePicker: [
             promoCampaign.startDate ? moment(promoCampaign.startDate) : undefined,
             promoCampaign.finishDate ? moment(promoCampaign.finishDate) : undefined,

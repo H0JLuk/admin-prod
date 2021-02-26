@@ -105,9 +105,9 @@ class PromoCampaignPage extends Component {
                 this.setState({ promoCampaignList: promoCampaignDtoList });
                 return getDzoList();
             }).then(response => {
-            const { dzoDtoList } = response;
-            this.setState({ allDzoList: dzoDtoList });
-        }).catch(() => this.setState({ allDzoList: [], promoCampaignList: [], listError: LIST_ERROR }));
+                const { dzoDtoList } = response;
+                this.setState({ allDzoList: dzoDtoList });
+            }).catch(() => this.setState({ allDzoList: [], promoCampaignList: [], listError: LIST_ERROR }));
     }
 
     handleClickStatistics = (promoCampaign) => {
@@ -148,7 +148,7 @@ class PromoCampaignPage extends Component {
                 .then(() => showSuccessNotification(onPromoCampaignSave(editedPromoCampaign.name)))
                 .catch(error => errorNotice(error.message));
         } else {
-            const newPromoCampaign = { ...editedPromoCampaign, promoCampaignBanners: [], promoCampaignTexts: [] };
+            const newPromoCampaign = { ...editedPromoCampaign, banners: [], texts: [] };
             createPromoCampaign(newPromoCampaign)
                 .then(({ id }) => this.pushToPromoCampaignList({ ...newPromoCampaign, id }))
                 .then(() => showSuccessNotification(onPromoCampaignSave(editedPromoCampaign.name, MODE_CREATE)))
@@ -217,10 +217,10 @@ class PromoCampaignPage extends Component {
         const { promoCampaignList, currentPromoCampaign, currentPromoCampaignBanner } = this.state;
         promoCampaignBanner.url = promoCampaignBanner.url + '&' + new Date().getTime();
         if (currentPromoCampaignBanner) {
-            currentPromoCampaign.promoCampaignBanners = currentPromoCampaign.promoCampaignBanners.filter(banner => banner.id !== currentPromoCampaignBanner.id);
+            currentPromoCampaign.banners = currentPromoCampaign.banners.filter(banner => banner.id !== currentPromoCampaignBanner.id);
         }
-        currentPromoCampaign.promoCampaignBanners = [...currentPromoCampaign.promoCampaignBanners, promoCampaignBanner];
-        promoCampaignList.forEach(pc =>  { if (pc.id === currentPromoCampaign.id) {
+        currentPromoCampaign.banners = [...currentPromoCampaign.banners, promoCampaignBanner];
+        promoCampaignList.forEach(pc => { if (pc.id === currentPromoCampaign.id) {
             return currentPromoCampaign;
         } });
         this.setState({ promoCampaignList }, () => this.closeSavePromoCampaignBannerModal());
@@ -230,8 +230,8 @@ class PromoCampaignPage extends Component {
         deletePromoCampaignBanner(currentPromoCampaignBanner.id)
             .then(() => {
                 const { promoCampaignList } = this.state;
-                currentPromoCampaign.promoCampaignBanners = currentPromoCampaign.promoCampaignBanners.filter(banner => banner.id !== currentPromoCampaignBanner.id);
-                promoCampaignList.forEach(pc =>  { if (pc.id === currentPromoCampaign.id) {
+                currentPromoCampaign.banners = currentPromoCampaign.banners.filter(banner => banner.id !== currentPromoCampaignBanner.id);
+                promoCampaignList.forEach(pc => { if (pc.id === currentPromoCampaign.id) {
                     return currentPromoCampaign;
                 } });
                 this.setState({ promoCampaignList });
@@ -250,8 +250,8 @@ class PromoCampaignPage extends Component {
         deletePromoCampaignText(currentPromoCampaignText.id)
             .then(() => {
                 const { promoCampaignList } = this.state;
-                currentPromoCampaign.promoCampaignTexts = currentPromoCampaign.promoCampaignTexts.filter(text => text.id !== currentPromoCampaignText.id);
-                promoCampaignList.forEach(pc =>  { if (pc.id === currentPromoCampaign.id) {
+                currentPromoCampaign.texts = currentPromoCampaign.texts.filter(text => text.id !== currentPromoCampaignText.id);
+                promoCampaignList.forEach(pc => { if (pc.id === currentPromoCampaign.id) {
                     return currentPromoCampaign;
                 } });
                 this.setState({ promoCampaignList });
@@ -293,10 +293,10 @@ class PromoCampaignPage extends Component {
     pushToPromoCampaignTextList = (promoCampaignText) => {
         const { promoCampaignList, currentPromoCampaign, currentPromoCampaignText } = this.state;
         if (currentPromoCampaignText) {
-            currentPromoCampaign.promoCampaignTexts = currentPromoCampaign.promoCampaignTexts.filter(text => text.id !== currentPromoCampaignText.id);
+            currentPromoCampaign.texts = currentPromoCampaign.texts.filter(text => text.id !== currentPromoCampaignText.id);
         }
-        currentPromoCampaign.promoCampaignTexts = [...currentPromoCampaign.promoCampaignTexts, promoCampaignText];
-        promoCampaignList.forEach(pc =>  { if (pc.id === currentPromoCampaign.id) {
+        currentPromoCampaign.texts = [...currentPromoCampaign.texts, promoCampaignText];
+        promoCampaignList.forEach(pc => { if (pc.id === currentPromoCampaign.id) {
             return currentPromoCampaign;
         }});
         this.setState({ promoCampaignList }, () => this.closeSavePromoCampaignTextModal());
@@ -378,9 +378,9 @@ class PromoCampaignPage extends Component {
             <div className={ styles.promoCampaigns }>
                 <div style={ { textAlign: 'center', padding: 10 } }><NavLink to={ getLinkForPromoCampaignPage() }>Редизайн</NavLink></div>
                 <div className={ styles.amListHeader }>
-                    <Typography.Text mark strong>{PROMO_CAMPAIGN_LIST_TITLE}</Typography.Text>
+                    <Typography.Text mark strong>{ PROMO_CAMPAIGN_LIST_TITLE }</Typography.Text>
                 </div>
-                {!_.isEmpty(promoCampaignList) || loading
+                { !_.isEmpty(promoCampaignList) || loading
                     ? <PromoCampaignList
                         loading={ loading }
                         promoCampaigns={ promoCampaignList }
@@ -401,10 +401,16 @@ class PromoCampaignPage extends Component {
                         DraggableBodyRow={ this.DraggableBodyRow }
                         DraggableContainer={ this.DraggableContainer }
                     />
-                    : <Empty description={
-                        <span>Нет промо кампаний, но вы можете <span className={ styles.promoCampaignsLink }
-                                                                     onClick={ this.createPromoCampaign }> создать новую!</span> </span>
-                    } />}
+                    : (
+                        <Empty
+                            description={
+                                <span>
+                                    Нет промо кампаний, но вы можете
+                                    <span className={ styles.promoCampaignsLink } onClick={ this.createPromoCampaign }> создать новую!</span>
+                                </span>
+                            }
+                        />
+                    ) }
 
                 <SavePromoCampaignModal
                     title={ currentPromoCampaign ? 'Редактирование промо кампании' : 'Добавление промокампании' }
@@ -450,10 +456,11 @@ class PromoCampaignPage extends Component {
                     onSave={ this.promoCodeUpload }
                 />
 
-                <FloatingButton text="Добавление промо кампании"
-                                onClick={ this.createPromoCampaign }
-                                icon={ <PlusOutlined /> }
-                                type="primary"
+                <FloatingButton
+                    text="Добавление промо кампании"
+                    onClick={ this.createPromoCampaign }
+                    icon={ <PlusOutlined /> }
+                    type="primary"
                 />
             </div>
         );
@@ -464,16 +471,16 @@ class PromoCampaignPage extends Component {
             return;
         }
         return (
-            <div>{error}</div>
+            <div>{ error }</div>
         );
     }
 
     render() {
         return (
             <div>
-                {this.renderError(this.state.listError)}
+                { this.renderError(this.state.listError) }
                 <div>
-                    {this.renderPromoCampaignList()}
+                    { this.renderPromoCampaignList() }
                 </div>
             </div>
         );
