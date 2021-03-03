@@ -56,15 +56,15 @@ function AutocompleteLocationAndSalePoint({
     });
     const selectedValues = useRef({ location: null, salePoint: null });
 
-    const changeLocation = useCallback((location) => {
+    const changeLocation = (location) => {
         selectedValues.current = { ...selectedValues.current, location };
         onLocationChange(location);
-    }, [onLocationChange]);
+    };
 
-    const changeSalePoint = useCallback((salePoint) => {
+    const changeSalePoint = (salePoint) => {
         selectedValues.current = { ...selectedValues.current, salePoint };
         onSalePointChange(salePoint);
-    }, [onSalePointChange]);
+    };
 
     /** @type {(searchValue: string, typeSearch: 'searchLocation' | 'searchSalePoint', newLocationId: number) => Promise<void>} */
     const getSearchResults = useCallback(async (searchValue, typeSearch = 'searchLocation', newLocationId = locationId) => {
@@ -87,7 +87,7 @@ function AutocompleteLocationAndSalePoint({
     const getResultsDebounced = useCallback(debounce(getSearchResults, 500), [getSearchResults]);
 
     /** @type {(searchValue: string, typeSearch: 'searchLocation' | 'searchSalePoint') => void} */
-    const search = useCallback((searchValue, typeSearch = 'searchLocation') => {
+    const search = (searchValue, typeSearch = 'searchLocation') => {
         if (typeSearch !== 'searchLocation' && typeSearch !== 'searchSalePoint') {
             throw Error('Incorrect `typeSearch` param');
         }
@@ -124,25 +124,25 @@ function AutocompleteLocationAndSalePoint({
         }
 
         getResultsDebounced(searchValue, typeSearch);
-    }, [getResultsDebounced, state.searchSalePoint.value]);
+    };
 
-    const handleSearchLocation = useCallback((searchValue) => {
+    const handleSearchLocation = (searchValue) => {
         if (!searchValue) {
             changeLocation(null);
         }
 
         search(searchValue, 'searchLocation');
-    }, [changeLocation, search]);
+    };
 
-    const handleSearchSalePoint = useCallback((searchValue) => {
+    const handleSearchSalePoint = (searchValue) => {
         if (!searchValue) {
             changeSalePoint(null);
         }
 
         search(searchValue, 'searchSalePoint');
-    }, [changeSalePoint, search]);
+    };
 
-    const handleSelectLocationOption = useCallback((value, location) => {
+    const handleSelectLocationOption = (value, location) => {
         const { data } = location;
 
         if (!state.searchSalePoint.value) {
@@ -154,9 +154,9 @@ function AutocompleteLocationAndSalePoint({
             ...state,
             searchLocation: { ...state.searchLocation, value },
         }));
-    }, [changeLocation, state.searchSalePoint.value, getSearchResults]);
+    };
 
-    const handleSelectSalePointOption = useCallback((value, { data: salePoint, data: { location } }) => {
+    const handleSelectSalePointOption = (value, { data: salePoint, data: { location } }) => {
         const { location: locationData, searchLocation } = createSearchDataAndPassLocation(location, locationId);
 
         if (locationData) {
@@ -169,7 +169,7 @@ function AutocompleteLocationAndSalePoint({
             searchSalePoint: { ...state.searchSalePoint, value },
             searchLocation: searchLocation ? searchLocation : state.searchLocation,
         }));
-    }, [changeSalePoint, changeLocation, locationId]);
+    };
 
     const handleBlurSalePoint = () => {
         const { searchSalePoint: { value } } = state;
@@ -181,7 +181,8 @@ function AutocompleteLocationAndSalePoint({
                 const [firstExactElem] = exactSalePoints;
 
                 if (salePoint?.name !== firstExactElem.name) {
-                    handleSelectSalePointOption(value, { data: firstExactElem });
+                    const inputValue = `${firstExactElem.name}, ${firstExactElem.description}`;
+                    handleSelectSalePointOption(inputValue, { data: firstExactElem });
                 }
             }
         }
@@ -209,7 +210,7 @@ function AutocompleteLocationAndSalePoint({
 
     const salePointOptions = searchSalePoint.results.map((el) => ({
         label: renderOptionLabelByType(el, 'searchSalePoint'),
-        value: el.name,
+        value: `${el.name}, ${el.description}`,
         key: el.id,
         data: el,
     }));
