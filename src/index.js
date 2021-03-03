@@ -5,8 +5,10 @@ import App from './App.jsx';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
+const basename = process.env.NODE_ENV === 'production' ? '/admin' : '/';
+
 ReactDOM.render((
-    <BrowserRouter>
+    <BrowserRouter basename={ basename }>
         <App />
     </BrowserRouter>
 ), document.getElementById('root'));

@@ -26,9 +26,9 @@
     "styled-components": "^5.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test --env=jest-environment-jsdom-sixteen",
     "docker-build": "docker build --no-cache -t dzo-distributor-admin .",
     "docker-run": "docker run -d --name dzo-distributor-admin -p 80:80 dzo-distributor-admin",
     "docker-stop": "docker stop dzo-distributor-admin",
@@ -51,6 +51,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@craco/craco": "^5.9.0",
     "@testing-library/react": "^11.1.2",
     "@testing-library/user-event": "^12.2.2",
     "eslint": "^6.6.0",
