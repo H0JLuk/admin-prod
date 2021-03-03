@@ -19,8 +19,13 @@
     justify-content: space-between;
 }
 
+.row:not(:last-child) {
+    margin-bottom: 20px;
+}
+
 .title {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .text {

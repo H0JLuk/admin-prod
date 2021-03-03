@@ -1,36 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Col, Row } from 'antd';
 import { TextBlock, ImageBlock } from './TemplateBlocks';
 import { INFO_ROWS } from './templateConstants';
 
 import styles from './Template.module.css';
 
+const getBanners = (banners) => banners.reduce(
+    (result, { type, url }) => ({ ...result, [type]: url }),
+    {}
+);
+
+const getTexts = (texts) => texts.reduce((result, { type, value }) => {
+    if (Object.prototype.hasOwnProperty.call(result, type)) {
+        return result;
+    }
+    return { ...result, [type]: value };
+}, {});
+
 const Template = ({ banners, texts, type }) => {
-    const [filteredBanners, setFilteredBanners] = useState({});
-    const [filteredTexts, setFilteredTexts] = useState({});
-    const [infoRows, setInfoRows] = useState([]);
-
-    useEffect(() => {
-        const resultBanners = banners.reduce((result, { type, url }) => {
-            return { ...result, [type]: url };
-        }, {});
-        const resultTexts = texts.reduce((result, { type, value }) => {
-            if (Object.prototype.hasOwnProperty.call(result, type)) {
-                return result;
-            }
-            return { ...result, [type]: value };
-        }, {});
-
-        setInfoRows(INFO_ROWS[type] || []);
-        setFilteredBanners(resultBanners);
-        setFilteredTexts(resultTexts);
-    }, [banners, texts, type]);
+    const [filteredBanners] = useState(() => getBanners(banners));
+    const [filteredTexts] = useState(() => getTexts(texts));
+    const [infoRows] = useState(INFO_ROWS[type] || []);
 
     return infoRows.map((row, index) => (
         <Row
             key={ index }
             className={ styles.row }
-            gutter={ [16, 32] }
+            gutter={ [16] }
         >
             { Object.keys(row).map((key) => (
                 <Col

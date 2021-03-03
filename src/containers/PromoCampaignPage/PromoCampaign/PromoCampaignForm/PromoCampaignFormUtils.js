@@ -177,10 +177,10 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
     return {
         name: promoCampaign.name,
         webUrl: promoCampaign.webUrl,
-        promoCodeType: promoCampaign.promoCodeType,
+        promoCodeType: isCopy ? undefined : promoCampaign.promoCodeType,
         active: promoCampaign.active,
         dzoId: promoCampaign.dzoId,
-        typePromoCampaign: promoCampaign.type,
+        type: promoCampaign.type,
         categoryIdList: promoCampaign.categoryList.reduce((prev, curr) => (
             [...prev, curr.categoryId]
         ), []),
@@ -190,7 +190,7 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
             promoCampaign.startDate ? moment(promoCampaign.startDate) : undefined,
             promoCampaign.finishDate ? moment(promoCampaign.finishDate) : undefined,
         ],
-        appCode: appCode ?? getAppCode(),
+        appCode: isCopy ? undefined : appCode ?? getAppCode(),
         settings: promoCampaign.settings,
         externalId: isCopy ? '' : promoCampaign.externalId,
     };
@@ -205,7 +205,7 @@ export const getDataForSend = ({
     finishDate,
     startDate,
     promoCodeType,
-    typePromoCampaign,
+    type,
     categoryIdList,
     settings,
     externalId
@@ -219,7 +219,7 @@ export const getDataForSend = ({
     startDate,
     promoCodeType,
     settings,
-    type: typePromoCampaign,
+    type,
     categoryIdList,
     externalId: externalId || null,
 });

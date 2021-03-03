@@ -74,7 +74,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
         }],
         texts: {},
         banners: {},
-        typePromoCampaign: '',
+        type: '',
         categoryIdList: [],
         appCode: null,
         settings: {
@@ -355,7 +355,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
                     <StepTextAndImage
                         texts={ state.texts }
                         banners={ state.banners }
-                        typePromoCampaign={ state.typePromoCampaign }
+                        typePromoCampaign={ state.type }
                         addChangedImg={ addChangedImg }
                         setFields={ form.setFields }
                     />

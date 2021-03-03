@@ -116,12 +116,12 @@ const StepInfo = ({ promoCampaign }) => {
                     </Col>
 
                     <Col span={ 12 }>
-                            <div className={ style.infoTitle }>{ EXTERNAL_ID_LABEL }</div>
-                            <div className={ style.infoText }>
-                                { promoCampaign.externalId
-                                    ? promoCampaign.externalId
-                                    : <i>{ EMPTY_EXTERNAL_ID_LABEL }</i> }
-                            </div>
+                        <div className={ style.infoTitle }>{ EXTERNAL_ID_LABEL }</div>
+                        <div className={ style.infoText }>
+                            { promoCampaign.externalId
+                                ? promoCampaign.externalId
+                                : <i>{ EMPTY_EXTERNAL_ID_LABEL }</i> }
+                        </div>
                     </Col>
                 </Row>
             </div>

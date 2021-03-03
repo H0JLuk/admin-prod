@@ -160,6 +160,6 @@ export const resolveMenuItemsByRoleAndAppCode = (role, appCode = '') => {
         case ROLES.USER_MANAGER:
             return [USER_MANAGER_SIDEBAR_MENU_ITEMS, USER_MANAGER_TOP_MENU_ITEMS];
         default:
-            return [];
+            return [[], []];
     }
 };

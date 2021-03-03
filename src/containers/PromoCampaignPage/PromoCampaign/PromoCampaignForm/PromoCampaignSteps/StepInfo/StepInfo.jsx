@@ -45,7 +45,7 @@ const EXTERNAL_ID_DUPLICATE = 'Введенный внешний ID уже ис�
 const types_promo = Object.values(promoCodeTypes);
 
 const namePathPriorityOnWebUrl = ['settings', 'priorityOnWebUrl'];
-const namePathAlternativeOfferMechanic = [ 'settings', 'alternativeOfferMechanic' ];
+const namePathAlternativeOfferMechanic = ['settings', 'alternativeOfferMechanic'];
 
 const EXCURSION = 'Экскурсия';
 const GIFT = 'Подарок';
@@ -72,15 +72,21 @@ const StepInfo = ({
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
     const [clientApps, setClientApps] = useState([]);
-    const [active, setActive] = useState(state.active ?? false);
     const [selectCategory, setSelectCategory] = useState(state.categoryIdList ?? []);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
         (async () => {
-            const { dzoDtoList = [] } = await getDzoList();
-            const { categoryList = [] } = await getCategoryList();
-            const { clientApplicationDtoList: allApps = [] } = await getClientAppList();
+            const [
+                { dzoDtoList = [] },
+                { categoryList = [] },
+                { clientApplicationDtoList: allApps = [] }
+            ] = await Promise.all([
+                getDzoList(),
+                getCategoryList(),
+                getClientAppList(),
+            ]);
+            // TODO: Переделать вызов setState на рефки или на один стейт. И возможно вынести эту логику в PromoCampaignForm что не делать каждый раз запросы при открытии этого шага
             setDzoList(dzoDtoList.filter(item => !item.isDeleted));
             setCategories(categoryList.filter(({ active }) => active));
             setClientApps(allApps.filter(({ isDeleted }) => !isDeleted));
@@ -124,7 +130,7 @@ const StepInfo = ({
                     label={ NAME_PROMO_CAMPAIGN }
                     className={ styles.promoCampaignName }
                     name="name"
-                    initialValue={ state.name }
+                    initialValue={ isCopy ? `Копия: ${state.name}` : state.name }
                     normalize={ (value) => !value.trim() ? value.trim() : value }
                     validateFirst
                     rules={ [
@@ -224,7 +230,7 @@ const StepInfo = ({
                                             ),
                                             message: 'Укажите ссылку'
                                         },
-                                        { pattern: URL_REGEXP, message: 'Введите url в формате site.ru', validateTrigger: 'onSubmit' },
+                                        { pattern: URL_REGEXP, message: 'Введите корректный URL', validateTrigger: 'onSubmit' },
                                     ] }
                                     initialValue={ decodeURI(state.webUrl || '') }
                                 >
@@ -326,28 +332,35 @@ const StepInfo = ({
 
                     <Col span={ 12 } className={ styles.flexCenter }>
                         <div className={ styles.flexCenter }>
-                            <div className={ styles.statusInfo }>
-                                <div>
-                                    { active ? STATUS_ON : STATUS_OFF }
-                                </div>
-                                <div className={ styles.viewInfo }>
-                                    <span className={ styles.statusText }>
-                                        { active ? STATUS_TEXT_ON : STATUS_TEXT_OFF }
-                                    </span>
-                                    <Form.Item
-                                        name="active"
-                                        valuePropName="checked"
-                                        className={ styles.blockActive }
-                                        initialValue={ state.active }
-                                    >
-                                        <Switch
-                                            id='active'
-                                            size="default"
-                                            onChange={ setActive }
-                                        />
-                                    </Form.Item>
-                                </div>
-                            </div>
+                            <Form.Item
+                                noStyle
+                                dependencies={ ['active'] }
+                            >
+                                { ({ getFieldValue }) => {
+                                    const active = getFieldValue('active');
+
+                                    return (
+                                        <div className={ styles.statusInfo }>
+                                            <div>
+                                                { active ? STATUS_ON : STATUS_OFF }
+                                            </div>
+                                            <div className={ styles.viewInfo }>
+                                                <span className={ styles.statusText }>
+                                                    { active ? STATUS_TEXT_ON : STATUS_TEXT_OFF }
+                                                </span>
+                                                <Form.Item
+                                                    name="active"
+                                                    valuePropName="checked"
+                                                    className={ styles.blockActive }
+                                                    initialValue={ state.active }
+                                                >
+                                                    <Switch />
+                                                </Form.Item>
+                                            </div>
+                                        </div>
+                                    );
+                                } }
+                            </Form.Item>
                         </div>
                     </Col>
                 </Row>
@@ -418,10 +431,10 @@ const StepInfo = ({
                     <Col span={ 12 }>
                         <div className={ styles.container }>
                             <Form.Item
-                                name="typePromoCampaign"
+                                name="type"
                                 label={ TYPE_PROMO_CAMPAIGN }
                                 rules={ [{ required: true, message: 'Укажите тип промо-кампании' }] }
-                                initialValue={ state.typePromoCampaign }
+                                initialValue={ state.type }
                             >
                                 <Radio.Group className={ styles.typePromoCampaign } onChange={ changeTypePromo }>
                                     <Radio
