@@ -50,6 +50,7 @@ const DEFAULT_ERRORS = { login: '', location: '', salePoint: '', backend: '' };
 
 
 const CREATE = 'CREATE';
+const EDIT = 'EDIT';
 const RESTORED = 'RESTORED';
 const DELETE = 'DELETE';
 const ERROR = 'ERROR';
@@ -69,6 +70,12 @@ const userMessage = (login, pwd, mode, errorMessage) => {
                     </Paragraph>
                 ),
                 placement: 'topRight',
+            };
+        }
+        case EDIT: {
+            return {
+                message: 'Данные пользователя успешно обновлены',
+                description: '',
             };
         }
         case RESTORED: {
@@ -192,7 +199,7 @@ const UserForm = ({ type, matchUrl }) => {
             return setError({ ...DEFAULT_ERRORS, login: 'Укажите логин пользователя' });
         }
 
-        if (login.length !== 8 && login.length !== 13) {
+        if (!notNewUser && login.length !== 8 && login.length !== 13) {
             return setError({ ...DEFAULT_ERRORS, login: 'Логин пользователя должен содержать 8 либо 13 символов' });
         }
 
@@ -210,6 +217,7 @@ const UserForm = ({ type, matchUrl }) => {
             const requestData = { clientAppIds, salePointId: salePoint?.id };
             if (notNewUser) {
                 await saveUser(userData.id, requestData);
+                showNotify({ mode: EDIT });
             } else {
                 const { generatedPassword } = await addUser({ ...requestData, personalNumber: login });
                 showNotify({ login, pwd: generatedPassword, mode: CREATE });
