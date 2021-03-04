@@ -1,1 +1,7 @@
-export const URL_REGEXP = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z\d]+([\\-\\.]{1}[a-zA-Z\d]+)*\.[a-z]{2,5}(:[\d]{1,5})?(\/.*)?$/;
+/* '^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+{}]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-{}]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator */
+export const URL_REGEXP = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+#]*)*(\?[;&a-z\d%_.~+=-{}]*)?(#[-a-z\d_]*)?$/;
