@@ -59,6 +59,8 @@ const NEW_USER_PASSWORD = 'Новый пароль пользователя';
 const COPY = 'Копировать';
 const ON_COPY = 'Скопировано';
 
+const patternLogin = /[^A-Za-z0-9]+/;
+
 const userMessage = (login, pwd, mode, errorMessage) => {
     switch (mode) {
         case CREATE: {
@@ -195,12 +197,18 @@ const UserForm = ({ type, matchUrl }) => {
     }, [type, getUserData]);
 
     const onSubmit = useCallback(async () => {
-        if (!login && !notNewUser) {
-            return setError({ ...DEFAULT_ERRORS, login: 'Укажите логин пользователя' });
-        }
+        if (!notNewUser) {
+            if (!login) {
+                return setError({ ...DEFAULT_ERRORS, login: 'Укажите логин пользователя' });
+            }
 
-        if (!notNewUser && login.length !== 8 && login.length !== 13) {
-            return setError({ ...DEFAULT_ERRORS, login: 'Логин пользователя должен содержать 8 либо 13 символов' });
+            if (patternLogin.test(login)) {
+                return setError({ ...DEFAULT_ERRORS, login: 'Логин пользователя должен содержать только латинские буквы либо цифры' });
+            }
+
+            if (login.length !== 8 && login.length !== 13) {
+                return setError({ ...DEFAULT_ERRORS, login: 'Логин пользователя должен содержать 8 либо 13 символов' });
+            }
         }
 
         if ((!userData || userData.role === 'User') && typeof salePoint?.id !== 'number') {
@@ -312,7 +320,7 @@ const UserForm = ({ type, matchUrl }) => {
         }
     }, [userData, redirectToUsersPage]);
 
-    const onLoginChange = useCallback((e) => setLogin(e.currentTarget.value), []);
+    const onLoginChange = useCallback((e) => setLogin(e.currentTarget.value.trim()), []);
 
     const onLocationChange = useCallback((location) => {
         setLocation(location);

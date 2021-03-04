@@ -64,7 +64,7 @@ const CategoryItem = ({
                     <Button type="primary" onClick={ onEditClick }>
                         { ButtonLabels.EDIT }
                     </Button>
-                    <Button type="danger" onClick={ onDeleteClick }>
+                    <Button type="primary" danger onClick={ onDeleteClick }>
                         { ButtonLabels.DELETE }
                     </Button>
                 </div>

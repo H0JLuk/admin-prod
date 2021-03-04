@@ -23,7 +23,7 @@ const UserFormButtonGroup = ({
     userBlocked,
 }) => {
     const deleteButton = (
-        <Button type="danger" onClick={ onDelete } disabled={ disableAllButtons }>
+        <Button type="primary" danger onClick={ onDelete } disabled={ disableAllButtons }>
             { BUTTON_DELETE_TEXT }
         </Button>
     );
