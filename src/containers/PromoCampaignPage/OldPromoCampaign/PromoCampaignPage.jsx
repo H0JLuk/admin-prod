@@ -23,7 +23,7 @@ import {
 } from '../../../api/services/promoCampaignTextService';
 import styles from './PromoCampaignPage.module.css';
 import { generatePath, NavLink, withRouter } from 'react-router-dom';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { PromoCampaignList } from './PromoCampaignList/PromoCampaignList';
 import SavePromoCampaignModal from '../../../components/CustomModal/SavePromoCampaignModal/SavePromoCampaignModal';
 import SavePromoCampaignBannerModal from '../../../components/CustomModal/SavePromoCampaignBannerModal/SavePromoCampaignBannerModal';
@@ -380,7 +380,7 @@ class PromoCampaignPage extends Component {
                 <div className={ styles.amListHeader }>
                     <Typography.Text mark strong>{ PROMO_CAMPAIGN_LIST_TITLE }</Typography.Text>
                 </div>
-                { !_.isEmpty(promoCampaignList) || loading
+                { !isEmpty(promoCampaignList) || loading
                     ? <PromoCampaignList
                         loading={ loading }
                         promoCampaigns={ promoCampaignList }

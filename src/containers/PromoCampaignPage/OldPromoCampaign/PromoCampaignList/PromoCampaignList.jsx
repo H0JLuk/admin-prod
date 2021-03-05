@@ -1,6 +1,6 @@
 import React from 'react';
 import { Collapse, Empty, Table, Typography, Switch } from 'antd';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import TooltipButton from '../../../../components/TooltipButton/TooltipButton';
 import ActionsMenu from '../../../../components/Menu/FloatingMenu/ActionsMenu';
 import Confirm from '../../../../components/Confirm/Confirm';
@@ -58,7 +58,7 @@ export const PromoCampaignList = ({
         <Collapse>
             <Panel key={ 1 }
                    header={ <BannerPanelHeader promoCampaign={ promoCampaign } /> }>
-            { !_.isEmpty(promoCampaign.banners)
+            { !isEmpty(promoCampaign.banners)
                 ? <Table loading={ loading }
                          className={ styles.promoCampaignsTable }
                          pagination={ false }
@@ -125,7 +125,7 @@ export const PromoCampaignList = ({
         <Collapse>
             <Panel key={ 1 }
                    header={ <TextPanelHeader promoCampaign={ promoCampaign } /> }>
-                {!_.isEmpty(promoCampaign.texts)
+                {!isEmpty(promoCampaign.texts)
                     ? <Table loading={ loading }
                              className={ styles.promoCampaignsTable }
                              pagination={ false }

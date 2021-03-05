@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
-import _ from 'lodash';
+import noop from 'lodash/noop';
 
 class Confirm extends Component {
     openModal = () => {
@@ -29,7 +29,7 @@ const confirm = (text, onConfirm) => Modal.confirm({
     okText: 'Да',
     cancelText: 'Нет',
     onOk: onConfirm,
-    onCancel: _.noop,
+    onCancel: noop,
 });
 
 export default Confirm;

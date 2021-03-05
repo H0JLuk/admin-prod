@@ -27,7 +27,7 @@ const LoginPage = (props) => {
 
             storeUserData(token, authority);
             saveStaticUrl(await getStaticUrlFromBackend());
-            goToStartPage(history, authority);
+            goToStartPage(history, true, authority);
         } catch (e) {
             console.error(e?.message);
             setError(Errors.FAIL);

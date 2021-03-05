@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Upload, Modal } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import _ from 'lodash';
+import eq from 'lodash/eq';
 import { warnNotice } from '../../toast/Notice';
 
 const { Dragger } = Upload;
@@ -24,8 +24,8 @@ class SavePromoCampaignBannerModal extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!_.eq(prevProps, this.props)) {
-            const { editingObject, editingObject: { type } , currentPromoCampaign: { id } } = this.props;
+        if (!eq(prevProps, this.props)) {
+            const { editingObject, editingObject: { type }, currentPromoCampaign: { id } } = this.props;
             this.setState({
                 editedPromoCampaignBanner: editingObject,
                 promoCampaignBanner : { type, promoCampaignId: id },

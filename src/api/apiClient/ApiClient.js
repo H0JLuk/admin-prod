@@ -1,5 +1,6 @@
-import _ from 'lodash';
-import { ROUTE } from '../../constants/route';
+import merge from 'lodash/merge';
+import cloneDeep from 'lodash/cloneDeep';
+import { goToLogin } from '../../utils/appNavigation';
 import { deleteUserData } from '../services/sessionService';
 
 const defaultOptions = {
@@ -12,13 +13,17 @@ const defaultOptions = {
 export default class ApiClient {
     constructor(config) {
         this.baseUrl = config.baseUrl;
-        this.options = _.merge(_.cloneDeep(defaultOptions), config.options);
+        this.options = merge(cloneDeep(defaultOptions), config.options);
+    }
+
+    setHistory(history) {
+        this.history = history;
     }
 
     async request(url, reqOptions = {}, responseType = 'json') {
         const { body, ...restOptions } = reqOptions;
         const urlWithParams = new URL(`${this.baseUrl}${url}`);
-        const mergedOptions = _.merge(_.cloneDeep(this.options), restOptions);
+        const mergedOptions = merge(cloneDeep(this.options), restOptions);
 
         try {
             const contentType = mergedOptions.headers['Content-Type'];
@@ -46,7 +51,8 @@ export default class ApiClient {
             if (response.status >= 400) {
                 if (response.status === 403) {
                     deleteUserData();
-                    window.location.href = ROUTE.LOGIN;
+                    goToLogin(this.history);
+                    // window.location.href = ROUTE.LOGIN;
                 }
                 return this.errorMessageHandler(response);
             }

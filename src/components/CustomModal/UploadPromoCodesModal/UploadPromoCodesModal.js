@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Upload, Modal, Typography } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import _ from 'lodash';
+import eq from 'lodash/eq';
 import { warnNotice } from '../../toast/Notice';
 import example from '../../../static/images/promoCodeUploadExample.png';
 
@@ -20,7 +20,7 @@ class UploadPromoCodesModal extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!_.eq(prevProps, this.props)) {
+        if (!eq(prevProps, this.props)) {
             const { currentPromoCampaign } = this.props;
             this.setState({ currentPromoCampaign, file: null, fileList: [] });
         }

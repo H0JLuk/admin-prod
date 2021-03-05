@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Modal } from 'antd';
-import _ from 'lodash';
+import eq from 'lodash/eq';
 import { warnNotice } from '../../toast/Notice';
 
 const emptyPromoCampaignText = {
@@ -18,7 +18,7 @@ class SavePromoCampaignTextModal extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!_.eq(prevProps, this.props)) {
+        if (!eq(prevProps, this.props)) {
             const { editingObject, currentPromoCampaign: { id } } = this.props;
             this.setState({ ...editingObject, promoCampaignId: id });
         }

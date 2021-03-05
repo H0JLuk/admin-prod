@@ -1,10 +1,10 @@
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 export const generateFormState = (obj) => {
-    let state = {};
+    const state = {};
     let errorCount = 0;
 
-    Object.keys(obj).forEach( key => {
+    Object.keys(obj).forEach(key => {
         const { value, isRequired } = obj[key];
         state[key] = {
             value,
@@ -21,8 +21,8 @@ export const generateFormState = (obj) => {
 };
 
 export const getValues = (obj) => {
-    let fields = {};
-    for (let key in obj) {
+    const fields = {};
+    for (const key in obj) {
         if (typeof obj[key] === 'object' && obj[key] !== null) {
             fields[key] = obj[key].value;
         }

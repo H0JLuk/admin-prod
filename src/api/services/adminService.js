@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import merge from 'lodash/merge';
 import { Api } from '../apiClient';
 import { getReqOptions } from './index';
 
@@ -10,7 +10,7 @@ const options = {
     }
 };
 
-const reqOptions = () => _.merge(options, getReqOptions());
+const reqOptions = () => merge(options, getReqOptions());
 
 export async function getOffers(start, end) {
     const url = (start && end)

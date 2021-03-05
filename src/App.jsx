@@ -1,5 +1,5 @@
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import 'antd/dist/antd.css'; // Ant styles will be here, before another styles imports
 import './static/fonts/fonts.css';
 import moment from 'moment';
@@ -16,35 +16,36 @@ import OwnerPage from './pages/OwnerPage';
 import ClientAppPage from './containers/ClientAppPage/OldClientAppPage/ClientAppPage';
 import UserManagerPage from './pages/UserManagerPage';
 import { goToStartPage } from './utils/appNavigation';
+import { Api } from './api/apiClient';
 
 moment.locale('ru');
 
-class App extends React.PureComponent {
+const App = () => {
+    const history = useHistory();
 
-    render() {
-        return (
-            <>
-                <Switch>
-                    { /* <Route exact path={ ROUTE.CORE } render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } /> */ }
-                    <Route exact path={ ROUTE.CORE } component={ CorePage } />
+    useEffect(() => {
+        Api.setHistory(history);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-                    <Route path={ ROUTE.LOGIN } component={ LoginPage } />
-                    <Route path={ ROUTE.CLIENT_APPS } component={ ClientAppPage } />
-                    <Route path={ `${ROUTE.OLD_DESIGN}${ROUTE.ADMIN}` } component={ withRedirect(OldDesignAdminPage, ROLES.ADMIN) } />
-                    <Route path={ `${ROUTE.OLD_DESIGN}${ROUTE.OWNER}` } component={ withRedirect(OldDesignOwnerPage, ROLES.PRODUCT_OWNER) } />
-                    <Route path={ ROUTE.AUDITOR } component={ withRedirect(AuditorPage, ROLES.AUDITOR) } />
-                    <Route path={ ROUTE.USER_MANAGER } component={ withRedirect(UserManagerPage, ROLES.USER_MANAGER) } />
+    return (
+        <Switch>
+            <Route exact path={ ROUTE.CORE } component={ CorePage } />
 
-                    <Route path={ ROUTE.ADMIN } component={ withRedirect(AdminPage, ROLES.ADMIN) } />
-                    <Route path={ ROUTE.OWNER } component={ withRedirect(OwnerPage, ROLES.PRODUCT_OWNER) } />
+            <Route path={ ROUTE.LOGIN } component={ LoginPage } />
+            <Route path={ ROUTE.CLIENT_APPS } component={ ClientAppPage } />
+            <Route path={ `${ROUTE.OLD_DESIGN}${ROUTE.ADMIN}` } component={ withRedirect(OldDesignAdminPage, ROLES.ADMIN) } />
+            <Route path={ `${ROUTE.OLD_DESIGN}${ROUTE.OWNER}` } component={ withRedirect(OldDesignOwnerPage, ROLES.PRODUCT_OWNER) } />
+            <Route path={ ROUTE.AUDITOR } component={ withRedirect(AuditorPage, ROLES.AUDITOR) } />
+            <Route path={ ROUTE.USER_MANAGER } component={ withRedirect(UserManagerPage, ROLES.USER_MANAGER) } />
 
-                    { /* <Route render={ () => <Redirect to={ ROUTE.CLIENT_APPS } /> } /> */ }
-                    <Route component={ CorePage } />
-                </Switch>
-            </>
-        );
-    }
-}
+            <Route path={ ROUTE.ADMIN } component={ withRedirect(AdminPage, ROLES.ADMIN) } />
+            <Route path={ ROUTE.OWNER } component={ withRedirect(OwnerPage, ROLES.PRODUCT_OWNER) } />
+
+            <Route component={ CorePage } />
+        </Switch>
+    );
+};
 
 export default App;
 
@@ -58,7 +59,7 @@ function withRedirect(Component, requiredRole) {
 
         const role = getRole();
         if (role !== requiredRole) {
-            goToStartPage(props.history, true);
+            goToStartPage(props.history, true, role);
             return null;
         }
         return <Component { ...props } />;

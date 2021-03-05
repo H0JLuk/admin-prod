@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Statistic, Row, Col, Typography } from 'antd';
-import _ from 'lodash';
+import eq from 'lodash/eq';
 
 const promoCodeTypes = {
     PERSONAL: 'В рамках данной промо-кампании любым клиентам выдаются персональные промокоды',
@@ -25,7 +25,7 @@ class PromoCodeStatisticModal extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!_.eq(prevProps, this.props)) {
+        if (!eq(prevProps, this.props)) {
             const { data, currentPromoCampaign } = this.props;
             this.setState({ ...data, currentPromoCampaign });
         }
@@ -41,7 +41,7 @@ class PromoCodeStatisticModal extends Component {
         const {
             totalPromoCodesNumber, issuedPromoCodesNumber, currentPromoCampaign: { promoCodeType } = {}
         } = this.state;
-        
+
         const description = promoCodeTypes[promoCodeType];
 
         return (

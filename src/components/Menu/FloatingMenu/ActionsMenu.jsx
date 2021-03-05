@@ -4,7 +4,7 @@ import './ActionsMenu.css';
 import TooltipButton from '../../TooltipButton/TooltipButton';
 import onClickOutside from 'react-onclickoutside';
 import { EllipsisOutlined, CloseOutlined } from '@ant-design/icons';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
 
 class ActionsMenu extends React.Component {
@@ -43,7 +43,7 @@ class ActionsMenu extends React.Component {
                                 key="MainButton"
                             />,
                             ...React.Children.toArray(children)
-                                .filter(o => !_.isEmpty(o))
+                                .filter(o => !isEmpty(o))
                                 .reverse()
                                 .map((o, index) => (<ChildButton key={ index } icon={ o } size={ 32 } />))
                         ]

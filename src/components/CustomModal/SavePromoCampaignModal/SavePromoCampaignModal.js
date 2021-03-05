@@ -5,7 +5,8 @@ import {
     // DatePicker, Space
 } from 'antd';
 import { getUnissuedPromoCodeStatistics } from '../../../api/services/promoCodeService';
-import _ from 'lodash';
+import eq from 'lodash/eq';
+import size from 'lodash/size';
 import { warnNotice } from '../../toast/Notice';
 // import moment from 'moment';
 import callConfirmModalForPromoCodeTypeChanging from '../../../containers/PromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging/ConfirmModalForPromoCodeTypeChanging';
@@ -41,8 +42,8 @@ class SavePromoCampaignModal extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!_.eq(prevProps, this.props)) {
-            const { editingObject , dzoList } = this.props;
+        if (!eq(prevProps, this.props)) {
+            const { editingObject, dzoList } = this.props;
             this.setState({
                 ...editingObject,
                 dzoList,
@@ -75,7 +76,7 @@ class SavePromoCampaignModal extends Component {
     };
 
     savePromoCampaign = (promoCampaign) => {
-        const length = _.size(promoCampaign.name);
+        const length = size(promoCampaign.name);
 
         if (length < 3 || length > 62) {
             return warnNotice('Введите корректное название!');
