@@ -205,10 +205,6 @@ const UserForm = ({ type, matchUrl }) => {
             if (patternLogin.test(login)) {
                 return setError({ ...DEFAULT_ERRORS, login: 'Логин пользователя должен содержать только латинские буквы либо цифры' });
             }
-
-            if (login.length !== 8 && login.length !== 13) {
-                return setError({ ...DEFAULT_ERRORS, login: 'Логин пользователя должен содержать 8 либо 13 символов' });
-            }
         }
 
         if ((!userData || userData.role === 'User') && typeof salePoint?.id !== 'number') {
