@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { swapPositions, uploadFile } from '../../api/services/adminService';
 import {
     addLanding,
@@ -20,8 +20,13 @@ import { populateFormWithData } from '../../components/Form/formHelper';
 import ButtonLabels from '../../components/Button/ButtonLables';
 import { getAppCode } from '../../api/services/sessionService';
 import Header from '../../components/Header/Header';
+import { Empty, message } from 'antd';
+import { SyncOutlined } from '@ant-design/icons';
 
-
+const LANDINGS_EMPTY = {
+    firstMessagePart: 'Для этой витрины пока нет лендингов',
+    secondMessagePart: 'Чтобы добавить лендинг нажмите кнопку "Добавить лендинг"'
+};
 const LANDINGS_GET_ERROR = 'Ошибка получения лендингов!';
 const LANDINGS_DELETE_ERROR = 'Ошибка удаления лендинга!';
 const IMAGE_UPLOAD_ERROR = 'Ошибка загрузки изображения!';
@@ -29,12 +34,14 @@ const LANDINGS_MOVE_ERROR = 'Ошибка изменения порядка ле
 const ADD_LANDING_TITLE = 'Добавить лендинг';
 const REMOVE_QUESTION = 'Удалить лендинг?';
 const LANDINGS_LIST_TITLE = 'Список лендингов';
-const LOADING_LIST_LABEL = 'Загрузка';
 const UPLOAD_IMAGE_PLEASE = 'Пожалуйста загрузите изображение!';
 const LANDING_DIR = 'landing';
 
-const LoadingStatus = ({ loading }) => (
-    <p className={ styles.loadingLabel }>{ loading ? LOADING_LIST_LABEL : LANDINGS_GET_ERROR }</p>
+const EmptyMessage = () => (
+    <Empty description={ null } className={ styles.emptyMessage } >
+        <div>{ LANDINGS_EMPTY.firstMessagePart }</div>
+        <div>{ LANDINGS_EMPTY.secondMessagePart }</div>
+    </Empty>
 );
 
 const initialEditingLanding = {
@@ -49,6 +56,7 @@ class PresentationPage extends Component {
         super(props);
         this.landingRef = React.createRef();
         this.state = {
+            loading: true,
             editingLanding: initialEditingLanding,
             landings: [],
             isOpen: false,
@@ -61,9 +69,12 @@ class PresentationPage extends Component {
         getLandingList()
             .then(response => {
                 const { landingDtoList } = response;
-                this.setState({ landings: landingDtoList });
+                this.setState({ landings: landingDtoList, loading: false });
             })
-            .catch(() => this.setState({ landings: [] }));
+            .catch(() => {
+                this.setState({ landings: [], loading: false });
+                message.error(LANDINGS_GET_ERROR);
+            });
     }
 
     clearState = () => this.setState({ editingLanding: initialEditingLanding });
@@ -85,7 +96,7 @@ class PresentationPage extends Component {
 
     handleMove = (id, direction) => {
         const { landings } = this.state;
-        let position = landings.findIndex((i) => i.landingId === id);
+        const position = landings.findIndex((i) => i.landingId === id);
         if (position < 0) {
             throw new Error('Given item not found.');
         } else if ((direction === UP && position === 0) || (direction === DOWN && position === landings.length - 1)) {
@@ -113,7 +124,7 @@ class PresentationPage extends Component {
         }) : LANDING_EDIT_FORM;
         return (
             <div className={ styles.modalForm }>
-            <img src={ cross } onClick={ this.closeModal } className={ styles.crossSvg } alt={ ButtonLabels.CLOSE } />
+                <img src={ cross } onClick={ this.closeModal } className={ styles.crossSvg } alt={ ButtonLabels.CLOSE } />
                 <Form
                     data={ formData }
                     buttonText={ ButtonLabels.SAVE }
@@ -195,33 +206,36 @@ class PresentationPage extends Component {
     };
 
     renderLandingsList = () => {
-        const { landings } = this.state;
-        const isSuccess = Array.isArray(landings);
-        return (
-            <Fragment>
-                {
-                    isSuccess ? (
-                        landings.length ?
-                            landings.map((landing, i) =>
-                                <LandingItem
-                                    key={ `landingItem-${i}` }
-                                    handleDelete={ this.handleDelete }
-                                    handleEdit={ this.handleEdit }
-                                    handleMove={ this.handleMove }
-                                    { ...landing }
-                                />
-                            ) : <LoadingStatus loading />
-                    ) : <LoadingStatus />
-                }
-            </Fragment>
-        );
+        const { landings, loading } = this.state;
+
+        if (loading) {
+            return (
+                <div className={ styles.loadingContainer }>
+                    <div className={ styles.loading }>
+                        <SyncOutlined spin />
+                    </div>
+                </div>
+            );
+        }
+
+        return landings.length
+            ? landings.map((landing, i) => (
+                <LandingItem
+                    key={ `landingItem-${i}` }
+                    handleDelete={ this.handleDelete }
+                    handleEdit={ this.handleEdit }
+                    handleMove={ this.handleMove }
+                    { ...landing }
+                />
+            ))
+            : <EmptyMessage />;
     };
 
     renderModifyModal = () => (
         <CustomModal
             isOpen={ this.state.isOpen }
             onRequestClose={ this.closeModal }>
-            {this.renderModalForm()}
+            { this.renderModalForm() }
         </CustomModal>
     );
 
@@ -235,7 +249,7 @@ class PresentationPage extends Component {
                 <div className={ styles.landingContainer }>
                     { this.renderModifyModal() }
                     <div className={ styles.headerSection }>
-                        <h3>{LANDINGS_LIST_TITLE}</h3>
+                        <h3>{ LANDINGS_LIST_TITLE }</h3>
                         <div>
                             <Button
                                 onClick={ openWithParam }
@@ -246,7 +260,7 @@ class PresentationPage extends Component {
                         </div>
                     </div>
                     <div className={ styles.landingList }>
-                        {this.renderLandingsList()}
+                        { this.renderLandingsList() }
                     </div>
                 </div>
             </div>
