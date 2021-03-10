@@ -2,7 +2,7 @@ export const APP_MECHANICS = {
     PRESENTS: { value: 'PRESENTS', label: 'Подарки' },
     ECOSYSTEM: { value: 'ECOSYSTEM', label: 'Продукты' },
     PRESENTATION: { value: 'PRESENTATION', label: 'Экскурсия' },
-    BUNDLE: { value: 'BUNDLE', label: 'WOW' },
+    BUNDLE: { value: 'BUNDLE', label: 'ВАУ' },
 };
 
 export const MECHANICS_CHECKBOXES = Object.keys(APP_MECHANICS).map(key => ({
