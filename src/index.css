@@ -99,6 +99,25 @@ body, ul, li, p {
     margin-bottom: 3px;
 }
 
+.ant-notification.ant-notification-topRight {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 100%;
+    top: 0 !important;
+    padding: 24px 28px 16px;
+    padding-left: 28px;
+    padding-right: 28px;
+    padding-top: 24px;
+    padding-bottom: 16px;
+    margin-right: 0;
+    margin-bottom: 0;
+    scrollbar-width: none;
+}
+
+.ant-notification.ant-notification-topRight::-webkit-scrollbar {
+    display: none !important;
+}
+
 /*.ant-btn-ghost,*/
 /*.ant-btn-ghost:hover,*/
 /*.ant-btn-ghost:focus {*/
