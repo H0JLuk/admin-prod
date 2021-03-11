@@ -278,21 +278,21 @@ const RelatedPromoCampaignsForm = ({
                                         <Col span={ 12 }>
                                             <Form.Item
                                                 noStyle
-                                                dependencies={ ['links', field.name, 'banners', 'LOGO_ICON'] }
+                                                dependencies={ ['links', field.name, 'banners', 'LOGO_MAIN'] }
                                             >
                                                 { ({ getFieldValue }) => (
                                                     <UploadPicture
                                                         uploadFileClassName={ styles.uploadBackground }
-                                                        name={ [field.name, 'banners', 'LOGO_ICON'] }
+                                                        name={ [field.name, 'banners', 'LOGO_MAIN'] }
                                                         { ...formItemProps.CAMPAIGN_BANNER_FIELD }
                                                         initialValue={ getFieldValue([
                                                             'links',
                                                             field.name,
                                                             'banners',
-                                                            'LOGO_ICON',
+                                                            'LOGO_MAIN',
                                                         ]) }
                                                         onRemoveImg={ () =>
-                                                            onRemoveImg(['links', field.name, 'banners', 'LOGO_ICON'])
+                                                            onRemoveImg(['links', field.name, 'banners', 'LOGO_MAIN'])
                                                         }
                                                     />
                                                 ) }
