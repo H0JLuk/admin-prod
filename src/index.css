@@ -34,8 +34,8 @@ body, ul, li, p {
 .ant-btn-dangerous.ant-btn-primary,
 .ant-btn-dangerous.ant-btn-primary:hover,
 .ant-btn-dangerous.ant-btn-primary:focus {
-    background-color: #dd283b !important;
-    border-color: #dd283b !important;
+    background-color: #dd283b;
+    border-color: #dd283b;
 }
 
 .ant-btn:disabled {
@@ -47,6 +47,23 @@ body, ul, li, p {
 
 .ant-switch-checked {
     background-color: #09a552;
+}
+
+.ant-input-affix-wrapper:hover,
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused,
+textarea.ant-input:hover,
+textarea.ant-input:focus {
+    border-color: #09a552;
+    box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
+}
+
+input.ant-input:placeholder-shown ~ span {
+    display: none;
+}
+
+.ant-input:hover, .ant-input:focus {
+    border-color: #09a552;
 }
 
 .ant-picker-focused,
@@ -82,6 +99,26 @@ body, ul, li, p {
     background-color: #09a552;
 }
 
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled),
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover,
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child {
+    color: #09A552;
+    border-color: #09A552;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before,
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
+    background-color: #09A552;
+}
+
+.ant-radio-button-wrapper:hover:not(.ant-radio-button-wrapper-disabled) {
+    color: #09A552;
+}
+
+.ant-radio-button-wrapper-checked:not([class*=' ant-radio-button-wrapper-disabled']).ant-radio-button-wrapper:first-child {
+    border-right-color: #09A552;
+}
+
 .ant-radio:hover,
 .ant-radio:hover .ant-radio-inner,
 .ant-radio-checked .ant-radio-inner,
@@ -97,6 +134,14 @@ body, ul, li, p {
     height: 19px;
     background: url(./static/images/cross.svg);
     margin-bottom: 3px;
+}
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector{
+    border-color: #09a552;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-color: #09a552;
+    box-shadow: none;
 }
 
 .ant-notification.ant-notification-topRight {

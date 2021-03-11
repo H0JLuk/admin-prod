@@ -15,6 +15,7 @@ const StepTextAndImage = ({
     banners,
     texts,
     setFields,
+    isCopy,
 }) => {
 
     const onRemoveImg = useCallback((name) => {
@@ -25,6 +26,7 @@ const StepTextAndImage = ({
     const templateProps = {
         banners,
         texts,
+        isCopy,
         onRemoveImg,
     };
 

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { getStaticUrl } from '../api/services/settingsService';
 
 export const downloadFile = (data, name) => {
     const blob = new Blob([data], { type: 'text/csv' });
@@ -29,6 +30,11 @@ export const getBase64 = (file) => {
         }
     });
 };
+
+export function getFileURL(file) {
+    const staticUrl = getStaticUrl();
+    return `${ staticUrl }${ file }`;
+}
 
 /**
  * @param {any[]} array
@@ -120,4 +126,20 @@ function getNumberSort(direction, a, b) {
 
 function stringToLowerCase(value) {
     return value.toLowerCase();
+}
+
+export const defaultSearchParams = {
+    sortBy: '',
+    direction: 'ASC',
+    filterText: '',
+};
+
+export function getSearchParamsFromUrl(search, defaultParams = defaultSearchParams) {
+    const urlSearchParams = new URLSearchParams(search);
+    return Object.keys(defaultParams).reduce((result, key) => {
+        return {
+            ...result,
+            [key]: urlSearchParams.get(key) || defaultParams[key],
+        };
+    }, {});
 }

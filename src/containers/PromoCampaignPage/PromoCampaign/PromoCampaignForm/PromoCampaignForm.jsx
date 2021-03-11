@@ -358,6 +358,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
                         typePromoCampaign={ state.type }
                         addChangedImg={ addChangedImg }
                         setFields={ form.setFields }
+                        isCopy={ isCopy }
                     />
                 );
             case steps.visibility:

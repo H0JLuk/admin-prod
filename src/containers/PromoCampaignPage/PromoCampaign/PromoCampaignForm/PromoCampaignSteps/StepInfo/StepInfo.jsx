@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Input, Switch, Select, DatePicker, Form, Row, Col, Radio, Checkbox } from 'antd';
+import localeDatePicker from 'antd/es/date-picker/locale/ru_RU';
 import { CloseOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { getDzoList } from '../../../../../../api/services/dzoService';
 import { getClientAppList } from '../../../../../../api/services/clientAppService';
@@ -8,6 +9,7 @@ import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList 
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
 import { URL_REGEXP } from '../../../../../../constants/common';
+import PROMO_CAMPAIGNS from '../../../../../../constants/promoCampaigns';
 import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWithTooltip';
 import { getAppCode } from '../../../../../../api/services/sessionService';
 
@@ -21,7 +23,7 @@ const NAME_PROMO_CAMPAIGN = 'Название промо-кампании';
 const CATEGORY = 'Категории';
 const CATEGORY_PROMO_CAMPAIGN = 'Выберите категорию';
 const TEMPLATE_PROMO_NAME = 'Например: Промо-кампания СберМаркет';
-const URL_PROMO_CAMPAIGN = 'Ссылка на страницу промо-кампании';
+const URL_PROMO_CAMPAIGN = 'Ссылка на промо-кампанию';
 const TYPE_PROMO_CAMPAIGN = 'Тип промо-кампании';
 const TYPE_PROMO_CODE = 'Тип промокода';
 const ACTIVE_PERIOD = 'Период действия';
@@ -39,17 +41,15 @@ const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
 const URL_SOURCE_DZO_LABEL = 'ДЗО';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
 const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
+const SHOW_ONLY_BUNDLE = 'Отображать только в составе бандла';
 const EXTERNAL_ID_LABEL = 'Внешний ID';
 const EXTERNAL_ID_PLACEHOLDER = 'Введите внешний ID';
 const EXTERNAL_ID_DUPLICATE = 'Введенный внешний ID уже используется в другой промо-кампании';
 const types_promo = Object.values(promoCodeTypes);
 
 const namePathPriorityOnWebUrl = ['settings', 'priorityOnWebUrl'];
-const namePathAlternativeOfferMechanic = ['settings', 'alternativeOfferMechanic'];
-
-const EXCURSION = 'Экскурсия';
-const GIFT = 'Подарок';
-// const LANDING = 'Лендинг';
+const namePathAlternativeOfferMechanic = [ 'settings', 'alternativeOfferMechanic' ];
+const namePathOnlyBundle = ['settings', 'onlyBundle']; // TODO: узнать имя свойства
 
 const selectTagRender = ({ label, onClose }) => (
     <div className={ styles.tagSelect }>
@@ -212,7 +212,7 @@ const StepInfo = ({
                 </Form.Item>
 
                 <Row gutter={ [24, 16] }>
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <Form.Item
                             noStyle
                             dependencies={ [namePathPriorityOnWebUrl] }
@@ -228,9 +228,13 @@ const StepInfo = ({
                                             required: (
                                                 getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN
                                             ),
-                                            message: 'Укажите ссылку'
+                                            message: 'Укажите ссылку',
                                         },
-                                        { pattern: URL_REGEXP, message: 'Введите корректный URL', validateTrigger: 'onSubmit' },
+                                        {
+                                            pattern: URL_REGEXP,
+                                            message: 'Введите корректный URL',
+                                            validateTrigger: 'onSubmit',
+                                        },
                                     ] }
                                     initialValue={ decodeURI(state.webUrl || '') }
                                 >
@@ -240,14 +244,15 @@ const StepInfo = ({
                         </Form.Item>
                     </Col>
 
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <Form.Item
                             name={ namePathPriorityOnWebUrl }
                             label={ URL_SOURCE_LABEL }
                             rules={ [{ required: true, message: 'Укажите источник ссылки для QR-кода' }] }
-                            initialValue={ state.settings.priorityOnWebUrl === true
-                                ? URL_SOURCE_VALUE_PROMO_CAMPAIGN
-                                : URL_SOURCE_VALUE_DZO
+                            initialValue={
+                                state.settings.priorityOnWebUrl === true
+                                    ? URL_SOURCE_VALUE_PROMO_CAMPAIGN
+                                    : URL_SOURCE_VALUE_DZO
                             }
                         >
                             <Radio.Group className={ styles.urlSource }>
@@ -260,10 +265,27 @@ const StepInfo = ({
                             </Radio.Group>
                         </Form.Item>
                     </Col>
+
+                    <Col span={ 8 } className={ styles.switchRow }>
+                        <div className={ styles.statusInfo }>
+                            <div className={ styles.viewInfo }>
+                                <span className={ styles.statusText }>
+                                    { SHOW_GO_TO_LINK_LABEL }
+                                </span>
+                                <Form.Item
+                                    name={ namePathAlternativeOfferMechanic }
+                                    initialValue={ state.settings.alternativeOfferMechanic }
+                                    valuePropName="checked"
+                                >
+                                    <Switch />
+                                </Form.Item>
+                            </div>
+                        </div>
+                    </Col>
                 </Row>
 
                 <Row gutter={ [24, 16] }>
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <Form.Item
                             label={ DZO }
                             className={ styles.formItem }
@@ -281,34 +303,39 @@ const StepInfo = ({
                         </Form.Item>
                     </Col>
 
-                    <Col span={ 12 }>
-                        <Form.Item
-                            label={ SHOW_GO_TO_LINK_LABEL }
-                            className={ styles.formItem }
-                            name={ namePathAlternativeOfferMechanic }
-                            initialValue={ state.settings.alternativeOfferMechanic }
-                            valuePropName="checked"
-                        >
-                            <Switch />
-                        </Form.Item>
-                    </Col>
-                </Row>
-
-                <Row gutter={ [24, 16] }>
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <Form.Item
                             label={ ACTIVE_PERIOD }
                             className={ styles.formItem }
                             name="datePicker"
                             initialValue={ state.datePicker }
                         >
-                            <DatePicker.RangePicker placeholder={ DATE_PICKER_PLACEHOLDER } />
+                            <DatePicker.RangePicker
+                                locale={ localeDatePicker }
+                                placeholder={ DATE_PICKER_PLACEHOLDER }
+                            />
                         </Form.Item>
+                    </Col>
+                    <Col span={ 8 } className={ styles.switchRow }>
+                        <div className={ styles.statusInfo }>
+                            <div className={ styles.viewInfo }>
+                                <span className={ styles.statusText }>
+                                    { SHOW_ONLY_BUNDLE }
+                                </span>
+                                <Form.Item
+                                    name={ namePathOnlyBundle }
+                                    initialValue={ state.settings.onlyBundle } // TODO: узнать имя свойства
+                                    valuePropName="checked"
+                                >
+                                    <Switch />
+                                </Form.Item>
+                            </div>
+                        </div>
                     </Col>
                 </Row>
 
                 <Row gutter={ [24, 16] }>
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <Form.Item
                             label={ TYPE_PROMO_CODE }
                             className={ styles.formItem }
@@ -330,43 +357,7 @@ const StepInfo = ({
                         </Form.Item>
                     </Col>
 
-                    <Col span={ 12 } className={ styles.flexCenter }>
-                        <div className={ styles.flexCenter }>
-                            <Form.Item
-                                noStyle
-                                dependencies={ ['active'] }
-                            >
-                                { ({ getFieldValue }) => {
-                                    const active = getFieldValue('active');
-
-                                    return (
-                                        <div className={ styles.statusInfo }>
-                                            <div>
-                                                { active ? STATUS_ON : STATUS_OFF }
-                                            </div>
-                                            <div className={ styles.viewInfo }>
-                                                <span className={ styles.statusText }>
-                                                    { active ? STATUS_TEXT_ON : STATUS_TEXT_OFF }
-                                                </span>
-                                                <Form.Item
-                                                    name="active"
-                                                    valuePropName="checked"
-                                                    className={ styles.blockActive }
-                                                    initialValue={ state.active }
-                                                >
-                                                    <Switch />
-                                                </Form.Item>
-                                            </div>
-                                        </div>
-                                    );
-                                } }
-                            </Form.Item>
-                        </div>
-                    </Col>
-                </Row>
-
-                <Row gutter={ [24, 16] }>
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <Form.Item
                             label={ EXTERNAL_ID_LABEL }
                             className={ styles.formItem }
@@ -404,6 +395,37 @@ const StepInfo = ({
                             <Input maxLength="64" placeholder={ EXTERNAL_ID_PLACEHOLDER } />
                         </Form.Item>
                     </Col>
+
+                    <Col span={ 8 }>
+                        <Form.Item
+                            noStyle
+                            dependencies={ ['active'] }
+                        >
+                            { ({ getFieldValue }) => {
+                                const active = getFieldValue('active');
+
+                                return (
+                                    <div className={ styles.statusInfo }>
+                                        <div>
+                                            { active ? STATUS_ON : STATUS_OFF }
+                                        </div>
+                                        <div className={ styles.viewInfo }>
+                                            <span className={ styles.statusText }>
+                                                { active ? STATUS_TEXT_ON : STATUS_TEXT_OFF }
+                                            </span>
+                                            <Form.Item
+                                                name="active"
+                                                valuePropName="checked"
+                                                initialValue={ state.active }
+                                            >
+                                                <Switch />
+                                            </Form.Item>
+                                        </div>
+                                    </div>
+                                );
+                            } }
+                        </Form.Item>
+                    </Col>
                 </Row>
             </div>
 
@@ -436,18 +458,18 @@ const StepInfo = ({
                                 rules={ [{ required: true, message: 'Укажите тип промо-кампании' }] }
                                 initialValue={ state.type }
                             >
-                                <Radio.Group className={ styles.typePromoCampaign } onChange={ changeTypePromo }>
+                                <Radio.Group onChange={ changeTypePromo }>
                                     <Radio
                                         className={ styles.checkbox }
-                                        value="NORMAL"
+                                        value={ PROMO_CAMPAIGNS.NORMAL.value }
                                     >
-                                        { EXCURSION }
+                                        { PROMO_CAMPAIGNS.NORMAL.label }
                                     </Radio>
                                     <Radio
                                         className={ styles.checkbox }
-                                        value="PRESENT"
+                                        value={ PROMO_CAMPAIGNS.PRESENT.value }
                                     >
-                                        { GIFT }
+                                        { PROMO_CAMPAIGNS.PRESENT.label }
                                     </Radio>
                                     { /* <Radio
                                         className={ styles.checkbox }

@@ -12,14 +12,13 @@
     width: 80%;
 }
 
+.formItem :global(.ant-picker-range) {
+    width: 100%;
+}
+
 .promoCampaignName,
 .selectCategories {
     max-width: 600px;
-}
-
-.flexCenter {
-    display: flex;
-    flex-grow: 1;
 }
 
 .tagSelect {
@@ -102,25 +101,25 @@
     width: 13px;
 }
 
-.blockActive {
-    margin-bottom: 0;
-    align-self: center;
-}
-
 .statusInfo {
     width: 100%;
+    max-width: 280px;
 }
 
 .viewInfo {
     display: flex;
-    width: 55%;
-    min-width: 250px;
-    color: rgba(0, 0, 0, 0.65);
     justify-content: space-between;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.viewInfo :global(.ant-form-item) {
+    margin-bottom: 0;
 }
 
 .statusText {
-    width: 180px;
+    max-width: 180px;
+    margin-right: 5px;
 }
 
 .infoDetail {
@@ -129,6 +128,7 @@
 }
 
 .checkbox:not(:last-child) {
+    display: block;
     margin-bottom: 10px;
 }
 
@@ -136,15 +136,22 @@
     margin-right: 10px;
 }
 
-.typePromoCampaign {
-    display: flex;
-    flex-direction: column;
-}
-
 .urlSource {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     width: 80%;
     max-width: 250px;
+}
+
+.switchRow {
+    display: flex;
+    align-items: flex-end;
+}
+
+.switchRow .statusInfo {
+    margin-bottom: 24px;
+}
+
+.switchRow .viewInfo {
+    color: rgba(0, 0, 0, 0.85);
 }

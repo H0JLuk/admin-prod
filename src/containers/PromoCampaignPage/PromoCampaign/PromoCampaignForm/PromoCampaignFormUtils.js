@@ -1,7 +1,6 @@
 import { deletePromoCampaignBanner, newCreatePromoCampaignBanner, newEditPromoCampaignBanner } from '../../../../api/services/promoCampaignBannerService';
 import { newVisibilitySetting } from '../../../../api/services/promoCampaignService';
 import { deletePromoCampaignText, newEditPromoCampaignText, newPromoCampaignText } from '../../../../api/services/promoCampaignTextService';
-import { getStaticUrl } from '../../../../api/services/settingsService';
 import { APPLICATION_JSON_TYPE, BANNER_REQUEST, IMAGE, promoCampaignBannerTypes } from './PromoCampaignFormConstants';
 import moment from 'moment';
 import { getAppCode } from '../../../../api/services/sessionService';
@@ -140,11 +139,6 @@ export async function EditImgBanners(promoCampaignBanners, promoCampaign, change
     }
 
     return { banners, deletedBannersId };
-}
-
-export function getFileURL(file) {
-    const staticUrl = getStaticUrl();
-    return `${ staticUrl }${ file }`;
 }
 
 export function normalizeFirstStepValue(val) {

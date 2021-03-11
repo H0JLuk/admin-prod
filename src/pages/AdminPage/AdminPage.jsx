@@ -10,6 +10,7 @@ import FilesPage from '../../containers/FilesPage/FilesPage';
 import PresentationPage from '../../containers/PresentationPage/PresentationPage';
 import PromoCampaignPageRouter from '../../containers/PromoCampaignPage/PromoCampaignPageRouter';
 import ClientAppPageRouter from '../../containers/ClientAppPage/ClientAppPageRouter';
+import GroupsPageRouter from '../../containers/GroupsPage/GroupsPageRouter';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
 import styles from './AdminPage.module.css';
@@ -29,6 +30,7 @@ const AdminPage = () => (
                 <Route path={ ROUTE_ADMIN.APPS } component={ ClientAppPageRouter } />
                 <Route path={ ROUTE_ADMIN.USERS } component={ UserPageRouter } />
                 <Route path={ ROUTE_ADMIN.PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />
+                <Route path={ ROUTE_ADMIN.GROUPS } component={ GroupsPageRouter } />
 
                 <Route render={ () => <Redirect to={ ROUTE_ADMIN.DASHBOARD } /> } />
             </Switch>

@@ -40,5 +40,7 @@ module.exports = {
         'comma-spacing': 'error',
         'no-trailing-spaces': "error",
         'indent': ['warn', 4, { SwitchCase: 1 }],
+        'key-spacing': ['warn', { mode: 'minimum' }],
+        'jsx-quotes': ['warn', 'prefer-double'],
     }
 }

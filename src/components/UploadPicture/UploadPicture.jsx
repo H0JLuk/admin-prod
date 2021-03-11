@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Form, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import ImagesBlock from '../../../../../../../../components/ImagesBlock/ImagesBlock';
-import { getBase64 } from '../../../../../../../../utils/helper';
-import { getFileURL } from '../../../../PromoCampaignFormUtils';
-import { ReactComponent as Cross } from '../../../../../../../../static/images/cross.svg';
+import { ReactComponent as Cross } from '../../static/images/cross.svg';
+import ImagesBlock from '../ImagesBlock/ImagesBlock';
 
-import styles from './UploadFile.module.css';
+import { getBase64, getFileURL } from '../../utils/helper';
+
+import styles from './UploadPicture.module.css';
 
 const customProps = {
     name: 'file',
@@ -33,7 +33,11 @@ const checkFileType = (access_types) => {
     return result;
 };
 
-const UploadFile = ({
+const checkFileSize = (fileSize, maxFileSize, validateFileSize) => {
+    return !validateFileSize ? false : fileSize > 1024 * 1024 * maxFileSize;
+};
+
+const UploadPicture = ({
     initialValue = [],
     description,
     setting,
@@ -45,6 +49,9 @@ const UploadFile = ({
     onRemoveImg,
     removeIconView = true,
     uploadButtonText = UPLOAD_BUTTON_TEXT,
+    uploadFileClassName,
+    maxFileSize = 2,
+    validateFileSize = true,
     footer,
 }) => {
     const [img, setImg] = useState('');
@@ -68,7 +75,7 @@ const UploadFile = ({
             }
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [initialValue]);
 
     const onChange = useCallback(async (info) => {
         if (info.fileList.length > 1) {
@@ -78,19 +85,18 @@ const UploadFile = ({
             message.error('Неверный формат картинки');
             return;
         }
-
-        if (info.file.size / 1024 / 1024 > 1) {
-            message.error('Размер файла должен быть меньше 1MB!');
+        if (checkFileSize(info.file.size, maxFileSize, validateFileSize)) {
+            message.error(`Размер файла должен быть меньше ${maxFileSize}MB!`);
             return;
         }
         setImg(await getBase64(info.file));
         setFileList(info.fileList);
         setUrlFile(null);
-    }, [accept]);
+    }, [accept, maxFileSize, validateFileSize]);
 
     const removeImg = useCallback((e) => {
         e.stopPropagation();
-        onRemoveImg(name);
+        typeof onRemoveImg === 'function' && onRemoveImg(name);
         setFileList([]);
         setUrlFile(null);
     }, [onRemoveImg, name]);
@@ -100,8 +106,15 @@ const UploadFile = ({
             return info.slice(-1);
         }
 
+        if (!checkFileType(accept).includes(info.file.type) || checkFileSize(info.file.size, maxFileSize, validateFileSize)) {
+            typeof onRemoveImg === 'function' && onRemoveImg(name);
+            setFileList([]);
+            setUrlFile(null);
+            return [];
+        }
+
         return info && info.fileList.slice(-1);
-    }, []);
+    }, [accept, maxFileSize, validateFileSize, onRemoveImg, name]);
 
     const draggerClassName = cn(styles.dragContainer, {
         [styles.logo]: type === 'logo',
@@ -117,7 +130,7 @@ const UploadFile = ({
                 label={ label }
                 name={ name }
                 initialValue={ initialValue }
-                valuePropName='file'
+                valuePropName="file"
                 rules={ rules || [] }
                 getValueFromEvent={ normFile }
             >
@@ -127,7 +140,7 @@ const UploadFile = ({
                     onChange={ onChange }
                     multiple={ false }
                     showUploadList={ false }
-                    className={ draggerClassName }
+                    className={ cn(draggerClassName, uploadFileClassName) }
                     accept={ accept ?? '' }
                 >
                     <ImagesBlock
@@ -147,4 +160,4 @@ const UploadFile = ({
     );
 };
 
-export default UploadFile;
+export default UploadPicture;

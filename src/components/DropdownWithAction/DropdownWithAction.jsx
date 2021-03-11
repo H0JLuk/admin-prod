@@ -2,7 +2,7 @@ import React, { memo, useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Dropdown, Button } from 'antd';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 
 import styles from './DropdownWithAction.module.css';
 
@@ -57,14 +57,8 @@ const DropdownWithAction = ({
             visible={ dropdownActive }
             onVisibleChange={ setDropdownActive }
         >
-            <Button
-                className={ cn(styles.dropdownButton, { [styles.dropdownActive]: dropdownActive }) }
-            >
-                { dropdownLabel } {
-                    !dropdownActive
-                        ? <DownOutlined style={ DROPDOWN_ARROW_STYLE } />
-                        : <UpOutlined style={ DROPDOWN_ARROW_STYLE } />
-                }
+            <Button className={ styles.dropdownButton }>
+                { dropdownLabel } { <DownOutlined style={ DROPDOWN_ARROW_STYLE } /> }
             </Button>
         </Dropdown>
     );

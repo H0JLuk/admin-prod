@@ -8,7 +8,7 @@ import HeaderWithActions from '../../components/HeaderWithActions/HeaderWithActi
 import ClientAppItem from './ClientAppItem/ClientAppItem';
 
 import { getClientAppList, reorderClientApp } from '../../api/services/clientAppService';
-import { sortItemsBySearchParams } from '../../utils/helper';
+import { defaultSearchParams, getSearchParamsFromUrl, sortItemsBySearchParams } from '../../utils/helper';
 import { CLIENT_APPS_PAGES } from '../../constants/route';
 import { getRole } from '../../api/services/sessionService';
 import ROLES from '../../constants/roles';
@@ -33,12 +33,6 @@ const DROPDOWN_SORT_MENU = [
     { name: 'code', label: 'По коду' },
 ];
 
-const defaultSearchParams = {
-    sortBy: '',
-    direction: 'ASC',
-    filterText: '',
-};
-
 const getURLSearchParams = ({ ...rest }) => new URLSearchParams(rest).toString();
 
 const ClientAppPage = ({ matchPath, history }) => {
@@ -55,6 +49,7 @@ const ClientAppPage = ({ matchPath, history }) => {
     const sortClientApp = useCallback((searchParams = defaultSearchParams) => {
         setParams(searchParams);
         history.replace(`${matchPath}?${getURLSearchParams(searchParams)}`);
+
         if (!searchParams.filterText && !searchParams.sortBy) {
             setItemList(copyOfItemList);
             return;
@@ -80,15 +75,7 @@ const ClientAppPage = ({ matchPath, history }) => {
     }, [history, matchPath]);
 
     useEffect(() => {
-        const urlSearchParams = new URLSearchParams(search);
-        const searchParamsFromUrl = {};
-
-        Object.keys(defaultSearchParams).forEach((key) => {
-            const searchValue = urlSearchParams.get(key);
-            searchParamsFromUrl[key] = searchValue || defaultSearchParams[key];
-        });
-
-        loadData(searchParamsFromUrl);
+        loadData(getSearchParamsFromUrl(search));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadData]);
 

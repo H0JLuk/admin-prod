@@ -1,0 +1,99 @@
+.row {
+    max-width: 950px;
+}
+
+.addButton {
+    text-align: center;
+}
+
+.loadingWrapper {
+    width: 100%;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+}
+
+.loading {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    left: 50%;
+    top: 0;
+    height: 100%;
+}
+
+.rowWrapper {
+    position: relative;
+    background: #f8f8f8;
+    padding: 25px 15px;
+    margin-bottom: 15px;
+}
+
+.error {
+    margin-top: 10px;
+    color: tomato;
+}
+
+.form {
+    padding: 15px 15px;
+}
+
+.errorBlock {
+    text-align: center;
+}
+
+.cross {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer;
+}
+
+.col {
+    display: flex;
+}
+
+.switchWrapper {
+    width:100%;
+    max-width:70%;
+}
+
+.switchBlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.switchBlock :global(.ant-form-item) {
+    margin: 0;
+}
+
+.switchText {
+    width: 180px;
+}
+
+.uploadBackground :global(.ant-upload-drag-container) {
+    background: #f8f8f8 !important;
+}
+
+.headerActions {
+    font-size: 18px;
+    padding: 15px;
+    border-bottom: 2px solid #e5e8eb;
+}
+
+.buttonBlock button {
+    margin-right: 10px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -.38px;
+    margin-bottom: 15px;
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row } from 'antd';
-import UploadFile from '../../StepLanding/FormControllers/UploadFile/UploadFile';
+import UploadPicture from '../../../../../../../components/UploadPicture/UploadPicture';
 import { getLabel } from '../../../../../../../components/LabelWithTooltip/LabelWithTooltip';
 import TextBlock from '../TextBlock/TextBlock';
 import { INFO_ROWS } from './templateConstants';
@@ -9,7 +9,7 @@ import styles from './Template.module.css';
 
 const ADD = 'Добавить';
 
-const Template = ({ banners, texts, type, onRemoveImg }) => {
+const Template = ({ banners, texts, type, onRemoveImg, isCopy }) => {
     const [infoRows, setInfoRows] = useState([]);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const Template = ({ banners, texts, type, onRemoveImg }) => {
                     span={ 12 }
                 >
                     { ['logo', 'banner'].includes(row[key].type) && (
-                        <UploadFile
+                        <UploadPicture
                             description={ row[key].description }
                             setting={ row[key].setting }
                             accept={ row[key].access_type }
@@ -40,6 +40,8 @@ const Template = ({ banners, texts, type, onRemoveImg }) => {
                             type={ row[key].type }
                             label={ getLabel(row[key].title, row[key].tooltipImg, true) }
                             uploadButtonText={ ADD }
+                            maxFileSize={ row[key].maxSize }
+                            validateFileSize={ !isCopy }
                             footer
                         />
                     ) }

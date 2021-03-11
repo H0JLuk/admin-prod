@@ -1,0 +1,89 @@
+.row {
+    max-width: 950px;
+}
+.rowWrapper {
+    position: relative;
+    background: #f8f8f8;
+    padding: 25px 15px;
+    margin-bottom: 15px;
+}
+
+.form {
+    padding: 15px;
+}
+
+.col {
+    display: flex;
+    align-items: flex-end;
+}
+
+.switchBlock {
+    display: flex;
+    align-items: center;
+}
+
+.switchText {
+    width: 180px;
+}
+
+.uploadBackground :global(.ant-upload-drag-container) {
+    background: #f8f8f8 !important;
+}
+
+.addButton {
+    text-align: center;
+}
+
+.error {
+    margin-top: 10px;
+    color: tomato;
+}
+
+.cross {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer;
+}
+
+.headerActions {
+    font-size: 18px;
+    padding: 15px;
+    border-bottom: 2px solid #e5e8eb;
+}
+
+.loadingWrapper {
+    width: 100%;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+}
+
+.loading {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    left: 50%;
+    top: 0;
+    height: 100%;
+}
+
+.errorBlock {
+    text-align: center;
+}
+
+.buttonBlock button {
+    margin-right: 10px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -.38px;
+    margin-bottom: 15px;
+}

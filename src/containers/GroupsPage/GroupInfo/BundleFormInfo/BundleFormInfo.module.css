@@ -1,0 +1,77 @@
+.row {
+    max-width: 950px;
+}
+
+.wrapper {
+    padding: 10px 15px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -.38px;
+}
+
+.infoTitle {
+    margin-bottom: 7px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 26px;
+    letter-spacing: -0.3px;
+}
+
+.campaignTitle {
+    font-size: 18px;
+}
+
+.infoText {
+    font-size: 14px;
+    color: #4e4e4e;
+}
+
+.addButton {
+    text-align: center;
+}
+
+.headerInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: max-content;
+    margin-bottom: 10px;
+}
+
+.rowWrapper {
+    position: relative;
+    background: #f8f8f8;
+    padding: 25px 15px;
+    margin-bottom: 15px;
+}
+
+.col {
+    display: flex;
+}
+
+.headerActions {
+    font-size: 18px;
+    padding: 15px;
+    border-bottom: 2px solid #e5e8eb;
+}
+
+.buttonBlock button {
+    margin-right: 10px;
+}
+
+.status {
+    padding: 5px 16px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color: #09a552;
+    margin-left: 15px;
+    border-radius: 25px;
+}
+
+.redStatus {
+    background-color:  #fff1f0 !important;
+    color: #dc283a !important;
+}

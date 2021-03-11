@@ -1,0 +1,125 @@
+.checkbox {
+    display: flex;
+    align-items: center;
+    margin: 0 !important;
+    padding-left: 20px;
+}
+
+.checkbox span:first-child {
+    width: 16px;
+}
+
+.cardInfo__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardName {
+    color: #171725;
+    font-size: 16px;
+    padding-right: 25px;
+}
+
+.cardName.center {
+    display: flex;
+    align-items: center;
+}
+
+.cardName,
+.type {
+    flex-basis: 30%;
+}
+
+.subInfo__label {
+    color: #657182;
+    font-size: 16px;
+}
+
+.subInfo__value {
+    color: #171725;
+    font-size: 16px;
+}
+
+.cardInfo__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+.status {
+    padding: 5px 16px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color: #09a552;
+    margin-right: 15px;
+    border-radius: 25px;
+}
+
+.redStatus {
+    background-color:  #fff1f0 !important;
+    color: #dc283a !important;
+}
+
+.cardWrapper {
+    position: relative;
+    display: flex;
+    font-family: SBSansText-medium;
+    background-color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    letter-spacing: -0.3px;
+}
+
+.cardWrapper:not(:first-child) {
+    margin-top: 15px;
+}
+
+.cardWrapper:hover {
+    box-shadow: 0 0 2.5px rgba(0, 0, 0, 0.05);
+    background-color: #F8F8F8;
+}
+
+.cardInfo {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    width: 100%;
+}
+
+.cardPromoInfo {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 24px 24px 10px;
+    width: 100%;
+}
+
+.promoIcon {
+    margin: 20px 0px 10px 20px;
+    font-size: 22px;
+}
+
+.sortableIcon {
+    font-size: 25px;
+}
+
+.cardSelector {
+    width: 50px;
+}
+
+.cardChildName {
+    padding-left: 25px;
+    padding-top: 15px;
+}
+
+.squareOutline {
+    width: 24px;
+    margin-top: 26px;
+    margin-left: 18px;
+    padding: 12px 0px;
+    border: 1px solid #D4D9DE;
+    border-radius: 2px;
+    font-size: 24px;
+    line-height: 0;
+    text-align: center;
+    user-select: none;
+}

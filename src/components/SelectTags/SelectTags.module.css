@@ -1,0 +1,186 @@
+.selectWrapper {
+    background-color: #f8f8f8;
+    padding: 10px 30px 0px 30px;
+    margin-bottom: 25px;
+    height: 100%;
+}
+
+.select :global(.ant-select-selector) {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+}
+
+.selectedCount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(9, 165, 82, 0.08);
+    margin-left: 10px;
+    text-align: center;
+    width: 53px;
+    height: 24px;
+    border-radius: 41%;
+    background-color: rgba(9, 165, 82, 0.08);
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 40%;
+    color: #09A552;
+}
+
+.selectCategories :global(.ant-select-multiple .ant-select-selection-item) {
+    background:transparent;
+    border: none;
+}
+
+.tagSelect:global(.ant-select-selection-overflow-item){
+    margin-left: 5px;
+}
+
+.tagSelect:global(.ant-select-selection-overflow-item:first-child){
+    margin: 0;
+}
+
+.select :global(.ant-select-selection-search-input) {
+    display: none;
+}
+
+.select :global(.ant-select-selection-overflow) {
+    max-width: 85%;
+}
+
+.select {
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    display: flex;
+    height: 40px;
+}
+
+.dropdown :global(.ant-select-item-option-selected:not(.ant-select-item-option-disabled)) {
+    background: transparent;
+    background-color: transparent;
+}
+
+.select:active, .select:focus, .select:hover {
+    border-color: #09a552;
+}
+
+.arrowActive {
+    transform: rotate(180deg);
+}
+
+.select :global(.ant-select-selection-overflow) {
+    max-width: 85%;
+}
+
+.selectedMenu {
+    display: inline-flex;
+}
+
+.select:global(.ant-select:not(.ant-select-disabled):hover .ant-select-selector){
+    border-color: #09a552;
+}
+
+.select :global(.ant-select-selection-search-input) {
+    display: none;
+}
+
+.select:global(.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector){
+    border-color:#09a552;
+}
+
+.dropdown :global(.ant-checkbox-indeterminate .ant-checkbox-inner::after) {
+    background-color: #09a552;
+}
+
+.dropdown :global(.ant-checkbox-checked .ant-checkbox-inner) {
+    background-color: #09a552 !important;
+    border-color: #09a552 !important;
+}
+
+.dropdown :global(.ant-checkbox-input:hover + .ant-checkbox-inner),
+.dropdown :global(.ant-checkbox-input:focus + .ant-checkbox-inner),
+.dropdown :global(.ant-checkbox-input:active + .ant-checkbox-inner) {
+    border-color: #09a552 !important;
+}
+
+.dropdown :global(.ant-select-item-option-state) {
+    display: none;
+}
+
+.tagSelect {
+    padding: 4px 10px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color:#09a552;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+}
+
+.suffixBlock {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.tagPlaceholder {
+    order: 1;
+    display: flex;
+    width: 100px;
+    margin-left: 5px;
+    justify-content: space-between;
+    background-color: transparent;
+}
+
+.mrt {
+    margin-top: 10px;
+}
+
+.tagSelect:global(.ant-select-selection-overflow-item){
+    margin-left: 5px;
+}
+
+.tagSelect:global(.ant-select-selection-overflow-item:first-child){
+    margin: 0;
+}
+
+.select:global(.ant-select-arrow){
+    pointer-events: none ;
+}
+
+.select:global(.ant-select-arrow .anticon:not(.ant-select-suffix)){
+    pointer-events: none !important ;
+}
+
+.selectText {
+    max-width: 120px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.select :global(.ant-select-selection-item) {
+    background-color:transparent;
+    border: none;
+}
+
+.mrr {
+    margin-right: 10px;
+}
+
+.icon {
+    margin: 0 5px;
+    font-size: 15px;
+}
+.closeIcon {
+    display: flex;
+    align-items: center;
+}
+
+.closeIcon svg {
+    fill: #09A552;
+}

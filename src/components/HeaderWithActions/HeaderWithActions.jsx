@@ -5,8 +5,6 @@ import { Button, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import DropdownWithAction from '../DropdownWithAction/DropdownWithAction';
 
-import { ReactComponent as Cross } from '../../static/images/cross.svg';
-
 import styles from './HeaderWithActions.module.css';
 
 const BUTTON_SORT = 'Сортировать';
@@ -38,13 +36,10 @@ const HeaderWithActions = ({
         searchInput.onChange(value);
     };
 
-    const clickClearButton = () => searchInput.onChange('');
-
     const dropdownLabel = useMemo(() => {
         const { label } = sortingBy.menuItems.find((item) => item.name === sortingBy.sortBy) || {};
         return label || sortingBy.buttonLabel || BUTTON_SORT;
     }, [sortingBy.menuItems, sortingBy.sortBy, sortingBy.buttonLabel]);
-
     return (
         <div className={ cn(styles.wrapper, classNames) }>
             { title && <div className={ styles.headerTitle }>{ title }</div> }
@@ -58,13 +53,7 @@ const HeaderWithActions = ({
                             placeholder={ searchInput.placeholder }
                             value={ searchInput.value }
                             prefix={ <SearchOutlined /> }
-                            suffix={ searchInput.value !== '' ?
-                                <Cross
-                                    className={ styles.crossIcon }
-                                    onClick={ clickClearButton }
-                                /> :
-                                <span />
-                            }
+                            allowClear
                             disabled={ searchInput.disabled }
                         />
                     ) }

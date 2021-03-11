@@ -346,10 +346,10 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
                         </div>
                         { selectedSettings.length > 0 && (
                             <Button
-                                className={ styles.redBtn }
                                 onClick={ onDelete }
                                 disabled={ loading }
                                 type="primary"
+                                danger
                             >
                                 { BUTTON_DELETE }
                             </Button>

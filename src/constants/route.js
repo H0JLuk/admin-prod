@@ -20,6 +20,7 @@ const PAGE = {
     PROMO_CAMPAIGN: 'promo-campaign',
     USERS:          'users',
     APPS:           'client-apps',
+    GROUPS:         'groups',
 };
 
 export const USERS_PAGES = {
@@ -50,6 +51,12 @@ export const DZO_PAGES = {
     DZO_EDIT:       '/:dzoId/edit',
 };
 
+export const GROUPS_PAGES = {
+    ADD_GROUP:      '/create',
+    EDIT_GROUP:     '/:groupId/edit',
+    INFO_GROUP:     '/:groupId/info',
+};
+
 export const ROUTE_AUDITOR = {
     AUDIT:          `${ ROUTE.AUDITOR }/${ PAGE.AUDIT }`
 };
@@ -71,6 +78,7 @@ export const ROUTE_ADMIN = {
     OLD_DESIGN_APPS: `${ ROUTE.OLD_DESIGN }${ ROUTE.ADMIN }/${ PAGE.APPS }`,
     APPS:           `${ ROUTE.ADMIN }/${ PAGE.APPS }`,
     APP_SETTINGS:   `${ ROUTE.ADMIN }/${ PAGE.APPS }${ CLIENT_APPS_PAGES.EDIT_APP }`,
+    GROUPS:         `${ ROUTE.ADMIN }/${ PAGE.GROUPS }`,
 };
 
 export const ROUTE_OWNER = {
@@ -83,4 +91,5 @@ export const ROUTE_OWNER = {
     PROMO_CAMPAIGN: `${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
     OLD_DESIGN_APPS: `${ ROUTE.OLD_DESIGN }${ ROUTE.OWNER }/${ PAGE.APPS }`,
     APPS:           `${ ROUTE.OWNER }/${ PAGE.APPS }`,
+    GROUPS:         `${ ROUTE.OWNER }/${ PAGE.GROUPS }`,
 };

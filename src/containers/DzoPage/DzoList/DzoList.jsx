@@ -7,7 +7,7 @@ import Header from '../../../components/Header/Header';
 import TableDeleteModal from '../../../components/TableDeleteModal/TableDeleteModal';
 import HeaderWithActions from '../../../components/HeaderWithActions/HeaderWithActions';
 
-import { sortItemsBySearchParams } from '../../../utils/helper';
+import { defaultSearchParams, getSearchParamsFromUrl, sortItemsBySearchParams } from '../../../utils/helper';
 import { DZO_PAGES } from '../../../constants/route';
 
 import styles from './DzoList.module.css';
@@ -35,12 +35,6 @@ const BUTTON_TEXT = {
 };
 
 const SEARCH_INPUT_PLACEHOLDER = 'Поиск по названию дзо';
-
-const defaultSearchParams = {
-    sortBy: '',
-    direction: 'ASC',
-    filterText: '',
-};
 
 const getURLSearchParams = ({ ...rest }) => new URLSearchParams(rest).toString();
 
@@ -80,29 +74,19 @@ const DzoPage = ({ matchPath }) => {
     }, []);
 
     useEffect(() => {
-        (async () => {
-            const urlSearchParams = new URLSearchParams(search);
-            const searchParamsFromUrl = {};
-            Object.keys(defaultSearchParams).forEach((key) => {
-                const searchValue = urlSearchParams.get(key);
-                searchParamsFromUrl[key] = searchValue || defaultSearchParams[key];
-            });
-            await loadDzoList(searchParamsFromUrl);
-        })();
+        loadDzoList(getSearchParamsFromUrl(search));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadDzoList]);
 
     const sortDzoList = useCallback((searchParams = defaultSearchParams) => {
         const { filterText, sortBy } = searchParams;
         setParams(searchParams);
+        history.replace(`${matchPath}?${getURLSearchParams(searchParams)}`);
 
         if (!filterText && !sortBy) {
             setDzoList(copyDzoList);
             return;
         }
-
-        const urlSearchParams = getURLSearchParams(searchParams);
-        history.replace(`${matchPath}?${urlSearchParams}`);
 
         setDzoList(sortItemsBySearchParams(searchParams, copyDzoList, 'dzoName'));
     }, [copyDzoList, history, matchPath]);

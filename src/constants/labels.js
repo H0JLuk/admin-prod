@@ -10,4 +10,5 @@ export const menuItemLabels = {
     INSTRUCTIONS: 'Инструкции',
     SETTINGS: 'Настройки',
     APP: 'Приложения',
+    GROUPS: 'Группы',
 };

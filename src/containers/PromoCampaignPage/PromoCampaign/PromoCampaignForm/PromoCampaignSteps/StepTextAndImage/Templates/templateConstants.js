@@ -13,19 +13,25 @@ export const EXCURSION_TYPE_ROWS = [
         CARD: {
             title: 'Баннер на главной',
             description: 'Добавить баннер',
-            setting: '770px x 368px, 1МБ .jpg',
             tooltipImg: main_banner,
             access_type: '.jpg,.jpeg,.png',
             rules: [{ required: true, message: 'Заполните поле' }],
             type: 'banner',
+            maxSize: 2,
+            get setting() {
+                return `770px x 368px, ${this.maxSize}МБ .jpg`;
+            }
         },
         LOGO_SECONDARY: {
             title: 'Логотип на экране с номером (белый)',
             description: 'Добавить логотип',
-            setting: '48px, 1МБ .svg',
             type: 'logo',
             tooltipImg: logo_on_screen_with_phone,
             access_type: '.svg',
+            maxSize: 2,
+            get setting() {
+                return `48px, ${this.maxSize}МБ .svg`;
+            }
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
@@ -33,19 +39,25 @@ export const EXCURSION_TYPE_ROWS = [
         SCREEN: {
             title: 'Лендинг',
             description: 'Добавить лендинг',
-            setting: '834px, 1МБ .jpg',
             tooltipImg: landing,
             access_type: '.jpg,.jpeg,.png',
             type: 'banner',
             rules: [{ required: true, message: 'Заполните поле' }],
+            maxSize: 2,
+            get setting() {
+                return `834px, ${this.maxSize}МБ .jpg`;
+            }
         },
         LOGO_MAIN: {
             title: 'Логотип на экране с QR',
             description: 'Добавить логотип',
-            setting: '48px, 1МБ .svg',
             tooltipImg: logo_on_screen_with_qr_code,
             access_type: '.svg',
             type: 'logo',
+            maxSize: 2,
+            get setting() {
+                return `48px, ${this.maxSize}МБ .svg`;
+            }
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
@@ -71,19 +83,25 @@ export const GIFT_TYPE_ROWS = [
         CARD: {
             title: 'Карточка на главной',
             description: 'Добавить изображение',
-            setting: '370px x 220px, 1МБ .jpg',
             tooltipImg: presents_main_banner,
             access_type: '.jpg,.jpeg,.png',
             type: 'banner',
             rules: [{ required: true, message: 'Заполните поле' }],
+            maxSize: 2,
+            get setting() {
+                return `370px x 220px, ${this.maxSize}МБ .jpg`;
+            },
         },
         LOGO_MAIN: {
             title: 'Логотип на главной',
             description: 'Добавить логотип',
-            setting: '48px, 1МБ .svg',
             tooltipImg: presents_main_logo_1,
             access_type: '.svg',
             type: 'logo',
+            maxSize: 2,
+            get setting() {
+                return `48px, ${this.maxSize}МБ .svg`;
+            },
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
@@ -91,10 +109,13 @@ export const GIFT_TYPE_ROWS = [
         LOGO_SECONDARY: {
             title: 'Логотип на главной (белый)',
             description: 'Добавить логотип',
-            setting: '48px, 1МБ .svg',
             tooltipImg: presents_main_logo_2,
             access_type: '.svg',
             type: 'logo',
+            maxSize: 2,
+            get setting() {
+                return `48px, ${this.maxSize}МБ .svg`;
+            }
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
         // SCREEN: {

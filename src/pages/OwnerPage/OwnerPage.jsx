@@ -9,6 +9,7 @@ import Dashboard from '../../containers/Dashboard/Dashboard';
 import DzoPageRouter from '../../containers/DzoPage/DzoPageRouter';
 import FilesPage from '../../containers/FilesPage/FilesPage';
 import PresentationPage from '../../containers/PresentationPage/PresentationPage';
+import GroupsPageRouter from '../../containers/GroupsPage/GroupsPageRouter';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
 import styles from './OwnerPage.module.css';
@@ -27,6 +28,7 @@ const OwnerPage = () => (
                 <Route path={ ROUTE_OWNER.CATEGORY } component={ CategoryPage } />
                 <Route path={ ROUTE_OWNER.APPS } component={ ClientAppPageRouter } />
                 <Route path={ ROUTE_OWNER.PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />
+                <Route path={ ROUTE_OWNER.GROUPS } component={ GroupsPageRouter } />
 
                 <Route render={ () => <Redirect to={ ROUTE_OWNER.DASHBOARD } /> } />
             </Switch>

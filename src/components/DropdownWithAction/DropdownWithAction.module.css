@@ -10,15 +10,18 @@ button.dropdownButton {
     align-items: center;
 }
 
-button.dropdownButton:hover,
-button.dropdownButton:focus {
-    color: #000;
-    border-color: #21ba72;
+button.dropdownButton svg {
+    transition: transform 0.3s;
+}
+
+button.dropdownButton:global(.ant-dropdown-open) svg {
+    transform: rotate(-180deg);
 }
 
 .dropdownMenuItem {
     padding: 10px;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
 .dropdownMenuItem:hover {
