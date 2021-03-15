@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { goToStartPage } from '../../utils/appNavigation';
 import { getStaticUrlFromBackend, saveStaticUrl } from '../../api/services/settingsService';
 import { LOGIN_FORM } from '../../components/Form/forms';
@@ -8,6 +8,7 @@ import { storeUserData } from '../../api/services/sessionService';
 import { Errors, getErrorText } from '../../constants/errors';
 import { ROLES } from '../../constants/roles';
 import ButtonLabels from '../../components/Button/ButtonLables';
+import { notification } from 'antd';
 
 import styles from './LoginPage.module.css';
 
@@ -16,6 +17,10 @@ const LoginPage = (props) => {
 
     const [ error, setError ] = useState(null);
     const { history } = props;
+
+    useEffect(() => {
+        notification.destroy();
+    }, []);
 
     const onSubmit = async (data) => {
         try {

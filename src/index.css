@@ -163,6 +163,11 @@ input.ant-input:placeholder-shown ~ span {
     display: none !important;
 }
 
+.ant-notification.ant-notification-topRight > div {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
 /*.ant-btn-ghost,*/
 /*.ant-btn-ghost:hover,*/
 /*.ant-btn-ghost:focus {*/
