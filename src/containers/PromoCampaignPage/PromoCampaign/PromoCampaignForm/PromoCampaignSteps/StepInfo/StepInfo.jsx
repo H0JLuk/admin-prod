@@ -41,7 +41,7 @@ const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
 const URL_SOURCE_DZO_LABEL = 'ДЗО';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
 const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
-const SHOW_ONLY_BUNDLE = 'Отображать только в составе бандла';
+const SHOW_ONLY_IN_BUNDLE = 'Отображать только в составе бандла';
 const EXTERNAL_ID_LABEL = 'Внешний ID';
 const EXTERNAL_ID_PLACEHOLDER = 'Введите внешний ID';
 const EXTERNAL_ID_DUPLICATE = 'Введенный внешний ID уже используется в другой промо-кампании';
@@ -49,7 +49,6 @@ const types_promo = Object.values(promoCodeTypes);
 
 const namePathPriorityOnWebUrl = ['settings', 'priorityOnWebUrl'];
 const namePathAlternativeOfferMechanic = [ 'settings', 'alternativeOfferMechanic' ];
-const namePathOnlyBundle = ['settings', 'onlyBundle']; // TODO: узнать имя свойства
 
 const selectTagRender = ({ label, onClose }) => (
     <div className={ styles.tagSelect }>
@@ -320,11 +319,11 @@ const StepInfo = ({
                         <div className={ styles.statusInfo }>
                             <div className={ styles.viewInfo }>
                                 <span className={ styles.statusText }>
-                                    { SHOW_ONLY_BUNDLE }
+                                    { SHOW_ONLY_IN_BUNDLE }
                                 </span>
                                 <Form.Item
-                                    name={ namePathOnlyBundle }
-                                    initialValue={ state.settings.onlyBundle } // TODO: узнать имя свойства
+                                    name="standalone"
+                                    initialValue={ state.standalone }
                                     valuePropName="checked"
                                 >
                                     <Switch />

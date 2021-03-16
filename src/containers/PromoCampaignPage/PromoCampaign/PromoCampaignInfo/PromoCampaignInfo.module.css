@@ -73,6 +73,21 @@
     margin-bottom: 10px;
 }
 
+.switchContainer {
+    max-width: 280px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.switch {
+    display: flex;
+    align-items: center;
+}
+
+.switch > button {
+    align-self: center;
+}
+
 .status {
     display: inline-block;
     padding: 5px 16px;
@@ -82,7 +97,7 @@
     text-align: center;
 }
 
-.redStatus {
+.danger {
     background-color: #fff1f0;
     color: #dc283a;
 }

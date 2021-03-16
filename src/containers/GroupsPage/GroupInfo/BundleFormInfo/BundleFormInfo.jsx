@@ -57,12 +57,10 @@ const BundleFormInfo = ({ matchPath, history, bundleData, groupId }) => {
                 okText: OK_TEXT,
             });
         } catch (e) {
-            const { message } = e;
-
             errorModal({
                 title: (
                     <span>
-                        { ERROR_DELETE } <span className={ styles.text }>{ message }</span>
+                        { ERROR_DELETE } <span className={ styles.text }>{ e.message }</span>
                     </span>
                 ),
             });
@@ -88,7 +86,7 @@ const BundleFormInfo = ({ matchPath, history, bundleData, groupId }) => {
         <div>
             <div className={ styles.headerActions }>
                 <div className={ styles.headerInfo }>
-                    <div className={ styles.title }>{ name } </div>
+                    <div className={ styles.title }>{ name }</div>
                     <div className={ cn(styles.status, { [styles.redStatus]: !active }) }>
                         { active ? STATUS.ACTIVE : STATUS.INACTIVE }
                     </div>
@@ -106,17 +104,16 @@ const BundleFormInfo = ({ matchPath, history, bundleData, groupId }) => {
                 <div className={ styles.rowWrapper }>
                     <Row gutter={ [24, 16] } className={ styles.row }>
                         <Col span={ 12 }>
-                            { !banners.length && (
+                            { !banners.length ? (
                                 <>
                                     <div className={ styles.infoTitle }>{ BUNDLE_ROWS[imagesTypes.CARD].label }</div>
                                     <div>
                                         <i>{ BANNER_EMPTY }</i>
                                     </div>
                                 </>
-                            ) }
-                            { banners.map(({ url, type }) => (
+                            ) : banners.map(({ url, type }) => (
                                 <React.Fragment key={ url }>
-                                    <div className={ styles.infoTitle }> { BUNDLE_ROWS[type]?.label }</div>
+                                    <div className={ styles.infoTitle }>{ BUNDLE_ROWS[type]?.label }</div>
                                     <ImagesBlock key={ url } imgURL={ url } />
                                 </React.Fragment>
                             )) }
@@ -127,7 +124,7 @@ const BundleFormInfo = ({ matchPath, history, bundleData, groupId }) => {
                     <div key={ index } className={ styles.rowWrapper }>
                         <Row gutter={ [24, 16] } className={ styles.row }>
                             <Col span={ 13 }>
-                                <span className={ cn(styles.infoTitle, styles.campaignTitle) }> { name } </span>
+                                <span className={ cn(styles.infoTitle, styles.campaignTitle) }>{ name }</span>
                             </Col>
                             { groupBundleRows.map((row) =>
                                 Object.keys(row).map((key, index) => (

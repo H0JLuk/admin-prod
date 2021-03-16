@@ -70,8 +70,7 @@ const PromoCampaignCopyModal = ({
                         </div>
                     </div>
                     <div className={ `${ modalPrefixClass }-btns` }>
-                        <Button onClick={ copyWithoutSettings }
-                        >
+                        <Button onClick={ copyWithoutSettings }>
                             { MODAL_CANCEL }
                         </Button>
                         <Button

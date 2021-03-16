@@ -12,6 +12,7 @@ const GIFT = 'Подарок';
 const CATEGORY = 'Категории';
 const NO_CATEGORY_LABEL = 'Нет выбранных категорий';
 const URL_PROMO_CAMPAIGN = 'Ссылка на страницу промо-кампании';
+const EMPTY_URL_PROMO_CAMPAIGN = 'Нет ссылки';
 const TYPE_PROMO_CAMPAIGN = 'Тип промо-кампании';
 const TYPE_PROMO_CODE = 'Тип промокода';
 const ACTIVE_PERIOD = 'Период действия';
@@ -21,6 +22,7 @@ const STATUS = 'Активность промо-кампании';
 const URL_SOURCE_LABEL = 'Источник ссылки';
 const URL_SOURCE_DZO_LABEL = 'ДЗО';
 const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
+const SHOW_ONLY_BUNDLE = 'Отображать только в составе бандла';
 const EXTERNAL_ID_LABEL = 'Внешний ID';
 const EMPTY_EXTERNAL_ID_LABEL = 'Внешний ID не выбран';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
@@ -58,12 +60,14 @@ const StepInfo = ({ promoCampaign }) => {
                         </div>
                     </Col>
 
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <div className={ style.infoTitle }>{ URL_PROMO_CAMPAIGN }</div>
-                        <div className={ style.webLink }>{ promoCampaign.webUrl }</div>
+                        <div className={ style.webLink }>
+                            { promoCampaign.webUrl || <i>{ EMPTY_URL_PROMO_CAMPAIGN }</i> }
+                        </div>
                     </Col>
 
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <div className={ style.infoTitle }>{ URL_SOURCE_LABEL }</div>
                         <div className={ style.flexRow }>
                             <Radio
@@ -83,44 +87,52 @@ const StepInfo = ({ promoCampaign }) => {
                         </div>
                     </Col>
 
-                    <Col span={ 12 }>
+                    <Col span={ 8 } className={ style.switchContainer }>
+                        <div className={ style.switch }>
+                            <div className={ style.infoTitle }>{ SHOW_GO_TO_LINK_LABEL }</div>
+                            <Switch disabled checked={ promoCampaign.settings?.alternativeOfferMechanic } />
+                        </div>
+                    </Col>
+
+                    <Col span={ 8 }>
                         <div className={ style.infoTitle }>{ DZO }</div>
                         <div className={ style.infoText }>
                             { promoCampaign.dzoName }
                         </div>
                     </Col>
-                    <Col span={ 12 }>
-                        <div className={ style.infoTitle }>{ SHOW_GO_TO_LINK_LABEL }</div>
-                        <Switch disabled checked={ promoCampaign.settings?.alternativeOfferMechanic } />
-                    </Col>
 
-                    <Col span={ 12 }>
+                    <Col span={ 8 }>
                         <div className={ style.infoTitle }>{ ACTIVE_PERIOD }</div>
                         <div className={ style.infoText }>
                             { promoCampaign.startDate } - { promoCampaign.finishDate }
                         </div>
                     </Col>
 
-                    <Col span={ 12 }>
+                    <Col span={ 8 } className={ style.switchContainer }>
+                        <div className={ style.switch }>
+                            <div className={ style.infoTitle }>{ SHOW_ONLY_BUNDLE }</div>
+                            <Switch disabled checked={ promoCampaign.standalone } />
+                        </div>
+                    </Col>
+
+                    <Col span={ 8 }>
                         <div className={ style.infoTitle }>{ TYPE_PROMO_CODE }</div>
                         <div className={ style.infoText }>
                             { promoCodeTypes[promoCampaign.promoCodeType].label }
                         </div>
                     </Col>
 
-                    <Col span={ 12 }>
-                        <div className={ style.infoTitle }>{ STATUS }</div>
-                        <div className={ cn(style.status, { [style.redStatus]: !promoCampaign.active }) }>
-                            { promoCampaign.active ? STATUS_TYPE.ACTIVE : STATUS_TYPE.INACTIVE }
+                    <Col span={ 8 }>
+                        <div className={ style.infoTitle }>{ EXTERNAL_ID_LABEL }</div>
+                        <div className={ style.infoText }>
+                            { promoCampaign.externalId || <i>{ EMPTY_EXTERNAL_ID_LABEL }</i> }
                         </div>
                     </Col>
 
-                    <Col span={ 12 }>
-                        <div className={ style.infoTitle }>{ EXTERNAL_ID_LABEL }</div>
-                        <div className={ style.infoText }>
-                            { promoCampaign.externalId
-                                ? promoCampaign.externalId
-                                : <i>{ EMPTY_EXTERNAL_ID_LABEL }</i> }
+                    <Col span={ 8 }>
+                        <div className={ style.infoTitle }>{ STATUS }</div>
+                        <div className={ cn(style.status, { [style.danger]: !promoCampaign.active }) }>
+                            { promoCampaign.active ? STATUS_TYPE.ACTIVE : STATUS_TYPE.INACTIVE }
                         </div>
                     </Col>
                 </Row>

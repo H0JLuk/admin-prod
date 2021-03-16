@@ -44,6 +44,7 @@ import { editPromoCampaign, newPromoCampaign, copyPromoCampaign } from '../../..
 import { ReactComponent as LoadingSpinner } from '../../../../static/images/loading-spinner.svg';
 
 import styles from './PromoCampaignForm.module.css';
+
 const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     const history = useHistory();
     const [form] = Form.useForm();
@@ -77,6 +78,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
         type: '',
         categoryIdList: [],
         appCode: null,
+        standalone: false,
         settings: {
             priorityOnWebUrl: false,
             alternativeOfferMechanic: false,
@@ -428,7 +430,6 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     // вызывается в модальном окне, при смене типа промо-кода.
     // При нажатии на ОК отправит запрос на сервер для обновления данных.
     const handleOkSaveMode = async () => {
-
         const dataForSend = getDataForSend(normalizeFirstStepValue({ ...state, ...form.getFieldsValue() }));
 
         const promoCampaignId = isCopy
@@ -441,7 +442,6 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
 
     // проверяет изменение типа промо-кода, если изменился, то вызовет модальное окно, в другом случае отправляет запрос на сервер для обновления данных;
     const handleEditPromoCampaign = async (dataForSend, id) => {
-
         if (!isCopy) {
             const oldValue = checkPromoCodes(savedPromoCampaignData.current, promoCampaign);
             const newValue = form.getFieldValue('promoCodeType');
@@ -499,9 +499,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             banners: [...promoCampaignSavedData.banners, ...editedBanners],
             texts: [...promoCampaignSavedData.texts, ...editedTexts],
         });
-
         clearImgRef();
-
         setState((prev) => ({ ...prev, banners, texts }));
     };
 
@@ -683,21 +681,21 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
                         { STEP } { step } из { stepsCount }
                     </p>
                     <Button
-                        className={ cn(styles.btnMR, styles.btnCancel) }
+                        className={ styles.btnMR }
                         onClick={ handleCancel }
                     >
                         { CANCEL }
                     </Button>
                     <Button
-                        type='primary'
-                        className={ cn(styles.btnMR) }
+                        type="primary"
+                        className={ styles.btnMR }
                         onClick={ onClick }
                     >
                         { buttonText }
                     </Button>
                     { step < stepsCount && (
                         <Button
-                            type='primary'
+                            type="primary"
                             onClick={ handleSaveInfo }
                             disabled={ saveStatus || loading }
                         >
@@ -710,7 +708,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
                 <Form
                     className={ cn({ [styles.containerStep]: step !== steps.visibility }) }
                     form={ form }
-                    layout='vertical'
+                    layout="vertical"
                     onValuesChange={ isChanged }
                 >
                     { StepContainer }

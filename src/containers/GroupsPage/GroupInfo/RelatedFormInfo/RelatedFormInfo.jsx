@@ -52,12 +52,10 @@ const RelatedFormInfo = ({ matchPath, history, groupId, bundleData }) => {
                 okText: OK_TEXT,
             });
         } catch (e) {
-            const { message } = e;
-
             errorModal({
                 title: (
                     <span>
-                        { ERROR_DELETE } <span className={ styles.text }>{ message }</span>
+                        { ERROR_DELETE } <span className={ styles.text }>{ e.message }</span>
                     </span>
                 ),
             });
@@ -82,7 +80,7 @@ const RelatedFormInfo = ({ matchPath, history, groupId, bundleData }) => {
         <div>
             <div className={ styles.headerActions }>
                 <div>
-                    <div className={ styles.title }>{ name } </div>
+                    <div className={ styles.title }>{ name }</div>
                 </div>
                 <div className={ styles.buttonBlock }>
                     <Button type="primary" onClick={ handleEdit }>
@@ -98,7 +96,7 @@ const RelatedFormInfo = ({ matchPath, history, groupId, bundleData }) => {
                     <div key={ index } className={ styles.rowWrapper }>
                         <Row gutter={ [24, 16] } className={ styles.row }>
                             <Col span={ 24 }>
-                                <span className={ cn(styles.infoTitle, styles.campaignTitle) }> { name } </span>
+                                <span className={ cn(styles.infoTitle, styles.campaignTitle) }>{ name }</span>
                             </Col>
                             { associationGroupRows.map((row) =>
                                 Object.keys(row).map((key, index) => (
@@ -106,13 +104,7 @@ const RelatedFormInfo = ({ matchPath, history, groupId, bundleData }) => {
                                         { row[key].type === 'text' && (
                                             <>
                                                 <div className={ styles.infoTitle }>{ row[key].label }</div>
-                                                { !texts[key] ? (
-                                                    <div>
-                                                        <i>{ HEADER_EMPTY }</i>
-                                                    </div>
-                                                ) : (
-                                                    <div> { texts[key] }</div>
-                                                ) }
+                                                <div>{ texts[key] || <i>{ HEADER_EMPTY }</i> }</div>
                                             </>
                                         ) }
                                         { ['banner', 'logo'].includes(row[key].type) && (

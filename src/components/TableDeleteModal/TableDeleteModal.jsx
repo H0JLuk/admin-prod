@@ -106,7 +106,7 @@ const TableDeleteModal = ({
             ) }
             { hasErrors && (
                 <ul className={ styles.list }>
-                    <span className={ styles.failed }> { FAILED_DELETE }</span>
+                    <span className={ styles.failed }>{ FAILED_DELETE }</span>
                     <span>({ request.errors.length })</span>
                     { request.errors.map(({ message, item }, index) => (
                         <li key={ index }><b>{ item }</b> - { message }</li>
@@ -124,7 +124,7 @@ TableDeleteModal.propTypes = {
     modalClose: PropTypes.func.isRequired,
     deleteFunction: PropTypes.func.isRequired,
     refreshTable: PropTypes.func.isRequired,
-    visible:PropTypes.bool.isRequired,
+    visible: PropTypes.bool.isRequired,
     modalTitle: PropTypes.string,
     modalSuccessTitle: PropTypes.string,
     okTextSuccess: PropTypes.string,

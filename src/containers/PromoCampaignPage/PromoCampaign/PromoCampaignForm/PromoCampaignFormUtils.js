@@ -186,6 +186,7 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
         ],
         appCode: isCopy ? undefined : appCode ?? getAppCode(),
         settings: promoCampaign.settings,
+        standalone: promoCampaign.standalone,
         externalId: isCopy ? '' : promoCampaign.externalId,
     };
 }
@@ -202,6 +203,7 @@ export const getDataForSend = ({
     type,
     categoryIdList,
     settings,
+    standalone,
     externalId
 }) => ({
     name,
@@ -213,6 +215,7 @@ export const getDataForSend = ({
     startDate,
     promoCodeType,
     settings,
+    standalone,
     type,
     categoryIdList,
     externalId: externalId || null,
@@ -232,6 +235,7 @@ export function getPromoCampaignForCopy(promoCampaign, copyVisibilitySettings) {
         oneLinkAppUrl: promoCampaign.oneLinkAppUrl,
         promoCodeType: promoCampaign.promoCodeType,
         settings: promoCampaign.settings,
+        standalone: promoCampaign.standalone,
         type: promoCampaign.type,
         webUrl: promoCampaign.webUrl,
         copyVisibilitySettings,

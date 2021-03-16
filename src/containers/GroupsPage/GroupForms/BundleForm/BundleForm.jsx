@@ -249,7 +249,7 @@ const BundleForm = ({
                                 { ({ getFieldValue }) => (
                                     <div className={ styles.switchWrapper }>
                                         <div>
-                                            <b>{ getFieldValue('active') ? BUNDLE_ON : BUNDLE_OFF } </b>
+                                            <b>{ getFieldValue('active') ? BUNDLE_ON : BUNDLE_OFF }</b>
                                         </div>
                                         <div className={ styles.switchBlock }>
                                             <div className={ styles.switchText }>
