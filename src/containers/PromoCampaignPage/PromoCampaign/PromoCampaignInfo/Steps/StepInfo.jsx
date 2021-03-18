@@ -22,7 +22,7 @@ const STATUS = 'Активность промо-кампании';
 const URL_SOURCE_LABEL = 'Источник ссылки';
 const URL_SOURCE_DZO_LABEL = 'ДЗО';
 const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
-const SHOW_ONLY_BUNDLE = 'Отображать только в составе бандла';
+const SHOW_ONLY_IN_BUNDLE = 'Отображать только в составе бандла';
 const EXTERNAL_ID_LABEL = 'Внешний ID';
 const EMPTY_EXTERNAL_ID_LABEL = 'Внешний ID не выбран';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
@@ -110,8 +110,8 @@ const StepInfo = ({ promoCampaign }) => {
 
                     <Col span={ 8 } className={ style.switchContainer }>
                         <div className={ style.switch }>
-                            <div className={ style.infoTitle }>{ SHOW_ONLY_BUNDLE }</div>
-                            <Switch disabled checked={ promoCampaign.standalone } />
+                            <div className={ style.infoTitle }>{ SHOW_ONLY_IN_BUNDLE }</div>
+                            <Switch disabled checked={ !promoCampaign.standalone } />
                         </div>
                     </Col>
 

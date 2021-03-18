@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import noop from 'lodash/noop';
 import { Input, Switch, Select, DatePicker, Form, Row, Col, Radio, Checkbox } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/ru_RU';
 import { CloseOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
@@ -57,6 +58,14 @@ const selectTagRender = ({ label, onClose }) => (
     </div>
 );
 
+const ReverseSwitch = ({ checked, onChange = noop, ...restProps }) => (
+    <Switch
+        checked={ !checked }
+        onChange={ (value) => onChange(!value) }
+        { ...restProps }
+    />
+);
+
 const StepInfo = ({
     state,
     changeTypePromo,
@@ -67,7 +76,6 @@ const StepInfo = ({
     copyPromoCampaignId,
     oldExternalId,
 }) => {
-
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
     const [clientApps, setClientApps] = useState([]);
@@ -326,7 +334,7 @@ const StepInfo = ({
                                     initialValue={ state.standalone }
                                     valuePropName="checked"
                                 >
-                                    <Switch />
+                                    <ReverseSwitch />
                                 </Form.Item>
                             </div>
                         </div>
