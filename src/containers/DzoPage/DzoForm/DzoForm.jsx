@@ -1,97 +1,73 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Col, Form, Row, Input, Select, Button } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
-import { addApplication, addDzo, deleteApp, deleteDzo, updateApp } from '../../../api/services/dzoService';
+import { addApplication, addDzo, deleteApp, deleteDzo, updateApp, updateDzo } from '../../../api/services/dzoService';
 import { confirmModal } from '../../../utils/utils';
 import Header from '../../../components/Header/Header';
 import { URL_REGEXP } from '../../../constants/common';
+import UploadPicture from '../../../components/UploadPicture/UploadPicture';
+import { APPLICATION_JSON_TYPE } from '../../PromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignFormConstants';
+import {
+    BANNERS,
+    DZO_REQUEST,
+    DEFAULT_DZO,
+    APP_OPTIONS,
+    DZO_CODE_NOT_UNIQUE,
+    DEFAULT_APP,
+    DELETE_CONFIRMATION_MODAL_TITLE,
+    DZO_APPLICATION_LIST_NAME,
+    NEW_DZO_TITLE,
+    FORM_ELEMENTS,
+    RULES,
+    BANNERS_UPLOAD_TEMPLATE,
+    APP_TYPE_LABEL,
+    QR_LINK_LABEL,
+    APP_TYPE_PLACEHOLDER,
+    QR_LINK_PLACEHOLDER,
+    CANCEL_BUTTON_TITLE,
+    URL_VALIDATION_TEXT,
+    ADD_BUTTON_TITLE,
+    SAVE_BUTTON_TITLE,
+    DELETE_BUTTON_LABEL,
+    TYPES,
+    APP_TYPE_ALREADY_SELECTED,
+} from '../dzoConstants';
 
 import styles from './DzoForm.module.css';
 
 import { ReactComponent as LoadingSpinner } from '../../../static/images/loading-spinner.svg';
 
-const NEW_DZO_TITLE = 'Новое ДЗО';
-const CANCEL_BUTTON_TITLE = 'Отменить';
-const VALIDATION_TEXT = 'Заполните обязательное поле';
-const ADD_BUTTON_TITLE = 'Добавить';
-const SAVE_BUTTON_TITLE = 'Сохранить';
-const URL_VALIDATION_TEXT = 'Введите url в формате http://site.ru';
-const DELETE_BUTTON_LABEL = 'Удалить';
-const DELETE_CONFIRMATION_MODAL_TITLE = 'Вы действительно хотите удалить ДЗО';
-const QR_LINK_PLACEHOLDER = 'Введите ссылку';
-const QR_LINK_LABEL = 'Ссылка для QR-кода';
-const APP_TYPE_LABEL = 'Тип приложения';
-const APP_TYPE_PLACEHOLDER = 'Выберите приложение';
-const APP_TYPE_ALREADY_SELECTED = 'Нельзя выбрать два одинаковых приложения';
-const DZO_CODE_NOT_UNIQUE = 'ДЗО с таким кодом уже есть!';
+function serializeBannersAndDzoData(imageInputs, textInputs) {
+    const formData = new FormData();
 
-const DZO_APPLICATION_LIST_NAME = 'applicationList';
+    Object.entries(imageInputs).forEach(([key, value]) => {
+        if (value[0]?.originFileObj) {
+            const name = `${key}.${value[0].name.split('.').pop()}`;
+            const [{ originFileObj }] = value;
+            formData.append(BANNERS, originFileObj, name);
+        }
+    });
 
-const TYPES = {
-    INPUT: 'input',
-    INPUT_WEB: 'inputWeb',
-    TEXT_BLOCK: 'textBlock',
-    SELECT: 'select',
-};
+    formData.append(DZO_REQUEST, new Blob([JSON.stringify(textInputs)], { type: APPLICATION_JSON_TYPE }));
 
-const RULES = {
-    STANDARD: [],
-    STANDARD_REQUIRED: [{ required: true, message: VALIDATION_TEXT, validateTrigger: 'onSubmit' }],
-};
-
-const APP_OPTIONS = [
-    { label: 'OTHER', value: 'OTHER' },
-    { label: 'IOS', value: 'IOS' },
-    { label: 'ANDROID', value: 'ANDROID' },
-];
-
-const formElements = [
-    [
-        {
-            label: 'Название',
-            type: TYPES.INPUT,
-            rules: RULES.STANDARD_REQUIRED,
-            name: 'dzoName',
-            placeholder: 'Название',
-        },
-        {
-            label: 'Код',
-            type: TYPES.INPUT,
-            name: 'dzoCode',
-            placeholder: 'Код',
-        },
-    ],
-    [
-        {
-            label: 'Описание ДЗО',
-            type: TYPES.TEXT_BLOCK,
-            rules: RULES.STANDARD,
-            name: 'description',
-            placeholder: 'Описание ДЗО',
-        },
-    ],
-];
-
-const defaultDzo = {
-    dzoCode: '',
-    description: '',
-    dzoName: '',
-    applicationList: [{ applicationType: APP_OPTIONS[0].value, applicationUrl: '' }],
-};
-
-const defaultApp = { applicationType: undefined, applicationUrl: '' };
+    return formData;
+}
 
 function getInitialValue({ dzoName, dzoCode, description, applicationList, dzoId } = {}) {
     const appList = (applicationList || []).map((el) => ({ ...el, applicationUrl: decodeURI(el.applicationUrl) }));
 
     return {
-        ...defaultDzo,
+        ...DEFAULT_DZO,
         dzoName,
         dzoCode,
         description,
         dzoId,
-        applicationList: appList.length < APP_OPTIONS.length ? [...appList, defaultApp] : appList,
+        applicationList: appList.length < APP_OPTIONS.length ? [...appList, DEFAULT_APP] : appList,
     };
+}
+
+function getInitialBanners(banners) {
+    return (banners || []).reduce((result, { type, url }) => ({ ...result, [type]: url }), {});
 }
 
 const DzoForm = ({ type, matchPath }) => {
@@ -100,9 +76,11 @@ const DzoForm = ({ type, matchPath }) => {
     const { state: stateFromLocation } = useLocation();
     const { dzoData, dzoCodes } = stateFromLocation || {};
     const initialData = useRef(getInitialValue(dzoData));
+    const initialBanners = useRef(getInitialBanners(dzoData?.dzoBannerList));
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const isEdit = type === 'edit';
+    const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
 
     useEffect(() => {
         if (isEdit && !dzoData) {
@@ -113,12 +91,14 @@ const DzoForm = ({ type, matchPath }) => {
 
     const onFinish = useCallback(
         async (dataFromForm) => {
-            const { applicationList, ...dzoFormData } = dataFromForm;
+            const { applicationList, dzoBannerList, ...dzoFormData } = dataFromForm;
+            const formData = serializeBannersAndDzoData(dzoBannerList, dzoFormData);
+
             try {
                 setLoading(true);
 
                 if (!isEdit) {
-                    const { id } = await addDzo(dzoFormData);
+                    const { id } = await addDzo(formData);
                     const appDataFromForm = applicationList.reduce((result, row) => {
                         if (!row.applicationUrl) {
                             return result;
@@ -189,6 +169,11 @@ const DzoForm = ({ type, matchPath }) => {
                     const appPromises = appsToCreate.map(addApplication);
                     appPromises.length && (await Promise.all(appPromises));
                     //create
+
+                    // update DZO info
+                    const { dzoId } = initialData.current;
+                    await updateDzo(dzoId, formData);
+                    // update DZO info
                 }
 
                 history.push(matchPath);
@@ -199,7 +184,7 @@ const DzoForm = ({ type, matchPath }) => {
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [initialData.current, history, matchPath, isEdit]
+        [history, matchPath, isEdit]
     );
 
     const handleCancel = () => history.push(matchPath);
@@ -241,7 +226,7 @@ const DzoForm = ({ type, matchPath }) => {
         }
 
         if (appsCount < APP_OPTIONS.length && index + 1 === appsCount && target.value) {
-            add(defaultApp);
+            add(DEFAULT_APP);
         }
     };
 
@@ -267,8 +252,9 @@ const DzoForm = ({ type, matchPath }) => {
                         className={ styles.formContainer }
                         onFinish={ onFinish }
                         initialValues={ initialData.current }
+                        onFieldsChange={ isEdit && (() => setIsSaveButtonDisabled(false)) }
                     >
-                        { (formElements || []).map((row, index) => (
+                        { (FORM_ELEMENTS || []).map((row, index) => (
                             <Row key={ index } gutter={ [24] }>
                                 { (row || []).map((props) => (
                                     <Col key={ props.label } span={ 24 / row.length }>
@@ -291,6 +277,24 @@ const DzoForm = ({ type, matchPath }) => {
                                 )) }
                             </Row>
                         )) }
+                        <Row gutter={ 24 }>
+                            { BANNERS_UPLOAD_TEMPLATE.map(({ label, name, accept, type, description, setting }) => (
+                                <Col span={ 8 } key={ label }>
+                                    <UploadPicture
+                                        description={ description }
+                                        uploadButtonText="Добавить"
+                                        name={ name }
+                                        setting={ setting }
+                                        label={ label }
+                                        accept={ accept }
+                                        type={ type }
+                                        removeIconView={ false }
+                                        footer
+                                        initialValue={ initialBanners.current[name[1]] }
+                                    />
+                                </Col>
+                            )) }
+                        </Row>
                         <Form.List name={ DZO_APPLICATION_LIST_NAME }>
                             { (fields, { add, remove }) => fields.map((field) => (
                                 <Row gutter={ [24] } key={ field.name }>
@@ -335,7 +339,12 @@ const DzoForm = ({ type, matchPath }) => {
                     <Button type="default" onClick={ handleCancel }>
                         { CANCEL_BUTTON_TITLE }
                     </Button>
-                    <Button htmlType="submit" form="info" type="primary">
+                    <Button
+                        htmlType="submit"
+                        form="info"
+                        type="primary"
+                        disabled={ isEdit && isSaveButtonDisabled }
+                    >
                         { isEdit ? SAVE_BUTTON_TITLE : ADD_BUTTON_TITLE }
                     </Button>
                     { isEdit && (

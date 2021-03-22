@@ -5,34 +5,19 @@ import Header from '../../../components/Header/Header';
 import { DZO_PAGES } from '../../../constants/route';
 import { deleteDzo } from '../../../api/services/dzoService';
 import { confirmModal, errorModal, successModal } from '../../../utils/utils';
+import { ImageBlock } from '../../PromoCampaignPage/PromoCampaign/PromoCampaignInfo/Steps/Templates/TemplateBlocks';
+import {
+    DELETE_BUTTON_LABEL,
+    DELETE_CONFIRMATION_MODAL_TITLE,
+    ERROR_DELETE_DZO, OK_TEXT,
+    DZO_INFO_TEMPLATE_DATA,
+    DZO_BANNERS_TEMPLATE,
+    BANNER_IS_EMPTY,
+    DZO_INFO_APPS_TEMPLATE,
+    EDIT,
+} from '../dzoConstants';
 
 import styles from './DzoInfo.module.css';
-
-const DZO_NAME = 'Название';
-const DZO_CODE = 'Код';
-const DZO_DESCRIPTION = 'Описание';
-const DZO_APP_TYPE = 'Тип приложения';
-const DZO_QR_URL = 'Ссылка для QR-кода';
-const EDIT = 'Редактировать';
-const DELETE = 'Удалить';
-const OK_TEXT = 'Хорошо';
-const DELETE_CONFIRMATION_MODAL_TITLE = 'Вы действительно хотите удалить ДЗО';
-const ERROR_DELETE_DZO = 'Ошибка удаления ДЗО';
-
-const DZO_INFO_TEMPLATE_DATA = [
-    [
-        { key: 'dzoName', label: DZO_NAME },
-        { key: 'dzoCode', label: DZO_CODE },
-    ],
-    [
-        { key: 'description', label: DZO_DESCRIPTION },
-    ],
-];
-
-const DZO_INFO_APPS_TEMPLATE = [
-    { key: 'applicationType', label: DZO_APP_TYPE },
-    { key: 'applicationUrl', label: DZO_QR_URL, type: 'url' },
-];
 
 const DzoInfo = ({ matchPath }) => {
     const history = useHistory();
@@ -44,7 +29,11 @@ const DzoInfo = ({ matchPath }) => {
         return null;
     }
 
-    const { dzoId, applicationList } = dzoData;
+    const { dzoId, applicationList, dzoBannerList } = dzoData;
+    const normalizedBannerList = dzoBannerList.reduce((acc, { type, url }) => ({
+        ...acc,
+        [type]: url,
+    }), {});
 
     const onEdit = () => {
         history.push(generatePath(`${ matchPath }${ DZO_PAGES.DZO_EDIT }`, { dzoId }), { dzoData });
@@ -87,7 +76,7 @@ const DzoInfo = ({ matchPath }) => {
                     { DELETE_CONFIRMATION_MODAL_TITLE } <span className={ styles.text }>{ `${dzoData.dzoName}?` }</span>
                 </span>
             ),
-            okText: DELETE,
+            okText: DELETE_BUTTON_LABEL,
             onOk: onDelete,
             okButtonProps: { danger: true },
         });
@@ -103,7 +92,7 @@ const DzoInfo = ({ matchPath }) => {
                 <div className={ styles.infoWrapper }>
                     <div className={ styles.dzoInfo }>
                         { DZO_INFO_TEMPLATE_DATA.map((row, index) => (
-                            <Row gutter={ [24, 16] } key={ index }>
+                            <Row gutter={ [24, 16] } key={ index } className={ styles.dzoInfoRow }>
                                 { row.map(({ key, label }) => (
                                     <DzoInfoBlock
                                         key={ key }
@@ -114,6 +103,26 @@ const DzoInfo = ({ matchPath }) => {
                                 )) }
                             </Row>
                         )) }
+                        <Row className={ styles.bannersRow } gutter={ 24 }>
+                            { DZO_BANNERS_TEMPLATE.map(({ type, label }) =>
+                                <Col span={ 8 } key={ type }>
+                                    { normalizedBannerList[type] ? (
+                                        <ImageBlock
+                                            type="logo"
+                                            label={ label }
+                                            src={ normalizedBannerList[type] }
+                                        />
+                                    ) : (
+                                        <>
+                                            <div className={ styles.infoTitle }>{ label }</div>
+                                            <div>
+                                                <i>{ BANNER_IS_EMPTY }</i>
+                                            </div>
+                                        </>
+                                    ) }
+                                </Col>
+                            ) }
+                        </Row>
                         { applicationList.map(dzoApp => (
                             <Row gutter={ [24, 16] } key={ dzoApp.applicationId }>
                                 { DZO_INFO_APPS_TEMPLATE.map(({ key, label, type }) => (
@@ -142,7 +151,7 @@ const DzoInfo = ({ matchPath }) => {
                             danger
                             onClick={ onDeleteClick }
                         >
-                            { DELETE }
+                            { DELETE_BUTTON_LABEL }
                         </Button>
                     </Space>
                 </div>
@@ -154,11 +163,13 @@ const DzoInfo = ({ matchPath }) => {
 export default DzoInfo;
 
 function DzoInfoBlock({ label, value, type, colSpan }) {
+    const decodedUrl = type === 'url' ? decodeURI(value) : value;
+
     return (
         <Col span={ colSpan }>
             <div className={ styles.title }>{ label }</div>
             <span className={ styles.text }>
-                { type === 'url' ? decodeURI(value) : value }
+                { value ? decodedUrl : (<i>{ `${ label } отсутствует` }</i>) }
             </span>
         </Col>
     );

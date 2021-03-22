@@ -41,6 +41,7 @@
 
 .imageLogo {
     transform: translateY(-45%);
+    max-width: 100%;
 }
 
 .footer {

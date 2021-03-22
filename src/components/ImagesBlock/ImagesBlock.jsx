@@ -39,7 +39,7 @@ const ImagesBlock = ({
                     [styles.imageLogo]: type === 'logo',
                 }) }
                 src={ base64URL ? base64URL : imgURL }
-                alt=''
+                alt=""
             />
             { footer && (
                 <div className={ styles.footer }>

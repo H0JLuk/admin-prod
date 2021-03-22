@@ -21,7 +21,7 @@
 }
 
 .title {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .dzoTitle {
@@ -35,8 +35,26 @@
 
 .text {
     font-weight: 600;
+    word-wrap: break-word;
+    white-space: pre-line;
 }
 
 .footer {
     margin-bottom: 25px;
+}
+
+.bannersRow {
+    padding: 26px 0 46px;
+}
+
+.infoTitle {
+    margin-bottom: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 26px;
+    letter-spacing: -0.3px;
+}
+
+.dzoInfoRow {
+    margin-bottom: 26px;
 }

@@ -1,4 +1,4 @@
-import { Api } from '../apiClient';
+import { Api, FORM_DATA_CONTENT_TYPE } from '../apiClient';
 import { getReqOptions } from './index';
 
 export async function getDzoList() {
@@ -9,23 +9,23 @@ export async function getAllDzoList() {
     return Api.get('/admin/dzo/list', getReqOptions());
 }
 
-export async function addDzo(dzoDto) {
-    return Api.post('/admin/dzo', dzoDto, getReqOptions());
+export function addDzo(dzoDto) {
+    return Api.upload('/admin/dzo', dzoDto, getReqOptions(FORM_DATA_CONTENT_TYPE));
 }
 
 export async function deleteDzo(id) {
     return Api.delete(`/admin/dzo/${id}`, getReqOptions());
 }
 
-export async function updateDzo(id, dzoDto) {
-    return Api.put(`/admin/dzo/${id}`, dzoDto, getReqOptions());
+export function updateDzo(id, dzoDto) {
+    return Api.update(`/admin/dzo/${id}`, dzoDto, getReqOptions(FORM_DATA_CONTENT_TYPE));
 }
 
 export async function getBehaviorTypes() {
     return Api.get('/dzo/behaviorTypes', getReqOptions());
 }
 
-export async function addApplication(newApplication) {
+export function addApplication(newApplication) {
     return Api.post('/admin/application', newApplication, getReqOptions());
 }
 
