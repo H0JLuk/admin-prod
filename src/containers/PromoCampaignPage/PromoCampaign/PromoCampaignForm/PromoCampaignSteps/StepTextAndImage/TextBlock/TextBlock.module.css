@@ -10,3 +10,7 @@
 .textBlock :global(.ant-form-item) {
     margin-bottom: 0;
 }
+
+.textBlock :global(div[role = 'alert']) {
+    margin-top: 5px;
+}

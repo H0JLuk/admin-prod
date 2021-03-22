@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { arrayMove, SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { SyncOutlined } from '@ant-design/icons';
 
 import Header from '../../components/Header/Header';
@@ -8,7 +8,7 @@ import HeaderWithActions from '../../components/HeaderWithActions/HeaderWithActi
 import ClientAppItem from './ClientAppItem/ClientAppItem';
 
 import { getClientAppList, reorderClientApp } from '../../api/services/clientAppService';
-import { defaultSearchParams, getSearchParamsFromUrl, sortItemsBySearchParams } from '../../utils/helper';
+import { defaultSearchParams, getSearchParamsFromUrl, sortItemsBySearchParams, arrayMove } from '../../utils/helper';
 import { CLIENT_APPS_PAGES } from '../../constants/route';
 import { getRole } from '../../api/services/sessionService';
 import ROLES from '../../constants/roles';
@@ -33,7 +33,7 @@ const DROPDOWN_SORT_MENU = [
     { name: 'code', label: 'По коду' },
 ];
 
-const getURLSearchParams = ({ ...rest }) => new URLSearchParams(rest).toString();
+const getURLSearchParams = (rest) => new URLSearchParams(rest).toString();
 
 const ClientAppPage = ({ matchPath, history }) => {
     const { search } = useLocation();

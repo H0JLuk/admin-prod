@@ -1,14 +1,34 @@
-import { APP_MECHANICS, MECHANICS_ERROR, MECHANICS_CHECKBOXES, APP_LOGIN_TYPES } from '../../../constants/clientAppsConstants';
+import { MECHANICS_CHECKBOXES, APP_LOGIN_TYPES, APP_MECHANICS, MECHANICS_ERROR } from '../../../constants/clientAppsConstants';
+import { showCount } from '../../../constants/common';
+
+const defaultImg = 'default_main_illustration';
+const february23 = 'February23_main_illustration';
+const march8 = 'March8_main_illustration';
 
 export const CREATE_APP_TITLE = 'Новое приложение';
 export const CANCEL_BUTTON_TITLE = 'Отменить';
 export const ADD_BUTTON_TITLE = 'Добавить';
 export const PROPERTIES_TITLE = 'Свойства';
 export const EDIT_BUTTON_LABEL = 'Сохранить';
+export const DESIGN_RADIO_TITLE = 'Оформление';
+export const PROPERTIES_RADIO_TITLE = 'Свойства';
+export const SUCCESS_MESSAGE = 'Операция завершена';
+export const ERROR_MESSAGE = 'Ошибка';
+export const SUCCESS_DESIGN_UPDATE_DESCRIPTION = 'Оформление для клиентского приложения успешно обновлено';
+export const SUCCESS_PROPERTIES_UPDATE_DESCRIPTION = 'Настройки клиентского приложения успешно обновлены';
+export const SUCCESS_PROPERTIES_CREATE_DESCRIPTION = 'Клиентское приложение успешно создано';
+export const BACKEND_ERROR_ALREADY_EXIST_ENDING = 'already exists';
 
-const appCodeRegex = /^[a-z0-9-_]+$/gmi;
+export const EDIT_MODE = {
+    DESIGN: 'Оформление',
+    PROPERTIES: 'Свойства',
+};
+
+export const keysToString = ['mechanics', 'login_types', 'where_to_use', 'design_elements'];
 
 const numberTransform = value => value ? Number(value) : '';
+
+export const TextKeysWithDefaultValues = ['home_page_header_present', 'home_page_header_wow'];
 
 const checkBoxValidator = (_, value) => {
     if (
@@ -20,6 +40,37 @@ const checkBoxValidator = (_, value) => {
     }
     return Promise.reject(MECHANICS_ERROR);
 };
+
+const DEFAULT_BANNER = {
+    vitrina_theme: defaultImg,
+    gradient: '228.35deg, #eaef00 7.94%, #cbea0a 15.79%, #9cdd16 21.25%, #5dca23 28.58%, #00b944 38.54%, #00a3a7 57.42%, #009bc5 64.31%, #0096d3 67.8%, #018fdb 72.33%, #0489d6 76.41%, #047fcf 82.5%, #0073c8 87.4%, #0051b7 99.87%',
+    design_elements: [],
+};
+
+export const BANNER_KEYS = Object.keys(DEFAULT_BANNER);
+
+export const banners = [
+    { ...DEFAULT_BANNER },
+    {
+        vitrina_theme: february23,
+        gradient: '262.6deg, #9cdd16 -9.99%, #84e73b 7.47%, #7dea44 13.24%, #18cd6d 32.14%, #06ac9a 43.29%, #00a3a7 51.61%, #00a0b2 57.73%, #0098b6 67.72%, #0073c8 90.72%',
+        design_elements: [],
+    },
+    {
+        vitrina_theme: march8,
+        gradient: '269.17deg, #ffeb37 3.13%, #ff8c39 50.88%, #f01d71 99.82%',
+        design_elements: [],
+    },
+];
+
+export const DEFAULT_DESIGN_SETTINGS = {
+    ...DEFAULT_BANNER,
+    home_page_header: 'Сбер изменился, чтобы стать еще ближе к вам',
+};
+
+export const designKeysForCheck = [...Object.keys(DEFAULT_DESIGN_SETTINGS), ...TextKeysWithDefaultValues];
+
+const appCodeRegex = /^[a-z0-9-_]+$/gmi;
 
 export const RULES = {
     STANDARD: [],
@@ -58,6 +109,8 @@ export const FORM_TYPES = {
     CHECKBOX_GROUP: 'CHECKBOX_GROUP',
     TEXT_BLOCK: 'TEXT_BLOCK',
     MAIN_INFO_INPUT: 'MAIN_INFO_INPUT',
+    BANNER: 'BANNER',
+    SELECT: 'SELECT',
 };
 
 export const SETTINGS_TYPES = {
@@ -220,4 +273,47 @@ export const formElements = [
             name: 'mechanics',
         },
     ]
+];
+
+export const designElements = [
+    [
+        {
+            label: 'Текст для главной(Продукты)',
+            type: FORM_TYPES.TEXT_BLOCK,
+            span: 12,
+            rows: 3,
+            maxLength: 70,
+            showCount,
+            name: 'home_page_header',
+            placeholder: 'Текст для главной(Продукты)',
+        },
+        {
+            label: 'Текст для главной(Подарки)',
+            type: FORM_TYPES.TEXT_BLOCK,
+            span: 12,
+            rows: 3,
+            maxLength: 70,
+            showCount,
+            name: 'home_page_header_present',
+            placeholder: 'Текст для главной(Подарки)',
+        },
+    ],
+    [
+        {
+            label: 'Текст для главной(WOW)',
+            type: FORM_TYPES.TEXT_BLOCK,
+            span: 12,
+            rows: 3,
+            maxLength: 70,
+            showCount,
+            name: 'home_page_header_wow',
+            placeholder: 'Текст для главной(WOW)',
+        },
+        {
+            label: 'Тема',
+            type: FORM_TYPES.BANNER,
+            span: 12,
+            name: 'home_page_theme',
+        },
+    ],
 ];

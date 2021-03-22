@@ -36,7 +36,7 @@ const BUTTON_TEXT = {
 
 const SEARCH_INPUT_PLACEHOLDER = 'Поиск по названию дзо';
 
-const getURLSearchParams = ({ ...rest }) => new URLSearchParams(rest).toString();
+const getURLSearchParams = (rest) => new URLSearchParams(rest).toString();
 
 const defaultSelected = { rowValues: [], rowKeys: [] };
 
@@ -237,7 +237,7 @@ const DzoPage = ({ matchPath }) => {
                             <Button
                                 disabled={ !selectedItems.rowKeys.length }
                                 danger
-                                type='primary'
+                                type="primary"
                                 onClick={ toggleModal }
                             >
                                 { BUTTON_TEXT.DELETE }
@@ -247,7 +247,7 @@ const DzoPage = ({ matchPath }) => {
                 </div>
             </div>
             <TableDeleteModal
-                listNameKey='dzoName'
+                listNameKey="dzoName"
                 listIdForRemove={ selectedItems.rowKeys }
                 sourceForRemove={ selectedItems.rowValues }
                 modalClose={ toggleModal }

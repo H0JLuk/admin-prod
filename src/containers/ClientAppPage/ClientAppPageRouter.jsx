@@ -3,7 +3,7 @@ import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { CLIENT_APPS_PAGES } from '../../constants/route';
 
 import ClientAppPage from './ClientAppPage';
-import ClientAppForm from './ClientAppForm';
+import ClientAppContainer from './ClientAppForm/ClientAppContainer';
 
 import { getRole } from '../../api/services/sessionService';
 import ROLES from '../../constants/roles';
@@ -22,13 +22,13 @@ const ClientAppPageRouter = () => {
                 urlToRedirect={ match.path }
                 accessRoles={ [ROLES.ADMIN] }
                 path={ `${ match.path }${ CLIENT_APPS_PAGES.ADD_APP }` }
-                render={ routeProps => <ClientAppForm { ...routeProps } matchPath={ match.path } type="new" /> }
+                render={ routeProps => <ClientAppContainer { ...routeProps } matchPath={ match.path } type="new" /> }
             />
             <RouteWithCheckRoles
                 urlToRedirect={ match.path }
                 accessRoles={ [ROLES.ADMIN] }
                 path={ `${ match.path }${ CLIENT_APPS_PAGES.EDIT_APP }` }
-                render={ routeProps => <ClientAppForm { ...routeProps } matchPath={ match.path } type="edit" /> }
+                render={ routeProps => <ClientAppContainer { ...routeProps } matchPath={ match.path } type="edit" /> }
             />
 
             <Redirect to={ `${ match.path }` } />

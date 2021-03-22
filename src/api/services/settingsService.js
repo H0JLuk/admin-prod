@@ -23,14 +23,18 @@ export function updateSettingsList(updatedSettingsObj) {
     return Api.put('/admin/setting', updatedSettingsObj, options);
 }
 
-export function addSetting(settingObj) {
-    return Api.post('/admin/setting', settingObj, getReqOptions());
+export function addSettings(settingObj) {
+    return Api.post('/admin/setting/addList', settingObj, getReqOptions());
 }
 
 export function getSettingsList(appCode) {
     const options = getReqOptions();
     delete options.headers.clientAppCode;
     return Api.get(`/admin/setting/${appCode}`, options);
+}
+
+export function getAllSettings() {
+    return Api.get('/admin/setting/', getReqOptions());
 }
 
 export function saveStaticUrl(staticUrl) {

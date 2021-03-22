@@ -5,6 +5,10 @@ export async function getClientAppList() {
     return Api.get('/admin/clientApplication', getReqOptions());
 }
 
+export function getClientAppInfo (appCode) {
+    return Api.get(`/admin/clientApplication/${appCode}`, getReqOptions());
+}
+
 export async function addClientApp(clientAppDto) {
     return Api.post('/admin/clientApplication', clientAppDto, getReqOptions());
 }

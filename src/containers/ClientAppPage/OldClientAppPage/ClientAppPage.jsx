@@ -5,7 +5,8 @@ import {
     getClientAppList,
     updateClientApp,
 } from '../../../api/services/clientAppService';
-import { addSetting, getSettingsList, getStaticUrl, updateSettingsList } from '../../../api/services/settingsService';
+import { addSettings, getSettingsList, getStaticUrl} from '../../../api/services/settingsService';
+import { createOrUpdateKey } from '../ClientAppForm/utils';
 import { goApp } from '../../../utils/appNavigation';
 import styles from './ClientAppPage.module.css';
 import CustomModal from '../../../components/CustomModal/CustomModal';
@@ -302,7 +303,7 @@ class ClientAppPage extends Component {
                     value: this.getMechanicString(),
                     key: 'mechanics',
                 };
-                JSON.parse(mechanics.value).length && await addSetting(mechanics);
+                JSON.parse(mechanics.value).length && await addSettings([mechanics]);
                 await this.pushToClientAppList(response.id, clientAppDto);
             } catch (e) {
                 console.error(e.message);
@@ -318,21 +319,6 @@ class ClientAppPage extends Component {
             }
         }
     };
-
-    createOrUpdateKey = async (changedParams) => {
-        const updateSettings = [];
-        const addSettings = [];
-
-        changedParams.forEach((changedValueObject) => {
-            const { type, ...params } = changedValueObject;
-            type === updateValueType.edit ? updateSettings.push(params) : addSettings.push(params);
-        });
-
-        updateSettings.length && (await updateSettingsList(updateSettings));
-
-        const addKeysPromises = addSettings.map(addSetting);
-        addKeysPromises.length && (await Promise.all(addKeysPromises));
-    }
 
     getMechanicString = () => {
         const stateMechanics = this.state.editingClientApp.mechanics || {};
@@ -370,7 +356,7 @@ class ClientAppPage extends Component {
         }, []);
 
         try {
-            await this.createOrUpdateKey(changedParams);
+            await createOrUpdateKey(changedParams);
         } catch (e) {
             console.error(e.message);
             alert(e.message);

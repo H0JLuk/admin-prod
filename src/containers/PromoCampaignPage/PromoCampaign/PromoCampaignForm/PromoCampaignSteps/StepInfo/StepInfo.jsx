@@ -1,20 +1,18 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import noop from 'lodash/noop';
-import { Input, Switch, Select, DatePicker, Form, Row, Col, Radio, Checkbox } from 'antd';
+import { Input, Switch, Select, DatePicker, Form, Row, Col, Radio } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/ru_RU';
-import { CloseOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { getDzoList } from '../../../../../../api/services/dzoService';
 import { getClientAppList } from '../../../../../../api/services/clientAppService';
 import { getCategoryList } from '../../../../../../api/services/categoryService';
 import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList } from '../../../../../../api/services/promoCampaignService';
-import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
 import { URL_REGEXP } from '../../../../../../constants/common';
 import PROMO_CAMPAIGNS from '../../../../../../constants/promoCampaigns';
 import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWithTooltip';
 import { getAppCode } from '../../../../../../api/services/sessionService';
-
-import { ReactComponent as Cross } from '../../../../../../static/images/cross.svg';
+import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
+import SelectTags from '../../../../../../components/SelectTags/SelectTags';
 
 import styles from './StepInfo.module.css';
 
@@ -51,12 +49,6 @@ const types_promo = Object.values(promoCodeTypes);
 const namePathPriorityOnWebUrl = ['settings', 'priorityOnWebUrl'];
 const namePathAlternativeOfferMechanic = [ 'settings', 'alternativeOfferMechanic' ];
 
-const selectTagRender = ({ label, onClose }) => (
-    <div className={ styles.tagSelect }>
-        <p className={ styles.selectText }>{ label[1] }</p>
-        <Cross height="15px" width="15px" color="#09A552" onClick={ onClose } />
-    </div>
-);
 
 const ReverseSwitch = ({ checked, onChange = noop, ...restProps }) => (
     <Switch
@@ -72,15 +64,12 @@ const StepInfo = ({
     isCopy,
     oldName,
     mode,
-    setFieldsValue,
     copyPromoCampaignId,
     oldExternalId,
 }) => {
     const [dzoList, setDzoList] = useState([]);
     const [categories, setCategories] = useState([]);
     const [clientApps, setClientApps] = useState([]);
-    const [selectCategory, setSelectCategory] = useState(state.categoryIdList ?? []);
-    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -100,35 +89,6 @@ const StepInfo = ({
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // TODO: remove this after change multi-select component
-    const clearSelect = useCallback((name) => () => {
-        setFieldsValue({ [name]: [] });
-        setSelectCategory([]);
-    }, [setFieldsValue]);
-
-    const toggleSelect = useCallback(() => setOpen(prev => !prev), []);
-
-    // TODO: remove this after change multi-select component
-    const renderSelectSuffix = useMemo(() => (
-        <div className={ styles.suffixBlock }>
-            { open
-                ? <UpOutlined className={ styles.icon } onClick={ toggleSelect } />
-                : <DownOutlined className={ styles.icon } onClick={ toggleSelect } />
-            }
-            { Boolean(selectCategory.length) && (
-                <>
-                    <CloseOutlined
-                        className={ styles.icon }
-                        onClick={ clearSelect('categoryIdList') }
-                    />
-                    <div className={ styles.selectCount }>
-                        { selectCategory.length }
-                    </div>
-                </>
-            ) }
-        </div>
-    ), [open, toggleSelect, selectCategory.length, clearSelect]);
 
     return (
         <>
@@ -189,33 +149,14 @@ const StepInfo = ({
                     className={ styles.selectCategories }
                     name="categoryIdList"
                     initialValue={ state.categoryIdList }
+                    normalize={ (catArr) => catArr.map(Number) }
                 >
-                    <Select
-                        showSearch={ false }
-                        mode="multiple"
-                        className={ styles.select }
-                        onChange={ setSelectCategory }
-                        showArrow
-                        open={ open }
-                        suffixIcon={ renderSelectSuffix }
-                        onDropdownVisibleChange={ setOpen }
+                    <SelectTags
+                        data={ categories }
+                        nameKey="categoryName"
+                        idKey="categoryId"
                         placeholder={ CATEGORY_PROMO_CAMPAIGN }
-                        tagRender={ selectTagRender }
-                    >
-                        { categories.map(({ categoryId, categoryName }) => (
-                            <Select.Option
-                                className={ styles.dropdown }
-                                value={ categoryId }
-                                key={ categoryId }
-                            >
-                                <Checkbox
-                                    className={ styles.mrr }
-                                    checked={ selectCategory.includes(categoryId) }
-                                />
-                                { categoryName }
-                            </Select.Option>
-                        )) }
-                    </Select>
+                    />
                 </Form.Item>
 
                 <Row gutter={ [24, 16] }>

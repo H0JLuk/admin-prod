@@ -1,0 +1,21 @@
+.imageBlock {
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.imageMask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    opacity: 0;
+    transition: .3s;
+}
+
+.imageMask:hover {
+    opacity: 1;
+}

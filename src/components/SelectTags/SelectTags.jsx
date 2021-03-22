@@ -1,20 +1,22 @@
 import React from 'react';
-import cn from 'classnames';
-import { CloseOutlined, UpOutlined } from '@ant-design/icons';
+import { CloseOutlined, DownOutlined } from '@ant-design/icons';
 import { Checkbox, Select } from 'antd';
 
 import styles from './SelectTags.module.css';
 
-function SelectTags({ onChange, data = [], value = [], nameKey='name', idKey='code', placeholder = 'Витрины', }) {
+function SelectTags({
+    onChange,
+    data = [],
+    value = [],
+    nameKey = 'name',
+    idKey = 'code',
+    placeholder,
+}) {
 
     const stringValue = value.map(String);
 
-    const findName = (data, selectedValue, nameKey, keyToCompare) => {
-        const name = data.find((elem) => {
-            const key = String(elem[keyToCompare]);
-            return key === selectedValue;
-        });
-        return name && name[nameKey];
+    const setSelect = (tag) => {
+        onChange(tag);
     };
 
     const onRemoveSelectedTag = () => {
@@ -22,12 +24,15 @@ function SelectTags({ onChange, data = [], value = [], nameKey='name', idKey='co
     };
 
     const selectTagRender = ({ value, onClose }) => (
-        value && (
-            <div className={ styles.tagSelect } >
-                <p className={ styles.selectText }>{ findName(data, value, nameKey, idKey) }</p>
-                <CloseOutlined height="15px" width="15px" fill="#09A552" onClick={ onClose } />
-            </div>
-        )
+        value && <div className={ styles.tagSelect } >
+            <p className={ styles.selectText }>{ findName(data, value, nameKey, idKey) }</p>
+            <CloseOutlined
+                height="15px"
+                width="15px"
+                fill="#09A552"
+                onClick={ onClose }
+            />
+        </div>
     );
 
     const options = data.map((elem) => {
@@ -36,7 +41,10 @@ function SelectTags({ onChange, data = [], value = [], nameKey='name', idKey='co
         return {
             label: (
                 <>
-                    <Checkbox className={ styles.mrr } checked={ stringValue.includes(value) } />
+                    <Checkbox
+                        className={ styles.mrr }
+                        checked={ stringValue.includes(value) }
+                    />
                     { name }
                 </>
             ),
@@ -47,16 +55,16 @@ function SelectTags({ onChange, data = [], value = [], nameKey='name', idKey='co
     return (
         <Select
             className={ styles.select }
-            suffixIcon={ () => suffixBlock(stringValue, onRemoveSelectedTag) }
+            suffixIcon={ () => suffixBlock(stringValue.length, onRemoveSelectedTag) }
             showArrow
             showSearch={ false }
-            maxTagCount='responsive'
+            maxTagCount="responsive"
             maxTagTextLength={ 50 }
             mode="tags"
             placeholder={ placeholder }
             maxTagPlaceholder={ tagsPlaceholder }
             tagRender={ selectTagRender }
-            onChange={ onChange }
+            onChange={ setSelect }
             dropdownClassName={ styles.dropdown }
             options={ options }
             value={ stringValue }
@@ -64,20 +72,34 @@ function SelectTags({ onChange, data = [], value = [], nameKey='name', idKey='co
     );
 }
 
-export default SelectTags;
-
 const tagsPlaceholder = <div className={ styles.tagPlaceholder }>...</div>;
 
-function suffixBlock(selectedData, onRemoveSelectedTag) {
+function suffixBlock(selectedCount, onRemoveSelectedTag) {
     return (
         <div className={ styles.suffixBlock }>
-            <UpOutlined className={ cn(styles.icon) } />
+            <DownOutlined className={ styles.icon } />
             <div className={ styles.closeIcon }>
-                { !!selectedData.length && <div className={ styles.selectedCount }>{ selectedData.length }</div> }
-                { !!selectedData.length && (
-                    <CloseOutlined className={ styles.icon } size={ 25 } onClick={ onRemoveSelectedTag } />
+                { !!selectedCount && <div className={ styles.selectedCount }>{ selectedCount }</div> }
+                { !!selectedCount && (
+                    <CloseOutlined
+                        className={ styles.icon }
+                        size={ 25 }
+                        onClick={ onRemoveSelectedTag }
+                    />
                 ) }
             </div>
         </div>
     );
 }
+
+function findName(data, selectedValue, nameKey, keyToCompare) {
+    const name = data.find((elem) => {
+        const key = String(elem[keyToCompare]);
+        return key === selectedValue;
+    });
+    return name && name[nameKey];
+}
+
+export default SelectTags;
+
+

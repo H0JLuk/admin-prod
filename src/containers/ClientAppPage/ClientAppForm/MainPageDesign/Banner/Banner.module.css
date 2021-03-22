@@ -1,0 +1,44 @@
+
+.imageBlock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border 0.3s;
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+}
+
+.imageBlock:hover {
+    border: 1px solid #09a552;
+}
+
+.imageBlock:hover button {
+    border-color: #09a552;
+    color: #09a552;
+}
+
+.cross {
+    position: absolute;
+    right: -10px;
+    top: -11px;
+    z-index: 10;
+    border: 1px solid #d7d8dc;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+}
+
+.imageContainer {
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    background-size: contain;
+}
+
+.img {
+    max-height: 270px;
+    max-width: 100%;
+}

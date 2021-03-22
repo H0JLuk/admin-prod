@@ -1,0 +1,35 @@
+/* colFlex */
+.colFlex :global(.ant-checkbox-group) {
+    display: flex;
+}
+/* /colFlex */
+
+.infoText {
+    font-size: 14px;
+    color: #4e4e4e;
+}
+
+.checkboxColumn {
+    flex-direction: column;
+}
+
+.labelBold :global(.ant-form-item-control-input) {
+    min-height: unset;
+}
+
+.labelBold > div > label {
+    font-weight: bold;
+}
+
+/* hide required red star */
+.labelBold > div > label::before {
+    content: none !important;
+}
+
+.propertiesRow:not(:nth-last-child(2)) {
+    align-items: flex-end;
+}
+
+.propertiesRow {
+    max-width: 950px;
+}
