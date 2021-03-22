@@ -127,3 +127,11 @@
 .copyable :global(.ant-typography-copy) {
     color: #09a552;
 }
+
+.status {
+    padding: 5px 16px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color: #09a552;
+    margin-left: 15px;
+    border-radius: 25px;
+}

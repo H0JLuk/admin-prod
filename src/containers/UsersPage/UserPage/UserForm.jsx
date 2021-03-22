@@ -25,6 +25,11 @@ const NEW_USER_TITLE = 'Новый пользователь';
 const FORM_NAME_NEW_USER = 'createNewUser';
 const FORM_NAME_EDIT_USER = 'editUser';
 
+const PASSWORD_FIELD = {
+    label: 'Временный пароль',
+    name: 'tempPassword',
+};
+
 const LOGIN_FIELD = {
     name: 'login',
     label: 'Логин пользователя',
@@ -47,7 +52,6 @@ const layout = {
 };
 
 const DEFAULT_ERRORS = { login: '', location: '', salePoint: '', backend: '' };
-
 
 const CREATE = 'CREATE';
 const EDIT = 'EDIT';
@@ -100,7 +104,7 @@ const userMessage = (login, pwd, mode, errorMessage) => {
         case ERROR: {
             return {
                 message: errorMessage,
-                description:'',
+                description: '',
             };
         }
         default: {
@@ -114,8 +118,8 @@ const userMessage = (login, pwd, mode, errorMessage) => {
 
 const showNotify = ({ login, pwd, mode, errorMessage }) => {
     const config = {
-        duration:0,
-        placement:'bottomRight'
+        duration: 0,
+        placement: 'bottomRight'
     };
     const { message, description, placement } = userMessage(login, pwd, mode, errorMessage);
     if (mode === ERROR){
@@ -130,7 +134,7 @@ const showNotify = ({ login, pwd, mode, errorMessage }) => {
         message,
         description,
         placement,
-        style:{ minWidth: '400px' },
+        style: { minWidth: '400px' },
     });
 };
 
@@ -347,7 +351,14 @@ const UserForm = ({ type, matchUrl }) => {
                         <div className={ styles.pageTitle }>
                             { userName }
                             { notNewUser && (
-                                <UserBlockStatus className={ styles.userStatus } blocked={ userData.tmpBlocked } />
+                                <>
+                                    <UserBlockStatus className={ styles.userStatus } blocked={ userData.tmpBlocked } />
+                                    { userData.tempPassword && type === 'info' && (
+                                        <div className={ styles.status }>
+                                            { PASSWORD_FIELD.label }
+                                        </div>
+                                    ) }
+                                </>
                             ) }
                         </div>
                         <Form
