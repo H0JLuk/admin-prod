@@ -40,6 +40,7 @@ import {
 import { filterBanner, deleteText } from './PromoCampaignFormSave.utils';
 import { getUnissuedPromoCodeStatistics } from '../../../../api/services/promoCodeService';
 import { editPromoCampaign, newPromoCampaign, copyPromoCampaign } from '../../../../api/services/promoCampaignService';
+import { DEFAULT_OFFER_DURATION } from '../../../../constants/promoCampaigns';
 
 import { ReactComponent as LoadingSpinner } from '../../../../static/images/loading-spinner.svg';
 
@@ -62,7 +63,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
         datePicker: [],
         promoCodeType: null,
         active: false,
-        offerDuration: 0,
+        offerDuration: DEFAULT_OFFER_DURATION,
         finishDate: '',
         startDate: '',
         externalId: '',

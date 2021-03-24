@@ -261,6 +261,7 @@ const StepInfo = ({
                             <DatePicker.RangePicker
                                 locale={ localeDatePicker }
                                 placeholder={ DATE_PICKER_PLACEHOLDER }
+                                allowEmpty={ [true, true] }
                             />
                         </Form.Item>
                     </Col>
@@ -426,6 +427,13 @@ const StepInfo = ({
                                         { LANDING }
                                     </Radio> */ }
                                 </Radio.Group>
+                            </Form.Item>
+                            <Form.Item
+                                hidden
+                                name="offerDuration"
+                                initialValue={ state.offerDuration }
+                            >
+                                <Input />
                             </Form.Item>
                         </div>
                     </Col>

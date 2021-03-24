@@ -14,3 +14,5 @@ const PROMO_CAMPAIGNS = {
 };
 
 export default PROMO_CAMPAIGNS;
+
+export const DEFAULT_OFFER_DURATION = 90;

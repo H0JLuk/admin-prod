@@ -143,23 +143,16 @@ export async function EditImgBanners(promoCampaignBanners, promoCampaign, change
 
 export function normalizeFirstStepValue(val) {
     const [startDate, finishDate] = val.datePicker || [];
-    const mainInfoData = {
+
+    return {
         ...val,
-        startDate: startDate?.toISOString(),
-        finishDate: finishDate?.toISOString(),
-        offerDuration: finishDate?.diff(startDate, 'days') + 1,
+        startDate: startDate?.startOf('day').toISOString(),
+        finishDate: finishDate?.endOf('day').toISOString(),
         settings: {
             ...val.settings,
             priorityOnWebUrl: val.settings.priorityOnWebUrl === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
         },
     };
-    if (!finishDate) {
-        delete mainInfoData.offerDuration;
-        delete mainInfoData.startDate;
-        delete mainInfoData.finishDate;
-    }
-
-    return mainInfoData;
 }
 
 
@@ -181,10 +174,11 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
         banners: arrayToObject(banners, 'type', 'url'),
         texts: arrayToObject(texts, 'type', 'value'),
         datePicker: [
-            promoCampaign.startDate ? moment(promoCampaign.startDate) : undefined,
-            promoCampaign.finishDate ? moment(promoCampaign.finishDate) : undefined,
+            promoCampaign.startDate ? moment.utc(promoCampaign.startDate).local() : undefined,
+            promoCampaign.finishDate ? moment.utc(promoCampaign.finishDate).local() : undefined,
         ],
         appCode: isCopy ? undefined : appCode ?? getAppCode(),
+        offerDuration: promoCampaign.offerDuration,
         settings: promoCampaign.settings,
         standalone: promoCampaign.standalone,
         externalId: isCopy ? '' : promoCampaign.externalId,

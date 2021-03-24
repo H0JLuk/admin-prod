@@ -59,7 +59,7 @@ export function getFormattedDate(date, format = 'DD.MM.YYYY') {
         return '';
     }
 
-    return moment(date).format(format);
+    return moment.utc(date).local().format(format);
 }
 
 /**

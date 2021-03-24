@@ -1,8 +1,7 @@
 import behaviorTypes from '../../constants/behaviorTypes';
 import { getReqOptions } from './index';
 import { Api, FORM_DATA_CONTENT_TYPE } from '../apiClient';
-
-const DEFAULT_OFFER_DURATION = 90;
+import { DEFAULT_OFFER_DURATION } from '../../constants/promoCampaigns';
 
 export async function getPromoCampaignList() {
     return Api.post('/promo-campaign/list/filter', { checkVisibility: false }, getReqOptions());
