@@ -7,8 +7,8 @@ import { getClientAppList } from '../../../../../../api/services/clientAppServic
 import { getCategoryList } from '../../../../../../api/services/categoryService';
 import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList } from '../../../../../../api/services/promoCampaignService';
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
-import { URL_REGEXP } from '../../../../../../constants/common';
 import PROMO_CAMPAIGNS from '../../../../../../constants/promoCampaigns';
+import { urlCheckRule } from '../../../../../../utils/urlValidator';
 import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWithTooltip';
 import { getAppCode } from '../../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
@@ -178,11 +178,7 @@ const StepInfo = ({
                                             ),
                                             message: 'Укажите ссылку',
                                         },
-                                        {
-                                            pattern: URL_REGEXP,
-                                            message: 'Введите корректный URL',
-                                            validateTrigger: 'onSubmit',
-                                        },
+                                        urlCheckRule
                                     ] }
                                     initialValue={ decodeURI(state.webUrl || '') }
                                 >

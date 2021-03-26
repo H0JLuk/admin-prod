@@ -24,6 +24,7 @@ export const BANNER_IS_EMPTY = 'Логотип отсутствует';
 export const DZO_APPLICATION_LIST_NAME = 'applicationList';
 export const BANNERS = 'banners';
 export const DZO_REQUEST = 'dzoRequest';
+export const URL_VALIDATION_NO_APPLICATION_TYPE = 'Выберите тип приложения';
 
 export const TYPES = {
     INPUT: 'input',

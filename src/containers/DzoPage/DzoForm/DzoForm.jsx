@@ -3,14 +3,10 @@ import { Col, Form, Row, Input, Select, Button } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { addApplication, addDzo, deleteApp, deleteDzo, updateApp, updateDzo } from '../../../api/services/dzoService';
 import { confirmModal } from '../../../utils/utils';
+import { urlCheckRule } from '../../../utils/urlValidator';
 import Header from '../../../components/Header/Header';
-import { URL_REGEXP } from '../../../constants/common';
 import UploadPicture from '../../../components/UploadPicture/UploadPicture';
-import { APPLICATION_JSON_TYPE } from '../../PromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignFormConstants';
 import {
-    BANNERS,
-    DZO_REQUEST,
-    DEFAULT_DZO,
     APP_OPTIONS,
     DZO_CODE_NOT_UNIQUE,
     DEFAULT_APP,
@@ -25,50 +21,26 @@ import {
     APP_TYPE_PLACEHOLDER,
     QR_LINK_PLACEHOLDER,
     CANCEL_BUTTON_TITLE,
-    URL_VALIDATION_TEXT,
     ADD_BUTTON_TITLE,
     SAVE_BUTTON_TITLE,
     DELETE_BUTTON_LABEL,
-    TYPES,
-    APP_TYPE_ALREADY_SELECTED,
 } from '../dzoConstants';
+import {
+    checkAppTypes,
+    checkBackendErrors,
+    checkEmptyAppType,
+    errorsToForm,
+    FormItem,
+    getInitialBanners,
+    getInitialValue,
+    hasRejectedPromises,
+    makeErrorAndSuccessObj,
+    serializeBannersAndDzoData,
+} from './dzoFormFunctions';
 
 import styles from './DzoForm.module.css';
 
 import { ReactComponent as LoadingSpinner } from '../../../static/images/loading-spinner.svg';
-
-function serializeBannersAndDzoData(imageInputs, textInputs) {
-    const formData = new FormData();
-
-    Object.entries(imageInputs).forEach(([key, value]) => {
-        if (value[0]?.originFileObj) {
-            const name = `${key}.${value[0].name.split('.').pop()}`;
-            const [{ originFileObj }] = value;
-            formData.append(BANNERS, originFileObj, name);
-        }
-    });
-
-    formData.append(DZO_REQUEST, new Blob([JSON.stringify(textInputs)], { type: APPLICATION_JSON_TYPE }));
-
-    return formData;
-}
-
-function getInitialValue({ dzoName, dzoCode, description, applicationList, dzoId } = {}) {
-    const appList = (applicationList || []).map((el) => ({ ...el, applicationUrl: decodeURI(el.applicationUrl) }));
-
-    return {
-        ...DEFAULT_DZO,
-        dzoName,
-        dzoCode,
-        description,
-        dzoId,
-        applicationList: appList.length < APP_OPTIONS.length ? [...appList, DEFAULT_APP] : appList,
-    };
-}
-
-function getInitialBanners(banners) {
-    return (banners || []).reduce((result, { type, url }) => ({ ...result, [type]: url }), {});
-}
 
 const DzoForm = ({ type, matchPath }) => {
     const [form] = Form.useForm();
@@ -106,7 +78,18 @@ const DzoForm = ({ type, matchPath }) => {
                         return [...result, { ...row, dzoId: id }];
                     }, []);
                     const appPromises = appDataFromForm.map(addApplication);
-                    await Promise.all(appPromises);
+                    const response = await Promise.allSettled(appPromises);
+
+                    if (hasRejectedPromises(response)) {
+                        const { applicationList, errorApps } = makeErrorAndSuccessObj(response, appDataFromForm);
+
+                        history.replace(`${matchPath}/${id}/edit`);
+                        initialData.current = { ...dataFromForm, dzoId: id, applicationList };
+
+                        errorsToForm(errorApps, form);
+                        throw new Error();
+                    }
+
                 } else {
                     const appFromServer = initialData.current.applicationList;
 
@@ -137,7 +120,8 @@ const DzoForm = ({ type, matchPath }) => {
                     //delete
 
                     //update
-                    const appsToUpdate = appFromServer.reduce((result, app) => {
+                    const namesToUpdate = [];
+                    const appsToUpdate = appFromServer.reduce((result, app, index) => {
                         const formAppParams = applicationList.find(
                             ({ applicationType }) => applicationType === app.applicationType
                         );
@@ -145,6 +129,7 @@ const DzoForm = ({ type, matchPath }) => {
                         if (formAppParams && formAppParams.applicationUrl && app.applicationUrl !== formAppParams.applicationUrl) {
                             // eslint-disable-next-line no-unused-vars
                             const { dzoId, applicationId, ...appParams } = formAppParams;
+                            namesToUpdate.push(index);
                             const applicationIdOld = appFromServer.find(
                                 app => app.applicationType === formAppParams.applicationType
                             );
@@ -153,27 +138,49 @@ const DzoForm = ({ type, matchPath }) => {
                         return result;
                     }, []);
                     const appToUpdatePromise = appsToUpdate.map(updateApp);
-                    appToUpdatePromise.length && (await Promise.all(appToUpdatePromise));
+                    const updateResponse = appToUpdatePromise.length && (await Promise.allSettled(appToUpdatePromise));
+                    const hasUpdateError = updateResponse && checkBackendErrors(updateResponse, form, namesToUpdate);
                     //update
 
                     //create
-                    const appsToCreate = applicationList.reduce((result, app) => {
+                    const namesToCreate = [];
+                    const appsToCreate = applicationList.reduce((result, app, index) => {
                         if (
                             !appFromServer.find(({ applicationType }) => applicationType === app.applicationType) &&
                             app.applicationUrl
                         ) {
-                            return [...result, { ...app, dzoId: appFromServer.dzoId }];
+                            namesToCreate.push(index);
+                            return [...result, { ...app, dzoId: initialData.current.dzoId }];
                         }
                         return result;
                     }, []);
                     const appPromises = appsToCreate.map(addApplication);
-                    appPromises.length && (await Promise.all(appPromises));
+                    const createResponse = appPromises.length && (await Promise.allSettled(appPromises));
+                    (createResponse || []).forEach(({ status, value }, index) => {
+                        if (status === 'fulfilled') {
+                            const appList = initialData.current.applicationList ;
+                            const newApp = appsToCreate[index];
+                            const appToAdd = { ...newApp, applicationId: value.id };
+                            initialData.current = {
+                                ...initialData.current,
+                                applicationList: [
+                                    ...appList,
+                                    appToAdd,
+                                ],
+                            };
+                        }
+                    });
+                    const hasCreateError = createResponse && checkBackendErrors(createResponse, form, namesToCreate);
                     //create
 
                     // update DZO info
                     const { dzoId } = initialData.current;
                     await updateDzo(dzoId, formData);
                     // update DZO info
+
+                    if (hasCreateError || hasUpdateError) {
+                        throw new Error();
+                    }
                 }
 
                 history.push(matchPath);
@@ -302,13 +309,7 @@ const DzoForm = ({ type, matchPath }) => {
                                         <Form.Item
                                             label={ APP_TYPE_LABEL }
                                             name={ [field.name, 'applicationType'] }
-                                            rules={ [
-                                                {
-                                                    required: !field.name,
-                                                    message: 'Укажите тип приложения',
-                                                },
-                                                checkAppTypes,
-                                            ] }
+                                            rules={ [ checkAppTypes, ] }
                                         >
                                             <Select options={ APP_OPTIONS } placeholder={ APP_TYPE_PLACEHOLDER } />
                                         </Form.Item>
@@ -316,10 +317,11 @@ const DzoForm = ({ type, matchPath }) => {
                                     <Col span={ 12 }>
                                         <Form.Item
                                             label={ QR_LINK_LABEL }
+                                            validateFirst
                                             name={ [field.name, 'applicationUrl'] }
                                             rules={ [
-                                                { required: !field.name, message: 'Укажите URL' },
-                                                { pattern: URL_REGEXP, message: URL_VALIDATION_TEXT, validateTrigger: 'onSubmit' }
+                                                urlCheckRule,
+                                                checkEmptyAppType,
                                             ] }
                                         >
                                             <Input
@@ -360,50 +362,3 @@ const DzoForm = ({ type, matchPath }) => {
 
 export default DzoForm;
 
-function FormItem({ label, type, rules, name, placeholder, options, dzoValue }) {
-    const formItemInput = (() => {
-        switch (type) {
-            case TYPES.INPUT:
-                return dzoValue ? (
-                    <div>{ dzoValue }</div>
-                ) : (
-                    <Input allowClear placeholder={ placeholder } />
-                );
-            case TYPES.TEXT_BLOCK:
-                return <Input.TextArea placeholder={ placeholder } />;
-            case TYPES.SELECT:
-                return <Select options={ options } />;
-            default:
-                return null;
-        }
-    })();
-
-    return (
-        <Form.Item
-            label={ label }
-            name={ name }
-            rules={ rules }
-        >
-            { formItemInput }
-        </Form.Item>
-    );
-}
-
-function checkAppTypes({ getFieldValue }) {
-    return {
-        validator(_, value) {
-            if (!value) {
-                return Promise.resolve();
-            }
-
-            const appList = getFieldValue(DZO_APPLICATION_LIST_NAME);
-            const { length } = appList.filter(({ applicationType }) => applicationType === value);
-
-            if (length > 1) {
-                return Promise.reject(APP_TYPE_ALREADY_SELECTED);
-            }
-            return Promise.resolve();
-        },
-        validateTrigger: 'onSubmit',
-    };
-}

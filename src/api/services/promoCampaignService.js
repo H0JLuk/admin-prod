@@ -38,7 +38,7 @@ export function getPromoCampaignById(id) {
 function normalizePromoCampaign(promoCampaign) {
     // TODO: send original promoCampaign without changing behaviorType and offerDuration
     const behaviorType = promoCampaign?.behaviorType ?? behaviorTypes.QR;
-    const offerDuration = promoCampaign?.offerDuration ?? DEFAULT_OFFER_DURATION;
+    const offerDuration = promoCampaign?.offerDuration || DEFAULT_OFFER_DURATION;
     return { ...promoCampaign, behaviorType, offerDuration };
 }
 

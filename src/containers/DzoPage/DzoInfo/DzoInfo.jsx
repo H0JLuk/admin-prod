@@ -123,9 +123,9 @@ const DzoInfo = ({ matchPath }) => {
                                 </Col>
                             ) }
                         </Row>
-                        { applicationList.map(dzoApp => (
-                            <Row gutter={ [24, 16] } key={ dzoApp.applicationId }>
-                                { DZO_INFO_APPS_TEMPLATE.map(({ key, label, type }) => (
+                        <Row gutter={ [24, 16] }>
+                            { applicationList.map(dzoApp =>
+                                DZO_INFO_APPS_TEMPLATE.map(({ key, label, type }) => (
                                     <DzoInfoBlock
                                         key={ key }
                                         label={ label }
@@ -133,9 +133,9 @@ const DzoInfo = ({ matchPath }) => {
                                         type={ type }
                                         colSpan={ 12 }
                                     />
-                                )) }
-                            </Row>
-                        )) }
+                                ))
+                            ) }
+                        </Row>
                     </div>
                 </div>
                 <div className={ styles.footer }>
