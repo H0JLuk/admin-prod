@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { generatePath, useHistory, useLocation } from 'react-router-dom';
+import { generatePath, useHistory } from 'react-router-dom';
 import { Button } from 'antd';
 import { deleteDzo, getAllDzoList, getDzoList } from '../../../api/services/dzoService';
 import DzoListTable from './Table/DzoListTable';
 import Header from '../../../components/Header/Header';
 import TableDeleteModal from '../../../components/TableDeleteModal/TableDeleteModal';
 import HeaderWithActions from '../../../components/HeaderWithActions/HeaderWithActions';
-
-import { defaultSearchParams, getSearchParamsFromUrl, sortItemsBySearchParams } from '../../../utils/helper';
 import { DZO_PAGES } from '../../../constants/route';
+import { requestWithMinWait } from '../../../utils/utils';
 
 import styles from './DzoList.module.css';
 
@@ -36,17 +35,17 @@ const BUTTON_TEXT = {
 
 const SEARCH_INPUT_PLACEHOLDER = 'Поиск по названию дзо';
 
-const getURLSearchParams = (rest) => new URLSearchParams(rest).toString();
+const sortByFieldKey = {
+    NAME: 'dzoName',
+};
 
 const defaultSelected = { rowValues: [], rowKeys: [] };
 
 const DzoPage = ({ matchPath }) => {
     const history = useHistory();
-    const { search } = useLocation();
-    const [params, setParams] = useState(defaultSearchParams);
     const [loadingTable, setLoadingTable] = useState(true);
     const [dzoList, setDzoList] = useState([]);
-    const [copyDzoList, setCopyDzoList] = useState([]);
+    const copyDzoList = useRef([]);
     const [select, setSelect] = useState(false);
     const [selectedItems, setSelectedItems] = useState(defaultSelected);
     const [isModalView, setIsModalView] = useState(false);
@@ -54,18 +53,20 @@ const DzoPage = ({ matchPath }) => {
 
     const onAddDzo = () => history.push(generatePath(`${matchPath}${DZO_PAGES.ADD_DZO}`), { dzoCodes: dzoCodes.current });
 
-    const loadDzoList = useCallback(async (searchParams = defaultSearchParams) => {
-        const urlSearchParams = getURLSearchParams(searchParams);
+    const loadDzoList = useCallback(async () => {
         setLoadingTable(true);
         try {
-            const { dzoDtoList = [] } = await getDzoList();
-            const { dzoDtoList: allDzo = [] } = await getAllDzoList();
+            const [
+                { dzoDtoList = [] },
+                { dzoDtoList: allDzo = [] }
+            ] = await requestWithMinWait([
+                getDzoList(),
+                getAllDzoList()
+            ]);
             dzoCodes.current = allDzo.map(({ dzoCode }) => dzoCode);
-            history.replace(`${matchPath}?${urlSearchParams}`);
+            copyDzoList.current = dzoDtoList;
+            setDzoList(dzoDtoList);
             clearSelectedItems();
-            setParams({ ...searchParams });
-            setCopyDzoList(dzoDtoList);
-            setDzoList(sortItemsBySearchParams(searchParams, dzoDtoList, 'dzoName'));
         } catch (e) {
             console.warn(e);
         }
@@ -74,22 +75,9 @@ const DzoPage = ({ matchPath }) => {
     }, []);
 
     useEffect(() => {
-        loadDzoList(getSearchParamsFromUrl(search));
+        loadDzoList();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadDzoList]);
-
-    const sortDzoList = useCallback((searchParams = defaultSearchParams) => {
-        const { filterText, sortBy } = searchParams;
-        setParams(searchParams);
-        history.replace(`${matchPath}?${getURLSearchParams(searchParams)}`);
-
-        if (!filterText && !sortBy) {
-            setDzoList(copyDzoList);
-            return;
-        }
-
-        setDzoList(sortItemsBySearchParams(searchParams, copyDzoList, 'dzoName'));
-    }, [copyDzoList, history, matchPath]);
 
     const clearSelectedItems = () => {
         setSelectedItems(defaultSelected);
@@ -138,33 +126,8 @@ const DzoPage = ({ matchPath }) => {
         },
     }), [select, selectedItems.rowKeys, selectedItems.rowValues, history, matchPath]);
 
-    const handleSearch = useCallback((value = '') => {
-        if (loadingTable) {
-            return;
-        }
-        const nextParams = { ...params, filterText: value };
-        sortDzoList(nextParams);
-    }, [sortDzoList, loadingTable, params]);
-
-    const changeSort = (sortBy) => {
-        if (typeof sortBy !== 'string') {
-            sortBy = '';
-        }
-
-        if (!sortBy && !params.sortBy) {
-            return;
-        }
-
-        const sortParams = {
-            ...params,
-            sortBy,
-            direction: !sortBy || params.direction === 'DESC' ? 'ASC' : 'DESC',
-        };
-        sortDzoList(sortParams);
-    };
-
-    const refreshTable = async () => {
-        await loadDzoList(params);
+    const refreshTable = () => {
+        loadDzoList();
         clearSelectedItems();
     };
 
@@ -194,17 +157,14 @@ const DzoPage = ({ matchPath }) => {
         );
     }
 
-    const searchInput = {
-        placeholder: SEARCH_INPUT_PLACEHOLDER,
-        onChange: handleSearch,
-        value: params.filterText,
-    };
-
-    const sortingBy = {
+    const searchAndSortParams = {
+        setDataList: setDzoList,
+        copyDataList: copyDzoList.current,
+        matchPath,
+        inputPlaceholder: SEARCH_INPUT_PLACEHOLDER,
+        sortByFieldKey: sortByFieldKey.NAME,
         menuItems: DROPDOWN_SORT_MENU,
-        onMenuItemClick: changeSort,
-        withReset: true,
-        sortBy: params.sortBy,
+        onChangeInput: clearSelectedItems,
     };
 
     return (
@@ -212,13 +172,9 @@ const DzoPage = ({ matchPath }) => {
             <div className={ styles.container }>
                 <Header />
                 <HeaderWithActions
-                    buttons={ buttons }
-                    showSorting
-                    showSearchInput
-                    searchInput={ searchInput }
-                    sortingBy={ sortingBy }
-                    classNameByInput={ styles.searchInput }
                     title={ DZO_TITLE }
+                    buttons={ buttons }
+                    { ...searchAndSortParams }
                 />
                 <DzoListTable
                     loading={ loadingTable }

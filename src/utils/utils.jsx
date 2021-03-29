@@ -1,7 +1,7 @@
-
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Modal } from 'antd';
 import React from 'react';
+import { DEFAULT_SLEEP_TIME } from '../constants/time';
+import { Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 export function highlightSearchingText(value = '', searchValue = '', highlightClassName) {
     if (!searchValue || !value) {
@@ -31,6 +31,10 @@ export function highlightSearchingText(value = '', searchValue = '', highlightCl
     }
 
     return <span>{ newValue }</span>;
+}
+
+export function requestWithMinWait(promise, minWait = DEFAULT_SLEEP_TIME) {
+    return Promise.all([...(Array.isArray(promise) ? promise : [promise]), sleep(minWait)]);
 }
 
 export function getStringOptionValue({ parentName = '', name = '' } = {}) {

@@ -14,19 +14,19 @@ function PromoCampaignRouter() {
             <Route exact path={ `${match.path}` } component={ PromoCampaignList } />
             <Route
                 path={ `${ match.path }${ PROMO_CAMPAIGN_PAGES.ADD_PROMO_CAMPAIGN }` }
-                render={ routeProps => <PromoCampaignForm { ...routeProps } matchUrl={ match.path } /> }
+                render={ routeProps => <PromoCampaignForm { ...routeProps } matchPath={ match.path } /> }
             />
             <Route
                 path={ `${ match.path }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT }` }
-                render={ routeProps => <PromoCampaignForm { ...routeProps } matchUrl={ match.path } mode='edit' /> }
+                render={ routeProps => <PromoCampaignForm { ...routeProps } matchPath={ match.path } mode="edit" /> }
             />
             <Route
                 path={ `${ match.path }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_COPY }` }
-                render={ routeProps => <PromoCampaignForm { ...routeProps } matchUrl={ match.path } mode='edit' isCopy /> }
+                render={ routeProps => <PromoCampaignForm { ...routeProps } matchPath={ match.path } mode="edit" isCopy /> }
             />
             <Route
                 path={ `${ match.path }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_INFO }` }
-                render={ routeProps => <PromoCampaignInfo { ...routeProps } matchUrl={ match.path } /> }
+                render={ routeProps => <PromoCampaignInfo { ...routeProps } matchPath={ match.path } /> }
             />
             <Route
                 path={ `${ match.path }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }` }

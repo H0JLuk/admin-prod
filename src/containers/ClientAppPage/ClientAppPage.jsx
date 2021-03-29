@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
+import { arrayMove, SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { SyncOutlined } from '@ant-design/icons';
 
 import Header from '../../components/Header/Header';
@@ -8,7 +7,6 @@ import HeaderWithActions from '../../components/HeaderWithActions/HeaderWithActi
 import ClientAppItem from './ClientAppItem/ClientAppItem';
 
 import { getClientAppList, reorderClientApp } from '../../api/services/clientAppService';
-import { defaultSearchParams, getSearchParamsFromUrl, sortItemsBySearchParams, arrayMove } from '../../utils/helper';
 import { CLIENT_APPS_PAGES } from '../../constants/route';
 import { getRole } from '../../api/services/sessionService';
 import ROLES from '../../constants/roles';
@@ -17,7 +15,6 @@ import style from './ClientAppPage.module.css';
 
 const SortableContainerList = SortableContainer(props => <div>{ props.children }</div>);
 const SortableElementItem = SortableElement(ClientAppItem);
-
 
 const SEARCH_INPUT_PLACEHOLDER = 'Поиск по названию';
 
@@ -33,74 +30,51 @@ const DROPDOWN_SORT_MENU = [
     { name: 'code', label: 'По коду' },
 ];
 
-const getURLSearchParams = (rest) => new URLSearchParams(rest).toString();
+const sortByFieldKey = {
+    NAME: 'displayName',
+};
 
 const ClientAppPage = ({ matchPath, history }) => {
-    const { search } = useLocation();
-
-    const [itemList, setItemList] = useState([]);
-    const [copyOfItemList, setCopyOfItemList] = useState([]);
+    const [dataList, setDataList] = useState([]);
+    const copyDataList = useRef([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSortable, setIsSortable] = useState(false);
-    const [params, setParams] = useState(defaultSearchParams);
 
     const role = useMemo(() => getRole(), []);
 
-    const sortClientApp = useCallback((searchParams = defaultSearchParams) => {
-        setParams(searchParams);
-        history.replace(`${matchPath}?${getURLSearchParams(searchParams)}`);
-
-        if (!searchParams.filterText && !searchParams.sortBy) {
-            setItemList(copyOfItemList);
-            return;
-        }
-
-        setItemList(sortItemsBySearchParams(searchParams, copyOfItemList, 'displayName'));
-    }, [copyOfItemList, history, matchPath]);
-
-    const loadData = useCallback(async (params = defaultSearchParams) => {
+    const loadData = useCallback(async () => {
         setIsLoading(true);
 
         try {
-            history.replace(`${matchPath}?${getURLSearchParams(params)}`);
             const { clientApplicationDtoList: appList = [] } = await getClientAppList();
             const withoutDeletedApps = appList.filter(({ isDeleted }) => !isDeleted);
-            setItemList(sortItemsBySearchParams(params, withoutDeletedApps, 'displayName'));
-            setCopyOfItemList(withoutDeletedApps);
+            copyDataList.current = withoutDeletedApps;
+            setDataList(withoutDeletedApps);
         } catch (error) {
             console.warn(error);
         }
 
         setIsLoading(false);
-    }, [history, matchPath]);
+    }, []);
 
     useEffect(() => {
-        loadData(getSearchParamsFromUrl(search));
+        loadData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadData]);
-
-    const onSearchInput = (filterText = '') => {
-        const paramsCopy = {
-            ...params,
-            filterText
-        };
-
-        sortClientApp(paramsCopy);
-    };
 
     const toggleSortable = () => setIsSortable((state) => !state);
 
     const onSortEnd = useCallback(({ oldIndex, newIndex }) => {
-        setItemList((state) => arrayMove(state, oldIndex, newIndex));
+        setDataList((state) => arrayMove(state, oldIndex, newIndex));
     }, []);
 
     const onCancelSortable = async () => {
-        setItemList(copyOfItemList);
+        setDataList(copyDataList.current);
         setIsSortable(false);
     };
 
     const onSave = async () => {
-        const idMap = itemList.reduce((result, elem, index) => ({ ...result, [elem.id]: index }), {});
+        const idMap = dataList.reduce((result, elem, index) => ({ ...result, [elem.id]: index }), {});
 
         setIsLoading(true);
         try {
@@ -116,21 +90,6 @@ const ClientAppPage = ({ matchPath, history }) => {
 
     const onAddClick = () => history.push(`${ matchPath }${ CLIENT_APPS_PAGES.ADD_APP }`);
 
-    const onSortChange = useCallback((sortBy) => {
-        if (typeof sortBy !== 'string') {
-            sortBy = '';
-        }
-
-        if (!sortBy && !params.sortBy) return;
-
-        const searchParams = {
-            ...params, sortBy,
-            direction: !sortBy || params.direction === 'DESC' ? 'ASC' : 'DESC',
-        };
-
-        sortClientApp(searchParams);
-    }, [params, sortClientApp]);
-
     const buttons = [];
 
     if (role === ROLES.ADMIN) {
@@ -143,22 +102,18 @@ const ClientAppPage = ({ matchPath, history }) => {
         } else {
             buttons.push(
                 { type: 'primary', label: BUTTON_TEXT.ADD, onClick: onAddClick },
-                { label: BUTTON_TEXT.CHANGE_ORDER, onClick: toggleSortable, disabled: !(!params.sortBy && !params.filterText) },
+                { label: BUTTON_TEXT.CHANGE_ORDER, onClick: toggleSortable, disabled: (params) => !!(params.sortBy || params.filterText) },
             );
         }
     }
 
-    const searchInput = {
-        placeholder: SEARCH_INPUT_PLACEHOLDER,
-        onChange: onSearchInput,
-        value: params.filterText,
-    };
-
-    const sortingBy = {
+    const searchAndSortParams = {
+        setDataList,
+        matchPath,
+        copyDataList: copyDataList.current,
+        inputPlaceholder: SEARCH_INPUT_PLACEHOLDER,
+        sortByFieldKey: sortByFieldKey.NAME,
         menuItems: DROPDOWN_SORT_MENU,
-        onMenuItemClick: onSortChange,
-        withReset: true,
-        sortBy: params.sortBy,
     };
 
     return (
@@ -174,18 +129,14 @@ const ClientAppPage = ({ matchPath, history }) => {
                 <Header buttonBack={ false } />
                 <HeaderWithActions
                     buttons={ buttons }
-                    searchInput={ searchInput }
-                    showSearchInput={ !isSortable }
-                    showSorting={ !isSortable }
-                    sortingBy={ sortingBy }
-                    classNameByInput={ style.searchInput }
+                    { ...searchAndSortParams }
                 />
                 <div className={ style.content }>
                     <SortableContainerList
                         useWindowAsScrollContainer
                         onSortEnd={ onSortEnd }
                     >
-                        { itemList.map((item, index) => (
+                        { dataList.map((item, index) => (
                             <SortableElementItem
                                 key={ item.id }
                                 item={ item }

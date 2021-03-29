@@ -22,7 +22,7 @@ const layout = {
     wrapperCol: { span: 12 },
 };
 
-const UserMultiEdit = ({ matchUrl }) => {
+const UserMultiEdit = ({ matchPath }) => {
     const [location, setLocation] = useState(null);
     const [salePoint, setSalePoint] = useState(null);
     const [error, setError] = useState({ location: '', salePoint: '', backend: '' });
@@ -32,7 +32,7 @@ const UserMultiEdit = ({ matchUrl }) => {
     const history = useHistory();
     const { state: { users = [] } = {} } = useLocation();
 
-    const redirectToUsersPage = useCallback(() => history.push(matchUrl), [history, matchUrl]);
+    const redirectToUsersPage = useCallback(() => history.push(matchPath), [history, matchPath]);
 
     useEffect(() => {
         if (!users?.length) {

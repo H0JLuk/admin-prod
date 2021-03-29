@@ -1,6 +1,8 @@
 import moment from 'moment';
 import { getStaticUrl } from '../api/services/settingsService';
 
+export const getURLSearchParams = (params) => new URLSearchParams(params).toString();
+
 export const downloadFile = (data, name) => {
     const blob = new Blob([data], { type: 'text/csv' });
     downloadFileFunc(URL.createObjectURL(blob), name, 'csv');
@@ -132,6 +134,15 @@ export const defaultSearchParams = {
     sortBy: '',
     direction: 'ASC',
     filterText: '',
+};
+
+export const defaultPaginationParams = {
+    pageNo: 0,
+    pageSize: 10,
+    sortBy: '',
+    direction: 'ASC',
+    filterText: '',
+    totalElements: 0,
 };
 
 export function getSearchParamsFromUrl(search, defaultParams = defaultSearchParams) {

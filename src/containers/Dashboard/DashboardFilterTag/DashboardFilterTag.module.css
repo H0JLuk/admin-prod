@@ -3,17 +3,12 @@
     justify-content: center;
     align-items: center;
     padding: 5px 10px;
-    border: grey solid 1px;
+    border: #d9d9d9 solid 1px;
     margin-left: -1px;
     margin-top: 8px;
     flex-grow: 1;
-}
-
-.tag:last-child {
-    border: grey solid 1px;
-}
-
-.tag:hover {
+    color: #171725;
+    transition: 0.3s;
     cursor: pointer;
 }
 
@@ -25,11 +20,10 @@
     font-style: normal;
     line-height: 1.29;
     letter-spacing: -0.27px;
-    text-align: center;
-    color: #171725;
 }
 
 .selected {
-    border-color: green !important;
-    color: green !important;
+    border-color: #09a552;
+    color: #09a552;
+    z-index: 1;
 }

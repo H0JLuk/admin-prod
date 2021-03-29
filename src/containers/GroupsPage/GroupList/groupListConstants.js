@@ -1,7 +1,7 @@
 
 export const TYPES = {
     IDEA: 'IDEA',
-    ASSOCIATION: 'ASSOCIATION'
+    ASSOCIATION: 'ASSOCIATION',
 };
 
 export const TITLE = {
@@ -15,7 +15,7 @@ export const TITLE = {
 
 export const PRE_TITLE = {
     CREATE_BUNDLE: 'Создайте первый бандл прямо сейчас',
-    CREATE_PROMO_CAMPAIGN: 'Создайте первую связанную промо-кампанию прямо сейчас'
+    CREATE_PROMO_CAMPAIGN: 'Создайте первую связанную промо-кампанию прямо сейчас',
 };
 
 export const BUTTON = {
@@ -30,7 +30,7 @@ export const BUTTON = {
 
 export const SEARCH_INPUT = {
     PROMO_SEARCH: 'Поиск промо-кампании',
-    BUNDLE_SEARCH: 'Поиск бандла'
+    BUNDLE_SEARCH: 'Поиск бандла',
 };
 
 export const RESET_LABEL = 'По умолчанию';
@@ -55,10 +55,10 @@ export const DIRECTION = {
 };
 
 export const sortByFieldKey = {
-    NAME: 'name'
+    NAME: 'name',
 };
 
 export const groupTypes = {
     BUNDLE: 'bundles',
-    RELATED_CAMPAIGN: 'relatedCampaigns'
+    RELATED_CAMPAIGN: 'relatedCampaigns',
 };

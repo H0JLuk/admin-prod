@@ -18,7 +18,7 @@ const EDIT = 'Редактировать';
 const COPY = 'Копировать';
 const DELETE = 'Удалить';
 
-const PromoCampaignInfo = ({ matchUrl }) => {
+const PromoCampaignInfo = ({ matchPath }) => {
     const history = useHistory();
     const [promoCampaign, setPromoCampaign] = useState({});
     const { state: stateFromLocation } = useLocation();
@@ -27,7 +27,7 @@ const PromoCampaignInfo = ({ matchUrl }) => {
     useEffect(() => {
         const { promoCampaign } = stateFromLocation || {};
         if (!promoCampaign) {
-            return history.push(matchUrl);
+            return history.push(matchPath);
         }
         setPromoCampaign({
             ...promoCampaign,
@@ -39,19 +39,19 @@ const PromoCampaignInfo = ({ matchUrl }) => {
     }, []);
 
     const onEdit = useCallback(() => {
-        const path = `${ matchUrl }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT }`;
+        const path = `${ matchPath }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT }`;
         const { promoCampaign } = stateFromLocation || {};
         history.push(generatePath(path, { promoCampaignId: promoCampaign.id }), { promoCampaign });
-    }, [history, matchUrl, stateFromLocation]);
+    }, [history, matchPath, stateFromLocation]);
 
     const onConfirmDelete = useCallback(async () => {
         try {
             await onConfirmDeletePromoCampaign(promoCampaign.id, promoCampaign.name);
-            history.push(matchUrl);
+            history.push(matchPath);
         } catch (e) {
             console.warn(e);
         }
-    }, [promoCampaign.id, promoCampaign.name, history, matchUrl]);
+    }, [promoCampaign.id, promoCampaign.name, history, matchPath]);
 
     const onDeleteClick = useCallback(() => confirmModal({
         onOk: onConfirmDelete,

@@ -1,7 +1,7 @@
 import { RedoOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { generatePath, useHistory } from 'react-router-dom';
-import { Menu, Dropdown, Button } from 'antd';
+import { Menu, Dropdown, Button, Alert } from 'antd';
 import { getDashboardInfo } from '../../api/services/adminService';
 import { getClientAppList } from '../../api/services/clientAppService';
 import { getDzoList } from '../../api/services/dzoService';
@@ -9,17 +9,22 @@ import { getPromoCampaignById } from '../../api/services/promoCampaignService';
 import { saveAppCode } from '../../api/services/sessionService';
 import useBodyClassForSidebar from '../../hooks/useBodyClassForSidebar';
 import Header from '../../components/Header/Header';
-import { DEFAULT_SLEEP_TIME } from '../../constants/time';
-import { sleep } from '../../utils/utils';
+import { requestWithMinWait } from '../../utils/utils';
 import DashboardFilterTag from './DashboardFilterTag';
 import { WITHOUT_FILTER, BY_APP, BY_DZO } from './dashboardFilterTypes';
 import DashboardItem from './DashboardItem';
-import downArrowImage from '../../static/svgs/arrow-down.svg';
 import { getPathForPromoCampaignInfo } from '../../utils/appNavigation';
+import downArrowImage from '../../static/svgs/arrow-down.svg';
+
 import styles from './Dashboard.module.css';
 
 const DEFAULT_FILTER_NAME = 'Фильтровать';
 const RELOAD_BUTTON_LABEL = 'Обновить';
+
+const EMPTY_DASHBOARD = {
+    MESSAGE: 'Отличная работа!',
+    DESCRIPTION: 'У нас все под контролем.'
+};
 
 const menuObj = [
     { label: BY_APP, value: 'По приложению' },
@@ -61,6 +66,7 @@ const Dashboard = () => {
     const [filterTagList, setFilterTagList] = useState([]);
     const [appList, setAppList] = useState([]);
     const [dzoList, setDzoList] = useState([]);
+    const [loadingPage, setLoadingPage] = useState(true);
     const [loading, setLoading] = useState(false);
 
     useBodyClassForSidebar();
@@ -68,21 +74,30 @@ const Dashboard = () => {
     const loadData = async () => {
         setLoading(true);
         try {
-            const response = await getDashboardInfo();
-            setList(response);
-            const { clientApplicationDtoList: clientAppList = [] } = await getClientAppList() ?? {};
+            const [
+                dashboardInfo,
+                { clientApplicationDtoList: clientAppList = [] } = {},
+                { dzoDtoList = [] } = {}
+            ] = await requestWithMinWait([
+                getDashboardInfo(),
+                getClientAppList(),
+                getDzoList()
+            ]);
+
+            setList(dashboardInfo);
             setAppList(clientAppList.map(({ id, displayName }) => ({ id, displayName })));
-            const { dzoDtoList = [] } = await getDzoList() ?? {};
             setDzoList(dzoDtoList.map(({ dzoId: id, dzoName: displayName }) => ({ id, displayName })));
         } catch (e) {
             console.error(e?.message);
         }
-        await sleep(DEFAULT_SLEEP_TIME);
         setLoading(false);
     };
 
     useEffect(() => {
-        loadData();
+        (async () => {
+            await loadData();
+            setLoadingPage(false);
+        })();
     }, []);
 
     useEffect(() => {
@@ -162,11 +177,23 @@ const Dashboard = () => {
                 </div>
                 <DashboardFilterList list={ filterTagList } filterIdList={ filterIdList } onClick={ onFilterTagClick } />
             </div>
-            <div className={ styles.content }>
-                { filteredList.map((elem, index) => (
-                    <DashboardItem key={ index } handleClick={ onItemClick } { ...elem } />
-                )) }
-            </div>
+            { !loadingPage && (
+                filteredList.length ? (
+                    <div className={ styles.content }>
+                        { filteredList.map((elem, index) => (
+                            <DashboardItem key={ index } handleClick={ onItemClick } { ...elem } />
+                        )) }
+                    </div>
+                ) : (
+                    <Alert
+                        className={ styles.message }
+                        message={ EMPTY_DASHBOARD.MESSAGE }
+                        description={ EMPTY_DASHBOARD.DESCRIPTION }
+                        type="success"
+                        showIcon
+                    />
+                )
+            ) }
         </div>
     );
 };

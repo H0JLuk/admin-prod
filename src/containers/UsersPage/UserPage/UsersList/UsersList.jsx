@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useHistory, generatePath, useLocation } from 'react-router-dom';
-import debounce from 'lodash/debounce';
 import cn from 'classnames';
 import { notification } from 'antd';
 import RestoredTableUser from './RestoredTableUser/RestoredTableUser';
@@ -14,11 +13,14 @@ import useBodyClassForSidebar from '../../../../hooks/useBodyClassForSidebar';
 import TemplateUploadButtonsWithModal from '../../../../components/ButtonWithModal/TemplateUploadButtonsWithModal';
 import { getUsersList, removeUser, resetUser } from '../../../../api/services/usersService';
 import { USERS_PAGES } from '../../../../constants/route';
+import { getSearchParamsFromUrl } from '../../../../utils/helper';
 
 import styles from './UsersList.module.css';
 import btnStyles from './ButtonUsers/ButtonUsers.module.css';
 
 const TITLE = 'Пользователи';
+
+const RESET_LABEL = 'По умолчанию';
 
 const BUTTON_EDIT = 'Редактировать';
 const BUTTON_CHANGE_PASSWORD = 'Сбросить пароль';
@@ -33,8 +35,6 @@ const SEARCH_INPUT = 'Поиск по логину, локации и точке
 
 const CHOSEN_USER = 'Выбрано';
 const TITLE_DOWNLOAD_USER = 'Пакетная обработка пользователей';
-
-const RESET_LABEL = 'По умолчанию';
 
 const MODAL_TITLE = 'Вы уверены что хотите удалить этих пользователей?';
 const MODAL_SUCCESS_TITLE = 'Результат удаления пользователей';
@@ -88,7 +88,7 @@ const showRestoredErrorsNotification = (message) => {
 
 const defaultSelected = { rowValues: [], rowKeys: [] };
 
-const UserList = ({ matchUrl }) => {
+const UserList = ({ matchPath }) => {
     const history = useHistory();
     const { search } = useLocation();
     const [users, setUsers] = useState([]);
@@ -109,7 +109,7 @@ const UserList = ({ matchUrl }) => {
         try {
             const { users = [], totalElements, pageNo } = await getUsersList(urlSearchParams);
             /* use `replace` instead of `push` for correct work `history.goBack()` */
-            history.replace(`${matchUrl}?${urlSearchParams}`);
+            history.replace(`${matchPath}?${urlSearchParams}`);
             clearSelectedItems();
             setParams({
                 ...searchParams,
@@ -124,82 +124,41 @@ const UserList = ({ matchUrl }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const loadUsersDataDebounced = useCallback(debounce(loadUsersData, 500), [loadUsersData]);
-
     useEffect(() => {
         (async () => {
-            const urlSearchParams = new URLSearchParams(search);
-            const searchParamsFromUrl = {};
-            Object.keys(DEFAULT_PARAMS).forEach(key => {
-                const searchValue = urlSearchParams.get(key);
-                searchParamsFromUrl[key] = searchValue || DEFAULT_PARAMS[key];
-            });
-            await loadUsersData(searchParamsFromUrl);
+            await loadUsersData(getSearchParamsFromUrl(search, DEFAULT_PARAMS));
             setLoadingPage(false);
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loadUsersData]);
-
-    const handleSearch = useCallback((value = '') => {
-        if (loadingTableData) {
-            return;
-        }
-
-        const nextParams = { ...params, filterText: value, pageNo: 0 };
-
-        if (value) {
-            loadUsersDataDebounced(nextParams);
-        } else {
-            loadUsersDataDebounced.cancel();
-            loadUsersData(nextParams);
-        }
-        setParams(nextParams);
-    }, [loadingTableData, params, loadUsersDataDebounced, loadUsersData]);
-
-    const changeSort = useCallback((sortBy) => {
-        if (typeof sortBy !== 'string') {
-            sortBy = '';
-        }
-
-        if (!sortBy && !params.sortBy) {
-            return;
-        }
-
-        loadUsersData({
-            ...params,
-            sortBy,
-            direction: !sortBy || params.direction === 'DESC' ? 'ASC' : 'DESC',
-        });
-    }, [loadUsersData, params]);
-
-    const clearSelectedItems = () => {
-        setSelectedItems(defaultSelected);
-    };
-
-    const onAddUser = useCallback(() => history.push(`${matchUrl}${USERS_PAGES.ADD_USER}`), [history, matchUrl]);
-
-    const setSelectedRow = useCallback(() => {
-        setSelect((state) => !state);
-        clearSelectedItems();
     }, []);
 
-    const selectAll = useCallback(() => {
+    const clearSelectedItems = useCallback(() => {
+        setSelectedItems(defaultSelected);
+    }, []);
+
+    const onAddUser = () => history.push(`${matchPath}${USERS_PAGES.ADD_USER}`);
+
+    const setSelectedRow = () => {
+        setSelect((state) => !state);
+        clearSelectedItems();
+    };
+
+    const selectAll = () => {
         if (users.length !== selectedItems.rowValues.length) {
             setSelectedItems({ rowKeys: users.map(({ id }) => id), rowValues: users });
             return;
         } else {
             clearSelectedItems();
         }
-    }, [selectedItems.rowValues, users]);
+    };
 
-    const onChangePage = useCallback(async ({ current, pageSize }) => {
+    const onChangePage = ({ current, pageSize }) => {
         loadUsersData({
             ...params,
             pageNo: current - 1,
             pageSize,
         });
-    }, [loadUsersData, params]);
+    };
 
     /** @type {import('antd/lib/pagination').PaginationConfig} */
     const pagination = useMemo(() => ({
@@ -211,10 +170,7 @@ const UserList = ({ matchUrl }) => {
         showSizeChanger: true,
     }), [params.pageNo, params.pageSize, params.totalElements]);
 
-    const forceUpdateUsersData = useCallback(() => loadUsersData(params), [params, loadUsersData]);
-
     const updateSelected = useCallback((rowKeys, rowValues) => {
-
         setSelectedItems({ rowKeys, rowValues });
     }, []);
 
@@ -223,15 +179,15 @@ const UserList = ({ matchUrl }) => {
         onChange: updateSelected,
     }), [selectedItems.rowKeys, updateSelected]);
 
-    const refreshTable = useCallback(async () => {
-        await loadUsersData(params);
+    const refreshTable = () => {
+        loadUsersData(params);
         clearSelectedItems();
-    }, [params, loadUsersData]);
+    };
 
-    const onRow = useCallback((record) => ({
+    const onRow = (record) => ({
         onClick: () => {
             if (!select) {
-                history.push(generatePath(`${matchUrl}${USERS_PAGES.USER_INFO}`, { userId: record.id }));
+                history.push(generatePath(`${matchPath}${USERS_PAGES.USER_INFO}`, { userId: record.id }));
                 return;
             }
 
@@ -244,7 +200,7 @@ const UserList = ({ matchUrl }) => {
 
             setSelectedItems({ rowKeys, rowValues });
         }
-    }), [select, selectedItems.rowKeys, selectedItems.rowValues, history, matchUrl]);
+    });
 
     const toggleModal = useCallback(() => setModalIsOpen(!modalIsOpen), [modalIsOpen]);
 
@@ -296,7 +252,7 @@ const UserList = ({ matchUrl }) => {
 
     /* no useCallback needed, because function is set to <button /> onClick */
     const linkEdit = () => {
-        history.push(`${matchUrl}${USERS_PAGES.EDIT_SOME_USERS}`, { users: selectedItems.rowValues });
+        history.push(`${matchPath}${USERS_PAGES.EDIT_SOME_USERS}`, { users: selectedItems.rowValues });
     };
 
     const buttons = [];
@@ -308,12 +264,12 @@ const UserList = ({ matchUrl }) => {
             type: 'primary',
             label: selectedAll ? BUTTON_UNSELECT_ALL : BUTTON_SELECT_ALL,
             onClick: selectAll,
-            disabled: loadingTableData
+            disabled: loadingTableData,
         },
         {
             label: BUTTON_CANCEL,
             onClick: setSelectedRow,
-            disabled: loadingTableData
+            disabled: loadingTableData,
         });
     } else {
         buttons.push(
@@ -322,19 +278,13 @@ const UserList = ({ matchUrl }) => {
         );
     }
 
-    /* no useMemo needed, because almost every render we get new object for `buttons` */
-    const searchInput = {
-        placeholder: SEARCH_INPUT,
-        value: params.filterText,
-        onChange: handleSearch,
-    };
-
-    /* no useMemo needed, because almost every render we get new object for `buttons` */
-    const sortingBy = {
+    const searchAndSortParams = {
+        params,
+        setParams,
+        loadData: loadUsersData,
+        onChangeSort: clearSelectedItems,
+        inputPlaceholder: SEARCH_INPUT,
         menuItems: DROPDOWN_SORT_MENU,
-        onMenuItemClick: changeSort,
-        sortBy: params.sortBy,
-        withReset: params.sortBy !== '',
     };
 
     return (
@@ -343,12 +293,10 @@ const UserList = ({ matchUrl }) => {
             <HeaderWithActions
                 title={ TITLE }
                 buttons={ buttons }
-                searchInput={ searchInput }
-                showSearchInput={ true }
-                showSorting
-                sortingBy={ sortingBy }
-                classNameByInput={ styles.inputSearch }
+                loading={ loadingTableData }
                 resetLabel={ RESET_LABEL }
+                { ...searchAndSortParams }
+                enableAsyncSort
             />
             <UsersListTable
                 loadingData={ loadingTableData }
@@ -396,7 +344,7 @@ const UserList = ({ matchUrl }) => {
                             modalSuccessTitle={ MODAL_SUCCESS_TITLE }
                             visible={ modalIsOpen }
                             modalTitle={ MODAL_TITLE }
-                            listNameKey='personalNumber'
+                            listNameKey="personalNumber"
                         />
                     </div>
                 ) : (
@@ -405,7 +353,7 @@ const UserList = ({ matchUrl }) => {
                             { TITLE_DOWNLOAD_USER }
                         </span>
                         <div className={ styles.downloadButtons }>
-                            <TemplateUploadButtonsWithModal onSuccess={ forceUpdateUsersData } />
+                            <TemplateUploadButtonsWithModal onSuccess={ refreshTable } />
                         </div>
                         <DownloadDropDown />
                     </div>

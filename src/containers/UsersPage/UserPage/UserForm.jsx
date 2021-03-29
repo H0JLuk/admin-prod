@@ -138,7 +138,7 @@ const showNotify = ({ login, pwd, mode, errorMessage }) => {
     });
 };
 
-const UserForm = ({ type, matchUrl }) => {
+const UserForm = ({ type, matchPath }) => {
     const history = useHistory();
     const params = useParams();
     const { userId } = params;
@@ -157,7 +157,7 @@ const UserForm = ({ type, matchUrl }) => {
         [notNewUser, userData]
     );
     const formName = useMemo(() => (notNewUser ? FORM_NAME_EDIT_USER : FORM_NAME_NEW_USER), [notNewUser]);
-    const redirectToUsersPage = useCallback(() => history.push(matchUrl), [history, matchUrl]);
+    const redirectToUsersPage = useCallback(() => history.push(matchPath), [history, matchPath]);
 
     const getUserData = useCallback(async () => {
         try {
@@ -240,11 +240,11 @@ const UserForm = ({ type, matchUrl }) => {
         setError(DEFAULT_ERRORS);
 
         if (notNewUser && userData) {
-            history.push(generatePath(`${matchUrl}${USERS_PAGES.USER_INFO}`, { userId: userData.id }));
+            history.push(generatePath(`${matchPath}${USERS_PAGES.USER_INFO}`, { userId: userData.id }));
         } else {
             redirectToUsersPage();
         }
-    }, [login, redirectToUsersPage, notNewUser, history, userData, salePoint, checkBoxes, matchUrl]);
+    }, [login, redirectToUsersPage, notNewUser, history, userData, salePoint, checkBoxes, matchPath]);
 
     const handleCheckBoxChange = useCallback((checked, name) => {
         setCheckBoxes((state) => ({
@@ -292,8 +292,8 @@ const UserForm = ({ type, matchUrl }) => {
 
     const onEditUser = useCallback(() => {
         setError(DEFAULT_ERRORS);
-        history.push(generatePath(`${matchUrl}${USERS_PAGES.EDIT_USER}`, { userId }));
-    }, [history, userId, matchUrl]);
+        history.push(generatePath(`${matchPath}${USERS_PAGES.EDIT_USER}`, { userId }));
+    }, [history, userId, matchPath]);
 
     const onCancel = useCallback(async () => {
         if (notNewUser && userData) {
@@ -301,11 +301,11 @@ const UserForm = ({ type, matchUrl }) => {
             setLocation({ id: userData.locationId, name: userData.locationName });
             setSalePoint({ id: userData.salePointId, name: userData.salePointName });
             setError(DEFAULT_ERRORS);
-            history.push(generatePath(`${matchUrl}${USERS_PAGES.USER_INFO}`, { userId: userData.id }));
+            history.push(generatePath(`${matchPath}${USERS_PAGES.USER_INFO}`, { userId: userData.id }));
         } else {
             redirectToUsersPage();
         }
-    }, [history, notNewUser, userData, redirectToUsersPage, clientApps, matchUrl]);
+    }, [history, notNewUser, userData, redirectToUsersPage, clientApps, matchPath]);
 
     const onDelete = useCallback(async () => {
         try {
@@ -461,7 +461,7 @@ const UserForm = ({ type, matchUrl }) => {
 
 UserForm.propTypes = {
     type: PropTypes.oneOf(['new', 'edit', 'info']),
-    matchUrl: PropTypes.string,
+    matchPath: PropTypes.string,
 };
 
 UserForm.defaultProps = {

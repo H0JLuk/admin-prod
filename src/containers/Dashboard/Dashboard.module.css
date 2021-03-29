@@ -4,6 +4,10 @@
     height: 100%;
 }
 
+.message {
+    margin: 0px 16px;
+}
+
 .header {
     padding: 16px;
 }

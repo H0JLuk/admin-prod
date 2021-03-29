@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams, useRouteMatch, useHistory, useLocation, generatePath } from 'react-router-dom';
+import { useParams, useHistory, useLocation, generatePath, useRouteMatch } from 'react-router-dom';
 import HeaderWithActions from '../../../../components/HeaderWithActions/HeaderWithActions';
 import PromoCampaignVisibilitySettingTable
     from './PromoCampaignVisibilitySettingTable/PromoCampaignVisibilitySettingTable';
 import { Button, message } from 'antd';
-import debounce from 'lodash/debounce';
 import Header from '../../../../components/Header/Header';
 import PromoCampaignVisibilitySettingModal from './PromoCampaignVisibilitySettingModal/PromoCampaignVisibilitySettingModal';
 import {
@@ -14,6 +13,7 @@ import {
     changeVisibleOfVisibilitySettings
 } from '../../../../api/services/promoCampaignService';
 import { getPathForCreatePromoCampaignVisibititySetting } from '../../../../utils/appNavigation';
+import { getSearchParamsFromUrl } from '../../../../utils/helper';
 
 import styles from './PromoCampaignVisibilitySetting.module.css';
 
@@ -57,13 +57,13 @@ const DROPDOWN_SORT_MENU = [
 // eslint-disable-next-line no-unused-vars
 const getURLSearchParams = ({ totalElements, ...rest }) => new URLSearchParams(rest).toString();
 
-function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, addNewByModal, }) {
+const PromoCampaignVisibilitySetting = ({ searchAndSortMode = true, hideHeader, addNewByModal }) => {
     const match = useRouteMatch();
     const { search, state } = useLocation();
     const history = useHistory();
     const { promoCampaignId } = useParams();
     const [ selectedSettings, setSelectedSettings ] = useState(null);
-    const [ loading, setLoading ] = useState(false);
+    const [ loading, setLoading ] = useState(true);
     const [ visibilitySettings, setVisibilitySettings ] = useState([]);
     const [ params, setParams ] = useState(defaultParams);
     const [ isModalVisible, setIsModalVisible ] = useState(false);
@@ -73,34 +73,27 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
     const closeModal = useCallback(() => setIsModalVisible(false), []);
 
     const loadData = useCallback(async (searchParams = defaultParams) => {
-        const urlSearchParams = getURLSearchParams(searchParams);
+        setLoading(true);
+
         try {
+            const urlSearchParams = getURLSearchParams(searchParams);
             const { visibilitySettings, pageNo, totalElements } = await getPromoCampaignVisibilitySettings(promoCampaignId, urlSearchParams);
+
             history.replace(`${match.url}?${urlSearchParams}`, state);
             setParams({ ...searchParams, pageNo, totalElements });
             setVisibilitySettings(visibilitySettings);
         } catch (e) {
-            console.error(e);
+            console.error(e); // TODO: add error handler
         }
+
+        setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [promoCampaignId]);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const loadDataDebounced = useCallback(debounce(loadData, 500), [loadData]);
 
     const forceUpdate = useCallback(() => loadData(params), [loadData, params]);
 
     useEffect(() => {
-        (async () => {
-            const urlSearchParams = new URLSearchParams(search);
-            const searchParamsFromUrl = {};
-            Object.keys(defaultParams).forEach(key => {
-                const searchValue = urlSearchParams.get(key);
-                searchParamsFromUrl[key] = searchValue || defaultParams[key];
-            });
-            await loadData(searchParamsFromUrl);
-            setLoading(false);
-        })();
+        loadData(getSearchParamsFromUrl(search, defaultParams));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadData]);
 
@@ -176,22 +169,6 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
     const onEnableSelection = useCallback(() => setSelectedSettings([]), []);
     const onDisableSelection = useCallback(() => setSelectedSettings(null), []);
 
-    const changeSort = useCallback(async (sortBy) => {
-        setLoading(true);
-
-        if (typeof sortBy !== 'string') {
-            sortBy = '';
-        }
-        await loadData({
-            ...params,
-            sortBy: sortBy || defaultParams.sortBy,
-            direction: !sortBy || params.direction === 'DESC' ? 'ASC' : 'DESC',
-        });
-
-        setSelectedSettings((state) => !state ? null : []);
-        setLoading(false);
-    }, [params, loadData]);
-
     const selectAll = useCallback(() => {
         setSelectedSettings(
             (state) => state.length === visibilitySettings.length ? [] : visibilitySettings.map(({ id }) => id)
@@ -212,29 +189,6 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
             );
         }
     }, [selectedSettings]);
-
-    const onSearchInputChange = useCallback((value = '', withDebounce = true) => {
-        if (loading) {
-            return;
-        }
-
-        const nextParams = { ...params, filterText: value, pageNo: 0 };
-
-        if (withDebounce) {
-            loadDataDebounced(nextParams);
-        } else {
-            loadData(nextParams);
-        }
-        setParams(nextParams);
-        setSelectedSettings((state) => !state ? null : []);
-    }, [loadDataDebounced, params, loading, loadData]);
-
-    const sortingBy = useMemo(() => ({
-        menuItems: DROPDOWN_SORT_MENU,
-        onMenuItemClick: changeSort,
-        sortBy: params.sortBy,
-        withReset: true,
-    }), [changeSort, params.sortBy]);
 
     const onChangePage = useCallback(async ({ pageSize, current }) => {
         setSelectedSettings((prev) => !prev ? prev : []);
@@ -296,12 +250,19 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
         showModal
     ]);
 
-    const searchInput = useMemo(() => ({
-        placeholder: SEARCH_SETTING,
-        onChange: onSearchInputChange,
-        disabled: loading,
-        value: params.filterText,
-    }), [onSearchInputChange, loading, params.filterText]);
+    const onChangeSort = useCallback(() => {
+        setSelectedSettings((state) => !state ? null : []);
+    }, []);
+
+    const searchAndSortParams = {
+        params,
+        setParams,
+        loadData,
+        onChangeSort,
+        loading,
+        inputPlaceholder: SEARCH_SETTING,
+        menuItems: DROPDOWN_SORT_MENU,
+    };
 
     return (
         <>
@@ -310,10 +271,10 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
                 <HeaderWithActions
                     title={ HEADER_TITLE }
                     buttons={ buttons }
-                    searchInput={ searchInput }
                     showSorting={ searchAndSortMode }
                     showSearchInput={ searchAndSortMode && selectedSettings === null }
-                    sortingBy={ sortingBy }
+                    { ...searchAndSortParams }
+                    enableAsyncSort
                 />
                 <div className={ styles.tableWrapper }>
                     <PromoCampaignVisibilitySettingTable
@@ -367,6 +328,6 @@ function PromoCampaignVisibilitySetting({ searchAndSortMode = true, hideHeader, 
             ) }
         </>
     );
-}
+};
 
 export default PromoCampaignVisibilitySetting;

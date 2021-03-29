@@ -30,39 +30,14 @@
     display: flex;
 }
 
-button.button {
+.buttons > button {
     margin-right: 10px;
-    font-family: SBSansText-medium;
 }
 
-button.button.btn_primary {
-    background: #09a552;
-    border-color: #09a552;
-    font-family: SBSansText;
+.buttons > :global(.ant-input-affix-wrapper) {
+    min-width: 250px;
 }
 
-button.button.btn_primary:hover,
-button.button.btn_primary:focus {
-    color: #ffffff;
-}
-
-button.button:hover,
-button.button:focus {
-    border-color: #09a552;
-    color:  #09a552;
-}
-
-.searchInput span[role='img'] {
+.buttons > :global(.ant-input-affix-wrapper) span[role='img'] {
     color: #c2c8d2;
-}
-
-span.searchInput:hover,
-span.searchInput:focus {
-    border-color: #09a552;
-}
-
-span.searchInput:focus,
-span.searchInput:global(.ant-input-affix-wrapper-focused) {
-    box-shadow: 0 0 0 2px rgba(33, 186, 114, 0.2);
-    border-color: #09a552;
 }

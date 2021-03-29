@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Button, Radio } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
 
@@ -8,7 +8,6 @@ import Header from '../../../components/Header/Header';
 import HeaderWithActions from '../../../components/HeaderWithActions/HeaderWithActions';
 import TableDeleteModal from '../../../components/TableDeleteModal/TableDeleteModal';
 import { getCampaignGroupList, deleteCampaignGroup } from '../../../api/services/campaignGroupService';
-import { defaultSearchParams, getSearchParamsFromUrl, sortItemsBySearchParams } from '../../../utils/helper';
 import { GROUPS_PAGES } from '../../../constants/route';
 import { EmptyGroup, GroupListByType } from './GroupListComponents';
 import {
@@ -20,14 +19,11 @@ import {
     TITLE,
     PRE_TITLE,
     RESET_LABEL,
-    DIRECTION,
     sortByFieldKey,
     groupTypes,
 } from './groupListConstants';
 
 import styles from './GroupList.module.css';
-
-const getURLSearchParams = (params) => new URLSearchParams(params).toString();
 
 const GroupList = ({ matchPath }) => {
     const [loading, setLoading] = useState(true);
@@ -41,9 +37,7 @@ const GroupList = ({ matchPath }) => {
     const [selectedSection, setSelectedSection] = useState(TYPES.IDEA);
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
-    const [params, setParams] = useState(defaultSearchParams);
     const history = useHistory();
-    const { search } = useLocation();
 
     const dataList = selectedSection === TYPES.IDEA ? groupBundlesList : groupPromoCampaignsList;
     const { current: copyDataList } = selectedSection === TYPES.IDEA ? copyBundleList : copyRelatedCampaigns;
@@ -54,8 +48,7 @@ const GroupList = ({ matchPath }) => {
     const toggleSelect = () => clearSelectedItems(isSelect);
     const toggleModal = () => setModalIsOpen(prev => !prev);
 
-    const loadData = async (searchParams = defaultSearchParams) => {
-        const urlSearchParams = getURLSearchParams(searchParams);
+    const loadData = async () => {
         setLoading(true);
         try {
             const { groups = [] } = await getCampaignGroupList();
@@ -69,10 +62,8 @@ const GroupList = ({ matchPath }) => {
 
             copyBundleList.current = bundles;
             copyRelatedCampaigns.current = relatedCampaigns;
-            setBundlesList(sortItemsBySearchParams(searchParams, bundles, sortByFieldKey.NAME));
-            setPromoCampaignsList(sortItemsBySearchParams(searchParams, relatedCampaigns, sortByFieldKey.NAME));
-            setParams({ ...searchParams });
-            history.replace(`${matchPath}?${urlSearchParams}`);
+            setBundlesList(bundles);
+            setPromoCampaignsList(relatedCampaigns);
         } catch (err) {
             console.error(err);
         }
@@ -80,9 +71,14 @@ const GroupList = ({ matchPath }) => {
     };
 
     useEffect(() => {
-        loadData(getSearchParamsFromUrl(search, defaultSearchParams));
+        loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const clearSelectedItems = (offSelect, saveSelecting) => {
+        checkedItems.current = {};
+        setSelectedItems(prev => offSelect || (saveSelecting && !prev) ? null : []);
+    };
 
     const handleSelectItem = (selectItem) => {
         setSelectedItems(prev => {
@@ -95,11 +91,6 @@ const GroupList = ({ matchPath }) => {
 
             return prev.filter(({ id }) => id !== selectedId);
         });
-    };
-
-    const clearSelectedItems = (offSelect, saveSelecting) => {
-        checkedItems.current = {};
-        setSelectedItems(prev => offSelect || (saveSelecting && !prev) ? null : []);
     };
 
     const handleSelectAllItem = () => {
@@ -119,43 +110,11 @@ const GroupList = ({ matchPath }) => {
         const sectionType = e.target.value;
         clearSelectedItems(true);
         setSelectedSection(sectionType);
-        sortData();
     };
 
     const refreshList = () => {
-        loadData(params);
+        loadData();
         clearSelectedItems(true);
-    };
-
-    const sortData = (searchParams = defaultSearchParams) => {
-        setParams(searchParams);
-        history.replace(`${matchPath}?${getURLSearchParams(searchParams)}`);
-
-        if (!searchParams.filterText && !searchParams.sortBy) {
-            setDataList(copyDataList);
-            return;
-        }
-
-        setDataList(sortItemsBySearchParams(searchParams, copyDataList, sortByFieldKey.NAME));
-    };
-
-    const handleSearch = (filterText = '') => {
-        clearSelectedItems(false, true);
-        sortData({ ...params, filterText });
-    };
-
-    const changeSort = (sortBy) => {
-        if (typeof sortBy !== 'string') {
-            sortBy = '';
-        }
-
-        if (!sortBy && !params.sortBy) return;
-
-        const searchParams = {
-            ...params, sortBy,
-            direction: !sortBy || params.direction === DIRECTION.DESC ? DIRECTION.ASC : DIRECTION.DESC,
-        };
-        sortData(searchParams);
     };
 
     const onAddGroupClick = () => {
@@ -180,17 +139,18 @@ const GroupList = ({ matchPath }) => {
         }
     ];
 
-    const searchInput = {
-        placeholder: selectedSection === TYPES.IDEA ? SEARCH_INPUT.BUNDLE_SEARCH : SEARCH_INPUT.PROMO_SEARCH,
-        value: params.filterText,
-        onChange: handleSearch,
-    };
+    const onChangeInput = useCallback(() => {
+        clearSelectedItems(false, true);
+    }, []);
 
-    const sortingBy = {
+    const searchAndSortParams = {
+        setDataList,
+        copyDataList,
+        matchPath,
+        inputPlaceholder: selectedSection === TYPES.IDEA ? SEARCH_INPUT.BUNDLE_SEARCH : SEARCH_INPUT.PROMO_SEARCH,
+        sortByFieldKey: sortByFieldKey.NAME,
         menuItems: DROPDOWN_SORT_MENU,
-        onMenuItemClick: changeSort,
-        sortBy: params.sortBy,
-        withReset: params.sortBy !== '',
+        onChangeInput,
     };
 
     return (
@@ -228,12 +188,9 @@ const GroupList = ({ matchPath }) => {
                     <HeaderWithActions
                         title={ selectedSection === TYPES.IDEA ? TITLE.BUNDLE : TITLE.PROMO_CAMPAIGNS }
                         buttons={ buttons }
-                        searchInput={ searchInput }
-                        showSearchInput={ true }
-                        showSorting
-                        sortingBy={ sortingBy }
-                        classNameByInput={ styles.searchInput }
+                        triggerResetParams={ selectedSection }
                         resetLabel={ RESET_LABEL }
+                        { ...searchAndSortParams }
                     />
                     <div className={ styles.content }>
                         <GroupListByType

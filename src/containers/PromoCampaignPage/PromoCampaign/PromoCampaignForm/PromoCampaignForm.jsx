@@ -45,8 +45,7 @@ import { DEFAULT_OFFER_DURATION } from '../../../../constants/promoCampaigns';
 import { ReactComponent as LoadingSpinner } from '../../../../static/images/loading-spinner.svg';
 
 import styles from './PromoCampaignForm.module.css';
-
-const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
+const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
     const history = useHistory();
     const [form] = Form.useForm();
     const [step, setStep] = useState(1);
@@ -118,7 +117,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
     useEffect(() => {
         if (mode === modes.edit) {
             if (!promoCampaign) {
-                return history.push(matchUrl);
+                return history.push(matchPath);
             }
 
             const normalizeData = normalizePromoCampaignData({ promoCampaign, isCopy });
@@ -254,7 +253,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
                 await Promise.all(visibilityPromises);
             }
 
-            history.push(matchUrl);
+            history.push(matchPath);
         } catch ({ message }) {
             setMessageError(message);
             setLoading(false);
@@ -297,7 +296,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
             await createImgBanners(state.banners, id, state.appCode);
             await Promise.all(visibilityPromises);
 
-            history.push(matchUrl);
+            history.push(matchPath);
         } catch (error) {
             setMessageError(error.message);
             setLoading(false);
@@ -315,7 +314,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchUrl, isCopy }) => {
 
     };
 
-    const handleCancel = () => history.push(matchUrl);
+    const handleCancel = () => history.push(matchPath);
     const handleBackClick = useCallback(() => setStep((prev) => prev - 1), []);
 
     const validStepChange = useCallback((step, finish = true) => {
