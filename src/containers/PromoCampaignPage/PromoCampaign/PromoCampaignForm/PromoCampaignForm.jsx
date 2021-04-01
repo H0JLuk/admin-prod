@@ -167,14 +167,12 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
     const validateVisibilitySettings = useCallback(() => {
         const { visibilitySettings } = state;
 
-        if (!visibilitySettings[0].location) {
-            const [setting] = visibilitySettings;
+        const isVisibilityErrors = visibilitySettings.some(({ location }) => !location);
+        if (isVisibilityErrors) {
             const nextState = { ...state };
-            nextState.visibilitySettings[0] = {
-                ...setting,
-                errors: { location: 'Укажите локацию' },
-            };
-
+            nextState.visibilitySettings = nextState.visibilitySettings.map(({ location, ...rest }) =>
+                !location ? { location, ...rest, errors: { location: 'Укажите локацию' } } : { location, ...rest }
+            );
             setState(nextState);
             return false;
         }
