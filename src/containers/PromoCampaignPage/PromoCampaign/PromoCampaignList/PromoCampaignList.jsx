@@ -6,7 +6,7 @@ import PromoCampaignItem from './PromoCampaignListItem/PromoCampaignListItem';
 import HeaderWithActions from '../../../../components/HeaderWithActions/HeaderWithActions';
 import Header from '../../../../components/Header/Header';
 import { getFilteredPromoCampaignList, reorderPromoCampaigns } from '../../../../api/services/promoCampaignService';
-import { arrayMove, sortItemsBySearchParams } from '../../../../utils/helper';
+import { arrayMove } from '../../../../utils/helper';
 import { getLinkForCreatePromoCampaign } from '../../../../utils/appNavigation';
 
 import style from './PromoCampaignList.module.css';
