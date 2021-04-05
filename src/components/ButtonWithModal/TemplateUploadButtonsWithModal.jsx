@@ -81,9 +81,7 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
             const requestFunc = type.current === 'edit' ? addUsersWithTemplate : deleteUsersWithTemplate;
             const response = await requestFunc(appCode, data);
 
-            if (type.current === 'edit') {
-                downloadFileFunc(URL.createObjectURL(response), DOWNLOAD_FILE_NAME, 'xlsx');
-            }
+            downloadFileFunc(URL.createObjectURL(response), DOWNLOAD_FILE_NAME, 'xlsx');
 
             setIsModalVisible(false);
             clearStateAndForm();
