@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams, generatePath } from 'react-router-dom';
 import cn from 'classnames';
-import { Form, Input, notification, Typography } from 'antd';
+import { Form, Input, Typography } from 'antd';
 import { USERS_PAGES } from '../../../constants/route';
 import { addUser, getUser, removeUser, resetUser, saveUser, unblockUser } from '../../../api/services/usersService';
 import Header from '../../../components/Header/Header';
@@ -14,6 +14,7 @@ import UserFormButtonGroup from './UserFormButtonGroup/UserFormButtonGroup';
 import { getStringOptionValue } from '../../../utils/utils';
 import { getClientAppList } from '../../../api/services/clientAppService';
 import { getUserAppsCheckboxes } from './UserFormHelper';
+import { customNotifications } from '../../../utils/notifications';
 
 import styles from './UserForm.module.css';
 
@@ -75,7 +76,6 @@ const userMessage = (login, pwd, mode, errorMessage) => {
                         { USER_PASSWORD }: { pwd }
                     </Paragraph>
                 ),
-                placement: 'topRight',
             };
         }
         case EDIT: {
@@ -92,7 +92,6 @@ const userMessage = (login, pwd, mode, errorMessage) => {
                         { NEW_USER_PASSWORD }: { pwd }
                     </Paragraph>
                 ),
-                placement: 'topRight',
             };
         }
         case DELETE: {
@@ -117,23 +116,16 @@ const userMessage = (login, pwd, mode, errorMessage) => {
 };
 
 const showNotify = ({ login, pwd, mode, errorMessage }) => {
-    const config = {
-        duration: 0,
-        placement: 'bottomRight'
-    };
-    const { message, description, placement } = userMessage(login, pwd, mode, errorMessage);
-    if (mode === ERROR){
-        return notification.error({
-            ...config,
+    const { message, description } = userMessage(login, pwd, mode, errorMessage);
+    if (mode === ERROR) {
+        return customNotifications.error({
             message,
             description,
         });
     }
-    notification.success({
-        ...config,
+    customNotifications.success({
         message,
         description,
-        placement,
         style: { minWidth: '400px' },
     });
 };

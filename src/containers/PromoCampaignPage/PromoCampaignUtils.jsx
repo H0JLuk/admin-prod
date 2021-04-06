@@ -1,6 +1,6 @@
 import React from 'react';
-import { notification } from 'antd';
 import { deletePromoCampaign } from '../../api/services/promoCampaignService';
+import { customNotifications } from '../../utils/notifications';
 
 
 export const getDeleteTitleConfirm = (promoCampaignName) => (
@@ -18,16 +18,13 @@ export const getSuccessDeleteMessage = (promoCampaignName) => (
 export async function onConfirmDeletePromoCampaign(id, name) {
     try {
         await deletePromoCampaign(id);
-        notification.success({
+        customNotifications.success({
             duration: 10,
             message: getSuccessDeleteMessage(name),
-            placement: 'bottomRight',
         });
     } catch ({ message }) {
-        notification.error({
+        customNotifications.error({
             message,
-            duration: 0,
-            placement: 'bottomRight',
         });
         throw new Error(message);
     }

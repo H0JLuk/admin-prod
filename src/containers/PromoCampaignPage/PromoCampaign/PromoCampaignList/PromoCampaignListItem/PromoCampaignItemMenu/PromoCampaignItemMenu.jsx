@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
-import { Menu, Dropdown, notification } from 'antd';
+import { Menu, Dropdown } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import PromoCodeStatisticModal from './PromoCampaignModalMenu/PromoCodeStatisticModal';
 import { errorNotice } from '../../../../../../components/toast/Notice';
@@ -10,6 +10,7 @@ import { uploadPromoCodes } from '../../../../../../api/services/promoCampaignSe
 import { PROMO_CAMPAIGN_PAGES } from '../../../../../../constants/route';
 import { confirmModal } from '../../../../../../utils/utils';
 import { getDeleteTitleConfirm, onConfirmDeletePromoCampaign } from '../../../../PromoCampaignUtils';
+import { customNotifications } from '../../../../../../utils/notifications';
 
 import styles from './PromoCampaignItemMenu.module.css';
 
@@ -17,10 +18,8 @@ const ON_PROMO_CODES_LOADED = 'Промокоды успешно загруже�
 const NONE_PROMO_CODES = 'NONE';
 
 const showSuccessNotification = (message) => {
-    notification.success({
-        duration: 0,
+    customNotifications.success({
         message,
-        placement: 'bottomRight',
     });
 };
 

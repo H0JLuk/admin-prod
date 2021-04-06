@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState, useRef, useLayoutEffect } from 'react';
-import { Form, Input, Switch, Row, Col, Button, notification, Select } from 'antd';
+import { Form, Input, Switch, Row, Col, Button, Select } from 'antd';
 import UploadPicture from '../../../../components/UploadPicture/UploadPicture';
 import { ReactComponent as Cross } from '../../../../static/images/cross.svg';
 import { ReactComponent as LoadingSpinner } from '../../../../static/images/loading-spinner.svg';
@@ -8,6 +8,7 @@ import {
     editCampaignGroup,
     getCampaignGroupList,
 } from '../../../../api/services/campaignGroupService';
+import { customNotifications } from '../../../../utils/notifications';
 import {
     // createGroupTexts,
     editCampaignGroupLinks,
@@ -94,14 +95,14 @@ const RULES_MESSAGE = {
 };
 
 const showSuccessNotification = (campaignName) => {
-    notification.success({
-        message: `Бандл ${campaignName} успешно сохранен`,
+    customNotifications.success({
+        message: <>Бандл <b>{ campaignName }</b> успешно сохранен</>,
     });
 };
 
 const showCreatedNotification = (campaignName) => {
-    notification.success({
-        message: `Бандл ${campaignName} добавлен`
+    customNotifications.success({
+        message: <>Бандл <b>{ campaignName }</b> добавлен</>,
     });
 };
 

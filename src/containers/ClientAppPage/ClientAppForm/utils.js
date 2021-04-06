@@ -1,23 +1,17 @@
-import { notification } from 'antd';
+import { customNotifications } from '../../../utils/notifications';
 import { addSettings, updateSettingsList } from '../../../api/services/settingsService';
 import { designKeysForCheck, SETTINGS_TYPES } from './ClientAppFormConstants';
 
 export const showNotify = (message, isError) => {
     const config = {
         duration: 5,
-        placement: 'bottomRight',
+        message,
     };
 
     if (isError) {
-        notification.error({
-            ...config,
-            message,
-        });
+        customNotifications.error(config);
     } else {
-        notification.success({
-            ...config,
-            message,
-        });
+        customNotifications.success(config);
     }
 
 };

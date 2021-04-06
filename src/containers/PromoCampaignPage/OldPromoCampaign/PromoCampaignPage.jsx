@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Empty, Typography, notification } from 'antd';
+import { Empty, Typography } from 'antd';
 import cn from 'classnames';
 import { updateTokenLifetime } from '../../../api/services';
 import {
@@ -37,6 +37,7 @@ import { errorNotice } from '../../../components/toast/Notice';
 import arrayMove from 'array-move';
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import { getLinkForPromoCampaignPage, getPathForPromoCampaignVisibititySettings } from '../../../utils/appNavigation';
+import { customNotifications } from '../../../utils/notifications';
 
 const PROMO_CAMPAIGN_LIST_TITLE = 'Промо-кампании';
 const LIST_ERROR = 'Не удалось получить список промо-кампаний';
@@ -66,10 +67,8 @@ const onPromoCampaignSave = (name, mode) => {
 };
 
 const showSuccessNotification = (message) => {
-    notification.success({
-        duration: 0,
+    customNotifications.success({
         message,
-        placement: 'bottomRight',
     });
 };
 

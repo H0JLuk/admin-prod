@@ -8,7 +8,7 @@ import { storeUserData } from '../../api/services/sessionService';
 import { Errors, getErrorText } from '../../constants/errors';
 import { ROLES } from '../../constants/roles';
 import ButtonLabels from '../../components/Button/ButtonLables';
-import { notification } from 'antd';
+import { customNotifications } from '../../utils/notifications';
 
 import styles from './LoginPage.module.css';
 
@@ -19,7 +19,7 @@ const LoginPage = (props) => {
     const { history } = props;
 
     useEffect(() => {
-        notification.destroy();
+        customNotifications.closeAll();
     }, []);
 
     const onSubmit = async (data) => {

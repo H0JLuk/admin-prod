@@ -11,7 +11,7 @@ export const groupBundleRows = [
 export const associationGroupRows = [
     {
         HEADER: { label: 'Текст заголовка', type: 'text' },
-        LOGO_ICON: { label: 'Логотип связанной промо-кампании', type: 'logo' }
+        LOGO_MAIN: { label: 'Логотип связанной промо-кампании', type: 'logo' },
     }
 ];
 

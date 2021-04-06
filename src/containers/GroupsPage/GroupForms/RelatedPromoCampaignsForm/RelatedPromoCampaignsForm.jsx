@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState, useRef, useLayoutEffect } from 'react';
-import { Form, Input, Row, Col, Button, Select, notification } from 'antd';
+import { Form, Input, Row, Col, Button, Select } from 'antd';
 import UploadPicture from '../../../../components/UploadPicture/UploadPicture';
 import { ReactComponent as Cross } from '../../../../static/images/cross.svg';
 import { ReactComponent as LoadingSpinner } from '../../../../static/images/loading-spinner.svg';
@@ -7,6 +7,7 @@ import { createGroupLink, editCampaignGroupTextAndBanners, editCampaignGroupLink
 import { createCampaignGroup, editCampaignGroup, getCampaignGroupList } from '../../../../api/services/campaignGroupService';
 import { getDataForAssociationCreate, normalizeAssociationData } from './RelatedPromoCampaignForm.utils.js';
 import { BUNDLE_LOCATION_KEY, BUNDLE_TYPE, MODES } from '../../groupPageConstants';
+import { customNotifications } from '../../../../utils/notifications';
 
 import styles from './RelatedPromoCampaignsForm.module.css';
 
@@ -56,13 +57,13 @@ const RULES_MESSAGE = {
 };
 
 const showSuccessNotification = (campaignName) => {
-    notification.success({
+    customNotifications.success({
         message: `Связанная промо-кампания ${campaignName} успешно сохранена`,
     });
 };
 
 const showCreatedNotification = (campaignName) => {
-    notification.success({
+    customNotifications.success({
         message: `Связанная промо-кампания ${campaignName} добавлена`,
     });
 };

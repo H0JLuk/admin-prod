@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useHistory, generatePath, useLocation } from 'react-router-dom';
 import cn from 'classnames';
-import { notification } from 'antd';
 import RestoredTableUser from './RestoredTableUser/RestoredTableUser';
 import EmptyUsersPage from './EmptyUsersPage/EmptyUsersPage';
 import DownloadDropDown from './DownloadDropDown/DownloadDropDown';
@@ -14,6 +13,7 @@ import TemplateUploadButtonsWithModal from '../../../../components/ButtonWithMod
 import { getUsersList, removeUser, resetUser } from '../../../../api/services/usersService';
 import { USERS_PAGES } from '../../../../constants/route';
 import { getSearchParamsFromUrl } from '../../../../utils/helper';
+import { customNotifications } from '../../../../utils/notifications';
 
 import styles from './UsersList.module.css';
 import btnStyles from './ButtonUsers/ButtonUsers.module.css';
@@ -70,19 +70,15 @@ const DROPDOWN_SORT_MENU = [
 
 
 const showRestoredUsersNotification = (users) => {
-    notification.success({
+    customNotifications.success({
         message: <RestoredTableUser users={ users } />,
-        duration: 0,
-        placement: 'bottomRight',
         style: { width: '100%' },
     });
 };
 
 const showRestoredErrorsNotification = (message) => {
-    notification.error({
+    customNotifications.error({
         message,
-        duration: 0,
-        placement: 'bottomRight',
     });
 };
 
