@@ -156,7 +156,7 @@ export const CLIENT_APP_EDIT_FORM = {
 };
 
 export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
-    ym_token: {
+    /*ym_token: {
         label : 'Токен яндекс метрики',
         value : '',
         type: 'text',
@@ -164,7 +164,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         maxLength: 20,
         validators: [digitValidator],
         mask: null,
-    },
+    },*/
     token_lifetime: {
         label : 'Сессия сотрудника (в секундах)',
         value : '',
@@ -185,7 +185,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
         placeholder: '15 секунд по умолчанию',
     },
-    promo_show_time: {
+    /*promo_show_time: {
         label : 'Показ предложения в "карусели" (в секундах)',
         value : '',
         type: 'text',
@@ -194,7 +194,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         validators: [digitValidator],
         mask: null,
         placeholder: '20 секунд по умолчанию',
-    },
+    },*/
     privacy_policy: {
         label : 'Политика конфиденциальности',
         value : '',
@@ -234,7 +234,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
         placeholder: '3 по умолчанию',
     },
-    installation_url: {
+    /*installation_url: {
         label : 'Путь к инструкции по установке',
         value : '',
         type: 'text',
@@ -251,7 +251,7 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         maxLength: 256,
         validators: [],
         mask: null,
-    },
+    },*/
 };
 
 export const DZO_ADD_FROM = {

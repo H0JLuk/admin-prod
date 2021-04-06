@@ -156,7 +156,7 @@ export const mainInfoElements = [
 
 export const formElements = [
     [
-        {
+        /*{
             label: 'Токен Яндекс Метрики',
             type: FORM_TYPES.INPUT,
             span: 8,
@@ -164,7 +164,7 @@ export const formElements = [
             name: 'ym_token',
             placeholder: 'Токен',
             maxLength: 12,
-        },
+        },*/
         {
             label: 'Сессия сотрудника (в секундах)',
             type: FORM_TYPES.INPUT,
@@ -183,27 +183,6 @@ export const formElements = [
             placeholder: '15 секунд по умолчанию',
             maxLength: 12,
         },
-    ],
-
-    [
-        {
-            label: 'Показ предложения в "карусели" (в секундах)',
-            type: FORM_TYPES.INPUT,
-            span: 8,
-            rules: RULES.STANDARD_NUMBER,
-            name: 'promo_show_time',
-            placeholder: '20 секунд по умолчанию',
-            maxLength: 12,
-        },
-        {
-            label: 'Максимальное число попыток входа',
-            type: FORM_TYPES.INPUT,
-            span: 8,
-            rules: RULES.TWO_DIGITS_NUMBER,
-            name: 'max_password_attempts',
-            placeholder: '3 по умолчанию',
-            maxLength: 2,
-        },
         {
             label: 'Временная блокировка пользователя (в секундах)',
             type: FORM_TYPES.INPUT,
@@ -216,6 +195,24 @@ export const formElements = [
     ],
 
     [
+        /*{
+            label: 'Показ предложения в "карусели" (в секундах)',
+            type: FORM_TYPES.INPUT,
+            span: 8,
+            rules: RULES.STANDARD_NUMBER,
+            name: 'promo_show_time',
+            placeholder: '20 секунд по умолчанию',
+            maxLength: 12,
+        },*/
+        {
+            label: 'Максимальное число попыток входа',
+            type: FORM_TYPES.INPUT,
+            span: 8,
+            rules: RULES.TWO_DIGITS_NUMBER,
+            name: 'max_password_attempts',
+            placeholder: '3 по умолчанию',
+            maxLength: 2,
+        },
         {
             label: 'Максимальное число подарков',
             type: FORM_TYPES.INPUT,
@@ -225,7 +222,10 @@ export const formElements = [
             placeholder: '3 по умолчанию',
             maxLength: 2,
         },
-        {
+    ],
+
+    [
+        /*{
             label: 'Путь к инструкции по установке',
             type: FORM_TYPES.INPUT,
             span: 8,
@@ -240,7 +240,7 @@ export const formElements = [
             rules: RULES.STANDARD,
             name: 'usage_url',
             placeholder: 'url',
-        },
+        },*/
     ],
 
     [
