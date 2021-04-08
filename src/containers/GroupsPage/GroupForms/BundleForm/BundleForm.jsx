@@ -121,6 +121,7 @@ const BundleForm = ({
     const [form] = Form.useForm();
     const bundle = useRef(getInitialValue(bundleData));
     const [errorMessage, setErrorMessage] = useState('');
+    const [selectedItems, setSelectedItems] = useState([]);
 
     const isEdit = mode === MODES.EDIT;
 
@@ -136,6 +137,7 @@ const BundleForm = ({
                 const normalizeBundleData = normalizeBundle(groupData);
                 form.setFieldsValue(normalizeBundleData);
                 bundle.current = groupData;
+                setSelectedItems((groupData.links.map(({ campaignId }) => campaignId)));
 
                 history.replace(`${matchPath}/${groupData.id}/edit?type=${BUNDLE_TYPE.IDEA}`, {
                     [BUNDLE_LOCATION_KEY]: groupData,
@@ -148,9 +150,10 @@ const BundleForm = ({
         }
     };
 
-    const selectOptions = useMemo(() => promoCampaignList.map(({ id, name }) => ({ label: name, value: id })), [
-        promoCampaignList,
-    ]);
+    const selectOptions = useMemo(() =>
+        promoCampaignList
+            .map(({ name, id }) => ({ label: name, value: id, hidden: selectedItems.includes(id) })),
+    [selectedItems, promoCampaignList]);
 
     useLayoutEffect(() => {
         getCampaignGroup();
@@ -196,9 +199,14 @@ const BundleForm = ({
 
     const onSearch = (input, option) => option.label.toLowerCase().includes(input.toLowerCase());
 
+    const filterSelectedItems = (links) => {
+        setSelectedItems((links || []).map(({ campaignId }) => campaignId));
+    };
+
     const validateCampaignId = () => {
         const links = form.getFieldValue('links');
         (links || []).forEach((_, index) => form.validateFields([['links', index, 'campaignId']]));
+        filterSelectedItems(links);
     };
 
     const clearErrors = () => {
@@ -316,6 +324,7 @@ const BundleForm = ({
                                                     options={ selectOptions }
                                                     placeholder={ SELECT_CAMPAIGN_PLACEHOLDER }
                                                     disabled={ disabledSelect(['links', field.name, 'id']) }
+                                                    virtual={ false }
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -372,7 +381,10 @@ const BundleForm = ({
                                             <Input />
                                         </Form.Item>
                                         { fields?.length > 1 && (
-                                            <Cross className={ styles.cross } onClick={ () => remove(field.name) } />
+                                            <Cross className={ styles.cross } onClick={ () => {
+                                                remove(field.name);
+                                                filterSelectedItems(form.getFieldValue('links'));
+                                            } } />
                                         ) }
                                     </Row>
                                 </div>

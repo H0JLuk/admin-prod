@@ -84,6 +84,7 @@ const RelatedPromoCampaignsForm = ({
     const mainCampaignName = useRef('');
     const association = useRef(getInitialValue(bundleData));
     const [errorMessage, setErrorMessage] = useState('');
+    const [selectedItems, setSelectedItems] = useState([]);
 
     const isEdit = mode === MODES.EDIT;
 
@@ -99,6 +100,11 @@ const RelatedPromoCampaignsForm = ({
                 if (!bundleData || needUpdate) {
                     groupData = await loadCampaignGroupList();
                 }
+                setSelectedItems((groupData.links || []).reduce(
+                    (prev, { mainCampaignId, campaignId }) =>
+                        prev.includes(mainCampaignId)
+                            ? [...prev, campaignId]
+                            : [...prev, mainCampaignId, campaignId], []));
 
                 const normalizeBundleData = normalizeAssociationData(groupData);
                 form.setFieldsValue(normalizeBundleData);
@@ -122,9 +128,10 @@ const RelatedPromoCampaignsForm = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bundleData]);
 
-    const selectOptions = useMemo(() => (
-        promoCampaignList.map(({ id, name }) => ({ label: name, value: id }))
-    ), [promoCampaignList]);
+    const selectOptions = useMemo(() =>
+        promoCampaignList
+            .map(({ name, id }) => ({ label: name, value: id, hidden: selectedItems.includes(id) })),
+    [selectedItems, promoCampaignList]);
 
     const handleCreate = async () => {
         showLoading();
@@ -164,8 +171,14 @@ const RelatedPromoCampaignsForm = ({
         }
     };
 
+    const filterSelectedItems = () => {
+        const { mainCampaignId, links } = form.getFieldsValue();
+        setSelectedItems([...(links || []), { campaignId: mainCampaignId }].map(({ campaignId }) => campaignId));
+    };
+
     const onSelect = (_, option) => {
         mainCampaignName.current = option.label;
+        filterSelectedItems();
     };
 
     const onRemoveImg = useCallback((name) => {
@@ -176,6 +189,11 @@ const RelatedPromoCampaignsForm = ({
 
     const clearErrors = () => {
         setErrorMessage('');
+    };
+
+    const isVisibleAddButton = () => {
+        const { mainCampaignId, links } = form.getFieldsValue();
+        return [...(links || []), { campaignId: mainCampaignId }].length < promoCampaignList.length;
     };
 
     return (
@@ -225,6 +243,7 @@ const RelatedPromoCampaignsForm = ({
                                     placeholder={ SELECT_CAMPAIGN_PLACEHOLDER }
                                     onSelect={ onSelect }
                                     disabled={ isEdit }
+                                    virtual={ false }
                                 />
                             </Form.Item>
                         </Col>
@@ -260,6 +279,8 @@ const RelatedPromoCampaignsForm = ({
                                                     options={ selectOptions }
                                                     placeholder={ SELECT_CAMPAIGN_PLACEHOLDER }
                                                     disabled={ disabledSelect(['links', field.name, 'id']) }
+                                                    virtual={ false }
+                                                    onChange={ filterSelectedItems }
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -303,16 +324,21 @@ const RelatedPromoCampaignsForm = ({
                                             <Input />
                                         </Form.Item>
                                         { fields.length > 1 && (
-                                            <Cross className={ styles.cross } onClick={ () => remove(field.name) } />
+                                            <Cross className={ styles.cross } onClick={ () => {
+                                                remove(field.name);
+                                                filterSelectedItems();
+                                            } } />
                                         ) }
                                     </Row>
                                 </div>
                             )) }
-                            <Form.Item className={ styles.addButton }>
-                                <Button type="default" onClick={ () => add() }>
-                                    { ADD_ASSOCIATION_CAMPAIGN }
-                                </Button>
-                            </Form.Item>
+                            { isVisibleAddButton() && (
+                                <Form.Item className={ styles.addButton }>
+                                    <Button type="default" onClick={ () => add() }>
+                                        { ADD_ASSOCIATION_CAMPAIGN }
+                                    </Button>
+                                </Form.Item>
+                            ) }
                             { errors && (
                                 <div className={ styles.errorBlock }>
                                     <Form.ErrorList errors={ errors } />

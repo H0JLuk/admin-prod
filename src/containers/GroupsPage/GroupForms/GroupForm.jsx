@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header/Header';
 import BundleForm from './BundleForm/BundleForm';
 import RelatedPromoCampaignsForm from './RelatedPromoCampaignsForm/RelatedPromoCampaignsForm';
-import { getPromoCampaignList } from '../../../api/services/promoCampaignService';
+import { getFilteredPromoCampaignList } from '../../../api/services/promoCampaignService';
 import { getCampaignGroupList } from '../../../api/services/campaignGroupService';
 import { BUNDLE_LOCATION_KEY, BUNDLE_TYPE } from '../groupPageConstants';
+import { groupFormFilterBy } from './groupForm.constants';
 
 const GroupForm = ({ matchPath, history, match, mode, location }) => {
     const groupType = new URLSearchParams(location.search).get('type');
@@ -52,11 +53,13 @@ const GroupForm = ({ matchPath, history, match, mode, location }) => {
     useEffect(() => {
         showLoading();
         (async () => {
-            const { promoCampaignDtoList = [] } = await getPromoCampaignList();
+            const { promoCampaignDtoList = [] } = await getFilteredPromoCampaignList({
+                type: groupFormFilterBy[groupType]
+            });
             setPromoCampaignList(promoCampaignDtoList);
         })();
         hideLoading();
-    }, []);
+    }, [groupType]);
 
     return (
         <div>

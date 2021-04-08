@@ -58,6 +58,10 @@ textarea.ant-input:focus {
     box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
 }
 
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+    border-color: #09a552;
+}
+
 input.ant-input:placeholder-shown ~ span {
     display: none;
 }
