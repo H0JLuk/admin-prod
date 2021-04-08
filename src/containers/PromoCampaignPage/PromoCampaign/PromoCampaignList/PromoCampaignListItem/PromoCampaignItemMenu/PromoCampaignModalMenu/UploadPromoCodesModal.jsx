@@ -12,11 +12,11 @@ const TITLE = 'Загрузить промо-коды';
 const CANCEL_TEXT = 'Отменить';
 const OK_TEXT = 'Сохранить';
 const UPLOAD_TEXT = 'Загрузить файл';
-const FORMAT_TEXT = 'Файл с промокодами должен быть в формат .xls или .xlsx.';
+const FORMAT_TEXT = 'Файл с промокодами должен быть в формате .csv.';
 const REQUIRE_TEXT = 'Промокоды в файле должны быть перечислены в первом столбце (столбце "A") первого листа файла.';
 const PROMO_CODES_TYPE_TEXT = 'Если тип промокода - COMMON (один промо код для всех), то в файле должен быть строго один промо код.';
 
-const acceptedTypes = '.xls,.xlsx';
+const acceptedTypes = '.csv';
 
 const initialState = {
     currentPromoCampaign: null,

@@ -33,8 +33,8 @@ const RULES = {
     APP_CODE: 'Выберите приложение',
 };
 
-const fileTypes = ['xls', 'xlm', 'xlsx'];
-const UPLOAD_ACCEPT = `.${ ['xls', 'xlm', 'xlsx'].join(', .') }`;
+const fileTypes = ['csv'];
+const UPLOAD_ACCEPT = `.${ fileTypes.join(', .') }`;
 
 const DEFAULT_ON_SUCCESS_FUNC = function() {};
 
@@ -106,6 +106,7 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
         const fileExtension = info.file.name.split('.').pop();
         if (!fileTypes.includes(fileExtension)) {
             message.error(WRONG_FILE_ERROR_TITLE);
+            return undefined;
         }
 
         setFileList([info.file]);
@@ -158,6 +159,7 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
                             accept={ UPLOAD_ACCEPT }
                             onRemove={ onRemoveFile }
                             beforeUpload={ onChangeFile }
+                            fileList={ fileList }
                         >
                             <Button
                                 className={ styles.uploadBtn }

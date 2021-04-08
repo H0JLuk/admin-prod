@@ -6,7 +6,7 @@ import { warnNotice } from '../../toast/Notice';
 import example from '../../../static/images/promoCodeUploadExample.png';
 
 const { Dragger } = Upload;
-const acceptedTypes = '.xls,.xlsx';
+const acceptedTypes = '.csv';
 
 class UploadPromoCodesModal extends Component {
     constructor(props) {
@@ -43,7 +43,7 @@ class UploadPromoCodesModal extends Component {
 
     uploadPromoCodes = (formData) => {
         if (!this.state.file) {
-             return warnNotice('Выберите файл для загрузки!');
+            return warnNotice('Выберите файл для загрузки!');
         }
         else if (this.state.fileList.length > 1) {
             return warnNotice('Можно загрузить только один файл за раз!');
@@ -97,7 +97,7 @@ class UploadPromoCodesModal extends Component {
                               onOk={ this.handleSubmit }
                               okText="Сохранить"
                               onCancel={ onClose }>
-                    <Typography.Paragraph>Файл с промокодами должен быть в формат .xls или .xlsx.</Typography.Paragraph>
+                    <Typography.Paragraph>Файл с промокодами должен быть в формате .csv.</Typography.Paragraph>
                     <Typography.Paragraph>Промокоды в файле должны быть перечислены в первом столбце (столбце "А") первого листа файла.</Typography.Paragraph>
                     <Typography.Paragraph>Если тип промокода - COMMON (один промо код для всех), то в файле должен быть строго один промо код.</Typography.Paragraph>
                     <img src={ example } alt="example" width="50%" />
