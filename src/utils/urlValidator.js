@@ -1,5 +1,5 @@
 export const URL_VALIDATION_TEXT = 'Введите корректную ссылку';
-const protocols = ['ftp', 'http', 'https'];
+const protocols = ['https'];
 const customProtocols = ['sberbankonline', 'android-app'];
 const hostNameRegExp = /^((http|https):\/\/)?[a-zA-Zа-яА-Я0-9]+([-./]{1}[a-zA-Zа-яА-Я0-9-]+)*\.[a-zA-Zа-яА-Я0-9]{2,5}($)?([0-9]{1,5})?(\/?.*)?([^=])?$/;
 const queryRegExp = /^[а-яА-Я\w/{}?#&[\]~=\-():_.%]+$/;
@@ -25,9 +25,8 @@ export function validateURL(url) {
             throw new Error('URL cannot be empty or with `spaces` or symbols `<` and `>`');
         }
 
-        let split;
         let customProtocol = false;
-        split = url.split('://');
+        const split = url.split('://');
         if (split.length > 1) {
             const protocol = split.shift().toLowerCase();
             customProtocol = !protocols.includes(protocol);
@@ -49,7 +48,9 @@ export function validateURL(url) {
             throw new Error('URL contains wrong symbols');
         }
     } catch (e) {
-        console.log(e.message);
+        if (process.env.NODE_ENV !== 'test') {
+            console.log(e.message);
+        }
         return false;
     }
 
