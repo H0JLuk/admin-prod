@@ -1,58 +1,38 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
-import { getInstallationUrl, getUsageUrl } from '../../api/services/settingsService';
+import classNames from 'classnames';
+import 'react-datepicker/dist/react-datepicker.css';
 import { DEFAULT_SLEEP_TIME } from '../../constants/time';
 import { sleep } from '../../utils/utils';
-import styles from './FilesPage.module.css';
-import CustomModal from '../../components/CustomModal/CustomModal';
 import Button from '../../components/Button/Button';
-import Form from '../../components/Form/Form';
-import cross from '../../static/images/cross.svg';
-import classNames from 'classnames';
-import { getErrorText } from '../../constants/errors';
-import { populateFormWithData } from '../../components/Form/formHelper';
-import { getOffers, getFeedback, uploadFile }
-    from '../../api/services/adminService';
+import { getOffers } from '../../api/services/adminService';
 import { downloadFile } from '../../utils/helper';
-import ButtonLabels from '../../components/Button/ButtonLables';
-import { PDF_EDIT_FORM } from '../../components/Form/forms';
-import { getAppCode } from '../../api/services/sessionService';
 import { getDzoList } from '../../api/services/dzoService';
 import { getPromoCampaignList } from '../../api/services/promoCampaignService';
 import { getPromoCodeStatistics } from '../../api/services/promoCodeService';
 import Header from '../../components/Header/Header';
 
+import styles from './ReportsPage.module.css';
+
 const DATE_FORMAT = 'dd/MM/yyyy';
 
-const PDF_DIR = 'guide';
 const OFFERS_NAME = 'offers';
 const PROMOCODES_NAME = 'promocodes';
-const FEEDBACK_NAME = 'feedback';
-const USAGE_NAME = 'usage';
-const INSTALLATION_NAME = 'installation';
 
 const OFFERS_LABLE = 'Скачать предложения';
-const FEEDBACK_LABLE = 'Скачать фидбэк';
 const EXPORT_LABLE = 'Скачать выданные промокоды';
 const START_DATE_LABLE = 'с';
 const END_DATE_LABLE = 'по';
 
-const EXCEL_FILES_TITLE = 'Экспорт предложений и фидбеков';
+const EXCEL_FILES_TITLE = 'Экспорт предложений';
 const FILTER_TITLE = 'Фильтровать по дате';
-const USAGE_TITLE = 'Инструкция пользователя (usage guide)';
-const INSTALLATION_TITLE = 'Инструкция по установке приложения (installation guide)';
-const CHANGE_PDF_TITLE = 'Заменить pdf';
 const UNSPECIFIED_TITLE = 'Не задано';
 const EXPORT_TITLE = 'Экспорт использованных промокодов';
-const TITLES = { [USAGE_NAME]: USAGE_TITLE, [INSTALLATION_NAME]: INSTALLATION_TITLE };
 
-const UPLOAD_PDF_PLEASE = 'Пожалуйста загрузите pdf-файл!';
-const PDF_UPLOAD_ERROR = 'Ошибка загрузки pdf-файла!';
 const FILTER_ERROR_MESSAGE = 'Введены некоректные данные для фильтра по дате';
 
-class FilesPage extends Component {
+class ReportsPage extends Component {
 
     constructor(props) {
         super(props);
@@ -62,11 +42,6 @@ class FilesPage extends Component {
             startDate: null,
             endDate: null,
             isFiltered: true,
-            isOpen: false,
-            formError: null,
-            installationUrl: null,
-            usageUrl: null,
-            editingPdf: null,
             dzoList: [],
             dzoId: null,
             promoCampaignList: [],
@@ -86,9 +61,7 @@ class FilesPage extends Component {
             try {
                 const { dzoDtoList: dzoList = [] } = await getDzoList() ?? {};
                 const { promoCampaignDtoList: promoCampaignList = [] } = await getPromoCampaignList() ?? {};
-                const usageUrl = await getUsageUrl();
-                const installationUrl = await getInstallationUrl();
-                this.setState({ dzoList, promoCampaignList, usageUrl, installationUrl });
+                this.setState({ dzoList, promoCampaignList });
             } catch (e) {
                 console.error(e.message);
             }
@@ -170,88 +143,13 @@ class FilesPage extends Component {
         this.setState(prevState => ({ isFiltered: !prevState.isFiltered }));
     };
 
-    openModal = () => { this.setState({ isOpen: true }); };
-
-    closeModal = () => { this.setState({ isOpen: false, editingPdf: null }); };
-
-    onSubmit = () => {
-        const { editingPdf } = this.state;
-        if (!this.pdfRef.current.files.length) {
-            alert(UPLOAD_PDF_PLEASE);
-            return;
-        }
-        if (!editingPdf) {
-            return;
-        }
-
-        const pdfFile = this.pdfRef.current.files[0];
-        const pdfName = `${getAppCode()}/${PDF_DIR}/${editingPdf}.pdf`;
-
-        uploadFile(pdfFile, pdfName)
-            .then(this.closeModal)
-            .catch(error => {
-                alert(PDF_UPLOAD_ERROR);
-                console.error(error.message);
-            });
-    };
-
-    renderModalForm = () => {
-        const { formError, editingPdf } = this.state;
-        const formData = editingPdf !== null
-            ? populateFormWithData(PDF_EDIT_FORM, { pdfName: TITLES[editingPdf] })
-            : PDF_EDIT_FORM;
-
-        return (
-            <div className={ styles.modalForm }>
-                <img
-                    src={ cross }
-                    onClick={ this.closeModal }
-                    className={ styles.crossSvg }
-                    alt={ ButtonLabels.CLOSE }
-                />
-                <Form
-                    data={ formData }
-                    buttonText={ ButtonLabels.SAVE }
-                    onSubmit={ this.onSubmit }
-                    formClassName={ styles.pdfForm }
-                    fieldClassName={ styles.pdfForm__field }
-                    activeLabelClassName={ styles.pdfForm__field__activeLabel }
-                    buttonClassName={ styles.pdfForm__button }
-                    errorText={ getErrorText(formError) }
-                    formError={ !!formError }
-                    errorClassName={ styles.error }
-                />
-                <form className={ styles.pdfUploadContainer }>
-                    <input
-                        type='file'
-                        id='pdfInput'
-                        ref={ this.pdfRef }
-                        className={ styles.pdfUpload }
-                        accept='application/pdf'
-                    />
-                </form>
-            </div>
-        );
-    };
-
-    renderModifyModal = () => (
-        <CustomModal
-            isOpen={ this.state.isOpen }
-            onRequestClose={ this.closeModal }>
-            {this.renderModalForm()}
-        </CustomModal>
-    );
-
     render() {
-        const { startDate, endDate, isFiltered, usageUrl, installationUrl, loading } = this.state;
-        const openWithParam = editingPdf => {
-            this.setState({ editingPdf });
-            this.openModal();
-        };
+        const { startDate, endDate, isFiltered, loading } = this.state;
+
         const picker =
             <div className={ styles.container__block }>
                 <label className={ styles.textFieldFormat }>
-                    {START_DATE_LABLE}
+                    { START_DATE_LABLE }
                 </label>
                 <DatePicker
                     className={ styles.datepicker }
@@ -261,7 +159,7 @@ class FilesPage extends Component {
                 />
 
                 <label className={ styles.textFieldFormat }>
-                    {END_DATE_LABLE}
+                    { END_DATE_LABLE }
                 </label>
                 <DatePicker
                     className={ styles.datepicker }
@@ -275,14 +173,14 @@ class FilesPage extends Component {
             <div className={ styles.container }>
                 <Header buttonBack={ false } menuMode />
                 <div className={ styles.filesContainer }>
-                    <h3>{EXCEL_FILES_TITLE}</h3>
+                    <h3>{ EXCEL_FILES_TITLE }</h3>
                     <div className={ styles.container__block }>
                         <p className={ styles.textFieldFormat }>
-                            {FILTER_TITLE}
+                            { FILTER_TITLE }
                         </p>
                         <input
                             className={ styles.checkbox }
-                            type='checkbox'
+                            type="checkbox"
                             checked={ isFiltered }
                             onChange={ this.handleFilterCheckboxChange }
                         />
@@ -295,61 +193,19 @@ class FilesPage extends Component {
                             label={ OFFERS_LABLE }
                             onClick={ this.getData(getOffers, OFFERS_NAME) }
                             className={ styles.container__button }
-                            type='green'
-                            font='roboto'
-                            disabled={ loading }
-                        />
-                        <Button
-                            label={ FEEDBACK_LABLE }
-                            onClick={ this.getData(getFeedback, FEEDBACK_NAME) }
-                            className={ styles.container__button }
-                            type='green'
-                            font='roboto'
+                            type="green"
+                            font="roboto"
                             disabled={ loading }
                         />
                     </div>
 
-                    {this.renderModifyModal()}
-
                     <hr />
                     <div className={ styles.headerSection }>
-                        <h3>{USAGE_TITLE}</h3>
-                        <div className={ styles.container__block }>
-                            <a href={ usageUrl } download={ USAGE_NAME }>
-                                {ButtonLabels.OPEN}
-                            </a>
-                            <Button
-                                onClick={ () => openWithParam(USAGE_NAME) }
-                                label={ CHANGE_PDF_TITLE }
-                                font="roboto"
-                                type="blue"
-                            />
-                        </div>
-                    </div>
-
-                    <hr />
-                    <div className={ styles.headerSection }>
-                        <h3>{INSTALLATION_TITLE}</h3>
-                        <div className={ styles.container__block }>
-                            <a href={ installationUrl } download={ INSTALLATION_NAME }>
-                                {ButtonLabels.OPEN}
-                            </a>
-                            <Button
-                                onClick={ () => openWithParam(INSTALLATION_NAME) }
-                                label={ CHANGE_PDF_TITLE }
-                                font="roboto"
-                                type="blue"
-                            />
-                        </div>
-                    </div>
-
-                    <hr />
-                    <div className={ styles.headerSection }>
-                        <h3>{EXPORT_TITLE}</h3>
+                        <h3>{ EXPORT_TITLE }</h3>
                         <div className={ styles.container__block }>
                             <p>ДЗО<br />
                                 <select className={ classNames(styles.select, styles.datepicker) }
-                                        onChange={ this.handleDZOSelectChange }
+                                    onChange={ this.handleDZOSelectChange }
                                 >
                                     <option key="dzo_empty" value="">{ UNSPECIFIED_TITLE }</option>
                                     { this.state.dzoList.map((option, index) =>
@@ -359,7 +215,7 @@ class FilesPage extends Component {
                             </p>
                             <p>Промокампания<br />
                                 <select ref={ this.optionRef } className={ classNames(styles.select, styles.datepicker) }
-                                        onChange={ this.handlePromoCampaignSelectChange }
+                                    onChange={ this.handlePromoCampaignSelectChange }
                                 >
                                     <option key="campaign_empty" value="">{ UNSPECIFIED_TITLE }</option>
                                     { this.state.filteredPromoCampaignList.map((option, index) =>
@@ -368,7 +224,7 @@ class FilesPage extends Component {
                                 </select>
                             </p>
                         </div>
-                        {picker}
+                        { picker }
                         <div className={ styles.container__block }>
                             <Button
                                 onClick={ this.downloadPromoCodes }
@@ -386,4 +242,4 @@ class FilesPage extends Component {
 
 }
 
-export default FilesPage;
+export default ReportsPage;

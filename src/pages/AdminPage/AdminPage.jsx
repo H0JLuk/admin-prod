@@ -6,7 +6,7 @@ import CategoryPage from '../../containers/CategoryPage/CategoryPage';
 import Dashboard from '../../containers/Dashboard/Dashboard';
 import DzoPageRouter from '../../containers/DzoPage/DzoPageRouter';
 import UserPageRouter from '../../containers/UsersPage/UserPageRouter';
-import FilesPage from '../../containers/FilesPage/FilesPage';
+import ReportsPage from '../../containers/ReportsPage/ReportsPage';
 import PresentationPage from '../../containers/PresentationPage/PresentationPage';
 import PromoCampaignPageRouter from '../../containers/PromoCampaignPage/PromoCampaignPageRouter';
 import ClientAppPageRouter from '../../containers/ClientAppPage/ClientAppPageRouter';
@@ -23,7 +23,7 @@ const AdminPage = () => (
                 <Route exact path={ ROUTE.ADMIN } render={ () => <Redirect to={ ROUTE_ADMIN.DASHBOARD } /> } />
 
                 <Route path={ ROUTE_ADMIN.DASHBOARD } component={ Dashboard } />
-                <Route path={ ROUTE_ADMIN.FILES } component={ FilesPage } />
+                <Route path={ ROUTE_ADMIN.REPORTS } component={ ReportsPage } />
                 <Route path={ ROUTE_ADMIN.DZO } component={ DzoPageRouter } />
                 <Route path={ ROUTE_ADMIN.CATEGORY } component={ CategoryPage } />
                 <Route path={ ROUTE_ADMIN.PRESENTATION } component={ PresentationPage } />

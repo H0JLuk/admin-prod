@@ -7,7 +7,7 @@ import ClientAppPageRouter from '../../containers/ClientAppPage/ClientAppPageRou
 import CategoryPage from '../../containers/CategoryPage/CategoryPage';
 import Dashboard from '../../containers/Dashboard/Dashboard';
 import DzoPageRouter from '../../containers/DzoPage/DzoPageRouter';
-import FilesPage from '../../containers/FilesPage/FilesPage';
+import ReportsPage from '../../containers/ReportsPage/ReportsPage';
 import PresentationPage from '../../containers/PresentationPage/PresentationPage';
 import GroupsPageRouter from '../../containers/GroupsPage/GroupsPageRouter';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -23,7 +23,7 @@ const OwnerPage = () => (
 
                 <Route path={ ROUTE_OWNER.DASHBOARD } component={ Dashboard } />
                 <Route path={ ROUTE_OWNER.DZO } component={ DzoPageRouter } />
-                <Route path={ ROUTE_OWNER.FILES } component={ FilesPage } />
+                <Route path={ ROUTE_OWNER.REPORTS } component={ ReportsPage } />
                 <Route path={ ROUTE_OWNER.PRESENTATION } component={ PresentationPage } />
                 <Route path={ ROUTE_OWNER.CATEGORY } component={ CategoryPage } />
                 <Route path={ ROUTE_OWNER.APPS } component={ ClientAppPageRouter } />

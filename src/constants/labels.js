@@ -2,7 +2,7 @@ export const menuItemLabels = {
     AUDIT: 'Журнал аудита',
     CATEGORY: 'Категории',
     DZO: 'ДЗО',
-    FILES: 'Файлы',
+    REPORTS: 'Отчёты',
     USERS: 'Пользователи',
     PROMO_CAMPAIGNS: 'Промо-кампании',
     DASHBOARD: 'Дашборд',

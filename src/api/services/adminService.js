@@ -19,13 +19,6 @@ export async function getOffers(start, end) {
     return Api.get(url, reqOptions(), 'blob');
 }
 
-export async function getFeedback(start, end) {
-    const url = (start && end)
-        ? `/admin/feedback/csv?start=${start}&end=${end}`
-        : '/admin/feedback/csv';
-    return Api.get(url, reqOptions(), 'blob');
-}
-
 export async function swapPositions(firstId, secondId, subDir) {
     subDir = !subDir ? '' : `${subDir}/`;
     return Api.put(`/admin/${subDir}swap`, { firstId, secondId }, getReqOptions());

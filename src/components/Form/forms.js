@@ -365,15 +365,3 @@ export const APP_EDIT_FROM = {
         mask: null
     },
 };
-
-export const PDF_EDIT_FORM = {
-    pdfName: {
-        value: '',
-        type: 'text',
-        disabled: true,
-        isRequired: true,
-        maxLength: 2048,
-        validators: [isRequired],
-        mask: null
-    },
-};

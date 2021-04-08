@@ -15,7 +15,7 @@ const USER_MANAGER_MENU_ITEMS = [
 const OLD_ADMIN_MENU_ITEMS = [
     { label: labels.DASHBOARD, path: ROUTE_ADMIN.DASHBOARD },
     { label: labels.USERS, path: ROUTE_ADMIN.OLD_DESIGN_USERS },
-    { label: labels.FILES, path: ROUTE_ADMIN.FILES },
+    { label: labels.REPORTS, path: ROUTE_ADMIN.REPORTS },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
     { label: labels.PRESENTATION, path: ROUTE_ADMIN.PRESENTATION },
     { label: labels.CATEGORY, path: ROUTE_ADMIN.CATEGORY },
@@ -26,14 +26,14 @@ const OLD_ADMIN_MENU_ITEMS = [
 const OLD_ADMIN_MENU_FOR_POINT_APP = [
     { label: labels.DASHBOARD, path: ROUTE_ADMIN.DASHBOARD },
     { label: labels.USERS, path: ROUTE_ADMIN.OLD_DESIGN_USERS },
-    { label: labels.FILES, path: ROUTE_ADMIN.FILES },
+    { label: labels.REPORTS, path: ROUTE_ADMIN.REPORTS },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
     { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.OLD_DESIGN_PROMO_CAMPAIGN },
 ];
 
 const OLD_PRODUCT_OWNER_MENU_ITEMS = [
     { label: labels.DASHBOARD, path: ROUTE_OWNER.DASHBOARD },
-    { label: labels.FILES, path: ROUTE_OWNER.FILES },
+    { label: labels.REPORTS, path: ROUTE_OWNER.REPORTS },
     { label: labels.DZO, path: ROUTE_OWNER.DZO },
     { label: labels.PRESENTATION, path: ROUTE_OWNER.PRESENTATION },
     { label: labels.CATEGORY, path: ROUTE_OWNER.CATEGORY },
@@ -43,7 +43,7 @@ const OLD_PRODUCT_OWNER_MENU_ITEMS = [
 // Список доступных вкладок для приложений с кодом оканчивающимся на "-point", таких как "promo-point" и "mcdonalds-point"
 const OLD_PRODUCT_OWNER_MENU_FOR_POINT_APP = [
     { label: labels.DASHBOARD, path: ROUTE_OWNER.DASHBOARD },
-    { label: labels.FILES, path: ROUTE_OWNER.FILES },
+    { label: labels.REPORTS, path: ROUTE_OWNER.REPORTS },
     { label: labels.DZO, path: ROUTE_OWNER.DZO },
     { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.OLD_DESIGN_PROMO_CAMPAIGN },
 ];
@@ -91,7 +91,7 @@ const ADMIN_TOP_MENU_ITEMS = [
     { label: labels.SETTINGS, path: ROUTE_ADMIN.APP_SETTINGS },
     { label: labels.PRESENTATION, path: ROUTE_ADMIN.PRESENTATION },
     { label: labels.GROUPS, path: ROUTE_ADMIN.GROUPS },
-    { label: labels.FILES, path: ROUTE_ADMIN.FILES },
+    { label: labels.REPORTS, path: ROUTE_ADMIN.REPORTS },
 ];
 
 // Список доступных вкладок для приложений с кодом оканчивающимся на "-point", таких как "promo-point" и "mcdonalds-point"
@@ -106,7 +106,7 @@ const ADMIN_TOP_MENU_FOR_POINT_APP = [
     { label: labels.PROMO_CAMPAIGNS, path: ROUTE_ADMIN.PROMO_CAMPAIGN },
     { label: labels.SETTINGS, path: ROUTE_ADMIN.APP_SETTINGS },
     { label: labels.GROUPS, path: ROUTE_ADMIN.GROUPS },
-    { label: labels.FILES, path: ROUTE_ADMIN.FILES },
+    { label: labels.REPORTS, path: ROUTE_ADMIN.REPORTS },
 ];
 
 const PRODUCT_OWNER_SIDEBAR_MENU_ITEMS = [
@@ -120,7 +120,7 @@ const PRODUCT_OWNER_TOP_MENU_ITEMS = [
     { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN },
     { label: labels.GROUPS, path: ROUTE_OWNER.GROUPS },
     { label: labels.PRESENTATION, path: ROUTE_OWNER.PRESENTATION },
-    { label: labels.FILES, path: ROUTE_OWNER.FILES },
+    { label: labels.REPORTS, path: ROUTE_OWNER.REPORTS },
 ];
 
 // Список доступных вкладок для приложений с кодом оканчивающимся на "-point", таких как "promo-point" и "mcdonalds-point"
@@ -133,7 +133,7 @@ const PRODUCT_OWNER_SIDEBAR_FOR_POINT_APP = [
 const PRODUCT_OWNER_TOP_FOR_POINT_APP = [
     { label: labels.PROMO_CAMPAIGNS, path: ROUTE_OWNER.PROMO_CAMPAIGN },
     { label: labels.GROUPS, path: ROUTE_OWNER.GROUPS },
-    { label: labels.FILES, path: ROUTE_OWNER.FILES },
+    { label: labels.REPORTS, path: ROUTE_OWNER.REPORTS },
 ];
 
 /**
