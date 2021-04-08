@@ -12,6 +12,12 @@ import { customNotifications } from '../../utils/notifications';
 
 import styles from './LoginPage.module.css';
 
+const availableRoles = [
+    ROLES.ADMIN,
+    ROLES.AUDITOR,
+    ROLES.PRODUCT_OWNER,
+    ROLES.USER_MANAGER,
+];
 
 const LoginPage = (props) => {
 
@@ -25,8 +31,8 @@ const LoginPage = (props) => {
     const onSubmit = async (data) => {
         try {
             const { token, authority } = await login(data) ?? {};
-            if (!Object.values(ROLES).includes(authority)) {
-                setError(Errors.AUTHORITY);
+            if (!availableRoles.includes(authority)) {
+                setError(Errors.FAIL);
                 return;
             }
 
