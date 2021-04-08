@@ -16,22 +16,14 @@ const customProps = {
 
 const UPLOAD_BUTTON_TEXT = 'Нажмите для загрузки';
 
-const imageTypes = ['.jpg', '.jpeg', '.png'];
-const svgTypes = ['.svg'];
-
-const checkFileType = (access_types) => {
-    const types = (access_types || '').split(',');
-    const result = [];
-
-    if (types.some((type) => imageTypes.includes(type))) {
-        result.push('image/jpeg', 'image/png');
-    }
-    if (types.some((type) => svgTypes.includes(type))) {
-        result.push('image/svg+xml');
-    }
-
-    return result;
+const imagesMimeTypes = {
+    '.jpeg': 'image/jpeg',
+    '.jpg': 'image/jpeg',
+    '.png': 'image/png',
+    '.svg': 'image/svg+xml',
 };
+
+const checkFileType = (access_types) => (access_types || '').split(',').map((type) => imagesMimeTypes[type]);
 
 const checkFileSize = (fileSize, maxFileSize, validateFileSize) => {
     return !validateFileSize ? false : fileSize > 1024 * 1024 * maxFileSize;
@@ -81,6 +73,7 @@ const UploadPicture = ({
         if (info.fileList.length > 1) {
             info.fileList = info.fileList.slice(-1);
         }
+
         if (!checkFileType(accept).includes(info.file.type)) {
             message.error('Неверный формат картинки');
             return;

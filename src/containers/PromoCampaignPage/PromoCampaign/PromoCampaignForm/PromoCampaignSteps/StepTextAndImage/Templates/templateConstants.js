@@ -19,7 +19,7 @@ export const EXCURSION_TYPE_ROWS = [
             type: 'banner',
             maxSize: 2,
             get setting() {
-                return `770px x 368px, ${this.maxSize}МБ .jpg`;
+                return `770px x 368px, ${this.maxSize}МБ ${this.access_type}`;
             }
         },
         LOGO_SECONDARY: {
@@ -30,7 +30,7 @@ export const EXCURSION_TYPE_ROWS = [
             access_type: '.svg',
             maxSize: 2,
             get setting() {
-                return `48px, ${this.maxSize}МБ .svg`;
+                return `48px, ${this.maxSize}МБ ${this.access_type}`;
             }
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
@@ -45,7 +45,7 @@ export const EXCURSION_TYPE_ROWS = [
             rules: [{ required: true, message: 'Заполните поле' }],
             maxSize: 2,
             get setting() {
-                return `834px, ${this.maxSize}МБ .jpg`;
+                return `834px, ${this.maxSize}МБ ${this.access_type}`;
             }
         },
         LOGO_MAIN: {
@@ -56,7 +56,7 @@ export const EXCURSION_TYPE_ROWS = [
             type: 'logo',
             maxSize: 2,
             get setting() {
-                return `48px, ${this.maxSize}МБ .svg`;
+                return `48px, ${this.maxSize}МБ ${this.access_type}`;
             }
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
@@ -89,7 +89,7 @@ export const GIFT_TYPE_ROWS = [
             rules: [{ required: true, message: 'Заполните поле' }],
             maxSize: 2,
             get setting() {
-                return `370px x 220px, ${this.maxSize}МБ .jpg`;
+                return `370px x 220px, ${this.maxSize}МБ ${this.access_type}`;
             },
         },
         LOGO_MAIN: {
@@ -100,7 +100,7 @@ export const GIFT_TYPE_ROWS = [
             type: 'logo',
             maxSize: 2,
             get setting() {
-                return `48px, ${this.maxSize}МБ .svg`;
+                return `48px, ${this.maxSize}МБ ${this.access_type}`;
             },
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
@@ -114,19 +114,10 @@ export const GIFT_TYPE_ROWS = [
             type: 'logo',
             maxSize: 2,
             get setting() {
-                return `48px, ${this.maxSize}МБ .svg`;
+                return `48px, ${this.maxSize}МБ ${this.access_type}`;
             }
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
-        // SCREEN: {
-        //     title: 'Изображение для сторис',
-        //     description: 'Добавить изображение',
-        //     setting: '375px, 1МБ .jpg',
-        //     tooltipImg: landing_gift,
-        //     access_type: '.jpg,.jpeg,.png',
-        //     type: 'banner',
-        //     rules: [{ required: true, message: 'Заполните поле' }],
-        // },
     },
     {
         HEADER: {
