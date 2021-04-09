@@ -1,6 +1,6 @@
-import React, { useCallback, useState, useEffect, useMemo } from 'react';
+import React, { useCallback, useState, useEffect, useMemo, useRef, memo } from 'react';
 import { useHistory, generatePath, useLocation } from 'react-router-dom';
-import cn from 'classnames';
+import { Button, Tooltip } from 'antd';
 import RestoredTableUser from './RestoredTableUser/RestoredTableUser';
 import EmptyUsersPage from './EmptyUsersPage/EmptyUsersPage';
 import DownloadDropDown from './DownloadDropDown/DownloadDropDown';
@@ -12,12 +12,12 @@ import useBodyClassForSidebar from '../../../../hooks/useBodyClassForSidebar';
 import TemplateUploadButtonsWithModal from '../../../../components/ButtonWithModal/TemplateUploadButtonsWithModal';
 import { getUsersList, removeUser, resetUser } from '../../../../api/services/usersService';
 import { USERS_PAGES } from '../../../../constants/route';
-import { getUsersSettingsByLoginType } from '../../../../constants/usersSettings';
 import { getSearchParamsFromUrl } from '../../../../utils/helper';
 import { customNotifications } from '../../../../utils/notifications';
+import { LOGIN_TYPES_ENUM } from '../../../../constants/loginTypes';
+import { getCurrUserInteractions } from '../../../../constants/permissions';
 
 import styles from './UsersList.module.css';
-import btnStyles from './ButtonUsers/ButtonUsers.module.css';
 
 const TITLE = 'Пользователи';
 
@@ -94,7 +94,9 @@ const UserList = ({ matchPath }) => {
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [params, setParams] = useState(DEFAULT_PARAMS);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const { creation, deleting, editing, passwordReset, unlocked, listCreation } = getUsersSettingsByLoginType();
+    const userInteractions = useRef({});
+    const { current: permissions = {} } = userInteractions;
+    const canSelectUsers = users.filter(({ role }) => (permissions[role] || {}).canSelectUserInTable);
 
     useBodyClassForSidebar();
 
@@ -126,6 +128,9 @@ const UserList = ({ matchPath }) => {
             await loadUsersData(getSearchParamsFromUrl(search, DEFAULT_PARAMS));
             setLoadingPage(false);
         })();
+
+        // TODO: Вынести настройки текущего пользователя в контекст приложения
+        userInteractions.current = getCurrUserInteractions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -141,8 +146,8 @@ const UserList = ({ matchPath }) => {
     };
 
     const selectAll = () => {
-        if (users.length !== selectedItems.rowValues.length) {
-            setSelectedItems({ rowKeys: users.map(({ id }) => id), rowValues: users });
+        if (canSelectUsers.length !== selectedItems.rowValues.length) {
+            setSelectedItems({ rowKeys: canSelectUsers.map(({ id }) => id), rowValues: canSelectUsers });
             return;
         } else {
             clearSelectedItems();
@@ -171,10 +176,14 @@ const UserList = ({ matchPath }) => {
         setSelectedItems({ rowKeys, rowValues });
     }, []);
 
+    /** @type {import('antd/lib/table/interface').TableRowSelection} */
     const rowSelection = useMemo(() => ({
         selectedRowKeys: selectedItems.rowKeys,
         onChange: updateSelected,
-    }), [selectedItems.rowKeys, updateSelected]);
+        getCheckboxProps: (record) => ({
+            disabled: !(permissions[record.role] || {}).canSelectUserInTable,
+        }),
+    }), [selectedItems.rowKeys, updateSelected, permissions]);
 
     const refreshTable = () => {
         loadUsersData(params);
@@ -185,6 +194,10 @@ const UserList = ({ matchPath }) => {
         onClick: () => {
             if (!select) {
                 history.push(generatePath(`${matchPath}${USERS_PAGES.USER_INFO}`, { userId: record.id }));
+                return;
+            }
+
+            if (!(permissions[record.role] || {}).canSelectUserInTable) {
                 return;
             }
 
@@ -199,22 +212,7 @@ const UserList = ({ matchPath }) => {
         }
     });
 
-    const toggleModal = useCallback(() => setModalIsOpen(!modalIsOpen), [modalIsOpen]);
-
-    if (loadingPage) {
-        return (
-            <div className={ styles.loadingPage }>
-                Загрузка...
-            </div>
-        );
-    }
-
-    if (!users.length && !loadingPage && !loadingTableData && !params.filterText && !params.pageNo) {
-        return <EmptyUsersPage />;
-    }
-
-    /* no useCallback needed, because function is set to <button /> onClick */
-    const linkChangePassword = async () => {
+    const onClickResetPass = useCallback(async () => {
         const requestPromises = selectedItems.rowValues.map(({ personalNumber }) => resetUser(personalNumber));
         setLoadingTableData(true);
 
@@ -245,18 +243,30 @@ const UserList = ({ matchPath }) => {
         }
 
         setLoadingTableData(false);
-    };
+    }, [clearSelectedItems, selectedItems.rowValues]);
 
-    /* no useCallback needed, because function is set to <button /> onClick */
+    const toggleModal = useCallback(() => setModalIsOpen(!modalIsOpen), [modalIsOpen]);
+
+    if (loadingPage) {
+        return (
+            <div className={ styles.loadingPage }>
+                Загрузка...
+            </div>
+        );
+    }
+
+    if (!users.length && !loadingPage && !loadingTableData && !params.filterText && !params.pageNo) {
+        return <EmptyUsersPage />;
+    }
+
     const linkEdit = () => {
         history.push(`${matchPath}${USERS_PAGES.EDIT_SOME_USERS}`, { users: selectedItems.rowValues });
     };
 
     const buttons = [];
 
-    /* no useMemo needed, because almost every render we get new object */
     if (select) {
-        const selectedAll = users.length === selectedItems.rowKeys.length;
+        const selectedAll = canSelectUsers.length === selectedItems.rowKeys.length;
         buttons.push({
             type: 'primary',
             label: selectedAll ? BUTTON_UNSELECT_ALL : BUTTON_SELECT_ALL,
@@ -269,11 +279,10 @@ const UserList = ({ matchPath }) => {
             disabled: loadingTableData,
         });
     } else {
-        creation && (
-            buttons.push(
-                { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
-                { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
-            ));
+        buttons.push(
+            { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
+            { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
+        );
     }
 
     const searchAndSortParams = {
@@ -311,34 +320,26 @@ const UserList = ({ matchPath }) => {
                             <span className={ styles.label }>
                                 { CHOSEN_USER } { selectedItems.rowKeys.length }
                             </span>
-                            { (passwordReset || unlocked) && (
-                                <button
-                                    className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
-                                    disabled={ !selectedItems.rowKeys.length }
-                                    onClick={ linkChangePassword }
-                                >
-                                    { BUTTON_CHANGE_PASSWORD }
-                                </button>
-                            ) }
-                            { editing && (
-                                <button
-                                    className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
-                                    disabled={ !selectedItems.rowKeys.length }
-                                    onClick={ linkEdit }
-                                >
-                                    { BUTTON_EDIT }
-                                </button>
-                            ) }
-                        </div>
-                        { deleting && (
-                            <button
-                                className={ cn(btnStyles.addButton, btnStyles.btnRed) }
+                            <ResetUsersPasswordBtn
+                                onClick={ onClickResetPass }
+                                selectedUsers={ selectedItems.rowValues }
+                            />
+                            <Button
+                                type="primary"
                                 disabled={ !selectedItems.rowKeys.length }
-                                onClick={ toggleModal }
+                                onClick={ linkEdit }
                             >
-                                { BUTTON_DELETE }
-                            </button>
-                        ) }
+                                { BUTTON_EDIT }
+                            </Button>
+                        </div>
+                        <Button
+                            type="primary"
+                            danger
+                            disabled={ !selectedItems.rowKeys.length }
+                            onClick={ toggleModal }
+                        >
+                            { BUTTON_DELETE }
+                        </Button>
                         <TableDeleteModal
                             modalClose={ toggleModal }
                             sourceForRemove={ selectedItems.rowValues }
@@ -353,22 +354,58 @@ const UserList = ({ matchPath }) => {
                     </div>
                 ) : (
                     <div className={ styles.section }>
-                        { listCreation && (
-                            <>
-                                <span className={ styles.label }>
-                                    { TITLE_DOWNLOAD_USER }
-                                </span>
-                                <div className={ styles.downloadButtons }>
-                                    <TemplateUploadButtonsWithModal onSuccess={ refreshTable } />
-                                </div>
-                                <DownloadDropDown />
-                            </>
-                        ) }
+                        <span className={ styles.label }>
+                            { TITLE_DOWNLOAD_USER }
+                        </span>
+                        <div className={ styles.downloadButtons }>
+                            <TemplateUploadButtonsWithModal onSuccess={ refreshTable } />
+                        </div>
+                        <DownloadDropDown />
                     </div>
                 ) }
             </div>
         </div>
     );
 };
+
+// eslint-disable-next-line react/display-name
+const ResetUsersPasswordBtn = memo(({
+    onClick,
+    selectedUsers,
+}) => {
+    let tooltipTitle = '';
+    const cantResetPassUsers = selectedUsers.filter(({ loginType }) => loginType !== LOGIN_TYPES_ENUM.PASSWORD);
+    const { length } = cantResetPassUsers;
+
+    if (length) {
+        tooltipTitle = cantResetPassUsers.reduce((result, user, index, arr) => [
+            ...result,
+            <span key={ user.id }>
+                { user.personalNumber }
+                { arr[index + 1] ? ', ' : '' }
+            </span>,
+        ],
+        [
+            <span key="startString">
+                Нельзя сбросить пароль для
+                { length > 1 ? ' пользователей ' : ' пользователя ' }
+                с логином:
+                <br />
+            </span>,
+        ]);
+    }
+
+    return (
+        <Tooltip title={ tooltipTitle }>
+            <Button
+                type="primary"
+                disabled={ !selectedUsers.length || !!length }
+                onClick={ onClick }
+            >
+                { BUTTON_CHANGE_PASSWORD }
+            </Button>
+        </Tooltip>
+    );
+});
 
 export default UserList;

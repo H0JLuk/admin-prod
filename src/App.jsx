@@ -15,6 +15,7 @@ import OldDesignOwnerPage from './pages/OwnerPage/OldDesignOwnerPage/OwnerPage';
 import OwnerPage from './pages/OwnerPage';
 import ClientAppPage from './containers/ClientAppPage/OldClientAppPage/ClientAppPage';
 import UserManagerPage from './pages/UserManagerPage';
+import PartnerPage from './pages/PartnerPage';
 import { goToStartPage } from './utils/appNavigation';
 import { Api } from './api/apiClient';
 
@@ -38,6 +39,7 @@ const App = () => {
             <Route path={ `${ROUTE.OLD_DESIGN}${ROUTE.OWNER}` } component={ withRedirect(OldDesignOwnerPage, ROLES.PRODUCT_OWNER) } />
             <Route path={ ROUTE.AUDITOR } component={ withRedirect(AuditorPage, ROLES.AUDITOR) } />
             <Route path={ ROUTE.USER_MANAGER } component={ withRedirect(UserManagerPage, ROLES.USER_MANAGER) } />
+            <Route path={ ROUTE.PARTNER } component={ withRedirect(PartnerPage, ROLES.PARTNER) } />
 
             <Route path={ ROUTE.ADMIN } component={ withRedirect(AdminPage, ROLES.ADMIN) } />
             <Route path={ ROUTE.OWNER } component={ withRedirect(OwnerPage, ROLES.PRODUCT_OWNER) } />

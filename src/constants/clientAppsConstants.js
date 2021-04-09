@@ -5,16 +5,8 @@ export const APP_MECHANICS = {
     BUNDLE: { value: 'BUNDLE', label: 'ВАУ' },
 };
 
-export const MECHANICS_CHECKBOXES = Object.keys(APP_MECHANICS).map(key => ({
-    value: APP_MECHANICS[key].value,
-    label: APP_MECHANICS[key].label,
-}));
+export const MECHANICS_CHECKBOXES = Object.values(APP_MECHANICS);
 
-export const APP_LOGIN_TYPES = [
-    { label: 'Логин/Пароль', value: 'PASSWORD' },
-    { label: 'СБОЛ ПРО', value: 'SBOL_PRO' },
-    { label: 'Ссылка', value: 'DIRECT_LINK' },
-];
 export const NOTIFICATION_TYPES = [
     { label: 'Push', value: 'PUSH' },
     // { label: 'SMS', value: 'SMS' },

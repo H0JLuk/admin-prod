@@ -5,7 +5,6 @@ import { getReqOptions } from '../../api/services';
 import { getClientAppList } from '../../api/services/clientAppService';
 import { addUsersWithTemplate, deleteUsersWithTemplate } from '../../api/services/usersService';
 import { downloadFileFunc } from '../../utils/helper';
-import { getUsersSettingsByLoginType } from '../../constants/usersSettings';
 
 import styles from './TemplateUploadButtonsWithModal.module.css';
 
@@ -46,8 +45,6 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
     const [loading, setLoading] = useState(false);
     const type = useRef('');
     const [form] = Form.useForm();
-
-    const { creation, deleting } = getUsersSettingsByLoginType();
 
     const showModal = async ({ currentTarget: { value: buttonType } }) => {
         type.current = buttonType;
@@ -123,20 +120,16 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
 
     return (
         <>
-            { creation && (
-                <Button
-                    type="primary"
-                    value="edit"
-                    onClick={ showModal }
-                >
-                    { ADD_BUTTON_LABEL }
-                </Button>
-            ) }
-            { deleting && (
-                <Button value="delete" onClick={ showModal }>
-                    { DELETE_BUTTON_LABEL }
-                </Button>
-            ) }
+            <Button
+                type="primary"
+                value="edit"
+                onClick={ showModal }
+            >
+                { ADD_BUTTON_LABEL }
+            </Button>
+            <Button value="delete" onClick={ showModal }>
+                { DELETE_BUTTON_LABEL }
+            </Button>
             <Modal
                 title={ MODAL_TITLE[type.current] }
                 visible={ isModalVisible }

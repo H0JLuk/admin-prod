@@ -1,7 +1,7 @@
+import { LOGIN_TYPE_OPTIONS } from '../../../constants/loginTypes';
 import {
-    MECHANICS_CHECKBOXES,
-    APP_LOGIN_TYPES,
     APP_MECHANICS,
+    MECHANICS_CHECKBOXES,
     MECHANICS_ERROR,
     NOTIFICATION_TYPES,
 } from '../../../constants/clientAppsConstants';
@@ -262,7 +262,7 @@ export const formElements = [
         {
             label: 'Способ авторизации в витрине',
             type: FORM_TYPES.CHECKBOX_GROUP,
-            options: APP_LOGIN_TYPES,
+            options: LOGIN_TYPE_OPTIONS,
             rules: RULES.CHECKBOX_REQUIRED,
             columnMode: true,
             span: 11,

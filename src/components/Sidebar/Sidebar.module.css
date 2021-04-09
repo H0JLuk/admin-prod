@@ -119,10 +119,3 @@ body:not(:global(.not_highlight_app)) .activeApp,
 .menu :global(.ant-menu-item a:hover) {
     color: black;
 }
-
-a.oldDesignLink {
-    display: block;
-    margin-top: 30px;
-    padding-left: 20px;
-    color: #999;
-}

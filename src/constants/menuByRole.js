@@ -1,5 +1,5 @@
 import ROLES from './roles';
-import { ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_OWNER, ROUTE_USER_MANAGER } from './route';
+import { ROUTE_ADMIN, ROUTE_AUDITOR, ROUTE_OWNER, ROUTE_PARTNER, ROUTE_USER_MANAGER } from './route';
 import { menuItemLabels as labels } from './labels';
 import { getDefaultAppCode } from '../api/services/clientAppService';
 
@@ -76,6 +76,13 @@ const USER_MANAGER_SIDEBAR_MENU_ITEMS = [
 ];
 
 const USER_MANAGER_TOP_MENU_ITEMS = [
+];
+
+const PARTNER_SIDEBAR_MENU_ITEMS = [
+    { label: labels.USERS, path: ROUTE_PARTNER.USERS },
+];
+
+const PARTNER_TOP_MENU_ITEMS = [
 ];
 
 const ADMIN_SIDEBAR_MENU_ITEMS = [
@@ -159,6 +166,8 @@ export const resolveMenuItemsByRoleAndAppCode = (role, appCode = '') => {
                 : [PRODUCT_OWNER_SIDEBAR_MENU_ITEMS, PRODUCT_OWNER_TOP_MENU_ITEMS];
         case ROLES.USER_MANAGER:
             return [USER_MANAGER_SIDEBAR_MENU_ITEMS, USER_MANAGER_TOP_MENU_ITEMS];
+        case ROLES.PARTNER:
+            return [PARTNER_SIDEBAR_MENU_ITEMS, PARTNER_TOP_MENU_ITEMS];
         default:
             return [[], []];
     }

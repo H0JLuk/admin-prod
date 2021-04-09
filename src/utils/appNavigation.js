@@ -1,5 +1,5 @@
 import { getRole } from '../api/services/sessionService';
-import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER, ROUTE_USER_MANAGER } from '../constants/route';
+import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER, ROUTE_USER_MANAGER, ROUTE_PARTNER } from '../constants/route';
 import ROLES from '../constants/roles';
 
 export const goToLogin = (history) => {
@@ -47,6 +47,10 @@ export function goToStartPage(history, redirect, role = getRole()) {
             goToUserManager(history, redirect);
             return;
         }
+        case ROLES.PARTNER: {
+            goToPartner(history, redirect);
+            return;
+        }
         case null:
         case '': {
             goToLogin(history);
@@ -73,6 +77,10 @@ export const goToUserManager = (history, redirect) => {
     (redirect ? history.replace : history.push)(ROUTE_USER_MANAGER.USERS);
 };
 
+export const goToPartner = (history, redirect) => {
+    (redirect ? history.replace : history.push)(ROUTE_PARTNER.USERS);
+};
+
 export const goToProduct = (history, oldDesign) => {
     if (oldDesign) {
         history.push(`${ROUTE.OLD_DESIGN}${ROUTE.OWNER}`);
@@ -92,6 +100,9 @@ export const goApp = (history, role, oldDesign) => {
         case ROLES.USER_MANAGER:
             goToUserManager(history);
             break;
+        case ROLES.PARTNER:
+            goToPartner(history);
+            break;
         case ROLES.PRODUCT_OWNER:
         default:
             goToProduct(history, oldDesign);
@@ -107,6 +118,8 @@ export function getLinkForUsersPage() {
             return ROUTE_OWNER.USERS;
         case ROLES.USER_MANAGER:
             return ROUTE_USER_MANAGER.USERS;
+        case ROLES.PARTNER:
+            return ROUTE_PARTNER.USERS;
         default:
             return '';
     }

@@ -52,14 +52,11 @@ body, ul, li, p {
 .ant-input-affix-wrapper:hover,
 .ant-input-affix-wrapper:focus,
 .ant-input-affix-wrapper-focused,
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover,
 textarea.ant-input:hover,
 textarea.ant-input:focus {
     border-color: #09a552;
     box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
-}
-
-.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
-    border-color: #09a552;
 }
 
 input.ant-input:placeholder-shown ~ span {

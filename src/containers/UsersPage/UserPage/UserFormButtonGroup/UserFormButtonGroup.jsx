@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getUsersSettingsByLoginType } from '../../../../constants/usersSettings';
+import { LOGIN_TYPES_ENUM } from '../../../../constants/loginTypes';
 
 const BUTTON_DELETE_TEXT = 'Удалить';
 const BUTTON_CANCEL_TEXT = 'Отменить';
@@ -22,10 +22,12 @@ const UserFormButtonGroup = ({
     onEditUser,
     disableAllButtons,
     userBlocked,
+    userLoginType,
+    actionPermissions = {},
 }) => {
-    const { creation, deleting, editing, unlocked, passwordReset } = getUsersSettingsByLoginType();
+    const { deleteUser, editUser, resetUserPassword, unlockUser } = actionPermissions;
 
-    const deleteButton = (
+    const deleteButton = deleteUser && (
         <Button type="primary" danger onClick={ onDelete } disabled={ disableAllButtons }>
             { BUTTON_DELETE_TEXT }
         </Button>
@@ -42,11 +44,9 @@ const UserFormButtonGroup = ({
             return (
                 <>
                     { cancelButton }
-                    { creation && (
-                        <Button type="primary" onClick={ onSubmit } disabled={ disableAllButtons }>
-                            { BUTTON_ADD_USER_TEXT }
-                        </Button>
-                    ) }
+                    <Button type="primary" onClick={ onSubmit } disabled={ disableAllButtons }>
+                        { BUTTON_ADD_USER_TEXT }
+                    </Button>
                 </>
             );
         }
@@ -54,33 +54,33 @@ const UserFormButtonGroup = ({
             return (
                 <>
                     { cancelButton }
-                    { editing && (
-                        <Button type="primary" onClick={ onSubmit } disabled={ disableAllButtons }>
-                            { BUTTON_SAVE_EDIT_USER_TEXT }
-                        </Button>
-                    ) }
-                    { deleting && (
-                        deleteButton
-                    ) }
+                    <Button type="primary" onClick={ onSubmit } disabled={ disableAllButtons }>
+                        { BUTTON_SAVE_EDIT_USER_TEXT }
+                    </Button>
+                    { deleteButton }
                 </>
             );
         }
         case 'info': {
+            const showResetOrUnlockBtn =
+                userLoginType === LOGIN_TYPES_ENUM.PASSWORD &&
+                (
+                    (userBlocked && unlockUser) ||
+                    (!userBlocked && resetUserPassword)
+                );
             return (
                 <>
-                    { (passwordReset || unlocked) && (
+                    { showResetOrUnlockBtn && (
                         <Button type="primary" onClick={ onResetPassword } disabled={ disableAllButtons }>
                             { userBlocked ? INFO_USER_BUTTONS.UNBLOCK : INFO_USER_BUTTONS.RESET_PASSWORD }
                         </Button>
                     ) }
-                    { editing && (
+                    { editUser && (
                         <Button type="primary" onClick={ onEditUser } disabled={ disableAllButtons }>
                             { INFO_USER_BUTTONS.EDIT }
                         </Button>
                     ) }
-                    { deleting && (
-                        deleteButton
-                    ) }
+                    { deleteButton }
                 </>
             );
         }

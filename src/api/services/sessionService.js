@@ -3,7 +3,6 @@ import { removeDefaultAppCode } from './clientAppService';
 const TOKEN = 'dzo_token';
 const ROLE = 'role';
 const APP_CODE = 'appCode';
-const LOGIN_TYPE = 'loginType';
 
 export function storeUserData(userToken, userRole) {
     window.sessionStorage.setItem(TOKEN, userToken);
@@ -15,7 +14,6 @@ export function deleteUserData() {
     window.sessionStorage.removeItem(ROLE);
     deleteAppCode();
     removeDefaultAppCode(); /* TODO: remove this after second phase */
-    deleteLoginType();
 }
 
 export function getSession() {
@@ -36,16 +34,4 @@ export function deleteAppCode() {
 
 export function getAppCode() {
     return window.sessionStorage.getItem(APP_CODE);
-}
-
-export function saveLoginType(loginType) {
-    return window.sessionStorage.setItem(LOGIN_TYPE, loginType);
-}
-
-export function getLoginType() {
-    return window.sessionStorage.getItem(LOGIN_TYPE);
-}
-
-export function deleteLoginType() {
-    return window.sessionStorage.removeItem(LOGIN_TYPE);
 }

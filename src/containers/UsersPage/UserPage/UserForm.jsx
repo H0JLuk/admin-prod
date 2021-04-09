@@ -1,8 +1,8 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams, generatePath } from 'react-router-dom';
 import cn from 'classnames';
-import { Form, Input, Typography } from 'antd';
+import { /* Col, */ Form, Input, /* Row, Select, */ Typography, message } from 'antd';
 import { USERS_PAGES } from '../../../constants/route';
 import { addUser, getUser, removeUser, resetUser, saveUser, unblockUser } from '../../../api/services/usersService';
 import Header from '../../../components/Header/Header';
@@ -11,10 +11,11 @@ import UserBlockStatus from '../../../components/UserBlockStatus/UserBlockStatus
 import UserSkeletonLoading from './UserSkeletonLoading/UserSkeletonLoading';
 import Checkboxes from '../../../components/Checkboxes/Checkboxes';
 import UserFormButtonGroup from './UserFormButtonGroup/UserFormButtonGroup';
-import { getStringOptionValue } from '../../../utils/utils';
 import { getClientAppList } from '../../../api/services/clientAppService';
 import { getUserAppsCheckboxes } from './UserFormHelper';
-import { getUsersSettingsByLoginType } from '../../../constants/usersSettings';
+// import { LOGIN_TYPE, LOGIN_TYPES_ENUM, LOGIN_TYPE_OPTIONS } from '../../../constants/loginTypes';
+import { getCurrUserInteractionsForOtherUser } from '../../../constants/permissions';
+import { getStringOptionValue } from '../../../utils/utils';
 import { customNotifications } from '../../../utils/notifications';
 
 import styles from './UserForm.module.css';
@@ -23,9 +24,6 @@ const { Paragraph } = Typography;
 
 const USER_AVAILABLE_APPS = 'Доступные приложения';
 const NEW_USER_TITLE = 'Новый пользователь';
-
-const FORM_NAME_NEW_USER = 'createNewUser';
-const FORM_NAME_EDIT_USER = 'editUser';
 
 const PASSWORD_FIELD = {
     label: 'Временный пароль',
@@ -82,7 +80,11 @@ const userMessage = (login, pwd, mode, errorMessage) => {
         case EDIT: {
             return {
                 message: 'Данные пользователя успешно обновлены',
-                description: '',
+                description: pwd ? (
+                    <Paragraph copyable={ { text: pwd, tooltips: [ COPY, ON_COPY ] } } className={ styles.copyable }>
+                        { USER_PASSWORD }: { pwd }
+                    </Paragraph>
+                ) : '',
             };
         }
         case RESTORED: {
@@ -131,70 +133,83 @@ const showNotify = ({ login, pwd, mode, errorMessage }) => {
     });
 };
 
+const errorEditPermissions = (personalNumber) => (
+    <span>
+        У вас недостаточно полномочий чтобы редактировать пользователя с табельным номером
+        <b> { personalNumber }</b>
+    </span>
+);
+
 const UserForm = ({ type, matchPath }) => {
     const history = useHistory();
     const params = useParams();
     const { userId } = params;
     const notNewUser = ['edit', 'info'].includes(type);
+    const isInfo = type === 'info';
     const [loading, setLoading] = useState(true);
     const [isSendingInfo, setIsSendingInfo] = useState(false);
     const [userData, setUserData] = useState(null);
-    const [clientApps, setClientApps] = useState([]);
+    const clientAppsRef = useRef([]);
+    const clientApps = clientAppsRef.current;
     const [login, setLogin] = useState(null);
     const [location, setLocation] = useState(null);
     const [salePoint, setSalePoint] = useState(null);
     const [checkBoxes, setCheckBoxes] = useState({});
     const [error, setError] = useState(DEFAULT_ERRORS);
-    const userName = useMemo(
-        () => (notNewUser && userData ? `Пользователь ${userData.personalNumber}` : NEW_USER_TITLE),
-        [notNewUser, userData]
-    );
-    const formName = useMemo(() => (notNewUser ? FORM_NAME_EDIT_USER : FORM_NAME_NEW_USER), [notNewUser]);
-    const { viewGeneratePassword } = getUsersSettingsByLoginType();
+    const userInteractions = useRef({});
+
     const redirectToUsersPage = useCallback(() => history.push(matchPath), [history, matchPath]);
 
-    const getUserData = useCallback(async () => {
+    const getUserData = async () => {
         try {
             let user;
             const { clientApplicationDtoList: appList = [] } = await getClientAppList();
+
             if (notNewUser) {
                 user = await getUser(userId);
                 setLocation({ id: user.locationId, name: user.locationName });
                 setSalePoint({ id: user.salePointId, name: user.salePointName });
                 setUserData(user);
+                userInteractions.current = getCurrUserInteractionsForOtherUser(user.role); // TODO: вынести подобные настройки доступа в контекст, чтобы не вызывать каждый раз функции на получения этих настроек
+
+                if (!isInfo && !userInteractions.current.editUser) {
+                    message.error(errorEditPermissions(user.personalNumber));
+                    history.replace(generatePath(`${matchPath}${USERS_PAGES.USER_INFO}`, { userId }));
+                    return;
+                }
             }
+
             const filteredApps = appList.filter(({ isDeleted }) => !isDeleted);
-            setClientApps(filteredApps);
+            clientAppsRef.current = filteredApps;
             setCheckBoxes(getUserAppsCheckboxes(filteredApps, user?.clientAppIds));
             setLoading(false);
         } catch (e) {
             redirectToUsersPage();
             console.warn(e);
         }
-    }, [notNewUser, redirectToUsersPage, userId]);
+    };
 
     useEffect(() => {
         if (notNewUser && (!userId || isNaN(Number(userId)))) {
             redirectToUsersPage();
             return;
         }
-        if (type !== 'info') {
+        if (!isInfo) {
             getUserData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        (async () => {
-            if (type === 'info') {
-                setLoading(true);
-                getUserData();
-                setError(DEFAULT_ERRORS);
-            }
-        })();
-    }, [type, getUserData]);
+        if (isInfo) {
+            setLoading(true);
+            getUserData();
+            setError(DEFAULT_ERRORS);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isInfo]);
 
-    const onSubmit = useCallback(async () => {
+    const onSubmit = async () => {
         if (!notNewUser) {
             if (!login) {
                 return setError({ ...DEFAULT_ERRORS, login: 'Укажите логин пользователя' });
@@ -217,12 +232,13 @@ const UserForm = ({ type, matchPath }) => {
 
         try {
             const requestData = { clientAppIds, salePointId: salePoint?.id };
+
             if (notNewUser) {
-                await saveUser(userData.id, requestData);
-                showNotify({ mode: EDIT });
+                const { newPassword } = await saveUser(userData.id, requestData);
+                showNotify({ mode: EDIT, pwd: newPassword });
             } else {
                 const { generatedPassword } = await addUser({ ...requestData, personalNumber: login });
-                viewGeneratePassword && showNotify({ login, pwd: generatedPassword, mode: CREATE });
+                showNotify({ login, pwd: generatedPassword, mode: CREATE });
             }
         } catch (e) {
             setIsSendingInfo(false);
@@ -238,7 +254,7 @@ const UserForm = ({ type, matchPath }) => {
         } else {
             redirectToUsersPage();
         }
-    }, [notNewUser, userData, salePoint, checkBoxes, login, viewGeneratePassword, history, matchPath, redirectToUsersPage]);
+    };
 
     const handleCheckBoxChange = useCallback((checked, name) => {
         setCheckBoxes((state) => ({
@@ -274,6 +290,7 @@ const UserForm = ({ type, matchPath }) => {
                 setUserData({ ...userData, tmpBlocked: false });
             } else {
                 const { generatedPassword } = await resetUser(userData.personalNumber);
+                setUserData({ ...userData, tempPassword: true });
                 showNotify({ login: userData.personalNumber, pwd: generatedPassword, mode: RESTORED });
             }
         } catch (err) {
@@ -314,40 +331,40 @@ const UserForm = ({ type, matchPath }) => {
         }
     }, [userData, redirectToUsersPage]);
 
-    const onLoginChange = useCallback((e) => setLogin(e.currentTarget.value.trim()), []);
+    const onLoginChange = (e) => setLogin(e.currentTarget.value.trim());
 
-    const onLocationChange = useCallback((location) => {
+    const onLocationChange = (location) => {
         setLocation(location);
         setError((state) => ({
             ...state,
             location: '',
             backend: '',
         }));
-    }, []);
+    };
 
-    const onSalePointChange = useCallback((salePoint) => {
+    const onSalePointChange = (salePoint) => {
         setSalePoint(salePoint);
         setError((state) => ({
             ...state,
             salePoint: '',
             backend: '',
         }));
-    }, []);
+    };
 
     return (
         <>
-            <Header />
+            <Header onClickFunc={ isInfo ? redirectToUsersPage : undefined } />
             { loading ? (
                 <UserSkeletonLoading />
             ) : (
                 <div className={ styles.container }>
                     <div className={ styles.pageWrapper }>
                         <div className={ styles.pageTitle }>
-                            { userName }
+                            { notNewUser && userData ? `Пользователь ${userData.personalNumber}` : NEW_USER_TITLE }
                             { notNewUser && (
                                 <>
                                     <UserBlockStatus className={ styles.userStatus } blocked={ userData.tmpBlocked } />
-                                    { userData.tempPassword && type === 'info' && (
+                                    { userData.tempPassword && isInfo && (
                                         <div className={ styles.status }>
                                             { PASSWORD_FIELD.label }
                                         </div>
@@ -355,11 +372,7 @@ const UserForm = ({ type, matchPath }) => {
                                 </>
                             ) }
                         </div>
-                        <Form
-                            { ...layout }
-                            className={ styles.formStyle }
-                            name={ formName }
-                        >
+                        <Form className={ styles.formStyle }>
                             <div className={ styles.formWrapper }>
                                 <div className={ styles.loginContainer }>
                                     <label className={ cn({ required: !notNewUser }) } htmlFor={ LOGIN_FIELD.name }>
@@ -385,7 +398,7 @@ const UserForm = ({ type, matchPath }) => {
                                         </div>
                                     ) }
                                 </div>
-                                { type !== 'info' ? (
+                                { !isInfo ? (
                                     <AutocompleteLocationAndSalePoint
                                         locationLabel={ LOCATION_FIELD.labelEdit }
                                         salePointLabel={ SALE_POINT_FIELD.labelEdit }
@@ -431,7 +444,7 @@ const UserForm = ({ type, matchPath }) => {
                                 checkboxesData={ checkBoxes }
                                 onChange={ handleCheckBoxChange }
                                 onChangeAll={ handleChangeAllCheckbox }
-                                disabledAll={ type === 'info' || isSendingInfo }
+                                disabledAll={ isInfo || isSendingInfo }
                             />
                         </div>
                     </div>
@@ -445,6 +458,8 @@ const UserForm = ({ type, matchPath }) => {
                             onEditUser={ onEditUser }
                             disableAllButtons={ isSendingInfo }
                             userBlocked={ userData?.tmpBlocked }
+                            userLoginType={ userData?.loginType }
+                            actionPermissions={ userInteractions.current }
                         />
                     </div>
                 </div>

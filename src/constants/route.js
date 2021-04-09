@@ -5,6 +5,7 @@ export const ROUTE = {
     AUDITOR:        '/auditor',
     ADMIN:          '/admin',
     OWNER:          '/owner',
+    PARTNER:        '/partner',
     USER_MANAGER:   '/user-manager',
     CLIENT_APPS:    '/client-apps',
     OLD_DESIGN:     '/old_design',
@@ -63,6 +64,10 @@ export const ROUTE_AUDITOR = {
 
 export const ROUTE_USER_MANAGER = {
     USERS:          `${ ROUTE.USER_MANAGER }/${ PAGE.USERS }`,
+};
+
+export const ROUTE_PARTNER = {
+    USERS:          `${ ROUTE.PARTNER }/${ PAGE.USERS }`,
 };
 
 export const ROUTE_ADMIN = {

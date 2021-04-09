@@ -2,7 +2,7 @@ import React, { memo, useEffect, /* useMemo, */ useState } from 'react';
 import cn from 'classnames';
 import { matchPath, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
-import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
+import { PROMO_CAMPAIGN_PAGES, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
 import { getClientAppList, setDefaultAppCode } from '../../api/services/clientAppService';
 import { getAppCode, getRole, saveAppCode } from '../../api/services/sessionService';
 import { goApp } from '../../utils/appNavigation';
@@ -29,6 +29,11 @@ const routesForApps = [
     `${ROUTE_OWNER.APPS}`
 ];
 
+const rolesWithoutClientApps = [
+    ROLES.USER_MANAGER,
+    ROLES.PARTNER,
+];
+
 const Sidebar = () => {
     const history = useHistory();
     const { pathname } = useLocation();
@@ -39,7 +44,7 @@ const Sidebar = () => {
     const [menuItems] = resolveMenuItemsByRoleAndAppCode(role, appCode);
 
     useEffect(() => {
-        if (role === ROLES.USER_MANAGER) {
+        if (rolesWithoutClientApps.includes(role)) {
             return;
         }
 
@@ -94,13 +99,6 @@ const Sidebar = () => {
                         </div>
                     </Menu.Item>
                 )) }
-                { role !== ROLES.USER_MANAGER && (
-                    <Menu.Item key="oldDesign">
-                        <NavLink to={ `${ ROUTE.OLD_DESIGN }${ pathname }` } className={ styles.oldDesignLink }>
-                            Старый дизайн
-                        </NavLink>
-                    </Menu.Item>
-                ) }
             </Menu>
         </div>
     );
