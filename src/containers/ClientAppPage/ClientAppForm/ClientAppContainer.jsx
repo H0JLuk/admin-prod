@@ -190,9 +190,18 @@ function doPropertiesSettings (settings, { displayName, code, name }) {
     settings.installation_url = settings.installation_url && settings.installation_url.replace(url, '');
     settings.usage_url = settings.usage_url && settings.usage_url.replace(url, '');
 
-    const { mechanics, login_types, ...restSettings } = settings;
+    const { mechanics, login_types, notification_types, ...restSettings } = settings;
     const mechanicsCheckBox = mechanics && JSON.parse(mechanics);
     const loginCheckBoxes = login_types && JSON.parse(login_types);
+    const notificationTypesCheckBoxes = notification_types && JSON.parse(notification_types);
 
-    return { code, name, displayName, mechanics: mechanicsCheckBox, login_types: loginCheckBoxes, ...restSettings };
+    return {
+        code,
+        name,
+        displayName,
+        mechanics: mechanicsCheckBox,
+        login_types: loginCheckBoxes,
+        notification_types: notificationTypesCheckBoxes,
+        ...restSettings
+    };
 }

@@ -1,4 +1,10 @@
-import { MECHANICS_CHECKBOXES, APP_LOGIN_TYPES, APP_MECHANICS, MECHANICS_ERROR } from '../../../constants/clientAppsConstants';
+import {
+    MECHANICS_CHECKBOXES,
+    APP_LOGIN_TYPES,
+    APP_MECHANICS,
+    MECHANICS_ERROR,
+    NOTIFICATION_TYPES,
+} from '../../../constants/clientAppsConstants';
 import { showCount } from '../../../constants/common';
 
 const defaultImg = 'default_main_illustration';
@@ -24,7 +30,7 @@ export const EDIT_MODE = {
     PROPERTIES: 'Свойства',
 };
 
-export const keysToString = ['mechanics', 'login_types', 'where_to_use', 'design_elements'];
+export const keysToString = ['mechanics', 'login_types', 'where_to_use', 'design_elements', 'notification_types'];
 
 const numberTransform = value => value ? Number(value) : '';
 
@@ -90,7 +96,7 @@ export const RULES = {
             message: 'Значение может быть только числовым',
         },
     ],
-    CHECKBOX_REQUIRED : [
+    CHECKBOX_REQUIRED: [
         { type: 'array', required: true, message: 'Это обязательное поле', validateTrigger: 'onSubmit' },
     ],
     CHECKBOX: [
@@ -267,10 +273,17 @@ export const formElements = [
         {
             label: 'Механика',
             type: FORM_TYPES.CHECKBOX_GROUP,
-            span: 24,
+            span: 13,
             rules: RULES.CHECKBOX,
             options: MECHANICS_CHECKBOXES,
             name: 'mechanics',
+        },
+        {
+            label: 'Способ отправки сообщений клиенту',
+            type: FORM_TYPES.CHECKBOX_GROUP,
+            span: 11,
+            options: NOTIFICATION_TYPES,
+            name: 'notification_types',
         },
     ]
 ];

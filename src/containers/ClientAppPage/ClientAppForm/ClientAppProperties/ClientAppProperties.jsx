@@ -49,6 +49,7 @@ const ClientAppProperties = ({
                     mechanics,
                     displayName,
                     login_types,
+                    notification_types,
                     ...restData
                 } = formData;
 
@@ -65,6 +66,11 @@ const ClientAppProperties = ({
                         clientAppCode: code,
                         value: JSON.stringify(login_types),
                         key: 'login_types',
+                    },
+                    {
+                        clientAppCode: code,
+                        value: JSON.stringify(notification_types),
+                        key: 'notification_types',
                     },
                 ];
                 Object.keys(restData).forEach((key) => {
