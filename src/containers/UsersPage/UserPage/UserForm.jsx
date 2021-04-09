@@ -14,6 +14,7 @@ import UserFormButtonGroup from './UserFormButtonGroup/UserFormButtonGroup';
 import { getStringOptionValue } from '../../../utils/utils';
 import { getClientAppList } from '../../../api/services/clientAppService';
 import { getUserAppsCheckboxes } from './UserFormHelper';
+import { getUsersSettingsByLoginType } from '../../../constants/usersSettings';
 import { customNotifications } from '../../../utils/notifications';
 
 import styles from './UserForm.module.css';
@@ -149,6 +150,7 @@ const UserForm = ({ type, matchPath }) => {
         [notNewUser, userData]
     );
     const formName = useMemo(() => (notNewUser ? FORM_NAME_EDIT_USER : FORM_NAME_NEW_USER), [notNewUser]);
+    const { viewGeneratePassword } = getUsersSettingsByLoginType();
     const redirectToUsersPage = useCallback(() => history.push(matchPath), [history, matchPath]);
 
     const getUserData = useCallback(async () => {
@@ -220,7 +222,7 @@ const UserForm = ({ type, matchPath }) => {
                 showNotify({ mode: EDIT });
             } else {
                 const { generatedPassword } = await addUser({ ...requestData, personalNumber: login });
-                showNotify({ login, pwd: generatedPassword, mode: CREATE });
+                viewGeneratePassword && showNotify({ login, pwd: generatedPassword, mode: CREATE });
             }
         } catch (e) {
             setIsSendingInfo(false);
@@ -236,7 +238,7 @@ const UserForm = ({ type, matchPath }) => {
         } else {
             redirectToUsersPage();
         }
-    }, [login, redirectToUsersPage, notNewUser, history, userData, salePoint, checkBoxes, matchPath]);
+    }, [notNewUser, userData, salePoint, checkBoxes, login, viewGeneratePassword, history, matchPath, redirectToUsersPage]);
 
     const handleCheckBoxChange = useCallback((checked, name) => {
         setCheckBoxes((state) => ({

@@ -12,6 +12,7 @@ import useBodyClassForSidebar from '../../../../hooks/useBodyClassForSidebar';
 import TemplateUploadButtonsWithModal from '../../../../components/ButtonWithModal/TemplateUploadButtonsWithModal';
 import { getUsersList, removeUser, resetUser } from '../../../../api/services/usersService';
 import { USERS_PAGES } from '../../../../constants/route';
+import { getUsersSettingsByLoginType } from '../../../../constants/usersSettings';
 import { getSearchParamsFromUrl } from '../../../../utils/helper';
 import { customNotifications } from '../../../../utils/notifications';
 
@@ -68,7 +69,6 @@ const DROPDOWN_SORT_MENU = [
     { name: 'salePointName', label: 'По точке продажи' },
 ];
 
-
 const showRestoredUsersNotification = (users) => {
     customNotifications.success({
         message: <RestoredTableUser users={ users } />,
@@ -94,6 +94,7 @@ const UserList = ({ matchPath }) => {
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [params, setParams] = useState(DEFAULT_PARAMS);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const { creation, deleting, editing, passwordReset, unlocked, listCreation } = getUsersSettingsByLoginType();
 
     useBodyClassForSidebar();
 
@@ -268,10 +269,11 @@ const UserList = ({ matchPath }) => {
             disabled: loadingTableData,
         });
     } else {
-        buttons.push(
-            { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
-            { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
-        );
+        creation && (
+            buttons.push(
+                { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
+                { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
+            ));
     }
 
     const searchAndSortParams = {
@@ -309,28 +311,34 @@ const UserList = ({ matchPath }) => {
                             <span className={ styles.label }>
                                 { CHOSEN_USER } { selectedItems.rowKeys.length }
                             </span>
-                            <button
-                                className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
-                                disabled={ !selectedItems.rowKeys.length }
-                                onClick={ linkChangePassword }
-                            >
-                                { BUTTON_CHANGE_PASSWORD }
-                            </button>
-                            <button
-                                className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
-                                disabled={ !selectedItems.rowKeys.length }
-                                onClick={ linkEdit }
-                            >
-                                { BUTTON_EDIT }
-                            </button>
+                            { (passwordReset || unlocked) && (
+                                <button
+                                    className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
+                                    disabled={ !selectedItems.rowKeys.length }
+                                    onClick={ linkChangePassword }
+                                >
+                                    { BUTTON_CHANGE_PASSWORD }
+                                </button>
+                            ) }
+                            { editing && (
+                                <button
+                                    className={ cn(btnStyles.addButton, btnStyles.btnGreen) }
+                                    disabled={ !selectedItems.rowKeys.length }
+                                    onClick={ linkEdit }
+                                >
+                                    { BUTTON_EDIT }
+                                </button>
+                            ) }
                         </div>
-                        <button
-                            className={ cn(btnStyles.addButton, btnStyles.btnRed) }
-                            disabled={ !selectedItems.rowKeys.length }
-                            onClick={ toggleModal }
-                        >
-                            { BUTTON_DELETE }
-                        </button>
+                        { deleting && (
+                            <button
+                                className={ cn(btnStyles.addButton, btnStyles.btnRed) }
+                                disabled={ !selectedItems.rowKeys.length }
+                                onClick={ toggleModal }
+                            >
+                                { BUTTON_DELETE }
+                            </button>
+                        ) }
                         <TableDeleteModal
                             modalClose={ toggleModal }
                             sourceForRemove={ selectedItems.rowValues }
@@ -345,13 +353,17 @@ const UserList = ({ matchPath }) => {
                     </div>
                 ) : (
                     <div className={ styles.section }>
-                        <span className={ styles.label }>
-                            { TITLE_DOWNLOAD_USER }
-                        </span>
-                        <div className={ styles.downloadButtons }>
-                            <TemplateUploadButtonsWithModal onSuccess={ refreshTable } />
-                        </div>
-                        <DownloadDropDown />
+                        { listCreation && (
+                            <>
+                                <span className={ styles.label }>
+                                    { TITLE_DOWNLOAD_USER }
+                                </span>
+                                <div className={ styles.downloadButtons }>
+                                    <TemplateUploadButtonsWithModal onSuccess={ refreshTable } />
+                                </div>
+                                <DownloadDropDown />
+                            </>
+                        ) }
                     </div>
                 ) }
             </div>

@@ -4,7 +4,7 @@ import { getStaticUrlFromBackend, saveStaticUrl } from '../../api/services/setti
 import { LOGIN_FORM } from '../../components/Form/forms';
 import Form from '../../components/Form/Form';
 import { login } from '../../api/services/authService';
-import { storeUserData } from '../../api/services/sessionService';
+import { saveLoginType, storeUserData } from '../../api/services/sessionService';
 import { Errors, getErrorText } from '../../constants/errors';
 import { ROLES } from '../../constants/roles';
 import ButtonLabels from '../../components/Button/ButtonLables';
@@ -30,13 +30,14 @@ const LoginPage = (props) => {
 
     const onSubmit = async (data) => {
         try {
-            const { token, authority } = await login(data) ?? {};
+            const { token, authority, loginType } = await login(data) ?? {};
             if (!availableRoles.includes(authority)) {
                 setError(Errors.FAIL);
                 return;
             }
 
             storeUserData(token, authority);
+            saveLoginType(loginType);
             saveStaticUrl(await getStaticUrlFromBackend());
             goToStartPage(history, true, authority);
         } catch (e) {
