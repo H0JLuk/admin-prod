@@ -6,6 +6,7 @@ import {
     NOTIFICATION_TYPES,
 } from '../../../constants/clientAppsConstants';
 import { showCount } from '../../../constants/common';
+import { getPatternAndMessage } from '../../../utils/validators';
 
 const defaultImg = 'default_main_illustration';
 const february23 = 'February23_main_illustration';
@@ -76,38 +77,15 @@ export const DEFAULT_DESIGN_SETTINGS = {
 
 export const designKeysForCheck = [...Object.keys(DEFAULT_DESIGN_SETTINGS), ...TextKeysWithDefaultValues];
 
-const appCodeRegex = /^[a-z0-9-_]+$/gmi;
+const REQUIRED_VALIDATE_MESSAGE = 'Это обязательное поле';
+const NUMBER_VALIDATE_MESSAGE = 'Значение может быть только числовым';
 
 export const RULES = {
-    STANDARD: [],
-    STANDARD_NUMBER: [
-        {
-            type: 'number',
-            transform: numberTransform,
-            validateTrigger: 'onSubmit',
-            message: 'Значение может быть только числовым',
-        },
-    ],
-    TWO_DIGITS_NUMBER: [
-        {
-            type: 'number',
-            transform: numberTransform,
-            validateTrigger: 'onSubmit',
-            message: 'Значение может быть только числовым',
-        },
-    ],
-    CHECKBOX_REQUIRED: [
-        { type: 'array', required: true, message: 'Это обязательное поле', validateTrigger: 'onSubmit' },
-    ],
-    CHECKBOX: [
-        { type: 'array', required: true, message: 'Это обязательное поле', validateTrigger: 'onSubmit' },
-        { type: 'array', validator: checkBoxValidator, validateTrigger: 'onSubmit' },
-    ],
-    REQUIRED: [{ required: true, message: 'Это обязательное поле', validateTrigger: 'onSubmit' }],
-    REQUIRED_ENGLISH_AND_NUMBER: [
-        { required: true, message: 'Это обязательное поле' },
-        { pattern: appCodeRegex, message: 'Можно использовать только латиницу', validateTrigger: 'onSubmit' },
-    ],
+    REQUIRED: { required: true, message: REQUIRED_VALIDATE_MESSAGE, validateTrigger: 'onSubmit' },
+    NUMBER: { type: 'number', message: NUMBER_VALIDATE_MESSAGE, transform: numberTransform, validateTrigger: 'onSubmit' },
+    get CHECKBOX_GROUP() {
+        return { ...this.REQUIRED, type: 'array' };
+    },
 };
 
 export const FORM_TYPES = {
@@ -135,7 +113,13 @@ export const mainInfoElements = [
             label: 'Название',
             type: FORM_TYPES.MAIN_INFO_INPUT,
             span: 16,
-            rules: RULES.REQUIRED,
+            rules: [
+                RULES.REQUIRED,
+                {
+                    ...getPatternAndMessage('clientApp', 'name'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
             name: 'name',
             placeholder: 'Имя',
         },
@@ -143,7 +127,13 @@ export const mainInfoElements = [
             label: 'Код',
             type: FORM_TYPES.MAIN_INFO_INPUT,
             span: 8,
-            rules: RULES.REQUIRED_ENGLISH_AND_NUMBER,
+            rules: [
+                RULES.REQUIRED,
+                {
+                    ...getPatternAndMessage('clientApp', 'code'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
             name: 'code',
             placeholder: 'Код',
         },
@@ -153,7 +143,13 @@ export const mainInfoElements = [
             label: 'Отображаемое имя',
             type: FORM_TYPES.MAIN_INFO_INPUT,
             span: 16,
-            rules: RULES.REQUIRED,
+            rules: [
+                RULES.REQUIRED,
+                {
+                    ...getPatternAndMessage('clientApp', 'name'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
             name: 'displayName',
             placeholder: 'Отображаемое имя',
         },
@@ -162,20 +158,13 @@ export const mainInfoElements = [
 
 export const formElements = [
     [
-        /*{
-            label: 'Токен Яндекс Метрики',
-            type: FORM_TYPES.INPUT,
-            span: 8,
-            rules: RULES.STANDARD_NUMBER,
-            name: 'ym_token',
-            placeholder: 'Токен',
-            maxLength: 12,
-        },*/
         {
             label: 'Сессия сотрудника (в секундах)',
             type: FORM_TYPES.INPUT,
             span: 8,
-            rules: RULES.STANDARD_NUMBER,
+            rules: [
+                RULES.NUMBER,
+            ],
             name: 'token_lifetime',
             placeholder: '1800 секунд по умолчанию',
             maxLength: 12,
@@ -184,7 +173,9 @@ export const formElements = [
             label: 'Сессия клиента (в секундах)',
             type: FORM_TYPES.INPUT,
             span: 8,
-            rules: RULES.STANDARD_NUMBER,
+            rules: [
+                RULES.NUMBER,
+            ],
             name: 'inactivity_time',
             placeholder: '15 секунд по умолчанию',
             maxLength: 12,
@@ -193,7 +184,9 @@ export const formElements = [
             label: 'Временная блокировка пользователя (в секундах)',
             type: FORM_TYPES.INPUT,
             span: 8,
-            rules: RULES.STANDARD_NUMBER,
+            rules: [
+                RULES.NUMBER,
+            ],
             name: 'tmp_block_time',
             placeholder: '1800 секунд по умолчанию',
             maxLength: 12,
@@ -201,20 +194,13 @@ export const formElements = [
     ],
 
     [
-        /*{
-            label: 'Показ предложения в "карусели" (в секундах)',
-            type: FORM_TYPES.INPUT,
-            span: 8,
-            rules: RULES.STANDARD_NUMBER,
-            name: 'promo_show_time',
-            placeholder: '20 секунд по умолчанию',
-            maxLength: 12,
-        },*/
         {
             label: 'Максимальное число попыток входа',
             type: FORM_TYPES.INPUT,
             span: 8,
-            rules: RULES.TWO_DIGITS_NUMBER,
+            rules: [
+                RULES.NUMBER,
+            ],
             name: 'max_password_attempts',
             placeholder: '3 по умолчанию',
             maxLength: 2,
@@ -223,30 +209,13 @@ export const formElements = [
             label: 'Максимальное число подарков',
             type: FORM_TYPES.INPUT,
             span: 8,
-            rules: RULES.TWO_DIGITS_NUMBER,
+            rules: [
+                RULES.NUMBER,
+            ],
             name: 'max_presents_number',
             placeholder: '3 по умолчанию',
             maxLength: 2,
         },
-    ],
-
-    [
-        /*{
-            label: 'Путь к инструкции по установке',
-            type: FORM_TYPES.INPUT,
-            span: 8,
-            rules: RULES.STANDARD,
-            name: 'installation_url',
-            placeholder: 'url',
-        },
-        {
-            label: 'Путь к инструкции по использованию',
-            type: FORM_TYPES.INPUT,
-            span: 8,
-            rules: RULES.STANDARD,
-            name: 'usage_url',
-            placeholder: 'url',
-        },*/
     ],
 
     [
@@ -255,7 +224,12 @@ export const formElements = [
             type: FORM_TYPES.TEXT_BLOCK,
             span: 13,
             rows: 3,
-            rules: RULES.STANDARD,
+            rules: [
+                {
+                    ...getPatternAndMessage('clientApp', 'privacyPolicy'),
+                    validateTrigger: 'onSubmit',
+                }
+            ],
             name: 'privacyPolicy',
             placeholder: 'Описание ДЗО',
         },
@@ -263,7 +237,9 @@ export const formElements = [
             label: 'Способ авторизации в витрине',
             type: FORM_TYPES.CHECKBOX_GROUP,
             options: LOGIN_TYPE_OPTIONS,
-            rules: RULES.CHECKBOX_REQUIRED,
+            rules: [
+                RULES.CHECKBOX_GROUP,
+            ],
             columnMode: true,
             span: 11,
             name: 'login_types',
@@ -274,7 +250,13 @@ export const formElements = [
             label: 'Механика',
             type: FORM_TYPES.CHECKBOX_GROUP,
             span: 13,
-            rules: RULES.CHECKBOX,
+            rules: [
+                RULES.CHECKBOX_GROUP,
+                {
+                    validator: checkBoxValidator,
+                    validateTrigger: 'onSubmit',
+                }
+            ],
             options: MECHANICS_CHECKBOXES,
             name: 'mechanics',
         },

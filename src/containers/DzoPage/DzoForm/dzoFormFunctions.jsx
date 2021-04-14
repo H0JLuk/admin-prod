@@ -65,7 +65,12 @@ export function FormItem({ label, type, rules, name, placeholder, options, dzoVa
     })();
 
     return (
-        <Form.Item label={ label } name={ name } rules={ rules }>
+        <Form.Item
+            label={ label }
+            name={ name }
+            rules={ rules }
+            validateFirst
+        >
             { formItemInput }
         </Form.Item>
     );

@@ -1,3 +1,4 @@
+import { getPatternAndMessage } from '../../utils/validators';
 
 export const NEW_DZO_TITLE = 'Новое ДЗО';
 export const CANCEL_BUTTON_TITLE = 'Отменить';
@@ -49,13 +50,26 @@ export const FORM_ELEMENTS = [
         {
             label: DZO_NAME,
             type: TYPES.INPUT,
-            rules: RULES.STANDARD_REQUIRED,
+            rules: [
+                ...RULES.STANDARD_REQUIRED,
+                {
+                    ...getPatternAndMessage('dzo', 'name'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
             name: 'dzoName',
             placeholder: DZO_NAME,
         },
         {
             label: 'Код',
             type: TYPES.INPUT,
+            rules: [
+                ...RULES.STANDARD_REQUIRED,
+                {
+                    ...getPatternAndMessage('dzo', 'code'),
+                    validateTrigger: 'onSubmit',
+                }
+            ],
             name: 'dzoCode',
             placeholder: 'Код',
         },
@@ -64,7 +78,12 @@ export const FORM_ELEMENTS = [
         {
             label: 'Описание ДЗО',
             type: TYPES.TEXT_BLOCK,
-            rules: RULES.STANDARD,
+            rules: [
+                {
+                    ...getPatternAndMessage('dzo', 'description'),
+                    validateTrigger: 'onSubmit',
+                }
+            ],
             name: 'description',
             placeholder: 'Описание ДЗО',
         },
@@ -80,7 +99,7 @@ export const BANNERS_UPLOAD_TEMPLATE = [
         description: 'Добавить логотип',
         maxSize: 1,
         get setting() {
-            return `${this.maxSize}МБ .svg`;
+            return `${this.maxSize}МБ ${this.accept}`;
         },
     },
     {
@@ -91,7 +110,7 @@ export const BANNERS_UPLOAD_TEMPLATE = [
         description: 'Добавить логотип',
         maxSize: 1,
         get setting() {
-            return `${this.maxSize}МБ .svg`;
+            return `${this.maxSize}МБ ${this.accept}`;
         },
     },
     {
@@ -102,7 +121,7 @@ export const BANNERS_UPLOAD_TEMPLATE = [
         description: 'Добавить логотип',
         maxSize: 1,
         get setting() {
-            return `${this.maxSize}МБ .svg`;
+            return `${this.maxSize}МБ ${this.accept}`;
         },
     },
 ];

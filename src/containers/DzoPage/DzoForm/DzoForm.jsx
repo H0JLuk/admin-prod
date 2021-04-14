@@ -14,7 +14,6 @@ import {
     DZO_APPLICATION_LIST_NAME,
     NEW_DZO_TITLE,
     FORM_ELEMENTS,
-    RULES,
     BANNERS_UPLOAD_TEMPLATE,
     APP_TYPE_LABEL,
     QR_LINK_LABEL,
@@ -263,21 +262,18 @@ const DzoForm = ({ type, matchPath }) => {
                     >
                         { (FORM_ELEMENTS || []).map((row, index) => (
                             <Row key={ index } gutter={ [24] }>
-                                { (row || []).map((props) => (
+                                { (row || []).map(({ rules, ...props }) => (
                                     <Col key={ props.label } span={ 24 / row.length }>
                                         <FormItem
                                             dzoValue={ props.name ==='dzoCode' && isEdit && initialData.current.dzoCode }
-                                            rules={ props.name === 'dzoCode' && !isEdit &&
-                                                [
-                                                    ...RULES.STANDARD_REQUIRED,
-                                                    {
-                                                        required: true,
-                                                        validator: checkUniqCode,
-                                                        message: DZO_CODE_NOT_UNIQUE,
-                                                        validateTrigger: 'onSubmit',
-                                                    }
-                                                ]
-                                            }
+                                            rules={ [
+                                                ...(rules || []),
+                                                props.name === 'dzoCode' && !isEdit ? {
+                                                    validator: checkUniqCode,
+                                                    message: DZO_CODE_NOT_UNIQUE,
+                                                    validateTrigger: 'onSubmit',
+                                                } : {}
+                                            ] }
                                             { ...props }
                                         />
                                     </Col>

@@ -59,17 +59,17 @@ const ClientAppProperties = ({
                 const settings = [
                     {
                         clientAppCode: code,
-                        value: JSON.stringify(mechanics),
+                        value: JSON.stringify(mechanics || []),
                         key: 'mechanics',
                     },
                     {
                         clientAppCode: code,
-                        value: JSON.stringify(login_types),
+                        value: JSON.stringify(login_types || []),
                         key: 'login_types',
                     },
                     {
                         clientAppCode: code,
-                        value: JSON.stringify(notification_types),
+                        value: JSON.stringify(notification_types || []),
                         key: 'notification_types',
                     },
                 ];

@@ -1,6 +1,12 @@
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../constants/jsxConstants';
-import { isRequired, digitValidator } from '../../utils/validators';
 import { getLabel } from '../LabelWithTooltip/LabelWithTooltip';
+import {
+    isRequired,
+    digitValidator,
+    categoryNameValidator,
+    categoryDescriptionValidator,
+    presentationValidator
+} from '../../utils/validators';
 
 export const LOGIN_FORM = {
     personalNumber: {
@@ -52,7 +58,7 @@ export const LANDING_EDIT_FORM = {
         type: 'text',
         isRequired: true,
         maxLength: 128,
-        validators: [isRequired],
+        validators: [isRequired, presentationValidator],
         mask: null
     },
     description: {
@@ -61,7 +67,7 @@ export const LANDING_EDIT_FORM = {
         type: 'text',
         isRequired: true,
         maxLength: 4096,
-        validators: [isRequired],
+        validators: [isRequired, presentationValidator],
         mask: null
     }
 };
@@ -73,7 +79,7 @@ export const CATEGORY_FORM = {
         type: 'text',
         isRequired: true,
         maxLength: 2048,
-        validators: [isRequired],
+        validators: [isRequired, categoryNameValidator],
         mask: null
     },
     categoryDescription: {
@@ -82,14 +88,14 @@ export const CATEGORY_FORM = {
         type: 'text',
         isRequired: false,
         maxLength: 2048,
-        validators: [],
+        validators: [categoryDescriptionValidator],
         mask: null
     }
 };
 
 export const CLIENT_APP_ADD_FORM = {
     name: {
-        label : 'Имя',
+        label: 'Имя',
         value: '',
         type: 'text',
         isRequired: true,
@@ -98,7 +104,7 @@ export const CLIENT_APP_ADD_FORM = {
         mask: null
     },
     displayName: {
-        label : 'Отображаемое имя',
+        label: 'Отображаемое имя',
         value: '',
         type: 'text',
         isRequired: true,
@@ -107,7 +113,7 @@ export const CLIENT_APP_ADD_FORM = {
         mask: null
     },
     code: {
-        label : 'Код',
+        label: 'Код',
         value: '',
         type: 'text',
         isRequired: true,
@@ -116,7 +122,7 @@ export const CLIENT_APP_ADD_FORM = {
         mask: null
     },
     existingCode: {
-        label : 'Код исходной витрины',
+        label: 'Код исходной витрины',
         value: '',
         type: 'text',
         maxLength: 40,
@@ -127,7 +133,7 @@ export const CLIENT_APP_ADD_FORM = {
 
 export const CLIENT_APP_EDIT_FORM = {
     name: {
-        label : 'Имя',
+        label: 'Имя',
         value: '',
         type: 'text',
         isRequired: true,
@@ -136,7 +142,7 @@ export const CLIENT_APP_EDIT_FORM = {
         mask: null
     },
     displayName: {
-        label : 'Отображаемое имя',
+        label: 'Отображаемое имя',
         value: '',
         type: 'text',
         isRequired: true,
@@ -145,7 +151,7 @@ export const CLIENT_APP_EDIT_FORM = {
         mask: null
     },
     code: {
-        label : 'Код',
+        label: 'Код',
         value: '',
         type: 'text',
         isRequired: true,
@@ -166,8 +172,8 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
     },*/
     token_lifetime: {
-        label : 'Сессия сотрудника (в секундах)',
-        value : '',
+        label: 'Сессия сотрудника (в секундах)',
+        value: '',
         type: 'text',
         isRequired: false,
         maxLength: 20,
@@ -176,8 +182,8 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         placeholder: '1800 секунд по умолчанию',
     },
     inactivity_time: {
-        label : 'Сессия клиента (в секундах)',
-        value : '',
+        label: 'Сессия клиента (в секундах)',
+        value: '',
         type: 'text',
         isRequired: false,
         maxLength: 20,
@@ -196,8 +202,8 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         placeholder: '20 секунд по умолчанию',
     },*/
     privacy_policy: {
-        label : 'Политика конфиденциальности',
-        value : '',
+        label: 'Политика конфиденциальности',
+        value: '',
         type: 'text',
         isRequired: false,
         maxLength: 4096,
@@ -205,8 +211,8 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         mask: null,
     },
     tmp_block_time: {
-        label : 'Временная блокировка пользователя (в секундах)',
-        value : '',
+        label: 'Временная блокировка пользователя (в секундах)',
+        value: '',
         type: 'text',
         isRequired: false,
         maxLength: 20,
@@ -215,8 +221,8 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         placeholder: '1800 секунд по умолчанию',
     },
     max_password_attempts: {
-        label : 'Максимальное число попыток ввода пароля',
-        value : '',
+        label: 'Максимальное число попыток ввода пароля',
+        value: '',
         type: 'text',
         isRequired: false,
         maxLength: 2,
@@ -225,8 +231,8 @@ export const CLIENT_APP_PROPERTIES_EDIT_FORM = {
         placeholder: '3 по умолчанию',
     },
     max_presents_number: {
-        label : 'Максимальное число подарков',
-        value : '',
+        label: 'Максимальное число подарков',
+        value: '',
         type: 'text',
         isRequired: false,
         maxLength: 2,

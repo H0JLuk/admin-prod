@@ -9,6 +9,7 @@ import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList 
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
 import PROMO_CAMPAIGNS from '../../../../../../constants/promoCampaigns';
 import { urlCheckRule } from '../../../../../../utils/urlValidator';
+import { getPatternAndMessage } from '../../../../../../utils/validators';
 import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWithTooltip';
 import { getAppCode } from '../../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
@@ -47,8 +48,7 @@ const EXTERNAL_ID_DUPLICATE = 'Введенный внешний ID уже ис�
 const types_promo = Object.values(promoCodeTypes);
 
 const namePathPriorityOnWebUrl = ['settings', 'priorityOnWebUrl'];
-const namePathAlternativeOfferMechanic = [ 'settings', 'alternativeOfferMechanic' ];
-
+const namePathAlternativeOfferMechanic = ['settings', 'alternativeOfferMechanic'];
 
 const ReverseSwitch = ({ checked, onChange = noop, ...restProps }) => (
     <Switch
@@ -101,7 +101,15 @@ const StepInfo = ({
                     normalize={ (value) => !value.trim() ? value.trim() : value }
                     validateFirst
                     rules={ [
-                        { required: true, message: 'Укажите название промо-кампании', validateTrigger: 'onSubmit' },
+                        {
+                            required: true,
+                            message: 'Укажите название промо-кампании',
+                            validateTrigger: 'onSubmit',
+                        },
+                        {
+                            ...getPatternAndMessage('promoCampaign', 'name'),
+                            validateTrigger: 'onSubmit',
+                        },
                         ({ getFieldValue }) => ({
                             message: 'Нельзя создать копию промо-кампании с таким же названием',
                             validator: (_, value) => {
@@ -126,7 +134,6 @@ const StepInfo = ({
                                 const nameChanged = value.trim() !== (oldName ?? '').trim();
                                 const isCopyCampaign = isCopy && typeof copyPromoCampaignId !== 'number';
                                 const isModeEditAndValueChanged = mode === 'edit' && nameChanged;
-
                                 if (isModeCreate || isModeEditAndValueChanged || (isCopyCampaign && !nameChanged && appCode !== getAppCode())) {
                                     const { promoCampaignDtoList = [] } = await getExactFilteredPromoCampaignList(
                                         value,
