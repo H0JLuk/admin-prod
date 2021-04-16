@@ -103,7 +103,7 @@ class UploadPromoCodesModal extends Component {
                     <img src={ example } alt="example" width="50%" />
                     <Form layout="vertical" onSubmit={ this.handleSubmit }>
                         <Form.Item required
-                                   label="Excel файл">
+                                   label="CSV файл">
                             <Dragger uploading={ uploading }
                                      { ...customProps }>
                                 <p className="ant-upload-drag-icon">

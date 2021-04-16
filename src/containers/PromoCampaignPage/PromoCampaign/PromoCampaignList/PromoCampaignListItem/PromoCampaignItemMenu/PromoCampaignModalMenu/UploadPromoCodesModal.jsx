@@ -107,11 +107,11 @@ const UploadPromoCodesModal = ({ open, onClose, onSave }) => {
             <Paragraph>{ FORMAT_TEXT }</Paragraph>
             <Paragraph>{ REQUIRE_TEXT }</Paragraph>
             <Paragraph>{ PROMO_CODES_TYPE_TEXT }</Paragraph>
-            <img src={ example } alt='example' width='50%' />
-            <Form layout='vertical' onSubmit={ handleSubmit }>
-                <Form.Item required label='Excel файл'>
+            <img src={ example } alt="example" width="50%" />
+            <Form layout="vertical" onSubmit={ handleSubmit }>
+                <Form.Item required label="CSV файл">
                     <Upload.Dragger uploading={ state.uploading } { ...customProps } className={ styles.dragContainer }>
-                        <p className='ant-upload-drag-icon'>
+                        <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                         </p>
                         <Button className={ styles.btn }>{ UPLOAD_TEXT }</Button>

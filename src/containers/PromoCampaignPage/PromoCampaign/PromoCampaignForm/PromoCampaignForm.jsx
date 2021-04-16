@@ -559,7 +559,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
                     const dataForSend = getDataForSend(normalizeFirstStepValue({
                         ...val,
                         settings: {
-                            ...promoCampaign.settings,
+                            ...(promoCampaign?.settings || {}),
                             ...val.settings,
                         },
                     }));
@@ -638,7 +638,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
                     const normalizedData = normalizeFirstStepValue({
                         ...val,
                         settings: {
-                            ...promoCampaign.settings,
+                            ...(promoCampaign?.settings || {}),
                             ...val.settings,
                         },
                     });
