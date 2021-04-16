@@ -9,9 +9,11 @@ const SearchInputWithAction = ({
     onChangeValue,
     params,
     onChangeInput = noop,
+    resetPage,
 }) => {
     const onChangeHandler = ({ target: { value } }) => {
         onChangeInput();
+        resetPage && (params.pageNo = 0);
         onChangeValue({ ...params, filterText: value });
     };
 

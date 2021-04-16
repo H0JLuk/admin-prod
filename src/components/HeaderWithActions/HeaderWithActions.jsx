@@ -133,6 +133,7 @@ const HeaderWithActions = ({
                             onChangeValue={ sortData }
                             params={ currentParams }
                             onChangeInput={ onChangeInput }
+                            resetPage={ enableAsyncSort }
                         />
                     ) }
                 </div>
