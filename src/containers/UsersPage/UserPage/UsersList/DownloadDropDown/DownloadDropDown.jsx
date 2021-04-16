@@ -42,10 +42,10 @@ const DownloadDropDown = () => {
             </Button>
             <div className={ cn(styles.dropdownMenu, { [styles.open]: isOpen }) }>
                 <div className={ styles.dropdownLinkWrapper }>
-                    <a href={ templateLink('user-upload.xlsx') }>
+                    <a href={ templateLink('user-upload.csv') }>
                         { DOWNLOAD_LOAD_TEMPLATE }
                     </a>
-                    <a href={ templateLink('user-delete.xlsx') }>
+                    <a href={ templateLink('user-delete.csv') }>
                         { DOWNLOAD_DELETE_TEMPLATE }
                     </a>
                 </div>

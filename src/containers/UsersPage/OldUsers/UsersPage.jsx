@@ -183,8 +183,8 @@ const UsersPage = () => {
                     </div>
                 </label>
                 <div className={ styles.packetProcessing__block }>
-                    <a href={ templateLink('user-upload.xlsx') } >Шаблон на загрузку</a>
-                    <a href={ templateLink('user-delete.xlsx') }
+                    <a href={ templateLink('user-upload.csv') } >Шаблон на загрузку</a>
+                    <a href={ templateLink('user-delete.csv') }
                        className={ styles.template__link }
                     >Шаблон на удаление</a>
                 </div>

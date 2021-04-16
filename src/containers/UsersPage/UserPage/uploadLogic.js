@@ -54,7 +54,7 @@ export const onFileUploadInputChange = async e => {
         const url = window.URL.createObjectURL(result);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'Результат загрузки пользователей.xlsx';
+        a.download = 'Результат загрузки пользователей.csv';
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -97,6 +97,6 @@ export async function onDeleteFileUploadInputChange(e) {
 }
 
 export function validateFile(file) {
-    return file && file.name && file.name.includes('.xlsx');
+    return file && file.name && file.name.includes('.csv');
 }
 export { initialState as usersPageInitialState, reducer as usersReducer };

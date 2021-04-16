@@ -32,7 +32,7 @@ const EmptyUsersPage = () => (
                     label={ PACKAGE_ADD_NEW_BUTTON_TEXT }
                 />
                 <a
-                    href={ templateLink('user-upload.xlsx') }
+                    href={ templateLink('user-upload.csv') }
                     className={ cn(btnStyles.addButton, btnStyles.greyButton, btnStyles.btnMT, btnStyles.link) }
                 >
                     { GET_TEMPLATE_BUTTON_TEXT }
