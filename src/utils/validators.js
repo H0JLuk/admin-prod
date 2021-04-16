@@ -73,15 +73,18 @@ export const digitValidator = (value) => {
 
 export const categoryNameValidator = (value) => {
     const { pattern } = getPatternAndMessage('category', 'name');
+    pattern.lastIndex = 0;
     return pattern.test(value);
 };
 
 export const categoryDescriptionValidator = (value) => {
     const { pattern } = getPatternAndMessage('category', 'description');
+    pattern.lastIndex = 0;
     return pattern.test(value);
 };
 
 export const presentationValidator = (value) => {
     const { pattern } = getPatternAndMessage('presentation', 'common');
+    pattern.lastIndex = 0;
     return pattern.test(value);
 };
