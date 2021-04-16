@@ -45,6 +45,7 @@ import { DEFAULT_OFFER_DURATION } from '../../../../constants/promoCampaigns';
 import { ReactComponent as LoadingSpinner } from '../../../../static/images/loading-spinner.svg';
 
 import styles from './PromoCampaignForm.module.css';
+
 const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
     const history = useHistory();
     const [form] = Form.useForm();
@@ -428,7 +429,15 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
     // вызывается в модальном окне, при смене типа промо-кода.
     // При нажатии на ОК отправит запрос на сервер для обновления данных.
     const handleOkSaveMode = async () => {
-        const dataForSend = getDataForSend(normalizeFirstStepValue({ ...state, ...form.getFieldsValue() }));
+        const formValues = form.getFieldsValue();
+        const dataForSend = getDataForSend(normalizeFirstStepValue({
+            ...state,
+            ...formValues,
+            settings: {
+                ...state.settings,
+                ...(formValues.settings || {}),
+            },
+        }));
 
         const promoCampaignId = isCopy
             ? copyPromoCampaignId
@@ -547,7 +556,13 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
 
             switch (step) {
                 case steps.main_info: {
-                    const dataForSend = getDataForSend(normalizeFirstStepValue(val));
+                    const dataForSend = getDataForSend(normalizeFirstStepValue({
+                        ...val,
+                        settings: {
+                            ...promoCampaign.settings,
+                            ...val.settings,
+                        },
+                    }));
 
                     // В режиме копирования вызываем функцию для копирования промо-кампании
                     if (isCopy) {
@@ -620,7 +635,13 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
             setValidStep(step + 1);
             switch (step) {
                 case steps.main_info: {
-                    const normalizedData = normalizeFirstStepValue(val);
+                    const normalizedData = normalizeFirstStepValue({
+                        ...val,
+                        settings: {
+                            ...promoCampaign.settings,
+                            ...val.settings,
+                        },
+                    });
                     handleNextStep(normalizedData);
                     break;
                 }

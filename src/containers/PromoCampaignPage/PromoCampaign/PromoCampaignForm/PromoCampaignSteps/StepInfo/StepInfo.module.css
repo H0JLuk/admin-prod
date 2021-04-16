@@ -5,6 +5,7 @@
 }
 
 .container :global(label.ant-form-item-required) {
+    display: flex;
     align-items: flex-start;
 }
 
