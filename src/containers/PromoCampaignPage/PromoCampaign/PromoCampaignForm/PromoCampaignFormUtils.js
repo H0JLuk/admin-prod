@@ -152,6 +152,7 @@ export function normalizeFirstStepValue(val) {
             ...val.settings,
             priorityOnWebUrl: val.settings.priorityOnWebUrl === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
         },
+        webUrl: val.webUrl || null,
     };
 }
 
