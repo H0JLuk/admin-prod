@@ -63,7 +63,7 @@ const NEW_USER_PASSWORD = 'Новый пароль пользователя';
 const COPY = 'Копировать';
 const ON_COPY = 'Скопировано';
 
-const patternLogin = /[^A-Za-z0-9]+/;
+const patternLogin = /[^a-zа-яё0-9]+/i;
 
 const userMessage = (login, pwd, mode, errorMessage) => {
     switch (mode) {

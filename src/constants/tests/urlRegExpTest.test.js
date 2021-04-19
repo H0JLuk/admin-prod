@@ -74,7 +74,6 @@ test('not valid url test', () => {
     expect(validateURL('://sberbank.ru')).toBe(false);
     expect(validateURL('sberbank-ru')).toBe(false);
     expect(validateURL('sberba/nk.ru/')).toBe(false);
-    expect(validateURL('https://oKko.tv/#**')).toBe(false);
     expect(validateURL('https://oKko.tv/test={*^}')).toBe(false);
     expect(validateURL('https://t*st.oKko.tv/')).toBe(false);
     expect(validateURL('https:/sberbank+sber.ru')).toBe(false);

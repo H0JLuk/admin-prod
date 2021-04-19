@@ -21,6 +21,7 @@ const TextBlock = ({
                 name={ name }
                 initialValue={ initialValue }
                 rules={ rules }
+                validateFirst
             >
                 <Input.TextArea
                     maxLength={ maxLength || null }

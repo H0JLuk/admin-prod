@@ -1,9 +1,9 @@
-export const URL_VALIDATION_TEXT = 'Допустимые символы латинские буквы и цифры, "-", ".", "_", "~", ":", "/", "?", "#", "[", "]", "@", "!", "$", "&", "(", ")", "*", "+", ",", ";", "%", "="';
+export const URL_VALIDATION_TEXT = 'Допустимые символы латинские буквы и цифры, "-", ".", "_", "~", ":", "/", "?", "#", "[", "]", "@", "!", "$", "&", "(", ")", "*", "+", ",", ";", "%", "=", "\'"';
 const protocols = ['https'];
 const customProtocols = ['sberbankonline', 'android-app'];
 const hostNameRegExp = /^((http|https):\/\/)?[a-zA-Zа-яА-Я0-9]+([-./]{1}[a-zA-Zа-яА-Я0-9-]+)*\.[a-zA-Zа-яА-Я0-9]{2,5}($)?([0-9]{1,5})?(\/?.*)?([^=])?$/;
-const queryRegExp = /^[а-яА-Я\w/{}?#&[\]~=\-():_.%;,+*'!@/$]+$/;
-const customProtocolCheck = /^[а-яА-Я\w:/=0-9?.=-]+$/;
+const queryRegExp = /^[а-яё\w/{}?#&[\]~=\-():.%;,+*'!@$]+$/i;
+const customProtocolCheck = /^[а-я\w\d:/=?.-]+$/i;
 
 function validatePartOfUrl(url, separateMark, regex = queryRegExp) {
     const separateMarkIndex = url.indexOf(separateMark);

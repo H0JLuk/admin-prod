@@ -5,6 +5,7 @@ import main_banner from '../../../../../../../static/images/main_banner.png';
 import presents_main_banner from '../../../../../../../static/images/presents_main_banner.png';
 import presents_main_logo_1 from '../../../../../../../static/images/presents_main_logo_1.png';
 import presents_main_logo_2 from '../../../../../../../static/images/presents_main_logo_2.png';
+import { getPatternAndMessage } from '../../../../../../../utils/validators';
 // import presents_scan_icon from '../../../../../../../static/images/presents_scan_icon.png';
 // import landing_gift from '../../../../../../../static/images/landing.png';
 
@@ -66,13 +67,24 @@ export const EXCURSION_TYPE_ROWS = [
             title: 'Условия',
             type: 'text',
             placeholder: 'Текст условий',
-            // rules: [{ required: true, message: 'Заполните поле' }],
+            rules: [
+                {
+                    ...getPatternAndMessage('promoCampaign', 'textContent'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
         },
         HEADER: {
             title: 'Заголовок на экране с QR',
             placeholder: 'Текст заголовка',
             maxLength: 60,
-            rules: [{ required: true, message: 'Заполните поле' }],
+            rules: [
+                { required: true, message: 'Заполните поле' },
+                {
+                    ...getPatternAndMessage('promoCampaign', 'textContent'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
             type: 'text',
         },
     },
@@ -125,14 +137,26 @@ export const GIFT_TYPE_ROWS = [
             type: 'text',
             placeholder: 'Заголовок',
             maxLength: 60,
-            rules: [{ required: true, message: 'Заполните поле' }],
+            rules: [
+                { required: true, message: 'Заполните поле' },
+                {
+                    ...getPatternAndMessage('promoCampaign', 'textContent'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
         },
         DESCRIPTION: {
             title: 'Текст описания',
             type: 'text',
             placeholder: 'Описание',
             maxLength: 120,
-            rules: [{ required: true, message: 'Заполните поле' }],
+            rules: [
+                { required: true, message: 'Заполните поле' },
+                {
+                    ...getPatternAndMessage('promoCampaign', 'textContent'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
         },
     },
     {
@@ -140,7 +164,12 @@ export const GIFT_TYPE_ROWS = [
             title: 'Условия',
             type: 'text',
             placeholder: 'Текст условий',
-            // rules: [{ required: true, message: 'Заполните поле' }],
+            rules: [
+                {
+                    ...getPatternAndMessage('promoCampaign', 'textContent'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
         },
     }
 ];

@@ -1,54 +1,48 @@
-const commonMessage = 'кириллица и латинские буквы, цифры, и символы ".", "-"';
+const commonMessage = 'кириллица, латинские буквы, цифры, и символы ".", "-", ",", "_"';
+const commonPattern = /^[а-яё\s\w.,-]+$/i;
+const commonRule = {
+    pattern: commonPattern,
+    message: commonMessage,
+};
 
 export const VALIDATE_FIELDS = {
     promoCampaign: {
         name: {
-            pattern: /^[а-яё.\-,/:%\s\d\w]+$/gi,
-            message: `${commonMessage}, ",", "/", "_", ":", "%"`,
+            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+        },
+        textContent: {
+            pattern: /^[а-яё\s\w.,/:%()?!№"-]+$/i,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
         },
     },
     clientApp: {
-        name: {
-            pattern: /^[а-яёa-z.\-,/:\s\d]+$/gi,
-            message: `${commonMessage}, ",", "/", ":"`,
-        },
+        name: commonRule,
         code: {
-            pattern: /^[a-z-_]+$/g,
-            message: 'латинские буквы и символы "_" и "-"',
+            pattern: /^[\w-]+$/,
+            message: 'латинские буквы, цифры, "_", "-"',
         },
         privacyPolicy: {
-            pattern: /^[а-яё.,/:+()\-"\s\w]+$/gi,
-            message: `${commonMessage}, ",", "/", "_", ":", "+", "(", ")", """`,
+            pattern: /^[а-яё\s\w.,-/:%()№"{}]+$/i,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "№", "{", "}", """`,
         },
     },
     dzo: {
-        name: {
-            pattern: /^[a-zа-яё\-.\s\d]+$/gi,
-            message: commonMessage,
-        },
+        name: commonRule,
         code: {
-            pattern: /^[a-z_\d]+$/g,
-            message: 'латинские буквы, цифры и "_"',
+            pattern: /^[\w-]+$/,
+            message: 'латинские буквы, цифры, "_", "-"',
         },
-        description: {
-            pattern: /^[а-яёa-z.\-,/\s\d]+$/gi,
-            message: `${commonMessage} ","`,
-        },
+        description: commonRule,
     },
     category: {
-        name: {
-            pattern: /^[a-zа-яё\-./\s\d]+$/gi,
-            message: `${commonMessage}, "/"`,
-        },
-        description: {
-            pattern: /^[а-яёa-z.\-,/:%\d\s]+$/gi,
-            message: `${commonMessage}, ",", "/", ":", "%"`,
-        },
+        name: commonRule,
+        description: commonRule,
     },
     presentation: {
         common: {
-            pattern: /^[a-zа-яё.\-,?№!"():\s\d]+$/gi,
-            message: `${commonMessage}, ",", "?", "№", "!", """, "(", ")", ":"`,
+            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", """, "№"`,
         },
     },
 };
