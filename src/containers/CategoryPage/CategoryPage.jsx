@@ -46,7 +46,6 @@ class CategoryPage extends Component {
             editingCategory: {
                 id: null,
                 name: null,
-                description: null,
                 url: null,
                 active: null,
             },
@@ -72,7 +71,7 @@ class CategoryPage extends Component {
     }
 
     clearState = () => this.setState({
-        editingCategory: { id: null, name: null, description: null, url: null, active: null }
+        editingCategory: { id: null, name: null, url: null, active: null }
     });
 
     openModal = () => this.setState({ isOpen: true });
@@ -88,8 +87,8 @@ class CategoryPage extends Component {
         }
     };
 
-    handleEdit = (id, name, description, url, active) => this.setState({
-        editingCategory: { id, name, description, url, active }
+    handleEdit = (id, name, url, active) => this.setState({
+        editingCategory: { id, name, url, active }
     }, this.openModal);
 
     handleInputChange(event) {
@@ -118,9 +117,9 @@ class CategoryPage extends Component {
     };
 
     renderModalForm = () => {
-        const { formError, editingCategory: { id, name, description, active } } = this.state;
+        const { formError, editingCategory: { id, name, active } } = this.state;
         const formData = id != null
-            ? populateFormWithData(CATEGORY_FORM, { categoryName: name, categoryDescription: description })
+            ? populateFormWithData(CATEGORY_FORM, { categoryName: name })
             : CATEGORY_FORM;
         return (
             <div className={ styles.modalForm }>
@@ -166,7 +165,6 @@ class CategoryPage extends Component {
                     this.setState({ categories: newCategories });
                 }
                 elem.categoryName = categoryDto.categoryName;
-                elem.categoryDescription = categoryDto.categoryDescription;
                 elem.categoryUrl = staticUrl + categoryDto.categoryUrl;
                 elem.active = active;
             }

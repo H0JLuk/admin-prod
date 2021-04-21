@@ -82,15 +82,6 @@ export const CATEGORY_FORM = {
         validators: [isRequired, categoryNameValidator],
         mask: null
     },
-    categoryDescription: {
-        label: 'Описание категории',
-        value: '',
-        type: 'text',
-        isRequired: false,
-        maxLength: 2048,
-        validators: [categoryDescriptionValidator],
-        mask: null
-    }
 };
 
 export const CLIENT_APP_ADD_FORM = {

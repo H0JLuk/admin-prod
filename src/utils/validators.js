@@ -71,12 +71,6 @@ export const categoryNameValidator = (value) => {
     return pattern.test(value);
 };
 
-export const categoryDescriptionValidator = (value) => {
-    const { pattern } = getPatternAndMessage('category', 'description');
-    pattern.lastIndex = 0;
-    return pattern.test(value);
-};
-
 export const presentationValidator = (value) => {
     const { pattern } = getPatternAndMessage('presentation', 'common');
     pattern.lastIndex = 0;

@@ -11,12 +11,10 @@ import ButtonLabels from '../Button/ButtonLables';
 import { UP, DOWN } from '../../constants/movementDirections';
 
 const CATEGORY_HEADER_LABEL = 'Заголовок: ';
-const CATEGORY_DESCRIPTION_LABEL = 'Описание: ';
 
 const CategoryItem = ({
                           handleDelete, handleEdit, handleMove,
                           categoryId: id, categoryName: name,
-                          categoryDescription: description,
                           categoryUrl: imageUrl, active
 }) => {
     const [curUrl, setUrl] = useState(spinner);
@@ -29,7 +27,7 @@ const CategoryItem = ({
 
     const onDeleteClick = () => handleDelete(id);
 
-    const onEditClick = () => handleEdit(id, name, description ?? '', imageUrl, active);
+    const onEditClick = () => handleEdit(id, name, imageUrl, active);
 
     const handleMoveUp = () => handleMove(id, UP);
 
@@ -41,7 +39,6 @@ const CategoryItem = ({
             <div className={ styles.content }>
                 <div className={ styles.textFieldFormat }>
                     <Field label={ CATEGORY_HEADER_LABEL } value={ `"${name}"` } />
-                    {description && <Field label={ CATEGORY_DESCRIPTION_LABEL } value={ `"${description}"` } />}
                     <p className={ cn(styles.fieldActive, { [styles.red]: !active }) }>
                         { active ? 'Активная' : 'Неактивная' }
                     </p>
@@ -76,7 +73,6 @@ const CategoryItem = ({
 CategoryItem.propTypes = {
     categoryId: PropTypes.number.isRequired,
     categoryName: PropTypes.string.isRequired,
-    categoryDescription: PropTypes.string,
     categoryUrl: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired,
     handleDelete: PropTypes.func.isRequired,

@@ -1,5 +1,4 @@
 import {
-    categoryDescriptionValidator,
     categoryNameValidator,
     digitValidator,
     getPatternAndMessage,
@@ -32,22 +31,6 @@ it('test `categoryNameValidator` function', () => {
     expect(
         categoryNameValidator(
             'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя % АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
-        )
-    ).toBeFalsy();
-});
-
-it('test `categoryDescriptionValidator` function', () => {
-    expect(categoryDescriptionValidator('Тест Описания категории')).toBeTruthy();
-    expect(categoryDescriptionValidator('Тест description Of Category')).toBeTruthy();
-    expect(categoryDescriptionValidator('Тест description Of Category 2')).toBeTruthy();
-    expect(categoryDescriptionValidator('Тест Описания категории, с запятой')).toBeTruthy();
-    expect(categoryDescriptionValidator('Тест Описания категории - через тире')).toBeTruthy();
-    expect(categoryDescriptionValidator('Тест Описания категории _ с нижним подчеркиванием')).toBeTruthy();
-    expect(categoryDescriptionValidator('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBeTruthy();
-    // недопустимый символ #
-    expect(
-        categoryDescriptionValidator(
-            'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя № АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
         )
     ).toBeFalsy();
 });
