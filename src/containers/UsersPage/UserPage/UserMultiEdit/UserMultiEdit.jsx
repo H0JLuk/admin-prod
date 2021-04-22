@@ -22,6 +22,10 @@ const layout = {
     wrapperCol: { span: 12 },
 };
 
+const ACTION_PERMISSIONS = {
+    deleteUser: true,
+};
+
 const UserMultiEdit = ({ matchPath }) => {
     const [location, setLocation] = useState(null);
     const [salePoint, setSalePoint] = useState(null);
@@ -125,6 +129,7 @@ const UserMultiEdit = ({ matchPath }) => {
                         onSubmit={ onSubmit }
                         onDelete={ onDelete }
                         disableAllButtons={ isSendingInfo }
+                        actionPermissions={ ACTION_PERMISSIONS }
                     />
                 </div>
             </div>
