@@ -18,4 +18,21 @@
 
 .buttonsContainer {
     display: flex;
+    margin-top: 15px;
+}
+
+.buttonsContainer > button {
+    margin-right: 5px;
+}
+
+.buttonsContainer a {
+    padding: 5px 15px;
+    border-radius: 2px;
+    cursor: pointer;
+    color: #000000;
+    background-color: #EDEEEF;
+}
+
+.buttonsContainer a:hover {
+    color: #000000;
 }

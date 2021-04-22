@@ -4,8 +4,7 @@ import {
     isRequired,
     digitValidator,
     categoryNameValidator,
-    categoryDescriptionValidator,
-    presentationValidator
+    presentationValidator,
 } from '../../utils/validators';
 
 export const LOGIN_FORM = {

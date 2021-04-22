@@ -256,7 +256,7 @@ const UserList = ({ matchPath }) => {
     }
 
     if (!users.length && !loadingPage && !loadingTableData && !params.filterText && !params.pageNo) {
-        return <EmptyUsersPage />;
+        return <EmptyUsersPage refreshTable={ refreshTable } />;
     }
 
     const linkEdit = () => {

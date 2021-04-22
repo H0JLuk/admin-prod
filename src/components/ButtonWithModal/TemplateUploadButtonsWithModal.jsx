@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import noop from 'lodash/noop';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Select, Upload, Form, Modal } from 'antd';
 import { getReqOptions } from '../../api/services';
@@ -8,15 +9,15 @@ import { downloadFileFunc } from '../../utils/helper';
 
 import styles from './TemplateUploadButtonsWithModal.module.css';
 
-const DOWNLOAD_FILE_NAME = 'Результат загрузки пользователей';
-const WRONG_FILE_ERROR_TITLE = 'Неверный формат файла';
-const OK_BUTTON_TITLE = 'Отправить';
-const CANCEL_BUTTON_TITLE = 'Отменить';
-const ADD_BUTTON_LABEL = 'Добавить';
-const DELETE_BUTTON_LABEL = 'Удалить';
-const DOWNLOAD_BUTTON_TITLE = 'Загрузить файл';
-const APP_LABEL_TITLE = 'Приложение';
-const FILE_LABEL_TITLE = 'Файл';
+const DOWNLOAD_FILE_NAME = 'Результат обработки пользователей';
+const ERROR_WRONG_FILE_TEXT = 'Неверный формат файла';
+const BUTTON_OK_LABEL = 'Отправить';
+const BUTTON_CANCEL_LABEL = 'Отменить';
+const BUTTON_ADD_LABEL = 'Добавить';
+const BUTTON_DELETE_LABEL = 'Удалить';
+const BUTTON_DOWNLOAD_LABEL = 'Загрузить файл';
+const APP_LABEL_TEXT = 'Приложение';
+const FILE_LABEL_TEXT = 'Файл';
 
 const FETCH_ERRORS = {
     edit: 'Не удалось загрузить пользователей.',
@@ -36,9 +37,13 @@ const RULES = {
 const fileTypes = ['csv'];
 const UPLOAD_ACCEPT = `.${ fileTypes.join(', .') }`;
 
-const DEFAULT_ON_SUCCESS_FUNC = function() {};
-
-const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC }) => {
+const TemplateUploadButtonsWithModal = ({
+    onSuccess = noop,
+    btnAddShow = true,
+    btnAddLabel = BUTTON_ADD_LABEL,
+    btnDeleteShow = true,
+    btnDeleteLabel = BUTTON_DELETE_LABEL,
+}) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [fileList, setFileList] = useState([]);
     const [appList, setAppList] = useState([]);
@@ -105,7 +110,7 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
 
         const fileExtension = info.file.name.split('.').pop();
         if (!fileTypes.includes(fileExtension)) {
-            message.error(WRONG_FILE_ERROR_TITLE);
+            message.error(ERROR_WRONG_FILE_TEXT);
             return undefined;
         }
 
@@ -120,24 +125,28 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
 
     return (
         <>
-            <Button
-                type="primary"
-                value="edit"
-                onClick={ showModal }
-            >
-                { ADD_BUTTON_LABEL }
-            </Button>
-            <Button value="delete" onClick={ showModal }>
-                { DELETE_BUTTON_LABEL }
-            </Button>
+            { btnAddShow && (
+                <Button
+                    type="primary"
+                    value="edit"
+                    onClick={ showModal }
+                >
+                    { btnAddLabel }
+                </Button>
+            ) }
+            { btnDeleteShow && (
+                <Button value="delete" onClick={ showModal }>
+                    { btnDeleteLabel }
+                </Button>
+            ) }
             <Modal
                 title={ MODAL_TITLE[type.current] }
                 visible={ isModalVisible }
                 confirmLoading={ loading }
                 onCancel={ handleCancel }
                 onOk={ onOkModal }
-                okText={ OK_BUTTON_TITLE }
-                cancelText={ CANCEL_BUTTON_TITLE }
+                okText={ BUTTON_OK_LABEL }
+                cancelText={ BUTTON_CANCEL_LABEL }
                 centered
             >
                 <Form
@@ -150,7 +159,7 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
                     <Form.Item
                         className={ styles.formItem }
                         rules={ [{ required: true, message: RULES.FILE }] }
-                        label={ FILE_LABEL_TITLE }
+                        label={ FILE_LABEL_TEXT }
                         name="file"
                         valuePropName="file"
                         getValueFromEvent={ normFile }
@@ -166,13 +175,13 @@ const TemplateUploadButtonsWithModal = ({ onSuccess = DEFAULT_ON_SUCCESS_FUNC })
                                 disabled={ fileList.length }
                                 icon={ <UploadOutlined /> }
                             >
-                                { DOWNLOAD_BUTTON_TITLE }
+                                { BUTTON_DOWNLOAD_LABEL }
                             </Button>
                         </Upload>
                     </Form.Item>
                     <Form.Item
                         className={ styles.formItem }
-                        label={ APP_LABEL_TITLE }
+                        label={ APP_LABEL_TEXT }
                         name="appCode"
                         rules={ [{ required: true, message: RULES.APP_CODE }] }
                     >
