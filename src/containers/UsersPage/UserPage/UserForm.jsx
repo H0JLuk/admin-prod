@@ -119,18 +119,12 @@ const userMessage = (login, pwd, mode, errorMessage) => {
 };
 
 const showNotify = ({ login, pwd, mode, errorMessage }) => {
-    const { message, description } = userMessage(login, pwd, mode, errorMessage);
+    const notifyConfig = userMessage(login, pwd, mode, errorMessage);
+
     if (mode === ERROR) {
-        return customNotifications.error({
-            message,
-            description,
-        });
+        return customNotifications.error(notifyConfig);
     }
-    customNotifications.success({
-        message,
-        description,
-        style: { minWidth: '400px' },
-    });
+    customNotifications.success(notifyConfig);
 };
 
 const errorEditPermissions = (personalNumber) => (

@@ -28,13 +28,14 @@ class Notifications {
      * @param {import('antd/lib/notification').ArgsProps} args
      * @param {import('antd/lib/notification').NotificationInstance['open']} action
      */
-    showNotification({ onClose, ...rest } = {}, action) {
+    showNotification({ onClose, style = {}, ...rest } = {}, action) {
         const key = `key_${Date.now()}`;
         this.noticeKeys.push(key);
         action({
             key,
             duration: 0,
             onClose: () => this.onCloseNotice(key, onClose),
+            style: { width: '400px', ...style },
             ...rest,
         });
         this.renderClearBtn();
