@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Col, Radio, Row, Switch } from 'antd';
-import { getClientAppList } from '../../../../../api/services/clientAppService';
+import { getClientAppInfo } from '../../../../../api/services/clientAppService';
 import { getAppCode } from '../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../constants/promoCodeTypes';
 import behaviorTypes from '../../../../../constants/behaviorTypes';
@@ -27,6 +27,10 @@ const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти
 const SHOW_ONLY_IN_BUNDLE = 'Отображать только в составе бандла';
 const EXTERNAL_ID_LABEL = 'Внешний ID';
 const EMPTY_EXTERNAL_ID_LABEL = 'Внешний ID не выбран';
+const DETAIL_BTN_LABEL = 'Текст кнопки';
+const EMPTY_DETAIL_BTN_LABEL = 'Текст не задан';
+const DETAIL_BTN_URL = 'Ссылка для кнопки';
+const EMPTY_DETAIL_BTN_URL = 'Нет ссылки';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
 const BEHAVIOR_TYPE_LABEL = 'Отображать QR-код';
 
@@ -36,15 +40,17 @@ const STATUS_TYPE = {
 };
 
 const StepInfo = ({ promoCampaign }) => {
-
     const [clientApp, setClientApp] = useState();
     const appCode = getAppCode();
 
     useEffect(() => {
         (async () => {
-            const { clientApplicationDtoList = [] } = await getClientAppList();
-            const app = clientApplicationDtoList.find(({ code }) => code === appCode);
-            setClientApp(app);
+            try {
+                const app = await getClientAppInfo(appCode);
+                setClientApp(app);
+            } catch (e) {
+                console.warn(e?.message);
+            }
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -145,8 +151,29 @@ const StepInfo = ({ promoCampaign }) => {
                     <Col span={ 8 }>
                         <div className={ style.infoTitle }>{ BEHAVIOR_TYPE_LABEL }</div>
                         <div className={ style.infoText }>
-                            <Switch disabled checked={ promoCampaign.behaviorType === behaviorTypes.QR } />
+                            <Switch
+                                disabled
+                                checked={ promoCampaign.behaviorType === behaviorTypes.QR }
+                            />
                         </div>
+                    </Col>
+
+                    <Col span={ 16 } className={ style.formGroup }>
+                        <span className={ style.formGroupLabel }>
+                            Настройки детальной кнопки
+                        </span>
+                        <Col span={ 12 }>
+                            <div className={ style.infoTitle }>{ DETAIL_BTN_LABEL }</div>
+                            <div className={ style.infoText }>
+                                { promoCampaign.settings.details_button_label || <i>{ EMPTY_DETAIL_BTN_LABEL }</i> }
+                            </div>
+                        </Col>
+                        <Col span={ 12 }>
+                            <div className={ style.infoTitle }>{ DETAIL_BTN_URL }</div>
+                            <div className={ style.infoText }>
+                                { promoCampaign.settings.details_button_url || <i>{ EMPTY_DETAIL_BTN_URL }</i> }
+                            </div>
+                        </Col>
                     </Col>
 
                 </Row>

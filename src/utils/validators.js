@@ -15,6 +15,7 @@ export const VALIDATE_FIELDS = {
             pattern: /^[а-яё\s\w.,/:%()?!№"-₽]+$/i,
             message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
         },
+        detailsButtonLabel: commonRule,
     },
     clientApp: {
         name: commonRule,

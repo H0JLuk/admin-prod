@@ -93,10 +93,8 @@ function suffixBlock(selectedCount, onRemoveSelectedTag) {
 }
 
 function findName(data, selectedValue, nameKey, keyToCompare) {
-    const name = data.find((elem) => {
-        const key = String(elem[keyToCompare]);
-        return key === selectedValue;
-    });
+    const name = data.find((elem) => String(elem[keyToCompare]) === selectedValue);
+
     return name && name[nameKey];
 }
 

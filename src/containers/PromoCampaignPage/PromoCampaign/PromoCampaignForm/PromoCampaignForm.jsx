@@ -84,6 +84,8 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
         settings: {
             priority_on_web_url: false,
             alternative_offer_mechanic: false,
+            details_button_label: '',
+            details_button_url: '',
         },
         behaviorType: true,
     });

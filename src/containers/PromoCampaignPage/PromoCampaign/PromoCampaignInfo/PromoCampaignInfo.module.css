@@ -24,6 +24,24 @@
     margin-bottom: 15px;
 }
 
+.formGroup {
+    display: flex;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+}
+
+.formGroupLabel {
+    position: absolute;
+    top: -11px;
+    left: 5px;
+    padding: 0 5px;
+    background-color: #f8f8f8;
+}
+
 .infoTitle {
     margin-bottom: 7px;
     font-size: 16px;

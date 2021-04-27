@@ -17,6 +17,23 @@
     width: 100%;
 }
 
+.formGroup {
+    display: flex;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+}
+
+.formGroupLabel {
+    position: absolute;
+    top: -11px;
+    left: 5px;
+    padding: 0 5px;
+    background-color: #f8f8f8;
+}
+
 .promoCampaignName,
 .selectCategories {
     max-width: 600px;

@@ -19,7 +19,7 @@ import { getBooleanFromString } from '../../PromoCampaignFormUtils';
 import styles from './StepInfo.module.css';
 
 const SELECT = 'Выбрать';
-const URL = 'url';
+const URL = 'URL';
 const NAME_PROMO_CAMPAIGN = 'Название промо-кампании';
 const CATEGORY = 'Категории';
 const CATEGORY_PROMO_CAMPAIGN = 'Выберите категорию';
@@ -46,10 +46,15 @@ const SHOW_ONLY_IN_BUNDLE = 'Отображать только в составе
 const EXTERNAL_ID_LABEL = 'Внешний ID';
 const EXTERNAL_ID_PLACEHOLDER = 'Введите внешний ID';
 const EXTERNAL_ID_DUPLICATE = 'Введенный внешний ID уже используется в другой промо-кампании';
+const DETAIL_BTN_LABEL = 'Текст кнопки';
+const DETAIL_BTN_URL = 'Ссылка для кнопки';
 const BEHAVIOR_TYPE_LABEL = 'Отображать QR-код';
 const types_promo = Object.values(promoCodeTypes);
+
 const namePathPriorityOnWebUrl = ['settings', 'priority_on_web_url'];
 const namePathAlternativeOfferMechanic = ['settings', 'alternative_offer_mechanic'];
+const detailsButtonLabelName = ['settings', 'details_button_label'];
+const detailsButtonURLName = ['settings', 'details_button_url'];
 
 const ReverseSwitch = ({ checked, onChange = noop, ...restProps }) => (
     <Switch
@@ -381,7 +386,7 @@ const StepInfo = ({
                     </Col>
                 </Row>
 
-                <Row>
+                <Row gutter={ 24 }>
                     <Col span={ 8 } className={ styles.switchRow }>
                         <Form.Item
                             name="behaviorType"
@@ -391,6 +396,40 @@ const StepInfo = ({
                         >
                             <Switch />
                         </Form.Item>
+                    </Col>
+                    <Col span={ 16 } className={ styles.formGroup }>
+                        <span className={ styles.formGroupLabel }>
+                            Настройки детальной кнопки
+                        </span>
+                        <Col span={ 12 }>
+                            <Form.Item
+                                className={ styles.formItem }
+                                name={ detailsButtonLabelName }
+                                label={ DETAIL_BTN_LABEL }
+                                initialValue={ state.settings.details_button_label }
+                                rules={ [
+                                    {
+                                        ...getPatternAndMessage('promoCampaign', 'detailsButtonLabel'),
+                                        validateTrigger: 'onSubmit',
+                                    }
+                                ] }
+                            >
+                                <Input placeholder="Детали" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={ 12 }>
+                            <Form.Item
+                                className={ styles.formItem }
+                                name={ detailsButtonURLName }
+                                label={ DETAIL_BTN_URL }
+                                initialValue={ state.settings.details_button_url }
+                                rules={ [
+                                    urlCheckRule,
+                                ] }
+                            >
+                                <Input placeholder={ URL } />
+                            </Form.Item>
+                        </Col>
                     </Col>
                 </Row>
 
