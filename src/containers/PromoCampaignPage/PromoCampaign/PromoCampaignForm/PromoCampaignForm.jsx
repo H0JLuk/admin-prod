@@ -41,6 +41,7 @@ import { filterBanner, deleteText } from './PromoCampaignFormSave.utils';
 import { getUnissuedPromoCodeStatistics } from '../../../../api/services/promoCodeService';
 import { editPromoCampaign, newPromoCampaign, copyPromoCampaign } from '../../../../api/services/promoCampaignService';
 import { DEFAULT_OFFER_DURATION } from '../../../../constants/promoCampaigns';
+import behaviorTypes from '../../../../constants/behaviorTypes';
 
 import { ReactComponent as LoadingSpinner } from '../../../../static/images/loading-spinner.svg';
 
@@ -81,9 +82,10 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
         appCode: null,
         standalone: false,
         settings: {
-            priorityOnWebUrl: false,
-            alternativeOfferMechanic: false,
+            priority_on_web_url: false,
+            alternative_offer_mechanic: false,
         },
+        behaviorType: true,
     });
     const [copyPromoCampaignId, setCopyPromoCampaignId] = useState(null);
     const { state: stateFromLocation } = useLocation();
@@ -207,7 +209,13 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
             if (isCopy) {
                 if (typeof copyPromoCampaignId !== 'number') {
                     const dataForCopy = getPromoCampaignForCopy(
-                        { ...oldPromoCampaignData, ...currentData },
+                        {
+                            ...oldPromoCampaignData,
+                            ...currentData,
+                            behaviorType: currentData.behaviorType
+                                ? behaviorTypes.QR
+                                : behaviorTypes.WEB,
+                        },
                         copyVisibilitySettings
                     );
                     oldPromoCampaignData = await copyPromoCampaign(oldPromoCampaignData.id, dataForCopy, currentData.appCode);

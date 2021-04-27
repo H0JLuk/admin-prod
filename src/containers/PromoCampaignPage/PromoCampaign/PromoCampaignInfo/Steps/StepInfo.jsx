@@ -4,6 +4,8 @@ import { Col, Radio, Row, Switch } from 'antd';
 import { getClientAppList } from '../../../../../api/services/clientAppService';
 import { getAppCode } from '../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../constants/promoCodeTypes';
+import behaviorTypes from '../../../../../constants/behaviorTypes';
+import { getBooleanFromString } from '../../PromoCampaignForm/PromoCampaignFormUtils';
 
 import style from '../PromoCampaignInfo.module.css';
 
@@ -26,6 +28,7 @@ const SHOW_ONLY_IN_BUNDLE = 'Отображать только в составе
 const EXTERNAL_ID_LABEL = 'Внешний ID';
 const EMPTY_EXTERNAL_ID_LABEL = 'Внешний ID не выбран';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
+const BEHAVIOR_TYPE_LABEL = 'Отображать QR-код';
 
 const STATUS_TYPE = {
     ACTIVE: 'Активная',
@@ -72,14 +75,14 @@ const StepInfo = ({ promoCampaign }) => {
                         <div className={ style.flexRow }>
                             <Radio
                                 className={ style.checkbox }
-                                checked={ promoCampaign?.settings?.priorityOnWebUrl !== true }
+                                checked={ promoCampaign?.settings?.priority_on_web_url !== true }
                                 disabled
                             >
                                 { URL_SOURCE_DZO_LABEL }
                             </Radio>
                             <Radio
                                 className={ style.checkbox }
-                                checked={ promoCampaign?.settings?.priorityOnWebUrl === true }
+                                checked={ promoCampaign?.settings?.priority_on_web_url === true }
                                 disabled
                             >
                                 { URL_SOURCE_PROMO_CAMPAIGN_LABEL }
@@ -90,7 +93,10 @@ const StepInfo = ({ promoCampaign }) => {
                     <Col span={ 8 } className={ style.switchContainer }>
                         <div className={ style.switch }>
                             <div className={ style.infoTitle }>{ SHOW_GO_TO_LINK_LABEL }</div>
-                            <Switch disabled checked={ promoCampaign.settings?.alternativeOfferMechanic } />
+                            <Switch
+                                disabled
+                                checked={ getBooleanFromString(promoCampaign) } /* TODO убрать JSON parse, когда будет приходить не строка, а булево значение */
+                            />
                         </div>
                     </Col>
 
@@ -135,6 +141,14 @@ const StepInfo = ({ promoCampaign }) => {
                             { promoCampaign.active ? STATUS_TYPE.ACTIVE : STATUS_TYPE.INACTIVE }
                         </div>
                     </Col>
+
+                    <Col span={ 8 }>
+                        <div className={ style.infoTitle }>{ BEHAVIOR_TYPE_LABEL }</div>
+                        <div className={ style.infoText }>
+                            <Switch disabled checked={ promoCampaign.behaviorType === behaviorTypes.QR } />
+                        </div>
+                    </Col>
+
                 </Row>
             </div>
 

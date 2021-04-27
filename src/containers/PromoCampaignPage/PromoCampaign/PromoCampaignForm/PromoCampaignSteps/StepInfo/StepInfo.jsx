@@ -14,6 +14,7 @@ import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWit
 import { getAppCode } from '../../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
 import SelectTags from '../../../../../../components/SelectTags/SelectTags';
+import { getBooleanFromString } from '../../PromoCampaignFormUtils';
 
 import styles from './StepInfo.module.css';
 
@@ -45,10 +46,10 @@ const SHOW_ONLY_IN_BUNDLE = 'Отображать только в составе
 const EXTERNAL_ID_LABEL = 'Внешний ID';
 const EXTERNAL_ID_PLACEHOLDER = 'Введите внешний ID';
 const EXTERNAL_ID_DUPLICATE = 'Введенный внешний ID уже используется в другой промо-кампании';
+const BEHAVIOR_TYPE_LABEL = 'Отображать QR-код';
 const types_promo = Object.values(promoCodeTypes);
-
-const namePathPriorityOnWebUrl = ['settings', 'priorityOnWebUrl'];
-const namePathAlternativeOfferMechanic = ['settings', 'alternativeOfferMechanic'];
+const namePathPriorityOnWebUrl = ['settings', 'priority_on_web_url'];
+const namePathAlternativeOfferMechanic = ['settings', 'alternative_offer_mechanic'];
 
 const ReverseSwitch = ({ checked, onChange = noop, ...restProps }) => (
     <Switch
@@ -201,7 +202,7 @@ const StepInfo = ({
                             label={ URL_SOURCE_LABEL }
                             rules={ [{ required: true, message: 'Укажите источник ссылки для QR-кода' }] }
                             initialValue={
-                                state.settings.priorityOnWebUrl === true
+                                state.settings.priority_on_web_url === true
                                     ? URL_SOURCE_VALUE_PROMO_CAMPAIGN
                                     : URL_SOURCE_VALUE_DZO
                             }
@@ -225,7 +226,7 @@ const StepInfo = ({
                                 </span>
                                 <Form.Item
                                     name={ namePathAlternativeOfferMechanic }
-                                    initialValue={ state.settings.alternativeOfferMechanic }
+                                    initialValue={ getBooleanFromString(state) } /* TODO убрать JSON parse, когда будет приходить не строка, а булево значение */
                                     valuePropName="checked"
                                 >
                                     <Switch />
@@ -379,6 +380,20 @@ const StepInfo = ({
                         </Form.Item>
                     </Col>
                 </Row>
+
+                <Row>
+                    <Col span={ 8 } className={ styles.switchRow }>
+                        <Form.Item
+                            name="behaviorType"
+                            initialValue={ state.behaviorType }
+                            label={ BEHAVIOR_TYPE_LABEL }
+                            valuePropName="checked"
+                        >
+                            <Switch />
+                        </Form.Item>
+                    </Col>
+                </Row>
+
             </div>
 
             <div className={ styles.infoDetail }>

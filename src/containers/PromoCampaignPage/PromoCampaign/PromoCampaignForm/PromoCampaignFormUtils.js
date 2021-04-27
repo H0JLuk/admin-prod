@@ -4,6 +4,7 @@ import { deletePromoCampaignText, newEditPromoCampaignText, newPromoCampaignText
 import { APPLICATION_JSON_TYPE, BANNER_REQUEST, IMAGE, promoCampaignBannerTypes } from './PromoCampaignFormConstants';
 import moment from 'moment';
 import { getAppCode } from '../../../../api/services/sessionService';
+import behaviorTypes from '../../../../constants/behaviorTypes';
 
 const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
 
@@ -150,7 +151,7 @@ export function normalizeFirstStepValue(val) {
         finishDate: finishDate?.endOf('day').toISOString(),
         settings: {
             ...val.settings,
-            priorityOnWebUrl: val.settings.priorityOnWebUrl === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
+            priority_on_web_url: val.settings.priority_on_web_url === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
         },
         webUrl: val.webUrl || null,
     };
@@ -163,6 +164,7 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
     const { banners = [], texts = [] } = promoCampaign;
 
     return {
+        ...promoCampaign,
         name: promoCampaign.name,
         webUrl: promoCampaign.webUrl,
         promoCodeType: isCopy ? undefined : promoCampaign.promoCodeType,
@@ -183,6 +185,7 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
         settings: promoCampaign.settings,
         standalone: promoCampaign.standalone,
         externalId: isCopy ? '' : promoCampaign.externalId,
+        behaviorType: promoCampaign.behaviorType === behaviorTypes.QR ? true : false,
     };
 }
 
@@ -198,8 +201,10 @@ export const getDataForSend = ({
     type,
     categoryIdList,
     settings,
+    oneLinkAppUrl,
     standalone,
-    externalId
+    externalId,
+    behaviorType,
 }) => ({
     name,
     dzoId,
@@ -213,7 +218,9 @@ export const getDataForSend = ({
     standalone,
     type,
     categoryIdList,
+    oneLinkAppUrl,
     externalId: externalId || null,
+    behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
 });
 
 export function getPromoCampaignForCopy(promoCampaign, copyVisibilitySettings) {
@@ -303,4 +310,11 @@ export function checkPromoCodes(promoCampaignRef, promoCampaignFromLocation) {
 
 export function getPromoCampaignValue(promoCampaign, refPromoCampaign) {
     return refPromoCampaign ?? promoCampaign;
+}
+
+export function getBooleanFromString(state) { /* TODO убрать функцию, когда будет приходить не строка, а булево значение */
+    if (state.settings?.alternative_offer_mechanic){
+        return JSON.parse(state.settings.alternative_offer_mechanic);
+    }
+    return false;
 }

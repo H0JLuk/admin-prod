@@ -12,7 +12,7 @@ export const VALIDATE_FIELDS = {
             message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
         },
         textContent: {
-            pattern: /^[а-яё\s\w.,/:%()?!№"-]+$/i,
+            pattern: /^[а-яё\s\w.,/:%()?!№"-₽]+$/i,
             message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
         },
     },

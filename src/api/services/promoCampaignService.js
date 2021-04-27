@@ -1,4 +1,3 @@
-import behaviorTypes from '../../constants/behaviorTypes';
 import { getReqOptions } from './index';
 import { Api, FORM_DATA_CONTENT_TYPE } from '../apiClient';
 import { DEFAULT_OFFER_DURATION } from '../../constants/promoCampaigns';
@@ -37,9 +36,8 @@ export function getPromoCampaignById(id) {
 
 function normalizePromoCampaign(promoCampaign) {
     // TODO: send original promoCampaign without changing behaviorType and offerDuration
-    const behaviorType = promoCampaign?.behaviorType ?? behaviorTypes.QR;
     const offerDuration = promoCampaign?.offerDuration || DEFAULT_OFFER_DURATION;
-    return { ...promoCampaign, behaviorType, offerDuration };
+    return { ...promoCampaign, offerDuration };
 }
 
 export async function createPromoCampaign(promoCampaign) {
