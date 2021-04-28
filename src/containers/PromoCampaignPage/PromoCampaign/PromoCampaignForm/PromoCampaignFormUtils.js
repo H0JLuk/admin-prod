@@ -311,10 +311,3 @@ export function checkPromoCodes(promoCampaignRef, promoCampaignFromLocation) {
 export function getPromoCampaignValue(promoCampaign, refPromoCampaign) {
     return refPromoCampaign ?? promoCampaign;
 }
-
-export function getBooleanFromString(state) { /* TODO убрать функцию, когда будет приходить не строка, а булево значение */
-    if (state.settings?.alternative_offer_mechanic){
-        return JSON.parse(state.settings.alternative_offer_mechanic);
-    }
-    return false;
-}

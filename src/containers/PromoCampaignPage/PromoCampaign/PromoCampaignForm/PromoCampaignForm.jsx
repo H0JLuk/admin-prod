@@ -567,6 +567,7 @@ const PromoCampaignForm = ({ mode = modes.create, matchPath, isCopy }) => {
             switch (step) {
                 case steps.main_info: {
                     const dataForSend = getDataForSend(normalizeFirstStepValue({
+                        ...state,
                         ...val,
                         settings: {
                             ...(promoCampaign?.settings || {}),

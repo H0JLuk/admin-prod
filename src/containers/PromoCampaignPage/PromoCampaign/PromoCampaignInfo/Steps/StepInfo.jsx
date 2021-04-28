@@ -5,7 +5,6 @@ import { getClientAppInfo } from '../../../../../api/services/clientAppService';
 import { getAppCode } from '../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../constants/promoCodeTypes';
 import behaviorTypes from '../../../../../constants/behaviorTypes';
-import { getBooleanFromString } from '../../PromoCampaignForm/PromoCampaignFormUtils';
 
 import style from '../PromoCampaignInfo.module.css';
 
@@ -101,7 +100,7 @@ const StepInfo = ({ promoCampaign }) => {
                             <div className={ style.infoTitle }>{ SHOW_GO_TO_LINK_LABEL }</div>
                             <Switch
                                 disabled
-                                checked={ getBooleanFromString(promoCampaign) } /* TODO убрать JSON parse, когда будет приходить не строка, а булево значение */
+                                checked={ promoCampaign.settings?.alternative_offer_mechanic || false }
                             />
                         </div>
                     </Col>

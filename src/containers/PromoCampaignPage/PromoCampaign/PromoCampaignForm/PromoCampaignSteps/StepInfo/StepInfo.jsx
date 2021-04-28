@@ -14,7 +14,6 @@ import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWit
 import { getAppCode } from '../../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
 import SelectTags from '../../../../../../components/SelectTags/SelectTags';
-import { getBooleanFromString } from '../../PromoCampaignFormUtils';
 
 import styles from './StepInfo.module.css';
 
@@ -231,7 +230,7 @@ const StepInfo = ({
                                 </span>
                                 <Form.Item
                                     name={ namePathAlternativeOfferMechanic }
-                                    initialValue={ getBooleanFromString(state) } /* TODO убрать JSON parse, когда будет приходить не строка, а булево значение */
+                                    initialValue={ state.settings?.alternative_offer_mechanic || false }
                                     valuePropName="checked"
                                 >
                                     <Switch />
