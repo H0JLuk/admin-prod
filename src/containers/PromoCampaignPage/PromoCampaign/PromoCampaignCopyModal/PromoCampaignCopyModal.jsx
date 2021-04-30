@@ -34,7 +34,7 @@ const PromoCampaignCopyModal = ({
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    const onCopyPromoCampaign = async (copyVisibilitySettings = true) => {
+    const onCopyPromoCampaign = (copyVisibilitySettings = true) => {
         const routeState = {
             promoCampaign: promoCampaignData,
             copyVisibilitySettings,

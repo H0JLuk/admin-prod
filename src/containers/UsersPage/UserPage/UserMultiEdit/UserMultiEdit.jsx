@@ -9,7 +9,7 @@ import UserFormButtonGroup from '../UserFormButtonGroup/UserFormButtonGroup';
 import styles from './UserMultiEdit.module.css';
 
 const PAGE_TITLE = 'Пользователи';
-const CHOSE_USERS_COUNT = 'Выбрано пользователей';
+export const CHOSE_USERS_COUNT = 'Выбрано пользователей';
 
 const LOCATION_FIELD = {
     label: 'Выберите локацию',

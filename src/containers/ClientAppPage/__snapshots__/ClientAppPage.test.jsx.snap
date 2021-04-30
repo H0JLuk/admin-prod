@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ClientAppPage /> test should match snapshot 1`] = `
+"<Fragment>
+  <div className=\\"loadingContainer\\">
+    <div className=\\"loading\\">
+      <ForwardRef(SyncOutlined) spin={true} />
+    </div>
+  </div>
+  <div className=\\"container\\">
+    <Header buttonBack={false} />
+    <HeaderWithActions buttons={{...}} setDataList={[Function: bound _dispatchAction]} matchPath=\\"matchPath\\" copyDataList={{...}} inputPlaceholder=\\"Поиск по названию\\" sortByFieldKey=\\"displayName\\" menuItems={{...}} />
+    <div className=\\"content\\">
+      <sortableList useWindowAsScrollContainer={true} onSortEnd={[Function (anonymous)]} axis=\\"y\\" disableAutoscroll={false} distance={0} getHelperDimensions={[Function: defaultGetHelperDimensions]} hideSortableGhost={true} lockOffset=\\"50%\\" lockToContainerEdges={false} pressDelay={0} pressThreshold={5} keyCodes={{...}} shouldCancelStart={[Function: defaultShouldCancelStart]} transitionDuration={300} />
+    </div>
+  </div>
+</Fragment>"
+`;

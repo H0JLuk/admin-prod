@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StepTextAndImage /> tests StepTextAndImage snapshot 1`] = `
+"<div className=\\"containerStep\\">
+  <div>
+    <div className=\\"title\\">
+      Экскурсия
+    </div>
+    <div className=\\"container\\">
+      <Template banners={{...}} texts={{...}} isCopy={false} onRemoveImg={[Function (anonymous)]} type=\\"NORMAL\\" />
+    </div>
+  </div>
+</div>"
+`;

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserListTable test should match snapshot 1`] = `
+"<div className=\\"tableWrapper\\">
+  <Table loading={[undefined]} onRow={[undefined]} rowKey=\\"id\\" className=\\"table\\" rowSelection={[undefined]} dataSource={[undefined]} pagination={[undefined]} showHeader={false} onChange={[undefined]} locale={{...}}>
+    <Column width=\\"20%\\" dataIndex=\\"personalNumber\\" render={[Function: render]} />
+    <Column width=\\"20%\\" dataIndex=\\"locationName\\" render={[Function: render]} />
+    <Column width=\\"20%\\" dataIndex=\\"salePointName\\" render={[Function: render]} />
+    <Column width=\\"25%\\" dataIndex=\\"loginType\\" render={[Function: render]} />
+    <Column width=\\"15%\\" dataIndex=\\"role\\" render={[Function: render]} />
+    <Column width=\\"15%\\" dataIndex=\\"tmpBlocked\\" className=\\"cellRight\\" render={[Function: columnRenderStatus]} />
+  </Table>
+</div>"
+`;

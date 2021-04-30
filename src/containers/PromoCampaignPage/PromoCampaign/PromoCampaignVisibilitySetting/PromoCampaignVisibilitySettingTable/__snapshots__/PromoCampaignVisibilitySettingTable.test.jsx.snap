@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PromoCampaignVisibilitySettingTable /> tests PromoCampaignVisibilitySettingTable snapshot 1`] = `
+"<Table className=\\"table\\" loading={false} rowKey=\\"id\\" pagination={{...}} rowSelection={[undefined]} dataSource={{...}} showHeader={false} onRow={[Function: onRow]} onChange={[Function: onChange]}>
+  <Column width=\\"40%\\" dataIndex=\\"locationName\\" render={[Function: render]} />
+  <Column width=\\"40%\\" dataIndex=\\"salePointName\\" render={[Function: render]} />
+  <Column width=\\"20%\\" className=\\"switch\\" render={[Function: render]} />
+</Table>"
+`;

@@ -69,9 +69,9 @@ const ClientAppMenu = ({ matchUrl, clientAppItem, forceUpdate, history }) => {
 
 export default ClientAppMenu;
 
-const DropdownMenu = ({
+export const DropdownMenu = ({
     onDelete,
-    redirectToEditPage
+    redirectToEditPage,
 }) => (
     <Menu>
         <Menu.Item key="0">

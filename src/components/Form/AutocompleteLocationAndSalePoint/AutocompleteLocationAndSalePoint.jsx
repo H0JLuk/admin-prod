@@ -12,13 +12,13 @@ import { ReactComponent as Cross } from '../../../static/images/cross.svg';
 
 import styles from './AutocompleteLocationAndSalePoint.module.css';
 
-const LOCATION_FIELD = {
+export const LOCATION_FIELD = {
     name: 'location',
     label: 'Локация',
     placeholder: 'Область, город...',
 };
 
-const SALE_POINT_FIELD = {
+export const SALE_POINT_FIELD = {
     name: 'salePoint',
     label: 'Точка продажи',
     placeholder: 'Отделение ВСП',

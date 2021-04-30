@@ -12,7 +12,6 @@ function FormInputByType({
     columnMode,
     ...restProps
 }) {
-
     switch (type) {
         case FORM_TYPES.BANNER:
             return <Banner { ...restProps } />;
@@ -24,7 +23,7 @@ function FormInputByType({
                 />
             );
         case FORM_TYPES.TEXT_BLOCK:
-            return <Input.TextArea { ...restProps } />; /* TODO поменять во всем проекте на showCount */
+            return <Input.TextArea { ...restProps } />;
         default:
             if (!isEdit) {
                 return <Input allowClear { ...restProps } />;

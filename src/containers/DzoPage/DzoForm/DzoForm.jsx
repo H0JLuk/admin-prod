@@ -112,9 +112,9 @@ const DzoForm = ({ type, matchPath }) => {
                         return result;
                     }, []);
 
-                    if (appsToDelete) {
+                    if (appsToDelete.length) {
                         const deleteApps = appsToDelete.map(deleteApp);
-                        deleteApps.length && Promise.all(deleteApps);
+                        await Promise.all(deleteApps);
                     }
                     //delete
 
@@ -181,7 +181,6 @@ const DzoForm = ({ type, matchPath }) => {
                         throw new Error();
                     }
                 }
-
                 history.push(matchPath);
             } catch (e) {
                 setError(e.message);

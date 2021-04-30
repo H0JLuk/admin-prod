@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PromoCampaignInfo /> tests PromoCampaignInfo snapshot 1`] = `
+"<div className=\\"promoContainer\\">
+  <PromoCampaignSideBar active={0} onClick={[Function: bound _dispatchAction]} />
+  <div className=\\"wrapper\\">
+    <Header />
+    <div className=\\"header\\">
+      <div className=\\"title\\" />
+      <div className=\\"buttonGroup\\">
+        <Button type=\\"primary\\" onClick={[Function (anonymous)]}>
+          Редактировать
+        </Button>
+        <PromoCampaignCopyModal promoCampaignData={{...}}>
+          <Button type=\\"primary\\">
+            Копировать
+          </Button>
+        </PromoCampaignCopyModal>
+        <Button type=\\"primary\\" danger={true} onClick={[Function (anonymous)]}>
+          Удалить
+        </Button>
+      </div>
+    </div>
+  </div>
+</div>"
+`;

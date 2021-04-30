@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PromoCampaignVisibilitySetting /> tests PromoCampaignVisibilitySetting snapshot 1`] = `
+"<Fragment>
+  <div className=\\"page\\">
+    <Component />
+    <HeaderWithActions title=\\"Настройки видимости промо-кампании\\" buttons={{...}} showSorting={false} showSearchInput={false} params={{...}} setParams={[Function: bound _dispatchAction]} loadData={[Function (anonymous)]} onChangeSort={[Function (anonymous)]} loading={true} inputPlaceholder=\\"Поиск настройки\\" menuItems={{...}} enableAsyncSort={true} />
+    <div className=\\"tableWrapper\\">
+      <PromoCampaignVisibilitySettingTable dataSource={{...}} selectRow={[Function (anonymous)]} onChangeVisible={[Function (anonymous)]} loading={true} rowSelection={[undefined]} pagination={{...}} onChange={[Function (anonymous)]} />
+    </div>
+  </div>
+  <PromoCampaignVisibilitySettingModal forceUpdate={[Function (anonymous)]} promoCampaignId=\\"24\\" closeModal={[Function (anonymous)]} isModalVisible={false} />
+</Fragment>"
+`;

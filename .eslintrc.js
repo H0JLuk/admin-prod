@@ -42,5 +42,10 @@ module.exports = {
         'indent': ['warn', 4, { SwitchCase: 1 }],
         'key-spacing': ['warn', { mode: 'minimum' }],
         'jsx-quotes': ['warn', 'prefer-double'],
+        'no-else-return': 'error',
+        'eol-last': 'warn',
+        'no-unneeded-ternary': 'error',
+        'space-before-blocks': ['warn', 'always'],
+        'arrow-spacing': 'warn',
     }
 }

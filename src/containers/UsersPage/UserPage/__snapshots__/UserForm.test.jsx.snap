@@ -1,0 +1,453 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserForm /> test should be mount snap with useEffect 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div
+      id="container-for-clearAll"
+    />
+    <div>
+      <div
+        class="container"
+      >
+        <div
+          class="backButton"
+        >
+          <span
+            aria-label="left"
+            class="anticon anticon-left"
+            role="img"
+          >
+            <svg
+              aria-hidden="true"
+              class=""
+              data-icon="left"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 000 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"
+              />
+            </svg>
+          </span>
+           
+           Назад
+        </div>
+        <div
+          class="avatar"
+        >
+          <span
+            aria-label="user"
+            class="anticon anticon-user ant-dropdown-trigger dropdown"
+            role="img"
+            style="font-size: 22px; color: rgb(255, 255, 255); background-color: rgb(193, 200, 209); border-radius: 50px; width: 32px; height: 32px; padding: 3px;"
+            tabindex="-1"
+          >
+            <svg
+              aria-hidden="true"
+              class=""
+              data-icon="user"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+              />
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div
+        class="container"
+      >
+        <div
+          class="pageWrapper"
+        >
+          <div
+            class="pageTitle"
+          >
+            Пользователь 111111
+            <div
+              class="userStatus"
+            >
+              <div
+                class="statusOn"
+              />
+            </div>
+            <div
+              class="status"
+            >
+              Временный пароль
+            </div>
+          </div>
+          <form
+            class="ant-form ant-form-horizontal formStyle"
+          >
+            <div
+              class="formWrapper"
+            >
+              <div
+                class="loginContainer"
+              >
+                <label
+                  class=""
+                  for="login"
+                >
+                  Логин пользователя
+                </label>
+                <div
+                  class="noEditField"
+                  id="idInput"
+                >
+                  111111
+                </div>
+              </div>
+              <div
+                class="labelCol"
+              >
+                <div
+                  class="labelTitle ant-col-8"
+                >
+                  Локация
+                </div>
+                <div
+                  class="noEditField ant-col-12"
+                >
+                  Калининград
+                </div>
+              </div>
+              <div
+                class="labelCol"
+              >
+                <div
+                  class="labelTitle ant-col-8"
+                >
+                  Точка продажи
+                </div>
+                <div
+                  class="noEditField ant-col-12"
+                >
+                  055_8626_1236
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div
+          class="checkboxesWrapper"
+        >
+          <h4
+            class="title"
+          >
+            Доступные приложения
+          </h4>
+          <div
+            class="checkBoxesCol"
+          >
+            <div
+              data-testid="checkboxes"
+            >
+              <span
+                data-testid="checkboxesData"
+              >
+                {"digital-village":{"checked":false,"disabled":false,"id":9,"label":"Партнеры"}}
+              </span>
+              <button
+                data-testid="changeAllCheckboxes"
+              >
+                changeAllCheckboxes
+              </button>
+              <button
+                data-testid="changeOneCheckbox"
+              >
+                changeOneCheckbox
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="buttonsContainer"
+        >
+          <button
+            class="ant-btn ant-btn-primary"
+            type="button"
+          >
+            <span>
+              Сбросить пароль
+            </span>
+          </button>
+          <button
+            class="ant-btn ant-btn-primary"
+            type="button"
+          >
+            <span>
+              Редактировать
+            </span>
+          </button>
+          <button
+            class="ant-btn ant-btn-primary ant-btn-dangerous"
+            type="button"
+          >
+            <span>
+              Удалить
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="container"
+    >
+      <div
+        class="backButton"
+      >
+        <span
+          aria-label="left"
+          class="anticon anticon-left"
+          role="img"
+        >
+          <svg
+            aria-hidden="true"
+            class=""
+            data-icon="left"
+            fill="currentColor"
+            focusable="false"
+            height="1em"
+            viewBox="64 64 896 896"
+            width="1em"
+          >
+            <path
+              d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 000 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"
+            />
+          </svg>
+        </span>
+         
+         Назад
+      </div>
+      <div
+        class="avatar"
+      >
+        <span
+          aria-label="user"
+          class="anticon anticon-user ant-dropdown-trigger dropdown"
+          role="img"
+          style="font-size: 22px; color: rgb(255, 255, 255); background-color: rgb(193, 200, 209); border-radius: 50px; width: 32px; height: 32px; padding: 3px;"
+          tabindex="-1"
+        >
+          <svg
+            aria-hidden="true"
+            class=""
+            data-icon="user"
+            fill="currentColor"
+            focusable="false"
+            height="1em"
+            viewBox="64 64 896 896"
+            width="1em"
+          >
+            <path
+              d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+            />
+          </svg>
+        </span>
+      </div>
+    </div>
+    <div
+      class="container"
+    >
+      <div
+        class="pageWrapper"
+      >
+        <div
+          class="pageTitle"
+        >
+          Пользователь 111111
+          <div
+            class="userStatus"
+          >
+            <div
+              class="statusOn"
+            />
+          </div>
+          <div
+            class="status"
+          >
+            Временный пароль
+          </div>
+        </div>
+        <form
+          class="ant-form ant-form-horizontal formStyle"
+        >
+          <div
+            class="formWrapper"
+          >
+            <div
+              class="loginContainer"
+            >
+              <label
+                class=""
+                for="login"
+              >
+                Логин пользователя
+              </label>
+              <div
+                class="noEditField"
+                id="idInput"
+              >
+                111111
+              </div>
+            </div>
+            <div
+              class="labelCol"
+            >
+              <div
+                class="labelTitle ant-col-8"
+              >
+                Локация
+              </div>
+              <div
+                class="noEditField ant-col-12"
+              >
+                Калининград
+              </div>
+            </div>
+            <div
+              class="labelCol"
+            >
+              <div
+                class="labelTitle ant-col-8"
+              >
+                Точка продажи
+              </div>
+              <div
+                class="noEditField ant-col-12"
+              >
+                055_8626_1236
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div
+        class="checkboxesWrapper"
+      >
+        <h4
+          class="title"
+        >
+          Доступные приложения
+        </h4>
+        <div
+          class="checkBoxesCol"
+        >
+          <div
+            data-testid="checkboxes"
+          >
+            <span
+              data-testid="checkboxesData"
+            >
+              {"digital-village":{"checked":false,"disabled":false,"id":9,"label":"Партнеры"}}
+            </span>
+            <button
+              data-testid="changeAllCheckboxes"
+            >
+              changeAllCheckboxes
+            </button>
+            <button
+              data-testid="changeOneCheckbox"
+            >
+              changeOneCheckbox
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="buttonsContainer"
+      >
+        <button
+          class="ant-btn ant-btn-primary"
+          type="button"
+        >
+          <span>
+            Сбросить пароль
+          </span>
+        </button>
+        <button
+          class="ant-btn ant-btn-primary"
+          type="button"
+        >
+          <span>
+            Редактировать
+          </span>
+        </button>
+        <button
+          class="ant-btn ant-btn-primary ant-btn-dangerous"
+          type="button"
+        >
+          <span>
+            Удалить
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

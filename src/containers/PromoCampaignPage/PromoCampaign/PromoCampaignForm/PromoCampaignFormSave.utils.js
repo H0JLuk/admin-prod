@@ -1,4 +1,4 @@
-export function filterBanner (promoCampaign, bannersIdList, textsList) {
+export function filterBanner(promoCampaign, bannersIdList, textsList) {
     const textsIDs = textsList.map((text) => text.id);
     const texts = promoCampaign.texts.filter((text) => !textsIDs.includes(text.id));
     const banners = promoCampaign.banners.filter((banner) => !bannersIdList.includes(banner.id));

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import noop from 'lodash/noop';
 import { Button } from 'antd';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
 import PromoCampaignVisibilitySettingInput from '../../PromoCampaignVisibilitySettingInput/PromoCampaignVisibilitySettingInput';
@@ -83,8 +84,8 @@ PromoCampaignVisibilitySettingForm.propTypes = {
 };
 
 PromoCampaignVisibilitySettingForm.defaultProps = {
-    onSubmit: () => {},
-    onCancel: () => {},
+    onSubmit: noop,
+    onCancel: noop,
 };
 
 export default PromoCampaignVisibilitySettingForm;

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RestoredTableUser /> tests RestoredTableUser shapshot 1`] = `"<p class=\\"titleRestored\\">Пароль успешно сброшен для:</p><p class=\\"usersList\\">333333333333, 4444444444444, 2000000000000</p><div class=\\"buttonWrapper\\"><button type=\\"button\\" class=\\"ant-btn ant-btn-primary\\"><span>Экспорт паролей</span></button></div>"`;

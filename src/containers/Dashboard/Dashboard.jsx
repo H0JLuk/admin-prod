@@ -41,7 +41,6 @@ const DashboardFilterMenu = ({ onClick }) => (
 );
 
 const DashboardFilterList = ({ list, filterIdList, onClick }) => {
-
     return (
         <div className={ styles.filtersBlock }>
             { list.map((elem, index) => (

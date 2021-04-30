@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserBlockStatus /> test should be mount 1`] = `"<div class=\\"TEST_CLASS\\"><div class=\\"statusOn\\"></div></div>"`;

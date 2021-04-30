@@ -6,7 +6,7 @@ import moment from 'moment';
 import { getAppCode } from '../../../../api/services/sessionService';
 import behaviorTypes from '../../../../constants/behaviorTypes';
 
-const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
+export const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
 
 export function arrayToObject(array, keyForKey, keyForValue) {
     return array.reduce((result, item) => ({ ...result, [item[keyForKey]]: item[keyForValue] }), {});
@@ -70,7 +70,7 @@ export function editTextBanners(promoCampaignTexts, promoCampaign, appCode, onDe
         if (newValue !== prevValue) {
             const textId = textWithType?.id;
 
-            if (textId) {
+            if (typeof textId === 'number') {
                 if (!newValue?.trim()) {
 
                     typeof onDelete === 'function' && onDelete(textId, type);
@@ -114,7 +114,7 @@ export async function EditImgBanners(promoCampaignBanners, promoCampaign, change
             const bannerId = promoCampaign.banners.find(banner => banner.type === bannerType)?.id;
             const [bannerFile] = promoCampaignBanners[formBannerType];
 
-            if (bannerId && !bannerFile) {
+            if (typeof bannerId === 'number' && !bannerFile) {
                 await deletePromoCampaignBanner(bannerId);
                 deletedBannersId.push(bannerId);
                 continue;
@@ -171,9 +171,7 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
         active: promoCampaign.active,
         dzoId: promoCampaign.dzoId,
         type: promoCampaign.type,
-        categoryIdList: promoCampaign.categoryList.reduce((prev, curr) => (
-            [...prev, curr.categoryId]
-        ), []),
+        categoryIdList: promoCampaign.categoryList.map(({ categoryId }) => categoryId),
         banners: arrayToObject(banners, 'type', 'url'),
         texts: arrayToObject(texts, 'type', 'value'),
         datePicker: [
@@ -185,7 +183,7 @@ export function normalizePromoCampaignData({ promoCampaign, appCode, isCopy }) {
         settings: promoCampaign.settings,
         standalone: promoCampaign.standalone,
         externalId: isCopy ? '' : promoCampaign.externalId,
-        behaviorType: promoCampaign.behaviorType === behaviorTypes.QR ? true : false,
+        behaviorType: promoCampaign.behaviorType === behaviorTypes.QR,
     };
 }
 
@@ -249,13 +247,12 @@ export function checkUniqVisibilitySettings(setting) {
     const filteredSettings = setting.filter(({ location, salePoint }) => location || salePoint);
     filteredSettings
         .map(({ location, salePoint }) => `${location?.id ?? ''}${salePoint?.id ?? ''}`)
-        .filter((el, i, array) => {
+        .forEach((el, i, array) => {
             const indexInArray = array.indexOf(el);
             const elemIsUniq = indexInArray === i;
             if (!elemIsUniq) {
                 samePositions.push([indexInArray, i]);
             }
-            return elemIsUniq;
         });
 
     return samePositions;
@@ -285,7 +282,10 @@ export function getVisibilitySettingsWithUpdatedErrors(settings, idx, needUpdate
         ).length;
 
         if (countSettingsWithError > 2) {
-            settings[idx].errors = {};
+            settings[idx] = {
+                ...settings[idx],
+                errors: {},
+            };
         } else {
             settings = settings.map((setting) => {
                 if (setting.errors?.server === errorMessage) {
@@ -300,12 +300,11 @@ export function getVisibilitySettingsWithUpdatedErrors(settings, idx, needUpdate
 }
 
 export function checkPromoCodes(promoCampaignRef, promoCampaignFromLocation) {
-
     if (promoCampaignRef.promoCodeType !== promoCampaignFromLocation?.promoCodeType) {
         return promoCampaignRef.promoCodeType;
-    } else {
-        return promoCampaignFromLocation.promoCodeType;
     }
+
+    return promoCampaignFromLocation.promoCodeType;
 }
 
 export function getPromoCampaignValue(promoCampaign, refPromoCampaign) {

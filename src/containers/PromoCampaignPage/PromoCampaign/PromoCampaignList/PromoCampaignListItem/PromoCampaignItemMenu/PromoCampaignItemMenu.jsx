@@ -62,11 +62,14 @@ const PromoCampaignItemMenu = ({ onDeleteItem, promoCampaign, matchUrl }) => {
         setShowPromoCodesModal(false);
     }, []);
 
-    const promoCodeUpload = useCallback((data) => {
-        uploadPromoCodes(promoCampaign.id, data)
-            .then(() => closeUploadPromoCodesModal())
-            .then(() => showSuccessNotification(ON_PROMO_CODES_LOADED))
-            .catch(error => errorNotice(error.message));
+    const promoCodeUpload = useCallback(async (data) => {
+        try {
+            await uploadPromoCodes(promoCampaign.id, data);
+            closeUploadPromoCodesModal();
+            showSuccessNotification(ON_PROMO_CODES_LOADED);
+        } catch (error) {
+            errorNotice(error.message);
+        }
     }, [closeUploadPromoCodesModal, promoCampaign.id]);
 
     return (

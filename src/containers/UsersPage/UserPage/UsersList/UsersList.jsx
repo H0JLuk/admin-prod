@@ -149,9 +149,9 @@ const UserList = ({ matchPath }) => {
         if (canSelectUsers.length !== selectedItems.rowValues.length) {
             setSelectedItems({ rowKeys: canSelectUsers.map(({ id }) => id), rowValues: canSelectUsers });
             return;
-        } else {
-            clearSelectedItems();
         }
+
+        clearSelectedItems();
     };
 
     const onChangePage = ({ current, pageSize }) => {

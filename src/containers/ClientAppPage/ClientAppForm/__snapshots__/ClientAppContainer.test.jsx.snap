@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ClientAppContainer /> tests should match snapshot 1`] = `
+"<div className=\\"clientAppForm\\">
+  <Component menuMode={true} buttonBack={false} />
+  <div className=\\"header\\">
+    <div className=\\"title\\">
+      Свойства
+    </div>
+  </div>
+  <ForwardRef(SvgLoadingSpinner) />
+</div>"
+`;

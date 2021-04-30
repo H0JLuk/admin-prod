@@ -10,7 +10,7 @@ const LabelWithTooltip = ({ tooltip, title, isImage }) => {
         <img
             className={ styles.tooltipImg }
             src={ tooltip }
-            alt='img'
+            alt="img"
         />
     ) : (
         <div className={ styles.tooltipText }>

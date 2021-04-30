@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserFormButtonGroup /> test should be mount snap 1`] = `"<button type=\\"button\\" class=\\"ant-btn ant-btn-ghost\\"><span>Отменить</span></button><button type=\\"button\\" class=\\"ant-btn ant-btn-primary\\"><span>Сохранить</span></button><button type=\\"button\\" class=\\"ant-btn ant-btn-primary ant-btn-dangerous\\"><span>Удалить</span></button>"`;

@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PromoCampaignForm.test.jsx should render 1`] = `
+"<div className=\\"promoCreateContainer\\">
+  <PromoCampaignSideBar active={1} validStep={1} onClick={[Function: bound _dispatchAction]} newPromoCampaign={true} hideLastStep={false} />
+  <div className=\\"wrapper\\">
+    <Header onClickFunc={false} />
+    <div className=\\"containerControl\\">
+      <p className=\\"headerTitle\\">
+        Новая промо-кампания
+      </p>
+      <p className=\\"headerSteps\\">
+        Шаг
+         
+        1
+         из 
+        3
+      </p>
+      <Button className=\\"btnMR\\" onClick={[Function: handleCancel]}>
+        Отменить
+      </Button>
+      <Button type=\\"primary\\" className=\\"btnMR\\" onClick={[Function: nextStep]}>
+        Далее
+      </Button>
+      <Button type=\\"primary\\" onClick={[Function: handleSaveInfo]} disabled={true}>
+        Сохранить
+      </Button>
+    </div>
+    <ForwardRef(InternalForm) className=\\"containerStep\\" form={{...}} layout=\\"vertical\\" onValuesChange={[Function: isChanged]}>
+      <StepInfo isCopy={[undefined]} state={{...}} changeTypePromo={[Function (anonymous)]} setFieldsValue={[Function (anonymous)]} oldName=\\"Промо-кампания Сбермаркет для витрины ВСП\\" oldExternalId={{...}} copyPromoCampaignId={{...}} mode=\\"create\\" />
+    </ForwardRef(InternalForm)>
+  </div>
+  <div className=\\"loadingWrapper\\">
+    <div className=\\"loading\\">
+      <ForwardRef(SvgLoadingSpinner) />
+    </div>
+  </div>
+</div>"
+`;

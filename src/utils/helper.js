@@ -109,7 +109,7 @@ function sortItems(type, direction, sortableItems) {
     }
 }
 
-function getStringSort(direction, a, b) {
+export function getStringSort(direction, a, b) {
     const aLowerCase = stringToLowerCase(a);
     const bLowerCase = stringToLowerCase(b);
 
@@ -122,7 +122,6 @@ function getStringSort(direction, a, b) {
 }
 
 function getNumberSort(direction, a, b) {
-
     return direction === 'ASC' ? a - b : b - a;
 }
 

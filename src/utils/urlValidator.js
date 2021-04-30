@@ -63,7 +63,7 @@ export const urlCheckRule = {
             return Promise.resolve();
         }
 
-        return validateURL(value) ? Promise.resolve() : Promise.reject(URL_VALIDATION_TEXT);
+        return validateURL(value) ? Promise.resolve() : Promise.reject(new Error(URL_VALIDATION_TEXT));
     },
     validateTrigger: 'onSubmit',
 };

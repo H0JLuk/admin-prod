@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PromoCampaignCopyModal /> tests. render with modal. should render modal and children 1`] = `"<div id=\\"test\\">test</div>"`;
+
+exports[`<PromoCampaignCopyModal /> tests. should render only children 1`] = `"<div id=\\"test\\">test</div>"`;

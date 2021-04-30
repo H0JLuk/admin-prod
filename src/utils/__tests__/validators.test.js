@@ -9,74 +9,74 @@ import {
 const validateField = (regex, value) => regex.test(value);
 
 it('test `isRequired` function', () => {
-    expect(isRequired('')).toBeFalsy();
-    expect(isRequired('some text')).toBeTruthy();
+    expect(isRequired('')).toBe(false);
+    expect(isRequired('some text')).toBe(true);
 });
 
 it('test `digitValidator` function', () => {
-    expect(digitValidator('awdawd24124')).toBeFalsy();
-    expect(digitValidator('123 23')).toBeFalsy();
-    expect(digitValidator('12521421')).toBeTruthy();
+    expect(digitValidator('awdawd24124')).toBe(false);
+    expect(digitValidator('123 23')).toBe(false);
+    expect(digitValidator('12521421')).toBe(true);
 });
 
 it('test `categoryNameValidator` function', () => {
-    expect(categoryNameValidator('Тест ИмЕни категории')).toBeTruthy();
-    expect(categoryNameValidator('Тест name Of Category')).toBeTruthy();
-    expect(categoryNameValidator('Тест name Of Category 2')).toBeTruthy();
-    expect(categoryNameValidator('Тест ИмЕни категории, с запятой')).toBeTruthy();
-    expect(categoryNameValidator('Тест ИмЕни категории - через тире')).toBeTruthy();
-    expect(categoryNameValidator('Тест ИмЕни категории _ с нижним подчеркиванием')).toBeTruthy();
-    expect(categoryNameValidator('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBeTruthy();
+    expect(categoryNameValidator('Тест ИмЕни категории')).toBe(true);
+    expect(categoryNameValidator('Тест name Of Category')).toBe(true);
+    expect(categoryNameValidator('Тест name Of Category 2')).toBe(true);
+    expect(categoryNameValidator('Тест ИмЕни категории, с запятой')).toBe(true);
+    expect(categoryNameValidator('Тест ИмЕни категории - через тире')).toBe(true);
+    expect(categoryNameValidator('Тест ИмЕни категории _ с нижним подчеркиванием')).toBe(true);
+    expect(categoryNameValidator('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBe(true);
     // недопустимый символ %
     expect(
         categoryNameValidator(
             'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя % АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
         )
-    ).toBeFalsy();
+    ).toBe(false);
 });
 
 it('test `presentationValidator` function', () => {
-    expect(presentationValidator('Тест значения поля В презентации')).toBeTruthy();
-    expect(presentationValidator('Тест presentation field')).toBeTruthy();
-    expect(presentationValidator('Тест presentation field 2')).toBeTruthy();
-    expect(presentationValidator('Тест значения поля В презентации, с запятой')).toBeTruthy();
-    expect(presentationValidator('Тест значения поля В презентации - через тире')).toBeTruthy();
-    expect(presentationValidator('Тест значения поля В презентации _ с нижним подчеркиванием')).toBeTruthy();
-    expect(presentationValidator('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%(?)!"№')).toBeTruthy();
+    expect(presentationValidator('Тест значения поля В презентации')).toBe(true);
+    expect(presentationValidator('Тест presentation field')).toBe(true);
+    expect(presentationValidator('Тест presentation field 2')).toBe(true);
+    expect(presentationValidator('Тест значения поля В презентации, с запятой')).toBe(true);
+    expect(presentationValidator('Тест значения поля В презентации - через тире')).toBe(true);
+    expect(presentationValidator('Тест значения поля В презентации _ с нижним подчеркиванием')).toBe(true);
+    expect(presentationValidator('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%(?)!"№')).toBe(true);
     // недопустимый символ @
     expect(
         presentationValidator(
             'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя @ АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
         )
-    ).toBeFalsy();
+    ).toBe(false);
 });
 
 describe('validate promoCampaign fields.', () => {
 
     it('test regex for `name`', () => {
         const { pattern } = getPatternAndMessage('promoCampaign', 'name');
-        expect(validateField(pattern, 'Test Имени промо-кампании.')).toBeTruthy();
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%(?)!"№')).toBeTruthy();
+        expect(validateField(pattern, 'Test Имени промо-кампании.')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%(?)!"№')).toBe(true);
         // недопустимый символ @
         expect(
             validateField(
                 pattern,
                 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя @ АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 
     it('test regex for `textContent` on second step', () => {
         const { pattern } = getPatternAndMessage('promoCampaign', 'textContent');
-        expect(validateField(pattern, 'Test Имени промо-кампании.')).toBeTruthy();
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%(?)!"№')).toBeTruthy();
+        expect(validateField(pattern, 'Test Имени промо-кампании.')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%(?)!"№')).toBe(true);
         // недопустимый символ @
         expect(
             validateField(
                 pattern,
                 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя @ АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 });
 
@@ -84,42 +84,42 @@ describe('validate clientApp fields', () => {
 
     it('test regex for `name`', () => {
         const { pattern } = getPatternAndMessage('clientApp', 'name');
-        expect(validateField(pattern, 'Test Имени клиентского приложения.')).toBeTruthy();
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBeTruthy();
+        expect(validateField(pattern, 'Test Имени клиентского приложения.')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBe(true);
         // недопустимый символ /
         expect(
             validateField(
                 pattern,
                 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя / АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 
     it('test regex for `code`', () => {
         const { pattern } = getPatternAndMessage('clientApp', 'code');
-        expect(validateField(pattern, 'Test_for_Code_clientApp')).toBeTruthy();
-        expect(validateField(pattern, 'Test for Code clientApp')).toBeFalsy();
-        expect(validateField(pattern, 'тест_кода')).toBeFalsy();
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-')).toBeTruthy();
+        expect(validateField(pattern, 'Test_for_Code_clientApp')).toBe(true);
+        expect(validateField(pattern, 'Test for Code clientApp')).toBe(false);
+        expect(validateField(pattern, 'тест_кода')).toBe(false);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-')).toBe(true);
         expect(
             validateField(
                 pattern,
                 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.'
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 
     it('test regex for `privacyPolicy`', () => {
         const { pattern } = getPatternAndMessage('clientApp', 'privacyPolicy');
-        expect(validateField(pattern, 'Test политики конфиденциальности клиентского приложения.')).toBeTruthy();
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%()№{}"')).toBeTruthy();
+        expect(validateField(pattern, 'Test политики конфиденциальности клиентского приложения.')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%()№{}"')).toBe(true);
         // недопустимый символ @
         expect(
             validateField(
                 pattern,
                 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя @ АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%()№{}"'
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 });
 
@@ -127,52 +127,52 @@ describe('validate DZO fields', () => {
 
     it('test regex for `name`', () => {
         const { pattern } = getPatternAndMessage('dzo', 'name');
-        expect(validateField(pattern, 'Тест ИмЕни ДЗО')).toBeTruthy();
-        expect(validateField(pattern, 'Тест name')).toBeTruthy();
-        expect(validateField(pattern, 'Тест name 2')).toBeTruthy();
-        expect(validateField(pattern, 'Тест ИмЕни ДЗО, с запятой')).toBeTruthy();
-        expect(validateField(pattern, 'Тест ИмЕни ДЗО - через тире')).toBeTruthy();
-        expect(validateField(pattern, 'Тест ИмЕни ДЗО _ с нижним подчеркиванием')).toBeTruthy();
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBeTruthy();
+        expect(validateField(pattern, 'Тест ИмЕни ДЗО')).toBe(true);
+        expect(validateField(pattern, 'Тест name')).toBe(true);
+        expect(validateField(pattern, 'Тест name 2')).toBe(true);
+        expect(validateField(pattern, 'Тест ИмЕни ДЗО, с запятой')).toBe(true);
+        expect(validateField(pattern, 'Тест ИмЕни ДЗО - через тире')).toBe(true);
+        expect(validateField(pattern, 'Тест ИмЕни ДЗО _ с нижним подчеркиванием')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBe(true);
         // недопустимый символ %
         expect(
             validateField(
                 pattern,
                 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя % АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 
     it('test regex for `code`', () => {
         const { pattern } = getPatternAndMessage('dzo', 'code');
-        expect(validateField(pattern, 'Test_for_Code_dzo')).toBeTruthy();
-        expect(validateField(pattern, 'Test for Code dzo')).toBeFalsy();
-        expect(validateField(pattern, 'тест_кода')).toBeFalsy();
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-')).toBeTruthy();
+        expect(validateField(pattern, 'Test_for_Code_dzo')).toBe(true);
+        expect(validateField(pattern, 'Test for Code dzo')).toBe(false);
+        expect(validateField(pattern, 'тест_кода')).toBe(false);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-')).toBe(true);
         expect(
             validateField(
                 pattern,
                 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.'
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 
     it('test regex for `description`', () => {
         const { pattern } = getPatternAndMessage('dzo', 'description');
-        expect(validateField(pattern, 'Тест описания ДЗО')).toBeTruthy();
-        expect(validateField(pattern, 'Тест description')).toBeTruthy();
-        expect(validateField(pattern, 'Тест description 2')).toBeTruthy();
-        expect(validateField(pattern, 'Тест описания ДЗО, с запятой')).toBeTruthy();
-        expect(validateField(pattern, 'Тест описания ДЗО - через тире')).toBeTruthy();
-        expect(validateField(pattern, 'Тест описания ДЗО _ с нижним подчеркиванием')).toBeTruthy();
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBeTruthy();
+        expect(validateField(pattern, 'Тест описания ДЗО')).toBe(true);
+        expect(validateField(pattern, 'Тест description')).toBe(true);
+        expect(validateField(pattern, 'Тест description 2')).toBe(true);
+        expect(validateField(pattern, 'Тест описания ДЗО, с запятой')).toBe(true);
+        expect(validateField(pattern, 'Тест описания ДЗО - через тире')).toBe(true);
+        expect(validateField(pattern, 'Тест описания ДЗО _ с нижним подчеркиванием')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_')).toBe(true);
         // недопустимый символ %
         expect(
             validateField(
                 pattern,
                 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя % АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 
 });

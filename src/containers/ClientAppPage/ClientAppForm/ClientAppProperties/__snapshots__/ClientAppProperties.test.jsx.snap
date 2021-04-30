@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ClientAppProperties /> test should match snapshot  1`] = `
+"<div className=\\"clientAppForm\\">
+  <ForwardRef(InternalForm) className=\\"form\\" form={{...}} onFinish={[Function: handleSubmit]} layout=\\"vertical\\" onFieldsChange={[Function: enableBtn]} id=\\"edit\\">
+    <div className=\\"container\\">
+      <AppFormConstructor row={{...}} isEdit={true} />
+      <AppFormConstructor row={{...}} isEdit={true} />
+    </div>
+    <div className=\\"container mrt\\">
+      <AppFormConstructor row={{...}} />
+      <AppFormConstructor row={{...}} />
+      <AppFormConstructor row={{...}} />
+      <AppFormConstructor row={{...}} />
+    </div>
+    <div className=\\"buttonGroup\\">
+      <Button disabled={true} type=\\"primary\\" htmlType=\\"submit\\">
+        Сохранить
+      </Button>
+    </div>
+  </ForwardRef(InternalForm)>
+</div>"
+`;

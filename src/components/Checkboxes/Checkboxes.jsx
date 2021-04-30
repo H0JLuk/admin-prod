@@ -3,9 +3,9 @@ import { Checkbox } from 'antd';
 
 import styles from './Checkboxes.module.css';
 
-const ALL_APPS_CHECKBOX_TEXT = 'Все приложения';
+export const ALL_APPS_CHECKBOX_TEXT = 'Все приложения';
 
-const CheckBoxCustom = ({ label, name, disabled, onChange, checked }) => {
+export const CheckBoxCustom = ({ label, name, disabled, onChange, checked }) => {
     const onChangeHandler = useCallback((e) => onChange(e.target.checked, name), [onChange, name]);
 
     return (

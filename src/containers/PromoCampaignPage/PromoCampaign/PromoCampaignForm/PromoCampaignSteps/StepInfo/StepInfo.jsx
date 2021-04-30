@@ -56,7 +56,7 @@ const namePathAlternativeOfferMechanic = ['settings', 'alternative_offer_mechani
 const detailsButtonLabelName = ['settings', 'details_button_label'];
 const detailsButtonURLName = ['settings', 'details_button_url'];
 
-const ReverseSwitch = ({ checked, onChange = noop, ...restProps }) => (
+export const ReverseSwitch = ({ checked, onChange = noop, ...restProps }) => (
     <Switch
         checked={ !checked }
         onChange={ (value) => onChange(!value) }
@@ -93,7 +93,6 @@ const StepInfo = ({
             setCategories(categoryList.filter(({ active }) => active));
             setClientApps(allApps.filter(({ isDeleted }) => !isDeleted));
         })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

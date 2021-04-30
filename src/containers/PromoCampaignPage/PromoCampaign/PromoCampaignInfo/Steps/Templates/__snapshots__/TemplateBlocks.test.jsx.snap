@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TemplateBlocks /> test <ImageBlock /> test ImageBlock snapshot 1`] = `"<div class=\\"title\\">label</div><div class=\\"block\\"><div class=\\"\\"><img class=\\"banner\\" src=\\"src\\" alt=\\"\\"/></div><div class=\\"footer\\"><div class=\\"fileName\\">src</div><div class=\\"fileSize\\">size</div></div></div>"`;
+
+exports[`<TemplateBlocks /> test <TextBlock /> test TextBlock snapshot 1`] = `"<div class=\\"title\\">label</div><div class=\\"text\\">text</div>"`;

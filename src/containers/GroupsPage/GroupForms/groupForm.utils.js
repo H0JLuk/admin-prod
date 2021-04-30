@@ -139,9 +139,9 @@ export function editCampaignGroupTexts(currentTexts, oldTexts = [], groupId) {
                     return deleteCampaignGroupText(text.id);
                 }
                 return updateCampaignGroupText(nextText, text.id);
-            } else {
-                return nextValue?.trim() && createCampaignGroupText(nextText);
             }
+
+            return nextValue?.trim() && createCampaignGroupText(nextText);
         }
         return null;
     });
@@ -167,9 +167,9 @@ export function editCampaignGroupBanners(currentBanners, oldBanners, groupId) {
 
                 if (isBannerID) {
                     return updateCampaignGroupBanner(formData, banner.id);
-                } else {
-                    return createCampaignGroupBanner(formData);
                 }
+
+                return createCampaignGroupBanner(formData);
             }
             return null;
         }
@@ -232,15 +232,15 @@ export function editCampaignGroupLinkTexts(currentTexts, oldTexts = [], linkId) 
                     return deleteCampaignGroupLinkText(text.id);
                 }
                 return updateCampaignGroupLinkText(text.id, nextText);
-            } else {
-                return nextValue?.trim() && createCampaignGroupLinkText(nextText);
             }
+
+            return nextValue?.trim() && createCampaignGroupLinkText(nextText);
         }
         return null;
     });
 }
 
-export function editCampaignGroupLinkBanners(currentBanners, oldBanners = [], linkId){
+export function editCampaignGroupLinkBanners(currentBanners, oldBanners = [], linkId) {
 
     return Object.entries(currentBanners).map(([type, file]) => {
         if (isArray(file)) {
@@ -261,9 +261,9 @@ export function editCampaignGroupLinkBanners(currentBanners, oldBanners = [], li
 
                 if (isBannerID) {
                     return updateCampaignGroupLinkBanner(banner.id, formData);
-                } else {
-                    return createCampaignGroupLinkBanner(formData);
                 }
+
+                return createCampaignGroupLinkBanner(formData);
             }
             return null;
         }

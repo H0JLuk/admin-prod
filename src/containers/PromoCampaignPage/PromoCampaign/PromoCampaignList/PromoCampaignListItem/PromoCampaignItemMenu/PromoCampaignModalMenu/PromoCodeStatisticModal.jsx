@@ -7,7 +7,7 @@ const { Title } = Typography;
 const TITLE = 'Статистика использования промокодов';
 const OK_TEXT = 'Хорошо';
 
-const promoCodeTypes = {
+export const promoCodeTypes = {
     PERSONAL: 'В рамках данной промо-кампании любым клиентам выдаются персональные промокоды',
     PERSONAL_CLIENT_POOL: 'В рамках данной промо-кампании определенным клиентам выдаются персональные промокоды',
     COMMON: 'В рамках данной промо-кампании любым клиентам выдается единый промокод',
@@ -33,7 +33,7 @@ const PromoCodeStatisticModal = ({ onClose, open, id, promoCodeType }) => {
         setPromoCodesStatistic(promoCampaignStatisticsDto);
     };
 
-    useEffect(()=> {
+    useEffect(() => {
         if (open) {
             getPromoCampaignStatistic();
         }
@@ -54,8 +54,8 @@ const PromoCodeStatisticModal = ({ onClose, open, id, promoCodeType }) => {
             <Row gutter={ 16 }>
                 <Col span={ 12 }>
                     <Statistic
-                        title='Использовано промокодов'
-                        groupSeparator=''
+                        title="Использовано промокодов"
+                        groupSeparator=""
                         value={ issuedPromoCodesNumber }
                         suffix={ `/ ${totalPromoCodesNumber}` }
                     />

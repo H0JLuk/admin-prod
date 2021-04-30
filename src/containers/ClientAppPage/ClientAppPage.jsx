@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
-import { arrayMove, SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { SyncOutlined } from '@ant-design/icons';
 
 import Header from '../../components/Header/Header';
@@ -10,6 +10,7 @@ import { getClientAppList, reorderClientApp } from '../../api/services/clientApp
 import { CLIENT_APPS_PAGES } from '../../constants/route';
 import { getRole } from '../../api/services/sessionService';
 import ROLES from '../../constants/roles';
+import { arrayMove } from '../../utils/helper';
 
 import style from './ClientAppPage.module.css';
 

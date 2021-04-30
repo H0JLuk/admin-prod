@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MenuLinks /> test should be mount snap 1`] = `"<div><a class=\\"menuItem\\" href=\\"/TEST_PATH\\">TEST_ITEM</a></div>"`;

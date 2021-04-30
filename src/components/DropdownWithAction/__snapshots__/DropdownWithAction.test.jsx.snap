@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test to open dropdown and select element click menu item element 1`] = `
+<div
+  class="dropdownMenuItem"
+>
+  TEST_LABEL_ONE
+</div>
+`;

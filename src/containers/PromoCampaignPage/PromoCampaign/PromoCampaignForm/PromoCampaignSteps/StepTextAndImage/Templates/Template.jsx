@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Col, Row } from 'antd';
 import UploadPicture from '../../../../../../../components/UploadPicture/UploadPicture';
 import { getLabel } from '../../../../../../../components/LabelWithTooltip/LabelWithTooltip';
@@ -10,11 +10,7 @@ import styles from './Template.module.css';
 const ADD = 'Добавить';
 
 const Template = ({ banners, texts, type, onRemoveImg, isCopy }) => {
-    const [infoRows, setInfoRows] = useState([]);
-
-    useEffect(() => {
-        setInfoRows(INFO_ROWS[type] || []);
-    }, [type]);
+    const [infoRows] = useState(INFO_ROWS[type] || []);
 
     return infoRows.map((row, index) => (
         <Row

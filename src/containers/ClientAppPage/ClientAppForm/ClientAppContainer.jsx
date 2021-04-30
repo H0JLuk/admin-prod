@@ -185,7 +185,7 @@ function doDesignSettings (settings) {
     return { home_page_theme, ...restSettings };
 }
 
-function doPropertiesSettings (settings, { displayName, code, name }) {
+export function doPropertiesSettings (settings, { displayName, code, name }) {
     const url = getStaticUrl();
     settings.installation_url = settings.installation_url && settings.installation_url.replace(url, '');
     settings.usage_url = settings.usage_url && settings.usage_url.replace(url, '');

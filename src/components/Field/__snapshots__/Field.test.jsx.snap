@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Field /> with no props should match the snapshot 1`] = `"<p class=\\"text\\"><span class=\\"bold\\"></span></p>"`;
+
+exports[`<Field /> with props should match the snapshot 1`] = `"<p class=\\"text\\"><span class=\\"bold\\">test</span>test_value</p>"`;

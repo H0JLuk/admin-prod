@@ -12,12 +12,7 @@ function SelectTags({
     idKey = 'code',
     placeholder,
 }) {
-
     const stringValue = value.map(String);
-
-    const setSelect = (tag) => {
-        onChange(tag);
-    };
 
     const onRemoveSelectedTag = () => {
         onChange([]);
@@ -64,7 +59,7 @@ function SelectTags({
             placeholder={ placeholder }
             maxTagPlaceholder={ tagsPlaceholder }
             tagRender={ selectTagRender }
-            onChange={ setSelect }
+            onChange={ onChange }
             dropdownClassName={ styles.dropdown }
             options={ options }
             value={ stringValue }
@@ -99,5 +94,3 @@ function findName(data, selectedValue, nameKey, keyToCompare) {
 }
 
 export default SelectTags;
-
-

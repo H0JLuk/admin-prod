@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DashboardFilterTag /> test should be mount snap 1`] = `"<div class=\\"tag\\"><p class=\\"text\\">test</p></div>"`;

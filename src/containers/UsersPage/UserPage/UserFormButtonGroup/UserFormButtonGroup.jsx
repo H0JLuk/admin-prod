@@ -3,11 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { LOGIN_TYPES_ENUM } from '../../../../constants/loginTypes';
 
-const BUTTON_DELETE_TEXT = 'Удалить';
-const BUTTON_CANCEL_TEXT = 'Отменить';
-const BUTTON_ADD_USER_TEXT = 'Добавить';
-const BUTTON_SAVE_EDIT_USER_TEXT = 'Сохранить';
-const INFO_USER_BUTTONS = {
+export const BUTTON = {
+    DELETE_TEXT: 'Удалить',
+    CANCEL_TEXT: 'Отменить',
+    ADD_USER_TEXT: 'Добавить',
+    SAVE_EDIT_USER_TEXT: 'Сохранить',
+};
+
+export const INFO_USER_BUTTONS = {
     RESET_PASSWORD: 'Сбросить пароль',
     EDIT: 'Редактировать',
     UNBLOCK: 'Разблокировать',
@@ -29,13 +32,13 @@ const UserFormButtonGroup = ({
 
     const deleteButton = deleteUser && (
         <Button type="primary" danger onClick={ onDelete } disabled={ disableAllButtons }>
-            { BUTTON_DELETE_TEXT }
+            { BUTTON.DELETE_TEXT }
         </Button>
     );
 
     const cancelButton = (
         <Button type="ghost" onClick={ onCancel } disabled={ disableAllButtons }>
-            { BUTTON_CANCEL_TEXT }
+            { BUTTON.CANCEL_TEXT }
         </Button>
     );
 
@@ -45,7 +48,7 @@ const UserFormButtonGroup = ({
                 <>
                     { cancelButton }
                     <Button type="primary" onClick={ onSubmit } disabled={ disableAllButtons }>
-                        { BUTTON_ADD_USER_TEXT }
+                        { BUTTON.ADD_USER_TEXT }
                     </Button>
                 </>
             );
@@ -55,7 +58,7 @@ const UserFormButtonGroup = ({
                 <>
                     { cancelButton }
                     <Button type="primary" onClick={ onSubmit } disabled={ disableAllButtons }>
-                        { BUTTON_SAVE_EDIT_USER_TEXT }
+                        { BUTTON.SAVE_EDIT_USER_TEXT }
                     </Button>
                     { deleteButton }
                 </>

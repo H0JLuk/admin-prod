@@ -175,6 +175,6 @@ export const GIFT_TYPE_ROWS = [
 ];
 
 export const INFO_ROWS = {
-    excursion: EXCURSION_TYPE_ROWS,
-    gift: GIFT_TYPE_ROWS,
+    NORMAL: EXCURSION_TYPE_ROWS,
+    PRESENT: GIFT_TYPE_ROWS,
 };

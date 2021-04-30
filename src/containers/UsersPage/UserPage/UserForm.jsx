@@ -30,7 +30,7 @@ const PASSWORD_FIELD = {
     name: 'tempPassword',
 };
 
-const LOGIN_FIELD = {
+export const LOGIN_FIELD = {
     name: 'login',
     label: 'Логин пользователя',
     placeholder: 'Табельный номер',
@@ -53,11 +53,14 @@ const layout = {
 
 const DEFAULT_ERRORS = { login: '', location: '', salePoint: '', backend: '' };
 
-const CREATE = 'CREATE';
-const EDIT = 'EDIT';
-const RESTORED = 'RESTORED';
-const DELETE = 'DELETE';
-const ERROR = 'ERROR';
+export const MODE = {
+    CREATE: 'CREATE',
+    EDIT: 'EDIT',
+    RESTORED: 'RESTORED',
+    DELETE: 'DELETE',
+    ERROR: 'ERROR',
+};
+
 const USER_PASSWORD = 'Пароль пользователя';
 const NEW_USER_PASSWORD = 'Новый пароль пользователя';
 const COPY = 'Копировать';
@@ -67,7 +70,7 @@ const patternLogin = /[^a-zа-яё0-9]+/i;
 
 const userMessage = (login, pwd, mode, errorMessage) => {
     switch (mode) {
-        case CREATE: {
+        case MODE.CREATE: {
             return {
                 message: `Пользователь с табельным номером ${ login } успешно создан`,
                 description: (
@@ -77,7 +80,7 @@ const userMessage = (login, pwd, mode, errorMessage) => {
                 ),
             };
         }
-        case EDIT: {
+        case MODE.EDIT: {
             return {
                 message: 'Данные пользователя успешно обновлены',
                 description: pwd ? (
@@ -87,7 +90,7 @@ const userMessage = (login, pwd, mode, errorMessage) => {
                 ) : '',
             };
         }
-        case RESTORED: {
+        case MODE.RESTORED: {
             return {
                 message: `Пароль пользователя с табельным номером ${ login } успешно сброшен`,
                 description: (
@@ -97,13 +100,13 @@ const userMessage = (login, pwd, mode, errorMessage) => {
                 ),
             };
         }
-        case DELETE: {
+        case MODE.DELETE: {
             return {
                 message: `Пользователь с табельным номером ${ login } успешно удален`,
                 description: '',
             };
         }
-        case ERROR: {
+        case MODE.ERROR: {
             return {
                 message: errorMessage,
                 description: '',
@@ -121,7 +124,7 @@ const userMessage = (login, pwd, mode, errorMessage) => {
 const showNotify = ({ login, pwd, mode, errorMessage }) => {
     const notifyConfig = userMessage(login, pwd, mode, errorMessage);
 
-    if (mode === ERROR) {
+    if (mode === MODE.ERROR) {
         return customNotifications.error(notifyConfig);
     }
     customNotifications.success(notifyConfig);
@@ -229,10 +232,10 @@ const UserForm = ({ type, matchPath }) => {
 
             if (notNewUser) {
                 const { newPassword } = await saveUser(userData.id, requestData);
-                showNotify({ mode: EDIT, pwd: newPassword });
+                showNotify({ mode: MODE.EDIT, pwd: newPassword });
             } else {
                 const { generatedPassword } = await addUser({ ...requestData, personalNumber: login });
-                showNotify({ login, pwd: generatedPassword, mode: CREATE });
+                showNotify({ login, pwd: generatedPassword, mode: MODE.CREATE });
             }
         } catch (e) {
             setIsSendingInfo(false);
@@ -285,10 +288,10 @@ const UserForm = ({ type, matchPath }) => {
             } else {
                 const { generatedPassword } = await resetUser(userData.personalNumber);
                 setUserData({ ...userData, tempPassword: true });
-                showNotify({ login: userData.personalNumber, pwd: generatedPassword, mode: RESTORED });
+                showNotify({ login: userData.personalNumber, pwd: generatedPassword, mode: MODE.RESTORED });
             }
         } catch (err) {
-            showNotify({ mode: ERROR, errorMessage: err.message });
+            showNotify({ mode: MODE.ERROR, errorMessage: err.message });
             setError({ ...DEFAULT_ERRORS, backend: err.message });
         }
 
@@ -316,10 +319,10 @@ const UserForm = ({ type, matchPath }) => {
         try {
             setIsSendingInfo(true);
             await removeUser(userData.id);
-            showNotify({ login: userData.personalNumber, mode: DELETE });
+            showNotify({ login: userData.personalNumber, mode: MODE.DELETE });
             redirectToUsersPage();
         } catch (err) {
-            showNotify({ mode: ERROR, errorMessage: err.message });
+            showNotify({ mode: MODE.ERROR, errorMessage: err.message });
             setIsSendingInfo(false);
             setError({ ...DEFAULT_ERRORS, backend: err.message });
         }
