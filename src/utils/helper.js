@@ -154,3 +154,11 @@ export function getSearchParamsFromUrl(search, defaultParams = defaultSearchPara
         };
     }, {});
 }
+
+export function removeExtraSpaces(value) {
+    if (typeof value !== 'string') {
+        return value;
+    }
+
+    return !value.trim() ? value.trim() : value.replace(/\s{2,}/g, ' ');
+}

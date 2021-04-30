@@ -14,6 +14,7 @@ import { getLabel } from '../../../../../../components/LabelWithTooltip/LabelWit
 import { getAppCode } from '../../../../../../api/services/sessionService';
 import promoCodeTypes from '../../../../../../constants/promoCodeTypes';
 import SelectTags from '../../../../../../components/SelectTags/SelectTags';
+import { removeExtraSpaces } from '../../../../../../utils/helper';
 
 import styles from './StepInfo.module.css';
 
@@ -103,7 +104,7 @@ const StepInfo = ({
                     className={ styles.promoCampaignName }
                     name="name"
                     initialValue={ isCopy ? `Копия: ${state.name}` : state.name }
-                    normalize={ (value) => !value.trim() ? value.trim() : value }
+                    normalize={ removeExtraSpaces }
                     validateFirst
                     rules={ [
                         {
@@ -406,6 +407,7 @@ const StepInfo = ({
                                 name={ detailsButtonLabelName }
                                 label={ DETAIL_BTN_LABEL }
                                 initialValue={ state.settings.details_button_label }
+                                normalize={ removeExtraSpaces }
                                 rules={ [
                                     {
                                         ...getPatternAndMessage('promoCampaign', 'detailsButtonLabel'),
@@ -413,7 +415,10 @@ const StepInfo = ({
                                     }
                                 ] }
                             >
-                                <Input placeholder="Детали" />
+                                <Input
+                                    placeholder="Детали"
+                                    maxLength="30"
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
@@ -422,6 +427,7 @@ const StepInfo = ({
                                 name={ detailsButtonURLName }
                                 label={ DETAIL_BTN_URL }
                                 initialValue={ state.settings.details_button_url }
+                                normalize={ removeExtraSpaces }
                                 rules={ [
                                     urlCheckRule,
                                 ] }
