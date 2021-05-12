@@ -172,8 +172,6 @@ input.ant-input:placeholder-shown ~ span {
     overflow-x: hidden;
     max-height: calc(100% - 63px);
     top: 63px !important;
-    pointer-events: none;
-    padding: 0 28px 16px;
     margin-right: 0;
     margin-bottom: 0;
     scrollbar-width: none;
@@ -188,6 +186,8 @@ input.ant-input:placeholder-shown ~ span {
 }
 
 .ant-notification.ant-notification-topRight > div {
+    pointer-events: none;
+    padding: 0 28px;
     display: flex;
     flex-direction: column-reverse;
 }

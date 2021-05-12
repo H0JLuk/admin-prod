@@ -46,7 +46,7 @@ const TemplateUploadButtonsWithModal = ({
 }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [fileList, setFileList] = useState([]);
-    const [appList, setAppList] = useState([]);
+    const [appsOptions, setAppsOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const type = useRef('');
     const [form] = Form.useForm();
@@ -54,9 +54,12 @@ const TemplateUploadButtonsWithModal = ({
     const showModal = async ({ currentTarget: { value: buttonType } }) => {
         type.current = buttonType;
         setIsModalVisible(true);
-        if (!appList.length) {
+        if (!appsOptions.length) {
             const { clientApplicationDtoList: clientAppList = [] } = await getClientAppList() ?? {};
-            setAppList(clientAppList.map(({ displayName, code }) => ({ value: code, label: displayName })));
+            const filteredAppOptions = clientAppList
+                .filter(({ isDeleted }) => !isDeleted)
+                .map(({ code, displayName }) => ({ value: code, label: displayName }));
+            setAppsOptions(filteredAppOptions);
         }
     };
 
@@ -119,10 +122,6 @@ const TemplateUploadButtonsWithModal = ({
         return info && info.file;
     };
 
-    const onOkModal = () => {
-        form.submit();
-    };
-
     return (
         <>
             { btnAddShow && (
@@ -144,7 +143,7 @@ const TemplateUploadButtonsWithModal = ({
                 visible={ isModalVisible }
                 confirmLoading={ loading }
                 onCancel={ handleCancel }
-                onOk={ onOkModal }
+                onOk={ form.submit }
                 okText={ BUTTON_OK_LABEL }
                 cancelText={ BUTTON_CANCEL_LABEL }
                 centered
@@ -185,7 +184,10 @@ const TemplateUploadButtonsWithModal = ({
                         name="appCode"
                         rules={ [{ required: true, message: RULES.APP_CODE }] }
                     >
-                        <Select options={ appList } />
+                        <Select
+                            placeholder="Выберите приложение"
+                            options={ appsOptions }
+                        />
                     </Form.Item>
                 </Form>
             </Modal>
