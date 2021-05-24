@@ -75,7 +75,7 @@ export function deletePromoCampaign(promoCampaignId) {
 }
 
 export function getLocationsByText(value) {
-    return Api.get(`/admin/location/search?name=${value}`, getReqOptions());
+    return Api.get(`/location/search?name=${value}`, getReqOptions());
 }
 
 function getSalePointParams(name, locationId) {
@@ -91,7 +91,7 @@ function getSalePointParams(name, locationId) {
 }
 
 export function getSalePointsByText(value, locationId) {
-    return Api.get(`/admin/salepoint/search?${getSalePointParams(value, locationId)}`, getReqOptions());
+    return Api.get(`/salepoint/search?${getSalePointParams(value, locationId)}`, getReqOptions());
 }
 
 /**
