@@ -3,10 +3,14 @@ import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import UserForm from './UserPage/UserForm';
 import UsersList from './UserPage/UsersList';
 import UserMultiEdit from './UserPage/UserMultiEdit/UserMultiEdit';
+import useBodyClassForSidebar from '../../hooks/useBodyClassForSidebar';
+
 import { USERS_PAGES } from '../../constants/route';
 
 function UserPageRouter() {
     const match = useRouteMatch();
+
+    useBodyClassForSidebar();
 
     return (
         <Switch>

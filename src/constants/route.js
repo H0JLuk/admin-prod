@@ -20,6 +20,7 @@ const PAGE = {
     PRESENTATION:   'presentation',
     PROMO_CAMPAIGN: 'promo-campaign',
     USERS:          'users',
+    CONSENTS:       'consents',
     APPS:           'client-apps',
     GROUPS:         'groups',
 };
@@ -58,6 +59,12 @@ export const GROUPS_PAGES = {
     INFO_GROUP:     '/:groupId/info',
 };
 
+export const CONSENTS_PAGES = {
+    ADD_CONSENT:    '/create',
+    INFO_CONSENT:   '/:consentId/info',
+    EDIT_CONSENT:   '/:consentId/edit',
+};
+
 export const ROUTE_AUDITOR = {
     AUDIT:          `${ ROUTE.AUDITOR }/${ PAGE.AUDIT }`
 };
@@ -81,6 +88,7 @@ export const ROUTE_ADMIN = {
     CATEGORY:       `${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
     OLD_DESIGN_APPS: `${ ROUTE.OLD_DESIGN }${ ROUTE.ADMIN }/${ PAGE.APPS }`,
+    CONSENTS:       `${ ROUTE.ADMIN }/${ PAGE.CONSENTS }`,
     APPS:           `${ ROUTE.ADMIN }/${ PAGE.APPS }`,
     APP_SETTINGS:   `${ ROUTE.ADMIN }/${ PAGE.APPS }${ CLIENT_APPS_PAGES.EDIT_APP }`,
     GROUPS:         `${ ROUTE.ADMIN }/${ PAGE.GROUPS }`,
@@ -95,6 +103,7 @@ export const ROUTE_OWNER = {
     CATEGORY:       `${ ROUTE.OWNER }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
     OLD_DESIGN_APPS: `${ ROUTE.OLD_DESIGN }${ ROUTE.OWNER }/${ PAGE.APPS }`,
+    CONSENTS:       `${ ROUTE.OWNER }/${ PAGE.CONSENTS }`,
     APPS:           `${ ROUTE.OWNER }/${ PAGE.APPS }`,
     GROUPS:         `${ ROUTE.OWNER }/${ PAGE.GROUPS }`,
 };

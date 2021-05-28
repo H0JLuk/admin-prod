@@ -67,10 +67,10 @@ input.ant-input:placeholder-shown ~ span {
     border-color: #09a552;
 }
 
-.ant-picker-focused,
-.ant-picker:hover,
-.ant-picker-focused:focus,
-.ant-picker-focused:hover {
+.ant-picker-focused:not(.ant-picker-disabled),
+.ant-picker:hover:not(.ant-picker-disabled),
+.ant-picker-focused:focus:not(.ant-picker-disabled),
+.ant-picker-focused:hover:not(.ant-picker-disabled) {
     border-color: #09a552;
     box-shadow: none;
 }
@@ -206,6 +206,10 @@ input.ant-input:placeholder-shown ~ span {
     margin-top: 4px;
     float: left;
     margin-bottom: -10px;
+}
+
+.ck.ck-editor__main ul {
+    padding-inline-start: 40px;
 }
 
 /*.ant-btn-ghost,*/

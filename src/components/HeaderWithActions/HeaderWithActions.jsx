@@ -29,7 +29,7 @@ const HeaderWithActions = ({
     copyDataList,
     matchPath,
     sortByFieldKey,
-    menuItems,
+    menuItems=[],
     inputPlaceholder,
     resetLabel,
     params,

@@ -201,7 +201,7 @@ describe('<DzoFrom /> test', () => {
 
         changeInputByPlaceholder(getByPlaceholderText, 'Описание ДЗО');
 
-        changeInputByPlaceholder(getByPlaceholderText, 'Код', '1455');
+        changeInputByPlaceholder(getByPlaceholderText, 'Код', 'test_code');
 
         fireEvent.submit(document.querySelector('.ant-form'));
         await sleep(500);

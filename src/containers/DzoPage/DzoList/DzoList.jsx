@@ -182,8 +182,8 @@ const DzoPage = ({ matchPath }) => {
                     rowSelection={ select && rowSelection }
                     onRow={ onRow }
                 />
-                <div className={ styles.footer }>
-                    { select && (
+                { select && (
+                    <div className={ styles.footer }>
                         <div className={ styles.space }>
                             <div className={ styles.section }>
                                 <span className={ styles.label }>
@@ -199,8 +199,8 @@ const DzoPage = ({ matchPath }) => {
                                 { BUTTON_TEXT.DELETE }
                             </Button>
                         </div>
-                    ) }
-                </div>
+                    </div>
+                ) }
             </div>
             <TableDeleteModal
                 listNameKey="dzoName"

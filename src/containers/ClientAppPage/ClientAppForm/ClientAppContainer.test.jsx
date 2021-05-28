@@ -16,6 +16,7 @@ import { getClientAppInfo } from '../../../api/services/clientAppService';
 import { getAppCode } from '../../../api/services/sessionService';
 import { sleep } from '../../../setupTests';
 import { doPropertiesSettings } from './ClientAppContainer';
+import * as consentsService from '../../../api/services/consentsService';
 
 const CURRENT_APP_CODE_MOCK = 'greenday-presents';
 const SPINNER_TEXT_NODE = 'loading-spinner.svg';
@@ -157,5 +158,13 @@ describe('<ClientAppContainer /> tests', () => {
             expect(message.error).toBeCalled();
         });
     });
-});
 
+    it('doPropertiesSettings right ', async () => {
+        consentsService.getConsentById = jest.fn();
+        await act(async () => {
+            render(<ClientAppPageContainer { ...props } />);
+            await sleep();
+            expect(consentsService.getConsentById).toHaveBeenCalledTimes(1);
+        });
+    });
+});

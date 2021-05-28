@@ -8,7 +8,6 @@ import HeaderWithActions from '../../../../components/HeaderWithActions/HeaderWi
 import TableDeleteModal from '../../../../components/TableDeleteModal/TableDeleteModal';
 import Header from '../../../../components/Header/Header';
 import UsersListTable from './UsersListTable';
-import useBodyClassForSidebar from '../../../../hooks/useBodyClassForSidebar';
 import TemplateUploadButtonsWithModal from '../../../../components/ButtonWithModal/TemplateUploadButtonsWithModal';
 import { getUsersList, removeUser, resetUser } from '../../../../api/services/usersService';
 import { USERS_PAGES } from '../../../../constants/route';
@@ -97,8 +96,6 @@ const UserList = ({ matchPath }) => {
     const userInteractions = useRef({});
     const { current: permissions = {} } = userInteractions;
     const canSelectUsers = users.filter(({ role }) => (permissions[role] || {}).canSelectUserInTable);
-
-    useBodyClassForSidebar();
 
     const loadUsersData = useCallback(async (searchParams = DEFAULT_PARAMS) => {
         const urlSearchParams = getURLSearchParams(searchParams);

@@ -1,0 +1,80 @@
+.header {
+    padding: 20px;
+    background-color: #ffffff;
+    letter-spacing: -0.3px;
+    border-bottom: 1px solid #e5e8ea;
+}
+
+.headerTitle {
+    font-family: SBSansText;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.38px;
+    color: #171725;
+    margin-bottom: 16px;
+}
+
+.buttons > button {
+    margin-right: 10px;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 60px 0px 15px;
+}
+
+.infoWrapper {
+    padding: 30px;
+    background-color: #f8f8f8;
+    margin: 25px 0;
+}
+
+.infoContainer {
+    max-width: 800px;
+}
+
+.title {
+    font-size: 14px;
+    color: #697382;
+}
+
+.title:not(:first-child) {
+    margin-top: 30px;
+}
+
+.text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: -0.3px;
+}
+
+.tagsBlock {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag {
+    padding: 5px 16px;
+    font-family: SBSansText-Medium, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.29;
+    letter-spacing: -0.27px;
+    text-align: center;
+    border-radius: 16px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color: #09a552;
+    /* wrap */
+}
+
+.errorMessage {
+    font-weight: 600;
+    word-wrap: break-word;
+    white-space: pre-line;
+}

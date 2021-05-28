@@ -1,5 +1,5 @@
 import { getRole } from '../api/services/sessionService';
-import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER, ROUTE_USER_MANAGER, ROUTE_PARTNER } from '../constants/route';
+import { PROMO_CAMPAIGN_PAGES, ROUTE, ROUTE_ADMIN, ROUTE_OWNER, ROUTE_USER_MANAGER, ROUTE_PARTNER, CONSENTS_PAGES } from '../constants/route';
 import ROLES from '../constants/roles';
 
 export const goToLogin = (history) => {
@@ -175,6 +175,28 @@ export function getPathForPromoCampaignVisibititySettings() {
             return `${ ROUTE_ADMIN.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }`;
         case ROLES.PRODUCT_OWNER:
             return `${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }`;
+        default:
+            return '';
+    }
+}
+
+export function getPathForConsentInfo() {
+    switch (getRole()) {
+        case ROLES.ADMIN:
+            return `${ ROUTE_ADMIN.CONSENTS }${ CONSENTS_PAGES.INFO_CONSENT }`;
+        case ROLES.PRODUCT_OWNER:
+            return `${ ROUTE_OWNER.CONSENTS }${ CONSENTS_PAGES.INFO_CONSENT }`;
+        default:
+            return '';
+    }
+}
+
+export function getPathForConsentsList() {
+    switch (getRole()) {
+        case ROLES.ADMIN:
+            return ROUTE_ADMIN.CONSENTS;
+        case ROLES.PRODUCT_OWNER:
+            return ROUTE_OWNER.CONSENTS;
         default:
             return '';
     }

@@ -3,7 +3,6 @@
 }
 
 .buttonGroup {
-    margin-top: 15px;
     margin-left: 15px;
 }
 
@@ -12,16 +11,11 @@
 }
 
 .container {
-    margin-left: 15px;
     background-color: #f8f8f8;
     padding: 20px;
-    margin-right: 30px;
+    margin: 0 30px 15px 15px;
 }
 
 .container :global(.ant-row:last-child .ant-form-item) {
     margin-bottom: 0;
-}
-
-.mrt {
-    margin-top: 15px;
 }

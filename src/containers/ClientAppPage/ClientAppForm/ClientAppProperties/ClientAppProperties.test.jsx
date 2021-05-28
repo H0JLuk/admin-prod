@@ -119,7 +119,6 @@ describe('<ClientAppProperties /> test', () => {
             expect(props.updateSettings).toBeCalledTimes(1);
             expect(props.updateSettings.mock.calls[0][0]).toHaveProperty('code', newProps.propertiesSettings.current.code);
             expect(props.updateSettings.mock.calls[0][0]).toHaveProperty('displayName', newProps.propertiesSettings.current.displayName);
-            expect(props.updateSettings.mock.calls[0][0]).toHaveProperty('privacyPolicy', 'test');
             expect(props.updateSettings.mock.calls[0][0]).toHaveProperty('token_lifetime', '33');
 
             expect(clientAppPropertiesUtils.createOrUpdateKey).toBeCalledTimes(1);

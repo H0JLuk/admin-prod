@@ -2,14 +2,13 @@ import React from 'react';
 import { Button } from 'antd';
 
 const ButtonsBlock = ({ buttons, params }) => {
-    return (buttons || []).map((button) => (
+    return (buttons || []).map(({ label, disabled, ...restProps }) => (
         <Button
-            key={ button.label }
-            type={ button.type }
-            onClick={ button.onClick }
-            disabled={ typeof button.disabled === 'function' ? button.disabled(params) : button.disabled }
+            key={ label }
+            disabled={ typeof disabled === 'function' ? disabled(params) : disabled }
+            { ...restProps }
         >
-            { button.label }
+            { label }
         </Button>
     ));
 };

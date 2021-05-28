@@ -183,6 +183,11 @@ export const settingDtoListTestData = {
             value: '10',
             clientAppCode: 'greenday-presents'
         },
+        {
+            key: 'privacy_policy',
+            value: '64',
+            clientAppCode: 'greenday-presents'
+        },
     ],
 };
 
@@ -195,6 +200,7 @@ export const doPropertiesSettingsTestData = {
     tmp_block_time: '1800',
     ym_token: '55864828',
     promo_show_time: '10',
+    privacy_policy: '64',
 };
 
 export const propertiesSettingsTestData = {
@@ -759,3 +765,64 @@ export const getTextsReturnValue = [
         value: 'test',
     },
 ];
+
+export const consentsTestData = {
+    list: [
+        {
+            active: true,
+            clientApplications: [
+                {
+                    id: 7,
+                    name: 'Витрина экосистемы с подарками',
+                    displayName: 'Витрина ВСП',
+                    code: 'greenday-presents',
+                    isDeleted: false,
+                    orderNumber: 1,
+                }, {
+                    id: 8,
+                    name: 'Сбер Премьер',
+                    displayName: 'Сбер Премьер',
+                    code: 'sber-premiere',
+                    isDeleted: false,
+                    orderNumber: 2,
+                },
+            ],
+            createDate: '2021-05-17T14:54:28.479',
+            id: 64,
+            text: 'test',
+            updateDate: null,
+            version: '4',
+        },
+        {
+            active: true,
+            clientApplications: [
+                {
+                    id: 1,
+                    name: 'Витрина экосистемы с подарками',
+                    displayName: 'Витрина ВСП',
+                    code: 'greenday-presents',
+                    isDeleted: false,
+                    orderNumber: 1,
+                }, {
+                    id: 2,
+                    name: 'Сбер Премьер',
+                    displayName: 'Сбер Премьер',
+                    code: 'sber-premiere',
+                    isDeleted: false,
+                    orderNumber: 2,
+                },
+            ],
+            createDate: '2021-05-17T14:54:28.479',
+            id: 65,
+            text: 'test',
+            updateDate: null,
+            version: '4',
+        },
+    ],
+};
+
+export const consentsTestDataWithAppsNames = consentsTestData.list.map((consent) => ({
+    ...consent,
+    clientApplicationsNames: consent.clientApplications
+        .map((apps) => apps.displayName).join(', ')
+}));

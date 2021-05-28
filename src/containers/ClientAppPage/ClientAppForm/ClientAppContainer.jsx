@@ -20,6 +20,7 @@ import {
     BANNER_KEYS,
 } from './ClientAppFormConstants';
 import { checkExistDesignSettings } from './utils';
+import { getConsentById } from '../../../api/services/consentsService';
 
 import styles from './ClientAppContainer.module.css';
 
@@ -33,15 +34,17 @@ const ClientAppContainer = ({ type, matchPath }) => {
     const settingDtoList = useRef({});
     const designSettings = useRef({});
     const propertiesSettings = useRef({});
+    const consent = useRef(null);
     const isEdit = type === FORM_MODES.EDIT;
     const isMainPageDesignEdit = mode === EDIT_MODE.DESIGN;
-    const currentAppCode = getAppCode();
 
     const handleModeChange = ({ target: { value } }) => {
         setMode(value);
     };
 
     useEffect(() => {
+        const currentAppCode = getAppCode();
+
         if (!currentAppCode && isEdit) {
             history.push(matchPath);
             return;
@@ -58,6 +61,10 @@ const ClientAppContainer = ({ type, matchPath }) => {
 
                 settingDtoList.current = settingsMap;
                 propertiesSettings.current = doPropertiesSettings(settingsMap, clientAppInfo);
+
+                if (typeof Number(settingsMap.privacy_policy) === 'number') {
+                    consent.current = await getConsentById(settingsMap.privacy_policy);
+                }
 
                 const settingsForDesign = { ...settingsMap };
 
@@ -145,6 +152,7 @@ const ClientAppContainer = ({ type, matchPath }) => {
             matchPath={ matchPath }
             propertiesSettings={ propertiesSettings }
             updateSettings={ updatePropertiesSettings }
+            consent={ consent.current }
         />
     );
 

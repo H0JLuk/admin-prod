@@ -4,6 +4,10 @@ const commonRule = {
     pattern: commonPattern,
     message: commonMessage,
 };
+const codeRule = {
+    pattern: /^[a-z_-]+$/,
+    message: 'латинские буквы в нижнем регистре, "_", "-"',
+};
 
 export const VALIDATE_FIELDS = {
     promoCampaign: {
@@ -19,10 +23,7 @@ export const VALIDATE_FIELDS = {
     },
     clientApp: {
         name: commonRule,
-        code: {
-            pattern: /^[\w-]+$/,
-            message: 'латинские буквы, цифры, "_", "-"',
-        },
+        code: codeRule,
         privacyPolicy: {
             pattern: /^[а-яё\s\w.,-/:%()№"{}]+$/i,
             message: `${commonMessage}, "/", ":", "%", "(", ")", "№", "{", "}", """`,
@@ -30,10 +31,7 @@ export const VALIDATE_FIELDS = {
     },
     dzo: {
         name: commonRule,
-        code: {
-            pattern: /^[\w-]+$/,
-            message: 'латинские буквы, цифры, "_", "-"',
-        },
+        code: codeRule,
         description: commonRule,
     },
     category: {
@@ -42,8 +40,14 @@ export const VALIDATE_FIELDS = {
     },
     presentation: {
         common: {
-            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
+            pattern: /^[а-яё\s\w.,/:%()?!№"-]+$/i,
             message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", """, "№"`,
+        },
+    },
+    consent: {
+        consentEditorText: {
+            pattern: /^[а-яё\s\w.,/:;+%()?!$№«»“”"{}–-]+$/i,
+            message: `${commonMessage}, "–", "/", ":", ";", "$", "+", "%", "(", ")", {", "}", "?", "!", "№", двойные кавычки.`,
         },
     },
 };

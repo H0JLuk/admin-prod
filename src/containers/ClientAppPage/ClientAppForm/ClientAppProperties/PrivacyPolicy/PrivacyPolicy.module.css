@@ -1,0 +1,25 @@
+.icon {
+    color: #09a552;
+    font-size: 35px;
+    margin-top: 5px;
+}
+
+.consentInfo {
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 3px;
+}
+
+.link {
+    color: #09a552 !important;
+    margin-top: 5px;
+}
+
+.privacyTitle {
+    color:  #171725;
+}
+
+.consentButton {
+    margin-top: 15px;
+}

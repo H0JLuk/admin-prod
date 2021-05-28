@@ -5,6 +5,7 @@ import { Checkbox, Select } from 'antd';
 import styles from './SelectTags.module.css';
 
 function SelectTags({
+    showClearIcon = true,
     onChange,
     data = [],
     value = [],
@@ -33,6 +34,7 @@ function SelectTags({
     const options = data.map((elem) => {
         const name = String(elem[nameKey]);
         const value = String(elem[idKey]);
+
         return {
             label: (
                 <>
@@ -44,13 +46,14 @@ function SelectTags({
                 </>
             ),
             value,
+            disabled: elem.disabled,
         };
     });
 
     return (
         <Select
             className={ styles.select }
-            suffixIcon={ () => suffixBlock(stringValue.length, onRemoveSelectedTag) }
+            suffixIcon={ () => suffixBlock(stringValue.length, onRemoveSelectedTag, showClearIcon) }
             showArrow
             showSearch={ false }
             maxTagCount="responsive"
@@ -69,13 +72,13 @@ function SelectTags({
 
 const tagsPlaceholder = <div className={ styles.tagPlaceholder }>...</div>;
 
-function suffixBlock(selectedCount, onRemoveSelectedTag) {
+function suffixBlock(selectedCount, onRemoveSelectedTag, showClearIcon) {
     return (
         <div className={ styles.suffixBlock }>
             <DownOutlined className={ styles.icon } />
             <div className={ styles.closeIcon }>
                 { !!selectedCount && <div className={ styles.selectedCount }>{ selectedCount }</div> }
-                { !!selectedCount && (
+                { showClearIcon && !!selectedCount && (
                     <CloseOutlined
                         className={ styles.icon }
                         size={ 25 }

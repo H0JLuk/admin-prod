@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import cn from 'classnames';
 import { Button, Form } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { createOrUpdateKey, showNotify } from '../utils';
@@ -20,6 +19,7 @@ import {
 } from '../ClientAppFormConstants';
 import AppFormConstructor from '../FormConstructor/FormConstructor';
 import Loading from '../../../../components/Loading/Loading';
+import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
 
 import styles from './ClientAppProperties.module.css';
 
@@ -27,6 +27,7 @@ const ClientAppProperties = ({
     type,
     matchPath,
     propertiesSettings: { current: propertiesSettings },
+    consent,
     updateSettings,
 }) => {
     const history = useHistory();
@@ -168,10 +169,13 @@ const ClientAppProperties = ({
                         />
                     )) }
                 </div>
-                <div className={ cn(styles.container, styles.mrt) }>
+                <div className={ styles.container }>
                     { formElements.map((row, index) => (
                         <AppFormConstructor key={ index } row={ row } />
                     )) }
+                </div>
+                <div className={ styles.container }>
+                    <PrivacyPolicy consent={ consent } />
                 </div>
                 <div className={ styles.buttonGroup }>
                     <Button
@@ -188,4 +192,3 @@ const ClientAppProperties = ({
 };
 
 export default ClientAppProperties;
-

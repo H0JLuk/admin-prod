@@ -97,10 +97,10 @@ describe('validate clientApp fields', () => {
 
     it('test regex for `code`', () => {
         const { pattern } = getPatternAndMessage('clientApp', 'code');
-        expect(validateField(pattern, 'Test_for_Code_clientApp')).toBe(true);
+        expect(validateField(pattern, 'test_for_code_client-app')).toBe(true);
         expect(validateField(pattern, 'Test for Code clientApp')).toBe(false);
         expect(validateField(pattern, 'тест_кода')).toBe(false);
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz-_')).toBe(true);
         expect(
             validateField(
                 pattern,
@@ -145,10 +145,10 @@ describe('validate DZO fields', () => {
 
     it('test regex for `code`', () => {
         const { pattern } = getPatternAndMessage('dzo', 'code');
-        expect(validateField(pattern, 'Test_for_Code_dzo')).toBe(true);
+        expect(validateField(pattern, 'test_for_code_dzo')).toBe(true);
         expect(validateField(pattern, 'Test for Code dzo')).toBe(false);
         expect(validateField(pattern, 'тест_кода')).toBe(false);
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz-_')).toBe(true);
         expect(
             validateField(
                 pattern,

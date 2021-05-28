@@ -106,6 +106,16 @@ export const FORM_MODES = {
     EDIT: 'edit',
 };
 
+
+export const PRIVACY_POLICY = {
+    TITLE: 'Согласие на обработку персональных данных',
+    VERSION: 'Версия',
+    START_DATE: 'Начало действия',
+    DETAILS: 'Подробнее',
+    EMPTY_CONSENTS: 'Согласия для витрины отсутствуют',
+    TO_CONSENTS_LIST: 'Перейти к списку согласий',
+};
+
 export const mainInfoElements = [
     [
         {
@@ -220,18 +230,18 @@ export const formElements = [
 
     [
         {
-            label: 'Политика конфиденциальности',
-            type: FORM_TYPES.TEXT_AREA,
+            label: 'Механика',
+            type: FORM_TYPES.CHECKBOX_GROUP,
             span: 13,
-            rows: 3,
             rules: [
+                RULES.CHECKBOX_GROUP,
                 {
-                    ...getPatternAndMessage('clientApp', 'privacyPolicy'),
+                    validator: checkBoxValidator,
                     validateTrigger: 'onSubmit',
                 }
             ],
-            name: 'privacyPolicy',
-            placeholder: 'Описание ДЗО',
+            options: MECHANICS_CHECKBOXES,
+            name: 'mechanics',
         },
         {
             label: 'Способ авторизации в витрине',
@@ -246,20 +256,6 @@ export const formElements = [
         },
     ],
     [
-        {
-            label: 'Механика',
-            type: FORM_TYPES.CHECKBOX_GROUP,
-            span: 13,
-            rules: [
-                RULES.CHECKBOX_GROUP,
-                {
-                    validator: checkBoxValidator,
-                    validateTrigger: 'onSubmit',
-                }
-            ],
-            options: MECHANICS_CHECKBOXES,
-            name: 'mechanics',
-        },
         {
             label: 'Способ отправки сообщений клиенту',
             type: FORM_TYPES.CHECKBOX_GROUP,

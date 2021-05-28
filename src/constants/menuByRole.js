@@ -90,6 +90,7 @@ const ADMIN_SIDEBAR_MENU_ITEMS = [
     { label: labels.USERS, path: ROUTE_ADMIN.USERS },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
     { label: labels.CATEGORY, path: ROUTE_ADMIN.CATEGORY },
+    { label: labels.CONSENTS, path: ROUTE_ADMIN.CONSENTS },
     { label: labels.APP, path: ROUTE_ADMIN.APPS }
 ];
 
@@ -106,6 +107,7 @@ const ADMIN_SIDEBAR_MENU_FOR_POINT_APP = [
     { label: labels.DASHBOARD, path: ROUTE_ADMIN.DASHBOARD },
     { label: labels.USERS, path: ROUTE_ADMIN.USERS },
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
+    { label: labels.CONSENTS, path: ROUTE_ADMIN.CONSENTS },
     { label: labels.APP, path: ROUTE_ADMIN.APPS },
 ];
 

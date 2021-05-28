@@ -10,6 +10,7 @@ import DzoPageRouter from '../../containers/DzoPage/DzoPageRouter';
 import ReportsPage from '../../containers/ReportsPage/ReportsPage';
 import PresentationPage from '../../containers/PresentationPage/PresentationPage';
 import GroupsPageRouter from '../../containers/GroupsPage/GroupsPageRouter';
+import ConsentsPageRouter from '../../containers/ConsentsPage/ConsentsPageRouter';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
 import styles from './OwnerPage.module.css';
@@ -29,6 +30,7 @@ const OwnerPage = () => (
                 <Route path={ ROUTE_OWNER.APPS } component={ ClientAppPageRouter } />
                 <Route path={ ROUTE_OWNER.PROMO_CAMPAIGN } component={ PromoCampaignPageRouter } />
                 <Route path={ ROUTE_OWNER.GROUPS } component={ GroupsPageRouter } />
+                <Route path={ ROUTE_OWNER.CONSENTS } component={ ConsentsPageRouter } />
 
                 <Route render={ () => <Redirect to={ ROUTE_OWNER.DASHBOARD } /> } />
             </Switch>

@@ -11,4 +11,5 @@ export const menuItemLabels = {
     SETTINGS: 'Настройки',
     APP: 'Приложения',
     GROUPS: 'Группы',
+    CONSENTS: 'Согласие',
 };

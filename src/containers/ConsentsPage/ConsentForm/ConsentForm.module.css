@@ -1,0 +1,53 @@
+.consentFormContainer {
+    padding: 15px;
+    border-top: 1px solid #e5e8ea;;
+}
+
+.headerWrapper {
+    padding: 20px;
+}
+
+.title {
+    font-family: SBSansText;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.38px;
+    color: #171725;
+    margin-bottom: 16px;
+}
+
+.buttons {
+    display: flex;
+}
+
+.buttons > button {
+    margin-right: 15px;
+}
+
+.loadingContainer {
+    top: 0;
+}
+
+.container {
+    background-color: #f8f8f8;
+    padding: 20px 30px;
+    margin-right: 20px;
+    height: 100%;
+}
+
+.form {
+    max-width: 800px;
+}
+
+.select {
+    max-width: 500px;
+}
+
+.createDate {
+    width: 100%;
+}
+
+.version:global(.ant-input-disabled:disabled) {
+    background: none;
+}
