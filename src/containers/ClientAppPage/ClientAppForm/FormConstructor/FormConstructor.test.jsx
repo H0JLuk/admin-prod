@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import FormConstructor from './FormConstructor';
 import { FORM_TYPES } from '../ClientAppFormConstants';
 
@@ -57,7 +57,7 @@ describe('<FormConstructor /> test', () => {
     it('should render textBlock', () => {
         const newProps = {
             ...props,
-            row: [{ ...props.row[0], type: FORM_TYPES.TEXT_BLOCK }],
+            row: [{ ...props.row[0], type: FORM_TYPES.TEXT_AREA }],
         };
         const FormConstructorComponent = shallow(
             <FormConstructor { ...newProps } />
@@ -67,26 +67,15 @@ describe('<FormConstructor /> test', () => {
         expect(FormConstructorComponent.find('FormInputByType').html()).toMatchSnapshot();
     });
 
-    it('should render input in default', () => {
-        const FormConstructorComponent = shallow(
-            <FormConstructor { ...props } />
-        );
-
-        expect(FormConstructorComponent.find('FormInputByType').html()).toMatch('input');
-        expect(FormConstructorComponent.find('FormInputByType').html()).toMatchSnapshot();
-    });
-
-    it('should render div in default with editMode', () => {
+    it('should render select', () => {
         const newProps = {
             ...props,
-            isEdit: true,
-            row: [{ ...props.row[0], value: 'test' }],
+            row: [{ ...props.row[0], value: ['test', 'test2'], type: FORM_TYPES.SELECT }],
         };
         const FormConstructorComponent = shallow(
             <FormConstructor { ...newProps } />
         );
-
-        expect(FormConstructorComponent.find('FormInputByType').html()).toMatch('infoText');
+        expect(FormConstructorComponent.find('FormInputByType').html()).toMatch('select');
         expect(FormConstructorComponent.find('FormInputByType').html()).toMatchSnapshot();
     });
 });

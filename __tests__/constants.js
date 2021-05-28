@@ -187,6 +187,7 @@ export const settingDtoListTestData = {
 };
 
 export const doPropertiesSettingsTestData = {
+    id: 6,
     code: 'greenday-presents',
     name: 'Витрина экосистемы с подарками',
     displayName: 'Витрина ВСП',
@@ -214,6 +215,7 @@ export const propertiesSettingsTestData = {
     token_lifetime: '18001223',
     notification_types: undefined,
     tmp_block_time: '1800',
+    id: 6,
     code: 'greenday-presents',
     displayName: 'Витрина ВСП',
 };

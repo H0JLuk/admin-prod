@@ -91,8 +91,7 @@ export const RULES = {
 export const FORM_TYPES = {
     INPUT: 'INPUT',
     CHECKBOX_GROUP: 'CHECKBOX_GROUP',
-    TEXT_BLOCK: 'TEXT_BLOCK',
-    MAIN_INFO_INPUT: 'MAIN_INFO_INPUT',
+    TEXT_AREA: 'TEXT_AREA',
     BANNER: 'BANNER',
     SELECT: 'SELECT',
 };
@@ -111,7 +110,7 @@ export const mainInfoElements = [
     [
         {
             label: 'Название',
-            type: FORM_TYPES.MAIN_INFO_INPUT,
+            type: FORM_TYPES.INPUT,
             span: 16,
             rules: [
                 RULES.REQUIRED,
@@ -125,7 +124,7 @@ export const mainInfoElements = [
         },
         {
             label: 'Код',
-            type: FORM_TYPES.MAIN_INFO_INPUT,
+            type: FORM_TYPES.INPUT,
             span: 8,
             rules: [
                 RULES.REQUIRED,
@@ -141,8 +140,9 @@ export const mainInfoElements = [
     [
         {
             label: 'Отображаемое имя',
-            type: FORM_TYPES.MAIN_INFO_INPUT,
+            type: FORM_TYPES.INPUT,
             span: 16,
+            canEdit: true,
             rules: [
                 RULES.REQUIRED,
                 {
@@ -221,7 +221,7 @@ export const formElements = [
     [
         {
             label: 'Политика конфиденциальности',
-            type: FORM_TYPES.TEXT_BLOCK,
+            type: FORM_TYPES.TEXT_AREA,
             span: 13,
             rows: 3,
             rules: [
@@ -274,7 +274,7 @@ export const designElements = [
     [
         {
             label: 'Текст для главной(Продукты)',
-            type: FORM_TYPES.TEXT_BLOCK,
+            type: FORM_TYPES.TEXT_AREA,
             span: 12,
             rows: 3,
             maxLength: 70,
@@ -284,7 +284,7 @@ export const designElements = [
         },
         {
             label: 'Текст для главной(Подарки)',
-            type: FORM_TYPES.TEXT_BLOCK,
+            type: FORM_TYPES.TEXT_AREA,
             span: 12,
             rows: 3,
             maxLength: 70,
@@ -296,7 +296,7 @@ export const designElements = [
     [
         {
             label: 'Текст для главной(WOW)',
-            type: FORM_TYPES.TEXT_BLOCK,
+            type: FORM_TYPES.TEXT_AREA,
             span: 12,
             rows: 3,
             maxLength: 70,

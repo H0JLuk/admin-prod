@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { Button, Form } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { createOrUpdateKey, showNotify } from '../utils';
-import { addClientApp } from '../../../../api/services/clientAppService';
+import { addClientApp, updateClientApp } from '../../../../api/services/clientAppService';
 import { getAppCode, saveAppCode } from '../../../../api/services/sessionService';
 import { addSettings } from '../../../../api/services/settingsService';
 import { CLIENT_APPS_PAGES } from '../../../../constants/route';
@@ -83,13 +83,14 @@ const ClientAppProperties = ({
                 history.replace(`${ matchPath }${CLIENT_APPS_PAGES.EDIT_APP}`);
             } else {
                 const clientAppCode = getAppCode();
-                const changedParams = Object.keys(formData).reduce((result, key) => {
+                const { displayName, code, name, ...restData } = formData;
+                const changedParams = Object.keys(restData).reduce((result, key) => {
                     const valueFromServer = keysToString.includes(key)
                         ? JSON.stringify(propertiesSettings[key])
                         : propertiesSettings[key];
                     const valueInForm = keysToString.includes(key)
-                        ? JSON.stringify(formData[key])
-                        : formData[key];
+                        ? JSON.stringify(restData[key])
+                        : restData[key];
 
                     if (valueFromServer === undefined && valueInForm) {
                         return [...result, { clientAppCode, key, value: valueInForm, type: SETTINGS_TYPES.CREATE }];
@@ -102,12 +103,35 @@ const ClientAppProperties = ({
                     return result;
                 }, []);
 
+                const { id } = propertiesSettings;
+                const requests = [];
+                const notifies = [];
+
+                if (displayName !== propertiesSettings.displayName) {
+                    requests.push(updateClientApp(id, { displayName, code, isDeleted: false, name }));
+                    notifies.push(() => showNotify(
+                        <span>
+                            Отображаемое имя витрины изменено с <b>&quot;{ propertiesSettings.displayName }&quot;</b> на <b>&quot;{ displayName }&quot;</b>
+                        </span>
+                    ));
+                }
+
                 if (changedParams.length) {
+                    requests.push(createOrUpdateKey(changedParams));
+                    notifies.unshift(() => showNotify(
+                        <span>
+                            Настройки для витрины <b>&quot;{ displayName }&quot;</b> обновлены
+                        </span>
+                    ));
+                }
+
+                if (requests.length) {
                     setLoading(true);
-                    await createOrUpdateKey(changedParams);
+                    await Promise.all(requests);
+
+                    notifies.forEach(fn => fn());
                     setBtnStatus(true);
-                    showNotify(`Настройка для витрины '${propertiesSettings.displayName}' обновлены`);
-                    updateSettings(formData);
+                    updateSettings({ ...formData, id });
                 }
             }
 
