@@ -157,8 +157,8 @@ const AuditPage = () => {
 
     useEffect(() => {
         (async () => {
-            const { clientApplicationDtoList: appList = [] } = await getClientAppList();
-            const appOptions = appList.map(({ displayName: label, code: value }) => ({ label, value }));
+            const { list = [] } = await getClientAppList();
+            const appOptions = list.map(({ displayName: label, code: value }) => ({ label, value }));
             setApplications([{ label: 'admin', value: 'admin' }, ...appOptions]);
         })();
     }, []);

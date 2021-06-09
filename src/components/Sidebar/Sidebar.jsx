@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { matchPath, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 import { PROMO_CAMPAIGN_PAGES, ROUTE_ADMIN, ROUTE_OWNER } from '../../constants/route';
-import { getClientAppList, setDefaultAppCode } from '../../api/services/clientAppService';
+import { getActiveClientApps, setDefaultAppCode } from '../../api/services/clientAppService';
 import { getAppCode, getRole, saveAppCode } from '../../api/services/sessionService';
 import { goApp } from '../../utils/appNavigation';
 import { resolveMenuItemsByRoleAndAppCode } from '../../constants/menuByRole';
@@ -26,7 +26,7 @@ const routesForNonRender = [
 
 const routesForApps = [
     `${ROUTE_ADMIN.APPS}`,
-    `${ROUTE_OWNER.APPS}`
+    `${ROUTE_OWNER.APPS}`,
 ];
 
 const rolesWithoutClientApps = [
@@ -49,14 +49,13 @@ const Sidebar = () => {
         }
 
         (async () => {
-            const { clientApplicationDtoList = [] } = await getClientAppList();
-            const sortedDtoList = clientApplicationDtoList.filter(({ isDeleted }) => !isDeleted);
+            const clientAppList = await getActiveClientApps();
             /* Временный костыль чтобы можно было перемещаться по приложению без крашей */
             if (!getAppCode()) {
-                setDefaultAppCode(sortedDtoList[0].code);
+                setDefaultAppCode(clientAppList[0].code);
             }
 
-            setAppsList(sortedDtoList);
+            setAppsList(clientAppList);
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

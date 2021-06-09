@@ -3,7 +3,7 @@ import noop from 'lodash/noop';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Select, Upload, Form, Modal } from 'antd';
 import { getReqOptions } from '../../api/services';
-import { getClientAppList } from '../../api/services/clientAppService';
+import { getActiveClientApps } from '../../api/services/clientAppService';
 import { addUsersWithTemplate, deleteUsersWithTemplate } from '../../api/services/usersService';
 import { downloadFileFunc } from '../../utils/helper';
 
@@ -55,9 +55,8 @@ const TemplateUploadButtonsWithModal = ({
         type.current = buttonType;
         setIsModalVisible(true);
         if (!appsOptions.length) {
-            const { clientApplicationDtoList: clientAppList = [] } = await getClientAppList() ?? {};
+            const clientAppList = await getActiveClientApps();
             const filteredAppOptions = clientAppList
-                .filter(({ isDeleted }) => !isDeleted)
                 .map(({ code, displayName }) => ({ value: code, label: displayName }));
             setAppsOptions(filteredAppOptions);
         }

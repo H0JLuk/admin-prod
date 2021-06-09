@@ -3,7 +3,7 @@ import noop from 'lodash/noop';
 import { Input, Switch, Select, DatePicker, Form, Row, Col, Radio } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/ru_RU';
 import { getDzoList } from '../../../../../../api/services/dzoService';
-import { getClientAppList } from '../../../../../../api/services/clientAppService';
+import { getActiveClientApps } from '../../../../../../api/services/clientAppService';
 import { getCategoryList } from '../../../../../../api/services/categoryService';
 import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList } from '../../../../../../api/services/promoCampaignService';
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '../../../../../../constants/jsxConstants';
@@ -82,16 +82,16 @@ const StepInfo = ({
             const [
                 { dzoDtoList = [] },
                 { categoryList = [] },
-                { clientApplicationDtoList: allApps = [] }
+                clientAppList,
             ] = await Promise.all([
                 getDzoList(),
                 getCategoryList(),
-                getClientAppList(),
+                getActiveClientApps(),
             ]);
             // TODO: Переделать вызов setState на рефки или на один стейт. И возможно вынести эту логику в PromoCampaignForm что не делать каждый раз запросы при открытии этого шага
             setDzoList(dzoDtoList.filter(item => !item.isDeleted));
             setCategories(categoryList.filter(({ active }) => active));
-            setClientApps(allApps.filter(({ isDeleted }) => !isDeleted));
+            setClientApps(clientAppList);
         })();
     }, []);
 

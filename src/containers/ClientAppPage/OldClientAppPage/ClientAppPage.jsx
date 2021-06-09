@@ -69,8 +69,8 @@ class ClientAppPage extends Component {
     componentDidMount() {
         getClientAppList()
             .then(response => {
-                const { clientApplicationDtoList } = response;
-                this.setState({ clientAppList: clientApplicationDtoList });
+                const { list } = response;
+                this.setState({ clientAppList: list });
             })
             .catch(() => this.setState({ clientAppList: [] }));
     }

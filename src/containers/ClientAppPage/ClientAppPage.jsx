@@ -6,7 +6,7 @@ import Header from '../../components/Header/Header';
 import HeaderWithActions from '../../components/HeaderWithActions/HeaderWithActions';
 import ClientAppItem from './ClientAppItem/ClientAppItem';
 
-import { getClientAppList, reorderClientApp } from '../../api/services/clientAppService';
+import { getActiveClientApps, reorderClientApp } from '../../api/services/clientAppService';
 import { CLIENT_APPS_PAGES } from '../../constants/route';
 import { getRole } from '../../api/services/sessionService';
 import ROLES from '../../constants/roles';
@@ -47,10 +47,9 @@ const ClientAppPage = ({ matchPath, history }) => {
         setIsLoading(true);
 
         try {
-            const { clientApplicationDtoList: appList = [] } = await getClientAppList();
-            const withoutDeletedApps = appList.filter(({ isDeleted }) => !isDeleted);
-            copyDataList.current = withoutDeletedApps;
-            setDataList(withoutDeletedApps);
+            const clientAppList = await getActiveClientApps();
+            copyDataList.current = clientAppList;
+            setDataList(clientAppList);
         } catch (error) {
             console.warn(error);
         }

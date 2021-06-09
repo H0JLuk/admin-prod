@@ -8,7 +8,7 @@ import SelectTags from '../../../components/SelectTags/SelectTags';
 import Loading from '../../../components/Loading/Loading';
 import { getPatternAndMessage } from '../../../utils/validators';
 import { attachConsentToClientApp, createConsent, getConsentById, updateConsent } from '../../../api/services/consentsService';
-import { getClientAppList } from '../../../api/services/clientAppService';
+import { getActiveClientApps } from '../../../api/services/clientAppService';
 
 import styles from './ConsentForm.module.css';
 
@@ -55,8 +55,7 @@ const ConsentForm = ({ history, matchPath, mode }) => {
 
     useEffect(() => {
         (async () => {
-            const { clientApplicationDtoList: appListRes = [] } = await getClientAppList();
-            let activeAppList = appListRes.filter(app => !app.isDeleted);
+            let clientAppList = await getActiveClientApps();
 
             if (isEditMode) {
                 consent.current = state?.consentData;
@@ -72,13 +71,13 @@ const ConsentForm = ({ history, matchPath, mode }) => {
                     clientApplications: clientAppCodes,
                 });
                 const selectedAppCodes = clientApplications.map(app => app.code);
-                activeAppList = activeAppList.map(app => ({
+                clientAppList = clientAppList.map(app => ({
                     ...app,
-                    disabled: selectedAppCodes.includes(app.code)
+                    disabled: selectedAppCodes.includes(app.code),
                 }));
             }
 
-            setAppList(activeAppList);
+            setAppList(clientAppList);
             setLoading(false);
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps

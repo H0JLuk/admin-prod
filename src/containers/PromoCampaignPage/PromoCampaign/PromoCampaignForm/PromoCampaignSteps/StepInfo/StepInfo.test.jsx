@@ -6,7 +6,7 @@ import StepInfo, { ReverseSwitch } from './StepInfo';
 
 import { getAppCode } from '../../../../../../api/services/sessionService';
 import { getDzoList } from '../../../../../../api/services/dzoService';
-import { getClientAppList } from '../../../../../../api/services/clientAppService';
+import { getActiveClientApps } from '../../../../../../api/services/clientAppService';
 import { getCategoryList } from '../../../../../../api/services/categoryService';
 import {
     getExactExternalIDPromoCampaignList,
@@ -36,7 +36,7 @@ jest.mock('../../../../../../api/services/dzoService', () => ({
 }));
 
 jest.mock('../../../../../../api/services/clientAppService', () => ({
-    getClientAppList: jest.fn(),
+    getActiveClientApps: jest.fn(),
 }));
 
 jest.mock('../../../../../../api/services/categoryService', () => ({
@@ -219,7 +219,7 @@ describe('<StepInfo /> create mode tests.', () => {
         getCategoryList.mockReturnValue({
             categoryList: categoryListTestData,
         });
-        getClientAppList.mockReturnValue(clientAppListTestResponse);
+        getActiveClientApps.mockReturnValue(clientAppListTestResponse.list);
 
         await act(async () => {
             render(
@@ -231,7 +231,7 @@ describe('<StepInfo /> create mode tests.', () => {
 
         expect(getDzoList).toBeCalledTimes(1);
         expect(getCategoryList).toBeCalledTimes(1);
-        expect(getClientAppList).toBeCalledTimes(1);
+        expect(getActiveClientApps).toBeCalledTimes(1);
     });
 
 });

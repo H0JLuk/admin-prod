@@ -153,7 +153,7 @@ export const clientAppTestData = {
 };
 
 export const clientAppListTestResponse = {
-    clientApplicationDtoList: [
+    list: [
         clientAppTestData,
         {
             code: 'greenday-presents',

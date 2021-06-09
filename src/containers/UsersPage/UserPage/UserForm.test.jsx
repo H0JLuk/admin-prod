@@ -5,7 +5,7 @@ import UserForm, { LOGIN_FIELD } from './UserForm';
 import { getUserAppsCheckboxes } from './UserFormHelper';
 import { getCurrUserInteractionsForOtherUser } from '../../../constants/permissions';
 import { getUser, unblockUser, resetUser, removeUser, saveUser, addUser } from '../../../api/services/usersService';
-import { getClientAppList } from '../../../api/services/clientAppService';
+import { getActiveClientApps } from '../../../api/services/clientAppService';
 import { sleep } from '../../../setupTests';
 import { BUTTON, INFO_USER_BUTTONS } from './UserFormButtonGroup/UserFormButtonGroup';
 import { customNotifications } from '../../../utils/notifications';
@@ -38,7 +38,7 @@ jest.mock('../../../components/Form/AutocompleteLocationAndSalePoint/Autocomplet
 }));
 
 jest.mock('../../../api/services/clientAppService', () => ({
-    getClientAppList: jest.fn(),
+    getActiveClientApps: jest.fn(),
 }));
 
 jest.mock('../../../constants/permissions', () => {
@@ -164,7 +164,7 @@ describe('<UserForm /> test', () => {
     );
 
     beforeEach(() => {
-        getClientAppList.mockResolvedValue(clientAppListTestResponse);
+        getActiveClientApps.mockResolvedValue(clientAppListTestResponse.list);
         getUser.mockResolvedValue(userTestData);
         getCurrUserInteractionsForOtherUser.mockReturnValue(TEST_INTERACTIONS);
         getUserAppsCheckboxes.mockReturnValueOnce(TEST_CHECKBOX);
@@ -173,7 +173,7 @@ describe('<UserForm /> test', () => {
     it('should be mount snap with useEffect', async () => {
         const ComponentInfo = Component();
         await sleep();
-        expect(getClientAppList).toBeCalledTimes(1);
+        expect(getActiveClientApps).toBeCalledTimes(1);
         expect(getUser).toBeCalledTimes(1);
         expect(getCurrUserInteractionsForOtherUser).toBeCalledTimes(1);
         expect(getUserAppsCheckboxes).toBeCalledTimes(1);

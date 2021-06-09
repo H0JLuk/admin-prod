@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { fireEvent, render } from '@testing-library/react';
 import { matchPath } from 'react-router-dom';
-import { getClientAppList } from '../../api/services/clientAppService';
+import { getActiveClientApps } from '../../api/services/clientAppService';
 import { getAppCode, getRole, saveAppCode } from '../../api/services/sessionService';
 import Sidebar from './Sidebar';
 import { sleep } from '../../setupTests';
@@ -20,23 +20,23 @@ jest.mock('react-router-dom', () => ({
     matchPath: jest.fn(),
     NavLink() {
         return <a>NavLink</a>;
-    }
+    },
 }));
 
 jest.mock('../../api/services/sessionService', () => ({
     getAppCode: jest.fn(),
     getRole: jest.fn(),
-    saveAppCode: jest.fn()
+    saveAppCode: jest.fn(),
 }));
 
 jest.mock('../../api/services/clientAppService', () => ({
     getDefaultAppCode: jest.fn(),
-    getClientAppList: jest.fn(),
-    setDefaultAppCode: jest.fn()
+    getActiveClientApps: jest.fn(),
+    setDefaultAppCode: jest.fn(),
 }));
 
 jest.mock('../../utils/appNavigation', () => ({
-    goApp: jest.fn()
+    goApp: jest.fn(),
 }));
 
 describe('<Sidebar /> tests', () => {
@@ -47,10 +47,10 @@ describe('<Sidebar /> tests', () => {
 
     it('should call useEffect and handleAdministrate func', async () => {
         matchPath.mockImplementation(() => undefined);
-        getClientAppList.mockResolvedValue(clientAppListTestResponse);
+        getActiveClientApps.mockResolvedValue(clientAppListTestResponse.list);
 
         const SidebarItem = render(<Sidebar />);
-        expect(getClientAppList).toBeCalled();
+        expect(getActiveClientApps).toBeCalled();
 
         await sleep();
 
@@ -74,7 +74,7 @@ describe('<Sidebar /> tests', () => {
 
         const { container } = render(<Sidebar />);
         expect(container.getElementsByClassName('menu')[0]).toBeInTheDocument();
-        expect(getClientAppList).toBeCalledTimes(0);
+        expect(getActiveClientApps).toBeCalledTimes(0);
     });
 
     it('should not render menuItems', () => {
@@ -85,7 +85,7 @@ describe('<Sidebar /> tests', () => {
 
     it('should not render appLink', () => {
         matchPath.mockImplementation(() => undefined);
-        getClientAppList.mockRejectedValue({});
+        getActiveClientApps.mockRejectedValue([]);
         menuRoleFuncs.resolveMenuItemsByRoleAndAppCode = jest.fn(
             () => resolveMenuItemsByRoleAndAppCodeValue
         );

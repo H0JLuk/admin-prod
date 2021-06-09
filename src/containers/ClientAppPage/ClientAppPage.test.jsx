@@ -45,7 +45,7 @@ describe('<ClientAppPage /> test', () => {
 
     it('should go to sortable mode on clicking sort button', () => {
         clientAppService.reorderClientApp = jest.fn();
-        clientAppService.getClientAppList = jest.fn(() => clientAppListTestResponse);
+        clientAppService.getActiveClientApps = jest.fn(() => clientAppListTestResponse.list);
         const ClientAppPageComponent = shallow(<ClientAppPage { ...props } />);
 
         expect(ClientAppPageComponent.find('HeaderWithActions').prop('buttons')[1].label).not.toEqual('Отменить');
@@ -56,8 +56,8 @@ describe('<ClientAppPage /> test', () => {
         expect(clientAppService.reorderClientApp).toBeCalledTimes(1);
     });
 
-    it('should warn with error in console after getClientAppList rejection', async () => {
-        clientAppService.getClientAppList.mockRejectedValueOnce('warn');
+    it('should warn with error in console after getActiveClientApps rejection', async () => {
+        clientAppService.getActiveClientApps.mockRejectedValueOnce('warn');
         const spy = jest.spyOn(console, 'warn').mockImplementation(() => '');
         mount(
             <MemoryRouter>
@@ -70,7 +70,7 @@ describe('<ClientAppPage /> test', () => {
 
     it('should cancel sortable mode', () => {
         clientAppService.reorderClientApp = jest.fn();
-        clientAppService.getClientAppList = jest.fn(() => clientAppListTestResponse);
+        clientAppService.getActiveClientApps = jest.fn(() => clientAppListTestResponse.list);
         const ClientAppPageComponent = shallow(<ClientAppPage { ...props } />);
 
         ClientAppPageComponent.find('HeaderWithActions').prop('buttons')[1].onClick();
@@ -83,7 +83,7 @@ describe('<ClientAppPage /> test', () => {
 
     it('should call `arrayMove` function', async () => {
         sessionService.getRole = jest.fn(() => ROLES.ADMIN);
-        clientAppService.getClientAppList = jest.fn(() => clientAppListTestResponse);
+        clientAppService.getActiveClientApps = jest.fn(() => clientAppListTestResponse.list);
         helper.arrayMove = jest.fn(() => []);
 
         const ClientAppPageComponent = shallow(<ClientAppPage { ...props } />);
@@ -94,7 +94,7 @@ describe('<ClientAppPage /> test', () => {
     it('sortableContainer should render <div /> children', async () => {
         clientAppService.reorderClientApp = jest.fn();
         sessionService.getRole = jest.fn(() => ROLES.ADMIN);
-        clientAppService.getClientAppList = jest.fn(() => clientAppListTestResponse);
+        clientAppService.getActiveClientApps = jest.fn(() => clientAppListTestResponse.list);
 
         const ClientAppPageComponent = mount(
             <MemoryRouter>

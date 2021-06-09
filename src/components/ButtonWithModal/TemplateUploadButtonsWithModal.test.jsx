@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import TemplateUploadButtonsWithModal from './TemplateUploadButtonsWithModal';
 import { sleep } from '../../setupTests';
-import { getClientAppList, getDefaultAppCode } from '../../api/services/clientAppService';
+import { getActiveClientApps, getDefaultAppCode } from '../../api/services/clientAppService';
 import { addUsersWithTemplate } from '../../api/services/usersService';
 import { Button, Form, message, Modal, Upload } from 'antd';
 import { act } from 'react-dom/test-utils';
@@ -17,7 +17,7 @@ jest.mock('../../api/services/usersService', () => ({
 }));
 
 jest.mock('../../api/services/clientAppService', () => ({
-    getClientAppList: jest.fn(),
+    getActiveClientApps: jest.fn(),
     getDefaultAppCode: jest.fn(),
 }));
 
@@ -50,8 +50,8 @@ const TEST_FILE_NO_CSV = 'TEST_NAME.non';
 const TEST_INFO = {
     file: {
         name: TEST_FILE_CSV,
-        status: 'TEST_STATUS'
-    }
+        status: 'TEST_STATUS',
+    },
 };
 
 const TEST_INFO_ARRAY = [TEST_INFO];
@@ -61,15 +61,18 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     const Component = mount(<TemplateUploadButtonsWithModal { ...TEST_PROPS } />);
     const Buttons = Component.find('button');
 
+    beforeEach(() => {
+        getActiveClientApps.mockResolvedValue(TEST_APP_LIST);
+    });
+
     it('should be mount snap', () => {
         expect(Component.html()).toMatchSnapshot();
     });
 
     it('should call show and close modal', async () => {
-        getClientAppList.mockResolvedValue({ clientApplicationDtoList: TEST_APP_LIST });
         Buttons.at(0).simulate('click');
         await sleep();
-        expect(getClientAppList).toBeCalledTimes(1);
+        expect(getActiveClientApps).toBeCalledTimes(1);
         const ModalTemplate = Component.find(Modal);
         expect(ModalTemplate.props().visible).toBe(true);
         ModalTemplate.find(Button).at(1).simulate('click');
@@ -77,7 +80,6 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     });
 
     it('should call show and upload file', async () => {
-        getClientAppList.mockResolvedValue({ clientApplicationDtoList: TEST_APP_LIST });
         getDefaultAppCode.mockResolvedValue({ headers: { clientAppCode: TEST_APP_LIST[0].code } });
         addUsersWithTemplate.mockResolvedValue(new Blob(['test'], { type: 'text/csv;charset=utf-8;' }));
         Buttons.at(0).simulate('click');
@@ -90,7 +92,6 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     });
 
     it('should call show and upload file with catch', async () => {
-        getClientAppList.mockResolvedValue({ clientApplicationDtoList: TEST_APP_LIST });
         getDefaultAppCode.mockResolvedValue({ headers: { clientAppCode: TEST_APP_LIST[0].code } });
         addUsersWithTemplate.mockRejectedValue(new Error('Error'));
         message.error = jest.fn();
@@ -105,8 +106,6 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     });
 
     it('should call normFile function', async () => {
-        getClientAppList.mockResolvedValue({ clientApplicationDtoList: TEST_APP_LIST });
-
         act(() => {
             Buttons.at(0).simulate('click');
         });
@@ -121,7 +120,6 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     });
 
     it('should call normFile function with array info', async () => {
-        getClientAppList.mockResolvedValue({ clientApplicationDtoList: TEST_APP_LIST });
         Buttons.at(0).simulate('click');
         await sleep();
         const ModalTemplate = Component.find(Modal);
@@ -131,7 +129,6 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     });
 
     it('should call normFile function with status removed', async () => {
-        getClientAppList.mockResolvedValue({ clientApplicationDtoList: TEST_APP_LIST });
         Buttons.at(0).simulate('click');
         await sleep();
         const ModalTemplate = Component.find(Modal);
@@ -141,7 +138,6 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     });
 
     it('should call normFile function with no csv file', async () => {
-        getClientAppList.mockResolvedValue({ clientApplicationDtoList: TEST_APP_LIST });
         Buttons.at(0).simulate('click');
         await sleep();
         const ModalTemplate = Component.find(Modal);
@@ -151,7 +147,6 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     });
 
     it('should call onChangeFile and onRemoveFile functions', async () => {
-        getClientAppList.mockResolvedValue({ clientApplicationDtoList: TEST_APP_LIST });
         Buttons.at(0).simulate('click');
         await sleep();
         const ModalTemplate = Component.find(Modal);

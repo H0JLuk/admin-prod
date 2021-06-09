@@ -11,7 +11,7 @@ import UserBlockStatus from '../../../components/UserBlockStatus/UserBlockStatus
 import UserSkeletonLoading from './UserSkeletonLoading/UserSkeletonLoading';
 import Checkboxes from '../../../components/Checkboxes/Checkboxes';
 import UserFormButtonGroup from './UserFormButtonGroup/UserFormButtonGroup';
-import { getClientAppList } from '../../../api/services/clientAppService';
+import { getActiveClientApps } from '../../../api/services/clientAppService';
 import { getUserAppsCheckboxes } from './UserFormHelper';
 // import { LOGIN_TYPE, LOGIN_TYPES_ENUM, LOGIN_TYPE_OPTIONS } from '../../../constants/loginTypes';
 import { getCurrUserInteractionsForOtherUser } from '../../../constants/permissions';
@@ -160,7 +160,7 @@ const UserForm = ({ type, matchPath }) => {
     const getUserData = async () => {
         try {
             let user;
-            const { clientApplicationDtoList: appList = [] } = await getClientAppList();
+            const clientAppList = await getActiveClientApps();
 
             if (notNewUser) {
                 user = await getUser(userId);
@@ -176,9 +176,8 @@ const UserForm = ({ type, matchPath }) => {
                 }
             }
 
-            const filteredApps = appList.filter(({ isDeleted }) => !isDeleted);
-            clientAppsRef.current = filteredApps;
-            setCheckBoxes(getUserAppsCheckboxes(filteredApps, user?.clientAppIds));
+            clientAppsRef.current = clientAppList;
+            setCheckBoxes(getUserAppsCheckboxes(clientAppList, user?.clientAppIds));
             setLoading(false);
         } catch (e) {
             redirectToUsersPage();

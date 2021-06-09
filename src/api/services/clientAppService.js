@@ -5,6 +5,11 @@ export async function getClientAppList() {
     return Api.get('/admin/clientApplication', getReqOptions());
 }
 
+export async function getActiveClientApps() {
+    const { list = [] } = await Api.get('/admin/clientApplication', getReqOptions()) ?? {};
+    return list.filter(({ isDeleted }) => !isDeleted);
+}
+
 export function getClientAppInfo(appCode) {
     return Api.get(`/admin/clientApplication/${appCode}`, getReqOptions());
 }

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { generatePath, useHistory } from 'react-router-dom';
 import { Menu, Dropdown, Button, Alert } from 'antd';
 import { getDashboardInfo } from '../../api/services/adminService';
-import { getClientAppList } from '../../api/services/clientAppService';
+import { getActiveClientApps } from '../../api/services/clientAppService';
 import { getDzoList } from '../../api/services/dzoService';
 import { getPromoCampaignById } from '../../api/services/promoCampaignService';
 import { saveAppCode } from '../../api/services/sessionService';
@@ -23,7 +23,7 @@ const RELOAD_BUTTON_LABEL = 'Обновить';
 
 const EMPTY_DASHBOARD = {
     MESSAGE: 'Отличная работа!',
-    DESCRIPTION: 'У нас все под контролем.'
+    DESCRIPTION: 'У нас все под контролем.',
 };
 
 const menuObj = [
@@ -75,12 +75,12 @@ const Dashboard = () => {
         try {
             const [
                 dashboardInfo,
-                { clientApplicationDtoList: clientAppList = [] } = {},
-                { dzoDtoList = [] } = {}
+                clientAppList,
+                { dzoDtoList = [] } = {},
             ] = await requestWithMinWait([
                 getDashboardInfo(),
-                getClientAppList(),
-                getDzoList()
+                getActiveClientApps(),
+                getDzoList(),
             ]);
 
             setList(dashboardInfo);
