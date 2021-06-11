@@ -20,15 +20,17 @@ function SelectTags({
     };
 
     const selectTagRender = ({ value, onClose }) => (
-        value && <div className={ styles.tagSelect } >
-            <p className={ styles.selectText }>{ findName(data, value, nameKey, idKey) }</p>
-            <CloseOutlined
-                height="15px"
-                width="15px"
-                fill="#09A552"
-                onClick={ onClose }
-            />
-        </div>
+        value && (
+            <div className={ styles.tagSelect } >
+                <p className={ styles.selectText }>{ findName(data, value, nameKey, idKey) }</p>
+                <CloseOutlined
+                    height="15px"
+                    width="15px"
+                    fill="#09A552"
+                    onClick={ onClose }
+                />
+            </div>
+        )
     );
 
     const options = data.map((elem) => {
@@ -60,7 +62,7 @@ function SelectTags({
             maxTagTextLength={ 50 }
             mode="tags"
             placeholder={ placeholder }
-            maxTagPlaceholder={ tagsPlaceholder }
+            maxTagPlaceholder={ <span>...</span> }
             tagRender={ selectTagRender }
             onChange={ onChange }
             dropdownClassName={ styles.dropdown }
@@ -69,8 +71,6 @@ function SelectTags({
         />
     );
 }
-
-const tagsPlaceholder = <div className={ styles.tagPlaceholder }>...</div>;
 
 function suffixBlock(selectedCount, onRemoveSelectedTag, showClearIcon) {
     return (

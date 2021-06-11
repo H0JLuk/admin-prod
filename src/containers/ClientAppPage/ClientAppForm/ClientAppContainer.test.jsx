@@ -5,18 +5,25 @@ import { message } from 'antd';
 import ClientAppPageContainer from './ClientAppContainer';
 import { EDIT_MODE } from './ClientAppFormConstants';
 import {
+    businessRolesTestResponse,
     settingDtoListTestData,
     clientAppTestData,
     doPropertiesSettingsTestData,
     propertiesSettingsTestData,
     settingsMapTestData,
+    testBusinessRole,
 } from '../../../../__tests__/constants';
-import { getSettingsList, getStaticUrl } from '../../../api/services/settingsService';
+import {
+    getSettingsList,
+    getBusinessRolesByClientApp,
+    getBusinessRoles,
+} from '../../../api/services/settingsService';
 import { getClientAppInfo } from '../../../api/services/clientAppService';
 import { getAppCode } from '../../../api/services/sessionService';
 import { sleep } from '../../../setupTests';
 import { doPropertiesSettings } from './ClientAppContainer';
 import * as consentsService from '../../../api/services/consentsService';
+import { requestWithMinWait } from '../../../utils/utils';
 
 const CURRENT_APP_CODE_MOCK = 'greenday-presents';
 const SPINNER_TEXT_NODE = 'loading-spinner.svg';
@@ -45,9 +52,15 @@ jest.mock('../../../api/services/sessionService', () => ({
     getAppCode: jest.fn(),
 }));
 
+jest.mock('../../../utils/utils', () => ({
+    ...jest.requireActual('../../../utils/utils'),
+    requestWithMinWait: jest.fn(),
+}));
+
 jest.mock('../../../api/services/settingsService', () => ({
     getSettingsList: jest.fn(),
-    getStaticUrl: jest.fn(),
+    getBusinessRoles: jest.fn(),
+    getBusinessRolesByClientApp: jest.fn(),
 }));
 
 jest.mock('../../../api/services/clientAppService', () => ({
@@ -58,14 +71,20 @@ jest.mock('antd', () => ({
     ...jest.requireActual('antd'),
     message: {
         error: jest.fn(),
-    }
+    },
 }));
 
 beforeEach(() => {
     getAppCode.mockImplementation(() => CURRENT_APP_CODE_MOCK);
     getSettingsList.mockResolvedValue(settingDtoListTestData);
     getClientAppInfo.mockResolvedValue(clientAppTestData);
-    getStaticUrl.mockResolvedValue('http://distributor-fs:8081/distributor-fs/file?path=');
+    getBusinessRoles.mockResolvedValue(businessRolesTestResponse);
+    getBusinessRolesByClientApp.mockResolvedValue({ list: [testBusinessRole] });
+    consentsService.getConsentById = jest.fn();
+    requestWithMinWait.mockResolvedValue([
+        settingDtoListTestData,
+        clientAppTestData,
+    ]);
 });
 
 describe('<ClientAppContainer /> tests', () => {
@@ -78,7 +97,7 @@ describe('<ClientAppContainer /> tests', () => {
         await act(async () => {
             const PROPERTIES = EDIT_MODE.PROPERTIES;
             const { getByText } = render(<ClientAppPageContainer { ...props } />);
-            await sleep(500);
+            await sleep();
 
             expect(getByText(PROPERTIES)).toBeInTheDocument();
         });
@@ -99,26 +118,31 @@ describe('<ClientAppContainer /> tests', () => {
     });
 
     it('should render ClientAppProperties', async () => {
-        const { getByText, getByTestId, rerender } = render(<ClientAppPageContainer { ...props } />);
-        await sleep(500);
+        const { getByText, getByTestId, rerender } = render(
+            <ClientAppPageContainer { ...props } />
+        );
+        await sleep();
 
         expect(getByText('ClientAppProperties')).toBeInTheDocument();
 
         const propertiesSettings = getByTestId('propertiesSettings');
-        expect(JSON.stringify({ 'current': doPropertiesSettingsTestData })).toEqual(propertiesSettings.textContent);
+        expect(JSON.stringify({ current: doPropertiesSettingsTestData })).toEqual(propertiesSettings.textContent);
 
         fireEvent.click(getByTestId('updateSettings-btn'));
         rerender(<ClientAppPageContainer { ...props } />);
         expect('{"current":{"test":2}}').toBe(propertiesSettings.textContent);
     });
 
-    it('should return undefined if isEdit is false', () => {
+    it('should return undefined if isEdit is false', async () => {
         const props = {
             type: 'new',
             matchPath: '/admin/client-apps',
         };
 
-        render(<ClientAppPageContainer { ...props } />);
+        act(() => {
+            render(<ClientAppPageContainer { ...props } />);
+        });
+        await sleep();
         expect(getClientAppInfo).not.toBeCalled();
     });
 
@@ -141,7 +165,7 @@ describe('<ClientAppContainer /> tests', () => {
 
     it('doPropertiesSettings right output', () => {
         const mockTestData = {
-            ...propertiesSettingsTestData
+            ...propertiesSettingsTestData,
         };
         delete mockTestData.doPropertiesSettingsTestData;
         const doPropertiesSettingsOutput = doPropertiesSettings(settingsMapTestData, clientAppTestData);
@@ -151,7 +175,7 @@ describe('<ClientAppContainer /> tests', () => {
 
     it('should render message.error', async () => {
         await act(async () => {
-            getSettingsList.mockRejectedValueOnce(new Error('error'));
+            requestWithMinWait.mockRejectedValue(new Error('error'));
             render(<ClientAppPageContainer { ...props } />);
             await sleep();
 
@@ -160,7 +184,6 @@ describe('<ClientAppContainer /> tests', () => {
     });
 
     it('doPropertiesSettings right ', async () => {
-        consentsService.getConsentById = jest.fn();
         await act(async () => {
             render(<ClientAppPageContainer { ...props } />);
             await sleep();

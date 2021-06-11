@@ -17,9 +17,14 @@
 
 .select :global(.ant-select-arrow .anticon:not(.ant-select-suffix):not([aria-label='close'])) {
     pointer-events: none;
+    transition: 0.3s;
 }
 
-.select:global(.ant-select-open .anticon:not([aria-label='close'])) {
+.select:global(.ant-select-open .ant-select-arrow) {
+    transform: none;
+}
+
+.select:global(.ant-select-open .ant-select-arrow .anticon-down:not(.ant-select-suffix)) {
     transform: rotate(-180deg);
 }
 
@@ -153,14 +158,6 @@
     flex-direction: row-reverse;
 }
 
-.tagPlaceholder {
-    order: 1;
-    display: flex;
-    max-width: 100px;
-    margin-left: 5px;
-    justify-content: space-between;
-    background-color: transparent;
-}
 .selectedCount {
     display: flex;
     align-items: center;

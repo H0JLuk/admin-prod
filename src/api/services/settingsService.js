@@ -34,3 +34,11 @@ export function saveStaticUrl(staticUrl) {
 export function getStaticUrl() {
     return window.localStorage.getItem(STATIC_URL);
 }
+
+export function getBusinessRoles() {
+    return Api.get('/business-role/list', getReqOptions());
+}
+
+export function getBusinessRolesByClientApp(clientAppId) {
+    return Api.get(`/admin/business-role/list?clientAppId=${clientAppId}`, getReqOptions());
+}

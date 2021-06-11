@@ -10,6 +10,7 @@ import { sleep } from '../../../../setupTests';
 import { act } from 'react-dom/test-utils';
 import ClientAppProperties from './ClientAppProperties';
 
+import { businessRolesTestResponse } from '../../../../../__tests__/constants';
 import * as clientAppService from '../../../../api/services/clientAppService';
 import * as settingsService from '../../../../api/services/settingsService';
 import * as sessionService from '../../../../api/services/sessionService';
@@ -18,6 +19,7 @@ import * as clientAppPropertiesUtils from '../utils';
 clientAppPropertiesUtils.showNotify = jest.fn();
 clientAppService.addClientApp = jest.fn();
 settingsService.addSettings = jest.fn();
+clientAppService.updateBusinessRolesClientApp = jest.fn();
 
 
 describe('<ClientAppProperties /> test', () => {
@@ -40,10 +42,14 @@ describe('<ClientAppProperties /> test', () => {
                 ym_token: '558648281231',
                 usage_url: '124',
                 displayName: 'displayName',
+                businessRoleIds: [],
                 isDeleted: false,
             },
         },
         updateSettings: jest.fn(),
+        businessRoles: {
+            current: businessRolesTestResponse.list,
+        },
     };
 
     it('should match snapshot ', () => {
@@ -75,6 +81,7 @@ describe('<ClientAppProperties /> test', () => {
                 displayName: props.propertiesSettings.current.displayName,
                 isDeleted: props.propertiesSettings.current.isDeleted,
                 name: props.propertiesSettings.current.name,
+                businessRoleIds: props.propertiesSettings.current.businessRoleIds,
             });
         });
     });
@@ -151,7 +158,7 @@ describe('<ClientAppProperties /> test', () => {
 
             expect(clientAppPropertiesUtils.showNotify).toBeCalledTimes(1);
             expect(clientAppPropertiesUtils.showNotify).toBeCalledWith(
-                `Клиентское приложение с кодом ${props.propertiesSettings.current.code} уже существует `,
+                <span>Клиентское приложение с кодом <b>code</b> уже существует</span>,
                 true
             );
         });

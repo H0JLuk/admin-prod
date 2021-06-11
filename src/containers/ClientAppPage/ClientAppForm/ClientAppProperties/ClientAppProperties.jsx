@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { createOrUpdateKey, showNotify } from '../utils';
 import { addClientApp, updateClientApp } from '../../../../api/services/clientAppService';
@@ -9,6 +9,8 @@ import { CLIENT_APPS_PAGES } from '../../../../constants/route';
 import {
     ADD_BUTTON_TITLE,
     BACKEND_ERROR_ALREADY_EXIST_ENDING,
+    BUSINESS_ROLE_FOR_APPLICATION,
+    BUSINESS_ROLE_FOR_APP_PLACEHOLDER,
     EDIT_BUTTON_LABEL,
     formElements,
     FORM_MODES,
@@ -17,13 +19,16 @@ import {
     SETTINGS_TYPES,
     SUCCESS_PROPERTIES_CREATE_DESCRIPTION,
 } from '../ClientAppFormConstants';
+import SelectTags from '../../../../components/SelectTags/SelectTags';
 import AppFormConstructor from '../FormConstructor/FormConstructor';
 import Loading from '../../../../components/Loading/Loading';
 import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
+import { compareArrayOfNumbers } from '../../../../utils/helper';
 
 import styles from './ClientAppProperties.module.css';
 
 const ClientAppProperties = ({
+    businessRoles: { current: businessRoles },
     type,
     matchPath,
     propertiesSettings: { current: propertiesSettings },
@@ -51,11 +56,12 @@ const ClientAppProperties = ({
                     displayName,
                     login_types,
                     notification_types,
+                    businessRoleIds,
                     ...restData
                 } = formData;
 
                 setLoading(true);
-                await addClientApp({ code, displayName, isDeleted: false, name });
+                await addClientApp({ code, displayName, isDeleted: false, name, businessRoleIds });
 
                 const settings = [
                     {
@@ -78,13 +84,14 @@ const ClientAppProperties = ({
                     const value = restData[key];
                     value && settings.push({ clientAppCode: code, value, key });
                 });
+
                 await addSettings(settings);
                 showNotify(SUCCESS_PROPERTIES_CREATE_DESCRIPTION);
                 saveAppCode(code);
                 history.replace(`${ matchPath }${CLIENT_APPS_PAGES.EDIT_APP}`);
             } else {
                 const clientAppCode = getAppCode();
-                const { displayName, code, name, ...restData } = formData;
+                const { displayName, code, name, businessRoleIds, ...restData } = formData;
                 const changedParams = Object.keys(restData).reduce((result, key) => {
                     const valueFromServer = keysToString.includes(key)
                         ? JSON.stringify(propertiesSettings[key])
@@ -108,8 +115,11 @@ const ClientAppProperties = ({
                 const requests = [];
                 const notifies = [];
 
-                if (displayName !== propertiesSettings.displayName) {
-                    requests.push(updateClientApp(id, { displayName, code, isDeleted: false, name }));
+                if (
+                    displayName !== propertiesSettings.displayName ||
+                    !compareArrayOfNumbers(businessRoleIds, propertiesSettings.businessRoleIds)
+                ) {
+                    requests.push(updateClientApp(id, { displayName, code, isDeleted: false, name, businessRoleIds }));
                     notifies.push(() => showNotify(
                         <span>
                             Отображаемое имя витрины изменено с <b>&quot;{ propertiesSettings.displayName }&quot;</b> на <b>&quot;{ displayName }&quot;</b>
@@ -137,9 +147,11 @@ const ClientAppProperties = ({
             }
 
         } catch ({ message }) {
-            const messageToShow = message.endsWith(BACKEND_ERROR_ALREADY_EXIST_ENDING)
-                ? `Клиентское приложение с кодом ${formData.code} уже существует `
-                : message;
+            const messageToShow = message.endsWith(BACKEND_ERROR_ALREADY_EXIST_ENDING) ? (
+                <span>
+                    Клиентское приложение с кодом <b>{ formData.code }</b> уже существует
+                </span>
+            ) : message;
             showNotify(messageToShow, true);
         }
         setLoading(false);
@@ -173,6 +185,22 @@ const ClientAppProperties = ({
                     { formElements.map((row, index) => (
                         <AppFormConstructor key={ index } row={ row } />
                     )) }
+                    <Row gutter={ 24 } className={ styles.row }>
+                        <Col span={ 13 }>
+                            <Form.Item
+                                label={ BUSINESS_ROLE_FOR_APPLICATION }
+                                name="businessRoleIds"
+                                normalize={ (catArr) => catArr.map(Number) }
+                            >
+                                <SelectTags
+                                    data={ businessRoles }
+                                    nameKey="name"
+                                    idKey="id"
+                                    placeholder={ BUSINESS_ROLE_FOR_APP_PLACEHOLDER }
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </div>
                 <div className={ styles.container }>
                     <PrivacyPolicy consent={ consent } />

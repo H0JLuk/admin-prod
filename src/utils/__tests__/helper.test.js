@@ -1,4 +1,5 @@
 import {
+    compareArrayOfNumbers,
     getURLSearchParams,
     downloadFile,
     templateLink,
@@ -62,12 +63,12 @@ describe('getStringSort()', () => {
     const ASC = 'ASC';
     const DESC = 'DESC';
     it('direction ASC', () => {
-        expect(getStringSort(ASC, 'test', 'test')).toEqual(0);
-        expect(getStringSort(ASC, 'string', 'teststring')).toEqual(-1);
+        expect(getStringSort('test', 'test', ASC)).toEqual(0);
+        expect(getStringSort('string', 'teststring', ASC)).toEqual(-1);
     });
     it('direction DESC', () => {
-        expect(getStringSort(DESC, 'test', 'test')).toEqual(0);
-        expect(getStringSort(DESC, 'string', 'teststring')).toEqual(1);
+        expect(getStringSort('test', 'test', DESC)).toEqual(0);
+        expect(getStringSort('string', 'teststring', DESC)).toEqual(1);
     });
 });
 
@@ -178,4 +179,20 @@ describe('getSearchParamsFromUrl()', () => {
             sortBy: 'name',
         });
     });
+});
+
+describe('test `compareArrayOfNumbers` function', () => {
+
+    it('should return true', () => {
+        expect(compareArrayOfNumbers([], [])).toBe(true);
+        expect(compareArrayOfNumbers([1], [1])).toBe(true);
+        expect(compareArrayOfNumbers([2, 1], [1, 2])).toBe(true);
+    });
+
+    it('should return false', () => {
+        expect(compareArrayOfNumbers([1], [])).toBe(false);
+        expect(compareArrayOfNumbers([2], [1])).toBe(false);
+        expect(compareArrayOfNumbers([2, 1], [1, 3])).toBe(false);
+    });
+
 });

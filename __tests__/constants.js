@@ -166,6 +166,37 @@ export const clientAppListTestResponse = {
     ],
 };
 
+export const testBusinessRole = {
+    id: 1,
+    name: 'Мобильный менеджер по продажам',
+    description: 'description',
+    deleted: false,
+    startDate: null,
+    endDate: null,
+};
+
+export const businessRolesTestResponse = {
+    list: [
+        testBusinessRole,
+        {
+            id: 2,
+            name: 'Заместитель руководителя ВИП ВСП',
+            description: 'description',
+            deleted: false,
+            startDate: null,
+            endDate: null,
+        },
+        {
+            id: 3,
+            name: 'Заместитель руководителя доп. офиса',
+            description: 'description',
+            deleted: false,
+            startDate: null,
+            endDate: null,
+        },
+    ],
+};
+
 export const settingDtoListTestData = {
     settingDtoList: [
         {
@@ -197,6 +228,7 @@ export const doPropertiesSettingsTestData = {
     name: 'Витрина экосистемы с подарками',
     displayName: 'Витрина ВСП',
 
+    businessRoleIds: [1],
     tmp_block_time: '1800',
     ym_token: '55864828',
     promo_show_time: '10',

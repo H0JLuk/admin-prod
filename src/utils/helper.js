@@ -98,10 +98,10 @@ function sortItems(type, direction, sortableItems) {
 
     switch (typeof a[type]) {
         case 'number': {
-            return getNumberSort(direction, a[type], b[type]);
+            return getNumberSort(a[type], b[type], direction);
         }
         case 'string': {
-            return getStringSort(direction, a[type], b[type]);
+            return getStringSort(a[type], b[type], direction);
         }
         default: {
             return 0;
@@ -109,7 +109,7 @@ function sortItems(type, direction, sortableItems) {
     }
 }
 
-export function getStringSort(direction, a, b) {
+export function getStringSort(a, b, direction = 'ASC') {
     const aLowerCase = stringToLowerCase(a);
     const bLowerCase = stringToLowerCase(b);
 
@@ -121,7 +121,7 @@ export function getStringSort(direction, a, b) {
     return direction === 'ASC' ? ASC_SORT : DESC_SORT;
 }
 
-function getNumberSort(direction, a, b) {
+function getNumberSort(a, b, direction = 'ASC') {
     return direction === 'ASC' ? a - b : b - a;
 }
 
@@ -160,4 +160,13 @@ export function removeExtraSpaces(value) {
     }
 
     return !value.trim() ? value.trim() : value.replace(/\s{2,}/g, ' ');
+}
+
+export function compareArrayOfNumbers(arrA, arrB) {
+    if (arrA.length === arrB.length) {
+        const arrBSorted = [...arrB].sort(getNumberSort);
+        return [...arrA].sort(getNumberSort).every((el, idx) => el === arrBSorted[idx]);
+    }
+
+    return false;
 }

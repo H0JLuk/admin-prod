@@ -3,7 +3,7 @@ import {
     APP_MECHANICS,
     MECHANICS_CHECKBOXES,
     MECHANICS_ERROR,
-    NOTIFICATION_TYPES,
+    NOTIFICATION_TYPES_OPTIONS,
 } from '../../../constants/clientAppsConstants';
 import { showCount } from '../../../constants/common';
 import { getPatternAndMessage } from '../../../utils/validators';
@@ -25,6 +25,8 @@ export const SUCCESS_DESIGN_UPDATE_DESCRIPTION = 'Оформление для к
 export const SUCCESS_PROPERTIES_UPDATE_DESCRIPTION = 'Настройки клиентского приложения успешно обновлены';
 export const SUCCESS_PROPERTIES_CREATE_DESCRIPTION = 'Клиентское приложение успешно создано';
 export const BACKEND_ERROR_ALREADY_EXIST_ENDING = 'already exists';
+export const BUSINESS_ROLE_FOR_APPLICATION = 'Бизнес-роль, для которой доступно приложение';
+export const BUSINESS_ROLE_FOR_APP_PLACEHOLDER = 'Выберите роль/роли';
 
 export const EDIT_MODE = {
     DESIGN: 'Оформление',
@@ -163,7 +165,7 @@ export const mainInfoElements = [
             name: 'displayName',
             placeholder: 'Отображаемое имя',
         },
-    ]
+    ],
 ];
 
 export const formElements = [
@@ -238,7 +240,7 @@ export const formElements = [
                 {
                     validator: checkBoxValidator,
                     validateTrigger: 'onSubmit',
-                }
+                },
             ],
             options: MECHANICS_CHECKBOXES,
             name: 'mechanics',
@@ -260,10 +262,10 @@ export const formElements = [
             label: 'Способ отправки сообщений клиенту',
             type: FORM_TYPES.CHECKBOX_GROUP,
             span: 11,
-            options: NOTIFICATION_TYPES,
+            options: NOTIFICATION_TYPES_OPTIONS,
             name: 'notification_types',
         },
-    ]
+    ],
 ];
 
 export const designElements = [

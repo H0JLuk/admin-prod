@@ -7,7 +7,13 @@ import Header from '../../../components/Header/Header';
 import ClientAppProperties from './ClientAppProperties/ClientAppProperties';
 import MainPageDesign from './MainPageDesign/MainPageDesign';
 import { getAppCode } from '../../../api/services/sessionService';
-import { addSettings, getAllSettings, getSettingsList, getStaticUrl } from '../../../api/services/settingsService';
+import {
+    addSettings,
+    getAllSettings,
+    getBusinessRoles,
+    getBusinessRolesByClientApp,
+    getSettingsList,
+} from '../../../api/services/settingsService';
 import { getClientAppInfo } from '../../../api/services/clientAppService';
 import {
     FORM_MODES,
@@ -20,6 +26,7 @@ import {
     BANNER_KEYS,
 } from './ClientAppFormConstants';
 import { checkExistDesignSettings } from './utils';
+import { requestWithMinWait } from '../../../utils/utils';
 import { getConsentById } from '../../../api/services/consentsService';
 
 import styles from './ClientAppContainer.module.css';
@@ -31,6 +38,7 @@ const ClientAppContainer = ({ type, matchPath }) => {
     const [mode, setMode] = useState(EDIT_MODE.PROPERTIES);
     const history = useHistory();
     const [loading, setLoading] = useState(true);
+    const businessRoles = useRef([]);
     const settingDtoList = useRef({});
     const designSettings = useRef({});
     const propertiesSettings = useRef({});
@@ -50,14 +58,29 @@ const ClientAppContainer = ({ type, matchPath }) => {
             return;
         }
         setLoading(true);
+
         (async () => {
             try {
+                businessRoles.current = (await getBusinessRoles()).list;
+
                 if (!isEdit) {
                     return;
                 }
-                const { settingDtoList: unformattedSettings = [] } = await getSettingsList(currentAppCode);
-                const clientAppInfo = await getClientAppInfo(currentAppCode);
-                const settingsMap = unformattedSettings.reduce((result, item) => ({ ...result, [item.key]: item.value }), {});
+
+                // TODO: не забыть немного переделать после перехода на TS.
+                const [
+                    { settingDtoList: unformattedSettings = [] },
+                    clientAppInfo,
+                ] = await requestWithMinWait([
+                    getSettingsList(currentAppCode),
+                    getClientAppInfo(currentAppCode),
+                ], 0);
+                const { list: clientAppRoles = [] } = await getBusinessRolesByClientApp(clientAppInfo.id);
+                const businessRoleIds = clientAppRoles.map(({ id }) => id);
+                const settingsMap = unformattedSettings.reduce(
+                    (result, item) => ({ ...result, [item.key]: item.value }),
+                    { businessRoleIds }
+                );
 
                 settingDtoList.current = settingsMap;
                 propertiesSettings.current = doPropertiesSettings(settingsMap, clientAppInfo);
@@ -152,6 +175,7 @@ const ClientAppContainer = ({ type, matchPath }) => {
             matchPath={ matchPath }
             propertiesSettings={ propertiesSettings }
             updateSettings={ updatePropertiesSettings }
+            businessRoles={ businessRoles }
             consent={ consent.current }
         />
     );
@@ -193,11 +217,7 @@ function doDesignSettings (settings) {
     return { home_page_theme, ...restSettings };
 }
 
-export function doPropertiesSettings (settings, { id, displayName, code, name }) {
-    const url = getStaticUrl();
-    settings.installation_url = settings.installation_url && settings.installation_url.replace(url, '');
-    settings.usage_url = settings.usage_url && settings.usage_url.replace(url, '');
-
+export function doPropertiesSettings(settings, { id, displayName, code, name }) {
     const { mechanics, login_types, notification_types, ...restSettings } = settings;
     const mechanicsCheckBox = mechanics && JSON.parse(mechanics);
     const loginCheckBoxes = login_types && JSON.parse(login_types);
@@ -211,6 +231,6 @@ export function doPropertiesSettings (settings, { id, displayName, code, name })
         mechanics: mechanicsCheckBox,
         login_types: loginCheckBoxes,
         notification_types: notificationTypesCheckBoxes,
-        ...restSettings
+        ...restSettings,
     };
 }
