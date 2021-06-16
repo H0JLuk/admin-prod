@@ -6,6 +6,7 @@ import styles from './SelectTags.module.css';
 
 function SelectTags({
     showClearIcon = true,
+    canRemoveSelected = true,
     onChange,
     data = [],
     value = [],
@@ -23,12 +24,14 @@ function SelectTags({
         value && (
             <div className={ styles.tagSelect } >
                 <p className={ styles.selectText }>{ findName(data, value, nameKey, idKey) }</p>
-                <CloseOutlined
-                    height="15px"
-                    width="15px"
-                    fill="#09A552"
-                    onClick={ onClose }
-                />
+                { canRemoveSelected && (
+                    <CloseOutlined
+                        height="15px"
+                        width="15px"
+                        fill="#09A552"
+                        onClick={ onClose }
+                    />
+                ) }
             </div>
         )
     );

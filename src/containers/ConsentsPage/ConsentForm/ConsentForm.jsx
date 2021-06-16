@@ -113,15 +113,15 @@ const ConsentForm = ({ history, matchPath, mode }) => {
             setLoadingTextEditor(true);
 
             if (typeof id === 'number') {
-                await updateConsent({ ...body, id });
+                !signed && await updateConsent({ ...body, id });
             } else {
                 ({ id } = await createConsent(body));
             }
-            notification.success({ message: `Согласие успешно ${isEditMode ? 'изменено' : 'создано'}` });
 
             const requestSequence = newAppSelection.map(app => attachConsentToClientApp(id, app));
 
             await Promise.all(requestSequence);
+            notification.success({ message: `Согласие успешно ${isEditMode ? 'изменено' : 'создано'}` });
             setLoading(true);
             history.replace(pathname);
             redirectToList();
@@ -226,9 +226,9 @@ const ConsentForm = ({ history, matchPath, mode }) => {
                                     <SelectTags
                                         placeholder="Приложения в которых показывается согласие"
                                         data={ appList }
-                                        idKey="code"
-                                        nameKey="name"
+                                        nameKey="displayName"
                                         showClearIcon={ false }
+                                        canRemoveSelected={ false }
                                     />
                                 </Form.Item>
                             </div>
