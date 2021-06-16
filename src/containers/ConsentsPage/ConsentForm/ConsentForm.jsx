@@ -191,6 +191,7 @@ const ConsentForm = ({ history, matchPath, mode }) => {
                                         className={ styles.version }
                                         placeholder={ VERSION_PLACEHOLDER }
                                         disabled={ isEditMode }
+                                        allowClear
                                     />
                                 </Form.Item>
                             </Col>

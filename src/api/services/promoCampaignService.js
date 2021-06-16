@@ -74,11 +74,12 @@ export function deletePromoCampaign(promoCampaignId) {
     return Api.delete(`/admin/promoCampaign/${promoCampaignId}`, getReqOptions());
 }
 
-export function getLocationsByText(value) {
-    return Api.get(`/location/search?name=${value}`, getReqOptions());
+export async function getLocationsByText(name) {
+    const { list } = await Api.get(`/location/search?name=${name}`, getReqOptions());
+    return list;
 }
 
-function getSalePointParams(name, locationId) {
+export async function getSalePointsByText(name, locationId) {
     const params = Object.entries({ name, locationId }).reduce((result, [key, val]) => {
         if (!val) {
             return result;
@@ -86,12 +87,9 @@ function getSalePointParams(name, locationId) {
 
         return { ...result, [key]: val };
     }, {});
+    const { list } = await Api.get(`/salepoint/search?${new URLSearchParams(params).toString()}`, getReqOptions());
 
-    return new URLSearchParams(params).toString();
-}
-
-export function getSalePointsByText(value, locationId) {
-    return Api.get(`/salepoint/search?${getSalePointParams(value, locationId)}`, getReqOptions());
+    return list;
 }
 
 /**
