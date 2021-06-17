@@ -21,7 +21,6 @@ Object {
           >
             <svg
               aria-hidden="true"
-              class=""
               data-icon="left"
               fill="currentColor"
               focusable="false"
@@ -49,7 +48,6 @@ Object {
           >
             <svg
               aria-hidden="true"
-              class=""
               data-icon="user"
               fill="currentColor"
               focusable="false"
@@ -217,7 +215,6 @@ Object {
         >
           <svg
             aria-hidden="true"
-            class=""
             data-icon="left"
             fill="currentColor"
             focusable="false"
@@ -245,7 +242,6 @@ Object {
         >
           <svg
             aria-hidden="true"
-            class=""
             data-icon="user"
             fill="currentColor"
             focusable="false"

@@ -43,21 +43,24 @@ describe('<DownloadDropDown /> test', () => {
 
     it('dropdown menu should not close (click inside component)', async () => {
         const container = mount(<DownloadDropDown />);
-        const wrapNode = container.getDOMNode();
-        const map ={};
-        document.addEventListener = jest.fn((event, cb) => {
-            map[event] = cb;
-        });
+        const wrapNode = container.find('.dropdownLinkWrapper').getDOMNode();
+        const map = {};
         const event = {
             target: wrapNode,
         };
+
+        document.addEventListener = jest.fn((event, cb) => {
+            map[event] = cb;
+        });
+
         container.find('Button').simulate('click');
         expect(container.find('.dropdownMenu').hasClass('open')).toBe(true);
+
         await act(async () => {
             map.click(event);
         });
+
         container.update();
         expect(container.find('.dropdownMenu').hasClass('open')).toBe(true);
-
     });
 });

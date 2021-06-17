@@ -61,23 +61,6 @@
     height: 100%;
 }
 
-.wrapper :global(.ant-input:hover),
-.wrapper :global(.ant-input:active),
-.wrapper :global(.ant-input:focus),
-.wrapper :global(.ant-select:hover .ant-select-selector),
-.wrapper :global(.ant-select:active .ant-select-selector),
-.wrapper :global(.ant-select:focus .ant-select-selector),
-.wrapper :global(.ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover) {
-    border-color: #09a552;
-    box-shadow: none;
-}
-
-.wrapper :global(.ant-select-focused:not(.ant-select-disabled).ant-select-single:not(.ant-select-customize-input) .ant-select-selector),
-.wrapper :global(.ant-select-focused:not(.ant-select-disabled).ant-select-multiple .ant-select-selector) {
-    border-color:#09a552;
-    box-shadow: none;
-}
-
 .containerStep {
     padding: 0 15px;
 }

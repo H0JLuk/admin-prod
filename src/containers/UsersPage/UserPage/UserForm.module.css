@@ -110,13 +110,6 @@
     margin-top: 25px;
 }
 
-.formWrapper :global(.ant-input-affix-wrapper:hover),
-.formWrapper :global(.ant-input-affix-wrapper:focus),
-.formWrapper :global(.ant-input-affix-wrapper-focused) {
-    border-color: #21ba72;
-    box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
-}
-
 .title {
     margin-bottom: 25px;
     color: #494949 !important ;
@@ -132,10 +125,6 @@
 
 .suffixStyle {
     cursor: pointer;
-}
-
-.copyable :global(.ant-typography-copy) {
-    color: #09a552;
 }
 
 .status {

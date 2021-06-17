@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import FormConstructor from './FormConstructor';
 import { FORM_TYPES } from '../ClientAppFormConstants';
 
@@ -16,6 +16,7 @@ describe('<FormConstructor /> test', () => {
                     vitrina_theme: 'vitrina_theme',
                     gradient: 'gradient',
                 },
+                type: FORM_TYPES.INPUT,
             },
         ],
     };

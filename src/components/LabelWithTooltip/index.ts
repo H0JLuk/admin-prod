@@ -1,0 +1,1 @@
+export { getLabel } from './LabelWithTooltip';

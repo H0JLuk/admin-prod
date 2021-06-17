@@ -4,7 +4,7 @@ exports[`<FormConstructor /> test should be mount snap 1`] = `
 "<Row className=\\"propertiesRow\\" gutter={24}>
   <Col className=\\"colFlex\\" span=\\"span\\">
     <FormItem rules=\\"rules\\" name=\\"name\\" className=\\"\\" label=\\"label\\" validateFirst={true}>
-      <FormInputByType isEdit={false} value={{...}} />
+      <FormInputByType isEdit={false} value={{...}} type=\\"INPUT\\" />
     </FormItem>
   </Col>
 </Row>"

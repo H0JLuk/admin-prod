@@ -1,0 +1,3 @@
+import PromoCampaignVisibilitySettingTable from './PromoCampaignVisibilitySettingTable';
+
+export default PromoCampaignVisibilitySettingTable;

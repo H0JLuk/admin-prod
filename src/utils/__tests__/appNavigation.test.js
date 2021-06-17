@@ -366,7 +366,7 @@ describe('history api should be call', () => {
 
             it('should create link to users page for owner', () => {
                 sessionService.getRole = jest.fn(() => 'Owner');
-                expect(getLinkForUsersPage()).toBe(ROUTE_OWNER.USERS);
+                expect(getLinkForUsersPage()).toBe(ROUTE_OWNER.DASHBOARD);
             });
 
             it('should create link to users page for user manager', () => {

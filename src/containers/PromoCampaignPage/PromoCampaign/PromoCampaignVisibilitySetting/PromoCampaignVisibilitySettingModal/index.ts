@@ -1,0 +1,3 @@
+import PromoCampaignVisibilitySettingModal from './PromoCampaignVisibilitySettingModal';
+
+export default PromoCampaignVisibilitySettingModal;

@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<PromoCampaignForm.test.jsx should render 1`] = `
+exports[`<PromoCampaignForm /> tests should render 1`] = `
 "<div className=\\"promoCreateContainer\\">
   <PromoCampaignSideBar active={1} validStep={1} onClick={[Function: bound _dispatchAction]} newPromoCampaign={true} hideLastStep={false} />
   <div className=\\"wrapper\\">
-    <Header onClickFunc={false} />
+    <Header onClickFunc={[undefined]} />
     <div className=\\"containerControl\\">
       <p className=\\"headerTitle\\">
         Новая промо-кампания
@@ -27,7 +27,7 @@ exports[`<PromoCampaignForm.test.jsx should render 1`] = `
       </Button>
     </div>
     <ForwardRef(InternalForm) className=\\"containerStep\\" form={{...}} layout=\\"vertical\\" onValuesChange={[Function: isChanged]}>
-      <StepInfo isCopy={[undefined]} state={{...}} changeTypePromo={[Function (anonymous)]} setFieldsValue={[Function (anonymous)]} oldName=\\"Промо-кампания Сбермаркет для витрины ВСП\\" oldExternalId={{...}} copyPromoCampaignId={{...}} mode=\\"create\\" />
+      <StepInfo isCopy={[undefined]} state={{...}} changeTypePromo={[Function (anonymous)]} oldName=\\"Промо-кампания Сбермаркет для витрины ВСП\\" oldExternalId={{...}} copyPromoCampaignId={{...}} mode=\\"create\\" />
     </ForwardRef(InternalForm)>
   </div>
   <div className=\\"loadingWrapper\\">

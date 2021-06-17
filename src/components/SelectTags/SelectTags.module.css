@@ -41,19 +41,10 @@
     max-width: 85%;
 }
 
-.select:active,
-.select:focus,
-.select:hover {
-    border-color: #09a552;
-}
-
 .select :global(.ant-select-selection-overflow) {
     max-width: 85%;
 }
 
-.select:global(.ant-select:not(.ant-select-disabled):hover .ant-select-selector) {
-    border-color: #09a552;
-}
 
 .select :global(.ant-select-selection-search-input) {
     display: none;
@@ -63,10 +54,6 @@
     border: none;
 }
 
-.select:global(.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
-        .ant-select-selector) {
-    border-color: #09a552;
-}
 /*  /select */
 
 /* tagSelect */
@@ -105,21 +92,6 @@
 .dropdown :global(.ant-select-item-option-selected:not(.ant-select-item-option-disabled)) {
     background: transparent;
     background-color: transparent;
-}
-
-.dropdown :global(.ant-checkbox-indeterminate .ant-checkbox-inner::after) {
-    background-color: #09a552;
-}
-
-.dropdown :global(.ant-checkbox-checked .ant-checkbox-inner) {
-    background-color: #09a552 !important;
-    border-color: #09a552 !important;
-}
-
-.dropdown :global(.ant-checkbox-input:hover + .ant-checkbox-inner),
-.dropdown :global(.ant-checkbox-input:focus + .ant-checkbox-inner),
-.dropdown :global(.ant-checkbox-input:active + .ant-checkbox-inner) {
-    border-color: #09a552 !important;
 }
 
 .dropdown :global(.ant-select-item-option-state) {

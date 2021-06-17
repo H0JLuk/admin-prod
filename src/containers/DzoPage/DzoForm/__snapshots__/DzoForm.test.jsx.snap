@@ -21,7 +21,6 @@ Object {
             >
               <svg
                 aria-hidden="true"
-                class=""
                 data-icon="left"
                 fill="currentColor"
                 focusable="false"
@@ -49,7 +48,6 @@ Object {
             >
               <svg
                 aria-hidden="true"
-                class=""
                 data-icon="user"
                 fill="currentColor"
                 focusable="false"
@@ -295,7 +293,7 @@ Object {
                                         1МБ .svg
                                       </p>
                                       <button
-                                        class="ant-btn uploadButton"
+                                        class="ant-btn"
                                         type="button"
                                       >
                                         <span
@@ -305,7 +303,6 @@ Object {
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            class=""
                                             data-icon="upload"
                                             fill="currentColor"
                                             focusable="false"
@@ -391,7 +388,7 @@ Object {
                                         1МБ .svg
                                       </p>
                                       <button
-                                        class="ant-btn uploadButton"
+                                        class="ant-btn"
                                         type="button"
                                       >
                                         <span
@@ -401,7 +398,6 @@ Object {
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            class=""
                                             data-icon="upload"
                                             fill="currentColor"
                                             focusable="false"
@@ -487,7 +483,7 @@ Object {
                                         1МБ .svg
                                       </p>
                                       <button
-                                        class="ant-btn uploadButton"
+                                        class="ant-btn"
                                         type="button"
                                       >
                                         <span
@@ -497,7 +493,6 @@ Object {
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            class=""
                                             data-icon="upload"
                                             fill="currentColor"
                                             focusable="false"
@@ -906,7 +901,6 @@ Object {
           >
             <svg
               aria-hidden="true"
-              class=""
               data-icon="left"
               fill="currentColor"
               focusable="false"
@@ -934,7 +928,6 @@ Object {
           >
             <svg
               aria-hidden="true"
-              class=""
               data-icon="user"
               fill="currentColor"
               focusable="false"
@@ -1180,7 +1173,7 @@ Object {
                                       1МБ .svg
                                     </p>
                                     <button
-                                      class="ant-btn uploadButton"
+                                      class="ant-btn"
                                       type="button"
                                     >
                                       <span
@@ -1190,7 +1183,6 @@ Object {
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          class=""
                                           data-icon="upload"
                                           fill="currentColor"
                                           focusable="false"
@@ -1276,7 +1268,7 @@ Object {
                                       1МБ .svg
                                     </p>
                                     <button
-                                      class="ant-btn uploadButton"
+                                      class="ant-btn"
                                       type="button"
                                     >
                                       <span
@@ -1286,7 +1278,6 @@ Object {
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          class=""
                                           data-icon="upload"
                                           fill="currentColor"
                                           focusable="false"
@@ -1372,7 +1363,7 @@ Object {
                                       1МБ .svg
                                     </p>
                                     <button
-                                      class="ant-btn uploadButton"
+                                      class="ant-btn"
                                       type="button"
                                     >
                                       <span
@@ -1382,7 +1373,6 @@ Object {
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          class=""
                                           data-icon="upload"
                                           fill="currentColor"
                                           focusable="false"

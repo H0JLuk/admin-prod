@@ -16,8 +16,13 @@
     border-color: #f8f8f8;
 }
 
-.dropdownButton span[role='img'] {
+.dropdownButton span[role='img'] svg {
     color: #c2c8d1;
+    transition: transform 0.2s;
+}
+
+.dropdownButton.dropdownActive span[role='img'] svg {
+    transform: rotate(-180deg);
 }
 
 .dropdownButton :global(.anticon.anticon-down) {

@@ -17,7 +17,7 @@ jest.mock('./PromoCampaignVisibilitySettingForm/PromoCampaignVisibilitySettingFo
     </div>
 ));
 
-jest.mock('./PromoCampaignVisibilitySetting.jsx', () => () => (
+jest.mock('./PromoCampaignVisibilitySetting', () => () => (
     <div>
         <span>PromoCampaignVisibilitySetting</span>
     </div>

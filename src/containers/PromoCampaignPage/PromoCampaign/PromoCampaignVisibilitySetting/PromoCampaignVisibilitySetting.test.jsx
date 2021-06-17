@@ -106,7 +106,7 @@ describe('<PromoCampaignVisibilitySetting /> tests', () => {
             render(<PromoCampaignVisibilitySetting { ...props } />);
             await sleep();
             expect(getSearchParamsFromUrl).toBeCalledWith(`?${urlSearchParams}`, defaultParams);
-            expect(getPromoCampaignVisibilitySettings).toBeCalledWith('24', urlSearchParams);
+            expect(getPromoCampaignVisibilitySettings).toBeCalledWith(24, urlSearchParams);
             expect(mockHistoryReplace).toBeCalled();
         });
     });
@@ -191,7 +191,7 @@ describe('<PromoCampaignVisibilitySetting /> tests', () => {
             fireEvent.click(getByText(/Выбрать все/));
             fireEvent.click(getByText(/Удалить/));
             expect(deletePromoCampaignVisibilitySetting).toBeCalledTimes(11);
-            expect(getPromoCampaignVisibilitySettings).toBeCalledWith('24', urlSearchParams);
+            expect(getPromoCampaignVisibilitySettings).toBeCalledWith(24, urlSearchParams);
         });
     });
 
@@ -247,7 +247,7 @@ describe('<PromoCampaignVisibilitySetting /> tests', () => {
             await sleep();
             const page2 = container.querySelectorAll('.ant-pagination-item')[1];
             fireEvent.click(page2);
-            expect(getPromoCampaignVisibilitySettings).toBeCalledWith('24', urlSearchParams);
+            expect(getPromoCampaignVisibilitySettings).toBeCalledWith(24, urlSearchParams);
         });
     });
 
@@ -282,7 +282,7 @@ describe('<PromoCampaignVisibilitySetting /> tests', () => {
             const wrapper = shallow(<PromoCampaignVisibilitySetting { ...props } />);
             wrapper.find('PromoCampaignVisibilitySettingModal').prop('forceUpdate')();
             await sleep();
-            expect(getPromoCampaignVisibilitySettings).toBeCalledWith('24', urlSearchParams);
+            expect(getPromoCampaignVisibilitySettings).toBeCalledWith(24, urlSearchParams);
         });
     });
 

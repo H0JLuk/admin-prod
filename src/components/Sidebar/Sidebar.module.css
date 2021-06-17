@@ -50,7 +50,7 @@
     margin-right: 10px;
 }
 
-.menu :global(.ant-menu-inline) .appLink.firstApp {
+.menuLinks .appLink.firstApp {
     margin-top: 15px !important;
 }
 
@@ -83,39 +83,10 @@ body:not(:global(.not_highlight_app)) .activeApp,
     color: white;
 }
 
-.menu :global(.ant-menu.ant-menu-dark) {
-    border-radius: 5px;
-    background-color: transparent;
-    border: 0;
-    color: white;
+.menuLinks a {
+    color: rgba(0, 0, 0, 0.85)
 }
 
-.menu :global(.ant-menu-inline .ant-menu-item) {
-    height: unset;
-    min-height: 40px;
-    white-space: unset;
-    margin: 0 !important;
-    padding-left: 0px !important;
-    padding-right: 0px;
-}
-
-.menu :global(.ant-menu-inline .ant-menu-item::after) {
-    border: none;
-}
-
-.menu :global(.ant-menu-item-selected) {
-    color: #09A552 !important;
-    background-color: transparent !important;
-}
-
-.menu :global(.ant-menu-item-selected) a {
-    color: rgba(0, 0, 0, 0.85);
-}
-
-.menu :global(.ant-menu-item:hover) {
-    color: black;
-}
-
-.menu :global(.ant-menu-item a:hover) {
-    color: black;
+.menuLinks a:hover {
+    color: rgba(0, 0, 0, 0.85)
 }

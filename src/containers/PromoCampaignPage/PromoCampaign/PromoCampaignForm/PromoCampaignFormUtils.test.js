@@ -13,7 +13,6 @@ import {
 } from '../../../../api/services/promoCampaignTextService';
 import { getAppCode } from '../../../../api/services/sessionService';
 import {
-    arrayToObject,
     createTexts,
     createImgBanners,
     createVisibilities,
@@ -80,11 +79,6 @@ const promoCampaignTextsObject = {
 };
 
 describe('PromoCampaignFormUtils tests', () => {
-
-    it('test `arrayToObject` function', () => {
-        expect(arrayToObject(promoCampaignBannerArray, 'type', 'url')).toEqual(promoCampaignBannersObject);
-        expect(arrayToObject(promoCampaignTextsArray, 'type', 'value')).toEqual(promoCampaignTextsObject);
-    });
 
     describe('test `createTexts` function', () => {
         beforeEach(() => {

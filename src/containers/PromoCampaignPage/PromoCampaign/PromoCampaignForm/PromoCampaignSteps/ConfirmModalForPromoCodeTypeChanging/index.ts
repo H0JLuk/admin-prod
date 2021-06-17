@@ -1,0 +1,3 @@
+import callConfirmModalForPromoCodeTypeChanging from './ConfirmModalForPromoCodeTypeChanging';
+
+export default callConfirmModalForPromoCodeTypeChanging;

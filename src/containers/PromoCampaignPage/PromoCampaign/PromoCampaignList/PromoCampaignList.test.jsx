@@ -51,6 +51,7 @@ describe('<PromoCampaignList /> test', () => {
     });
 
     it('reorderPromoCampaigns should be called when the sort button is clicked in sortable mode', async () => {
+        promoCampaignService.getFilteredPromoCampaignList = jest.fn(() => ({ promoCampaignDtoList: [] }));
         await container.find('HeaderWithActions').prop('buttons')[0].onClick();
         expect(promoCampaignService.reorderPromoCampaigns).toBeCalledTimes(1);
         expect(container.find('HeaderWithActions').prop('buttons')[1].label).toEqual('Изменить порядок');
@@ -83,6 +84,9 @@ describe('<PromoCampaignList /> test', () => {
     });
 
     it('idMap should be correct', async () => {
+        promoCampaignService.getFilteredPromoCampaignList = jest.fn(() => ({
+            promoCampaignDtoList: promoCampaignList,
+        }));
         const idMap = {
             '24': 0,
             '23': 1,

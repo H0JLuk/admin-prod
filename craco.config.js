@@ -1,3 +1,5 @@
+const CracoAlias = require('craco-alias');
+const CracoLessPlugin = require('craco-less');
 const RawLoader = require('craco-raw-loader');
 const CraCKEditorPlugin = require('./craco.ckeditor.plugin');
 const isProd = process.env.NODE_ENV === 'production';
@@ -10,8 +12,8 @@ module.exports = {
         {
             plugin: RawLoader,
             options: {
-                test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/
-            }
+                test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+            },
         },
         {
             plugin: CraCKEditorPlugin,
@@ -24,12 +26,12 @@ module.exports = {
                 },
                 postcssLoaderOptions: {
                     themeImporter: {
-                        themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
+                        themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
                     },
                     minify: true,
-                }
-            }
-        }
+                },
+            },
+        },
     ],
     webpack: {
         configure: {
@@ -41,6 +43,26 @@ module.exports = {
                     maxSize: 1024 * 1000,
                 },
             },
-        }
+        },
     },
+    plugins: [
+        {
+            plugin: CracoAlias,
+            options: {
+                source: 'tsconfig',
+                baseUrl: './',
+                tsConfigPath: './tsconfig.extend.json',
+            },
+        },
+        {
+            plugin: CracoLessPlugin,
+            options: {
+                lessLoaderOptions: {
+                    lessOptions: {
+                        javascriptEnabled: true,
+                    },
+                },
+            },
+        },
+    ],
 };

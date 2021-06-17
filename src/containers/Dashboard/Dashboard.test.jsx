@@ -57,9 +57,9 @@ describe('<Dashboard /> test', () => {
     const container = shallow(<Dashboard />);
 
     beforeEach(() => {
-        adminService.getDashboardInfo = jest.fn(() => dashboardInfo);
-        clientAppService.getActiveClientApps = jest.fn(() => clientAppListTestResponse.list);
-        dzoService.getDzoList = jest.fn(() => ({ dzoDtoList: dzoListTestData }));
+        adminService.getDashboardInfo = jest.fn().mockResolvedValue(dashboardInfo);
+        clientAppService.getActiveClientApps = jest.fn().mockResolvedValue(clientAppListTestResponse.list);
+        dzoService.getDzoList = jest.fn().mockResolvedValue({ dzoDtoList: dzoListTestData });
     });
 
     it('should be mount snap', () => {
@@ -104,7 +104,7 @@ describe('<Dashboard /> test', () => {
     });
 
     it('filterTagList should be correct', async () => {
-        utils.requestWithMinWait = jest.fn(() => [adminService.getDashboardInfo(), clientAppService.getActiveClientApps(), dzoService.getDzoList()]);
+        utils.requestsWithMinWait = jest.fn().mockResolvedValue([dashboardInfo, clientAppListTestResponse.list, { dzoDtoList: dzoListTestData }]);
         const container = mount(<Dashboard />);
         const dropDownContainer = shallow(container.find('Dropdown').at(1).prop('overlay'));
         await act(async () => {
@@ -128,7 +128,7 @@ describe('<Dashboard /> test', () => {
     });
 
     it('list should be filtered by dzo', async () => {
-        utils.requestWithMinWait = jest.fn(() => [adminService.getDashboardInfo(), clientAppService.getActiveClientApps(), dzoService.getDzoList()]);
+        utils.requestsWithMinWait = jest.fn().mockResolvedValue([dashboardInfo, clientAppListTestResponse.list, { dzoDtoList: dzoListTestData }]);
         const container = mount(<Dashboard />);
         const dropDownContainer = shallow(container.find('Dropdown').at(1).prop('overlay'));
         await act(async () => {
@@ -143,7 +143,7 @@ describe('<Dashboard /> test', () => {
     });
 
     it('list should be filtered by application', async () => {
-        utils.requestWithMinWait = jest.fn(() => [adminService.getDashboardInfo(), clientAppService.getActiveClientApps(), dzoService.getDzoList()]);
+        utils.requestsWithMinWait = jest.fn().mockResolvedValue([dashboardInfo, clientAppListTestResponse.list, { dzoDtoList: dzoListTestData }]);
         const container = mount(<Dashboard />);
         const dropDownContainer = shallow(container.find('Dropdown').at(1).prop('overlay'));
         await act(async () => {
@@ -157,17 +157,17 @@ describe('<Dashboard /> test', () => {
         expect(container.find('DashboardItem').prop('clientApplicationId')).toEqual(1);
     });
 
-    it('requestWithMinWait should be called', async () => {
-        utils.requestWithMinWait = jest.fn(() => [adminService.getDashboardInfo(), clientAppService.getActiveClientApps(), dzoService.getDzoList()]);
+    it('requestsWithMinWait should be called', async () => {
+        utils.requestsWithMinWait = jest.fn().mockResolvedValue([dashboardInfo, clientAppListTestResponse.list, { dzoDtoList: dzoListTestData }]);
         await act(async () => {
             mount(<Dashboard />);
         });
-        expect(utils.requestWithMinWait).toHaveBeenCalledTimes(1);
+        expect(utils.requestsWithMinWait).toHaveBeenCalledTimes(1);
     });
 
     it('console.error should be called with "test error" message', async () => {
         const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => '');
-        utils.requestWithMinWait = jest.fn(() => Promise.reject(new Error ('test error')));
+        utils.requestsWithMinWait = jest.fn().mockRejectedValue(new Error('test error'));
         await act(async () => {
             mount(<Dashboard />);
         });
@@ -176,7 +176,7 @@ describe('<Dashboard /> test', () => {
     });
 
     it('getPromoCampaignById should be called', async () => {
-        utils.requestWithMinWait = jest.fn(() => [adminService.getDashboardInfo(), clientAppService.getActiveClientApps(), dzoService.getDzoList()]);
+        utils.requestsWithMinWait = jest.fn().mockResolvedValue([dashboardInfo, clientAppListTestResponse.list, { dzoDtoList: dzoListTestData }]);
         promoCampaignService.getPromoCampaignById = jest.fn(() => ({ promoCampaignDtoList: [promoCampaignTestData] }));
         const container = mount(<Dashboard />);
         await sleep();
@@ -189,7 +189,7 @@ describe('<Dashboard /> test', () => {
     });
 
     it('history.push should not be called', async () => {
-        utils.requestWithMinWait = jest.fn(() => [adminService.getDashboardInfo(), clientAppService.getActiveClientApps(), dzoService.getDzoList()]);
+        utils.requestsWithMinWait = jest.fn().mockResolvedValue([dashboardInfo, clientAppListTestResponse.list, { dzoDtoList: dzoListTestData }]);
         promoCampaignService.getPromoCampaignById = jest.fn();
         const container = mount(<Dashboard />);
         await sleep();
@@ -201,7 +201,7 @@ describe('<Dashboard /> test', () => {
     });
 
     it('console.error should be called, when there is an error ', async () => {
-        utils.requestWithMinWait = jest.fn(() => [adminService.getDashboardInfo(), clientAppService.getActiveClientApps(), dzoService.getDzoList()]);
+        utils.requestsWithMinWait = jest.fn().mockResolvedValue([dashboardInfo, clientAppListTestResponse.list, { dzoDtoList: dzoListTestData }]);
         promoCampaignService.getPromoCampaignById = jest.fn(() => Promise.reject(new Error ('test error')));
         const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => '');
         const container = mount(<Dashboard />);

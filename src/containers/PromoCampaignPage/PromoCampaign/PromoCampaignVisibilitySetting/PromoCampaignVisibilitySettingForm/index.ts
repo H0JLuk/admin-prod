@@ -1,0 +1,3 @@
+import PromoCampaignVisibilitySettingForm from './PromoCampaignVisibilitySettingForm';
+
+export default PromoCampaignVisibilitySettingForm;

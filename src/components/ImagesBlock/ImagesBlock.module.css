@@ -32,19 +32,6 @@
     max-width: 100%;
 }
 
-.btn:hover {
-    color:#09a552;
-}
-
-.uploadButton:hover {
-    color: #09a552;
-    border-color: #09a552 !important;
-}
-
-.uploadButton:global(.ant-upload-drag-hover) {
-    border-color: #09a552 !important;
-}
-
 .banner {
     width: 100%;
 }

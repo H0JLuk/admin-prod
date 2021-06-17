@@ -45,7 +45,6 @@ const TEST_APP_LIST = [
 ];
 
 const TEST_FILE_CSV = 'TEST_NAME.csv';
-const TEST_FILE_NO_CSV = 'TEST_NAME.non';
 
 const TEST_INFO = {
     file: {
@@ -54,12 +53,10 @@ const TEST_INFO = {
     },
 };
 
-const TEST_INFO_ARRAY = [TEST_INFO];
-
 describe('<TemplateUploadButtonsWithModal /> test', () => {
     global.URL.createObjectURL = jest.fn();
     const Component = mount(<TemplateUploadButtonsWithModal { ...TEST_PROPS } />);
-    const Buttons = Component.find('button');
+    const Buttons = Component.find('Button');
 
     beforeEach(() => {
         getActiveClientApps.mockResolvedValue(TEST_APP_LIST);
@@ -70,20 +67,30 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
     });
 
     it('should call show and close modal', async () => {
-        Buttons.at(0).simulate('click');
-        await sleep();
+        await act(async () => {
+            Buttons.first().simulate('click');
+        });
+        Component.update();
+
         expect(getActiveClientApps).toBeCalledTimes(1);
         const ModalTemplate = Component.find(Modal);
-        expect(ModalTemplate.props().visible).toBe(true);
-        ModalTemplate.find(Button).at(1).simulate('click');
-        expect(Component.find(Modal).props().visible).toBe(false);
+        expect(ModalTemplate.prop('visible')).toBe(true);
+
+        expect(1).toBe(1);
+        await act(async () => {
+            ModalTemplate.find(Button).at(1).simulate('click');
+        });
+        Component.update();
+
+        expect(Component.find(Modal).prop('visible')).toBe(false);
     });
 
     it('should call show and upload file', async () => {
         getDefaultAppCode.mockResolvedValue({ headers: { clientAppCode: TEST_APP_LIST[0].code } });
         addUsersWithTemplate.mockResolvedValue(new Blob(['test'], { type: 'text/csv;charset=utf-8;' }));
-        Buttons.at(0).simulate('click');
-        await sleep();
+        await act(async () => {
+            Buttons.first().simulate('click');
+        });
         const file = new File(['example text'], TEST_FILE_CSV, { type: 'text/csv;charset=utf-8;' });
         Component.find(Modal).find(Form).props().form.setFieldsValue({ appCode: TEST_APP_LIST[0].code, file });
         Component.find(Modal).find(Button).at(2).simulate('click');
@@ -95,8 +102,9 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
         getDefaultAppCode.mockResolvedValue({ headers: { clientAppCode: TEST_APP_LIST[0].code } });
         addUsersWithTemplate.mockRejectedValue(new Error('Error'));
         message.error = jest.fn();
-        Buttons.at(0).simulate('click');
-        await sleep();
+        await act(async () => {
+            Buttons.first().simulate('click');
+        });
         const ModalTemplate = Component.find(Modal);
         const file = new File(['example text'], TEST_FILE_CSV, { type: 'text/csv;charset=utf-8;' });
         ModalTemplate.find(Form).props().form.setFieldsValue({ appCode: TEST_APP_LIST[0].code, file });
@@ -107,7 +115,7 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
 
     it('should call normFile function', async () => {
         act(() => {
-            Buttons.at(0).simulate('click');
+            Buttons.first().simulate('click');
         });
 
         const ModalTemplate = Component.find(Modal);
@@ -119,30 +127,13 @@ describe('<TemplateUploadButtonsWithModal /> test', () => {
         });
     });
 
-    it('should call normFile function with array info', async () => {
-        Buttons.at(0).simulate('click');
-        await sleep();
-        const ModalTemplate = Component.find(Modal);
-        expect(
-            ModalTemplate.find(Form.Item).at(0).props().getValueFromEvent(TEST_INFO_ARRAY)['file']['name']
-        ).toEqual(TEST_FILE_CSV);
-    });
-
     it('should call normFile function with status removed', async () => {
-        Buttons.at(0).simulate('click');
-        await sleep();
+        await act(async () => {
+            Buttons.first().simulate('click');
+        });
         const ModalTemplate = Component.find(Modal);
         expect(
-            ModalTemplate.find(Form.Item).at(0).props().getValueFromEvent({ ...TEST_INFO_ARRAY, file: { status: 'removed' } })
-        ).toEqual(undefined);
-    });
-
-    it('should call normFile function with no csv file', async () => {
-        Buttons.at(0).simulate('click');
-        await sleep();
-        const ModalTemplate = Component.find(Modal);
-        expect(
-            ModalTemplate.find(Form.Item).at(0).props().getValueFromEvent({ ...TEST_INFO_ARRAY, file: { name: TEST_FILE_NO_CSV } })
+            ModalTemplate.find(Form.Item).at(0).props().getValueFromEvent({ ...TEST_INFO, file: { ...TEST_INFO.file, status: 'removed' } })
         ).toEqual(undefined);
     });
 

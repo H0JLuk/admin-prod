@@ -86,7 +86,7 @@ const testProps = {
     matchPath: '/test/path',
 };
 
-describe('<PromoCampaignForm.test.jsx', () => {
+describe('<PromoCampaignForm /> tests', () => {
     const wrapper = shallow(<PromoCampaignForm { ...testProps } />);
 
     beforeEach(() => {

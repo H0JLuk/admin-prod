@@ -1,4 +1,6 @@
+import { promoCampaignBannerArray, promoCampaignTextsArray } from '../../../__tests__/constants';
 import {
+    arrayToObject,
     compareArrayOfNumbers,
     getURLSearchParams,
     downloadFile,
@@ -11,6 +13,20 @@ import {
     getSearchParamsFromUrl,
     sortItemsBySearchParams,
 } from '../helper';
+
+
+it('test `arrayToObject` function', () => {
+    const promoCampaignBannersObject = {
+        [promoCampaignBannerArray[0].type]: promoCampaignBannerArray[0].url,
+        [promoCampaignBannerArray[1].type]: promoCampaignBannerArray[1].url,
+    };
+    const promoCampaignTextsObject = {
+        [promoCampaignTextsArray[0].type]: promoCampaignTextsArray[0].value,
+        [promoCampaignTextsArray[1].type]: promoCampaignTextsArray[1].value,
+    };
+    expect(arrayToObject(promoCampaignBannerArray, 'type', 'url')).toEqual(promoCampaignBannersObject);
+    expect(arrayToObject(promoCampaignTextsArray, 'type', 'value')).toEqual(promoCampaignTextsObject);
+});
 
 test('getURLSearchParams()', () => {
     expect(getURLSearchParams({ user: 20 })).toEqual('user=20');

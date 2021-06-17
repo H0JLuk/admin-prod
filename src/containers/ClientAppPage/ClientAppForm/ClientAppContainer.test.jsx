@@ -23,7 +23,7 @@ import { getAppCode } from '../../../api/services/sessionService';
 import { sleep } from '../../../setupTests';
 import { doPropertiesSettings } from './ClientAppContainer';
 import * as consentsService from '../../../api/services/consentsService';
-import { requestWithMinWait } from '../../../utils/utils';
+import { requestsWithMinWait } from '../../../utils/utils';
 
 const CURRENT_APP_CODE_MOCK = 'greenday-presents';
 const SPINNER_TEXT_NODE = 'loading-spinner.svg';
@@ -54,7 +54,7 @@ jest.mock('../../../api/services/sessionService', () => ({
 
 jest.mock('../../../utils/utils', () => ({
     ...jest.requireActual('../../../utils/utils'),
-    requestWithMinWait: jest.fn(),
+    requestsWithMinWait: jest.fn(),
 }));
 
 jest.mock('../../../api/services/settingsService', () => ({
@@ -81,7 +81,7 @@ beforeEach(() => {
     getBusinessRoles.mockResolvedValue(businessRolesTestResponse);
     getBusinessRolesByClientApp.mockResolvedValue({ list: [testBusinessRole] });
     consentsService.getConsentById = jest.fn();
-    requestWithMinWait.mockResolvedValue([
+    requestsWithMinWait.mockResolvedValue([
         settingDtoListTestData,
         clientAppTestData,
     ]);
@@ -175,7 +175,7 @@ describe('<ClientAppContainer /> tests', () => {
 
     it('should render message.error', async () => {
         await act(async () => {
-            requestWithMinWait.mockRejectedValue(new Error('error'));
+            requestsWithMinWait.mockRejectedValue(new Error('error'));
             render(<ClientAppPageContainer { ...props } />);
             await sleep();
 

@@ -14,140 +14,8 @@ body, ul, li, p {
     margin-right: 3px;
 }
 
-.ant-btn:hover,
-.ant-btn:focus {
-    border-color: #09a552;
-    color: #09a552;
-}
-
-.ant-btn-primary,
-.ant-btn-primary:hover,
-.ant-btn-primary:focus {
-    background-color: #09a552;
-    border-color: #09a552;
-    color: #ffffff;
-}
-
-.ant-btn-danger,
-.ant-btn-danger:hover,
-.ant-btn-danger:focus,
-.ant-btn-dangerous.ant-btn-primary,
-.ant-btn-dangerous.ant-btn-primary:hover,
-.ant-btn-dangerous.ant-btn-primary:focus {
-    background-color: #dd283b;
-    border-color: #dd283b;
-}
-
-.ant-btn:disabled {
-    background-color: #f5f5f5 !important;
-    border-color: #d9d9d9 !important;
-    color: rgba(0, 0, 0, 0.25) !important;
-    box-shadow:inherit !important;
-}
-
-.ant-switch-checked {
-    background-color: #09a552;
-}
-
-.ant-input-affix-wrapper:hover,
-.ant-input-affix-wrapper:focus,
-.ant-input-affix-wrapper-focused,
-.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover,
-textarea.ant-input:hover,
-textarea.ant-input:focus {
-    border-color: #09a552;
-    box-shadow: 0 0 0 1px rgba(141, 220, 183, 0.2);
-}
-
 input.ant-input:placeholder-shown ~ .ant-input-suffix .anticon-close-circle {
     display: none;
-}
-
-.ant-input:hover, .ant-input:focus {
-    border-color: #09a552;
-}
-
-.ant-picker-focused:not(.ant-picker-disabled),
-.ant-picker:hover:not(.ant-picker-disabled),
-.ant-picker-focused:focus:not(.ant-picker-disabled),
-.ant-picker-focused:hover:not(.ant-picker-disabled) {
-    border-color: #09a552;
-    box-shadow: none;
-}
-
-.ant-picker-range .ant-picker-active-bar {
-    background: #09a552;
-    border-color: #09a552;
-    box-shadow: none;
-}
-
-.ant-checkbox-input:hover + .ant-checkbox-inner,
-.ant-checkbox-input:focus + .ant-checkbox-inner,
-.ant-checkbox-input:active + .ant-checkbox-inner,
-.ant-checkbox-wrapper:hover .ant-checkbox-inner,
-.ant-checkbox:hover .ant-checkbox-inner {
-    border-color: #09a552;
-}
-
-.ant-checkbox-indeterminate .ant-checkbox-inner::after {
-    background-color: #09a552;
-}
-
-.ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #09a552;
-    border-color: #09a552;
-}
-
-.ant-radio-inner::after {
-    background-color: #09a552;
-}
-
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled),
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover,
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child {
-    color: #09A552;
-    border-color: #09A552;
-}
-
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before,
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
-    background-color: #09A552;
-}
-
-.ant-radio-button-wrapper:hover:not(.ant-radio-button-wrapper-disabled) {
-    color: #09A552;
-}
-
-.ant-radio-button-wrapper-checked:not([class*=' ant-radio-button-wrapper-disabled']).ant-radio-button-wrapper:first-child {
-    border-right-color: #09A552;
-}
-
-.ant-radio:hover,
-.ant-radio:hover .ant-radio-inner,
-.ant-radio-checked .ant-radio-inner,
-.ant-radio-input:focus + .ant-radio-inner,
-.ant-radio-checked::after {
-    border-color: #09a552;
-}
-
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled),
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover,
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child {
-    color: #09a552;
-    border-color: #09a552;
-}
-
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before,
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
-    background-color: #09a552;
-}
-
-.ant-radio-button-wrapper:hover:not(.ant-radio-button-wrapper-disabled) {
-    color: #09a552;
-}
-
-.ant-radio-button-wrapper-checked:not([class*=' ant-radio-button-wrapper-disabled']).ant-radio-button-wrapper:first-child {
-    border-right-color: #09a552;
 }
 
 .ant-input-clear-icon > svg,
@@ -159,13 +27,8 @@ input.ant-input:placeholder-shown ~ .ant-input-suffix .anticon-close-circle {
     margin-bottom: 3px;
 }
 
-.ant-select:not(.ant-select-disabled):hover .ant-select-selector{
-    border-color: #09a552;
-}
-
-.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    border-color: #09a552;
-    box-shadow: none;
+.ant-checkbox-disabled.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #09a552;
 }
 
 .ant-notification.ant-notification-topRight {
@@ -212,11 +75,3 @@ input.ant-input:placeholder-shown ~ .ant-input-suffix .anticon-close-circle {
 .ck.ck-editor__main ul {
     padding-inline-start: 40px;
 }
-
-/*.ant-btn-ghost,*/
-/*.ant-btn-ghost:hover,*/
-/*.ant-btn-ghost:focus {*/
-/*    background-color: white;*/
-/*    color: #333f48;*/
-/*    border: 1px solid #d9d9d9 !important;*/
-/*}*/
