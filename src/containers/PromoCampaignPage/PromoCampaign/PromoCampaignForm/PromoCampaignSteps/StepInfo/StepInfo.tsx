@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PromoCampaignFormInitialState } from '../../types';
-import { CategoryDto, ClientAppDto, IDzoItem } from '@types';
+import { CategoryDto, ClientAppDto, DzoDto } from '@types';
 import noop from 'lodash/noop';
 import { Input, Switch, Select, DatePicker, Form, Row, Col, Radio, SwitchProps } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/ru_RU';
@@ -17,6 +17,7 @@ import { getLabel } from '@components/LabelWithTooltip/LabelWithTooltip';
 import { getAppCode } from '@apiServices/sessionService';
 import promoCodeTypes from '@constants/promoCodeTypes';
 import { removeExtraSpaces } from '@utils/helper';
+import { BANNER_TYPE } from '@constants/common';
 
 import styles from './StepInfo.module.css';
 
@@ -41,7 +42,7 @@ const TYPE_PROMO_CAMPAIGN = 'Тип промо-кампании';
 const TYPE_PROMO_CODE = 'Тип промокода';
 const ACTIVE_PERIOD = 'Период действия';
 const CHOOSE_SHOWCASE = 'Выберите витрину';
-const SHOW_PROMO_CAMPAIGN = 'Витрины, в которых показывать промо-кампанию';
+const SHOW_PROMO_CAMPAIGN = 'Витрина, в которой показывать промо-кампанию';
 const DZO = 'ДЗО';
 const STATUS_ON = 'Промо-кампания включена';
 const STATUS_OFF = 'Промо-кампания отключена';
@@ -53,6 +54,7 @@ const URL_SOURCE_VALUE_DZO = 'DZO';
 const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
 const URL_SOURCE_DZO_LABEL = 'ДЗО';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
+const SHOW_VIDEO_TOUR_LABEL = 'Отображать видеоэкскурсию';
 const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
 const SHOW_ONLY_IN_BUNDLE = 'Отображать только в составе бандла';
 const EXTERNAL_ID_LABEL = 'Внешний ID';
@@ -65,21 +67,51 @@ const types_promo = Object.values(promoCodeTypes);
 
 const namePathPriorityOnWebUrl = ['settings', 'priority_on_web_url'];
 const namePathAlternativeOfferMechanic = ['settings', 'alternative_offer_mechanic'];
+const namePathDisableBannerTypes = ['settings', 'disabled_banner_types'];
 const detailsButtonLabelName = ['settings', 'details_button_label'];
 const detailsButtonURLName = ['settings', 'details_button_url'];
 
 type ReverseSwitchProps = {
     checked?: boolean;
     onChange?: (value: boolean) => void;
-} & Partial<SwitchProps>;
+} & SwitchProps;
 
-export const ReverseSwitch = ({ checked, onChange = noop, ...restProps }: ReverseSwitchProps) => (
+export const ReverseSwitch: React.FC<ReverseSwitchProps> = ({ checked, onChange = noop, ...restProps }) => (
     <Switch
         checked={!checked}
         onChange={(value) => onChange(!value)}
         {...restProps}
     />
 );
+
+type DisableBannersSwitchProps = {
+    value?: string[];
+    onChange?: (value: string[]) => void;
+    controlledValue: string;
+} & Omit<SwitchProps, 'checked' | 'onChange'>;
+
+export const DisableBannersSwitch: React.FC<DisableBannersSwitchProps> = ({
+    value = [],
+    onChange = noop,
+    controlledValue = '',
+    ...restProps
+}) => {
+    const onChangeHandler = (checked: boolean) => {
+        onChange(
+            checked
+                ? value.filter(el => el !== controlledValue)
+                : [...value, controlledValue]
+        );
+    };
+
+    return (
+        <Switch
+            checked={!value.includes(controlledValue)}
+            onChange={onChangeHandler}
+            {...restProps}
+        />
+    );
+};
 
 const StepInfo: React.FC<StepInfoProps> = ({
     state,
@@ -90,7 +122,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
     copyPromoCampaignId,
     oldExternalId,
 }) => {
-    const [dzoList, setDzoList] = useState<IDzoItem[]>([]);
+    const [dzoList, setDzoList] = useState<DzoDto[]>([]);
     const [categories, setCategories] = useState<CategoryDto[]>([]);
     const [clientApps, setClientApps] = useState<ClientAppDto[]>([]);
 
@@ -115,80 +147,103 @@ const StepInfo: React.FC<StepInfoProps> = ({
     return (
         <>
             <div className={styles.container}>
-                <Form.Item
-                    label={NAME_PROMO_CAMPAIGN}
-                    className={styles.promoCampaignName}
-                    name="name"
-                    initialValue={isCopy ? `Копия: ${state.name}` : state.name}
-                    normalize={removeExtraSpaces}
-                    validateFirst
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Укажите название промо-кампании',
-                            validateTrigger: 'onSubmit',
-                        },
-                        {
-                            ...getPatternAndMessage('promoCampaign', 'name'),
-                            validateTrigger: 'onSubmit',
-                        },
-                        ({ getFieldValue }) => ({
-                            message: 'Нельзя создать копию промо-кампании с таким же названием',
-                            validator: (_, value) => {
-                                if (isCopy && typeof copyPromoCampaignId !== 'number' && value.trim() === oldName) {
-                                    const appCode = getFieldValue('appCode');
-                                    return appCode === getAppCode() ? Promise.reject() : Promise.resolve();
-                                }
+                <Row gutter={[24, 5]}>
+                    <Col span={24}>
+                        <Form.Item
+                            className={styles.promoCampaignName}
+                            label={NAME_PROMO_CAMPAIGN}
+                            name="name"
+                            initialValue={isCopy ? `Копия: ${state.name}` : state.name}
+                            normalize={removeExtraSpaces}
+                            validateFirst
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Укажите название промо-кампании',
+                                    validateTrigger: 'onSubmit',
+                                },
+                                {
+                                    ...getPatternAndMessage('promoCampaign', 'name'),
+                                    validateTrigger: 'onSubmit',
+                                },
+                                ({ getFieldValue }) => ({
+                                    message: 'Нельзя создать копию промо-кампании с таким же названием',
+                                    validator: (_, value) => {
+                                        if (isCopy && typeof copyPromoCampaignId !== 'number' && value.trim() === oldName) {
+                                            const appCode = getFieldValue('appCode');
+                                            return appCode === getAppCode() ? Promise.reject() : Promise.resolve();
+                                        }
 
-                                return Promise.resolve();
-                            },
-                            validateTrigger: 'onSubmit',
-                        }),
-                        ({ getFieldValue }) => ({
-                            validator: async (_, value) => {
-                                const appCode = getFieldValue('appCode');
+                                        return Promise.resolve();
+                                    },
+                                    validateTrigger: 'onSubmit',
+                                }),
+                                ({ getFieldValue }) => ({
+                                    validator: async (_, value) => {
+                                        const appCode = getFieldValue('appCode');
 
-                                if (!appCode) {
-                                    throw new Error('Для проверки имени нужно выбрать витрину!');
-                                }
+                                        if (!appCode) {
+                                            throw new Error('Для проверки имени нужно выбрать витрину!');
+                                        }
 
-                                const isModeCreate = mode === 'create';
-                                const nameChanged = value.trim() !== (oldName ?? '').trim();
-                                const isCopyCampaign = isCopy && typeof copyPromoCampaignId !== 'number';
-                                const isModeEditAndValueChanged = mode === 'edit' && nameChanged;
-                                if (isModeCreate || isModeEditAndValueChanged || (isCopyCampaign && !nameChanged && appCode !== getAppCode())) {
-                                    const { promoCampaignDtoList = [] } = await getExactFilteredPromoCampaignList(
-                                        value,
-                                        appCode
-                                    );
+                                        const nameChanged = value.trim() !== (oldName ?? '').trim();
+                                        const isCopyCampaign = isCopy && typeof copyPromoCampaignId !== 'number';
+                                        const isModeEditAndValueChanged = mode === 'edit' && nameChanged;
+                                        if (
+                                            mode === 'create' ||
+                                            isModeEditAndValueChanged ||
+                                            (isCopyCampaign && !nameChanged && appCode !== getAppCode())
+                                        ) {
+                                            const { promoCampaignDtoList = [] } = await getExactFilteredPromoCampaignList(
+                                                value,
+                                                appCode
+                                            );
 
-                                    if (promoCampaignDtoList.length) {
-                                        throw new Error('Промо кампания с таким именем уже существует! Введите другое имя');
-                                    }
-                                }
-                            },
-                            validateTrigger: 'onSubmit',
-                        }),
-                    ]}
-                >
-                    <Input placeholder={TEMPLATE_PROMO_NAME} />
-                </Form.Item>
-                <Form.Item
-                    label={CATEGORY}
-                    className={styles.selectCategories}
-                    name="categoryIdList"
-                    initialValue={state.categoryIdList}
-                    normalize={(catArr) => catArr.map(Number)}
-                >
-                    <SelectTags
-                        data={categories}
-                        nameKey="categoryName"
-                        idKey="categoryId"
-                        placeholder={CATEGORY_PROMO_CAMPAIGN}
-                    />
-                </Form.Item>
+                                            if (promoCampaignDtoList.length) {
+                                                throw new Error('Промо кампания с таким именем уже существует! Введите другое имя');
+                                            }
+                                        }
+                                    },
+                                    validateTrigger: 'onSubmit',
+                                }),
+                            ]}
+                        >
+                            <Input placeholder={TEMPLATE_PROMO_NAME} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={16}>
+                        <Form.Item
+                            className={styles.selectCategories}
+                            label={CATEGORY}
+                            name="categoryIdList"
+                            initialValue={state.categoryIdList}
+                            normalize={(catArr) => catArr.map(Number)}
+                        >
+                            <SelectTags
+                                data={categories}
+                                nameKey="categoryName"
+                                idKey="categoryId"
+                                placeholder={CATEGORY_PROMO_CAMPAIGN}
+                            />
+                        </Form.Item>
+                    </Col>
 
-                <Row gutter={[24, 16]}>
+                    <Col span={8} className={styles.switchRow}>
+                        <div className={styles.statusInfo}>
+                            <div className={styles.viewInfo}>
+                                <span className={styles.statusText}>
+                                    {SHOW_VIDEO_TOUR_LABEL}
+                                </span>
+                                <Form.Item
+                                    name={namePathDisableBannerTypes}
+                                    initialValue={state.settings?.disabled_banner_types}
+                                >
+                                    <DisableBannersSwitch controlledValue={BANNER_TYPE.VIDEO} />
+                                </Form.Item>
+                            </div>
+                        </div>
+                    </Col>
+
                     <Col span={8}>
                         <Form.Item
                             noStyle
@@ -253,9 +308,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             </div>
                         </div>
                     </Col>
-                </Row>
 
-                <Row gutter={[24, 16]}>
                     <Col span={8}>
                         <Form.Item
                             label={DZO}
@@ -304,9 +357,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             </div>
                         </div>
                     </Col>
-                </Row>
 
-                <Row gutter={[24, 16]}>
                     <Col span={8}>
                         <Form.Item
                             label={TYPE_PROMO_CODE}
@@ -398,9 +449,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             }}
                         </Form.Item>
                     </Col>
-                </Row>
 
-                <Row gutter={24}>
                     <Col span={8} className={styles.switchRow}>
                         <Form.Item
                             name="behaviorType"
@@ -455,7 +504,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
             </div>
 
             <div className={styles.infoDetail}>
-                <Row gutter={[24, 16]}>
+                <Row gutter={24}>
                     <Col span={12}>
                         <div className={styles.container}>
                             <Form.Item

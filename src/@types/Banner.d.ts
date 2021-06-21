@@ -1,10 +1,12 @@
+import { BANNER_TYPE } from '@constants/common';
 import { UploadFile } from 'antd/lib/upload/interface';
 
 /* don't change this type. Use `Partial` */
 export type BannerDto = {
+    default?: boolean;
     id: number;
     orderNumber: number;
-    type: string;
+    type: BANNER_TYPE;
     url: string;
 };
 

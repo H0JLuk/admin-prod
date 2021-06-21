@@ -11,7 +11,7 @@ import { warnNotice } from '../../toast/Notice';
 // import moment from 'moment';
 import callConfirmModalForPromoCodeTypeChanging from '@containers/PromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging/ConfirmModalForPromoCodeTypeChanging';
 import promoCodeTypes from '@constants/promoCodeTypes';
-import { IDzoItem, PromoCampaignDto } from '@types';
+import { DzoDto, PromoCampaignDto } from '@types';
 
 const { Option } = Select;
 // const { RangePicker } = DatePicker;
@@ -19,7 +19,7 @@ const { Option } = Select;
 interface ISavePromoCampaignModal {
     editingObject?: PromoCampaignDto;
     editMode: boolean;
-    dzoList: IDzoItem[];
+    dzoList: DzoDto[];
     title: string;
     onSave: (state: IOnSaveState) => void;
     open: boolean;
@@ -35,7 +35,7 @@ export type ISavePromoCampaignModalState = Partial<Omit<PromoCampaignDto, 'dzoId
     type: string | null;
     active: boolean;
     dzoId: number | null;
-    dzoList: IDzoItem[];
+    dzoList: DzoDto[];
 };
 
 const emptyPromoCampaign = {

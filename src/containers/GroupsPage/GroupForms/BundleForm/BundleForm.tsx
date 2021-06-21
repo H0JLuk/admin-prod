@@ -23,6 +23,7 @@ import {
 } from '../groupForm.utils';
 import { BundleTypes, BUNDLE_LOCATION_KEY, MODES } from '../../groupPageConstants';
 import { normalizeBundle, getDataForBundleCreate } from './Bundle.utils';
+import { BANNER_TYPE, BANNER_TEXT_TYPE } from '@constants/common';
 
 import styles from './BundleForm.module.css';
 
@@ -59,13 +60,13 @@ const formItemProps = {
         rules: [{ required: true, message: 'Укажите название бандла', whitespace: true }],
     },
     BUNDLE_HEADER_FIELD: {
-        name: ['texts', 'HEADER'],
+        name: ['texts', BANNER_TEXT_TYPE.HEADER],
         label: 'Текст заголовка',
         rules: [{ message: 'Текст заголовка обязателен' }],
     },
     BUNDLE_ACTIVE_FIELD: { name: 'active', valuePropName: 'checked', initialValue: false },
     BUNDLE_BANNER_FIELD: {
-        name: ['banners', 'CARD'],
+        name: ['banners', BANNER_TYPE.CARD],
         label: 'Баннер на главной',
         accept: '.jpg',
         get setting() {
@@ -76,7 +77,7 @@ const formItemProps = {
         message: 'Загрузите баннер',
     },
     BUNDLE_DESCRIPTION_FIELD: {
-        name: ['texts', 'DESCRIPTION'],
+        name: ['texts', BANNER_TEXT_TYPE.DESCRIPTION],
         label: 'Текст описания',
         rules: [{ required: true, message: 'Текст описания обязателен' }],
     },
@@ -349,7 +350,7 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                         {/* <Col span={ 12 }>
                                             <Form.Item
                                                 { ...formItemProps.CAMPAIGN_HEADER_FIELD }
-                                                name={ [field.name, 'texts', 'HEADER'] }
+                                                name={ [field.name, 'texts', BANNER_TEXT_TYPE.HEADER] }
                                             >
                                                 <Input.TextArea
                                                     placeholder='Заголовок'
@@ -362,21 +363,21 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                         <Col span={13}>
                                             <Form.Item
                                                 noStyle
-                                                dependencies={['links', field.name, 'banners', 'LOGO_ICON']}
+                                                dependencies={['links', field.name, 'banners', BANNER_TYPE.LOGO_ICON]}
                                             >
                                                 {({ getFieldValue }) => (
                                                     <UploadPicture
                                                         {...formItemProps.CAMPAIGN_BANNER_FIELD}
-                                                        name={[field.name, 'banners', 'LOGO_ICON']}
+                                                        name={[field.name, 'banners', BANNER_TYPE.LOGO_ICON]}
                                                         uploadFileClassName={styles.uploadBackground}
                                                         initialValue={getFieldValue([
                                                             'links',
                                                             field.name,
                                                             'banners',
-                                                            'LOGO_ICON',
+                                                            BANNER_TYPE.LOGO_ICON,
                                                         ])}
                                                         onRemoveImg={() =>
-                                                            onRemoveImg(['links', field.name, 'banners', 'LOGO_ICON'])
+                                                            onRemoveImg(['links', field.name, 'banners', BANNER_TYPE.LOGO_ICON])
                                                         }
                                                     />
                                                 )}
@@ -385,7 +386,7 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                         {/* <Col span={ 12 }>
                                             <Form.Item
                                                 { ...formItemProps.CAMPAIGN_DESCRIPTION_FIELD }
-                                                name={ [field.name, 'texts', 'DESCRIPTION'] }
+                                                name={ [field.name, 'texts', BANNER_TEXT_TYPE.DESCRIPTION] }
                                             >
                                                 <Input.TextArea
                                                     placeholder='Описание'

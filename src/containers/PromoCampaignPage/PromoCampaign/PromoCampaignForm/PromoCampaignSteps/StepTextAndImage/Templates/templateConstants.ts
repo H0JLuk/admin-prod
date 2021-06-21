@@ -7,8 +7,7 @@ import presents_main_banner from '@imgs/presents_main_banner.png';
 import presents_main_logo_1 from '@imgs/presents_main_logo_1.png';
 import presents_main_logo_2 from '@imgs/presents_main_logo_2.png';
 import { getPatternAndMessage } from '@utils/validators';
-// import presents_scan_icon from '@imgs/presents_scan_icon.png';
-// import landing_gift from '@imgs/landing.png';
+import { BANNER_TEXT_TYPE, BANNER_TYPE } from '@constants/common';
 
 export type TemplateRowsValues = {
     title: string;
@@ -25,7 +24,7 @@ export type TemplateRowsValues = {
 
 export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
     {
-        CARD: {
+        [BANNER_TYPE.CARD]: {
             title: 'Баннер на главной',
             description: 'Добавить баннер',
             tooltipImg: main_banner,
@@ -37,7 +36,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 return `770px x 368px, ${this.maxSize}МБ ${this.access_type}`;
             }
         },
-        LOGO_SECONDARY: {
+        [BANNER_TYPE.LOGO_SECONDARY]: {
             title: 'Логотип на экране с номером (белый)',
             description: 'Добавить логотип',
             type: 'logo',
@@ -51,7 +50,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
         },
     },
     {
-        SCREEN: {
+        [BANNER_TYPE.SCREEN]: {
             title: 'Лендинг',
             description: 'Добавить лендинг',
             tooltipImg: landing,
@@ -63,7 +62,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 return `834px, ${this.maxSize}МБ ${this.access_type}`;
             }
         },
-        LOGO_MAIN: {
+        [BANNER_TYPE.LOGO_MAIN]: {
             title: 'Логотип на экране с QR',
             description: 'Добавить логотип',
             tooltipImg: logo_on_screen_with_qr_code,
@@ -77,7 +76,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
         },
     },
     {
-        RULES: {
+        [BANNER_TEXT_TYPE.RULES]: {
             title: 'Условия',
             type: 'text',
             placeholder: 'Текст условий',
@@ -88,7 +87,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 },
             ],
         },
-        HEADER: {
+        [BANNER_TEXT_TYPE.HEADER]: {
             title: 'Заголовок на экране с QR',
             placeholder: 'Текст заголовка',
             maxLength: 60,
@@ -106,7 +105,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
 
 export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
     {
-        CARD: {
+        [BANNER_TYPE.CARD]: {
             title: 'Карточка на главной',
             description: 'Добавить изображение',
             tooltipImg: presents_main_banner,
@@ -118,7 +117,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 return `370px x 220px, ${this.maxSize}МБ ${this.access_type}`;
             },
         },
-        LOGO_MAIN: {
+        [BANNER_TYPE.LOGO_MAIN]: {
             title: 'Логотип на главной',
             description: 'Добавить логотип',
             tooltipImg: presents_main_logo_1,
@@ -132,7 +131,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
         },
     },
     {
-        LOGO_SECONDARY: {
+        [BANNER_TYPE.LOGO_SECONDARY]: {
             title: 'Логотип на главной (белый)',
             description: 'Добавить логотип',
             tooltipImg: presents_main_logo_2,
@@ -146,7 +145,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
         },
     },
     {
-        HEADER: {
+        [BANNER_TEXT_TYPE.HEADER]: {
             title: 'Текст заголовка',
             type: 'text',
             placeholder: 'Заголовок',
@@ -159,7 +158,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 },
             ],
         },
-        DESCRIPTION: {
+        [BANNER_TEXT_TYPE.DESCRIPTION]: {
             title: 'Текст описания',
             type: 'text',
             placeholder: 'Описание',
@@ -174,7 +173,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
         },
     },
     {
-        RULES: {
+        [BANNER_TEXT_TYPE.RULES]: {
             title: 'Условия',
             type: 'text',
             placeholder: 'Текст условий',

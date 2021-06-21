@@ -18,8 +18,9 @@ export type UserDto = {
 };
 
 export type UserInfo = {
+    id: number;
     blocked: boolean;
-    clientAppIds: number[];
+    clientAppIds: number[] | null;
     id: number;
     locationId: number;
     locationName: string;

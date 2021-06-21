@@ -8,7 +8,7 @@ import TableDeleteModal from '@components/TableDeleteModal';
 import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
 import { DZO_PAGES } from '@constants/route';
 import { requestsWithMinWait } from '@utils/utils';
-import { IDzoItem } from '@types';
+import { DzoDto } from '@types';
 
 import styles from './DzoList.module.css';
 
@@ -18,11 +18,11 @@ type IDzoPageProp = {
 
 type ISelectedItems = {
     rowKeys: number[];
-    rowValues: IDzoItem[];
+    rowValues: DzoDto[];
 };
 
 type ISortByFieldKey = {
-    NAME: keyof IDzoItem;
+    NAME: keyof DzoDto;
 };
 
 const MODAL_TITLE = 'Вы уверены, что хотите удалить эти ДЗО?';
@@ -58,8 +58,8 @@ const defaultSelected = { rowValues: [], rowKeys: [] };
 const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
     const history = useHistory();
     const [loadingTable, setLoadingTable] = useState(true);
-    const [dzoList, setDzoList] = useState<IDzoItem[]>([]);
-    const copyDzoList = useRef<IDzoItem[]>([]);
+    const [dzoList, setDzoList] = useState<DzoDto[]>([]);
+    const copyDzoList = useRef<DzoDto[]>([]);
     const [select, setSelect] = useState(false);
     const [selectedItems, setSelectedItems] = useState<ISelectedItems>(defaultSelected);
     const [isModalView, setIsModalView] = useState(false);
@@ -183,7 +183,7 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
         <>
             <div className={styles.container}>
                 <Header />
-                {<HeaderWithActions<IDzoItem>
+                {<HeaderWithActions<DzoDto>
                     title={DZO_TITLE}
                     buttons={buttons}
                     {...searchAndSortParams}
@@ -214,7 +214,7 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
                     </div>
                 )}
             </div>
-            {<TableDeleteModal<IDzoItem>
+            {<TableDeleteModal<DzoDto>
                 listNameKey="dzoName"
                 listIdForRemove={selectedItems.rowKeys}
                 sourceForRemove={selectedItems.rowValues}

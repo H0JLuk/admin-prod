@@ -31,14 +31,14 @@ export type PromoCampaignDto = {
     deleted: boolean;
     dzoId: number;
     dzoName: string;
-    externalId: number;
+    externalId: number | null;
     finishDate: string;
     id: number;
-    landingId: number;
+    landingId: number | null;
     links: BundleLink[];
     name: string;
     offerDuration: number;
-    oneLinkAppUrl: string;
+    oneLinkAppUrl: string | null;
     orderNumber: number;
     priority: number;
     promoCodeType: PromoCodeType;
@@ -76,6 +76,7 @@ export type PromoCampaignSettingsDto = {
     alternative_offer_mechanic: boolean;
     details_button_label: string;
     details_button_url: string;
+    disabled_banner_types: string[];
 };
 
 export type PromoCampaignFilterRequest = Omit<PromoCampaignDto, 'categoryList' | 'categoryIdList'> & {
@@ -87,11 +88,11 @@ export type PromoCampaignCreateDto = {
     behaviorType: string;
     categoryIdList: number[];
     dzoId: number;
-    externalId: string | number;
+    externalId: string | number | null;
     finishDate: string;
     name: string;
     offerDuration: number;
-    oneLinkAppUrl: string;
+    oneLinkAppUrl: string | null;
     promoCodeType: PromoCodeType;
     settings: Record<string, any>;
     standalone: boolean;

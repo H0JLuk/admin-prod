@@ -15,30 +15,31 @@ import {
     BANNER_IS_EMPTY,
     DZO_INFO_APPS_TEMPLATE,
     EDIT,
+    LINK_VIDEO_LABEL,
     IMainDataRow,
     IDzoBannersRow,
-    IDzoInfoRow,
 } from '../dzoConstants';
-import { dzoBannerTypes, IDzoItem } from '@types';
+import { DzoDto } from '@types';
 
 import styles from './DzoInfo.module.css';
+import { BANNER_TYPE } from '@constants/common';
 
 interface IDzoInfoProps {
     matchPath: string;
 }
 
 interface ILocationState {
-    dzoData: IDzoItem;
+    dzoData: DzoDto;
 }
 
 type INormalizedBannerList = {
-    [BannerType in keyof typeof dzoBannerTypes]?: string;
+    [BannerType in BANNER_TYPE]?: string;
 };
 
 interface IDzoInfoBlock {
     label: string;
     value: string;
-    type?: string ;
+    type?: string;
     colSpan: number;
 }
 
@@ -145,9 +146,9 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                                 </Col>
                             )}
                         </Row>
-                        <Row gutter={[24, 16]}>
+                        <Row gutter={[24, 16]} className={styles.dzoInfoRow}>
                             {applicationList.map(dzoApp =>
-                                DZO_INFO_APPS_TEMPLATE.map(({ key, label, type }: IDzoInfoRow) => (
+                                DZO_INFO_APPS_TEMPLATE.map(({ key, label, type }) => (
                                     <DzoInfoBlock
                                         key={key}
                                         label={label}
@@ -157,6 +158,14 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                                     />
                                 ))
                             )}
+                        </Row>
+                        <Row gutter={24}>
+                            <DzoInfoBlock
+                                label={LINK_VIDEO_LABEL}
+                                value={normalizedBannerList.VIDEO || ''}
+                                type="url"
+                                colSpan={12}
+                            />
                         </Row>
                     </div>
                 </div>
@@ -190,9 +199,9 @@ function DzoInfoBlock({ label, value, type, colSpan }: IDzoInfoBlock) {
     return (
         <Col span={colSpan}>
             <div className={styles.title}>{label}</div>
-            <span className={styles.text}>
-                {value ? decodedUrl : (<i>{`${ label } отсутствует`}</i>)}
-            </span>
+            <div className={styles.text}>
+                {value ? decodedUrl : (<i>{`${label} отсутствует`}</i>)}
+            </div>
         </Col>
     );
 }

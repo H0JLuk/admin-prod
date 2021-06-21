@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
     deletePromoCampaignBanner,
     newCreatePromoCampaignBanner,
@@ -10,15 +11,12 @@ import {
     newPromoCampaignText,
 } from '@apiServices/promoCampaignTextService';
 import {
-    APPLICATION_JSON_TYPE,
     BANNER_REQUEST,
     IMAGE,
-    promoCampaignBannerTypes,
-    promoCampaignBannerTypesKeys,
 } from './PromoCampaignFormConstants';
-import moment from 'moment';
 import { getAppCode } from '@apiServices/sessionService';
 import behaviorTypes from '@constants/behaviorTypes';
+import { APPLICATION_JSON_TYPE, BANNER_TYPE } from '@constants/common';
 import {
     PromoCampaignFormInitialState,
     PromoCampaignFormSavedStateRef,
@@ -53,7 +51,7 @@ export async function createImgBanners(
         const formData = new FormData();
         const [bannerFile] = promoCampaignBanners[formBannerType] as UploadFile[];
         const promoCampaignBanner = {
-            type: promoCampaignBannerTypes[formBannerType as promoCampaignBannerTypesKeys],
+            type: BANNER_TYPE[formBannerType as BANNER_TYPE],
             promoCampaignId,
         };
 
@@ -141,7 +139,7 @@ export async function EditImgBanners(
 
     for (const formBannerType of Object.keys(promoCampaignBanners)) {
         const formData = new FormData();
-        const bannerType = promoCampaignBannerTypes[formBannerType as promoCampaignBannerTypesKeys];
+        const bannerType = BANNER_TYPE[formBannerType as BANNER_TYPE];
         const promoCampaignBanner = {
             type: bannerType,
             promoCampaignId: promoCampaign.id,
@@ -355,7 +353,7 @@ export function checkPromoCodes(
 
 export function getPromoCampaignValue(
     promoCampaign: PromoCampaignDto,
-    refPromoCampaign: PromoCampaignFormSavedStateRef
+    refPromoCampaign?: PromoCampaignFormSavedStateRef
 ) {
     return refPromoCampaign ?? promoCampaign;
 }

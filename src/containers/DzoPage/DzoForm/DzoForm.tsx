@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form, Row, Input, Select, Button } from 'antd';
 import { FormListOperation } from 'antd/lib/form/FormList';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
 import { addApplication, addDzo, deleteApp, deleteDzo, updateApp, updateDzo } from '@apiServices/dzoService';
 import { confirmModal } from '@utils/utils';
-import { urlCheckRule } from '@utils/urlValidator';
-import { DzoApplication, IDzoItem, SaveDzoApplicationRequest } from '@types';
+import { urlCheckRule, urlHttpsRule } from '@utils/urlValidator';
+import { DzoApplication, DzoDto, SaveDzoApplicationRequest } from '@types';
 import Header from '@components/Header';
 import UploadPicture from '@components/UploadPicture';
 import {
@@ -21,11 +21,12 @@ import {
     APP_TYPE_LABEL,
     QR_LINK_LABEL,
     APP_TYPE_PLACEHOLDER,
-    QR_LINK_PLACEHOLDER,
     CANCEL_BUTTON_TITLE,
     ADD_BUTTON_TITLE,
     SAVE_BUTTON_TITLE,
     DELETE_BUTTON_LABEL,
+    LINK_INPUT_PLACEHOLDER,
+    LINK_VIDEO_LABEL,
 } from '../dzoConstants';
 import {
     checkAppTypes,
@@ -42,6 +43,7 @@ import {
     InitialDzoData,
     DzoFormLogos,
 } from './dzoFormFunctions';
+import { BANNER_TYPE } from '@constants/common';
 
 import styles from './DzoForm.module.css';
 
@@ -53,7 +55,7 @@ type DzoFormProps = {
 };
 
 type DzoFormLocationState = {
-    dzoData: IDzoItem;
+    dzoData: DzoDto;
     dzoCodes: string[];
 };
 
@@ -81,133 +83,134 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const onFinish = useCallback(
-        async (dataFromForm: OnFinishFormData) => {
-            const { applicationList, dzoBannerList, ...dzoFormData } = dataFromForm;
-            const formData = serializeBannersAndDzoData(dzoBannerList, dzoFormData);
+    const onFinish = async (dataFromForm: OnFinishFormData) => {
+        const { applicationList, dzoBannerList, ...dzoFormData } = dataFromForm;
+        const formData = serializeBannersAndDzoData(dzoBannerList, dzoFormData, dzoData?.dzoBannerList);
 
-            try {
-                setLoading(true);
+        try {
+            setLoading(true);
 
-                if (!isEdit) {
-                    const { id } = await addDzo(formData);
-                    const appDataFromForm = applicationList.reduce<SaveDzoApplicationRequest[]>((result, row) => {
-                        if (!row.applicationUrl) {
-                            return result;
-                        }
-                        return [...result, { ...(row as SaveDzoApplicationRequest), dzoId: id }];
-                    }, []);
-                    const appPromises = appDataFromForm.map(addApplication);
-                    const response = await Promise.allSettled(appPromises);
-
-                    if (hasRejectedPromises(response)) {
-                        const { applicationList, errorApps } = makeErrorAndSuccessObj(response, appDataFromForm);
-
-                        history.replace(`${matchPath}/${id}/edit`);
-                        initialData.current = { ...dataFromForm, dzoId: id, applicationList };
-                        errorsToForm(errorApps, form);
-                        throw new Error();
-                    }
-
-                } else {
-                    const appFromServer = initialData.current.applicationList;
-
-                    //delete
-                    const appsToDelete = appFromServer.reduce<number[]>((result, applicationFromServer) => {
-                        const appTypeFromServer = applicationFromServer.applicationType;
-                        const appId = applicationFromServer.applicationId;
-                        const isInFormButWithBlankValue = applicationList.find(
-                            appFromForm => appFromForm.applicationType === appTypeFromServer && appFromForm.applicationUrl === ''
-                        );
-
-                        const isNotInForm = !applicationList.find(
-                            appFromForm => appFromForm.applicationType === appTypeFromServer
-                        );
-
-                        if (appId && (isInFormButWithBlankValue || isNotInForm)) {
-                            return [...result, appId];
-                        }
+            if (!isEdit) {
+                const { id } = await addDzo(formData);
+                const appDataFromForm = applicationList.reduce<SaveDzoApplicationRequest[]>((result, row) => {
+                    if (!row.applicationUrl) {
                         return result;
-                    }, []);
-
-                    if (appsToDelete.length) {
-                        const deleteApps = appsToDelete.map(deleteApp);
-                        await Promise.all(deleteApps);
                     }
-                    //delete
+                    return [...result, { ...(row as SaveDzoApplicationRequest), dzoId: id }];
+                }, []);
+                const appPromises = appDataFromForm.map(addApplication);
+                const response = await Promise.allSettled(appPromises);
 
-                    //update
-                    const namesToUpdate: number[] = [];
-                    const appsToUpdate = appFromServer.reduce<SaveDzoApplicationRequest[]>((result, app, index) => {
-                        const formAppParams = applicationList.find(
-                            ({ applicationType }) => applicationType === app.applicationType
-                        );
-                        if (formAppParams && formAppParams.applicationUrl && app.applicationUrl !== formAppParams.applicationUrl) {
-                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                            const { dzoId, applicationId, ...appParams } = formAppParams;
-                            namesToUpdate.push(index);
-                            const applicationIdOld = appFromServer.find(
-                                app => app.applicationType === formAppParams.applicationType
-                            );
-                            return [...result, ({ ...appParams, applicationId: applicationIdOld?.applicationId }) as DzoApplication];
-                        }
-                        return result;
-                    }, []);
-                    const appToUpdatePromise = appsToUpdate.map(updateApp);
-                    const updateResponse = !!appToUpdatePromise.length && (await Promise.allSettled(appToUpdatePromise));
-                    const hasUpdateError = updateResponse && checkBackendErrors(updateResponse, form, namesToUpdate);
-                    //update
+                if (hasRejectedPromises(response)) {
+                    const { applicationList, errorApps } = makeErrorAndSuccessObj(response, appDataFromForm);
 
-                    //create
-                    const namesToCreate: number[] = [];
-                    const appsToCreate = applicationList.reduce<SaveDzoApplicationRequest[]>((result, app, index) => {
-                        if (
-                            !appFromServer.find(({ applicationType }) => applicationType === app.applicationType) &&
-                            app.applicationUrl
-                        ) {
-                            namesToCreate.push(index);
-                            return [...result, ({ ...app, dzoId: initialData.current.dzoId } as SaveDzoApplicationRequest)];
-                        }
-                        return result;
-                    }, []);
-                    const appPromises = appsToCreate.map(addApplication);
-                    const createResponse = !!appPromises.length && (await Promise.allSettled(appPromises));
-                    (createResponse || []).forEach((response, index) => {
-                        if (response.status === 'fulfilled') {
-                            const appList = initialData.current.applicationList ;
-                            const newApp = appsToCreate[index];
-                            const appToAdd = { ...newApp, applicationId: response.value.id };
-                            initialData.current = {
-                                ...initialData.current,
-                                applicationList: [
-                                    ...appList,
-                                    appToAdd,
-                                ],
-                            };
-                        }
-                    });
-                    const hasCreateError = createResponse && checkBackendErrors(createResponse, form, namesToCreate);
-                    //create
+                    history.replace(`${matchPath}/${id}/edit`);
+                    initialData.current = { ...dataFromForm, dzoId: id, applicationList };
 
-                    // update DZO info
-                    const { dzoId } = initialData.current;
-                    await updateDzo(dzoId, formData);
-                    // update DZO info
-
-                    if (hasCreateError || hasUpdateError) {
-                        throw new Error();
-                    }
+                    errorsToForm(errorApps, form);
+                    throw new Error();
                 }
-                history.push(matchPath);
-            } catch (e) {
-                setError(e.message);
-                console.error(e);
-                setLoading(false);
+
+            } else {
+                const appFromServer = initialData.current.applicationList;
+                const { dzoId } = initialData.current;
+
+                // START delete applications
+                const appsToDelete = appFromServer.reduce<number[]>((result, applicationFromServer) => {
+                    const appTypeFromServer = applicationFromServer.applicationType;
+                    const appId = applicationFromServer.applicationId;
+
+                    const isInFormButWithBlankValue = applicationList.find(
+                        appFromForm =>
+                            appFromForm.applicationType === appTypeFromServer && appFromForm.applicationUrl === ''
+                    );
+
+                    const isNotInForm = !applicationList.find(
+                        appFromForm => appFromForm.applicationType === appTypeFromServer
+                    );
+
+                    if (appId && (isInFormButWithBlankValue || isNotInForm)) {
+                        return [...result, appId];
+                    }
+                    return result;
+                }, []);
+
+                if (appsToDelete.length) {
+                    const deleteApps = appsToDelete.map(deleteApp);
+                    await Promise.all(deleteApps);
+                }
+                // END delete applications
+
+                // START update applications
+                const namesToUpdate: number[] = [];
+                const appsToUpdate = appFromServer.reduce<SaveDzoApplicationRequest[]>((result, app, index) => {
+                    const formAppParams = applicationList.find(
+                        ({ applicationType }) => applicationType === app.applicationType
+                    );
+
+                    if (formAppParams && formAppParams.applicationUrl && app.applicationUrl !== formAppParams.applicationUrl) {
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        const { dzoId, applicationId, ...appParams } = formAppParams;
+                        namesToUpdate.push(index);
+                        const applicationIdOld = appFromServer.find(
+                            app => app.applicationType === formAppParams.applicationType
+                        );
+                        return [...result, ({ ...appParams, applicationId: applicationIdOld?.applicationId }) as DzoApplication];
+                    }
+                    return result;
+                }, []);
+                const appToUpdatePromise = appsToUpdate.map(updateApp);
+                const updateResponse = appToUpdatePromise.length && (await Promise.allSettled(appToUpdatePromise));
+                const hasUpdateError = updateResponse && checkBackendErrors(updateResponse, form, namesToUpdate);
+                // END update applications
+
+                // START create applications
+                const namesToCreate: number[] = [];
+                const appsToCreate = applicationList.reduce<SaveDzoApplicationRequest[]>((result, app, index) => {
+                    if (
+                        !appFromServer.find(({ applicationType }) => applicationType === app.applicationType) &&
+                        app.applicationUrl
+                    ) {
+                        namesToCreate.push(index);
+                        return [...result, ({ ...app, dzoId } as SaveDzoApplicationRequest)];
+                    }
+                    return result;
+                }, []);
+                const appPromises = appsToCreate.map(addApplication);
+                const createResponse = appPromises.length && (await Promise.allSettled(appPromises));
+
+                (createResponse || []).forEach((response, index) => {
+                    if (response.status === 'fulfilled') {
+                        const appList = initialData.current.applicationList ;
+                        const newApp = appsToCreate[index];
+                        const appToAdd = { ...newApp, applicationId: response.value.id };
+                        initialData.current = {
+                            ...initialData.current,
+                            applicationList: [
+                                ...appList,
+                                appToAdd,
+                            ],
+                        };
+                    }
+                });
+                const hasCreateError = createResponse && checkBackendErrors(createResponse, form, namesToCreate);
+                // END create applications
+
+                // START update DZO info
+                await updateDzo(dzoId, formData);
+                // END update DZO info
+
+                if (hasCreateError || hasUpdateError) {
+                    throw new Error();
+                }
             }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [history, matchPath, isEdit]
-    );
+            history.push(matchPath);
+        } catch (e) {
+            setError(e.message);
+            console.error(e);
+            setLoading(false);
+        }
+    };
 
     const handleCancel = () => history.push(matchPath);
 
@@ -282,7 +285,11 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                         onFieldsChange={(isEdit && (() => setIsSaveButtonDisabled(false))) || undefined}
                     >
                         {(FORM_ELEMENTS || []).map((row, index) => (
-                            <Row key={index} gutter={24}>
+                            <Row
+                                key={index}
+                                className={styles.mainInfoRow}
+                                gutter={24}
+                            >
                                 {(row || []).map(({ rules, ...props }) => (
                                     <Col key={props.label} span={24 / row.length}>
                                         <FormItem
@@ -301,9 +308,13 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                                 ))}
                             </Row>
                         ))}
-                        <Row gutter={24}>
+                        <Row justify="space-between">
                             {BANNERS_UPLOAD_TEMPLATE.map(({ label, name, accept, type, description, setting, maxFileSize }) => (
-                                <Col span={8} key={label}>
+                                <Col
+                                    key={label}
+                                    className={styles.uploadImage}
+                                    span={8}
+                                >
                                     <UploadPicture
                                         description={description}
                                         uploadButtonText="Добавить"
@@ -322,12 +333,16 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                         </Row>
                         <Form.List name={DZO_APPLICATION_LIST_NAME}>
                             {(fields, { add, remove }) => fields.map((field) => (
-                                <Row gutter={24} key={field.name}>
+                                <Row
+                                    key={field.name}
+                                    className={styles.mainInfoRow}
+                                    gutter={24}
+                                >
                                     <Col span={12}>
                                         <Form.Item
                                             label={APP_TYPE_LABEL}
                                             name={[field.name, 'applicationType']}
-                                            rules={[ checkAppTypes, ]}
+                                            rules={[checkAppTypes]}
                                         >
                                             <Select options={APP_OPTIONS} placeholder={APP_TYPE_PLACEHOLDER} />
                                         </Form.Item>
@@ -343,15 +358,34 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                                             ]}
                                         >
                                             <Input
-                                                allowClear
-                                                placeholder={QR_LINK_PLACEHOLDER}
+                                                placeholder={LINK_INPUT_PLACEHOLDER}
                                                 onChange={(event) => onChangeAppUrl(event, field.name, add, remove)}
+                                                allowClear
                                             />
                                         </Form.Item>
                                     </Col>
                                 </Row>
                             ))}
                         </Form.List>
+                        <Row
+                            className={styles.mainInfoRow}
+                            gutter={24}
+                        >
+                            <Col span={12}>
+                                <Form.Item
+                                    label={LINK_VIDEO_LABEL}
+                                    name={['dzoBannerList', BANNER_TYPE.VIDEO]}
+                                    rules={[urlHttpsRule, urlCheckRule]}
+                                    initialValue={initialBanners.current[BANNER_TYPE.VIDEO] ?? ''}
+                                    validateFirst
+                                >
+                                    <Input
+                                        placeholder={LINK_INPUT_PLACEHOLDER}
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
                     </Form>
                     {error && <span className={styles.error}>{error}</span>}
                 </div>

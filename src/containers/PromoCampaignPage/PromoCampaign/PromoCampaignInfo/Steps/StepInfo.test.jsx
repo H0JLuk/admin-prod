@@ -10,11 +10,18 @@ const EMPTY_URL_PROMO_CAMPAIGN = 'Нет ссылки';
 
 describe('<StepInfo/> test', () => {
     const props = {
-        promoCampaign: promoCampaignTestData
+        promoCampaign: promoCampaignTestData,
     };
 
     beforeEach(() => {
         clientAppService.getClientAppInfo = jest.fn().mockResolvedValue(clientAppTestData);
+    });
+
+    it('should match to snapshot', async () => {
+        const wrapper = mount(<StepInfo { ...props } />);
+        await sleep();
+
+        expect(wrapper.debug()).toMatchSnapshot();
     });
 
     it('should call `getClientAppInfo` function', async () => {

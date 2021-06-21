@@ -1,6 +1,7 @@
 import { Rule } from 'rc-field-form/lib/interface';
 
 export const URL_VALIDATION_TEXT = 'Допустимые символы латинские буквы и цифры, "-", ".", "_", "~", ":", "/", "?", "#", "[", "]", "@", "!", "$", "&", "(", ")", "*", "+", ",", ";", "%", "=", "\'"';
+export const URL_HTTPS_VALIDATION_TEXT = 'Ссылка должна начинаться с https';
 const protocols = ['https'];
 const customProtocols = ['sberbankonline', 'android-app'];
 const hostNameRegExp = /^((http|https):\/\/)?[a-zA-Zа-яА-Я0-9]+([-./]{1}[a-zA-Zа-яА-Я0-9-]+)*\.[a-zA-Zа-яА-Я0-9]{2,5}($)?([0-9]{1,5})?(\/?.*)?([^=])?$/;
@@ -61,11 +62,18 @@ export function validateURL(url: string) {
 
 export const urlCheckRule: Rule = {
     validator(_, value) {
-        if (!value) {
-            return Promise.resolve();
-        }
+        return !value || validateURL(value)
+            ? Promise.resolve()
+            : Promise.reject(new Error(URL_VALIDATION_TEXT));
+    },
+    validateTrigger: 'onSubmit',
+};
 
-        return validateURL(value) ? Promise.resolve() : Promise.reject(new Error(URL_VALIDATION_TEXT));
+export const urlHttpsRule: Rule = {
+    validator(_, value) {
+        return !value || value.startsWith('https')
+            ? Promise.resolve()
+            : Promise.reject(new Error(URL_HTTPS_VALIDATION_TEXT));
     },
     validateTrigger: 'onSubmit',
 };

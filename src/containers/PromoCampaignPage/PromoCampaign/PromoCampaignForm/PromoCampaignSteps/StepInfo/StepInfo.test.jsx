@@ -2,7 +2,7 @@ import React from 'react';
 import Form from 'antd/lib/form/Form';
 import { act, render } from '@testing-library/react';
 import { shallow } from 'enzyme';
-import StepInfo, { ReverseSwitch } from './StepInfo';
+import StepInfo, { DisableBannersSwitch, ReverseSwitch } from './StepInfo';
 
 import { getAppCode } from '../../../../../../api/services/sessionService';
 import { getDzoList } from '../../../../../../api/services/dzoService';
@@ -342,9 +342,43 @@ describe('<ReverseSwitch /> test.', () => {
 
     it('Switch checked prop should be inverse from incoming checked prop', () => {
         const wrapper = shallow(<ReverseSwitch checked={ false } onChange={ onChange } />);
-        expect(wrapper.find('Switch').prop('checked')).toBe(true);
-        wrapper.find('Switch').simulate('change', false);
+        const switchComp = wrapper.find('Switch');
+        expect(switchComp.prop('checked')).toBe(true);
+        switchComp.simulate('change', false);
         expect(onChange).toBeCalledWith(true);
     });
 
+});
+
+describe('<DisableBannersSwitch /> test', () => {
+    const defaultProps = {
+        onChange: jest.fn(),
+        controlledValue: 'TEST_VALUE',
+        value: ['someValue'],
+    };
+
+    it('should add value to array', () => {
+        const wrapper = shallow(<DisableBannersSwitch { ...defaultProps } />);
+        const switchComp = wrapper.find('Switch');
+
+        expect(switchComp.prop('checked')).toBe(true);
+        switchComp.simulate('change', false);
+        expect(defaultProps.onChange).toBeCalledTimes(1);
+        expect(defaultProps.onChange).toBeCalledWith([...defaultProps.value, defaultProps.controlledValue]);
+    });
+
+    it('should remove value from array', () => {
+        const wrapper = shallow(
+            <DisableBannersSwitch
+                { ...defaultProps }
+                value={ [...defaultProps.value, defaultProps.controlledValue] }
+            />
+        );
+        const switchComp = wrapper.find('Switch');
+
+        expect(switchComp.prop('checked')).toBe(false);
+        switchComp.simulate('change', true);
+        expect(defaultProps.onChange).toBeCalledTimes(1);
+        expect(defaultProps.onChange).toBeCalledWith(defaultProps.value);
+    });
 });

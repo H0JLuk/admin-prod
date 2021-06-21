@@ -35,8 +35,9 @@
 
 .text {
     font-weight: 600;
-    word-wrap: break-word;
-    white-space: pre-line;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .footer {

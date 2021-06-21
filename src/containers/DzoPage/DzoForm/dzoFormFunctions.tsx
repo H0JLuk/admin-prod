@@ -11,12 +11,11 @@ import {
     TYPES,
     URL_VALIDATION_NO_APPLICATION_TYPE,
 } from '../dzoConstants';
-import { APPLICATION_JSON_TYPE } from '../../PromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignFormConstants';
+import { APPLICATION_JSON_TYPE, BANNER_TYPE } from '@constants/common';
 import {
     BannerDto,
-    dzoBannerTypes,
     DzoApplication,
-    IDzoItem,
+    DzoDto,
     DefaultCreateDtoResponse,
     SaveDzoApplicationRequest,
     DefaultApiResponse,
@@ -24,21 +23,30 @@ import {
 import { UploadFile } from 'antd/lib/upload/interface';
 import { RuleRender } from 'antd/lib/form';
 
+type ExternalBanner = {
+    type: BANNER_TYPE;
+    url: string | null;
+    id?: number;
+};
+
 type TextInputs = {
-    description: string;
+    description: string | null;
     dzoCode: string;
     dzoName: string;
+    externalBanners?: ExternalBanner[];
 };
 
 export type DzoFormApplication = Partial<DzoApplication> & {
     applicationUrl: string;
 };
 
-export type InitialDzoData = Pick<IDzoItem, 'dzoId' | 'dzoCode' | 'dzoName' | 'description'> & {
+export type InitialDzoData = Pick<DzoDto, 'dzoId' | 'dzoCode' | 'dzoName' | 'description'> & {
     applicationList: DzoFormApplication[];
 };
 
-export type DzoFormLogos = Record<dzoBannerTypes, string | UploadFile[]>;
+export type DzoFormLogos = {
+    [BannerType in BANNER_TYPE]?: string | UploadFile[];
+};
 
 type ErrorApp = {
     index: number;
@@ -60,22 +68,37 @@ type DzoFormItemProps = {
     dzoValue?: string;
 };
 
-function getFileNameByType(file: UploadFile, type: dzoBannerTypes) {
+function getFileNameByType(file: UploadFile, type: string) {
     return `${type}.${file.name.split('.').pop()}`;
 }
 
-export function serializeBannersAndDzoData(imageInputs: DzoFormLogos, textInputs: TextInputs) {
+export function serializeBannersAndDzoData(
+    imageInputs: DzoFormLogos,
+    textInputs: TextInputs,
+    dzoBanners: DzoDto['dzoBannerList'] = [],
+) {
     const formData = new FormData();
+    const { VIDEO: videoLink, ...restImages } = imageInputs;
+    const videoBanner = dzoBanners.find(({ type }) => type === BANNER_TYPE.VIDEO);
+    const dzoRequest = textInputs;
 
-    Object.entries(imageInputs).forEach(([key, value]) => {
+    Object.entries(restImages).forEach(([key, value]) => {
         if (typeof value !== 'string' && value[0]?.originFileObj) {
-            const name = getFileNameByType(value[0], key as dzoBannerTypes);
+            const name = getFileNameByType(value[0], key);
             const [{ originFileObj }] = value;
             formData.append(BANNERS, originFileObj, name);
         }
     });
 
-    formData.append(DZO_REQUEST, new Blob([JSON.stringify(textInputs)], { type: APPLICATION_JSON_TYPE }));
+    if ((!videoBanner && !!videoLink) || (videoBanner && videoBanner.url !== videoLink)) {
+        dzoRequest.externalBanners = [{
+            type: BANNER_TYPE.VIDEO,
+            url: (videoLink as string) || null,
+            id: videoBanner?.id,
+        }];
+    }
+
+    formData.append(DZO_REQUEST, new Blob([JSON.stringify(dzoRequest)], { type: APPLICATION_JSON_TYPE }));
 
     return formData;
 }
@@ -86,7 +109,7 @@ export function getInitialValue({
     description,
     applicationList,
     dzoId,
-} = {} as IDzoItem): InitialDzoData {
+} = {} as DzoDto): InitialDzoData {
     const appList = (applicationList || []).map((el) => ({ ...el, applicationUrl: decodeURI(el.applicationUrl) }));
 
     return {

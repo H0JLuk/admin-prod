@@ -5,11 +5,12 @@ import { BundleDto, BundleLink } from '@types';
 import cn from 'classnames';
 import { Row, Col, Button } from 'antd';
 import { arrayToObject } from '@utils/helper';
-import ImagesBlock from '@components/ImagesBlock/ImagesBlock';
-import { BundleRowsDto, BundleRowsValueDto, BUNDLE_ROWS, groupBundleRows, imagesTypes } from '../groupInfo.constants';
+import ImagesBlock from '@components/ImagesBlock';
+import { BundleRowsDto, BundleRowsValueDto, BUNDLE_ROWS, groupBundleRows } from '../groupInfo.constants';
 import { deleteCampaignGroup } from '@apiServices/campaignGroupService';
 import { confirmModal, errorModal, successModal } from '@utils/utils';
 import { BundleTypes, BUNDLE_LOCATION_KEY } from '../../groupPageConstants';
+import { BANNER_TYPE } from '@constants/common';
 
 import styles from './BundleFormInfo.module.css';
 
@@ -118,7 +119,9 @@ const BundleFormInfo: React.FC<BundleFormInfoProps> = ({ matchPath, history, bun
                         <Col span={12}>
                             {!banners.length ? (
                                 <>
-                                    <div className={styles.infoTitle}>{BUNDLE_ROWS[imagesTypes.CARD as 'CARD'].label}</div>
+                                    <div className={styles.infoTitle}>
+                                        {BUNDLE_ROWS[BANNER_TYPE.CARD].label}
+                                    </div>
                                     <div>
                                         <i>{BANNER_EMPTY}</i>
                                     </div>

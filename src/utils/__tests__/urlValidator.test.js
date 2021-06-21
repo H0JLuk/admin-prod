@@ -1,4 +1,4 @@
-import { validateURL, urlCheckRule, URL_VALIDATION_TEXT } from '../urlValidator';
+import { validateURL, urlCheckRule, URL_VALIDATION_TEXT, urlHttpsRule, URL_HTTPS_VALIDATION_TEXT } from '../urlValidator';
 
 test('valid url test', () => {
     expect(validateURL('https://www.sberbank.ru')).toBe(true);
@@ -103,4 +103,26 @@ it('test `urlCheckRule`', async () => {
     await validator('', 'https://testUrl.ru');
     expect(resolveSpy).toBeCalledTimes(2);
     expect(rejectSpy).toBeCalledTimes(1);
+});
+
+it('test `urlHttpsRule`', async () => {
+    const { validator } = urlHttpsRule;
+    const resolveSpy = jest.spyOn(Promise, 'resolve');
+    const rejectSpy = jest.spyOn(Promise, 'reject');
+
+    await validator('', '');
+    expect(resolveSpy).toBeCalledTimes(1);
+    expect(rejectSpy).toBeCalledTimes(0);
+
+    await expect(validator('', 'testString')).rejects.toThrow(URL_HTTPS_VALIDATION_TEXT);
+    expect(resolveSpy).toBeCalledTimes(1);
+    expect(rejectSpy).toBeCalledTimes(1);
+
+    await expect(validator('', 'http://testUrl.ru')).rejects.toThrow(URL_HTTPS_VALIDATION_TEXT);
+    expect(resolveSpy).toBeCalledTimes(1);
+    expect(rejectSpy).toBeCalledTimes(2);
+
+    await validator('', 'https://testUrl.ru');
+    expect(resolveSpy).toBeCalledTimes(2);
+    expect(rejectSpy).toBeCalledTimes(2);
 });

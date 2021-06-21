@@ -3,6 +3,7 @@ import { Form, Input, Upload, Modal } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import eq from 'lodash/eq';
 import { warnNotice } from '../../toast/Notice';
+import { APPLICATION_JSON_TYPE, BANNER_TYPE } from '@constants/common';
 import { DraggerProps } from 'antd/lib/upload';
 import { BannerDto, PromoCampaignDto } from '@types';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
@@ -31,7 +32,7 @@ type SavePromoCampaignBannerModalState = {
 const { Dragger } = Upload;
 const ACCEPTED_TYPES = '.png,.jpg,.jpeg,.svg';
 const emptyPromoCampaignBanner: PromoCampaignBanner = {
-    type: '',
+    type: '' as BANNER_TYPE,
     promoCampaignId: null
 };
 
@@ -66,7 +67,7 @@ class SavePromoCampaignBannerModal extends Component<SavePromoCampaignBannerModa
         this.setState({ uploading: true });
         const formData = new FormData();
         formData.append('bannerRequest', new Blob([JSON.stringify(promoCampaignBanner)], {
-            type: 'application/json'
+            type: APPLICATION_JSON_TYPE,
         }));
         if (file) {
             formData.append('image', file, file.name);
@@ -160,7 +161,7 @@ class SavePromoCampaignBannerModal extends Component<SavePromoCampaignBannerModa
                         label="Тип баннера">
                         <Input autoFocus
                             value={promoCampaignBanner.type}
-                            onChange={(e) => this.setState({ promoCampaignBanner: { ...promoCampaignBanner, type: e.target.value } })}
+                            onChange={(e) => this.setState({ promoCampaignBanner: { ...promoCampaignBanner, type: e.target.value as BANNER_TYPE } })}
                         />
                     </Form.Item>
                 </Form>

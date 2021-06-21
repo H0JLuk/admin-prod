@@ -34,9 +34,10 @@
     background-color: #f8f8f8;
 }
 
+.clientApp,
 .promoCampaignName,
 .selectCategories {
-    max-width: 600px;
+    max-width: 550px;
 }
 
 .statusInfo {

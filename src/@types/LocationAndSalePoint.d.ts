@@ -1,22 +1,22 @@
 type LocationType = {
     id: number;
     name: string;
-    description?: string;
+    description?: string | null;
     deleted: boolean;
     priority: number;
     startDate?: string;
-    endDate?: string;
+    endDate?: string | null;
 };
 
 export type LocationDto = {
     id: number;
     name: string;
     parentName?: string;
-    description?: string;
+    description?: string | null;
     type: LocationType;
     deleted: boolean;
     startDate?: string;
-    endDate?: string;
+    endDate?: string | null;
 };
 
 type SalePointType = {
@@ -26,7 +26,7 @@ type SalePointType = {
     deleted: boolean;
     priority: number;
     startDate?: string;
-    endDate?: string;
+    endDate?: string | null;
 };
 
 export type SalePointDto = {
@@ -38,7 +38,7 @@ export type SalePointDto = {
     type: SalePointType;
     deleted: boolean;
     startDate?: string;
-    endDate?: string;
+    endDate?: string | null;
 };
 
 export type SearchType = 'searchLocation' | 'searchSalePoint';

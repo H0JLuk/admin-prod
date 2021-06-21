@@ -1,7 +1,8 @@
 import { UploadPictureProps } from '@components/UploadPicture';
 import { getPatternAndMessage } from '@utils/validators';
-import { dzoBannerTypes, DzoApplication, IDzoItem } from '@types';
+import { DzoApplication, DzoDto } from '@types';
 import { Rule } from 'rc-field-form/lib/interface';
+import { BANNER_TYPE } from '@constants/common';
 
 export interface IDzoInfoRow {
     label: string;
@@ -10,13 +11,13 @@ export interface IDzoInfoRow {
 }
 
 export interface IDzoBannersRow {
-    type: keyof typeof dzoBannerTypes;
+    type: BANNER_TYPE;
     label: string;
 }
 
 export interface IMainDataRow {
     label: string;
-    key: keyof Omit<IDzoItem, 'applicationList' | 'dzoBannerList' | 'dzoId' | 'deleted'>;
+    key: keyof Omit<DzoDto, 'applicationList' | 'dzoBannerList' | 'dzoId' | 'deleted'>;
 }
 
 type BannersUploadTemplate = Pick<UploadPictureProps, 'accept' | 'type' | 'description' | 'maxFileSize' | 'setting'> & {
@@ -32,7 +33,8 @@ export const SAVE_BUTTON_TITLE = 'Сохранить';
 export const URL_VALIDATION_TEXT = 'Введите url в формате http://site.ru';
 export const DELETE_BUTTON_LABEL = 'Удалить';
 export const DELETE_CONFIRMATION_MODAL_TITLE = 'Вы действительно хотите удалить ДЗО';
-export const QR_LINK_PLACEHOLDER = 'Введите ссылку';
+export const LINK_VIDEO_LABEL = 'Ссылка на видеоэкскурсию';
+export const LINK_INPUT_PLACEHOLDER = 'Укажите ссылку';
 export const QR_LINK_LABEL = 'Ссылка для QR-кода';
 export const APP_TYPE_LABEL = 'Тип приложения';
 export const APP_TYPE_PLACEHOLDER = 'Выберите приложение';
@@ -118,7 +120,7 @@ export const BANNERS_UPLOAD_TEMPLATE: BannersUploadTemplate[] = [
     {
         label: 'Логотип (цветной)',
         accept: '.svg',
-        name: ['dzoBannerList', 'LOGO_MAIN'],
+        name: ['dzoBannerList', BANNER_TYPE.LOGO_MAIN],
         type: 'logo',
         description: 'Добавить логотип',
         maxFileSize: 1,
@@ -129,7 +131,7 @@ export const BANNERS_UPLOAD_TEMPLATE: BannersUploadTemplate[] = [
     {
         label: 'Логотип (белый)',
         accept: '.svg',
-        name: ['dzoBannerList', 'LOGO_SECONDARY'],
+        name: ['dzoBannerList', BANNER_TYPE.LOGO_SECONDARY],
         type: 'logo',
         description: 'Добавить логотип',
         maxFileSize: 1,
@@ -140,7 +142,7 @@ export const BANNERS_UPLOAD_TEMPLATE: BannersUploadTemplate[] = [
     {
         label: 'Иконка',
         accept: '.svg',
-        name: ['dzoBannerList', 'LOGO_ICON'],
+        name: ['dzoBannerList', BANNER_TYPE.LOGO_ICON],
         type: 'logo',
         description: 'Добавить логотип',
         maxFileSize: 1,
@@ -176,15 +178,15 @@ export const DZO_INFO_APPS_TEMPLATE: IDzoInfoRow[] = [
 
 export const DZO_BANNERS_TEMPLATE: IDzoBannersRow[] = [
     {
-        type: 'LOGO_MAIN',
+        type: BANNER_TYPE.LOGO_MAIN,
         label: 'Логотип (цветной)',
     },
     {
-        type: 'LOGO_SECONDARY',
+        type: BANNER_TYPE.LOGO_SECONDARY,
         label: 'Логотип (белый)',
     },
     {
-        type: 'LOGO_ICON',
+        type: BANNER_TYPE.LOGO_ICON,
         label: 'Иконка',
     },
 ];

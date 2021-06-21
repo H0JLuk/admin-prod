@@ -45,7 +45,7 @@ import {
     BannerTextDto,
     PromoCampaignDto,
     PromoCampaignStatisticsDto,
-    IDzoItem,
+    DzoDto,
     PromoCampaignTextCreateDto,
     PromoCampaignCreateDto,
 } from '@types';
@@ -93,7 +93,7 @@ type PromoCampaignPageProps = {
 
 export type PromoCampaignPageState = {
     loading: boolean;
-    allDzoList: IDzoItem[];
+    allDzoList: DzoDto[];
     currentStatistics?: PromoCampaignStatisticsDto;
     currentPromoCampaign?: PromoCampaignDto;
     currentPromoCampaignBanner?: BannerDto;

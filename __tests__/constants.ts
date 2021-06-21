@@ -1,39 +1,61 @@
-export const categoryListTestData = [
+import { BANNER_TYPE } from '@constants/common';
+import ROLES from '@constants/roles';
+import {
+    BannerDto,
+    BannerTextDto,
+    BusinessRoleDto,
+    CategoryDto,
+    ClientAppDto,
+    ConsentDto,
+    DzoApplication,
+    DzoDto,
+    ISettingList,
+    ListResponse,
+    LocationDto,
+    PromoCampaignDto,
+    SalePointDto,
+    UserInfo,
+    UserPaginationResponse,
+    VisibilitySettingDto,
+    VisibilitySettingsPaginationResponse,
+} from '@types';
+
+export const categoryListTestData: CategoryDto[] = [
     {
         active: true,
-        categoryDescription: null,
         categoryId: 0,
         categoryName: 'Test category Name 1',
         categoryUrl: 'www.test.categoryUrl.com',
     },
     {
         active: true,
-        categoryDescription: null,
         categoryId: 1,
         categoryName: 'Test category Name 2',
         categoryUrl: 'www.test.categoryUrl2.com',
     },
 ];
 
-export const promoCampaignBannerArray = [
+export const promoCampaignBannerArray: BannerDto[] = [
     {
         id: 57,
-        type: 'LOGO_MAIN',
+        type: BANNER_TYPE.LOGO_MAIN,
+        orderNumber: 0,
         url: 'http://distributor-fs:8081/distributor-fs/file?path=greenday-presents/promocampaign/sberhealth/2/logo-main.svg',
     },
     {
         id: 61,
-        type: 'CARD',
+        type: BANNER_TYPE.CARD,
+        orderNumber: 0,
         url: 'http://distributor-fs:8081/distributor-fs/file?path=greenday-presents/promocampaign/sberhealth/2/card.jpg',
     }
 ];
 
-export const promoCampaignTextsArray = [
+export const promoCampaignTextsArray: BannerTextDto[] = [
     { id: 78, value: 'Скидка 300 ₽ при заказе от 500 ₽', type: 'HEADER' },
     { id: 79, value: 'Доставка забытого горошка для оливье за 15 мин', type: 'DESCRIPTION' },
 ];
 
-export const promoCampaignTestData = {
+export const promoCampaignTestData: PromoCampaignDto = {
     active: true,
     behaviorType: 'QrBehavior',
     clientApplicationDto: {
@@ -42,8 +64,12 @@ export const promoCampaignTestData = {
         displayName: 'Витрина ВСП',
         id: 7,
         isDeleted: false,
+        businessRoleIds: [],
+        orderNumber: 0,
     },
     id: 24,
+    childGroups: [],
+    categoryIdList: [],
     name: 'Промо-кампания Сбермаркет для витрины ВСП',
     dzoId: 3,
     dzoName: 'СберЗдоровье',
@@ -52,17 +78,24 @@ export const promoCampaignTestData = {
     finishDate: '2021-03-08T20:59:59.999',
     banners: promoCampaignBannerArray,
     links: [],
+    deleted: false,
+    landingId: null,
     offerDuration: 90,
     texts: promoCampaignTextsArray,
     categoryList: categoryListTestData,
     oneLinkAppUrl: null,
     settings: {
         priority_on_web_url: true,
-        video_Url: 'http://localhost',
+        alternative_offer_mechanic: false,
+        details_button_label: '',
+        details_button_url: '',
+        disabled_banner_types: [],
     },
     promoCodeType: 'PERSONAL',
     standalone: true,
     type: 'PRESENT',
+    orderNumber: 2,
+    priority: 2,
     webUrl: 'https://www.promo.sberhealth.ru/vvo',
 };
 
@@ -81,7 +114,7 @@ export const userTestData = {
     tmpBlocked: false,
 };
 
-export const dzoApplicationsTestData = [
+export const dzoApplicationsTestData: DzoApplication[] = [
     {
         applicationId: 0,
         applicationType: 'IOS',
@@ -98,7 +131,7 @@ export const dzoApplicationsTestData = [
     },
 ];
 
-export const dzoListTestData = [
+export const dzoListTestData: DzoDto[] = [
     {
         dzoId: 0,
         dzoName: 'Беру!',
@@ -118,7 +151,7 @@ export const dzoListTestData = [
         dzoName: 'Сбермаркет',
         dzoCode: 'sbermarket_old',
         dzoBannerList: [],
-        dzoApplicationsTestData: dzoApplicationsTestData.map(app => ({ ...app, dzoId: 3 })),
+        applicationList: dzoApplicationsTestData.map(app => ({ ...app, dzoId: 3 })),
         header: 'Скидки до -40% на покупку продуктов онлайн с доставкой до двери.',
         logoUrl: 'http://distributor-fs:8081/distributor-fs/file?path=dzo/beru/beru@3x.png',
         screenUrl: 'http://distributor-fs:8081/distributor-fs/file?path=dzo/beru/invalid-name3x.jpg',
@@ -132,7 +165,7 @@ export const dzoListTestData = [
         dzoName: 'СберМобайл',
         dzoCode: 'sbermobile',
         dzoBannerList: [],
-        dzoApplicationsTestData: dzoApplicationsTestData.map(app => ({ ...app, dzoId: 70 })),
+        applicationList: dzoApplicationsTestData.map(app => ({ ...app, dzoId: 70 })),
         header: null,
         logoUrl: '',
         screenUrl: '',
@@ -143,16 +176,17 @@ export const dzoListTestData = [
     },
 ];
 
-export const clientAppTestData = {
+export const clientAppTestData: ClientAppDto = {
     code: 'greenday-presents',
     displayName: 'Витрина ВСП',
     id: 6,
     isDeleted: false,
     name: 'Витрина экосистемы с подарками',
     orderNumber: 0,
+    businessRoleIds: [],
 };
 
-export const clientAppListTestResponse = {
+export const clientAppListTestResponse: ListResponse<ClientAppDto> = {
     list: [
         clientAppTestData,
         {
@@ -162,11 +196,14 @@ export const clientAppListTestResponse = {
             isDeleted: false,
             name: 'Витрина экосистемы с подарками 2',
             orderNumber: 1,
+            businessRoleIds: [],
         }
     ],
+    message: '',
+    status: 'Ok',
 };
 
-export const testBusinessRole = {
+export const testBusinessRole: BusinessRoleDto = {
     id: 1,
     name: 'Мобильный менеджер по продажам',
     description: 'description',
@@ -175,7 +212,7 @@ export const testBusinessRole = {
     endDate: null,
 };
 
-export const businessRolesTestResponse = {
+export const businessRolesTestResponse: ListResponse<BusinessRoleDto> = {
     list: [
         testBusinessRole,
         {
@@ -195,9 +232,13 @@ export const businessRolesTestResponse = {
             endDate: null,
         },
     ],
+    status: 'Ok',
+    message: '',
 };
 
-export const settingDtoListTestData = {
+export const settingDtoListTestData: ISettingList = {
+    message: '',
+    status: 'Ok',
     settingDtoList: [
         {
             key: 'tmp_block_time',
@@ -270,7 +311,7 @@ export const settingsMapTestData = {
     inactivity_time: '152',
 };
 
-export const visibilitySettingLocation = {
+export const visibilitySettingLocation: LocationDto = {
     id: 2046,
     name: 'Ростов',
     description: null,
@@ -289,7 +330,7 @@ export const visibilitySettingLocation = {
     parentName: 'Ярославская область'
 };
 
-export const visibilitySettingSalePoint = {
+export const visibilitySettingSalePoint: SalePointDto = {
     id: 3163,
     name: '040_0017_0251',
     description: 'Доп.офис №0017/0251',
@@ -326,7 +367,7 @@ export const visibilitySettingSalePoint = {
     }
 };
 
-export const searchSalePointTestData = [
+export const searchSalePointTestData: SalePointDto[] = [
     {
         id: 886,
         name: '055_8626_1232',
@@ -365,7 +406,7 @@ export const searchSalePointTestData = [
     },
 ];
 
-export const usersTestArray = [
+export const usersTestArray: UserInfo[] = [
     {
         id: 1,
         personalNumber: '000000',
@@ -375,7 +416,7 @@ export const usersTestArray = [
         locationId: 1001,
         blocked: false,
         tmpBlocked: false,
-        role: 'Admin',
+        role: ROLES.ADMIN,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -389,7 +430,7 @@ export const usersTestArray = [
         locationId: 4,
         blocked: false,
         tmpBlocked: false,
-        role: 'Admin',
+        role: ROLES.ADMIN,
         clientAppIds: null,
         tempPassword: false,
         loginType: 'PASSWORD',
@@ -403,7 +444,7 @@ export const usersTestArray = [
         locationId: 1628,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -417,7 +458,7 @@ export const usersTestArray = [
         locationId: 1128,
         blocked: true,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -431,7 +472,7 @@ export const usersTestArray = [
         locationId: 1778,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -445,7 +486,7 @@ export const usersTestArray = [
         locationId: 1128,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -459,7 +500,7 @@ export const usersTestArray = [
         locationId: 1128,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -473,7 +514,7 @@ export const usersTestArray = [
         locationId: 1169,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -487,7 +528,7 @@ export const usersTestArray = [
         locationId: 1100,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -501,7 +542,7 @@ export const usersTestArray = [
         locationId: 1528,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -515,7 +556,7 @@ export const usersTestArray = [
         locationId: 1128,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
@@ -529,14 +570,14 @@ export const usersTestArray = [
         locationId: 9128,
         blocked: false,
         tmpBlocked: false,
-        role: 'User',
+        role: ROLES.USER,
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
     },
 ];
 
-export const usersListTestData = {
+export const usersListTestData: UserPaginationResponse = {
     users: usersTestArray,
     pageNo: 0,
     totalPages: 2,
@@ -594,7 +635,7 @@ export const promoCampaignVisibilitySettingTestData = {
     promoCampaign: promoCampaignTestData,
 };
 
-export const visibilitySettingsTestArray = [
+export const visibilitySettingsTestArray: VisibilitySettingDto[] = [
     {
         id: 4401,
         locationId: 139,
@@ -613,7 +654,7 @@ export const visibilitySettingsTestArray = [
     }
 ];
 
-export const visibilitySettings = [
+export const visibilitySettings: VisibilitySettingDto[] = [
     {
         id: 4611,
         locationId: 6,
@@ -696,8 +737,7 @@ export const visibilitySettings = [
     },
 ];
 
-
-export const visibilitySettingTestData = {
+export const visibilitySettingTestData: VisibilitySettingsPaginationResponse = {
     visibilitySettings: [
         {
             id: 3,
@@ -715,6 +755,7 @@ export const visibilitySettingTestData = {
     status: 'Ok',
     message: 'Successful',
 };
+
 export const searchLocation = [
     {
         deleted: false,
@@ -775,7 +816,7 @@ export const resolveMenuItemsByRoleAndAppCodeValue = [
     ]
 ];
 
-export const getTextsReturnValue = [
+export const getTextsReturnValue: BannerTextDto[] = [
     {
         id: 473,
         type: 'HEADER',
@@ -798,10 +839,13 @@ export const getTextsReturnValue = [
     },
 ];
 
-export const consentsTestData = {
+export const consentsTestData: ListResponse<ConsentDto> = {
+    message: '',
+    status: 'Ok',
     list: [
         {
             active: true,
+            signed: false,
             clientApplications: [
                 {
                     id: 7,
@@ -810,6 +854,7 @@ export const consentsTestData = {
                     code: 'greenday-presents',
                     isDeleted: false,
                     orderNumber: 1,
+                    businessRoleIds: [],
                 }, {
                     id: 8,
                     name: 'Сбер Премьер',
@@ -817,16 +862,17 @@ export const consentsTestData = {
                     code: 'sber-premiere',
                     isDeleted: false,
                     orderNumber: 2,
+                    businessRoleIds: [],
                 },
             ],
             createDate: '2021-05-17T14:54:28.479',
             id: 64,
             text: 'test',
-            updateDate: null,
             version: '4',
         },
         {
             active: true,
+            signed: false,
             clientApplications: [
                 {
                     id: 1,
@@ -835,6 +881,7 @@ export const consentsTestData = {
                     code: 'greenday-presents',
                     isDeleted: false,
                     orderNumber: 1,
+                    businessRoleIds: [],
                 }, {
                     id: 2,
                     name: 'Сбер Премьер',
@@ -842,12 +889,12 @@ export const consentsTestData = {
                     code: 'sber-premiere',
                     isDeleted: false,
                     orderNumber: 2,
+                    businessRoleIds: [],
                 },
             ],
             createDate: '2021-05-17T14:54:28.479',
             id: 65,
             text: 'test',
-            updateDate: null,
             version: '4',
         },
     ],

@@ -53,14 +53,18 @@
 }
 
 .formContainer {
-    max-width: 800px;
+    max-width: 900px;
 }
 
-.cross {
-    cursor: pointer;
+.mainInfoRow {
+    max-width: 750px;
 }
 
-.container :global(.ant-select-item-option-selected:not(.ant-select-item-option-disabled)){
+.uploadImage {
+    max-width: 250px;
+}
+
+.container :global(.ant-select-item-option-selected:not(.ant-select-item-option-disabled)) {
     background-color: inherit;
 }
 

@@ -2,7 +2,7 @@ import { ClientAppDto } from '@types';
 
 export type getUserAppsCheckboxesResult = Record<string, {id: number; label: string; disabled: boolean; checked: boolean;}>;
 
-export const getUserAppsCheckboxes = (availableApps: ClientAppDto[] = [], checkedApps: number[] = []) =>
+export const getUserAppsCheckboxes = (availableApps: ClientAppDto[] = [], checkedApps?: number[] | null) =>
     availableApps.reduce<getUserAppsCheckboxesResult>(
         (result, app) => ({
             ...result,
@@ -10,7 +10,7 @@ export const getUserAppsCheckboxes = (availableApps: ClientAppDto[] = [], checke
                 id: app.id,
                 label: app.displayName,
                 disabled: false,
-                checked: checkedApps.includes(app.id),
+                checked: checkedApps?.includes(app.id) ?? false,
             },
         }),
         {}

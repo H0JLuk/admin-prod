@@ -162,12 +162,13 @@ describe('<DzoFrom /> test', () => {
 
         expect(serializeBannersAndDzoData).toBeCalled();
         expect(serializeBannersAndDzoData).toBeCalledWith(
-            { LOGO_ICON: [], LOGO_MAIN: [], LOGO_SECONDARY: [] },
+            { LOGO_ICON: [], LOGO_MAIN: [], LOGO_SECONDARY: [], VIDEO: '' },
             {
                 description: 'Описание ДЗО',
                 dzoCode: 'sberhealth',
                 dzoName: 'Название',
-            }
+            },
+            [],
         );
         expect(updateDzo).toBeCalled();
         expect(updateDzo).toBeCalledWith(67, 'testFormData');
@@ -212,7 +213,7 @@ describe('<DzoFrom /> test', () => {
         expect(errorsToForm).toBeCalled();
         expect(console.error).toBeCalled();
 
-        fireEvent.change(getAllByPlaceholderText('Введите ссылку')[0], {
+        fireEvent.change(getAllByPlaceholderText('Укажите ссылку')[0], {
             target: { value: 'https://sberhealth.ru/' },
         });
         fireEvent.mouseDown(document.querySelector('.ant-select-selector'));
@@ -252,7 +253,7 @@ describe('<DzoFrom /> test', () => {
 
         const { getAllByPlaceholderText } = render(<DzoForm { ...props } />);
 
-        fireEvent.change(getAllByPlaceholderText('Введите ссылку')[0], {
+        fireEvent.change(getAllByPlaceholderText('Укажите ссылку')[0], {
             target: { value: 'https://Notsberhealth.ru/' },
         });
 
@@ -287,7 +288,7 @@ describe('<DzoFrom /> test', () => {
 
         const { getAllByPlaceholderText } = render(<DzoForm { ...props } />);
 
-        fireEvent.change(getAllByPlaceholderText('Введите ссылку')[0], {
+        fireEvent.change(getAllByPlaceholderText('Укажите ссылку')[0], {
             target: { value: 'https://newApp.ru/' },
         });
         fireEvent.mouseDown(document.querySelector('.ant-select-selector'));

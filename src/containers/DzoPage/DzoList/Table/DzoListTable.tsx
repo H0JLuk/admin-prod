@@ -1,11 +1,11 @@
 import React from 'react';
 import { Table, Empty, TableProps } from 'antd';
-import { IDzoItem } from '@types';
+import { DzoDto } from '@types';
 
 import styles from './DzoListTable.module.css';
 
-type IDzoListTable = TableProps<IDzoItem> & {
-    dzoList: IDzoItem[];
+type IDzoListTable = TableProps<DzoDto> & {
+    dzoList: DzoDto[];
 };
 
 const { Column } = Table;

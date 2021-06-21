@@ -3,12 +3,13 @@ import merge from 'lodash/merge';
 import cloneDeep from 'lodash/cloneDeep';
 import { goToLogin } from '@utils/appNavigation';
 import { deleteUserData } from '@apiServices/sessionService';
+import { APPLICATION_JSON_TYPE } from '@constants/common';
 import { ApiRequestOptions, ApiConfig, ApiRequest, ApiRequestBody } from '@types';
 
 const defaultOptions = {
     headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
+        Accept: APPLICATION_JSON_TYPE,
+        'Content-Type': APPLICATION_JSON_TYPE,
     }
 };
 

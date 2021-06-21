@@ -12,7 +12,7 @@ import { getPromoCampaignList } from '@apiServices/promoCampaignService';
 import { DEFAULT_SLEEP_TIME } from '@constants/common';
 import { sleep } from '@utils/utils';
 import { downloadFile } from '@utils/helper';
-import { PromoCampaignDto, IDzoItem } from '@types';
+import { PromoCampaignDto, DzoDto } from '@types';
 
 import styles from './ReportsPage.module.css';
 
@@ -37,7 +37,7 @@ type ReportsPageState = {
     startDate: Date | null;
     endDate: Date | null;
     isFiltered: boolean;
-    dzoList: IDzoItem[];
+    dzoList: DzoDto[];
     dzoId: number | null;
     promoCampaignList: PromoCampaignDto[];
     filteredPromoCampaignList: PromoCampaignDto[];

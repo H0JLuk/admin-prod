@@ -103,6 +103,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
             alternative_offer_mechanic: false,
             details_button_label: '',
             details_button_url: '',
+            disabled_banner_types: [],
         },
         behaviorType: true,
     });

@@ -26,12 +26,15 @@ import {
     deleteCampaignGroupText,
     deleteCampaignGroupBanner,
 } from '@apiServices/campaignGroupService';
+import { APPLICATION_JSON_TYPE } from '@constants/common';
+import { BANNER_REQUEST, IMAGE } from '../../PromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignFormConstants';
 import {
-    APPLICATION_JSON_TYPE,
-    BANNER_REQUEST,
-    IMAGE,
-} from '../../PromoCampaignPage/PromoCampaign/PromoCampaignForm/PromoCampaignFormConstants';
-import { BundleInitialValue, CreateGroupLinkDto, EditGroupBannersAndTextsDto, LinksCreateDto } from './types';
+    BundleInitialValue,
+    CreateGroupLinkDto,
+    EditGroupBannersAndTextsDto,
+    LinksCreateDto,
+} from './types';
+
 //  create group banners
 export async function createGroupBanner(banners: BannerCreateDto, groupId: number) {
     for (const bannerType of Object.keys(banners)) {

@@ -5,6 +5,7 @@ import { getClientAppInfo } from '@apiServices/clientAppService';
 import { getAppCode } from '@apiServices/sessionService';
 import promoCodeTypes from '@constants/promoCodeTypes';
 import behaviorTypes from '@constants/behaviorTypes';
+import { BANNER_TYPE } from '@constants/common';
 import { ClientAppDto, PromoCampaignDto } from '@types';
 
 import style from '../PromoCampaignInfo.module.css';
@@ -22,7 +23,7 @@ const EMPTY_URL_PROMO_CAMPAIGN = 'Нет ссылки';
 const TYPE_PROMO_CAMPAIGN = 'Тип промо-кампании';
 const TYPE_PROMO_CODE = 'Тип промокода';
 const ACTIVE_PERIOD = 'Период действия';
-const SHOW_PROMO_CAMPAIGN = 'Витрины, в которых отображается промо-кампания';
+const SHOW_PROMO_CAMPAIGN = 'Витрина, в которой отображается промо-кампания';
 const DZO = 'ДЗО';
 const STATUS = 'Активность промо-кампании';
 const URL_SOURCE_LABEL = 'Источник ссылки';
@@ -37,6 +38,7 @@ const DETAIL_BTN_URL = 'Ссылка для кнопки';
 const EMPTY_DETAIL_BTN_URL = 'Нет ссылки';
 const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
 const BEHAVIOR_TYPE_LABEL = 'Отображать QR-код';
+const SHOW_VIDEO_TOUR_LABEL = 'Отображать видеоэкскурсию';
 
 const STATUS_TYPE = {
     ACTIVE: 'Активная',
@@ -44,7 +46,6 @@ const STATUS_TYPE = {
 };
 
 const StepInfo: React.FC<IStepInfoProps>= ({ promoCampaign }) => {
-
     const [clientApp, setClientApp] = useState<ClientAppDto>();
     const appCode = getAppCode() || '';
 
@@ -64,13 +65,25 @@ const StepInfo: React.FC<IStepInfoProps>= ({ promoCampaign }) => {
         <div className={style.containerStep}>
             <div className={style.container}>
                 <Row gutter={[24, 40]}>
-                    <Col span={24}>
+                    <Col span={16}>
                         <div className={style.infoTitle}>{CATEGORY}</div>
                         <div className={style.infoText}>
                             {promoCampaign.categoryList?.length
-                                ? promoCampaign.categoryList.map(({ categoryName }: {categoryName: string;}) => categoryName).join(', ')
+                                ? promoCampaign.categoryList.map(({ categoryName }) => categoryName).join(', ')
                                 : <i>{NO_CATEGORY_LABEL}</i>
                             }
+                        </div>
+                    </Col>
+
+                    <Col span={8} className={style.switchContainer}>
+                        <div className={style.switch}>
+                            <div className={style.infoTitle}>
+                                {SHOW_VIDEO_TOUR_LABEL}
+                            </div>
+                            <Switch
+                                checked={!promoCampaign.settings?.disabled_banner_types?.includes(BANNER_TYPE.VIDEO)}
+                                disabled
+                            />
                         </div>
                     </Col>
 

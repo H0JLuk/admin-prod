@@ -12,6 +12,7 @@ import { BundleLink } from '@types';
 import { RuleObject, RuleRender } from 'antd/lib/form';
 import { NamePath } from 'rc-field-form/lib/interface';
 import { customNotifications } from '@utils/notifications';
+import { BANNER_TEXT_TYPE, BANNER_TYPE } from '@constants/common';
 
 import styles from './RelatedPromoCampaignsForm.module.css';
 
@@ -27,7 +28,7 @@ const HEADER_PLACEHOLDER = 'Заголовок';
 
 const formItemProps = {
     ASSOCIATION_HEADER_FIELD: {
-        name: ['texts', 'HEADER'],
+        name: ['texts', BANNER_TEXT_TYPE.HEADER],
         label: 'Текст заголовка',
         rules: [{ message: 'Текст заголовка обязателен' }],
     },
@@ -297,7 +298,7 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
                                         </Col>
                                         <Col span={12}>
                                             <Form.Item
-                                                name={[field.name, 'texts', 'HEADER']}
+                                                name={[field.name, 'texts', BANNER_TEXT_TYPE.HEADER]}
                                                 {...formItemProps.CAMPAIGN_HEADER_FIELD}
                                             >
                                                 <Input.TextArea
@@ -311,21 +312,21 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
                                         <Col span={12}>
                                             <Form.Item
                                                 noStyle
-                                                dependencies={['links', field.name, 'banners', 'LOGO_MAIN']}
+                                                dependencies={['links', field.name, 'banners', BANNER_TYPE.LOGO_MAIN]}
                                             >
                                                 {({ getFieldValue }) => (
                                                     <UploadPicture
                                                         uploadFileClassName={styles.uploadBackground}
-                                                        name={[field.name, 'banners', 'LOGO_MAIN']}
+                                                        name={[field.name, 'banners', BANNER_TYPE.LOGO_MAIN]}
                                                         {...formItemProps.CAMPAIGN_BANNER_FIELD}
                                                         initialValue={getFieldValue([
                                                             'links',
                                                             field.name,
                                                             'banners',
-                                                            'LOGO_MAIN',
+                                                            BANNER_TYPE.LOGO_MAIN,
                                                         ])}
                                                         onRemoveImg={() =>
-                                                            onRemoveImg(['links', field.name, 'banners', 'LOGO_MAIN'])
+                                                            onRemoveImg(['links', field.name, 'banners', BANNER_TYPE.LOGO_MAIN])
                                                         }
                                                     />
                                                 )}

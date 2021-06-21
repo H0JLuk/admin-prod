@@ -1,3 +1,5 @@
+import { BannerDto } from './Banner';
+
 export type DzoApplication = {
     applicationId: number;
     applicationType: string;
@@ -6,32 +8,24 @@ export type DzoApplication = {
     deleted: boolean;
 };
 
-export type IDzoItem = {
+export type DzoDto = {
     cardUrl: string;
-    description: string;
+    description: string | null;
     dzoCode: string;
     dzoId: number;
     dzoName: string;
     dzoPresentationUrl?: string;
     deleted: boolean;
-    header: string;
+    header: string | null;
     logoUrl: string;
     screenUrl: string;
     webUrl: string;
     applicationList: DzoApplication[];
-    dzoBannerList: IDzoBannerList[];
+    dzoBannerList: BannerDto[];
 };
 
-interface IDzoBannerList {
-    default: boolean;
-    id: number;
-    orderNumber: number;
-    type: keyof typeof dzoBannerTypes;
-    url: string;
-}
-
 export interface IDzoListResponse extends DefaultApiResponse {
-    dzoDtoList: IDzoItem[];
+    dzoDtoList: DzoDto[];
 }
 
 export type SaveDzoApplicationRequest = {
@@ -39,9 +33,3 @@ export type SaveDzoApplicationRequest = {
     applicationUrl: string;
     dzoId: number;
 };
-
-export enum dzoBannerTypes {
-    LOGO_MAIN = 'LOGO_MAIN',
-    LOGO_ICON = 'LOGO_ICON',
-    LOGO_SECONDARY = 'LOGO_SECONDARY',
-}

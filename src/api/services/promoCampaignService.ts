@@ -47,10 +47,15 @@ export function getPromoCampaignById(id: number) {
     return Api.get<PromoCampaignListResponse>(`/promo-campaign/list/?id=${id}`, getReqOptions());
 }
 
-function normalizePromoCampaign<PromoCampaign extends Record<string, any>>(promoCampaign: PromoCampaign) {
-    // TODO: send original promoCampaign without changing behaviorType and offerDuration
-    const offerDuration = promoCampaign?.offerDuration || DEFAULT_OFFER_DURATION;
-    return { ...promoCampaign, offerDuration };
+function normalizePromoCampaign<PromoCampaign extends PromoCampaignCreateDto>(promoCampaign: PromoCampaign) {
+    return {
+        ...promoCampaign,
+        offerDuration: promoCampaign?.offerDuration || DEFAULT_OFFER_DURATION,
+        settings: {
+            ...promoCampaign.settings,
+            disabled_banner_types: JSON.stringify(promoCampaign.settings.disabled_banner_types),
+        },
+    };
 }
 
 export function createPromoCampaign(promoCampaign: PromoCampaignCreateDto) {
