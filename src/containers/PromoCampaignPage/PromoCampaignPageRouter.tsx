@@ -1,9 +1,9 @@
 import React from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
-import { PROMO_CAMPAIGN_PAGES } from '../../constants/route';
-import PromoCampaignInfo from './PromoCampaign/PromoCampaignInfo/PromoCampaignInfo';
-import PromoCampaignList from './PromoCampaign/PromoCampaignList/PromoCampaignList';
-import PromoCampaignForm from './PromoCampaign/PromoCampaignForm/PromoCampaignForm';
+import { PROMO_CAMPAIGN_PAGES } from '@constants/route';
+import PromoCampaignInfo from './PromoCampaign/PromoCampaignInfo';
+import PromoCampaignList from './PromoCampaign/PromoCampaignList';
+import PromoCampaignForm from './PromoCampaign/PromoCampaignForm';
 import PromoCampaignVisibilitySettingRouter from './PromoCampaign/PromoCampaignVisibilitySetting/PromoCampaignVisibilitySettingRouter';
 
 function PromoCampaignRouter() {

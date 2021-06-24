@@ -4,10 +4,11 @@ import { getReqOptions } from './index';
 
 const contentTypeImage = 'image/jpeg';
 
-export function getOffers(start: number | null, end: number | null) {
+export function getOffers(start: number | null, end: number | null, salePointId?: number | null) {
+    const salePoint = typeof salePointId === 'number' ? `salePointId=${salePointId}` : '';
     const url = (start && end)
-        ? `/admin/offer/csv?start=${start}&end=${end}`
-        : '/admin/offer/csv';
+        ? `/admin/offer/csv?start=${start}&end=${end}&${salePoint}`
+        : `/admin/offer/csv?${salePoint}`;
     return Api.get<Blob>(url, getReqOptions(contentTypeImage), 'blob');
 }
 

@@ -8,29 +8,47 @@ import * as usersService from '../../../../api/services/usersService';
 import { shallow } from 'enzyme';
 import { USERS_PAGES } from '../../../../constants/route';
 import * as permissions from '../../../../constants/permissions';
+import { downloadFileFunc } from '../../../../utils/helper';
 
-const DEFAULT_URL_SEARCH_PARAMS = 'pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=';
-const diffLoginTypeUsersListTestData = {
-    ...usersListTestData,
-    users: [
-        ...usersListTestData['users'].slice(10),
-        { ...usersListTestData['users'][11], loginType: 'SBER_REGISTRY', id: 22882 }
-    ],
-};
+const DEFAULT_URL_SEARCH_PARAMS = 'pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=&loginType=';
 
-jest.mock('../../../../components/TableDeleteModal/TableDeleteModal', () => ({ modalClose, visible, refreshTable }) => (
+jest.mock('../../../../components/TableDeleteModal/TableDeleteModal', () => ({ refreshTable }) => (
     <div>
-        { visible && (
-            <div>
-                <div>Modal</div>
-                <button onClick={ modalClose }>close</button>
-                <button onClick={ refreshTable }>refresh</button>
-            </div>
-        ) }
+        <div>Modal</div>
+        <button onClick={ refreshTable }>refresh</button>
     </div>
 ));
+jest.mock('./FiltrationBlock', () => ({ params, onChangeFilter }) => (
+    <div>
+        <span>FiltrationBlock</span>
+        <button onClick={ () => onChangeFilter(params) }>onChangeFilter</button>
+        <button
+            onClick={ () => onChangeFilter({ ...params, parentUserName: 'test' }) }
+        >
+            onChangeFilterWithPartner
+        </button>
+    </div>
+));
+jest.mock('./ActionsDropDown', () => ({
+    onClickResetPass,
+    linkEdit,
+    generateQR,
+    generateQRDisabled,
+}) => (
+    <div>
+        <span>ActionsDropDown</span>
+        <button onClick={ onClickResetPass }>Сбросить пароль</button>
+        <button onClick={ linkEdit }>Редактировать</button>
+        <button onClick={ generateQR } disabled={ generateQRDisabled }>Сгенерировать QR-код</button>
+    </div>
+));
+jest.mock('../../../../components/Loading/Loading', () => () => (<div>Loading</div>));
 jest.mock('./EmptyUsersPage/EmptyUsersPage', () => () => (<div>EmptyUsersPage</div>));
-jest.mock('../UserForm', () => () => (<div>UserForm</div>));
+jest.mock('../../../../utils/helper', () => ({
+    ...jest.requireActual('../../../../utils/helper'),
+    downloadFileFunc: jest.fn(),
+}));
+
 
 const mockPush = jest.fn();
 
@@ -38,8 +56,10 @@ jest.mock('../../../../utils/notifications', () => ({
     customNotifications: {
         success: jest.fn(),
         error: jest.fn(),
-    }
+    },
 }));
+
+let mockFilterLoginType = false;
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -47,17 +67,18 @@ jest.mock('react-router-dom', () => ({
         push: mockPush,
         replace: jest.fn(),
         location: {
-            search: '?pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=',
+            search: `?pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=&clientAppCode=${mockFilterLoginType ? 'test-code' : ''}&loginType=${mockFilterLoginType ? 'DIRECT_LINK' : ''}${mockFilterLoginType ? '&parentUserName=test-user' : ''}`,
         },
     }),
     useLocation: () => ({
-        search: '?pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=',
+        search: `?pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=&clientAppCode=${mockFilterLoginType ? 'test-code' : ''}&loginType=${mockFilterLoginType ? 'DIRECT_LINK' : ''}${mockFilterLoginType ? '&parentUserName=test-user' : ''}`,
     }),
     generatePath: jest.fn(),
 }));
 
 beforeEach(() => {
     usersService.getUsersList = jest.fn().mockResolvedValue(usersListTestData);
+    usersService.generateQRCodes = jest.fn();
     permissions.getCurrUserInteractions = jest.fn().mockReturnValue(permissionsTestData);
 });
 
@@ -85,7 +106,7 @@ describe('<UsersList /> test', () => {
         await act(async () => {
             const { getByText } = render(<UserList { ...props } />);
 
-            expect(getByText(/Загрузка.../)).toBeInTheDocument();
+            expect(getByText(/Loading/)).toBeInTheDocument();
         });
     });
 
@@ -222,22 +243,6 @@ describe('<UsersList /> test', () => {
         });
     });
 
-    it('should not reset pass according to diff login type test data', async () => {
-        usersService.resetUser = jest.fn().mockResolvedValue({});
-        usersService.getUsersList = jest.fn().mockResolvedValue(diffLoginTypeUsersListTestData);
-        await act(async () => {
-            const { getByText } = render(<UserList { ...props } />);
-            await sleep();
-
-            fireEvent.click(getByText(/Выбрать/));
-            fireEvent.click(getByText(/Выбрать все/));
-            fireEvent.click(getByText(/Сбросить пароль/));
-            await sleep();
-
-            expect(usersService.resetUser).not.toBeCalled();
-        });
-    });
-
     it('should successfully resets passwords with rejected one too', async () => {
         usersService.resetUser = jest.fn().mockRejectedValueOnce('error').mockResolvedValue({});
         await act(async () => {
@@ -295,21 +300,6 @@ describe('<UsersList /> test', () => {
         });
     });
 
-    it('should toggle modal', async () => {
-        await act(async () => {
-            const { getByText, queryAllByText } = render(<UserList { ...props } />);
-            await sleep();
-
-            fireEvent.click(getByText(/Выбрать/));
-            fireEvent.click(getByText(/Выбрать все/));
-            fireEvent.click(getByText(/Удалить/));
-            expect(getByText(/Modal/)).toBeInTheDocument();
-
-            fireEvent.click(getByText(/close/));
-            expect(queryAllByText(/Modal/)).toHaveLength(0);
-        });
-    });
-
     it('should run refreshTable ', async () => {
         await act(async () => {
             const { getByText } = render(<UserList { ...props } />);
@@ -317,10 +307,60 @@ describe('<UsersList /> test', () => {
 
             fireEvent.click(getByText(/Выбрать/));
             fireEvent.click(getByText(/Выбрать все/));
-            fireEvent.click(getByText(/Удалить/));
             fireEvent.click(getByText(/refresh/));
 
             expect(usersService.getUsersList).toBeCalledTimes(2);
+        });
+    });
+
+    it('should not call `downloadFileFunc` when generate QR', async () => {
+        await act(async () => {
+            const { getByText } = render(<UserList { ...props } />);
+            await sleep();
+
+            fireEvent.click(getByText(/Выбрать/));
+            fireEvent.click(getByText(/Выбрать все/));
+            fireEvent.click(getByText(/Сгенерировать QR-код/));
+
+            expect(usersService.generateQRCodes).toBeCalledTimes(0);
+        });
+    });
+
+    it('should call `downloadFileFunc` when generate QR', async () => {
+        mockFilterLoginType = true;
+        URL.createObjectURL = jest.fn();
+        await act(async () => {
+            const { getByText } = render(<UserList { ...props } />);
+            await sleep();
+
+            fireEvent.click(getByText(/Выбрать/));
+            fireEvent.click(getByText(/Выбрать все/));
+            fireEvent.click(getByText(/Сгенерировать QR-код/));
+            await sleep();
+
+            expect(usersService.generateQRCodes).toBeCalledTimes(1);
+            expect(downloadFileFunc).toBeCalledTimes(1);
+        });
+        mockFilterLoginType = false;
+    });
+
+    it('should call update users if filter is changed', async () => {
+        await act(async () => {
+            const { getByText } = render(<UserList { ...props } />);
+            await sleep();
+            expect(usersService.getUsersList).toBeCalledTimes(1);
+
+            fireEvent.click(getByText('onChangeFilter'));
+            await sleep();
+
+            expect(usersService.getUsersList).toBeCalledTimes(2);
+            expect(usersService.getUsersList).toBeCalledWith(DEFAULT_URL_SEARCH_PARAMS);
+
+            fireEvent.click(getByText('onChangeFilterWithPartner'));
+            await sleep();
+
+            expect(usersService.getUsersList).toBeCalledTimes(3);
+            expect(usersService.getUsersList).toBeCalledWith(`${DEFAULT_URL_SEARCH_PARAMS}&parentUserName=test`);
         });
     });
 });

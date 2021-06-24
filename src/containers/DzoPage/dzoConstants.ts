@@ -94,7 +94,7 @@ export const FORM_ELEMENTS = [
                 {
                     ...getPatternAndMessage('dzo', 'code'),
                     validateTrigger: 'onSubmit',
-                }
+                },
             ],
             name: 'dzoCode',
             placeholder: 'Код',
@@ -108,7 +108,7 @@ export const FORM_ELEMENTS = [
                 {
                     ...getPatternAndMessage('dzo', 'description'),
                     validateTrigger: 'onSubmit',
-                }
+                },
             ],
             name: 'description',
             placeholder: 'Описание ДЗО',

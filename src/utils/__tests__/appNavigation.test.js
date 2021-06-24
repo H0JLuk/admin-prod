@@ -6,7 +6,7 @@ import {
     ROUTE_ADMIN,
     ROUTE_OWNER,
     ROUTE_PARTNER,
-    ROUTE_USER_MANAGER
+    ROUTE_USER_MANAGER,
 } from '../../constants/route';
 import {
     goToLogin,

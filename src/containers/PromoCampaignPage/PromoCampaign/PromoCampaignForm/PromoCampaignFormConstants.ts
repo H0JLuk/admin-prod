@@ -15,7 +15,7 @@ export const modes = {
 export const steps = {
     main_info: 1,
     textAndBanners: 2,
-    visibility: 3
+    visibility: 3,
 };
 
 export const pageTypes = {

@@ -243,7 +243,7 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
         { target }: React.ChangeEvent<HTMLInputElement>,
         index: number,
         add: FormListOperation['add'],
-        remove: FormListOperation['remove']
+        remove: FormListOperation['remove'],
     ) => {
         const appList: DzoFormApplication[] = form.getFieldValue(DZO_APPLICATION_LIST_NAME);
         const appsCount = appList.length;
@@ -300,7 +300,7 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                                                     validator: checkUniqCode,
                                                     message: DZO_CODE_NOT_UNIQUE,
                                                     validateTrigger: 'onSubmit',
-                                                } : {}
+                                                } : {},
                                             ]}
                                             {...props}
                                         />

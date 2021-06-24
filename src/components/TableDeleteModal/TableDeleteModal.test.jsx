@@ -12,10 +12,8 @@ describe('<TableDeleteModal tests/>', () => {
 
     const props = {
         listNameKey: 'dzoName',
-        visible: true,
         refreshTable: jest.fn(),
         deleteFunction: jest.fn(),
-        modalClose: jest.fn(),
         sourceForRemove: [
             {
                 dzoId: 102,
@@ -34,12 +32,12 @@ describe('<TableDeleteModal tests/>', () => {
                         applicationType: 'OTHER',
                         applicationUrl: 'https://apps.apple.com/ru/app/delivery-сlub-доставка-еды/id436145623',
                         dzoId: 102,
-                        deleted: false
-                    }
+                        deleted: false,
+                    },
                 ],
                 dzoBannerList: [],
-                deleted: false
-            }
+                deleted: false,
+            },
         ],
         listIdForRemove: [138, 139],
     };
@@ -50,12 +48,35 @@ describe('<TableDeleteModal tests/>', () => {
             sourceForRemove: [],
         };
 
-        const TableDeleteModalItem = mount(<TableDeleteModal { ...newProps } />);
+        const TableDeleteModalItem = mount(
+            <TableDeleteModal { ...newProps }>
+                <div className="trigger">test</div>
+            </TableDeleteModal>
+        );
+        expect(TableDeleteModalItem.html()).toMatchSnapshot();
+
+        TableDeleteModalItem.find('.trigger').simulate('click');
         expect(TableDeleteModalItem.html()).toMatchSnapshot();
     });
 
+    it('should return null and warning without children', () => {
+        const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => '');
+        const wrapper = mount(
+            <TableDeleteModal { ...props } />
+        );
+
+        expect(errorSpy).toBeCalledTimes(2); // 1 - Warning from propTypes; 2 - Warning from component
+        expect(errorSpy).toBeCalledWith('Warning: `children` of `TableDeleteModal` must be single reactNode');
+        expect(wrapper.isEmptyRender()).toBe(true);
+    });
+
     it('should call handleDelete, deleteFunction and handleClose', async () => {
-        const TableDeleteModalItem = shallow(<TableDeleteModal { ...props } />);
+        const TableDeleteModalItem = shallow(
+            <TableDeleteModal { ...props } >
+                <div className="trigger">test</div>
+            </TableDeleteModal>
+        );
+        TableDeleteModalItem.find('.trigger').simulate('click');
         await TableDeleteModalItem.find('Modal').prop('onOk')();
 
         expect(props.deleteFunction).toBeCalledTimes(props.listIdForRemove.length);
@@ -63,14 +84,19 @@ describe('<TableDeleteModal tests/>', () => {
 
         await TableDeleteModalItem.find('Modal').prop('onOk')();
 
-        expect(props.modalClose).toBeCalled();
+        expect(TableDeleteModalItem.find('Modal')).toHaveLength(0);
         expect(props.refreshTable).toBeCalled();
     });
 
     it('should render error list', async () => {
         props.deleteFunction = jest.fn().mockResolvedValue([{ status: 'rejected', message: 'Error' }]);
         Promise.allSettled = jest.fn().mockResolvedValue(null);
-        const TableDeleteModalItem = shallow(<TableDeleteModal { ...props } />);
+        const TableDeleteModalItem = shallow(
+            <TableDeleteModal { ...props } >
+                <div className="trigger">test</div>
+            </TableDeleteModal>
+        );
+        TableDeleteModalItem.find('.trigger').simulate('click');
 
         await act(async () => {
             await TableDeleteModalItem.find('Modal').prop('onOk')();
@@ -79,7 +105,12 @@ describe('<TableDeleteModal tests/>', () => {
     });
 
     it('should render okTextDelete and okTextSuccess', async () => {
-        const TableDeleteModalItem = shallow(<TableDeleteModal { ...props } />);
+        const TableDeleteModalItem = shallow(
+            <TableDeleteModal { ...props } >
+                <div className="trigger">test</div>
+            </TableDeleteModal>
+        );
+        TableDeleteModalItem.find('.trigger').simulate('click');
 
         expect(
             TableDeleteModalItem.find('Modal').prop('okText')
@@ -93,7 +124,13 @@ describe('<TableDeleteModal tests/>', () => {
     });
 
     it('should render modalTitle and modalSuccessTitle', async () => {
-        const TableDeleteModalItem = shallow(<TableDeleteModal { ...props } />);
+        const TableDeleteModalItem = shallow(
+            <TableDeleteModal { ...props } >
+                <div className="trigger">test</div>
+            </TableDeleteModal>
+        );
+        TableDeleteModalItem.find('.trigger').simulate('click');
+
         expect(
             TableDeleteModalItem.find('Modal').first().prop('title')
         ).toEqual('Вы точно хотите удалить эти данные?');
@@ -105,25 +142,30 @@ describe('<TableDeleteModal tests/>', () => {
         ).toEqual('Результат удаления');
     });
 
-    it('should not render Modal', () => {
-        const newProps = { ...props, visible: false };
-        const TableDeleteModalItem = shallow(<TableDeleteModal { ...newProps } />);
-        expect(TableDeleteModalItem.find('Modal')).toHaveLength(0);
-    });
-
     it('should run useEffect', async () => {
         jest.useFakeTimers();
         let TableDeleteModalItem;
+
         await act(async () => {
-            TableDeleteModalItem = mount(<TableDeleteModal { ...props } />);
+            TableDeleteModalItem = mount(
+                <TableDeleteModal { ...props } >
+                    <div className="trigger">test</div>
+                </TableDeleteModal>
+            );
         });
+
+        expect(TableDeleteModalItem.find('Modal')).toHaveLength(0);
+        TableDeleteModalItem.find('.trigger').simulate('click');
+        expect(TableDeleteModalItem.find('Modal')).toHaveLength(1);
+
         await sleep(528);
         await act(async () => {
-            TableDeleteModalItem.setProps({ ...props, visible: false });
+            TableDeleteModalItem.find('Modal').prop('onCancel')();
             jest.runAllTimers();
         });
+        TableDeleteModalItem.update();
         await act(async () => {
-            expect(TableDeleteModalItem.html()).toBeNull();
+            expect(TableDeleteModalItem.find('Modal')).toHaveLength(0);
         });
         jest.useRealTimers();
     });

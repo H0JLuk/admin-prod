@@ -10,7 +10,7 @@ import style from '../GroupListItem.module.css';
 const TITLE = {
     MAIN_PROMO_CAMPAIGN: 'Основная промо-кампания',
     CHILD_PROMO_CAMPAIGNS: 'Связанная промо-кампания',
-    NONE_PROMO_CAMPAIGNS: 'Нет связанных промо-кампаний'
+    NONE_PROMO_CAMPAIGNS: 'Нет связанных промо-кампаний',
 };
 
 const GroupPromoCampaignListItem: React.FC<GroupPromoCampaignOrBundleListItemProps> = ({

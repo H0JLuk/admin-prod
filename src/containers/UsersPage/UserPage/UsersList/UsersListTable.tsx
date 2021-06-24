@@ -23,6 +23,7 @@ const LOCATION = 'Локация';
 const SALE_POINT = 'Точка продажи';
 const ROLE = 'Роль';
 const LOGIN_METHOD = 'Способ входа';
+const PARTNER = 'Партнёр';
 const EMPTY_TABLE = {
     firstMessagePart: 'Мы ничего не нашли.',
     secondMessagePart: 'Измените значение поиска и попробуйте еще раз',
@@ -57,31 +58,37 @@ const UsersListTable: React.FC<UsersListTableProps> = ({
             locale={{ emptyText: EmptyMessage }}
         >
             <Table.Column
-                width="20%"
+                width="15%"
                 key="login"
                 dataIndex="personalNumber"
                 render={(item) => columnRender(item, LOGIN)}
             />
             <Table.Column
-                width="20%"
+                width="15%"
                 key="locationName"
                 dataIndex="locationName"
                 render={(item) => columnRender(item, LOCATION)}
             />
             <Table.Column
-                width="20%"
+                width="15%"
                 key="salePointName"
                 dataIndex="salePointName"
                 render={(item) => columnRender(item, SALE_POINT)}
             />
             <Table.Column
-                width="25%"
+                width="15%"
+                key="parentUserName"
+                dataIndex="parentUserName"
+                render={(item) => columnRender(item || <i>Нет партнёра</i>, PARTNER)}
+            />
+            <Table.Column
+                width="15%"
                 key="loginType"
                 dataIndex="loginType"
                 render={(item: LoginTypes) => columnRender(LOGIN_TYPE[item], LOGIN_METHOD)}
             />
             <Table.Column
-                width="15%"
+                width="10%"
                 key="role"
                 dataIndex="role"
                 render={(userRole: ROLES) => columnRender(ROLES_RU[userRole], ROLE)}
@@ -110,7 +117,7 @@ const columnRender = (item: string, name: string) => (
 const columnRenderStatus = (blocked: UserInfo['tmpBlocked']) => (
     <div className={cn({
         [styles.blocked]: blocked,
-        [styles.active]: !blocked
+        [styles.active]: !blocked,
     })}>
         {blocked ? USER_BLOCKED : USER_ACTIVE}
     </div>

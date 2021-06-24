@@ -3,16 +3,19 @@ import moment from 'moment';
 import classNames from 'classnames';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import Header from '@components/Header/Header';
-import Button from '@components/Button/Button';
+import Header from '@components/Header';
+import Button from '@components/Button';
+import AutoCompleteComponent from '@components/AutoComplete';
+import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { getOffers } from '@apiServices/adminService';
+import { getSalePointsByText } from '@apiServices/promoCampaignService';
 import { getDzoList } from '@apiServices/dzoService';
 import { getPromoCodeStatistics } from '@apiServices/promoCodeService';
 import { getPromoCampaignList } from '@apiServices/promoCampaignService';
 import { DEFAULT_SLEEP_TIME } from '@constants/common';
 import { sleep } from '@utils/utils';
 import { downloadFile } from '@utils/helper';
-import { PromoCampaignDto, DzoDto } from '@types';
+import { PromoCampaignDto, DzoDto, SalePointDto } from '@types';
 
 import styles from './ReportsPage.module.css';
 
@@ -42,6 +45,8 @@ type ReportsPageState = {
     promoCampaignList: PromoCampaignDto[];
     filteredPromoCampaignList: PromoCampaignDto[];
     promoCampaignId: number | null;
+    salePointOfferId: number | null;
+    salePointPromoId: number | null;
     loading: boolean;
 };
 
@@ -61,7 +66,9 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
             promoCampaignList: [],
             filteredPromoCampaignList: [],
             promoCampaignId: null,
-            loading: false
+            loading: false,
+            salePointOfferId: null,
+            salePointPromoId: null,
         };
     }
 
@@ -96,11 +103,17 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         return true;
     };
 
-    getData = (func: (start: number | null, end: number | null) => Promise<BlobPart>, name: string) => async () => {
+    getData = (func: (start: number | null, end: number | null, salePointId?: number | null) => Promise<BlobPart>, name: string) => async () => {
         if (typeof(func) !== 'function') {
             return;
         }
-        const { startDate, endDate, isFiltered } = this.state;
+
+        const {
+            startDate,
+            endDate,
+            isFiltered,
+            salePointOfferId,
+        } = this.state;
 
         if (isFiltered && !this.checkDate(startDate, endDate)) {
             return;
@@ -110,7 +123,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         const endTime = isFiltered && endDate ? endDate.getTime() : null;
         try {
             this.setState({ loading: true });
-            func(startTime, endTime).then((data) => downloadFile(data, name));
+            func(startTime, endTime, salePointOfferId).then(data => downloadFile(data, name));
         } catch (e) {
             console.error(e);
         } finally {
@@ -128,15 +141,30 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
     };
 
     downloadPromoCodes = async () => {
-        const { startDate, endDate, dzoId, promoCampaignId } = this.state;
+        const {
+            startDate,
+            endDate,
+            dzoId,
+            promoCampaignId,
+            salePointPromoId,
+        } = this.state;
+
         if (!this.checkDate(startDate, endDate)) {
             return;
         }
+
         const momentStartDate = moment(startDate).format('DD.MM.YYYY');
         const momentEndDate = moment(endDate).format('DD.MM.YYYY');
+
         try {
             this.setState({ loading: true });
-            const blob = await getPromoCodeStatistics(momentStartDate, momentEndDate, dzoId!, promoCampaignId!);
+            const blob = await getPromoCodeStatistics(
+                momentStartDate,
+                momentEndDate,
+                dzoId!,
+                promoCampaignId!,
+                salePointPromoId!,
+            );
             downloadFile(blob, PROMOCODES_NAME);
         } catch (e) {
             console.error(e);
@@ -147,7 +175,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
     };
 
     handleDZOSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const dzoId = Number(event.target.value);
+        const dzoId = event.target.value ? Number(event.target.value) : null;
         const filteredPromoCampaignList = this.state.promoCampaignList.filter(item => item.dzoId === dzoId);
         if (this.optionRef.current) {
             this.optionRef.current.value = '';
@@ -155,16 +183,22 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         this.setState({ dzoId, filteredPromoCampaignList, promoCampaignId: null });
     };
 
-    handlePromoCampaignSelectChange = (event: ChangeEvent<HTMLSelectElement>) => this.setState({ promoCampaignId: +event.target.value });
+    handlePromoCampaignSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const promoCampaignId = event.target.value ? Number(event.target.value) : null;
+        this.setState({ promoCampaignId });
+    };
 
     handleFilterCheckboxChange = () => {
         this.setState(prevState => ({ isFiltered: !prevState.isFiltered }));
     };
 
+    handleSalePointPromoSelect = (data: SalePointDto | null) => this.setState({ salePointPromoId: data ? data.id : null });
+    handleSalePointOfferSelect = (data: SalePointDto | null) => this.setState({ salePointOfferId: data ? data.id : null });
+
     render() {
         const { startDate, endDate, isFiltered, loading } = this.state;
 
-        const picker =
+        const picker = (
             <div className={styles.container__block}>
                 <label className={styles.textFieldFormat}>
                     {START_DATE_LABLE}
@@ -185,7 +219,8 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                     selected={endDate}
                     onChange={date => { this.handleChangeDate(date as Date, false); }}
                 />
-            </div>;
+            </div>
+        );
 
         return (
             <div className={styles.container}>
@@ -193,15 +228,36 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                 <div className={styles.filesContainer}>
                     <h3>{EXCEL_FILES_TITLE}</h3>
                     <div className={styles.container__block}>
-                        <p className={styles.textFieldFormat}>
-                            {FILTER_TITLE}
-                        </p>
-                        <input
-                            className={styles.checkbox}
-                            type="checkbox"
-                            checked={isFiltered}
-                            onChange={this.handleFilterCheckboxChange}
-                        />
+                        <div className={styles.container__block__wrapper}>
+                            <p className={styles.textFieldFormat}>
+                                {FILTER_TITLE}
+                            </p>
+                            <input
+                                className={styles.checkbox}
+                                type="checkbox"
+                                checked={isFiltered}
+                                onChange={this.handleFilterCheckboxChange}
+                            />
+                        </div>
+                        <div className={styles.autocomplete}>
+                            Точка продажи<br />
+                            <AutoCompleteComponent<SalePointDto>
+                                onSelect={this.handleSalePointOfferSelect}
+                                requestFunction={getSalePointsByText}
+                                placeholder={UNSPECIFIED_TITLE}
+                                renderOptionStringValue={
+                                    ({ name, description }) => description ? `${name}, ${description}`: name
+                                }
+                                renderOptionItemLabel={({ name, parentName }: any, value: string) => (
+                                    <AutocompleteOptionLabel
+                                        name={name}
+                                        parentName={parentName}
+                                        highlightValue={value}
+                                        highlightClassName={styles.highlight}
+                                    />
+                                )}
+                            />
+                        </div>
                     </div>
 
                     {isFiltered ? picker : null}
@@ -241,6 +297,25 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                                     }
                                 </select>
                             </p>
+                            <div className={styles.autocomplete}>
+                                Точка продажи<br />
+                                <AutoCompleteComponent<SalePointDto>
+                                    onSelect={this.handleSalePointPromoSelect}
+                                    requestFunction={getSalePointsByText}
+                                    placeholder={UNSPECIFIED_TITLE}
+                                    renderOptionStringValue={
+                                        ({ name, description }) => description ? `${name}, ${description}`: name
+                                    }
+                                    renderOptionItemLabel={({ name, parentName }: any, value: string) => (
+                                        <AutocompleteOptionLabel
+                                            name={name}
+                                            parentName={parentName}
+                                            highlightValue={value}
+                                            highlightClassName={styles.highlight}
+                                        />
+                                    )}
+                                />
+                            </div>
                         </div>
                         {picker}
                         <div className={styles.container__block}>

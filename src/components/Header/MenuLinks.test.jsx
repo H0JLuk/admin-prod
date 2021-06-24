@@ -7,23 +7,23 @@ import { MemoryRouter } from 'react-router';
 
 jest.mock('../../api/services/sessionService', () => ({
     getAppCode: jest.fn(),
-    getRole: jest.fn()
+    getRole: jest.fn(),
 }));
 
 jest.mock('../../constants/menuByRole', () => ({
-    resolveMenuItemsByRoleAndAppCode: jest.fn()
+    resolveMenuItemsByRoleAndAppCode: jest.fn(),
 }));
 
 const TEST_ITEM = {
     label: 'TEST_ITEM',
-    path: 'TEST_PATH'
+    path: 'TEST_PATH',
 };
 
 const TEST_RESOLVE_MENU_ITEMS = [
     TEST_ITEM.label,
     [
         { label: TEST_ITEM.label, path: TEST_ITEM.path },
-    ]
+    ],
 ];
 
 describe('<MenuLinks /> test', () => {

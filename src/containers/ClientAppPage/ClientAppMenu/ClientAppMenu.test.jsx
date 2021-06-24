@@ -40,7 +40,7 @@ describe('<ClientAppMenu /> test', () => {
             ...props,
             history: {
                 push: jest.fn(),
-            }
+            },
         };
         const ClientAppMenuComponent = shallow(<ClientAppMenu { ...updateProps } />);
 

@@ -3,10 +3,11 @@ import { downloadFileFunc } from '../../utils/helper';
 import { Api } from '../apiClient';
 import { getReqOptions } from './index';
 
-export function getPromoCodeStatistics(start: string, end: string, dzoId: number, promoCampaignId: number) {
-    const dzo = dzoId ? `&dzoId=${dzoId}` : '';
-    const promoCampaign = promoCampaignId ? `&promoCampaignId=${promoCampaignId}` : '';
-    return Api.get<Blob>(`/admin/promoCampaign/promoCode/statistic/csv?start=${start}&end=${end}${dzo}${promoCampaign}`, getReqOptions('blob'), 'blob');
+export function getPromoCodeStatistics(start: string, end: string, dzoId: number, promoCampaignId: number, salePointId?: number) {
+    const dzo = typeof dzoId === 'number' ? `&dzoId=${dzoId}` : '';
+    const promoCampaign = typeof promoCampaignId === 'number' ? `&promoCampaignId=${promoCampaignId}` : '';
+    const salePoint = typeof salePointId === 'number' ? `&salePointId=${salePointId}` : '';
+    return Api.get<Blob>(`/admin/promoCampaign/promoCode/statistic/csv?start=${start}&end=${end}${dzo}${promoCampaign}${salePoint}`, getReqOptions('blob'), 'blob');
 }
 
 export async function getUnissuedPromoCodeStatistics(promoCampaignId: number, promoCodeType: string) {

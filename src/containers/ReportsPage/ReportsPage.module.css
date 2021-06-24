@@ -18,6 +18,10 @@
     padding: 0px 0px 20px;
 }
 
+.container__block__wrapper {
+    margin-right: 30px;
+}
+
 .container__button {
     margin-right: 30px;
     padding: 10px 20px;
@@ -38,6 +42,7 @@
 
 .checkbox {
     margin-left: 5px;
+    margin-bottom: 10px;
     width: 16px;
     height: 16px;
 }
@@ -184,4 +189,13 @@
     margin-top: 10px;
     color: #f6650a;
     font-family: Roboto, sans-serif;
+}
+
+.highlight {
+    color: #09a552;
+}
+
+.autocomplete {
+    width: 100%;
+    max-width: 300px;
 }

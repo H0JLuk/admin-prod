@@ -43,7 +43,7 @@ jest.mock('antd', () => ({
     ...jest.requireActual('antd'),
     message: {
         error: jest.fn(),
-    }
+    },
 }));
 
 const mockHistoryPush = jest.fn();

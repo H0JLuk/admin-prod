@@ -27,7 +27,7 @@
 
 .form {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     max-width: 900px;
 }
 

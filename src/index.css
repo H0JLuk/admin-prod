@@ -31,6 +31,14 @@ input.ant-input:placeholder-shown ~ .ant-input-suffix .anticon-close-circle {
     background-color: #09a552;
 }
 
+.ant-select-open .ant-select-arrow {
+    transform: rotate(-180deg);
+}
+
+.ant-select-arrow {
+    transition: transform 0.3s;
+}
+
 .ant-notification.ant-notification-topRight {
     overflow-y: scroll;
     overflow-x: hidden;

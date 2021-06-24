@@ -62,7 +62,6 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
     const copyDzoList = useRef<DzoDto[]>([]);
     const [select, setSelect] = useState(false);
     const [selectedItems, setSelectedItems] = useState<ISelectedItems>(defaultSelected);
-    const [isModalView, setIsModalView] = useState(false);
     const dzoCodes = useRef<string[]>([]);
 
     const onAddDzo = () => history.push(generatePath(`${matchPath}${DZO_PAGES.ADD_DZO}`), { dzoCodes: dzoCodes.current });
@@ -73,7 +72,7 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
             const requests = Promise.all([getDzoList(), getAllDzoList()]);
             const [
                 { dzoDtoList = [] },
-                { dzoDtoList: allDzo = [] }
+                { dzoDtoList: allDzo = [] },
             ] = await requestsWithMinWait(requests, 0);
             dzoCodes.current = allDzo.map(({ dzoCode }) => dzoCode);
             copyDzoList.current = dzoDtoList;
@@ -143,10 +142,6 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
         clearSelectedItems();
     };
 
-    const toggleModal = () => {
-        setIsModalView(!isModalView);
-    };
-
     const buttons: ButtonProps[] = [];
 
     if (select) {
@@ -202,29 +197,27 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
                                     {BUTTON_TEXT.CHOSEN} {selectedItems.rowKeys.length}
                                 </span>
                             </div>
-                            <Button
-                                disabled={!selectedItems.rowKeys.length}
-                                danger
-                                type="primary"
-                                onClick={toggleModal}
+                            <TableDeleteModal<DzoDto>
+                                listNameKey="dzoName"
+                                listIdForRemove={selectedItems.rowKeys}
+                                sourceForRemove={selectedItems.rowValues}
+                                deleteFunction={deleteDzo}
+                                refreshTable={refreshTable}
+                                modalSuccessTitle={MODAL_SUCCESS_TITLE}
+                                modalTitle={MODAL_TITLE}
                             >
-                                {BUTTON_TEXT.DELETE}
-                            </Button>
+                                <Button
+                                    type="primary"
+                                    disabled={!selectedItems.rowKeys.length}
+                                    danger
+                                >
+                                    {BUTTON_TEXT.DELETE}
+                                </Button>
+                            </TableDeleteModal>
                         </div>
                     </div>
                 )}
             </div>
-            {<TableDeleteModal<DzoDto>
-                listNameKey="dzoName"
-                listIdForRemove={selectedItems.rowKeys}
-                sourceForRemove={selectedItems.rowValues}
-                modalClose={toggleModal}
-                deleteFunction={deleteDzo}
-                refreshTable={refreshTable}
-                modalSuccessTitle={MODAL_SUCCESS_TITLE}
-                modalTitle={MODAL_TITLE}
-                visible={isModalView}
-            />}
         </>
     );
 };

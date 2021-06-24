@@ -1,9 +1,12 @@
 import React from 'react';
 import { generatePath } from 'react-router-dom';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import UserForm, { LOGIN_FIELD } from './UserForm';
 import { getUserAppsCheckboxes } from './UserFormHelper';
-import { getCurrUserInteractionsForOtherUser } from '../../../constants/permissions';
+import {
+    getCurrUserInteractionsForOtherUser,
+    getCommonPermissionsByRole,
+} from '../../../constants/permissions';
 import { getUser, unblockUser, resetUser, removeUser, saveUser, addUser } from '../../../api/services/usersService';
 import { getActiveClientApps } from '../../../api/services/clientAppService';
 import { sleep } from '../../../setupTests';
@@ -11,7 +14,16 @@ import { BUTTON, INFO_USER_BUTTONS } from './UserFormButtonGroup/UserFormButtonG
 import { customNotifications } from '../../../utils/notifications';
 import { userTestData, clientAppListTestResponse, searchSalePointTestData } from '../../../../__tests__/constants';
 import { getResultsByTextAndType, createSearchDataAndPassLocation } from '../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper';
+import { confirmModal } from '../../../utils/utils';
+import { getSalePointByText } from '../../../api/services/promoCampaignService';
 
+const mockSalePointSelect = {
+    ...searchSalePointTestData[0],
+    type: {
+        ...searchSalePointTestData[0].type,
+        kind: 'INTERNAL',
+    },
+};
 jest.mock(
     '../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteLocationAndSalePoint',
     () => ({ onLocationChange, onSalePointChange, error, locationId }) => (
@@ -19,7 +31,7 @@ jest.mock(
             { error.salePoint }
             <span data-testid="locationId">{ locationId }</span>
             <button data-testid="location" onClick={ () => onLocationChange({ id: 2, name: 'testName' }) }>location</button>
-            <button data-testid="salePoint" onClick={ () => onSalePointChange({ id: 3 }) }>salePoint</button>
+            <button data-testid="salePoint" onClick={ () => onSalePointChange(mockSalePointSelect) }>salePoint</button>
         </>
     )
 );
@@ -32,13 +44,22 @@ jest.mock('../../../components/Checkboxes/Checkboxes', () => ({ checkboxesData, 
     </div>
 ));
 
+jest.mock('../../../api/services/promoCampaignService', () => ({
+    getSalePointByText: jest.fn(),
+}));
+
 jest.mock('../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper', () => ({
     getResultsByTextAndType: jest.fn(),
-    createSearchDataAndPassLocation: jest.fn()
+    createSearchDataAndPassLocation: jest.fn(),
 }));
 
 jest.mock('../../../api/services/clientAppService', () => ({
     getActiveClientApps: jest.fn(),
+}));
+
+jest.mock('../../../utils/utils', () => ({
+    ...jest.requireActual('../../../utils/utils'),
+    confirmModal: jest.fn(),
 }));
 
 jest.mock('../../../constants/permissions', () => {
@@ -48,6 +69,7 @@ jest.mock('../../../constants/permissions', () => {
         __esModule: true,
         ...originalModule,
         getCurrUserInteractionsForOtherUser: jest.fn(),
+        getCommonPermissionsByRole: jest.fn(),
     };
 });
 
@@ -79,7 +101,7 @@ jest.mock('react-router-dom', () => ({
         push: mockHistoryPush,
         replace: jest.fn(),
     }),
-    generatePath: jest.fn()
+    generatePath: jest.fn(),
 }));
 
 const TEST_PASSWORD = 'TEST_PASSWORD_123';
@@ -103,9 +125,9 @@ const SearchData = {
                 deleted: false,
             },
             parentName: '8626',
-        }
+        },
     ],
-    value: 'Московская область, Москва'
+    value: 'Московская область, Москва',
 };
 
 const LocationData = searchSalePointTestData[0].location;
@@ -118,7 +140,7 @@ const TEST_PASSWORDS = {
 const TEST_USER_DATA = {
     FALSE_LOGIN: '-=-',
     LOGIN: '123456',
-    SALE_POINT: '1232'
+    SALE_POINT: '1232',
 };
 
 const CASE_TYPES = {
@@ -140,6 +162,11 @@ const TEST_INTERACTIONS = {
     unlockUser: true,
 };
 
+const TEST_COMMON_PERMISSIONS = {
+    canSetUserRole: true,
+    canSetUserPartner: true,
+};
+
 const TEST_INTERACTIONS_FALSE = {
     canSelectUserInTable: false,
     deleteUser: false,
@@ -155,7 +182,7 @@ const TEST_CHECKBOX = {
         disabled: false,
         id: 9,
         label: 'Партнеры',
-    }
+    },
 };
 
 describe('<UserForm /> test', () => {
@@ -167,7 +194,11 @@ describe('<UserForm /> test', () => {
         getActiveClientApps.mockResolvedValue(clientAppListTestResponse.list);
         getUser.mockResolvedValue(userTestData);
         getCurrUserInteractionsForOtherUser.mockReturnValue(TEST_INTERACTIONS);
-        getUserAppsCheckboxes.mockReturnValueOnce(TEST_CHECKBOX);
+        getCommonPermissionsByRole.mockReturnValue(TEST_COMMON_PERMISSIONS);
+        getUserAppsCheckboxes.mockReturnValue(TEST_CHECKBOX);
+        getSalePointByText.mockReturnValue({ ...searchSalePointTestData[0], id: userTestData.salePointId });
+        cleanup();
+        document.body.innerHTML = '';
     });
 
     it('should be mount snap with useEffect', async () => {
@@ -227,12 +258,17 @@ describe('<UserForm /> test', () => {
         expect(generatePath).toBeCalledTimes(1);
     });
 
-    it('should call delete function', async () => {
+    it('should call confirmModal and delete function', async () => {
         Component();
         await sleep();
         expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
         fireEvent.click(screen.getByText(BUTTON.DELETE_TEXT));
         await sleep();
+        expect(confirmModal).toBeCalledTimes(1);
+
+        await act(async () => {
+            await confirmModal.mock.calls[0][0].onOk();
+        });
         expect(removeUser).toBeCalledTimes(1);
     });
 
@@ -243,12 +279,39 @@ describe('<UserForm /> test', () => {
         await sleep();
         expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
         fireEvent.click(screen.getByText(BUTTON.DELETE_TEXT));
+        expect(confirmModal).toBeCalledTimes(1);
+
+        await act(async () => {
+            await confirmModal.mock.calls[0][0].onOk();
+        });
         await sleep();
         expect(removeUser).toBeCalledTimes(1);
         expect(customNotifications.error).toBeCalledTimes(1);
     });
 
+    it('should call catch in onDelete function', async () => {
+        getUser.mockResolvedValue({ ...userTestData, id: null });
+        Component();
+        await sleep();
+        expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON.DELETE_TEXT));
+        expect(confirmModal).toBeCalledTimes(1);
+
+        await act(async () => {
+            await confirmModal.mock.calls[0][0].onOk();
+        });
+        expect(removeUser).toBeCalledTimes(1);
+    });
+
     it('should call submit function', async () => {
+        getSalePointByText.mockReturnValue({
+            ...searchSalePointTestData[0],
+            id: userTestData.salePointId,
+            type: {
+                ...searchSalePointTestData[0].type,
+                kind: 'INTERNAL',
+            },
+        });
         saveUser.mockResolvedValue(TEST_PASSWORDS);
         Component(CASE_TYPES.EDIT);
         await sleep();
@@ -258,11 +321,18 @@ describe('<UserForm /> test', () => {
         await sleep();
 
         expect(saveUser).toBeCalledTimes(1);
-        expect(screen.getByText(/обновлены/i)).toBeTruthy();
         expect(generatePath).toBeCalledTimes(1);
     });
 
     it('should call submit function with catch', async () => {
+        getSalePointByText.mockReturnValue({
+            ...searchSalePointTestData[0],
+            id: userTestData.salePointId,
+            type: {
+                ...searchSalePointTestData[0].type,
+                kind: 'INTERNAL',
+            },
+        });
         saveUser.mockRejectedValue(new Error('Error'));
         Component(CASE_TYPES.EDIT);
         await sleep();
@@ -271,6 +341,7 @@ describe('<UserForm /> test', () => {
         fireEvent.click(screen.getByText(BUTTON.SAVE_EDIT_USER_TEXT));
         await sleep();
         expect(saveUser).toBeCalledTimes(1);
+        expect(generatePath).toBeCalledTimes(0);
     });
 
     it('should call check validate if data submit', async () => {
@@ -281,27 +352,22 @@ describe('<UserForm /> test', () => {
         await act(async () => {
             fireEvent.click(screen.getByText(BUTTON.ADD_USER_TEXT));
         });
-
         expect(screen.getByText(/Укажите/i)).toBeTruthy();
 
         await act(async () => {
             fireEvent.change(screen.getByPlaceholderText(LOGIN_FIELD.placeholder), { target: { value: TEST_USER_DATA.FALSE_LOGIN } });
         });
-
         await act(async () => {
             fireEvent.click(screen.getByText(BUTTON.ADD_USER_TEXT));
         });
-
         expect(screen.getByText(/латинские/i)).toBeTruthy();
 
         await act(async () => {
             fireEvent.change(screen.getByPlaceholderText(LOGIN_FIELD.placeholder), { target: { value: TEST_USER_DATA.LOGIN } });
         });
-
         await act(async () => {
             fireEvent.click(screen.getByText(BUTTON.ADD_USER_TEXT));
         });
-
         expect(screen.getByText(/продажи/i)).toBeTruthy();
     });
 
@@ -409,15 +475,6 @@ describe('<UserForm /> test', () => {
         expect(mockHistoryPush).toBeCalledTimes(1);
         expect(mockHistoryPush).toBeCalledWith(TEST_PROPS.matchPath);
         expect(console.warn).toBeCalled();
-    });
-
-    it('should call catch in onDelete function', async () => {
-        getUser.mockResolvedValue({ ...userTestData, id: null });
-        Component();
-        await sleep();
-        expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
-        fireEvent.click(screen.getByText(BUTTON.DELETE_TEXT));
-        expect(removeUser).toBeCalledTimes(1);
     });
 
     it('should redirect on first useEffect if userId is wrong', async () => {

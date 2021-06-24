@@ -1,10 +1,10 @@
 import React from 'react';
 import { generatePath, useHistory, useLocation } from 'react-router-dom';
 import { Col, Row, Space, Button } from 'antd';
-import Header from '../../../components/Header/Header';
-import { DZO_PAGES } from '../../../constants/route';
-import { deleteDzo } from '../../../api/services/dzoService';
-import { confirmModal, errorModal, successModal } from '../../../utils/utils';
+import Header from '@components/Header';
+import { DZO_PAGES } from '@constants/route';
+import { deleteDzo } from '@apiServices/dzoService';
+import { confirmModal, errorModal, successModal } from '@utils/utils';
 import { ImageBlock } from '../../PromoCampaignPage/PromoCampaign/PromoCampaignInfo/Steps/Templates/TemplateBlocks';
 import {
     DELETE_BUTTON_LABEL,
@@ -127,7 +127,7 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                             </Row>
                         ))}
                         <Row className={styles.bannersRow} gutter={24}>
-                            {DZO_BANNERS_TEMPLATE.map(({ type, label }: IDzoBannersRow) =>
+                            {DZO_BANNERS_TEMPLATE.map(({ type, label }: IDzoBannersRow) => (
                                 <Col span={8} key={type}>
                                     {normalizedBannerList[type] ? (
                                         <ImageBlock
@@ -144,7 +144,7 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                                         </>
                                     )}
                                 </Col>
-                            )}
+                            ))}
                         </Row>
                         <Row gutter={[24, 16]} className={styles.dzoInfoRow}>
                             {applicationList.map(dzoApp =>
@@ -156,7 +156,7 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                                         type={type}
                                         colSpan={12}
                                     />
-                                ))
+                                )),
                             )}
                         </Row>
                         <Row gutter={24}>

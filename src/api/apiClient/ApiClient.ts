@@ -10,7 +10,7 @@ const defaultOptions = {
     headers: {
         Accept: APPLICATION_JSON_TYPE,
         'Content-Type': APPLICATION_JSON_TYPE,
-    }
+    },
 };
 
 export default class ApiClient {
@@ -39,7 +39,7 @@ export default class ApiClient {
             }
             const response = await fetch(urlWithParams.toString(), {
                 ...mergedOptions,
-                body
+                body,
             });
 
             if (response.ok) {
@@ -73,7 +73,7 @@ export default class ApiClient {
     get<R = any>(
         url: string,
         reqOptions: ApiRequestOptions,
-        responseType?: XMLHttpRequestResponseType
+        responseType?: XMLHttpRequestResponseType,
     ): Promise<R> {
         return this.request(url, reqOptions, responseType);
     }
@@ -82,12 +82,12 @@ export default class ApiClient {
         url: string,
         body: ApiRequestBody,
         reqOptions = {} as ApiRequestOptions,
-        responseType?: XMLHttpRequestResponseType
+        responseType?: XMLHttpRequestResponseType,
     ): Promise<R> {
         return this.request(url, {
             ...reqOptions,
             method: 'POST',
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         }, responseType);
     }
 
@@ -95,12 +95,12 @@ export default class ApiClient {
         url: string,
         body: Blob | FormData,
         reqOptions = {} as ApiRequestOptions,
-        responseType: XMLHttpRequestResponseType = 'json'
+        responseType: XMLHttpRequestResponseType = 'json',
     ): Promise<R> {
         return this.request(url, {
             ...reqOptions,
             method: 'POST',
-            body
+            body,
         }, responseType);
     }
 
@@ -108,7 +108,7 @@ export default class ApiClient {
         return this.request(url, {
             ...reqOptions,
             method: 'PUT',
-            body
+            body,
         });
     }
 
@@ -116,14 +116,14 @@ export default class ApiClient {
         return this.request(url, {
             ...reqOptions,
             method: 'PUT',
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
     }
 
     delete<R = any>(url: string, reqOptions: ApiRequestOptions): Promise<R> {
         return this.request(url, {
             ...reqOptions,
-            method: 'DELETE'
+            method: 'DELETE',
         });
     }
 

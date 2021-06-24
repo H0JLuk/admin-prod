@@ -1,7 +1,8 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import UserFormButtonGroup, { BUTTON, INFO_USER_BUTTONS } from './UserFormButtonGroup';
 import { LOGIN_TYPES_ENUM } from '../../../../constants/loginTypes';
+import { userTestData } from '../../../../../__tests__/constants';
 
 const CASE_TYPES = {
     NEW: 'new',
@@ -17,6 +18,7 @@ const TEST_ACTION_PROPS = {
     editUser: true,
     resetUserPassword: true,
     unlockUser: true,
+    canGenerateQRCode: true,
 };
 
 const TEST_ACTION_PROPS_FALSE = {
@@ -24,6 +26,7 @@ const TEST_ACTION_PROPS_FALSE = {
     editUser: false,
     resetUserPassword: false,
     unlockUser: false,
+    canGenerateQRCode: false,
 };
 
 const TEST_PROPS = {
@@ -34,16 +37,17 @@ const TEST_PROPS = {
     onSubmit: jest.fn(),
     onResetPassword: jest.fn(),
     onEditUser: jest.fn(),
+    userData: userTestData,
     userLoginType: LOGIN_TYPE,
     actionPermissions: TEST_ACTION_PROPS,
 };
 
 describe('<UserFormButtonGroup /> test', () => {
-    const Component = (type = CASE_TYPES.EDIT, blocked = false) => mount(
+    const Component = (type = CASE_TYPES.EDIT, tmpBlocked = false) => mount(
         <UserFormButtonGroup
             { ...TEST_PROPS }
+            userData={ { ...TEST_PROPS.userData, tmpBlocked } }
             type={ type }
-            userBlocked={ blocked }
         />
     );
     const ComponentEdit = Component();
@@ -101,6 +105,22 @@ describe('<UserFormButtonGroup /> test', () => {
         const ComponentInfo = Component(CASE_TYPES.INFO, true);
         const ComponentInfoButtons = ComponentInfo.find('button');
         expect(ComponentInfoButtons.at(0).text()).toBe(INFO_USER_BUTTONS.UNBLOCK);
+    });
+
+    it('should render generateQR button', () => {
+        const wrapper = shallow(
+            <UserFormButtonGroup
+                { ...TEST_PROPS }
+                userData={ {
+                    ...TEST_PROPS.userData,
+                    loginType: LOGIN_TYPES_ENUM.DIRECT_LINK,
+                } }
+
+                type="info"
+            />
+        );
+
+        expect(wrapper.find('UserGenerateQRModal')).toHaveLength(1);
     });
 
     it('should be visible type info with action permissions false and 0 buttons', () => {

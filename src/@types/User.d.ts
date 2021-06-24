@@ -24,8 +24,9 @@ export type UserInfo = {
     id: number;
     locationId: number;
     locationName: string;
-    loginType: LoginTypes;
+    loginType: LoginTypes | null;
     personalNumber: string;
+    parentUserName: string | null;
     role: ROLES;
     salePointId: number;
     salePointName: string;
@@ -34,9 +35,12 @@ export type UserInfo = {
 };
 
 export type RegisterUserRequest = {
+    role?: ROLES;
+    loginType?: LoginTypes;
     clientAppIds?: number[];
     personalNumber: string;
-    salePointId: number;
+    salePointId?: number;
+    parent: string | null;
 };
 
 export type UpdateUserRequest = Omit<RegisterUserRequest, 'personalNumber'>;
@@ -50,6 +54,7 @@ export type ResetUserPassword = DefaultApiResponse & {
 };
 
 export type SaveUserResponse = DefaultApiResponse & {
+    userName: string;
     generatedPassword: string;
 };
 
@@ -61,6 +66,17 @@ export type UpdateUsersSalePoint = {
 export type LoginResponse = {
     authority: ROLES;
     availableApps: ClientAppDto[];
-    loginType: string; // TODO: to enum;
+    loginType: LoginTypes;
     token: string;
+};
+
+export type DirectLinkRequest = {
+    clientAppCode: string;
+    userId: number;
+};
+
+export type QRRequest = {
+    clientAppCode: string;
+    parentId: number;
+    userIds: number[];
 };

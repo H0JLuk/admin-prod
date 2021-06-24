@@ -1,20 +1,20 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import PromoCampaignVisibilitySettingForm from './PromoCampaignVisibilitySettingForm';
-import { visibilitySettingLocation as location, visibilitySettingSalePoint as salePoint } from '../../../../../../__tests__/constants';
+import { visibilitySettingLocation as location, salePointTest as salePoint } from '../../../../../../__tests__/constants';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
 import { act } from '@testing-library/react';
 
 
 jest.mock('../../../../../api/services/promoCampaignService', () => ({
-    addVisibilitySetting: jest.fn()
+    addVisibilitySetting: jest.fn(),
 }));
 
 describe('<PromoCampaignVisibilitySettingForm /> tests', () => {
     const props = {
         onCancel: jest.fn(),
         onSubmit: jest.fn(),
-        match: { params: { promoCampaignId: 11 } }
+        match: { params: { promoCampaignId: 11 } },
     };
 
     it('PromoCampaignVisibilitySettingForm snapshot', () => {

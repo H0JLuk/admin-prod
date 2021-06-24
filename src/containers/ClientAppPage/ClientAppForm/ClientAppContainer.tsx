@@ -171,7 +171,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                 ...result,
                 [key]: newParams[key] ?? currentHomePageTheme[key],
             }),
-            { ...currentHomePageTheme }
+            { ...currentHomePageTheme },
         );
 
         designSettings.current = { ...designSettings.current, ...newParams };
@@ -232,7 +232,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
 
 export default ClientAppContainer;
 
-function doDesignSettings (settings: ISettings, displayName: string): IDesignSettings {
+function doDesignSettings(settings: ISettings, displayName: string): IDesignSettings {
     const { vitrina_theme, gradient, design_elements: designElementsString, ...restSettings } = settings;
     const design_elements: string[] = designElementsString && JSON.parse(designElementsString);
     const home_page_theme = { gradient, design_elements, vitrina_theme } as IBanner;
@@ -242,7 +242,7 @@ function doDesignSettings (settings: ISettings, displayName: string): IDesignSet
     return result;
 }
 
-export function doPropertiesSettings (settings: ISettings, { id, displayName, code, name }: IDoPropertiesSettings): IPropertiesSettings {
+export function doPropertiesSettings(settings: ISettings, { id, displayName, code, name }: IDoPropertiesSettings): IPropertiesSettings {
     const { mechanics, login_types, notification_types, ...restSettings } = settings;
     const mechanicsCheckBox = mechanics && JSON.parse(mechanics);
     const loginCheckBoxes = login_types && JSON.parse(login_types);

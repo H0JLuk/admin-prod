@@ -100,7 +100,7 @@ export const DisableBannersSwitch: React.FC<DisableBannersSwitchProps> = ({
         onChange(
             checked
                 ? value.filter(el => el !== controlledValue)
-                : [...value, controlledValue]
+                : [...value, controlledValue],
         );
     };
 
@@ -196,7 +196,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                         ) {
                                             const { promoCampaignDtoList = [] } = await getExactFilteredPromoCampaignList(
                                                 value,
-                                                appCode
+                                                appCode,
                                             );
 
                                             if (promoCampaignDtoList.length) {
@@ -260,8 +260,9 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                             required: (
                                                 getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN
                                             ),
-                                            message: 'Укажите ссылку', },
-                                        urlCheckRule
+                                            message: 'Укажите ссылку',
+                                        },
+                                        urlCheckRule,
                                     ]}
                                     initialValue={decodeURI(state.webUrl || '')}
                                 >
@@ -475,7 +476,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                     {
                                         ...getPatternAndMessage('promoCampaign', 'detailsButtonLabel'),
                                         validateTrigger: 'onSubmit',
-                                    }
+                                    },
                                 ]}
                             >
                                 <Input

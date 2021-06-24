@@ -35,8 +35,8 @@ describe('<PromoCodeStatisticModal /> test', () => {
                 promoCampaignStatisticsDto: {
                     campaignId: 1,
                     issuedPromoCodesNumber: 2,
-                    totalPromoCodesNumber: 3
-                }
+                    totalPromoCodesNumber: 3,
+                },
             });
         mount(<PromoCodeStatisticModal { ...initialProps } />);
         await act(async () => {
@@ -50,8 +50,8 @@ describe('<PromoCodeStatisticModal /> test', () => {
                 promoCampaignStatisticsDto: {
                     campaignId: 1,
                     issuedPromoCodesNumber: 2,
-                    totalPromoCodesNumber: 3
-                }
+                    totalPromoCodesNumber: 3,
+                },
             });
         mount(<PromoCodeStatisticModal { ...{ ...initialProps, open: false } } />);
         await act(async () => {

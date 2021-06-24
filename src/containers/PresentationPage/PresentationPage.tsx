@@ -4,29 +4,29 @@ import {
     addLanding,
     deleteLanding,
     getLandingList,
-    updateLanding
+    updateLanding,
 } from '@apiServices/landingService';
 import { getStaticUrl } from '@apiServices/settingsService';
 import { LANDING_EDIT_FORM } from '@components/Form/forms';
 import { Errors, getErrorText } from '@constants/errors';
 import CustomModal from '@components/CustomModal/CustomModal';
-import LandingItem from '@components/LandingItem/LandingItem';
+import LandingItem from '@components/LandingItem';
 import { movementDirections } from '@constants/movementDirections';
 import Form from '@components/Form';
-import Button from '@components/Button/Button';
+import Button from '@components/Button';
 import cross from '@imgs/cross.svg';
 import styles from './PresentationPage.module.css';
 import { populateFormWithData } from '@components/Form/formHelper';
 import ButtonLabels from '@components/Button/ButtonLables';
 import { getAppCode } from '@apiServices/sessionService';
-import Header from '@components/Header/Header';
+import Header from '@components/Header';
 import { Empty, message } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
 import { LandingDto, SaveLandingRequest } from '@types';
 
 const LANDINGS_EMPTY = {
     firstMessagePart: 'Для этой витрины пока нет лендингов',
-    secondMessagePart: 'Чтобы добавить лендинг нажмите кнопку "Добавить лендинг"'
+    secondMessagePart: 'Чтобы добавить лендинг нажмите кнопку "Добавить лендинг"',
 };
 const LANDINGS_GET_ERROR = 'Ошибка получения лендингов!';
 const LANDINGS_DELETE_ERROR = 'Ошибка удаления лендинга!';
@@ -80,7 +80,7 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
             landings: [],
             isOpen: false,
             formError: null,
-            staticServerUrl: getStaticUrl() as string
+            staticServerUrl: getStaticUrl() as string,
         };
     }
 
@@ -130,7 +130,7 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
     };
 
     handleEdit = (landingId: number, header: string, description: string, imageUrl: string) => this.setState({
-        editingLanding: { landingId, header, description, imageUrl }
+        editingLanding: { landingId, header, description, imageUrl },
     }, this.openModal);
 
     renderModalForm = () => {
@@ -139,7 +139,7 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
             landingId: editingLanding.landingId as string,
             header: editingLanding.header,
             description: editingLanding.description,
-            imageUrl: editingLanding.imageUrl
+            imageUrl: editingLanding.imageUrl,
         }) : LANDING_EDIT_FORM;
         return (
             <div className={styles.modalForm}>

@@ -101,7 +101,7 @@ describe('PromoCampaignFormUtils tests', () => {
                     type: 'DESCRIPTION',
                     value: 'Доставка забытого горошка для оливье за 15 мин',
                     appCode: 'test',
-                }
+                },
             ]);
             expect(newPromoCampaignText).toHaveBeenCalledTimes(2);
         });
@@ -131,7 +131,7 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(newCreatePromoCampaignBanner).toBeCalledTimes(2);
             const [
                 [firstFormData, firstAppCode],
-                [secondFormData, secondCode]
+                [secondFormData, secondCode],
             ] = (newCreatePromoCampaignBanner as jest.Mock).mock.calls;
             expect(firstFormData.get('image').name).toBe('test-filename0.jpg');
             expect(secondFormData.get('image').name).toBe('test-filename1.jpg');
@@ -239,7 +239,7 @@ describe('PromoCampaignFormUtils tests', () => {
                         value: 'Доставка забытого горошка для оливье за 15 мин',
                     },
                     appCode: 'code',
-                }
+                },
             ]);
             expect(newPromoCampaignText).toHaveBeenCalledTimes(2);
             expect(newEditPromoCampaignText).toHaveBeenCalledTimes(0);
@@ -258,9 +258,9 @@ describe('PromoCampaignFormUtils tests', () => {
                         type: 'HEADER',
                         promoCampaignId: 24,
                         value: 'Скидка 300 ₽ при заказе от 500 ₽ new',
-                        id: 78
+                        id: 78,
                     },
-                    appCode: 'code'
+                    appCode: 'code',
                 },
                 {
                     id: 79,
@@ -268,10 +268,10 @@ describe('PromoCampaignFormUtils tests', () => {
                         type: 'DESCRIPTION',
                         promoCampaignId: 24,
                         value: 'Доставка забытого горошка для оливье за 15 мин new',
-                        id: 79
+                        id: 79,
                     },
-                    appCode: 'code'
-                }
+                    appCode: 'code',
+                },
             ]);
             expect(newPromoCampaignText).toHaveBeenCalledTimes(0);
             expect(newEditPromoCampaignText).toHaveBeenCalledTimes(2);
@@ -312,7 +312,7 @@ describe('PromoCampaignFormUtils tests', () => {
                         value: 'new text',
                     },
                     appCode: 'code',
-                }
+                },
             ]);
             expect(newPromoCampaignText).toHaveBeenCalledTimes(1);
             expect(newEditPromoCampaignText).toHaveBeenCalledTimes(0);
@@ -361,7 +361,7 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(editTextBanners(newTexts, oldPromoCampaign, 'code')).toEqual([
                 {
                     text: { type: 'HEADER', promoCampaignId: 24, value: 'new header' },
-                    appCode: 'code'
+                    appCode: 'code',
                 },
                 {
                     id: 79,
@@ -369,10 +369,10 @@ describe('PromoCampaignFormUtils tests', () => {
                         type: 'DESCRIPTION',
                         promoCampaignId: 24,
                         value: 'edit description',
-                        id: 79
+                        id: 79,
                     },
-                    appCode: 'code'
-                }
+                    appCode: 'code',
+                },
             ]);
             expect(newPromoCampaignText).toHaveBeenCalledTimes(1);
             expect(newEditPromoCampaignText).toHaveBeenCalledTimes(1);
@@ -391,10 +391,10 @@ describe('PromoCampaignFormUtils tests', () => {
         beforeEach(() => {
             (deletePromoCampaignBanner as jest.Mock).mockImplementation(id => `delete ${id}`);
             (newEditPromoCampaignBanner as jest.Mock).mockImplementation(
-                (id, formData, appCode) => Promise.resolve({ id, formData, appCode })
+                (id, formData, appCode) => Promise.resolve({ id, formData, appCode }),
             );
             (newCreatePromoCampaignBanner as jest.Mock).mockImplementation(
-                (formData, appCode) => Promise.resolve({ formData, appCode })
+                (formData, appCode) => Promise.resolve({ formData, appCode }),
             );
         });
 
@@ -744,13 +744,13 @@ describe('PromoCampaignFormUtils tests', () => {
 
         expect(getDataForSend(promoCampaignTestData as any)).toEqual(pickData);
         expect(
-            getDataForSend({ ...(promoCampaignTestData as any), externalId: 'test' })
+            getDataForSend({ ...(promoCampaignTestData as any), externalId: 'test' }),
         ).toEqual({
             ...pickData,
             externalId: 'test',
         });
         expect(
-            getDataForSend({ ...(promoCampaignTestData as any), externalId: '' })
+            getDataForSend({ ...(promoCampaignTestData as any), externalId: '' }),
         ).toEqual({
             ...pickData,
             externalId: null,
@@ -777,14 +777,14 @@ describe('PromoCampaignFormUtils tests', () => {
         ]);
 
         expect(
-            getPromoCampaignForCopy(promoCampaignTestData, true)
+            getPromoCampaignForCopy(promoCampaignTestData, true),
         ).toEqual({
             ...pickData,
             copyVisibilitySettings: true,
         });
 
         expect(
-            getPromoCampaignForCopy({ ...promoCampaignTestData, externalId: 'testId' }, false)
+            getPromoCampaignForCopy({ ...promoCampaignTestData, externalId: 'testId' }, false),
         ).toEqual({
             ...pickData,
             externalId: 'testId',
@@ -829,7 +829,7 @@ describe('PromoCampaignFormUtils tests', () => {
                     visible: false,
                     errors: {},
                     id: 0,
-                }])
+                }]),
             ).toEqual([[0, 3]]);
         });
 
@@ -942,8 +942,8 @@ describe('PromoCampaignFormUtils tests', () => {
         expect(
             checkPromoCodes(
                 { ...promoCampaignTestData, promoCodeType: 'newType' } as any,
-                promoCampaignTestData
-            )
+                promoCampaignTestData,
+            ),
         ).toBe('newType');
     });
 
@@ -951,7 +951,7 @@ describe('PromoCampaignFormUtils tests', () => {
         expect(getPromoCampaignValue(promoCampaignTestData, undefined)).toBe(promoCampaignTestData);
 
         expect(
-            getPromoCampaignValue(promoCampaignTestData, { ...promoCampaignTestData, test: 123 } as any)
+            getPromoCampaignValue(promoCampaignTestData, { ...promoCampaignTestData, test: 123 } as any),
         ).toEqual({ ...promoCampaignTestData, test: 123 });
     });
 

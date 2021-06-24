@@ -23,7 +23,7 @@ describe('<StepTextAndImage /> test', () => {
     it('present type test', () => {
         const newProps = {
             ...props,
-            type: 'PRESENT'
+            type: 'PRESENT',
         };
         StepTextAndImageItem.setProps(newProps);
         expect(StepTextAndImageItem.find('.title').text()).toEqual('Подарок');

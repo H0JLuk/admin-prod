@@ -9,17 +9,17 @@ describe('<RestoredTableUser /> tests', () => {
         users: [
             {
                 generatedPassword: '1111111111',
-                personalNumber: '333333333333'
+                personalNumber: '333333333333',
             },
             {
                 generatedPassword: '555555555555',
-                personalNumber: '4444444444444'
+                personalNumber: '4444444444444',
             },
             {
                 generatedPassword: '9999999999999',
-                personalNumber: '2000000000000'
-            }
-        ]
+                personalNumber: '2000000000000',
+            },
+        ],
     };
 
     it('RestoredTableUser shapshot', () => {

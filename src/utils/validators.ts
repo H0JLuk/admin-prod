@@ -14,22 +14,18 @@ export type PageFieldsValidate = Record<string, typeof commonRule>;
 export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
     promoCampaign: {
         name: {
-            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
+            pattern: /^[а-яё\s\w\-.,/:%()?!№"]+$/i,
             message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
         },
         textContent: {
             pattern: /^[а-яё\s\w\-.,/:%()?!№"₽]+$/i,
-            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """, "₽"`,
         },
         detailsButtonLabel: commonRule,
     },
     clientApp: {
         name: commonRule,
         code: codeRule,
-        privacyPolicy: {
-            pattern: /^[а-яё\s\w.,-/:%()№"{}]+$/i,
-            message: `${commonMessage}, "/", ":", "%", "(", ")", "№", "{", "}", """`,
-        },
     },
     dzo: {
         name: commonRule,
@@ -50,6 +46,12 @@ export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
         consentEditorText: {
             pattern: /^[а-яё\s\w.,/:;+%()?!$№«»“”"{}–-]+$/i,
             message: `${commonMessage}, "–", "/", ":", ";", "$", "+", "%", "(", ")", {", "}", "?", "!", "№", двойные кавычки.`,
+        },
+    },
+    users: {
+        login: {
+            pattern: /^[a-z\d]+$/i,
+            message: 'латинские буквы и цифры',
         },
     },
 };

@@ -10,13 +10,13 @@ const TEST_CLASS = 'TEST_CLASS';
 const TEST_PROPS_FALSE = {
     blocked: false,
     withText: false,
-    className: TEST_CLASS
+    className: TEST_CLASS,
 };
 
 const TEST_PROPS_TRUE = {
     blocked: true,
     withText: true,
-    className: TEST_CLASS
+    className: TEST_CLASS,
 };
 
 describe('<UserBlockStatus /> test', () => {

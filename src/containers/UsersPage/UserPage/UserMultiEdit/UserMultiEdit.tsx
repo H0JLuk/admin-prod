@@ -4,9 +4,10 @@ import { Form } from 'antd';
 
 import { editLocationAndSalePointUsers, removeUser } from '@apiServices/usersService';
 import { LocationDto, SalePointDto, UserInfo } from '@types';
-import AutocompleteLocationAndSalePoint from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteLocationAndSalePoint';
-import Header from '@components/Header/Header';
-import UserFormButtonGroup from '../UserFormButtonGroup/UserFormButtonGroup';
+import AutocompleteLocationAndSalePoint from '@components/Form/AutocompleteLocationAndSalePoint';
+import Header from '@components/Header';
+import UserFormButtonGroup from '../UserFormButtonGroup';
+import { ROLES_FOR_EXTERNAL_SALE_POINT, validateSalePoint } from '../UserFormHelper';
 
 import styles from './UserMultiEdit.module.css';
 
@@ -42,16 +43,15 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
     const [error, setError] = useState({ location: '', salePoint: '', backend: '' });
     const [isSendingInfo, setIsSendingInfo] = useState(false);
     const [arrUsersIds, setArrUsersIds] = useState<number[]>([]);
-    const [userRoleExist, setUserRoleExist] = useState(false);
     const history = useHistory();
     const { state: { users = [] } = {} } = useLocation<LocationState>();
 
-    const redirectToUsersPage = useCallback(() => history.push(matchPath), [history, matchPath]);
+    const redirectToUsersPage = () => history.push(matchPath);
+
     useEffect(() => {
         if (!users?.length) {
             redirectToUsersPage();
         }
-        setUserRoleExist(users.some(({ role }) => role === 'User'));
         setArrUsersIds(users.map(({ id }) => id));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -66,12 +66,9 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
         setError({ location: '', salePoint: '', backend: '' });
     }, []);
 
-    const onCancel = useCallback(() => redirectToUsersPage(), [redirectToUsersPage]);
-
-    const onDelete = useCallback(async () => {
+    const onDelete = async () => {
         setIsSendingInfo(true);
 
-        // TODO: изменить этот кусок кода, когда на бэке добавят API для удаления нескольких пользователей
         try {
             const requestPromises = arrUsersIds.map(removeUser);
 
@@ -81,26 +78,34 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
             setIsSendingInfo(false);
             setError({ location: '', salePoint: '', backend: e.message });
         }
-    }, [redirectToUsersPage, arrUsersIds]);
+    };
 
-    const onSubmit = useCallback(async () => {
-        if (userRoleExist && !salePoint) {
-            return setError({ location: '', salePoint: 'Выберите действительную точку продажи', backend: '' });
-        }
-
-        setIsSendingInfo(true);
-
+    const onSubmit = async () => {
         try {
-            await editLocationAndSalePointUsers({
-                userIds: arrUsersIds,
-                salePointId: salePoint?.id,
+            const salePointShouldExternal = users.every(({ role }) => ROLES_FOR_EXTERNAL_SALE_POINT.includes(role));
+            validateSalePoint(salePoint, salePointShouldExternal);
+
+            setIsSendingInfo(true);
+
+            try {
+                await editLocationAndSalePointUsers({
+                    userIds: arrUsersIds,
+                    salePointId: salePoint?.id,
+                });
+                redirectToUsersPage();
+            } catch (e) {
+                setIsSendingInfo(false);
+                setError({ location: '', salePoint: '', backend: e.message });
+            }
+        } catch ({ message, name }) {
+            return setError({
+                location: '',
+                salePoint: '',
+                backend: '',
+                [name]: message,
             });
-            redirectToUsersPage();
-        } catch (e) {
-            setIsSendingInfo(false);
-            setError({ location: '', salePoint: '', backend: e.message });
         }
-    }, [salePoint, arrUsersIds, redirectToUsersPage, userRoleExist]);
+    };
 
     return (
         <>
@@ -119,7 +124,7 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
                             salePointDisabled={isSendingInfo}
                             locationLabel={LOCATION_FIELD.label}
                             salePointLabel={SALE_POINT_FIELD.label}
-                            salePointLabelClassNames={userRoleExist ? 'required': ''}
+                            salePointLabelClassNames="required"
                             onLocationChange={onLocationChange}
                             onSalePointChange={onSalePointChange}
                             autoFocusLocation={true}
@@ -132,7 +137,7 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
                 <div className={styles.buttonsContainer}>
                     <UserFormButtonGroup
                         type="edit"
-                        onCancel={onCancel}
+                        onCancel={redirectToUsersPage}
                         onSubmit={onSubmit}
                         onDelete={onDelete}
                         disableAllButtons={isSendingInfo}

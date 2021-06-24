@@ -1,16 +1,21 @@
+import ROLES from '@constants/roles';
+import { getURLSearchParams } from '@utils/helper';
 import { Api } from '../apiClient';
 import { getReqOptions } from './index';
 import {
     DefaultApiResponse,
+    DirectLinkRequest,
     RegisterUserRequest,
     ResetUserPassword,
     SaveUserResponse,
+    QRRequest,
     UpdateUserRequest,
     UpdateUsersSalePoint,
     UserDto,
     UserInfo,
     UserPaginationResponse,
 } from '@types';
+import { DIRECTION } from '@constants/common';
 
 export function getUser(pn: string) {
     return Api.get<UserInfo>(`/admin/user/${pn}`, getReqOptions());
@@ -21,7 +26,7 @@ export function oldAddUser(data: UserDto) {
 }
 
 export function addUser(data: RegisterUserRequest) {
-    return Api.post<DefaultApiResponse & SaveUserResponse>('/admin/user/register', data, getReqOptions());
+    return Api.post<SaveUserResponse>('/admin/user/register', data, getReqOptions());
 }
 
 export function oldRemoveUser(pn: string) {
@@ -36,12 +41,18 @@ export function getUsersList(searchParams: string) {
     return Api.get<UserPaginationResponse>(`/admin/user/filtered?${searchParams}`, getReqOptions());
 }
 
-// TODO: раскомментировать после добавления на бэке запроса на удаление нескольких пользователей
-/*
-export function removeUsers(usersIds: number[]) {
-    return Api.delete(`/admin/user/${usersIds}`, getReqOptions());
+export async function getPartnersList(filterText = '') {
+    const searchParams = getURLSearchParams({
+        filterText,
+        pageNo: 0,
+        direction: DIRECTION.ASC,
+        pageSize: 15,
+        userRole: ROLES.PARTNER,
+    });
+    const { users } = await Api.get(`/admin/user/filtered?${searchParams}`, getReqOptions());
+    return users;
 }
-*/
+
 
 export function resetUser(pn: string) {
     return Api.post<ResetUserPassword>(`/admin/user/reset/${pn}`, {}, getReqOptions());
@@ -57,6 +68,14 @@ export function saveUser(id: number, data: UpdateUserRequest) {
 
 export function editLocationAndSalePointUsers(data: UpdateUsersSalePoint) {
     return Api.post<DefaultApiResponse>('/admin/user/editSalePoint', data, getReqOptions());
+}
+
+export function getLinkForQR(data: DirectLinkRequest) {
+    return Api.post('/admin/user/direct/link', data, getReqOptions(), 'text');
+}
+
+export function generateQRCodes(data: QRRequest) {
+    return Api.post<Blob>('/admin/user/direct/links', data, getReqOptions('application/json'), 'blob');
 }
 
 function getReqForFileUpload(appCode: string) {

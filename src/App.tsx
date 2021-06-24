@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, useHistory, RouteComponentProps } from 'react-
 import './App.less';
 // import 'antd/dist/antd.css'; // Ant styles will be here, before another styles imports
 import './static/fonts/fonts.css';
-import moment from 'moment';
+import 'moment/locale/ru';
 import { History } from 'history';
 import { ROUTE } from '@constants/route';
 import ROLES from '@constants/roles';
@@ -21,8 +21,6 @@ import PartnerPage from './pages/PartnerPage';
 import { goToStartPage } from '@utils/appNavigation';
 import { Api } from './api/apiClient';
 
-
-moment.locale('ru');
 
 const App = () => {
     const history = useHistory();

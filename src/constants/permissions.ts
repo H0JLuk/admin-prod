@@ -9,15 +9,17 @@ const DEFAULT_USERS_INTERACTIONS: UsersInteractions = {
     unlockUser: [],
     deleteUser: [],
     canSelectUserInTable: [],
+    canGenerateQRCode: [],
 };
 
 const USERS_INTERACTIONS_BY_ROLE: Record<ROLES, UsersInteractions> = {
     [ROLES.ADMIN]: {
-        editUser: [ROLES.USER],
-        resetUserPassword: [ROLES.USER],
-        unlockUser: [ROLES.USER],
-        deleteUser: [ROLES.USER],
-        canSelectUserInTable: [ROLES.USER],
+        editUser: [ROLES.USER, ROLES.PARTNER, ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        resetUserPassword: [ROLES.USER, ROLES.PARTNER, ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        unlockUser: [ROLES.USER, ROLES.PARTNER, ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        deleteUser: [ROLES.USER, ROLES.PARTNER, ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        canSelectUserInTable: [ROLES.USER, ROLES.PARTNER, ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        canGenerateQRCode: [ROLES.USER, ROLES.PARTNER, ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
     },
     [ROLES.USER_MANAGER]: {
         editUser: [ROLES.USER],
@@ -36,7 +38,57 @@ const USERS_INTERACTIONS_BY_ROLE: Record<ROLES, UsersInteractions> = {
         ...DEFAULT_USERS_INTERACTIONS,
     },
     [ROLES.PARTNER]: {
+        editUser: [ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        resetUserPassword: [ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        unlockUser: [ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        deleteUser: [ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+        canSelectUserInTable: [ROLES.EXTERNAL_USER, ROLES.REFERAL_LINK],
+    },
+    [ROLES.EXTERNAL_USER]: {
         ...DEFAULT_USERS_INTERACTIONS,
+    },
+    [ROLES.REFERAL_LINK]: {
+        ...DEFAULT_USERS_INTERACTIONS,
+    },
+};
+
+export type CommonPermissions = {
+    canSetUserRole: boolean;
+    canSetUserPartner: boolean;
+};
+
+const COMMON_PERMISSIONS_BY_ROLE: Record<ROLES, CommonPermissions> = {
+    [ROLES.ADMIN]: {
+        canSetUserRole: true,
+        canSetUserPartner: true,
+    },
+    [ROLES.USER_MANAGER]: {
+        canSetUserRole: false,
+        canSetUserPartner: false,
+    },
+    [ROLES.AUDITOR]: {
+        canSetUserRole: false,
+        canSetUserPartner: false,
+    },
+    [ROLES.PRODUCT_OWNER]: {
+        canSetUserRole: false,
+        canSetUserPartner: false,
+    },
+    [ROLES.USER]: {
+        canSetUserRole: false,
+        canSetUserPartner: false,
+    },
+    [ROLES.PARTNER]: {
+        canSetUserRole: false,
+        canSetUserPartner: false,
+    },
+    [ROLES.EXTERNAL_USER]: {
+        canSetUserRole: false,
+        canSetUserPartner: false,
+    },
+    [ROLES.REFERAL_LINK]: {
+        canSetUserRole: false,
+        canSetUserPartner: false,
     },
 };
 
@@ -87,6 +139,10 @@ export const INTERACTIONS_CURR_USER_WITH_OTHER_USER = Object.values(ROLES).reduc
         },
     };
 }, {} as InteractionsCurrUserWIthOtherUser);
+
+export function getCommonPermissionsByRole() {
+    return COMMON_PERMISSIONS_BY_ROLE[getRole()] || {};
+}
 
 export function getCurrUserInteractions() {
     return INTERACTIONS_CURR_USER_WITH_OTHER_USER[getRole()] || {};

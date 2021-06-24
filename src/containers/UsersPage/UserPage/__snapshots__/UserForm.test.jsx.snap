@@ -4,9 +4,6 @@ exports[`<UserForm /> test should be mount snap with useEffect 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>
-    <div
-      id="container-for-clearAll"
-    />
     <div>
       <div
         class="container"
@@ -89,7 +86,8 @@ Object {
             class="ant-form ant-form-horizontal formStyle"
           >
             <div
-              class="formWrapper"
+              class="ant-row ant-row-space-between formWrapper"
+              style="margin-top: -7.5px; margin-bottom: -7.5px;"
             >
               <div
                 class="loginContainer"
@@ -110,13 +108,11 @@ Object {
               <div
                 class="labelCol"
               >
-                <div
-                  class="labelTitle ant-col-8"
-                >
+                <label>
                   Локация
-                </div>
+                </label>
                 <div
-                  class="noEditField ant-col-12"
+                  class="noEditField"
                 >
                   Калининград
                 </div>
@@ -124,15 +120,58 @@ Object {
               <div
                 class="labelCol"
               >
-                <div
-                  class="labelTitle ant-col-8"
-                >
+                <label>
                   Точка продажи
-                </div>
+                </label>
                 <div
-                  class="noEditField ant-col-12"
+                  class="noEditField"
                 >
-                  055_8626_1236
+                  055_8626_1232
+                </div>
+              </div>
+              <div
+                class="ant-col ant-col-8 roleBlock"
+                style="padding-top: 7.5px; padding-bottom: 7.5px;"
+              >
+                <label>
+                  Способ авторизации
+                </label>
+                <div
+                  class="noEditField"
+                >
+                  Логин/Пароль
+                </div>
+              </div>
+              <div
+                class="ant-col ant-col-8 labelCol"
+                style="padding-top: 7.5px; padding-bottom: 7.5px;"
+              >
+                <label
+                  for="role"
+                >
+                  Роль
+                </label>
+                <div
+                  class="noEditField"
+                >
+                  Пользователь
+                </div>
+              </div>
+              <div
+                class="ant-col ant-col-8 labelCol"
+                style="padding-top: 7.5px; padding-bottom: 7.5px;"
+              >
+                <label
+                  class=""
+                >
+                  Партнёр
+                </label>
+                <div
+                  class="noEditField"
+                >
+                  <i>
+                    Нет партнёра
+                  </i>
                 </div>
               </div>
             </div>
@@ -283,7 +322,8 @@ Object {
           class="ant-form ant-form-horizontal formStyle"
         >
           <div
-            class="formWrapper"
+            class="ant-row ant-row-space-between formWrapper"
+            style="margin-top: -7.5px; margin-bottom: -7.5px;"
           >
             <div
               class="loginContainer"
@@ -304,13 +344,11 @@ Object {
             <div
               class="labelCol"
             >
-              <div
-                class="labelTitle ant-col-8"
-              >
+              <label>
                 Локация
-              </div>
+              </label>
               <div
-                class="noEditField ant-col-12"
+                class="noEditField"
               >
                 Калининград
               </div>
@@ -318,15 +356,58 @@ Object {
             <div
               class="labelCol"
             >
-              <div
-                class="labelTitle ant-col-8"
-              >
+              <label>
                 Точка продажи
-              </div>
+              </label>
               <div
-                class="noEditField ant-col-12"
+                class="noEditField"
               >
-                055_8626_1236
+                055_8626_1232
+              </div>
+            </div>
+            <div
+              class="ant-col ant-col-8 roleBlock"
+              style="padding-top: 7.5px; padding-bottom: 7.5px;"
+            >
+              <label>
+                Способ авторизации
+              </label>
+              <div
+                class="noEditField"
+              >
+                Логин/Пароль
+              </div>
+            </div>
+            <div
+              class="ant-col ant-col-8 labelCol"
+              style="padding-top: 7.5px; padding-bottom: 7.5px;"
+            >
+              <label
+                for="role"
+              >
+                Роль
+              </label>
+              <div
+                class="noEditField"
+              >
+                Пользователь
+              </div>
+            </div>
+            <div
+              class="ant-col ant-col-8 labelCol"
+              style="padding-top: 7.5px; padding-bottom: 7.5px;"
+            >
+              <label
+                class=""
+              >
+                Партнёр
+              </label>
+              <div
+                class="noEditField"
+              >
+                <i>
+                  Нет партнёра
+                </i>
               </div>
             </div>
           </div>

@@ -36,7 +36,6 @@ const ConsentsList: React.FC<ConsentsListProps> = ({ matchPath, history }) => {
     const [select, setSelect] = useState(false);
     const [consentsList, setConsentsList] = useState<ConsentListState[]>([]);
     const [selectedItems, setSelectedItems] = useState(defaultSelected);
-    const [isModalView, setIsModalView] = useState(false);
 
     const loadConsentsList = useCallback(async () => {
         try {
@@ -45,7 +44,7 @@ const ConsentsList: React.FC<ConsentsListProps> = ({ matchPath, history }) => {
             const consentsData = list.map((consent) => ({
                 ...consent,
                 clientApplicationsNames: consent.clientApplications
-                    .map((apps) => apps.displayName).join(', ')
+                    .map((apps) => apps.displayName).join(', '),
             }));
 
             setConsentsList(consentsData);
@@ -126,10 +125,6 @@ const ConsentsList: React.FC<ConsentsListProps> = ({ matchPath, history }) => {
         },
     });
 
-    const toggleModal = () => {
-        setIsModalView(!isModalView);
-    };
-
     const refreshTable = () => {
         loadConsentsList();
         clearSelectedItems();
@@ -181,28 +176,25 @@ const ConsentsList: React.FC<ConsentsListProps> = ({ matchPath, history }) => {
                             {BUTTON_TEXT.CHOSEN} {selectedItems.rowKeys.length}
                         </span>
                     </div>
-                    <Button
-                        disabled={!selectedItems.rowKeys.length}
-                        danger
-                        type="primary"
-                        onClick={toggleModal}
+                    <TableDeleteModal<ConsentDto>
+                        listNameKey="version"
+                        listIdForRemove={selectedItems.rowKeys}
+                        sourceForRemove={selectedItems.rowValues}
+                        deleteFunction={deleteConsent}
+                        refreshTable={refreshTable}
+                        modalSuccessTitle={CONSENTS_LABELS.MODAL_SUCCESS_TITLE}
+                        modalTitle={CONSENTS_LABELS.DELETE_LIST_MODAL_TITLE}
                     >
-                        {BUTTON_TEXT.DELETE}
-                    </Button>
+                        <Button
+                            type="primary"
+                            disabled={!selectedItems.rowKeys.length}
+                            danger
+                        >
+                            {BUTTON_TEXT.DELETE}
+                        </Button>
+                    </TableDeleteModal>
                 </div>
             )}
-            {/* TODO: Подумать над тем как вынести кнопку вызова модалки в компонент с модалкой */}
-            <TableDeleteModal<ConsentDto>
-                listNameKey="version"
-                listIdForRemove={selectedItems.rowKeys}
-                sourceForRemove={selectedItems.rowValues}
-                modalClose={toggleModal}
-                deleteFunction={deleteConsent}
-                refreshTable={refreshTable}
-                modalSuccessTitle={CONSENTS_LABELS.MODAL_SUCCESS_TITLE}
-                modalTitle={CONSENTS_LABELS.DELETE_LIST_MODAL_TITLE}
-                visible={isModalView}
-            />
         </div>
     );
 };

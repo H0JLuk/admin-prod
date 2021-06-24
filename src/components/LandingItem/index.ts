@@ -1,3 +1,3 @@
 import { LandingItem } from './LandingItem';
 
-export { LandingItem };
+export default LandingItem;

@@ -17,7 +17,7 @@ describe('<PromoCampaignItemMenu /> test', () => {
         promoCampaign: {
             id: 1,
             name: 'promoCampaign',
-            promoCodeType: 'PERSONAL'
+            promoCodeType: 'PERSONAL',
         },
         matchUrl: 'url',
     };

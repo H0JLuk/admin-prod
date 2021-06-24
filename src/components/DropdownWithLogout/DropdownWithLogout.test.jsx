@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('../../api/services/authService', () => ({
-    logout: jest.fn()
+    logout: jest.fn(),
 }));
 
 describe('<DropdownWithLogout /> tests', () => {

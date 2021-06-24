@@ -85,6 +85,8 @@ const USER_MANAGER_TOP_MENU_ITEMS: MenuItem[] = [
 
 const PARTNER_SIDEBAR_MENU_ITEMS: MenuItem[] = [
     { label: labels.USERS, path: ROUTE_PARTNER.USERS },
+    { label: labels.APP, path: ROUTE_PARTNER.APPS },
+    { label: labels.REPORTS, path: ROUTE_PARTNER.REPORTS },
 ];
 
 const PARTNER_TOP_MENU_ITEMS: MenuItem[] = [
@@ -96,7 +98,7 @@ const ADMIN_SIDEBAR_MENU_ITEMS: MenuItem[] = [
     { label: labels.DZO, path: ROUTE_ADMIN.DZO },
     { label: labels.CATEGORY, path: ROUTE_ADMIN.CATEGORY },
     { label: labels.CONSENTS, path: ROUTE_ADMIN.CONSENTS },
-    { label: labels.APP, path: ROUTE_ADMIN.APPS }
+    { label: labels.APP, path: ROUTE_ADMIN.APPS },
 ];
 
 const ADMIN_TOP_MENU_ITEMS: MenuItem[] = [
@@ -127,7 +129,7 @@ const PRODUCT_OWNER_SIDEBAR_MENU_ITEMS: MenuItem[] = [
     { label: labels.DASHBOARD, path: ROUTE_OWNER.DASHBOARD },
     { label: labels.DZO, path: ROUTE_OWNER.DZO },
     { label: labels.CATEGORY, path: ROUTE_OWNER.CATEGORY },
-    { label: labels.APP, path: ROUTE_OWNER.APPS }
+    { label: labels.APP, path: ROUTE_OWNER.APPS },
 ];
 
 const PRODUCT_OWNER_TOP_MENU_ITEMS: MenuItem[] = [

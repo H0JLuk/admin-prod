@@ -21,10 +21,10 @@ const promoCampaignVisibilitySettingTablePropsTestData = {
             prev_5: 'Предыдущие 5',
             next_5: 'Следующие 5',
             prev_3: 'Предыдущие 3',
-            next_3: 'Следующие 3'
+            next_3: 'Следующие 3',
         },
         showSizeChanger: true,
-        showQuickJumper: true
+        showQuickJumper: true,
     },
     rowSelection: undefined,
     selectedRow: '1',
@@ -33,7 +33,7 @@ const promoCampaignVisibilitySettingTablePropsTestData = {
     },
     onChangeVisible() {
         return;
-    }
+    },
 };
 
 

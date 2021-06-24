@@ -9,7 +9,7 @@ import style from '../GroupListItem.module.css';
 
 const TITLE = {
     SHOWCASES: 'Витрины',
-    PROMO_CAMPAIGNS_NUMBER: 'Кол-во промо-кампаний'
+    PROMO_CAMPAIGNS_NUMBER: 'Кол-во промо-кампаний',
 };
 
 const STATUS = {

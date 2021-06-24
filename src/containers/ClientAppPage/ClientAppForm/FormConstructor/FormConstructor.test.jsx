@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import FormConstructor from './FormConstructor';
 import { FORM_TYPES } from '../ClientAppFormConstants';
+import { LOGIN_TYPES_ENUM, LOGIN_TYPE_OPTIONS } from '../../../../constants/loginTypes';
 
 describe('<FormConstructor /> test', () => {
     const props = {
@@ -78,5 +79,30 @@ describe('<FormConstructor /> test', () => {
         );
         expect(FormConstructorComponent.find('FormInputByType').html()).toMatch('select');
         expect(FormConstructorComponent.find('FormInputByType').html()).toMatchSnapshot();
+    });
+
+    it('should disabled one checkbox', () => {
+        const newProps = {
+            ...props,
+            row: [{
+                ...props.row[0],
+                name: 'login_types',
+                id: 'login_types',
+                type: FORM_TYPES.CHECKBOX_GROUP,
+                value: [LOGIN_TYPE_OPTIONS[0].value],
+                options: LOGIN_TYPE_OPTIONS,
+            }],
+            disabledFields: {
+                login_types: [LOGIN_TYPES_ENUM.DIRECT_LINK],
+            },
+        };
+
+        const FormConstructorComponent = shallow(
+            <FormConstructor { ...newProps } />
+        );
+
+        const checkboxGroup = FormConstructorComponent.find('FormInputByType').dive();
+        expect(checkboxGroup.prop('options')[1].disabled).toBe(false);
+        expect(checkboxGroup.prop('options')[2].disabled).toBe(true);
     });
 });

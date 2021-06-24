@@ -1,3 +1,5 @@
+import { SALE_POINT_TYPE } from '@constants/common';
+
 type LocationType = {
     id: number;
     name: string;
@@ -27,6 +29,7 @@ type SalePointType = {
     priority: number;
     startDate?: string;
     endDate?: string | null;
+    kind: SALE_POINT_TYPE;
 };
 
 export type SalePointDto = {

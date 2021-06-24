@@ -165,7 +165,7 @@ HeaderWithActions.propTypes = {
         onClick: PropTypes.func.isRequired,
         disabled: PropTypes.oneOfType([
             PropTypes.bool,
-            PropTypes.func
+            PropTypes.func,
         ]),
     })),
     showSearchInput: PropTypes.bool,

@@ -1,17 +1,20 @@
-import React, { useCallback, useState, useEffect, useMemo, useRef, memo } from 'react';
+import React, { useCallback, useState, useEffect, useMemo, useRef } from 'react';
 import { useHistory, generatePath, useLocation } from 'react-router-dom';
-import { Button, TableProps, Tooltip } from 'antd';
+import { Button, TableProps } from 'antd';
 import RestoredTableUser from './RestoredTableUser/RestoredTableUser';
 import EmptyUsersPage from './EmptyUsersPage/EmptyUsersPage';
 import DownloadDropDown from './DownloadDropDown/DownloadDropDown';
 import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
 import TableDeleteModal from '@components/TableDeleteModal';
 import Header from '@components/Header';
+import Loading from '@components/Loading';
 import UsersListTable from './UsersListTable';
+import FiltrationBlock from './FiltrationBlock';
+import ActionsDropDown from './ActionsDropDown';
 import TemplateUploadButtonsWithModal from '@components/ButtonWithModal/TemplateUploadButtonsWithModal';
-import { getUsersList, removeUser, resetUser } from '@apiServices/usersService';
+import { generateQRCodes, getUsersList, removeUser, resetUser } from '@apiServices/usersService';
 import { USERS_PAGES } from '@constants/route';
-import { getSearchParamsFromUrl } from '@utils/helper';
+import { downloadFileFunc, getSearchParamsFromUrl } from '@utils/helper';
 import { PaginationConfig } from 'antd/lib/pagination';
 import { UserInfo } from '@types';
 import { DIRECTION } from '@constants/common';
@@ -35,8 +38,6 @@ const TITLE = 'Пользователи';
 
 const RESET_LABEL = 'По умолчанию';
 
-const BUTTON_EDIT = 'Редактировать';
-const BUTTON_CHANGE_PASSWORD = 'Сбросить пароль';
 const BUTTON_ADD = 'Добавить';
 const BUTTON_CHOOSE = 'Выбрать';
 const BUTTON_CANCEL = 'Отменить';
@@ -69,11 +70,15 @@ const DEFAULT_PARAMS: SearchParams = {
     sortBy: '',
     direction: DIRECTION.ASC,
     filterText: '',
+    clientAppCode: '',
+    parentUserName: '',
+    parentId: '',
+    loginType: '',
     totalElements: 0,
 };
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-const getURLSearchParams = ({ totalElements, ...rest }: Record<string, string | number>) =>
+const getURLSearchParams = ({ totalElements, parentId, ...rest }: Record<string, string | number>) =>
     new URLSearchParams(rest as Record<string, string>).toString();
 
 const DROPDOWN_SORT_MENU = [
@@ -101,6 +106,7 @@ const showRestoredErrorsNotification = (message: React.ReactNode) => {
     });
 };
 
+const IGNORE_SEARCH_PARAMS = ['parentUserName', 'clientAppCode'];
 const defaultSelected: SelectedItems = { rowValues: [], rowKeys: [] };
 
 const UserList: React.FC<UserListProps> = ({ matchPath }) => {
@@ -112,7 +118,6 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
     const [loadingPage, setLoadingPage] = useState(true);
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [params, setParams] = useState(DEFAULT_PARAMS);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
     const userInteractions = useRef({} as InteractionsForOtherUser);
     const { current: permissions = {} as InteractionsForOtherUser } = userInteractions;
     const canSelectUsers = users.filter(({ role }) => (permissions[role] || {}).canSelectUserInTable);
@@ -142,7 +147,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
 
     useEffect(() => {
         (async () => {
-            await loadUsersData(getSearchParamsFromUrl(search, DEFAULT_PARAMS));
+            await loadUsersData(getSearchParamsFromUrl(search, DEFAULT_PARAMS, IGNORE_SEARCH_PARAMS));
             setLoadingPage(false);
         })();
 
@@ -224,7 +229,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                 : selectedItems.rowValues.filter((selectedItem) => selectedItem.id !== record.id);
 
             setSelectedItems({ rowKeys, rowValues });
-        }
+        },
     });
 
     const onClickResetPass = useCallback(async () => {
@@ -261,17 +266,24 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         setLoadingTableData(false);
     }, [clearSelectedItems, selectedItems.rowValues]);
 
-    const toggleModal = useCallback(() => setModalIsOpen(!modalIsOpen), [modalIsOpen]);
-
     if (loadingPage) {
         return (
             <div className={styles.loadingPage}>
-                Загрузка...
+                <Loading />
             </div>
         );
     }
 
-    if (!users.length && !loadingPage && !loadingTableData && !params.filterText && !params.pageNo) {
+    if (
+        !users.length &&
+        !loadingPage &&
+        !loadingTableData &&
+        !params.filterText &&
+        !params.pageNo &&
+        !params.clientAppCode &&
+        !params.parentUserName &&
+        !params.loginType
+    ) {
         return <EmptyUsersPage refreshTable={refreshTable} />;
     }
 
@@ -302,6 +314,30 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
     }
 
 
+    const onChangeFilter = (requestOptions: SearchParams) => {
+        const newParams: SearchParams = { ...requestOptions, pageNo: 0 };
+
+        IGNORE_SEARCH_PARAMS.forEach(key => {
+            if (!newParams[key]) {
+                delete newParams[key];
+            }
+        });
+        loadUsersData(newParams);
+    };
+
+    const generateQR = async () => {
+        try {
+            const file = await generateQRCodes({
+                clientAppCode: params.clientAppCode as string,
+                parentId: params.parentId as number,
+                userIds: selectedItems.rowKeys,
+            });
+            downloadFileFunc(URL.createObjectURL(file), 'QR-codes', 'zip');
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <div className={styles.mainBlock}>
             <Header buttonBack={false} />
@@ -318,6 +354,11 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                 menuItems={DROPDOWN_SORT_MENU}
                 enableAsyncSort
             />
+            <FiltrationBlock
+                params={params}
+                onChangeFilter={onChangeFilter}
+                disabledAllFields={loadingTableData}
+            />
             <UsersListTable
                 loadingData={loadingTableData}
                 onRow={onRow}
@@ -333,37 +374,35 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                             <span className={styles.label}>
                                 {CHOSEN_USER} {selectedItems.rowKeys.length}
                             </span>
-                            <ResetUsersPasswordBtn
-                                onClick={onClickResetPass}
-                                selectedUsers={selectedItems.rowValues}
+                            <ActionsDropDown
+                                selectedItems={selectedItems}
+                                onClickResetPass={onClickResetPass}
+                                linkEdit={linkEdit}
+                                generateQR={generateQR}
+                                generateQRDisabled={
+                                    params.loginType !== LOGIN_TYPES_ENUM.DIRECT_LINK ||
+                                    !params.clientAppCode ||
+                                    !params.parentUserName
+                                }
                             />
-                            <Button
-                                type="primary"
-                                disabled={!selectedItems.rowKeys.length}
-                                onClick={linkEdit}
-                            >
-                                {BUTTON_EDIT}
-                            </Button>
                         </div>
-                        <Button
-                            type="primary"
-                            danger
-                            disabled={!selectedItems.rowKeys.length}
-                            onClick={toggleModal}
-                        >
-                            {BUTTON_DELETE}
-                        </Button>
                         <TableDeleteModal<UserInfo>
-                            modalClose={toggleModal}
                             sourceForRemove={selectedItems.rowValues}
                             listIdForRemove={selectedItems.rowKeys}
                             deleteFunction={removeUser}
                             refreshTable={refreshTable}
                             modalSuccessTitle={MODAL_SUCCESS_TITLE}
-                            visible={modalIsOpen}
                             modalTitle={MODAL_TITLE}
                             listNameKey="personalNumber"
-                        />
+                        >
+                            <Button
+                                type="primary"
+                                danger
+                                disabled={!selectedItems.rowKeys.length}
+                            >
+                                {BUTTON_DELETE}
+                            </Button>
+                        </TableDeleteModal>
                     </div>
                 ) : (
                     <div className={styles.section}>
@@ -380,51 +419,5 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         </div>
     );
 };
-
-
-type ResetUsersPasswordBtnProps = {
-    onClick: () => void;
-    selectedUsers: UserInfo[];
-};
-
-// eslint-disable-next-line react/display-name
-const ResetUsersPasswordBtn: React.FC<ResetUsersPasswordBtnProps> = memo(({
-    onClick,
-    selectedUsers,
-}) => {
-    let tooltipTitle: JSX.Element[] | string = '';
-    const cantResetPassUsers = selectedUsers.filter(({ loginType }) => loginType !== LOGIN_TYPES_ENUM.PASSWORD);
-    const { length } = cantResetPassUsers;
-
-    if (length) {
-        tooltipTitle = cantResetPassUsers.reduce<JSX.Element[]>((result, user, index, arr) => [
-            ...result,
-            <span key={user.id}>
-                {user.personalNumber}
-                {arr[index + 1] ? ', ' : ''}
-            </span>,
-        ],
-        [
-            <span key="startString">
-                Нельзя сбросить пароль для
-                {length > 1 ? ' пользователей ' : ' пользователя '}
-                с логином:
-                <br />
-            </span>,
-        ]);
-    }
-
-    return (
-        <Tooltip title={tooltipTitle}>
-            <Button
-                type="primary"
-                disabled={!selectedUsers.length || !!length}
-                onClick={onClick}
-            >
-                {BUTTON_CHANGE_PASSWORD}
-            </Button>
-        </Tooltip>
-    );
-});
 
 export default UserList;

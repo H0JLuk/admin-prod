@@ -6,14 +6,14 @@ const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
     useHistory: () => ({
         push: mockHistoryPush,
-        location: jest.fn()
+        location: jest.fn(),
     }),
     useRouteMatch: () => ({ path: 'test' }),
     useParams: () => ({ promoCampaignId: 1064 }),
     useLocation: () => ({
         search: {},
-        state: 'test state'
-    })
+        state: 'test state',
+    }),
 }));
 
 jest.mock(
@@ -25,8 +25,8 @@ jest.mock('', () => ({
     getPromoCampaignVisibilitySettings: () => ({
         visibilitySettings: [],
         pageNo: 0,
-        totalElements: 0
-    })
+        totalElements: 0,
+    }),
 }));
 
 describe('<StepVisibility /> tests', () => {
@@ -37,7 +37,7 @@ describe('<StepVisibility /> tests', () => {
                 id: 1619691826728,
                 location: null,
                 salePoint: null,
-                visible: false
+                visible: false,
             },
         ],
         onChangeState: jest.fn(),

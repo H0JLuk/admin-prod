@@ -29,7 +29,7 @@ export function copyClientApp(clientAppDto: SaveClientApp) {
     return Api.post<DefaultCreateDtoResponse>(
         '/admin/clientApplication/copy',
         clientAppDto,
-        getReqOptions()
+        getReqOptions(),
     );
 }
 

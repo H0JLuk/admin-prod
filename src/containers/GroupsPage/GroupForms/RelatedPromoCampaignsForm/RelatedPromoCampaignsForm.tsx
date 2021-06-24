@@ -113,7 +113,7 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
                         prev.includes(mainCampaignId)
                             ? [...prev, campaignId]
                             : [...prev, mainCampaignId, campaignId],
-                    [])
+                    []),
                 );
 
                 const normalizeBundleData = normalizeAssociationData(groupData);
@@ -148,7 +148,7 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
         try {
             const associationData = await form.validateFields();
             const { id } = await createCampaignGroup(
-                getDataForAssociationCreate({ ...associationData, name: mainCampaignName.current })
+                getDataForAssociationCreate({ ...associationData, name: mainCampaignName.current }),
             );
             await createGroupLink(associationData.links, id);
             hideLoading();
@@ -168,7 +168,7 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
             if (typeof association.current.id === 'number') {
                 await editCampaignGroup(
                     getDataForAssociationCreate({ ...associationData, name: mainCampaignName.current }),
-                    association.current.id
+                    association.current.id,
                 );
                 await editCampaignGroupTextAndBanners(associationData, association.current, association.current.id);
                 await editCampaignGroupLinks(associationData.links, association.current, association.current.id);
@@ -237,7 +237,7 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
                                             const { groups } = await getCampaignGroupList();
                                             const currentCampaign = promoCampaignList.find(({ id }) => id === value);
                                             const isAlreadyExists = groups.some(
-                                                ({ name }) => currentCampaign?.name === name
+                                                ({ name }) => currentCampaign?.name === name,
                                             );
 
                                             return isAlreadyExists
@@ -390,7 +390,7 @@ const campaignIdValidator: RuleRender = ({ getFieldValue }) => ({
         }
         return Promise.resolve();
     },
-    validateTrigger: 'onChange'
+    validateTrigger: 'onChange',
 });
 
 const validatorsContentData = [
@@ -401,5 +401,5 @@ const validatorsContentData = [
                 return Promise.reject(Error('Добавьте хотя бы один блок'));
             }
         },
-    }
+    },
 ];

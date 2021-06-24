@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal, { ModalProps } from 'antd/lib/modal/Modal';
 import PropTypes from 'prop-types';
 import { DefaultApiResponse } from '@types';
@@ -20,15 +20,14 @@ type TableDeleteModalProps<DataType> = {
     sourceForRemove: DataType[];
     listIdForRemove: number[];
     listNameKey: keyof DataType;
-    modalClose: (e?: MouseEvent) => void;
     deleteFunction: (id: number) => Promise<DefaultApiResponse>;
     refreshTable: () => void;
-    visible: boolean;
     modalTitle?: string;
     modalSuccessTitle?: string;
     okTextSuccess?: string;
     okTextDelete?: string;
     cancelText?: string;
+    children: React.ReactElement;
 };
 
 const defaultOptions: ModalProps = {
@@ -49,7 +48,6 @@ function TableDeleteModal<DataType extends { id: number; } | { dzoId: number; }>
     sourceForRemove,
     listIdForRemove,
     listNameKey,
-    modalClose,
     deleteFunction,
     refreshTable,
     modalTitle = 'Вы точно хотите удалить эти данные?',
@@ -57,27 +55,42 @@ function TableDeleteModal<DataType extends { id: number; } | { dzoId: number; }>
     okTextSuccess = OK_TEXT_SUCCESS,
     okTextDelete = OK_TEXT_DELETE,
     cancelText = CANCEL_TEXT,
-    visible,
+    children,
 }: TableDeleteModalProps<DataType>) {
     const [isModalRender, setIsModalRender] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [request, setRequest] = useState(initialRequestState);
 
     useEffect(() => {
         // setTimeout need for save close animation modal
         setTimeout(() => {
-            setIsModalRender(visible);
+            setIsModalRender(isVisible);
         }, 500);
-    }, [visible]);
+    }, [isVisible]);
 
-    if (!visible && !isModalRender) return null;
+    try {
+        React.Children.only(children);
+    } catch (e) {
+        console.error('Warning: `children` of `TableDeleteModal` must be single reactNode');
+        return null;
+    }
+
+    const openModal = () => setIsVisible(true);
+    const closeModal = () => setIsVisible(false);
+
+    const triggerElem = React.cloneElement(children, { onClick: openModal });
+
+    if (!isVisible && !isModalRender) {
+        return triggerElem;
+    }
 
     const handleDelete = async () => {
         const requestPromises = listIdForRemove.map(deleteFunction);
         setLoading(true);
         try {
             const response = await Promise.allSettled(requestPromises);
-            const { deleted, errors } = response.reduce((prev, result: ResponseResult, index: number) => {
+            const { deleted, errors } = response.reduce((prev, result: ResponseResult, index) => {
                 const key = result.status === 'rejected' ? 'errors' : 'deleted';
                 return {
                     ...prev,
@@ -93,7 +106,7 @@ function TableDeleteModal<DataType extends { id: number; } | { dzoId: number; }>
     };
 
     const handleClose = () => {
-        modalClose();
+        closeModal();
         setRequest(initialRequestState);
         refreshTable();
     };
@@ -103,45 +116,48 @@ function TableDeleteModal<DataType extends { id: number; } | { dzoId: number; }>
     const dataIsLoaded = hasErrors || hasDeleted;
 
     return (
-        <Modal
-            cancelText={cancelText}
-            title={dataIsLoaded ? modalSuccessTitle : modalTitle}
-            okText={dataIsLoaded ? okTextSuccess : okTextDelete}
-            cancelButtonProps={{ hidden: dataIsLoaded }}
-            okButtonProps={{ type: 'primary', danger: !dataIsLoaded }}
-            closable={!dataIsLoaded}
-            onOk={dataIsLoaded ? handleClose : handleDelete}
-            onCancel={modalClose}
-            visible={visible}
-            confirmLoading={loading}
-            {...defaultOptions}
-        >
-            {!dataIsLoaded && (
-                <ul className={styles.list}>
-                    {sourceForRemove.map((item, index) => (
-                        <li key={index}>{item[listNameKey]}</li>
-                    ))}
-                </ul>
-            )}
-            {hasDeleted && (
-                <ul className={styles.list}>
-                    <span className={styles.success}>{SUCCESSFULLY_DELETED}</span>
-                    <span>({request.deleted.length})</span>
-                    {request.deleted.map(({ item }, index) => (
-                        <li key={index}>{item}</li>
-                    ))}
-                </ul>
-            )}
-            {hasErrors && (
-                <ul className={styles.list}>
-                    <span className={styles.failed}>{FAILED_DELETE}</span>
-                    <span>({request.errors.length})</span>
-                    {request.errors.map(({ message, item }, index) => (
-                        <li key={index}><b>{item}</b> - {message}</li>
-                    ))}
-                </ul>
-            )}
-        </Modal>
+        <>
+            {triggerElem}
+            <Modal
+                cancelText={cancelText}
+                title={dataIsLoaded ? modalSuccessTitle : modalTitle}
+                okText={dataIsLoaded ? okTextSuccess : okTextDelete}
+                cancelButtonProps={{ hidden: dataIsLoaded }}
+                okButtonProps={{ type: 'primary', danger: !dataIsLoaded }}
+                closable={!dataIsLoaded}
+                onOk={dataIsLoaded ? handleClose : handleDelete}
+                onCancel={closeModal}
+                visible={isVisible}
+                confirmLoading={loading}
+                {...defaultOptions}
+            >
+                {!dataIsLoaded && (
+                    <ul className={styles.list}>
+                        {sourceForRemove.map((item, index) => (
+                            <li key={index}>{item[listNameKey]}</li>
+                        ))}
+                    </ul>
+                )}
+                {hasDeleted && (
+                    <ul className={styles.list}>
+                        <span className={styles.success}>{SUCCESSFULLY_DELETED}</span>
+                        <span>({request.deleted.length})</span>
+                        {request.deleted.map(({ item }, index) => (
+                            <li key={index}>{item}</li>
+                        ))}
+                    </ul>
+                )}
+                {hasErrors && (
+                    <ul className={styles.list}>
+                        <span className={styles.failed}>{FAILED_DELETE}</span>
+                        <span>({request.errors.length})</span>
+                        {request.errors.map(({ message, item }, index) => (
+                            <li key={index}><b>{item}</b> - {message}</li>
+                        ))}
+                    </ul>
+                )}
+            </Modal>
+        </>
     );
 }
 
@@ -149,15 +165,14 @@ TableDeleteModal.propTypes = {
     sourceForRemove: PropTypes.array.isRequired,
     listIdForRemove: PropTypes.array.isRequired,
     listNameKey: PropTypes.string.isRequired,
-    modalClose: PropTypes.func.isRequired,
     deleteFunction: PropTypes.func.isRequired,
     refreshTable: PropTypes.func.isRequired,
-    visible: PropTypes.bool.isRequired,
     modalTitle: PropTypes.string,
     modalSuccessTitle: PropTypes.string,
     okTextSuccess: PropTypes.string,
     okTextDelete: PropTypes.string,
     cancelText: PropTypes.string,
+    children: PropTypes.node.isRequired,
 };
 
 export default TableDeleteModal;

@@ -7,25 +7,25 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ru';
 // @ts-ignore
-import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold.js';
+import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 // @ts-ignore
-import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
+import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 // @ts-ignore
-import FontBackgroundColor from '@ckeditor/ckeditor5-font/src/fontbackgroundcolor.js';
+import FontBackgroundColor from '@ckeditor/ckeditor5-font/src/fontbackgroundcolor';
 // @ts-ignore
-import FontColor from '@ckeditor/ckeditor5-font/src/fontcolor.js';
-import Heading from '@ckeditor/ckeditor5-heading/src/heading.js';
+import FontColor from '@ckeditor/ckeditor5-font/src/fontcolor';
+import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 // @ts-ignore
-import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic.js';
+import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 // @ts-ignore
-import List from '@ckeditor/ckeditor5-list/src/list.js';
+import List from '@ckeditor/ckeditor5-list/src/list';
 // @ts-ignore
-import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle.js';
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
+import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle';
+import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 // @ts-ignore
-import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript.js';
+import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
 // @ts-ignore
-import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript.js';
+import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
 
 import SetListValue from './setListValuePlugin/setListValue';
@@ -96,7 +96,7 @@ const editorConfiguration = {
             { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
             { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
             { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' },
-        ]
+        ],
     },
     language: 'ru',
 };

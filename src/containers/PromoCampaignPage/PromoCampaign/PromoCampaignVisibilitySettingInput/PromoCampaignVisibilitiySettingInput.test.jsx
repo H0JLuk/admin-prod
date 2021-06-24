@@ -27,9 +27,9 @@ describe('<PromoCampaignVisibilitySettingInput /> tests', () => {
                 startDate: '2020-01-01',
                 endDate: null,
                 priority: 6,
-                deleted: false
+                deleted: false,
             },
-            parentName: 'Ярославская область'
+            parentName: 'Ярославская область',
         },
         salePoint: '',
         columnMode: true,
@@ -44,8 +44,8 @@ describe('<PromoCampaignVisibilitySettingInput /> tests', () => {
         const newProps = {
             ...props,
             error: {
-                server: 'test'
-            }
+                server: 'test',
+            },
         };
 
         const VisibilityInput = shallow(<PromoCampaignVisibilitySettingInput { ...newProps } />);

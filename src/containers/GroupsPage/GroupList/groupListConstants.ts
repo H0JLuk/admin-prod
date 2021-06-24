@@ -3,7 +3,7 @@ import { BundleTypes } from '../groupPageConstants';
 export const TITLE = {
     BUNDLE: 'Бандлы',
     PROMO_CAMPAIGNS: 'Связанные промо-кампании',
-    MODAL_TITLE: 'Вы уверены что хотите удалить эти группы ?',
+    MODAL_TITLE: 'Вы уверены что хотите удалить эти группы?',
     MODAL_SUCCESS_TITLE: 'Результат удаления групп',
     EMPTY_BUNDLES: 'Нет созданных бандлов',
     EMPTY_PROMO_CAMPAIGNS: 'Нет созданных связанных промо-кампаний',
@@ -37,7 +37,7 @@ export const DROPDOWN_SORT_MENU = [
 
 export const GROUP_OPTIONS = [
     { label: TITLE.BUNDLE, value: BundleTypes.IDEA },
-    { label: TITLE.PROMO_CAMPAIGNS, value: BundleTypes.ASSOCIATION }
+    { label: TITLE.PROMO_CAMPAIGNS, value: BundleTypes.ASSOCIATION },
 ];
 
 export const EMPTY_TABLE = {

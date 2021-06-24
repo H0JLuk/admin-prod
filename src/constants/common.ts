@@ -26,3 +26,8 @@ export enum BANNER_TEXT_TYPE {
     HEADER = 'HEADER',
     RULES = 'RULES',
 }
+
+export enum SALE_POINT_TYPE {
+    INTERNAL = 'INTERNAL',
+    EXTERNAL = 'EXTERNAL',
+}

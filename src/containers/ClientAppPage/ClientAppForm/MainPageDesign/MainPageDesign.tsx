@@ -44,7 +44,7 @@ const MainPageDesign: React.FC<IMainPageDesignProps>= ({
     }, []);
 
     const handleSubmit = async ({ home_page_theme, ...rest }: IFormData) => {
-        const formData: IFormattedFormData = { ...rest, ...home_page_theme, };
+        const formData: IFormattedFormData = { ...rest, ...home_page_theme };
         const oldDesignedSettings = {
             ...designSettings,
             ...designSettings.home_page_theme,

@@ -22,14 +22,14 @@ const UserSkeletonLoading = () => (
                     </div>
                 ))}
             </div>
-            {/* <div className={ styles.labelsWrapperSkeleton }>
-                { Array.from({ length: 1 }, (_, i) => (
-                    <div className={ styles.labelsSkeleton } key={ i }>
-                        <Skeleton.Input style={ inputsStyle } active size="small" />
-                        <Skeleton.Input style={ inputsStyle } active size="small" />
+            <div className={styles.labelsWrapperSkeleton}>
+                {Array.from({ length: 3 }, (_, i) => (
+                    <div className={styles.labelsSkeleton} key={i}>
+                        <Skeleton.Input style={inputsStyle} active size="small" />
+                        <Skeleton.Input style={inputsStyle} active size="small" />
                     </div>
-                )) }
-            </div> */}
+                ))}
+            </div>
         </div>
         <div className={styles.mainBlock}>
             <div className={styles.labelsWrapperSkeleton} style={secondWrapperStyle}>

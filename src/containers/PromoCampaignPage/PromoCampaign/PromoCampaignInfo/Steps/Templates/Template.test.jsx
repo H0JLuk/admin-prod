@@ -11,7 +11,7 @@ describe('<Template /> test', () => {
     const props = {
         banners: promoCampaignBannerArray,
         texts: promoCampaignTextsArray,
-        type: 'NORMAL' // 'NORMAL' || 'PRESENT'
+        type: 'NORMAL', // 'NORMAL' || 'PRESENT'
     };
 
     it('Template snapshot', () => {
@@ -29,7 +29,7 @@ describe('<Template /> test', () => {
     it('should not render Template', () => {
         const newProps = {
             ...props,
-            type: 'errorType'
+            type: 'errorType',
         };
 
         const TemplateItem = shallow(<Template { ...newProps } />);
@@ -39,7 +39,7 @@ describe('<Template /> test', () => {
     it('should return only result in getTexts func', () => {
         const newProps = {
             ...props,
-            texts: getTextsReturnValue
+            texts: getTextsReturnValue,
         };
 
         const TemplateItem = shallow(<Template { ...newProps } />);

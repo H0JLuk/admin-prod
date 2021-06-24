@@ -11,7 +11,7 @@ describe('<Template /> tests', () => {
         },
         type: 'NORMAL',
         onRemoveImg: jest.fn(),
-        isCopy: false // boolean
+        isCopy: false,
     };
 
     it('Template snapshot', () => {

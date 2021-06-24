@@ -8,7 +8,7 @@ describe('<TemplateBlocks /> test', () => {
             label: 'label',
             type: 'banner',
             src: 'src',
-            size: 'size'
+            size: 'size',
         };
         const ImageBlockItem = shallow(<ImageBlock { ...props } />);
 
@@ -34,7 +34,7 @@ describe('<TemplateBlocks /> test', () => {
     describe('<TextBlock /> test', () => {
         const props = {
             label: 'label',
-            text: 'text'
+            text: 'text',
         };
         const TextBlockItem = shallow(<TextBlock { ...props } />);
 

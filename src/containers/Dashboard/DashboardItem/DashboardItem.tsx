@@ -17,7 +17,7 @@ interface IDashboardItem extends PromoCampaignReport {
 const PROMO = {
     GIVE: 'Выдано промокодов',
     LOAD: 'Загружено промокодов',
-    END: 'Осталось дней'
+    END: 'Осталось дней',
 };
 
 const StatisticCard: React.FC<IStatisticCard> = ({ value, label, isRed = true }) => (

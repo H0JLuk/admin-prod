@@ -25,7 +25,7 @@ const dashboardInfo = [
         issuedCodePercents: 50,
         noCodes: true,
         promoCampaignId: 3,
-        promoCampaignName: 'test promo-campaign'
+        promoCampaignName: 'test promo-campaign',
     },
     {
         active: true,
@@ -39,8 +39,8 @@ const dashboardInfo = [
         issuedCodePercents: 80,
         noCodes: true,
         promoCampaignId: 8,
-        promoCampaignName: 'test promo-campaign2'
-    }
+        promoCampaignName: 'test promo-campaign2',
+    },
 ];
 
 const mockHistoryPush = jest.fn();
@@ -48,7 +48,7 @@ jest.mock('react-router-dom', () => ({
     useHistory: () => ({
         push: mockHistoryPush,
     }),
-    generatePath: jest.fn()
+    generatePath: jest.fn(),
 }));
 
 appNavigation.getPathForPromoCampaignInfo = jest.fn();
@@ -114,15 +114,15 @@ describe('<Dashboard /> test', () => {
         expect(container.find('DashboardFilterList').prop('list')).toEqual([
             {
                 id: 0,
-                displayName: 'Беру!'
+                displayName: 'Беру!',
             },
             {
                 id: 3,
-                displayName: 'Сбермаркет'
+                displayName: 'Сбермаркет',
             },
             {
                 id: 70,
-                displayName: 'СберМобайл'
+                displayName: 'СберМобайл',
             },
         ]);
     });

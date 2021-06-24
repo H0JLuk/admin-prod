@@ -19,7 +19,7 @@ const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
     useHistory: () => ({
         push: mockHistoryPush,
-        location: jest.fn()
+        location: jest.fn(),
     }),
     useRouteMatch: () => ({ path: 'test' }),
 }));

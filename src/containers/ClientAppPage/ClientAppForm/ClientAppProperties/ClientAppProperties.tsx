@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Row } from 'antd';
+import { Button, Col, Form, FormProps, Row } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { createOrUpdateKey, IChangedParam, showNotify } from '../utils';
 import { addClientApp, updateClientApp } from '@apiServices/clientAppService';
@@ -23,6 +23,8 @@ import {
     SETTINGS_TYPES,
     SUCCESS_PROPERTIES_CREATE_DESCRIPTION,
 } from '../ClientAppFormConstants';
+import { LoginTypes, LOGIN_TYPES_ENUM } from '@constants/loginTypes';
+import { NOTIFICATION_TYPES } from '@constants/clientAppsConstants';
 import { IPropertiesSettings, ISettings } from '../ClientAppContainer';
 import { BusinessRoleDto, ConsentDto } from '@types';
 import { compareArrayOfNumbers } from '@utils/helper';
@@ -51,8 +53,11 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
     const isEdit = type === FORM_MODES.EDIT;
     const [loading, setLoading] = useState(false);
     const [btnStatus, setBtnStatus] = useState(true);
+    const [disabledFields, setDisabledFields] = useState({} as Record<string, string[]>);
+
     useEffect(() => {
         isEdit && form.setFieldsValue(propertiesSettings);
+        updateCheckboxStatus(propertiesSettings.login_types as any);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -133,7 +138,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         notifies.push(() => showNotify(
                             <span>
                                 Отображаемое имя витрины изменено с <b>&quot;{propertiesSettings.displayName}&quot;</b> на <b>&quot;{displayName}&quot;</b>
-                            </span>
+                            </span>,
                         ));
                     }
 
@@ -141,7 +146,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         notifies.push(() => showNotify(
                             <span>
                                 Бизнес-роли для витрины <b>&quot;{propertiesSettings.displayName}&quot;</b> успешно обновлены
-                            </span>
+                            </span>,
                         ));
                     }
                 }
@@ -151,7 +156,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     notifies.unshift(() => showNotify(
                         <span>
                             Настройки для витрины <b>&quot;{displayName}&quot;</b> обновлены
-                        </span>
+                        </span>,
                     ));
                 }
 
@@ -175,7 +180,34 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
         setLoading(false);
     };
 
-    const enableBtn = () => {
+    const updateCheckboxStatus = (value: LoginTypes[] = []) => {
+        if (!value.length) {
+            setDisabledFields({});
+            return;
+        }
+
+        if (value.includes(LOGIN_TYPES_ENUM.DIRECT_LINK)) {
+            setDisabledFields({
+                notification_types: [NOTIFICATION_TYPES.PUSH],
+                login_types: [LOGIN_TYPES_ENUM.PASSWORD, LOGIN_TYPES_ENUM.SBER_REGISTRY],
+            });
+            form.setFieldsValue({
+                notification_types: [],
+                login_types: [LOGIN_TYPES_ENUM.DIRECT_LINK],
+            });
+            return;
+        }
+
+        setDisabledFields({
+            login_types: [LOGIN_TYPES_ENUM.DIRECT_LINK],
+        });
+    };
+
+    const handleFieldsChange: FormProps['onFieldsChange'] = (fields) => {
+        const [ { name, value } ] = fields;
+        if (Array.isArray(name) && name[0] === 'login_types') {
+            updateCheckboxStatus(value);
+        }
         setBtnStatus(false);
     };
 
@@ -187,7 +219,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 form={form}
                 onFinish={handleSubmit}
                 layout="vertical"
-                onFieldsChange={enableBtn}
+                onFieldsChange={handleFieldsChange}
                 id={type}
             >
                 <div className={styles.container}>
@@ -201,7 +233,11 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 </div>
                 <div className={styles.container}>
                     {formElements.map((row, index) => (
-                        <AppFormConstructor key={index} row={row} />
+                        <AppFormConstructor
+                            key={index}
+                            row={row}
+                            disabledFields={disabledFields}
+                        />
                     ))}
                     <Row gutter={24} className={styles.row}>
                         <Col span={13}>
@@ -212,7 +248,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                             >
                                 <SelectTags
                                     data={businessRoles}
-                                    nameKey="name"
                                     idKey="id"
                                     placeholder={BUSINESS_ROLE_FOR_APP_PLACEHOLDER}
                                 />

@@ -74,7 +74,7 @@ export const onFileUploadInputChange = async (e: React.ChangeEvent<HTMLInputElem
         response = await fetch(uploadUrl.toString(), {
             ...getReqOptions(),
             method: 'POST',
-            body: data
+            body: data,
         });
     } catch (e) {
         throw new Error(`Не удалось загрузить пользователей. ${e.message}`);

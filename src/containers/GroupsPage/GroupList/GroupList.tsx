@@ -38,7 +38,6 @@ const GroupList: React.FC<GroupListProps> = ({ matchPath }) => {
     const checkedItems = useRef<Record<number, boolean>>({});
     const [selectedItems, setSelectedItems] = useState<CheckedItem[] | null>(null);
     const [selectedSection, setSelectedSection] = useState(BundleTypes.IDEA);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const history = useHistory();
 
@@ -49,7 +48,6 @@ const GroupList: React.FC<GroupListProps> = ({ matchPath }) => {
     const isSelect = selectedItems !== null;
 
     const toggleSelect = () => clearSelectedItems(isSelect);
-    const toggleModal = () => setModalIsOpen(prev => !prev);
 
     const loadData = async () => {
         setLoading(true);
@@ -143,7 +141,7 @@ const GroupList: React.FC<GroupListProps> = ({ matchPath }) => {
         {
             label: isSelect ? BUTTON.CANCEL : BUTTON.CHOOSE,
             onClick: toggleSelect,
-        }
+        },
     ];
 
     const onChangeInput = useCallback(() => {
@@ -208,27 +206,25 @@ const GroupList: React.FC<GroupListProps> = ({ matchPath }) => {
                     {isSelect && (
                         <div className={styles.footer}>
                             <span>{`Выбрано групп: ${selectedItems!.length}`}</span>
-                            <Button
-                                disabled={!selectedItems!.length}
-                                onClick={toggleModal}
-                                type="primary"
-                                danger
+                            <TableDeleteModal<CheckedItem>
+                                sourceForRemove={selectedItems || []}
+                                listIdForRemove={(selectedItems || []).map(item => item.id)}
+                                deleteFunction={deleteCampaignGroup}
+                                refreshTable={refreshList}
+                                modalSuccessTitle={TITLE.MODAL_SUCCESS_TITLE}
+                                modalTitle={TITLE.MODAL_TITLE}
+                                listNameKey="name"
                             >
-                                {BUTTON.DELETE}
-                            </Button>
+                                <Button
+                                    type="primary"
+                                    disabled={!selectedItems?.length}
+                                    danger
+                                >
+                                    {BUTTON.DELETE}
+                                </Button>
+                            </TableDeleteModal>
                         </div>
                     )}
-                    <TableDeleteModal<CheckedItem>
-                        modalClose={toggleModal}
-                        sourceForRemove={selectedItems || []}
-                        listIdForRemove={(selectedItems || []).map(({ id }) => id)}
-                        deleteFunction={deleteCampaignGroup}
-                        refreshTable={refreshList}
-                        modalSuccessTitle={TITLE.MODAL_SUCCESS_TITLE}
-                        visible={modalIsOpen}
-                        modalTitle={TITLE.MODAL_TITLE}
-                        listNameKey="name"
-                    />
                 </>
             )}
         </div>

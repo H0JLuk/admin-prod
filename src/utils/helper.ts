@@ -82,7 +82,7 @@ export function downloadFileFunc(dataObj: string, name = 'file', fileExtension =
 export function sortItemsBySearchParams<T, K extends keyof T>(
     { sortBy, direction, filterText }: SearchParams,
     list: T[],
-    filterKey: K
+    filterKey: K,
 ) {
     return (!filterText
         ? list.slice()
@@ -151,13 +151,22 @@ export const defaultPaginationParams: SearchParams = {
 
 export function getSearchParamsFromUrl(
     search: string,
-    defaultParams: Record<string, string | number> = defaultSearchParams
+    defaultParams: Record<string, string | number> = defaultSearchParams,
+    ignoreKeys: string[] = [],
 ): SearchParams {
     const urlSearchParams = new URLSearchParams(search);
-    return Object.keys(defaultParams).reduce((result, key) => ({
-        ...result,
-        [key]: urlSearchParams.get(key) || defaultParams[key],
-    }), {} as SearchParams);
+
+    return Object.keys(defaultParams).reduce((result, key) => {
+        const value = urlSearchParams.get(key);
+        if (!value && ignoreKeys.includes(key)) {
+            return result;
+        }
+
+        return {
+            ...result,
+            [key]: value || defaultParams[key],
+        };
+    }, {} as SearchParams);
 }
 
 export function arrayToObject(array: Array<Record<string, any>>, keyForKey: string, keyForValue: string) {

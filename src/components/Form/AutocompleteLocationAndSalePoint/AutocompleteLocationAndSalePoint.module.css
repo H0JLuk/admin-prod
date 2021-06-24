@@ -1,13 +1,7 @@
 .formColumn {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    color: rgba(0, 0, 0, 0.85);
     font-size: 14px;
-    vertical-align: top;
     justify-content: space-between;
     flex-basis: 33.3%;
 }
@@ -89,12 +83,6 @@ div.autocompleteDropdown :global(.ant-select-item) {
 }
 
 .formError {
-    margin-top: 10px;
-    color: #ec464e;
-}
-
-.formError {
-    margin-top: 10px;
     color: #ec464e;
 }
 

@@ -1,4 +1,4 @@
-import { BANNER_TYPE } from '@constants/common';
+import { BANNER_TYPE, SALE_POINT_TYPE } from '@constants/common';
 import ROLES from '@constants/roles';
 import {
     BannerDto,
@@ -47,7 +47,7 @@ export const promoCampaignBannerArray: BannerDto[] = [
         type: BANNER_TYPE.CARD,
         orderNumber: 0,
         url: 'http://distributor-fs:8081/distributor-fs/file?path=greenday-presents/promocampaign/sberhealth/2/card.jpg',
-    }
+    },
 ];
 
 export const promoCampaignTextsArray: BannerTextDto[] = [
@@ -66,6 +66,7 @@ export const promoCampaignTestData: PromoCampaignDto = {
         isDeleted: false,
         businessRoleIds: [],
         orderNumber: 0,
+        loginTypes: [],
     },
     id: 24,
     childGroups: [],
@@ -184,6 +185,7 @@ export const clientAppTestData: ClientAppDto = {
     name: 'Витрина экосистемы с подарками',
     orderNumber: 0,
     businessRoleIds: [],
+    loginTypes: [],
 };
 
 export const clientAppListTestResponse: ListResponse<ClientAppDto> = {
@@ -197,7 +199,8 @@ export const clientAppListTestResponse: ListResponse<ClientAppDto> = {
             name: 'Витрина экосистемы с подарками 2',
             orderNumber: 1,
             businessRoleIds: [],
-        }
+            loginTypes: [],
+        },
     ],
     message: '',
     status: 'Ok',
@@ -243,22 +246,22 @@ export const settingDtoListTestData: ISettingList = {
         {
             key: 'tmp_block_time',
             value: '1800',
-            clientAppCode: 'greenday-presents'
+            clientAppCode: 'greenday-presents',
         },
         {
             key: 'ym_token',
             value: '55864828',
-            clientAppCode: 'greenday-presents'
+            clientAppCode: 'greenday-presents',
         },
         {
             key: 'promo_show_time',
             value: '10',
-            clientAppCode: 'greenday-presents'
+            clientAppCode: 'greenday-presents',
         },
         {
             key: 'privacy_policy',
             value: '64',
-            clientAppCode: 'greenday-presents'
+            clientAppCode: 'greenday-presents',
         },
     ],
 };
@@ -280,11 +283,11 @@ export const propertiesSettingsTestData = {
     doPropertiesSettingsTestData,
     name: 'Витрина экосистемы с подарками',
     mechanics: [
-        'BUNDLE'
+        'BUNDLE',
     ],
     login_types: [
         'PASSWORD',
-        'SBOL_PRO'
+        'SBOL_PRO',
     ],
     privacy_policy: 'Я, абонент номера мобильного телефона ${phoneNumber},  выражаю свое согласие ПАО Сбербанк (адрес: Российская Федерация, 117997, г. Москва, ул. Вавилова, д. 19) на обработку и хранение моих персональных данных (номера телефона, файлы cookie, сведения о действиях пользователя на сайте, сведения об оборудовании пользователя, дата и время сессии) в т.ч. с использованием метрических программ Яндекс.Метрика. В связи с предоставлением настоящего согласия Банк вправе без ограничения с использованием средств автоматизации осуществлять любые действия (операции) с моими персональными данными, включая сбор, запись, систематизацию, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, обезличивание, блокирование, удаление, уничтожение, передачу (распространение, предоставление, доступ) персональных данных.',
     max_presents_number: '3',
@@ -325,12 +328,12 @@ export const visibilitySettingLocation: LocationDto = {
         startDate: '2020-01-01',
         endDate: null,
         priority: 6,
-        deleted: false
+        deleted: false,
     },
-    parentName: 'Ярославская область'
+    parentName: 'Ярославская область',
 };
 
-export const visibilitySettingSalePoint: SalePointDto = {
+export const salePointTest: SalePointDto = {
     id: 3163,
     name: '040_0017_0251',
     description: 'Доп.офис №0017/0251',
@@ -344,7 +347,8 @@ export const visibilitySettingSalePoint: SalePointDto = {
         startDate: '2020-01-01',
         endDate: null,
         priority: 8,
-        deleted: false
+        deleted: false,
+        kind: SALE_POINT_TYPE.INTERNAL,
     },
     parentName: '0017',
     location: {
@@ -361,10 +365,10 @@ export const visibilitySettingSalePoint: SalePointDto = {
             startDate: '2020-01-01',
             endDate: null,
             priority: 6,
-            deleted: false
+            deleted: false,
         },
-        parentName: 'Ярославская область'
-    }
+        parentName: 'Ярославская область',
+    },
 };
 
 export const searchSalePointTestData: SalePointDto[] = [
@@ -381,6 +385,7 @@ export const searchSalePointTestData: SalePointDto[] = [
             description: 'Внутреннее структурное подразделение',
             startDate: '2020-01-01',
             endDate: null,
+            kind: SALE_POINT_TYPE.EXTERNAL,
             priority: 8,
             deleted: false,
         },
@@ -420,6 +425,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 53,
@@ -434,6 +440,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: false,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 106,
@@ -448,6 +455,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 118,
@@ -462,6 +470,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 120,
@@ -476,6 +485,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 121,
@@ -490,6 +500,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 960,
@@ -504,6 +515,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 69,
@@ -518,6 +530,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 99,
@@ -532,6 +545,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 2,
@@ -546,6 +560,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 228,
@@ -560,6 +575,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
     {
         id: 1110,
@@ -574,6 +590,7 @@ export const usersTestArray: UserInfo[] = [
         clientAppIds: null,
         tempPassword: true,
         loginType: 'PASSWORD',
+        parentUserName: null,
     },
 ];
 
@@ -628,7 +645,7 @@ export const permissionsTestData = {
         unlockUser: false,
         deleteUser: false,
         canSelectUserInTable: false,
-    }
+    },
 };
 
 export const promoCampaignVisibilitySettingTestData = {
@@ -651,7 +668,7 @@ export const visibilitySettingsTestArray: VisibilitySettingDto[] = [
         salePointId: 3140,
         salePointName: '040_0017_0031',
         visible: true,
-    }
+    },
 ];
 
 export const visibilitySettings: VisibilitySettingDto[] = [
@@ -781,39 +798,39 @@ export const resolveMenuItemsByRoleAndAppCodeValue = [
     [
         {
             label: 'Промо-кампании',
-            path: '/admin/promo-campaign'
+            path: '/admin/promo-campaign',
         },
         {
             label: 'Настройки',
-            path: '/admin/client-apps/app-properties'
+            path: '/admin/client-apps/app-properties',
         },
         {
             label: 'Группы',
-            path: '/admin/groups'
+            path: '/admin/groups',
         },
         {
             label: 'Отчеты',
-            path: '/admin/reports'
+            path: '/admin/reports',
         },
     ],
     [
         {
             label: 'Дашборд',
-            path: '/admin/dashboard'
+            path: '/admin/dashboard',
         },
         {
             label: 'Пользователи',
-            path: '/admin/users'
+            path: '/admin/users',
         },
         {
             label: 'ДЗО',
-            path: '/admin/dzo'
+            path: '/admin/dzo',
         },
         {
             label: 'Приложения',
-            path: '/admin/client-apps'
+            path: '/admin/client-apps',
         },
-    ]
+    ],
 ];
 
 export const getTextsReturnValue: BannerTextDto[] = [
@@ -855,6 +872,7 @@ export const consentsTestData: ListResponse<ConsentDto> = {
                     isDeleted: false,
                     orderNumber: 1,
                     businessRoleIds: [],
+                    loginTypes: [],
                 }, {
                     id: 8,
                     name: 'Сбер Премьер',
@@ -863,6 +881,7 @@ export const consentsTestData: ListResponse<ConsentDto> = {
                     isDeleted: false,
                     orderNumber: 2,
                     businessRoleIds: [],
+                    loginTypes: [],
                 },
             ],
             createDate: '2021-05-17T14:54:28.479',
@@ -882,6 +901,7 @@ export const consentsTestData: ListResponse<ConsentDto> = {
                     isDeleted: false,
                     orderNumber: 1,
                     businessRoleIds: [],
+                    loginTypes: [],
                 }, {
                     id: 2,
                     name: 'Сбер Премьер',
@@ -890,6 +910,7 @@ export const consentsTestData: ListResponse<ConsentDto> = {
                     isDeleted: false,
                     orderNumber: 2,
                     businessRoleIds: [],
+                    loginTypes: [],
                 },
             ],
             createDate: '2021-05-17T14:54:28.479',
@@ -903,5 +924,5 @@ export const consentsTestData: ListResponse<ConsentDto> = {
 export const consentsTestDataWithAppsNames = consentsTestData.list.map((consent) => ({
     ...consent,
     clientApplicationsNames: consent.clientApplications
-        .map((apps) => apps.displayName).join(', ')
+        .map((apps) => apps.displayName).join(', '),
 }));

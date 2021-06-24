@@ -10,7 +10,7 @@ import {
     deletePromoCampaignVisibilitySetting,
     editPromoCampaignVisibilitySetting,
     getPromoCampaignVisibilitySettings,
-    changeVisibleOfVisibilitySettings
+    changeVisibleOfVisibilitySettings,
 } from '@apiServices/promoCampaignService';
 import { getPathForCreatePromoCampaignVisibititySetting } from '@utils/appNavigation';
 import { getSearchParamsFromUrl } from '@utils/helper';
@@ -186,7 +186,7 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
 
     const selectAll = useCallback(() => {
         setSelectedSettings(
-            (state) => state!.length === visibilitySettings.length ? [] : visibilitySettings.map(({ id }) => id)
+            (state) => state!.length === visibilitySettings.length ? [] : visibilitySettings.map(({ id }) => id),
         );
     }, [visibilitySettings]);
 
@@ -200,7 +200,7 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
     const selectRow = useCallback((id) => {
         if (selectedSettings !== null) {
             setSelectedSettings(
-                (state) => state!.includes(id) ? state!.filter(el => el !== id) : [...state!, id]
+                (state) => state!.includes(id) ? state!.filter(el => el !== id) : [...state!, id],
             );
         }
     }, [selectedSettings]);
@@ -261,7 +261,7 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
         visibilitySettings,
         addNewByModal,
         onCreate,
-        showModal
+        showModal,
     ]);
 
     const onChangeSort = useCallback(() => {

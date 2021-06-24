@@ -68,7 +68,7 @@ const GroupForm: React.FC<GroupFormProps> = ({ matchPath, history, match, mode, 
         showLoading();
         (async () => {
             const { promoCampaignDtoList = [] } = await getFilteredPromoCampaignList({
-                type: groupFormFilterBy[groupType]
+                type: groupFormFilterBy[groupType],
             });
             setPromoCampaignList(promoCampaignDtoList);
         })();

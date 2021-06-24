@@ -20,10 +20,6 @@
     font-weight: bold;
 }
 
-.inputSearch {
-    min-width: 380px !important;
-}
-
 .footer {
     position: sticky;
     display: flex;
@@ -62,8 +58,4 @@
 
 .downloadButtons > button:not(:last-child) {
     margin-right: 12px;
-}
-
-.passwordColumn {
-    text-align: right;
 }

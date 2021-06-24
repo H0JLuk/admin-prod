@@ -5,21 +5,19 @@ import { SelectProps } from 'antd/es/select';
 
 import styles from './SelectTags.module.css';
 
-interface ISelectTags {
+// OT = OptionType
+interface ISelectTags<OT> {
     showClearIcon?: boolean;
     canRemoveSelected?: boolean;
     onChange?: (value: string[]) => void;
-    data: SelectTagsOptions[];
+    data: OT[];
     value?: number[];
-    nameKey?: string;
-    idKey?: string;
+    nameKey?: keyof OT;
+    idKey?: keyof OT;
     placeholder: string;
 }
 
-// TODO: Придумать как обобщить тип options с помощью дженерика
-type SelectTagsOptions = Record<string, any>;
-
-const SelectTags: React.FC<ISelectTags> = ({
+const SelectTags = <OT extends Record<string, any>>({
     showClearIcon = true,
     canRemoveSelected = true,
     onChange,
@@ -28,7 +26,7 @@ const SelectTags: React.FC<ISelectTags> = ({
     nameKey = 'name',
     idKey = 'code',
     placeholder,
-}) => {
+}: ISelectTags<OT>) => {
     const stringValue = value.map(String);
 
     const onRemoveSelectedTags = () => {
@@ -68,10 +66,12 @@ const SelectTags: React.FC<ISelectTags> = ({
         };
     });
 
+    const suffix = suffixBlock(stringValue.length, onRemoveSelectedTags, showClearIcon);
+
     return (
         <Select<string[]>
             className={styles.select}
-            suffixIcon={() => suffixBlock(stringValue.length, onRemoveSelectedTags, showClearIcon)}
+            suffixIcon={suffix}
             showArrow
             showSearch={false}
             maxTagCount="responsive"
@@ -106,7 +106,7 @@ function suffixBlock(selectedCount: number, onRemoveSelectedTag: () => void, sho
     );
 }
 
-function findName(data: SelectTagsOptions[], selectedValue: string, nameKey: string, keyToCompare: string) {
+function findName<OT>(data: OT[], selectedValue: string, nameKey: keyof OT, keyToCompare: keyof OT) {
     const name = data.find((elem) => String(elem[keyToCompare]) === selectedValue);
 
     return name && String(name[nameKey]);

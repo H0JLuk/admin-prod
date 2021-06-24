@@ -34,7 +34,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             maxSize: 2,
             get setting() {
                 return `770px x 368px, ${this.maxSize}МБ ${this.access_type}`;
-            }
+            },
         },
         [BANNER_TYPE.LOGO_SECONDARY]: {
             title: 'Логотип на экране с номером (белый)',
@@ -45,7 +45,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             maxSize: 2,
             get setting() {
                 return `48px, ${this.maxSize}МБ ${this.access_type}`;
-            }
+            },
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
@@ -60,7 +60,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             maxSize: 2,
             get setting() {
                 return `834px, ${this.maxSize}МБ ${this.access_type}`;
-            }
+            },
         },
         [BANNER_TYPE.LOGO_MAIN]: {
             title: 'Логотип на экране с QR',
@@ -71,7 +71,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             maxSize: 2,
             get setting() {
                 return `48px, ${this.maxSize}МБ ${this.access_type}`;
-            }
+            },
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
@@ -140,7 +140,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             maxSize: 2,
             get setting() {
                 return `48px, ${this.maxSize}МБ ${this.access_type}`;
-            }
+            },
             // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
@@ -184,7 +184,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 },
             ],
         },
-    }
+    },
 ];
 
 export const INFO_ROWS = {

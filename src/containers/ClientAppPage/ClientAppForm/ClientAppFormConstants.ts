@@ -263,6 +263,17 @@ export const formElements: FormConstructorItem[][] = [
 
     [
         {
+            label: 'Сессия referalLink (в секундах)',
+            type: FORM_TYPES.INPUT,
+            span: 8,
+            rules: [
+                RULES.NUMBER,
+            ],
+            name: 'referal_lifetime',
+            placeholder: '30 секунд по умолчанию',
+            maxLength: 12,
+        },
+        {
             label: 'Максимальное число попыток входа',
             type: FORM_TYPES.INPUT,
             span: 8,

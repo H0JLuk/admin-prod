@@ -9,14 +9,16 @@ import styles from './FormConstructor.module.css';
 type FormInputByTypeProps = FormConstructorFormItem & {
     isEdit?: boolean;
     canEdit?: boolean;
+    disabledFields?: Record<string, string[]>;
 };
 
 type AppFormConstructorProps = {
     isEdit?: boolean;
     row: FormConstructorItem[];
+    disabledFields?: Record<string, string[]>;
 };
 
-const FormInputByType: React.FC<FormInputByTypeProps> = ({ isEdit, ...rest }) => {
+const FormInputByType: React.FC<FormInputByTypeProps> = ({ isEdit, disabledFields = {}, ...rest }) => {
     switch (rest.type) {
         case FORM_TYPES.BANNER: {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,6 +28,12 @@ const FormInputByType: React.FC<FormInputByTypeProps> = ({ isEdit, ...rest }) =>
         case FORM_TYPES.CHECKBOX_GROUP: {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { type, columnMode, ...restProps } = rest;
+            const hasFieldsToDisable = disabledFields[(restProps as any).id];
+            if (hasFieldsToDisable) {
+                restProps.options = (restProps.options || []).map(
+                    op => typeof op === 'object' ? ({ ...op, disabled: hasFieldsToDisable.includes(op.value as string) }) : op,
+                );
+            }
             return (
                 <Checkbox.Group
                     className={cn({ [styles.checkboxColumn]: columnMode })}
@@ -54,7 +62,7 @@ const FormInputByType: React.FC<FormInputByTypeProps> = ({ isEdit, ...rest }) =>
     }
 };
 
-const AppFormConstructor: React.FC<AppFormConstructorProps> = ({ row, isEdit }) => (
+const AppFormConstructor: React.FC<AppFormConstructorProps> = ({ row, isEdit, disabledFields }) => (
     <Row className={styles.propertiesRow} gutter={24}>
         {row.map(({ label, span, rules, name, ...restProps }) => (
             <Col className={styles.colFlex} key={label} span={span}>
@@ -65,7 +73,11 @@ const AppFormConstructor: React.FC<AppFormConstructorProps> = ({ row, isEdit }) 
                     label={label}
                     validateFirst
                 >
-                    <FormInputByType isEdit={isEdit} {...restProps} />
+                    <FormInputByType
+                        isEdit={isEdit}
+                        {...restProps}
+                        disabledFields={disabledFields}
+                    />
                 </Form.Item>
             </Col>
         ))}

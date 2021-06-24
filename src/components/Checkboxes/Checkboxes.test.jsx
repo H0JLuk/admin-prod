@@ -16,7 +16,7 @@ const TEST_PROPS_CHECKBOX_CUSTOM = [
         checked: false,
         name: 'TEST_KEY_TWO',
         onChange: jest.fn(),
-    }
+    },
 ];
 
 const TEST_PROPS = {
@@ -26,7 +26,7 @@ const TEST_PROPS = {
     },
     onChange: jest.fn(),
     onChangeAll: jest.fn(),
-    disabledAll: false
+    disabledAll: false,
 };
 
 describe('<Checkboxes /> test', () => {

@@ -20,7 +20,7 @@ const TEST_BUTTONS_PROPS = [
 
 const TEST_PROPS = {
     buttons: TEST_BUTTONS_PROPS,
-    params: false
+    params: false,
 };
 
 describe('<ButtonsBlock /> tests.', () => {

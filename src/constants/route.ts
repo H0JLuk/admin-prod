@@ -66,7 +66,7 @@ export const CONSENTS_PAGES = {
 };
 
 export const ROUTE_AUDITOR = {
-    AUDIT:          `${ ROUTE.AUDITOR }/${ PAGE.AUDIT }`
+    AUDIT:          `${ ROUTE.AUDITOR }/${ PAGE.AUDIT }`,
 };
 
 export const ROUTE_USER_MANAGER = {
@@ -75,6 +75,8 @@ export const ROUTE_USER_MANAGER = {
 
 export const ROUTE_PARTNER = {
     USERS:          `${ ROUTE.PARTNER }/${ PAGE.USERS }`,
+    REPORTS:        `${ ROUTE.PARTNER }/${ PAGE.REPORTS }`,
+    APPS:           `${ ROUTE.PARTNER }/${ PAGE.APPS }`,
 };
 
 export const ROUTE_ADMIN = {

@@ -83,7 +83,7 @@ const formItemProps = {
     },
     CAMPAIGN_ID_FIELD: {
         label: 'Промо-кампания, с которой связать бандл',
-        required: true
+        required: true,
     },
     CAMPAIGN_HEADER_FIELD: {
         label: 'Текст заголовка',

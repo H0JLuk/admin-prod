@@ -43,7 +43,7 @@ SearchInputWithAction.propTypes = {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     params: PropTypes.object.isRequired,
-    onChangeInput: PropTypes.func
+    onChangeInput: PropTypes.func,
 };
 
 export default memo(SearchInputWithAction);

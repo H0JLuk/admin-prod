@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Form, Input, Select, DatePicker, Button } from 'antd';
-import 'moment/locale/ru';
 import locale from 'antd/es/date-picker/locale/ru_RU';
 import { AuditPageAppType } from './AuditPage';
 
@@ -80,9 +79,15 @@ const auditEventTypes = [
     'LOCATION_ADD',
     'LOCATION_EDIT',
     'LOCATION_DELETE',
+    'LOCATION_TYPE_ADD',
+    'LOCATION_TYPE_EDIT',
+    'LOCATION_TYPE_DELETE',
     'SALE_POINT_ADD',
     'SALE_POINT_EDIT',
     'SALE_POINT_DELETE',
+    'SALE_POINT_TYPE_ADD',
+    'SALE_POINT_TYPE_EDIT',
+    'SALE_POINT_TYPE_DELETE',
     'VISIBILITY_SETTING_ADD',
     'VISIBILITY_SETTING_EDIT',
     'VISIBILITY_SETTING_DELETE',
@@ -116,6 +121,8 @@ const auditEventTypes = [
     'CONSENT_EDIT',
     'CONSENT_DELETE',
     'CONSENT_ASSIGNED',
+    'DIRECT_LINK_ADD',
+    'DIRECT_LINK_LIST_ADD',
 ];
 const auditEventOptions = auditEventTypes.map(el => ({ label: el, value: el }));
 
@@ -131,7 +138,7 @@ const auditEventStatus: any[] = [
     {
         label: 'Не важно',
         value: null,
-    }
+    },
 ];
 
 const dateFormat = 'DD.MM.YYYY HH:mm:ss';
@@ -143,15 +150,15 @@ const layout = {
 
 const formFooterLayout = {
     span: 10,
-    offset: 3
+    offset: 3,
 };
 
 const resetBtnStyles = {
-    margin: '0 8px'
+    margin: '0 8px',
 };
 
 const initialValues = {
-    success: null
+    success: null,
 };
 
 const notValidValue = [undefined, null, ''];
@@ -173,7 +180,7 @@ const AuditFilter: React.FC<AuditFilterProps> = ({ submit, applications }) => {
         if (Array.isArray(date)) {
             data = {
                 from: date[0].format(dateFormat),
-                till: date[1].format(dateFormat)
+                till: date[1].format(dateFormat),
             };
         }
 
@@ -183,7 +190,7 @@ const AuditFilter: React.FC<AuditFilterProps> = ({ submit, applications }) => {
                     !notValidValue.includes(value)
                         ? { ...obj, [key]: value }
                         : obj,
-                {}
+                {},
             ),
             ...data,
         };

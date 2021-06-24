@@ -3,10 +3,10 @@ import { Button, message } from 'antd';
 import { Markup } from 'interweave';
 import { generatePath, useHistory, useParams } from 'react-router-dom';
 
-import Header from '@components/Header/Header';
+import Header from '@components/Header';
 import { getFormattedDate } from '@utils/helper';
 import { CONSENTS_PAGES } from '@constants/route';
-import Loading from '@components/Loading/Loading';
+import Loading from '@components/Loading';
 import { getRole } from '@apiServices/sessionService';
 import { confirmModal, errorModal, successModal } from '@utils/utils';
 import { deleteConsent, getConsentById } from '@apiServices/consentsService';
@@ -99,67 +99,68 @@ const ConsentInfo: React.FC<ConsentInfoProps> = ({ matchPath }) => {
             <Header />
             {loading
                 ? <Loading />
-                : <>
-                    <div className={styles.header}>
-                        <div className={styles.headerTitle}>
-                            {`${CONSENTS_LABELS.INFO_TITLE} ${version}`}
-                        </div>
-                        {buttonsVisibility && (
-                            <div className={styles.buttons}>
-                                <Button
-                                    type="primary"
-                                    onClick={onEdit}
-                                >
-                                    {BUTTON_TEXT.EDIT}
-                                </Button>
-                                {!clientApplications.length && (
+                : (
+                    <>
+                        <div className={styles.header}>
+                            <div className={styles.headerTitle}>
+                                {`${CONSENTS_LABELS.INFO_TITLE} ${version}`}
+                            </div>
+                            {buttonsVisibility && (
+                                <div className={styles.buttons}>
                                     <Button
                                         type="primary"
-                                        onClick={onDeleteClick}
-                                        danger
+                                        onClick={onEdit}
                                     >
-                                        {BUTTON_TEXT.DELETE}
+                                        {BUTTON_TEXT.EDIT}
                                     </Button>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                    <div className={styles.container}>
-                        <div className={styles.infoWrapper}>
-                            <div className={styles.infoContainer}>
-                                <div className={styles.title}>
-                                    {CONSENTS_LABELS.CREATE_DATE}
+                                    {!clientApplications.length && (
+                                        <Button
+                                            type="primary"
+                                            onClick={onDeleteClick}
+                                            danger
+                                        >
+                                            {BUTTON_TEXT.DELETE}
+                                        </Button>
+                                    )}
                                 </div>
-                                <div className={styles.text}>
-                                    {getFormattedDate(createDate)}
-                                </div>
-                                <div className={styles.title}>
-                                    {CONSENTS_LABELS.VERSION}
-                                </div>
-                                <div className={styles.text}>
-                                    {version}
-                                </div>
-                                <div className={styles.title}>
-                                    {CONSENTS_LABELS.CONSENTS_TEXT}
-                                </div>
-                                <Markup allowAttributes content={text} />
-                                <div className={styles.title}>
-                                    {CONSENTS_LABELS.CONSENTS_APPS}
-                                </div>
-                                <div className={styles.tagsBlock}>
-                                    {clientApplications.length > 0
-                                        ? clientApplications.map(({ displayName, id }) => (
-                                            <div key={id} className={styles.tag}>
-                                                {displayName}
-                                            </div>))
-                                        : <i>{EMPTY_VALUE[CONSENTS_LABELS.CLIENT_APPS_DTO_LIST]}</i>
-                                    }
+                            )}
+                        </div>
+                        <div className={styles.container}>
+                            <div className={styles.infoWrapper}>
+                                <div className={styles.infoContainer}>
+                                    <div className={styles.title}>
+                                        {CONSENTS_LABELS.CREATE_DATE}
+                                    </div>
+                                    <div className={styles.text}>
+                                        {getFormattedDate(createDate)}
+                                    </div>
+                                    <div className={styles.title}>
+                                        {CONSENTS_LABELS.VERSION}
+                                    </div>
+                                    <div className={styles.text}>
+                                        {version}
+                                    </div>
+                                    <div className={styles.title}>
+                                        {CONSENTS_LABELS.CONSENTS_TEXT}
+                                    </div>
+                                    <Markup allowAttributes content={text} />
+                                    <div className={styles.title}>
+                                        {CONSENTS_LABELS.CONSENTS_APPS}
+                                    </div>
+                                    <div className={styles.tagsBlock}>
+                                        {clientApplications.length > 0
+                                            ? clientApplications.map(({ displayName, id }) => (
+                                                <div key={id} className={styles.tag}>
+                                                    {displayName}
+                                                </div>
+                                            )) : <i>{EMPTY_VALUE[CONSENTS_LABELS.CLIENT_APPS_DTO_LIST]}</i>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </>
-            }
+                    </>
+                )}
         </>
     );
 };

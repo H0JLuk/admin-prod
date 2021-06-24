@@ -117,7 +117,7 @@ const AutocompleteLocationAndSalePoint: React.FC<AutocompleteLocationAndSalePoin
     const getSearchResults = useCallback(async (
         searchValue: string,
         typeSearch: SearchType = 'searchLocation',
-        newLocationId: number | undefined = locationId
+        newLocationId: number | undefined = locationId,
     ) => {
         try {
             const searchResult = await getResultsByTextAndType(searchValue, typeSearch, newLocationId);

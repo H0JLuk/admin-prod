@@ -14,7 +14,7 @@ export default class SetListValueEditing extends Plugin {
         editor.model.schema.extend('listItem', { allowAttributes: 'value' });
         editor.conversion.attributeToAttribute({
             model: 'value',
-            view: 'value'
+            view: 'value',
         });
 
         this.editor.commands.add(

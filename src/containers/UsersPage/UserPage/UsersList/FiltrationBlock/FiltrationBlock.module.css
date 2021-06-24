@@ -1,0 +1,56 @@
+.container {
+    background-color: #ffffff;
+    padding: 0 15px 15px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    margin-right: 20px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.filterBlock {
+    display: flex;
+    column-gap: 20px;
+    align-items: center;
+}
+
+.filterItem {
+    display: flex;
+    align-items: center;
+}
+
+.filterItem:global(.ant-select) {
+    width: 200px;
+}
+
+.filterItem:global(.ant-select-clear) {
+    top: 10px;
+    right: 15px !important;
+    opacity: 1 !important;
+}
+
+.clearButton {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    background-color: #f3f3f3;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.clearButton:hover {
+    background-color: #e7e6e6;
+}
+
+.clearButton[data-disabled=true] {
+    cursor: not-allowed;
+    background-color: #e0e0e0;
+}
+
+.autoComplete {
+    width: 250px
+}

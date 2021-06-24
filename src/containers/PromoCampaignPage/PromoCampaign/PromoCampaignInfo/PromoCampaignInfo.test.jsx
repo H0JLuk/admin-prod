@@ -50,7 +50,7 @@ describe('<PromoCampaignInfo /> tests', () => {
         matchPath: '/admin/promo-campaign',
         history: {
             push: jest.fn(),
-        }
+        },
     };
 
     it('PromoCampaignInfo snapshot', () => {
@@ -96,7 +96,7 @@ describe('<PromoCampaignInfo /> tests', () => {
         useLocation.mockImplementation(() => ({
             state: {
                 promoCampaign: undefined,
-            }
+            },
         }));
         render(<PromoCampaignInfo { ...props } />);
         await sleep();

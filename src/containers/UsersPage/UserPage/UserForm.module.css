@@ -6,15 +6,12 @@
 
 .container label {
     color: #494949;
+    margin-bottom: 8px;
 }
 
 .container h4 {
     color: #ababad;
     font-size: 12px;
-}
-
-.pageWrapper {
-    min-width: 500px;
 }
 
 .pageTitle {
@@ -24,6 +21,16 @@
     font-weight: 600;
     margin-bottom: 25px;
     color: #171725;
+    min-height: 38px;
+}
+
+.status {
+    padding: 5px 16px;
+    background-color: rgba(9, 165, 82, 0.08);
+    color: #09a552;
+    margin-left: 15px;
+    border-radius: 25px;
+    font-size: 18px;
 }
 
 .userStatus {
@@ -32,7 +39,6 @@
 }
 
 .error {
-    margin-top: 10px;
     color: #ff4d4f;
 }
 
@@ -48,8 +54,9 @@
 }
 
 .loginContainer {
+    display: flex;
+    flex-direction: column;
     flex-basis: 30%;
-    margin-right: 10px;
 }
 
 .hasError {
@@ -67,21 +74,28 @@
 }
 
 .noEditField {
+    display: flex;
+    align-items: center;
     color: #494949;
     font-size: 14px;
     font-weight: bold;
-    margin-top: 15px;
-    white-space: nowrap;
+    min-height: 32px;
+    max-width: 300px;
 }
 
 .labelCol {
-    flex: 1 0 33%;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 33%;
     min-height: 40px;
+    max-width: unset;
 }
 
-.selector {
-    width: 250px;
-    margin-top: 8px;
+.roleBlock {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 30%;
+    max-width: unset;
 }
 
 .buttonsContainer {
@@ -98,16 +112,9 @@
 }
 
 .formWrapper {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
     align-items: baseline;
     width: 100%;
     max-width: 1100px;
-}
-
-.formWrapper .formWrapper {
-    margin-top: 25px;
 }
 
 .title {
@@ -116,10 +123,11 @@
     font-size: 17px !important;
 }
 
-.loginInput {
-    margin-top: 8px;
+.loginInput,
+.selectInput {
     min-width: 200px;
-    max-width: 250px;
+    max-width: 300px;
+    width: 100%;
     max-height: 32px;
 }
 
@@ -127,22 +135,6 @@
     cursor: pointer;
 }
 
-.status {
-    padding: 5px 16px;
-    background-color: rgba(9, 165, 82, 0.08);
+.copyable :global(.ant-typography-copy) {
     color: #09a552;
-    margin-left: 15px;
-    border-radius: 25px;
-}
-
-.selectsRow {
-    margin-top: 25px;
-    width: 100%;
-    max-width: 1100px;
-}
-
-.selectsRow > div:first-child {
-    flex-basis: 30%;
-    max-width: 30%;
-    margin-right: 20px;
 }

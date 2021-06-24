@@ -14,7 +14,7 @@ describe('<ImagesBlock /> tests', () => {
         setting: '770px x 368px, 2МБ .jpg,.jpeg,.png',
         description: 'Добавить баннер',
         footer: false,
-        type: 'banner'
+        type: 'banner',
     };
 
     it('ImagesBlock snapshot', () => {
@@ -31,7 +31,7 @@ describe('<ImagesBlock /> tests', () => {
         const newProps = {
             ...props,
             footer: true,
-            originFileObj: {}
+            originFileObj: {},
         };
 
         const ImagesBlockItem = shallow(<ImagesBlock { ...newProps } />);
@@ -44,7 +44,7 @@ describe('<ImagesBlock /> tests', () => {
             ...props,
             footer: true,
             originFileObj: {},
-            imgURL: 'some img url'
+            imgURL: 'some img url',
         };
 
         const ImagesBlockItem = shallow(<ImagesBlock { ...newProps } />);

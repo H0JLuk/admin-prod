@@ -47,6 +47,18 @@ module.exports = {
         'no-unneeded-ternary': 'error',
         'space-before-blocks': ['warn', 'always'],
         'arrow-spacing': 'warn',
+        'comma-dangle': ['warn', 'always-multiline'],
+        'react/jsx-wrap-multilines': [
+            'warn',
+            {
+                declaration: 'parens-new-line',
+                assignment: 'parens-new-line',
+                return: 'parens-new-line',
+                arrow: 'parens-new-line',
+                condition: 'parens-new-line',
+                logical: 'parens-new-line',
+            },
+        ],
     },
     overrides: [
         {
@@ -126,6 +138,19 @@ module.exports = {
                         arrow: { before: true, after: true },
                     },
                 }],
+                'comma-dangle': 'off',
+                '@typescript-eslint/comma-dangle': ['warn', 'always-multiline'],
+                'react/jsx-wrap-multilines': [
+                    'warn',
+                    {
+                        declaration: 'parens-new-line',
+                        assignment: 'parens-new-line',
+                        return: 'parens-new-line',
+                        arrow: 'parens-new-line',
+                        condition: 'parens-new-line',
+                        logical: 'parens-new-line',
+                    },
+                ],
             },
             settings: {
                 react: {

@@ -44,7 +44,7 @@ describe('ClientAppForm utils test', () => {
                 key: 'max_presents_number',
                 type: 'create',
                 value: '4',
-            }
+            },
         ];
 
         settingsService.updateSettingsList = jest.fn().mockResolvedValue('ready');

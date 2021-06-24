@@ -12,7 +12,7 @@ describe('<TextBlock /> tests', () => {
         rules: [
             {
                 message: 'Заполните поле',
-                required: true
+                required: true,
             },
         ],
         name: ['texts', 'RULES'],

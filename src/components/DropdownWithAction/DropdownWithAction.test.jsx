@@ -10,13 +10,13 @@ const TEST_MENU_ITEMS = [
     {
         name: 'TEST_NAME_ONE',
         label: 'TEST_LABEL_ONE',
-        active: false
+        active: false,
     },
     {
         name: 'TEST_NAME_TWO',
         label: 'TEST_LABEL_TWO',
-        active: false
-    }
+        active: false,
+    },
 ];
 
 const TEST_PROPS = {

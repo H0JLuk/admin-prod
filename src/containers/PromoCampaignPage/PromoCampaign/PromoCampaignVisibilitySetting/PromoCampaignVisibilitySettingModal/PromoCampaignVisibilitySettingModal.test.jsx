@@ -1,11 +1,11 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import { visibilitySettingLocation as location, visibilitySettingSalePoint as salePoint } from '../../../../../../__tests__/constants';
+import { visibilitySettingLocation as location, salePointTest as salePoint } from '../../../../../../__tests__/constants';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
 import PromoCampaignVisibilitySettingModal from './PromoCampaignVisibilitySettingModal';
 
 jest.mock('../../../../../api/services/promoCampaignService', () => ({
-    addVisibilitySetting: jest.fn()
+    addVisibilitySetting: jest.fn(),
 }));
 
 describe('<PromoCampaignVisibilitySettingModal /> tests', () => {

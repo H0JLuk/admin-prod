@@ -19,8 +19,8 @@ describe('<SelectTags /> tests', () => {
                 categoryId: 8,
                 categoryName: 'Организуем приём у лучших врачей онлайн 24/7',
                 categoryUrl: 'http://distributor-fs:8081/distributor-fs/file?path=category/6.png',
-                highlights: []
-            }
+                highlights: [],
+            },
         ],
         value: ['11', '8'],
         nameKey: 'categoryName',
@@ -67,7 +67,7 @@ describe('<SelectTags /> tests', () => {
 
         await act(async() => {
             const {
-                props: { className }
+                props: { className },
             } = wrapper.find('Select').prop('tagRender')({ value: props.value[1], onClose });
             expect(className).toEqual('tagSelect');
         });

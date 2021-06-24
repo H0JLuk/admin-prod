@@ -108,19 +108,6 @@ describe('validate clientApp fields', () => {
             )
         ).toBe(false);
     });
-
-    it('test regex for `privacyPolicy`', () => {
-        const { pattern } = getPatternAndMessage('clientApp', 'privacyPolicy');
-        expect(validateField(pattern, 'Test политики конфиденциальности клиентского приложения.')).toBe(true);
-        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%()№{}"')).toBe(true);
-        // недопустимый символ @
-        expect(
-            validateField(
-                pattern,
-                'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя @ АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_/:%()№{}"'
-            )
-        ).toBe(false);
-    });
 });
 
 describe('validate DZO fields', () => {
@@ -173,6 +160,20 @@ describe('validate DZO fields', () => {
                 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюя % АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 0123456789 .-,_'
             )
         ).toBe(false);
+    });
+
+});
+
+describe('validate users pages', () => {
+
+    it('test regex for `login`', () => {
+        const { pattern } = getPatternAndMessage('users', 'login');
+        expect(validateField(pattern, '12312412412')).toBe(true);
+        expect(validateField(pattern, 'TestValue')).toBe(true);
+        expect(validateField(pattern, '1231Test13')).toBe(true);
+        expect(validateField(pattern, '123 123')).toBe(false);
+        expect(validateField(pattern, 'test value')).toBe(false);
+        expect(validateField(pattern, 'test#Value')).toBe(false);
     });
 
 });

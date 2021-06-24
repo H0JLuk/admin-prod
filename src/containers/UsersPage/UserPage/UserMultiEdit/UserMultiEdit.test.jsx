@@ -48,14 +48,14 @@ jest.mock('react-router-dom', () => ({
                     salePointName: '055_8626_1236',
                     tempPassword: true,
                     tmpBlocked: false,
-                }
+                },
             ] : undefined,
-        }
+        },
     }),
 }));
 
 const TEST_PROPS = {
-    matchPath: 'TEST_PATH'
+    matchPath: 'TEST_PATH',
 };
 
 const TEST_USER_DATA = {
