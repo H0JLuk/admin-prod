@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import PromoCampaignVisibilitySettingForm from './PromoCampaignVisibilitySettingForm';
-import { visibilitySettingLocation as location, salePointTest as salePoint } from '../../../../../../__tests__/constants';
+import { testLocation as location, salePointTest as salePoint } from '../../../../../../__tests__/constants';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
 import { act } from '@testing-library/react';
 

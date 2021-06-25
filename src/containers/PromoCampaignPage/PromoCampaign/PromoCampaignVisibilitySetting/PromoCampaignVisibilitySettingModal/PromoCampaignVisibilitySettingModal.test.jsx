@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import { visibilitySettingLocation as location, salePointTest as salePoint } from '../../../../../../__tests__/constants';
+import { testLocation as location, salePointTest as salePoint } from '../../../../../../__tests__/constants';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
 import PromoCampaignVisibilitySettingModal from './PromoCampaignVisibilitySettingModal';
 

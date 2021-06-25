@@ -8,7 +8,7 @@ import { promoCampaignTestData } from '../../../../../__tests__/constants';
 import * as promoCampaignService from '../../../../api/services/promoCampaignService';
 import * as appNavigation from '../../../../utils/appNavigation';
 import * as helper from '../../../../utils/helper';
-import { sleep } from '../../../../utils/utils';
+import { sleep } from '../../../../setupTests';
 
 promoCampaignService.getFilteredPromoCampaignList = jest.fn();
 promoCampaignService.reorderPromoCampaigns = jest.fn();

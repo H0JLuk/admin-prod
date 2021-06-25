@@ -315,7 +315,7 @@ export const settingsMapTestData = {
     inactivity_time: '152',
 };
 
-export const visibilitySettingLocation: LocationDto = {
+export const testLocation: LocationDto = {
     id: 2046,
     name: 'Ростов',
     description: null,

@@ -6,16 +6,21 @@ import { getUserAppsCheckboxes } from './UserFormHelper';
 import {
     getCurrUserInteractionsForOtherUser,
     getCommonPermissionsByRole,
-} from '../../../constants/permissions';
-import { getUser, unblockUser, resetUser, removeUser, saveUser, addUser } from '../../../api/services/usersService';
-import { getActiveClientApps } from '../../../api/services/clientAppService';
+} from '@constants/permissions';
+import { getUser, unblockUser, resetUser, removeUser, saveUser, addUser } from '@apiServices/usersService';
+import { getActiveClientApps } from '@apiServices/clientAppService';
 import { sleep } from '../../../setupTests';
 import { BUTTON, INFO_USER_BUTTONS } from './UserFormButtonGroup/UserFormButtonGroup';
-import { customNotifications } from '../../../utils/notifications';
-import { userTestData, clientAppListTestResponse, searchSalePointTestData } from '../../../../__tests__/constants';
-import { getResultsByTextAndType, createSearchDataAndPassLocation } from '../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper';
-import { confirmModal } from '../../../utils/utils';
-import { getSalePointByText } from '../../../api/services/promoCampaignService';
+import { customNotifications } from '@utils/notifications';
+import {
+    userTestData,
+    clientAppListTestResponse,
+    searchSalePointTestData,
+    salePointTest,
+} from '../../../../__tests__/constants';
+import { getResultsByTextAndType, createSearchDataAndPassLocation } from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper';
+import { confirmModal } from '@utils/utils';
+import { getSalePointByText } from '@apiServices/promoCampaignService';
 
 const mockSalePointSelect = {
     ...searchSalePointTestData[0],
@@ -25,45 +30,71 @@ const mockSalePointSelect = {
     },
 };
 jest.mock(
-    '../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteLocationAndSalePoint',
-    () => ({ onLocationChange, onSalePointChange, error, locationId }) => (
+    '@components/Form/AutocompleteLocationAndSalePoint',
+    () => ({ onLocationChange, onSalePointChange, error, locationId }: any) => (
         <>
-            { error.salePoint }
-            <span data-testid="locationId">{ locationId }</span>
-            <button data-testid="location" onClick={ () => onLocationChange({ id: 2, name: 'testName' }) }>location</button>
-            <button data-testid="salePoint" onClick={ () => onSalePointChange(mockSalePointSelect) }>salePoint</button>
+            {error.salePoint}
+            <span data-testid="locationId">{locationId}</span>
+            <button data-testid="location" onClick={() => onLocationChange({ id: 2, name: 'testName' })}>location</button>
+            <button data-testid="salePoint" onClick={() => onSalePointChange(mockSalePointSelect)}>salePoint</button>
         </>
-    )
+    ),
 );
 
-jest.mock('../../../components/Checkboxes/Checkboxes', () => ({ checkboxesData, onChangeAll, onChange }) => (
+jest.mock('antd', () => ({
+    ...jest.requireActual('antd'),
+    Select({ onChange }: any) {
+        return (
+            <div data-testid="Select">
+                <button data-testid="changeRoleToPartner" onClick={() => onChange('Partner')}>PartnerRole</button>
+                <button data-testid="changeRoleToUser" onClick={() => onChange('User')}>UserRole</button>
+            </div>
+        );
+    },
+}));
+
+jest.mock('@components/Checkboxes', () => ({ checkboxesData, onChangeAll, onChange }: any) => (
     <div data-testid="checkboxes">
-        <span data-testid="checkboxesData">{ JSON.stringify(checkboxesData) }</span>
-        <button data-testid="changeAllCheckboxes" onClick={ (e) => onChangeAll(e.target.testValue) }>changeAllCheckboxes</button>
-        <button data-testid="changeOneCheckbox" onClick={ (e) => onChange(e.target.testValue, 'digital-village') }>changeOneCheckbox</button>
+        <span data-testid="checkboxesData">{JSON.stringify(checkboxesData)}</span>
+        <button data-testid="changeAllCheckboxes" onClick={(e: any) => onChangeAll(e.target.testValue)}>changeAllCheckboxes</button>
+        <button data-testid="changeOneCheckbox" onClick={(e: any) => onChange(e.target.testValue, 'digital-village')}>changeOneCheckbox</button>
     </div>
 ));
 
-jest.mock('../../../api/services/promoCampaignService', () => ({
+jest.mock(
+    '@components/AutoComplete',
+    () => ({ value, error, onSelect, componentMethods }: any) => {
+        componentMethods.current = { clearState: () => '' };
+        return (
+            <div data-testid="autocompletePartner">
+                <div data-testid="autocompletePartnerValue">{JSON.stringify(value)}</div>
+                <button data-testid="partnerSelect" onClick={() => onSelect({ personalNumber: 'testPN' })}>partnerSelect</button>
+                <span data-testid="partnerError">{error}</span>
+            </div>
+        );
+    },
+);
+
+jest.mock('@apiServices/promoCampaignService', () => ({
     getSalePointByText: jest.fn(),
 }));
 
-jest.mock('../../../components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper', () => ({
+jest.mock('@components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper', () => ({
     getResultsByTextAndType: jest.fn(),
     createSearchDataAndPassLocation: jest.fn(),
 }));
 
-jest.mock('../../../api/services/clientAppService', () => ({
+jest.mock('@apiServices/clientAppService', () => ({
     getActiveClientApps: jest.fn(),
 }));
 
-jest.mock('../../../utils/utils', () => ({
-    ...jest.requireActual('../../../utils/utils'),
+jest.mock('@utils/utils', () => ({
+    ...jest.requireActual('@utils/utils'),
     confirmModal: jest.fn(),
 }));
 
-jest.mock('../../../constants/permissions', () => {
-    const originalModule = jest.requireActual('../../../constants/permissions');
+jest.mock('@constants/permissions', () => {
+    const originalModule = jest.requireActual('@constants/permissions');
 
     return {
         __esModule: true,
@@ -73,7 +104,7 @@ jest.mock('../../../constants/permissions', () => {
     };
 });
 
-jest.mock('../../../api/services/usersService', () => ({
+jest.mock('@apiServices/usersService', () => ({
     getUser: jest.fn(),
     unblockUser: jest.fn(),
     resetUser: jest.fn(),
@@ -107,26 +138,7 @@ jest.mock('react-router-dom', () => ({
 const TEST_PASSWORD = 'TEST_PASSWORD_123';
 
 const SearchData = {
-    results: [
-        {
-            id: 886,
-            name: '055_8626_1232',
-            description: 'Доп.офис №8626/1232',
-            startDate: '2020-01-11',
-            endDate: null,
-            deleted: false,
-            type: {
-                id: 3,
-                name: 'ВСП',
-                description: 'Внутреннее структурное подразделение',
-                startDate: '2020-01-01',
-                endDate: null,
-                priority: 8,
-                deleted: false,
-            },
-            parentName: '8626',
-        },
-    ],
+    results: [salePointTest],
     value: 'Московская область, Москва',
 };
 
@@ -187,16 +199,16 @@ const TEST_CHECKBOX = {
 
 describe('<UserForm /> test', () => {
     const Component = (type = CASE_TYPES.INFO) => render(
-        <UserForm { ...TEST_PROPS } type={ type } />
+        <UserForm {...TEST_PROPS} type={type} />,
     );
 
     beforeEach(() => {
-        getActiveClientApps.mockResolvedValue(clientAppListTestResponse.list);
-        getUser.mockResolvedValue(userTestData);
-        getCurrUserInteractionsForOtherUser.mockReturnValue(TEST_INTERACTIONS);
-        getCommonPermissionsByRole.mockReturnValue(TEST_COMMON_PERMISSIONS);
-        getUserAppsCheckboxes.mockReturnValue(TEST_CHECKBOX);
-        getSalePointByText.mockReturnValue({ ...searchSalePointTestData[0], id: userTestData.salePointId });
+        (getActiveClientApps as jest.Mock).mockResolvedValue(clientAppListTestResponse.list);
+        (getUser as jest.Mock).mockResolvedValue(userTestData);
+        (getCurrUserInteractionsForOtherUser as jest.Mock).mockReturnValue(TEST_INTERACTIONS);
+        (getCommonPermissionsByRole as jest.Mock).mockReturnValue(TEST_COMMON_PERMISSIONS);
+        (getUserAppsCheckboxes as jest.Mock).mockReturnValue(TEST_CHECKBOX);
+        (getSalePointByText as jest.Mock).mockReturnValue({ ...searchSalePointTestData[0], id: userTestData.salePointId });
         cleanup();
         document.body.innerHTML = '';
     });
@@ -213,7 +225,7 @@ describe('<UserForm /> test', () => {
     });
 
     it('should find buttons and call reset password function', async () => {
-        resetUser.mockResolvedValue(TEST_PASSWORDS);
+        (resetUser as jest.Mock).mockResolvedValue(TEST_PASSWORDS);
         await act(async () => {
             Component();
         });
@@ -231,7 +243,7 @@ describe('<UserForm /> test', () => {
     });
 
     it('should find buttons and call reset password function with catch', async () => {
-        resetUser.mockRejectedValue(new Error('Error'));
+        (resetUser as jest.Mock).mockRejectedValue(new Error('Error'));
         customNotifications.error = jest.fn();
 
         await act(async () => {
@@ -267,13 +279,13 @@ describe('<UserForm /> test', () => {
         expect(confirmModal).toBeCalledTimes(1);
 
         await act(async () => {
-            await confirmModal.mock.calls[0][0].onOk();
+            await (confirmModal as jest.Mock).mock.calls[0][0].onOk();
         });
         expect(removeUser).toBeCalledTimes(1);
     });
 
     it('should call delete function with catch', async () => {
-        removeUser.mockRejectedValue(new Error('Error'));
+        (removeUser as jest.Mock).mockRejectedValue(new Error('Error'));
         customNotifications.error = jest.fn();
         Component();
         await sleep();
@@ -282,7 +294,7 @@ describe('<UserForm /> test', () => {
         expect(confirmModal).toBeCalledTimes(1);
 
         await act(async () => {
-            await confirmModal.mock.calls[0][0].onOk();
+            await (confirmModal as jest.Mock).mock.calls[0][0].onOk();
         });
         await sleep();
         expect(removeUser).toBeCalledTimes(1);
@@ -290,7 +302,7 @@ describe('<UserForm /> test', () => {
     });
 
     it('should call catch in onDelete function', async () => {
-        getUser.mockResolvedValue({ ...userTestData, id: null });
+        (getUser as jest.Mock).mockResolvedValue({ ...userTestData, id: null });
         Component();
         await sleep();
         expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
@@ -298,13 +310,13 @@ describe('<UserForm /> test', () => {
         expect(confirmModal).toBeCalledTimes(1);
 
         await act(async () => {
-            await confirmModal.mock.calls[0][0].onOk();
+            await (confirmModal as jest.Mock).mock.calls[0][0].onOk();
         });
         expect(removeUser).toBeCalledTimes(1);
     });
 
     it('should call submit function', async () => {
-        getSalePointByText.mockReturnValue({
+        (getSalePointByText as jest.Mock).mockReturnValue({
             ...searchSalePointTestData[0],
             id: userTestData.salePointId,
             type: {
@@ -312,7 +324,7 @@ describe('<UserForm /> test', () => {
                 kind: 'INTERNAL',
             },
         });
-        saveUser.mockResolvedValue(TEST_PASSWORDS);
+        (saveUser as jest.Mock).mockResolvedValue(TEST_PASSWORDS);
         Component(CASE_TYPES.EDIT);
         await sleep();
 
@@ -325,7 +337,7 @@ describe('<UserForm /> test', () => {
     });
 
     it('should call submit function with catch', async () => {
-        getSalePointByText.mockReturnValue({
+        (getSalePointByText as jest.Mock).mockReturnValue({
             ...searchSalePointTestData[0],
             id: userTestData.salePointId,
             type: {
@@ -333,7 +345,7 @@ describe('<UserForm /> test', () => {
                 kind: 'INTERNAL',
             },
         });
-        saveUser.mockRejectedValue(new Error('Error'));
+        (saveUser as jest.Mock).mockRejectedValue(new Error('Error'));
         Component(CASE_TYPES.EDIT);
         await sleep();
 
@@ -372,9 +384,9 @@ describe('<UserForm /> test', () => {
     });
 
     it('should call submit function with new User', async () => {
-        getResultsByTextAndType.mockResolvedValue(searchSalePointTestData);
-        addUser.mockResolvedValue({ generatedPassword: TEST_PASSWORD });
-        createSearchDataAndPassLocation.mockReturnValue({ location: LocationData, searchLocation: SearchData });
+        (getResultsByTextAndType as jest.Mock).mockResolvedValue(searchSalePointTestData);
+        (addUser as jest.Mock).mockResolvedValue({ generatedPassword: TEST_PASSWORD });
+        (createSearchDataAndPassLocation as jest.Mock).mockReturnValue({ location: LocationData, searchLocation: SearchData });
         customNotifications.success = jest.fn();
 
         await act(async () => {
@@ -410,24 +422,24 @@ describe('<UserForm /> test', () => {
 
         fireEvent.click(
             screen.getByTestId('changeAllCheckboxes'),
-            { target: { testValue: true } }
+            { target: { testValue: true } },
         );
         await sleep();
         expect(
             JSON.parse(
-                screen.getByTestId('checkboxesData').innerHTML
-            )['digital-village'].checked
+                screen.getByTestId('checkboxesData').innerHTML,
+            )['digital-village'].checked,
         ).toBe(true);
 
         fireEvent.click(
             screen.getByTestId('changeOneCheckbox'),
-            { target: { testValue: false } }
+            { target: { testValue: false } },
         );
         await sleep();
         expect(
             JSON.parse(
-                screen.getByTestId('checkboxesData').innerHTML
-            )['digital-village'].checked
+                screen.getByTestId('checkboxesData').innerHTML,
+            )['digital-village'].checked,
         ).toBe(false);
     });
 
@@ -448,14 +460,14 @@ describe('<UserForm /> test', () => {
     });
 
     it('should call history replace in get user data', async () => {
-        getCurrUserInteractionsForOtherUser.mockReturnValue(TEST_INTERACTIONS_FALSE);
+        (getCurrUserInteractionsForOtherUser as jest.Mock).mockReturnValue(TEST_INTERACTIONS_FALSE);
         Component(CASE_TYPES.EDIT);
         await sleep();
         expect(generatePath).toBeCalledTimes(1);
     });
 
     it('should call reset function with blocked user', async () => {
-        getUser.mockResolvedValue({ ...userTestData, tmpBlocked: true });
+        (getUser as jest.Mock).mockResolvedValue({ ...userTestData, tmpBlocked: true });
         await act(async () => {
             Component();
         });
@@ -469,7 +481,7 @@ describe('<UserForm /> test', () => {
 
     it('should call catch in get user data', async () => {
         jest.spyOn(console, 'warn').mockImplementation(() => '');
-        getUser.mockRejectedValue(new Error('Error'));
+        (getUser as jest.Mock).mockRejectedValue(new Error('Error'));
         Component();
         await sleep();
         expect(mockHistoryPush).toBeCalledTimes(1);
@@ -485,5 +497,35 @@ describe('<UserForm /> test', () => {
         expect(mockHistoryPush).toBeCalledTimes(1);
         expect(mockHistoryPush).toBeCalledWith(TEST_PROPS.matchPath);
         mockErrorParams = false;
+    });
+
+    it('should change partner field', async () => {
+        Component('edit');
+        await sleep();
+
+        await act(async () => {
+            fireEvent.click(screen.getByTestId('partnerSelect'));
+        });
+        expect(screen.getByTestId('autocompletePartnerValue').innerHTML).toBe(JSON.stringify('testPN'));
+    });
+
+    it('should change role', async () => {
+        Component('new');
+        await sleep();
+
+        const login = screen.getByPlaceholderText('Табельный номер') as HTMLInputElement;
+        login.value = 'testValue';
+
+        await act(async () => {
+            fireEvent.click(screen.getByTestId('partnerSelect'));
+        });
+        expect(screen.getByTestId('autocompletePartnerValue').innerHTML).toBe(JSON.stringify('testPN'));
+
+        act(() => {
+            fireEvent.click(screen.getByTestId('changeRoleToPartner'));
+        });
+
+        expect((screen.getByPlaceholderText('Табельный номер') as HTMLInputElement).value).toBe('');
+        expect(screen.getByTestId('autocompletePartnerValue').innerHTML).toBe(JSON.stringify(null));
     });
 });

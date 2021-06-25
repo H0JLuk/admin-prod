@@ -1,17 +1,22 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import UserMultiEdit, { CHOSE_USERS_COUNT } from './UserMultiEdit';
-import { editLocationAndSalePointUsers, removeUser } from '../../../../api/services/usersService';
+import { editLocationAndSalePointUsers, removeUser } from '@apiServices/usersService';
 import { sleep } from '../../../../setupTests';
 import { act } from 'react-dom/test-utils';
+import { salePointTest, testLocation, usersTestArray } from '../../../../../__tests__/constants';
+import AutocompleteLocationAndSalePoint from '@components/Form/AutocompleteLocationAndSalePoint';
+import UserFormButtonGroup from '../UserFormButtonGroup';
 
-jest.mock('../../../../api/services/usersService', () => ({
+jest.mock('@apiServices/usersService', () => ({
     editLocationAndSalePointUsers: jest.fn(),
     removeUser: jest.fn(),
 }));
 
 const mockHistoryPush = jest.fn();
 let mockA = true;
+const mockUsersArray = [usersTestArray[0], usersTestArray[1]];
 
 jest.mock('react-router-dom', () => ({
     useParams: () => ({ userId: 1 }),
@@ -20,36 +25,7 @@ jest.mock('react-router-dom', () => ({
     }),
     useLocation: () => ({
         state: {
-            users: mockA ? [
-                {
-                    blocked: false,
-                    clientAppIds: null,
-                    id: 287,
-                    locationId: 233,
-                    locationName: 'Тамбов',
-                    loginType: 'PASSWORD',
-                    personalNumber: '12222222',
-                    role: 'User',
-                    salePointId: 1513,
-                    salePointName: '013_8594_3926',
-                    tempPassword: true,
-                    tmpBlocked: false,
-                },
-                {
-                    blocked: false,
-                    clientAppIds: null,
-                    id: 136,
-                    locationId: 137,
-                    locationName: 'Калининград',
-                    loginType: 'PASSWORD',
-                    personalNumber: '111111',
-                    role: 'User',
-                    salePointId: 887,
-                    salePointName: '055_8626_1236',
-                    tempPassword: true,
-                    tmpBlocked: false,
-                },
-            ] : undefined,
+            users: mockA ? mockUsersArray : undefined,
         },
     }),
 }));
@@ -59,13 +35,13 @@ const TEST_PROPS = {
 };
 
 const TEST_USER_DATA = {
-    LOCATION: 'TEST_LOCATION',
-    SALE_POINT: '38',
+    LOCATION: testLocation,
+    SALE_POINT: salePointTest,
 };
 
 describe('<UserMultiEdit /> test', () => {
-    const ComponentMount = () => mount(<UserMultiEdit { ...TEST_PROPS } />);
-    const ComponentShallow = () => shallow(<UserMultiEdit { ...TEST_PROPS } />);
+    const ComponentMount = () => mount(<UserMultiEdit {...TEST_PROPS} />);
+    const ComponentShallow = () => shallow(<UserMultiEdit {...TEST_PROPS} />);
 
     it('should be mount snap', () => {
         const Component = ComponentMount();
@@ -79,25 +55,25 @@ describe('<UserMultiEdit /> test', () => {
 
     it('should input edit users data and call submit function', async () => {
         const Component = ComponentShallow();
-        const Autocomplete = Component.find('AutocompleteLocationAndSalePoint');
+        const Autocomplete = Component.find(AutocompleteLocationAndSalePoint);
         Autocomplete.props().onLocationChange(TEST_USER_DATA.LOCATION);
         Autocomplete.props().onSalePointChange(TEST_USER_DATA.SALE_POINT);
 
-        const ButtonGroup = Component.find('UserFormButtonGroup');
-        ButtonGroup.props().onSubmit();
+        const ButtonGroup = Component.find(UserFormButtonGroup);
+        ButtonGroup.props().onSubmit!();
         await sleep();
         expect(editLocationAndSalePointUsers).toBeCalledTimes(1);
         expect(mockHistoryPush).toBeCalledTimes(1);
     });
 
     it('should input edit users data and call submit function with catch', async () => {
-        editLocationAndSalePointUsers.mockRejectedValue(new Error('Error'));
+        (editLocationAndSalePointUsers as jest.Mock).mockRejectedValue(new Error('Error'));
         const Component = ComponentShallow();
-        const Autocomplete = Component.find('AutocompleteLocationAndSalePoint');
+        const Autocomplete = Component.find(AutocompleteLocationAndSalePoint);
         Autocomplete.props().onLocationChange(TEST_USER_DATA.LOCATION);
         Autocomplete.props().onSalePointChange(TEST_USER_DATA.SALE_POINT);
-        const ButtonGroup = Component.find('UserFormButtonGroup');
-        ButtonGroup.props().onSubmit();
+        const ButtonGroup = Component.find(UserFormButtonGroup);
+        ButtonGroup.props().onSubmit!();
         await sleep();
         expect(editLocationAndSalePointUsers).toBeCalledTimes(1);
         expect(ButtonGroup.find('.formError')).toBeTruthy();
@@ -105,16 +81,16 @@ describe('<UserMultiEdit /> test', () => {
 
     it('should input edit users data and call submit function with error sale point', async () => {
         const Component = ComponentMount();
-        const Autocomplete = Component.find('AutocompleteLocationAndSalePoint');
+        const Autocomplete = Component.find(AutocompleteLocationAndSalePoint);
 
         act(() => {
             Autocomplete.props().onLocationChange(TEST_USER_DATA.LOCATION);
         });
 
-        const ButtonGroup = Component.find('UserFormButtonGroup');
+        const ButtonGroup = Component.find(UserFormButtonGroup);
 
         act(() => {
-            ButtonGroup.props().onSubmit();
+            ButtonGroup.props().onSubmit!();
         });
 
         expect(Component.find('.formError')).toBeTruthy();
@@ -122,22 +98,22 @@ describe('<UserMultiEdit /> test', () => {
 
     it('should call delete users function', async () => {
         const Component = ComponentMount();
-        const ButtonGroup = Component.find('UserFormButtonGroup');
+        const ButtonGroup = Component.find(UserFormButtonGroup);
 
         await act(async () => {
-            ButtonGroup.props().onDelete();
+            ButtonGroup.props().onDelete!();
         });
 
         expect(removeUser).toBeCalledTimes(2);
     });
 
     it('should call delete users function with catch', async () => {
-        removeUser.mockRejectedValue(new Error('Error'));
+        (removeUser as jest.Mock).mockRejectedValue(new Error('Error'));
         const Component = ComponentMount();
-        const ButtonGroup = Component.find('UserFormButtonGroup');
+        const ButtonGroup = Component.find(UserFormButtonGroup);
 
         await act(async () => {
-            ButtonGroup.props().onDelete();
+            ButtonGroup.props().onDelete!();
         });
 
         expect(ButtonGroup.find('.formError')).toBeTruthy();
@@ -145,8 +121,8 @@ describe('<UserMultiEdit /> test', () => {
 
     it('should call cancel function', () => {
         const Component = ComponentShallow();
-        const ButtonGroup = Component.find('UserFormButtonGroup');
-        ButtonGroup.props().onCancel();
+        const ButtonGroup = Component.find(UserFormButtonGroup);
+        ButtonGroup.props().onCancel!();
         expect(mockHistoryPush).toBeCalledTimes(1);
     });
 

@@ -18,7 +18,7 @@ import {
 } from './PromoCampaignFormUtils';
 import {
     promoCampaignTestData,
-    visibilitySettingLocation,
+    testLocation,
 } from '../../../../../__tests__/constants';
 import { sleep } from '../../../../setupTests';
 
@@ -179,11 +179,11 @@ describe('<PromoCampaignForm /> tests', () => {
         const StepVisibility = wrapper.find('StepVisibility');
         expect(StepVisibility.prop('visibilitySettings')[0].errors).toEqual({ location: 'Укажите локацию' });
 
-        StepVisibility.simulate('changeState', visibilitySettingLocation, 0, 'location', {});
+        StepVisibility.simulate('changeState', testLocation, 0, 'location', {});
 
         expect(
             wrapper.find('StepVisibility').prop('visibilitySettings')[0].location
-        ).toEqual(visibilitySettingLocation);
+        ).toEqual(testLocation);
 
         wrapper.find('StepVisibility').simulate(
             'changeState',
@@ -193,7 +193,7 @@ describe('<PromoCampaignForm /> tests', () => {
 
         expect(wrapper.find('StepVisibility').prop('visibilitySettings')).toHaveLength(2);
 
-        wrapper.find('StepVisibility').simulate('changeState', visibilitySettingLocation, 1, 'location', {});
+        wrapper.find('StepVisibility').simulate('changeState', testLocation, 1, 'location', {});
 
         wrapper.find('Button').at(1).simulate('click');
         const [firstSetting, secondSetting] = wrapper.find('StepVisibility').prop('visibilitySettings');
@@ -538,7 +538,7 @@ describe('<PromoCampaignForm /> tests', () => {
             getPromoCampaignValue.mockReturnValue({ id: 11 });
 
             wrapper.find('PromoCampaignSideBar').simulate('click', 3);
-            wrapper.find('StepVisibility').simulate('changeState', visibilitySettingLocation, 0, 'location', {});
+            wrapper.find('StepVisibility').simulate('changeState', testLocation, 0, 'location', {});
             wrapper.find('Button').at(1).simulate('click');
             await sleep();
 
