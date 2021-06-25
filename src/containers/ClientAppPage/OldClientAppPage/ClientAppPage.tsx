@@ -23,7 +23,7 @@ import { getRole, saveAppCode } from '@apiServices/sessionService';
 import { logout } from '@apiServices/authService';
 import cross from '@imgs/cross.svg';
 import { Switch, Typography } from 'antd';
-import { APP_MECHANICS, MECHANICS_CHECKBOXES, MECHANICS_ERROR } from '@constants/clientAppsConstants';
+import { APP_MECHANIC, APP_MECHANIC_OPTIONS, MECHANICS_ERROR } from '@constants/clientAppsConstants';
 import { SETTINGS_TYPES } from '../ClientAppForm/ClientAppFormConstants';
 import { ClientAppDto, SaveClientApp } from '@types';
 import { History, Location } from 'history';
@@ -50,7 +50,7 @@ const initialState = {
         code: null,
         existingCode: null,
         isDeleted: false,
-        mechanics: MECHANICS_CHECKBOXES.reduce((result, { value }) => ({ ...result, [value]: false }), {}),
+        mechanics: APP_MECHANIC_OPTIONS.reduce((result, { value }) => ({ ...result, [value]: false }), {}),
     },
     clientAppProperties: {
         clientAppId: null,
@@ -171,10 +171,10 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
             editingClientApp: {
                 ...this.state.editingClientApp,
                 mechanics: {
-                    PRESENTS: value.includes(APP_MECHANICS.PRESENTS.value),
-                    ECOSYSTEM: value.includes(APP_MECHANICS.ECOSYSTEM.value),
-                    PRESENTATION: value.includes(APP_MECHANICS.PRESENTATION.value),
-                    BUNDLE: value.includes(APP_MECHANICS.BUNDLE.value),
+                    PRESENTS: value.includes(APP_MECHANIC.PRESENTS),
+                    ECOSYSTEM: value.includes(APP_MECHANIC.ECOSYSTEM),
+                    PRESENTATION: value.includes(APP_MECHANIC.PRESENTATION),
+                    BUNDLE: value.includes(APP_MECHANIC.BUNDLE),
                 },
             },
         });
@@ -199,7 +199,7 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
     changeMechanicHandler = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = target;
 
-        if ([APP_MECHANICS.PRESENTS.value, APP_MECHANICS.ECOSYSTEM.value].includes(name) && checked) {
+        if ([APP_MECHANIC.PRESENTS, APP_MECHANIC.ECOSYSTEM].includes(name as APP_MECHANIC) && checked) {
             this.setState({ mechanicsError: null });
         }
 
@@ -278,7 +278,7 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
                 {isMechanics &&
             (<div className={styles.clientAppForm}>
                 <h3 className={styles.mechanics_title} >{MECHANICS}</h3>
-                {MECHANICS_CHECKBOXES.map(({ label, value: name }) => (
+                {APP_MECHANIC_OPTIONS.map(({ label, value: name }) => (
                     <div key={name}>
                         <label className={styles.clientAppForm__field}>{label}</label>
                         <input

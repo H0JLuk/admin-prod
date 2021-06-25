@@ -1,6 +1,7 @@
 import {
-    MECHANICS_CHECKBOXES,
-    APP_MECHANICS,
+    APP_MECHANIC,
+    GAME_MECHANIC_OPTIONS,
+    APP_MECHANIC_OPTIONS,
     MECHANICS_ERROR,
     NOTIFICATION_TYPES_OPTIONS,
 } from '@constants/clientAppsConstants';
@@ -38,7 +39,14 @@ export const EDIT_MODE = {
     PROPERTIES: 'Свойства',
 };
 
-export const keysToString = ['mechanics', 'login_types', 'where_to_use', 'design_elements', 'notification_types'];
+export const keysToString = [
+    'mechanics',
+    'login_types',
+    'where_to_use',
+    'design_elements',
+    'notification_types',
+    'game_mechanics',
+];
 
 const numberTransform = (value: string) => value ? Number(value) : '';
 
@@ -46,9 +54,9 @@ export const TextKeysWithDefaultValues = ['home_page_header_present', 'home_page
 
 const checkBoxValidator: ValidatorRule['validator'] = (_, value) => {
     if (
-        value.includes(APP_MECHANICS.PRESENTS.value) ||
-        value.includes(APP_MECHANICS.ECOSYSTEM.value) ||
-        value.includes(APP_MECHANICS.BUNDLE.value)
+        value.includes(APP_MECHANIC.PRESENTS) ||
+        value.includes(APP_MECHANIC.ECOSYSTEM) ||
+        value.includes(APP_MECHANIC.BUNDLE)
     ) {
         return Promise.resolve();
     }
@@ -301,7 +309,7 @@ export const formElements: FormConstructorItem[][] = [
         {
             label: 'Механика',
             type: FORM_TYPES.CHECKBOX_GROUP,
-            span: 13,
+            span: 12,
             rules: [
                 RULES.CHECKBOX_GROUP,
                 {
@@ -309,9 +317,18 @@ export const formElements: FormConstructorItem[][] = [
                     validateTrigger: 'onSubmit',
                 },
             ],
-            options: MECHANICS_CHECKBOXES,
+            options: APP_MECHANIC_OPTIONS,
             name: 'mechanics',
         },
+        {
+            label: 'Игровая механика',
+            type: FORM_TYPES.CHECKBOX_GROUP,
+            span: 12,
+            options: GAME_MECHANIC_OPTIONS,
+            name: 'game_mechanics',
+        }
+    ],
+    [
         {
             label: 'Способ авторизации в витрине',
             type: FORM_TYPES.CHECKBOX_GROUP,
@@ -320,15 +337,13 @@ export const formElements: FormConstructorItem[][] = [
                 RULES.CHECKBOX_GROUP,
             ],
             columnMode: true,
-            span: 11,
+            span: 12,
             name: 'login_types',
         },
-    ],
-    [
         {
             label: 'Способ отправки сообщений клиенту',
             type: FORM_TYPES.CHECKBOX_GROUP,
-            span: 11,
+            span: 12,
             options: NOTIFICATION_TYPES_OPTIONS,
             name: 'notification_types',
         },

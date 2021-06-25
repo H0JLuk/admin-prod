@@ -296,6 +296,7 @@ export const propertiesSettingsTestData = {
     inactivity_time: '152',
     token_lifetime: '18001223',
     notification_types: undefined,
+    game_mechanics: undefined,
     tmp_block_time: '1800',
     id: 6,
     code: 'greenday-presents',

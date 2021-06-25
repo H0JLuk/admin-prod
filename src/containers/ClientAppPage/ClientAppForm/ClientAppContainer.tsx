@@ -242,20 +242,28 @@ function doDesignSettings(settings: ISettings, displayName: string): IDesignSett
     return result;
 }
 
-export function doPropertiesSettings(settings: ISettings, { id, displayName, code, name }: IDoPropertiesSettings): IPropertiesSettings {
-    const { mechanics, login_types, notification_types, ...restSettings } = settings;
-    const mechanicsCheckBox = mechanics && JSON.parse(mechanics);
-    const loginCheckBoxes = login_types && JSON.parse(login_types);
-    const notificationTypesCheckBoxes = notification_types && JSON.parse(notification_types);
+export function doPropertiesSettings (settings: ISettings, { id, displayName, code, name }: IDoPropertiesSettings): IPropertiesSettings {
+    const {
+        mechanics,
+        game_mechanics,
+        login_types,
+        notification_types,
+        ...restSettings
+    } = settings;
+    const appMechanics = mechanics && JSON.parse(mechanics);
+    const gameMechanics = game_mechanics && JSON.parse(game_mechanics);
+    const loginTypes = login_types && JSON.parse(login_types);
+    const notificationTypes = notification_types && JSON.parse(notification_types);
 
     return {
         id: id as unknown as string,
         code,
         name,
         displayName,
-        mechanics: mechanicsCheckBox,
-        login_types: loginCheckBoxes,
-        notification_types: notificationTypesCheckBoxes,
+        mechanics: appMechanics,
+        game_mechanics: gameMechanics,
+        login_types: loginTypes,
+        notification_types: notificationTypes,
         ...restSettings,
     };
 }

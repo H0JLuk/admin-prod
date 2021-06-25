@@ -68,6 +68,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     code,
                     name,
                     mechanics,
+                    game_mechanics,
                     displayName,
                     login_types,
                     notification_types,
@@ -83,6 +84,11 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         clientAppCode: code,
                         value: JSON.stringify(mechanics || []),
                         key: 'mechanics',
+                    },
+                    {
+                        clientAppCode: code,
+                        value: JSON.stringify(game_mechanics || []),
+                        key: 'game_mechanics',
                     },
                     {
                         clientAppCode: code,
@@ -240,7 +246,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         />
                     ))}
                     <Row gutter={24} className={styles.row}>
-                        <Col span={13}>
+                        <Col span={12}>
                             <Form.Item
                                 label={BUSINESS_ROLE_FOR_APPLICATION}
                                 name="businessRoleIds"

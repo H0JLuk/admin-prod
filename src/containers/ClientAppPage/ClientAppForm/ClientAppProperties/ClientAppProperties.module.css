@@ -19,3 +19,8 @@
 .container :global(.ant-row:last-child .ant-form-item) {
     margin-bottom: 0;
 }
+
+.row {
+    margin-top: 10px;
+    max-width: 950px;
+}

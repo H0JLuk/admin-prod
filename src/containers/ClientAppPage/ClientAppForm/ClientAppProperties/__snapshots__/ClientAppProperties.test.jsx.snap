@@ -13,7 +13,7 @@ exports[`<ClientAppProperties /> test should match snapshot  1`] = `
       <AppFormConstructor row={{...}} disabledFields={{...}} />
       <AppFormConstructor row={{...}} disabledFields={{...}} />
       <Row gutter={24} className=\\"row\\">
-        <Col span={13}>
+        <Col span={12}>
           <FormItem label=\\"Бизнес-роль, для которой доступно приложение\\" name=\\"businessRoleIds\\" normalize={[Function: normalize]}>
             <SelectTags data={{...}} idKey=\\"id\\" placeholder=\\"Выберите роль/роли\\" />
           </FormItem>
