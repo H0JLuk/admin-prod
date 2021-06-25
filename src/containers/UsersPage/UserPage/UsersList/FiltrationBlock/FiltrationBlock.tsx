@@ -21,7 +21,7 @@ const TITLE = 'Фильтры';
 const CLEAR_FILTERS = 'Очистить';
 
 const FILTER_TYPES = {
-    BY_PARTNER: 'Партнер',
+    BY_PARTNER: 'Логин партнёра',
     BY_APP: 'Приложение',
     BY_LOGIN_TYPE: 'Способ авторизации',
 };
