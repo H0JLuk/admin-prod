@@ -32,20 +32,6 @@ module.exports = {
                 },
             },
         },
-    ],
-    webpack: {
-        configure: {
-            output: {
-                publicPath: process.env.PUBLIC_URL,
-            },
-            optimization: {
-                splitChunks: {
-                    maxSize: 1024 * 1000,
-                },
-            },
-        },
-    },
-    plugins: [
         {
             plugin: CracoAlias,
             options: {
@@ -65,4 +51,16 @@ module.exports = {
             },
         },
     ],
+    webpack: {
+        configure: {
+            output: {
+                publicPath: process.env.PUBLIC_URL,
+            },
+            optimization: {
+                splitChunks: {
+                    maxSize: 1024 * 1000,
+                },
+            },
+        },
+    },
 };

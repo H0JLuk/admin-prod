@@ -27,13 +27,14 @@ export default class SetListValueUI extends Plugin {
             });
 
             this.listenTo(popup, 'submit', () => {
-                const startValue = (popup.tbName.element as any).value;
+                const element = popup.tbName.element as HTMLInputElement;
+                const startValue = element.value;
                 const selectedListItem = editor.model.document.selection.getFirstPosition()!.parent;
 
                 editor.execute('insertListValue', startValue, selectedListItem);
 
                 dropDown.isOpen = false;
-                (popup.tbName.element as any).value = '';
+                element.value = '';
             });
 
             addToolbarToDropdown(dropDown, [popup as any]);

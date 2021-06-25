@@ -19,7 +19,7 @@ export default class SetListValueEditing extends Plugin {
 
         this.editor.commands.add(
             'insertListValue',
-            new InsertListValueCommand(this.editor)
+            new InsertListValueCommand(this.editor),
         );
 
         editor.commands.get('enter')!.on('afterExecute', () => {
