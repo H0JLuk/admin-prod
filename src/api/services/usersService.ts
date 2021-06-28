@@ -17,8 +17,8 @@ import {
 } from '@types';
 import { DIRECTION } from '@constants/common';
 
-export function getUser(pn: string) {
-    return Api.get<UserInfo>(`/admin/user/${pn}`, getReqOptions());
+export function getUser(userId: string | number) {
+    return Api.get<UserInfo>(`/admin/user/${userId}`, getReqOptions());
 }
 
 export function oldAddUser(data: UserDto) {
@@ -37,7 +37,10 @@ export function removeUser(userId: number) {
     return Api.delete<DefaultApiResponse>(`/admin/user/delete/${userId}`, getReqOptions());
 }
 
-export function getUsersList(searchParams: string) {
+export function getUsersList(searchParams: string, parentUserName?: string) {
+    if (parentUserName) {
+        searchParams += `&parentUserName=${parentUserName}`;
+    }
     return Api.get<UserPaginationResponse>(`/admin/user/filtered?${searchParams}`, getReqOptions());
 }
 
@@ -49,7 +52,7 @@ export async function getPartnersList(filterText = '') {
         pageSize: 15,
         userRole: ROLES.PARTNER,
     });
-    const { users } = await Api.get(`/admin/user/filtered?${searchParams}`, getReqOptions());
+    const { users } = await getUsersList(searchParams);
     return users;
 }
 

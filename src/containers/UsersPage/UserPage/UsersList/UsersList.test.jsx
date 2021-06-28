@@ -18,12 +18,15 @@ jest.mock('../../../../components/TableDeleteModal/TableDeleteModal', () => ({ r
         <button onClick={ refreshTable }>refresh</button>
     </div>
 ));
-jest.mock('./FiltrationBlock', () => ({ params, onChangeFilter }) => (
+jest.mock('./FiltrationBlock', () => ({ params, onChangeFilter, onChangeParent }) => (
     <div>
         <span>FiltrationBlock</span>
         <button onClick={ () => onChangeFilter(params) }>onChangeFilter</button>
         <button
-            onClick={ () => onChangeFilter({ ...params, parentUserName: 'test' }) }
+            onClick={ () => {
+                onChangeParent({ personalNumber: 'test-partner-user', id: 999, role: 'Partner' });
+                onChangeFilter({ ...params, parentId: 999 });
+            } }
         >
             onChangeFilterWithPartner
         </button>
@@ -67,16 +70,17 @@ jest.mock('react-router-dom', () => ({
         push: mockPush,
         replace: jest.fn(),
         location: {
-            search: `?pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=&clientAppCode=${mockFilterLoginType ? 'test-code' : ''}&loginType=${mockFilterLoginType ? 'DIRECT_LINK' : ''}${mockFilterLoginType ? '&parentUserName=test-user' : ''}`,
+            search: `?pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=&clientAppCode=${mockFilterLoginType ? 'test-code' : ''}&loginType=${mockFilterLoginType ? 'DIRECT_LINK' : ''}${mockFilterLoginType ? '&parentId=999' : ''}`,
         },
     }),
     useLocation: () => ({
-        search: `?pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=&clientAppCode=${mockFilterLoginType ? 'test-code' : ''}&loginType=${mockFilterLoginType ? 'DIRECT_LINK' : ''}${mockFilterLoginType ? '&parentUserName=test-user' : ''}`,
+        search: `?pageNo=0&pageSize=10&sortBy=&direction=ASC&filterText=&clientAppCode=${mockFilterLoginType ? 'test-code' : ''}&loginType=${mockFilterLoginType ? 'DIRECT_LINK' : ''}${mockFilterLoginType ? '&parentId=999' : ''}`,
     }),
     generatePath: jest.fn(),
 }));
 
 beforeEach(() => {
+    usersService.getUser = jest.fn().mockResolvedValue({ ...usersTestArray[0], role: 'Partner' });
     usersService.getUsersList = jest.fn().mockResolvedValue(usersListTestData);
     usersService.generateQRCodes = jest.fn();
     permissions.getCurrUserInteractions = jest.fn().mockReturnValue(permissionsTestData);
@@ -98,7 +102,7 @@ describe('<UsersList /> test', () => {
             render(<UserList { ...props } />);
             await sleep();
 
-            expect(usersService.getUsersList).toBeCalledWith(DEFAULT_URL_SEARCH_PARAMS);
+            expect(usersService.getUsersList).toBeCalledWith(DEFAULT_URL_SEARCH_PARAMS, undefined);
         });
     });
 
@@ -354,13 +358,13 @@ describe('<UsersList /> test', () => {
             await sleep();
 
             expect(usersService.getUsersList).toBeCalledTimes(2);
-            expect(usersService.getUsersList).toBeCalledWith(DEFAULT_URL_SEARCH_PARAMS);
+            expect(usersService.getUsersList).toBeCalledWith(DEFAULT_URL_SEARCH_PARAMS, undefined);
 
             fireEvent.click(getByText('onChangeFilterWithPartner'));
             await sleep();
 
             expect(usersService.getUsersList).toBeCalledTimes(3);
-            expect(usersService.getUsersList).toBeCalledWith(`${DEFAULT_URL_SEARCH_PARAMS}&parentUserName=test`);
+            expect(usersService.getUsersList).toBeCalledWith(`${DEFAULT_URL_SEARCH_PARAMS}&parentId=999`, 'test-partner-user');
         });
     });
 });

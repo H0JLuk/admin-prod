@@ -12,7 +12,7 @@ import UsersListTable from './UsersListTable';
 import FiltrationBlock from './FiltrationBlock';
 import ActionsDropDown from './ActionsDropDown';
 import TemplateUploadButtonsWithModal from '@components/ButtonWithModal/TemplateUploadButtonsWithModal';
-import { generateQRCodes, getUsersList, removeUser, resetUser } from '@apiServices/usersService';
+import { generateQRCodes, getUser, getUsersList, removeUser, resetUser } from '@apiServices/usersService';
 import { USERS_PAGES } from '@constants/route';
 import { downloadFileFunc, getSearchParamsFromUrl } from '@utils/helper';
 import { PaginationConfig } from 'antd/lib/pagination';
@@ -22,6 +22,7 @@ import { SearchParams } from '@components/HeaderWithActions/types';
 import { customNotifications } from '@utils/notifications';
 import { LOGIN_TYPES_ENUM } from '@constants/loginTypes';
 import { getCurrUserInteractions, InteractionsForOtherUser } from '@constants/permissions';
+import ROLES from '@constants/roles';
 
 import styles from './UsersList.module.css';
 
@@ -71,14 +72,13 @@ const DEFAULT_PARAMS: SearchParams = {
     direction: DIRECTION.ASC,
     filterText: '',
     clientAppCode: '',
-    parentUserName: '',
     parentId: '',
     loginType: '',
     totalElements: 0,
 };
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-const getURLSearchParams = ({ totalElements, parentId, ...rest }: Record<string, string | number>) =>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getURLSearchParams = ({ totalElements, ...rest }: Record<string, string | number>) =>
     new URLSearchParams(rest as Record<string, string>).toString();
 
 const DROPDOWN_SORT_MENU = [
@@ -106,7 +106,7 @@ const showRestoredErrorsNotification = (message: React.ReactNode) => {
     });
 };
 
-const IGNORE_SEARCH_PARAMS = ['parentUserName', 'clientAppCode'];
+const IGNORE_SEARCH_PARAMS = ['parentId', 'clientAppCode'];
 const defaultSelected: SelectedItems = { rowValues: [], rowKeys: [] };
 
 const UserList: React.FC<UserListProps> = ({ matchPath }) => {
@@ -118,6 +118,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
     const [loadingPage, setLoadingPage] = useState(true);
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [params, setParams] = useState(DEFAULT_PARAMS);
+    const parentUser = useRef<UserInfo>();
     const userInteractions = useRef({} as InteractionsForOtherUser);
     const { current: permissions = {} as InteractionsForOtherUser } = userInteractions;
     const canSelectUsers = users.filter(({ role }) => (permissions[role] || {}).canSelectUserInTable);
@@ -128,7 +129,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         setLoadingTableData(true);
 
         try {
-            const { users = [], totalElements, pageNo } = await getUsersList(urlSearchParams);
+            const { users = [], totalElements, pageNo } = await getUsersList(urlSearchParams, parentUser.current?.personalNumber);
             /* use `replace` instead of `push` for correct work `history.goBack()` */
             history.replace(`${matchPath}?${urlSearchParams}`);
             clearSelectedItems();
@@ -147,7 +148,21 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
 
     useEffect(() => {
         (async () => {
-            await loadUsersData(getSearchParamsFromUrl(search, DEFAULT_PARAMS, IGNORE_SEARCH_PARAMS));
+            const urlSearchParams = new URLSearchParams(search);
+            const parentId = urlSearchParams.get('parentId');
+            if (parentId) {
+                try {
+                    const userData = await getUser(parentId);
+                    if (userData.role === ROLES.PARTNER) {
+                        parentUser.current = userData;
+                    } else {
+                        throw new Error('user is not Partner');
+                    }
+                } catch (e) {
+                    urlSearchParams.delete('parentId');
+                }
+            }
+            await loadUsersData(getSearchParamsFromUrl(urlSearchParams.toString(), DEFAULT_PARAMS, IGNORE_SEARCH_PARAMS));
             setLoadingPage(false);
         })();
 
@@ -193,17 +208,17 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         showSizeChanger: true,
     }), [params.pageNo, params.pageSize, params.totalElements]);
 
-    const updateSelected = useCallback((rowKeys: React.Key[], rowValues: UserInfo[]) => {
+    const updateSelected = (rowKeys: React.Key[], rowValues: UserInfo[]) => {
         setSelectedItems({ rowKeys: rowKeys as number[], rowValues });
-    }, []);
+    };
 
-    const rowSelection: TableProps<UserInfo>['rowSelection'] = useMemo(() => ({
+    const rowSelection: TableProps<UserInfo>['rowSelection'] = {
         selectedRowKeys: selectedItems.rowKeys,
         onChange: updateSelected,
         getCheckboxProps: (record) => ({
             disabled: !(permissions[record.role] || {}).canSelectUserInTable,
         }),
-    }), [selectedItems.rowKeys, updateSelected, permissions]);
+    };
 
     const refreshTable = () => {
         loadUsersData(params);
@@ -281,7 +296,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         !params.filterText &&
         !params.pageNo &&
         !params.clientAppCode &&
-        !params.parentUserName &&
+        !params.parentId &&
         !params.loginType
     ) {
         return <EmptyUsersPage refreshTable={refreshTable} />;
@@ -325,6 +340,10 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         loadUsersData(newParams);
     };
 
+    const onChangeParentUser = (parentUserData: UserInfo | null) => {
+        parentUser.current = parentUserData || undefined;
+    };
+
     const generateQR = async () => {
         try {
             const file = await generateQRCodes({
@@ -357,7 +376,9 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
             <FiltrationBlock
                 params={params}
                 onChangeFilter={onChangeFilter}
+                onChangeParent={onChangeParentUser}
                 disabledAllFields={loadingTableData}
+                initialParentUserData={parentUser.current}
             />
             <UsersListTable
                 loadingData={loadingTableData}
@@ -382,7 +403,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                                 generateQRDisabled={
                                     params.loginType !== LOGIN_TYPES_ENUM.DIRECT_LINK ||
                                     !params.clientAppCode ||
-                                    !params.parentUserName
+                                    !params.parentId
                                 }
                             />
                         </div>

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, ReactNode, useRef, SetStateAct
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import cn from 'classnames';
-import { AutoComplete, AutoCompleteProps, Input } from 'antd';
+import { AutoComplete, AutoCompleteProps, Input, InputProps } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
 
@@ -33,6 +33,7 @@ interface AutoCompleteComponentProps<DataType> extends Omit<AutoCompleteProps, '
     searchCondition?: (searchValue: string) => boolean;
     disabled?: boolean;
     placeholder: string;
+    inputMaxLength?: InputProps['maxLength'];
     requestFunction?: (searchValue: string, ...args: any[]) => Promise<DataType[]>;
     componentMethods?: React.MutableRefObject<AutoCompleteMethods<DataType>>;
 }
@@ -59,6 +60,7 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
     searchCondition = noop as any,
     disabled,
     placeholder,
+    inputMaxLength,
     requestFunction = noop as any,
     componentMethods,
     ...restProps
@@ -193,6 +195,7 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
                 <Input
                     placeholder={placeholder}
                     suffix={<SearchOutlined className={styles.suffix} />}
+                    maxLength={inputMaxLength}
                 />
             </AutoComplete>
             {!!error && <div className={styles.formError}>{error}</div>}

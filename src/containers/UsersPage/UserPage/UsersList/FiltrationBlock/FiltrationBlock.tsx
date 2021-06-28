@@ -13,6 +13,8 @@ import { ReactComponent as Cross } from '@imgs/cross.svg';
 
 type FiltrationBlockProps = {
     params: SearchParams;
+    initialParentUserData?: UserInfo;
+    onChangeParent(parentUserData: UserInfo | null): void;
     onChangeFilter(params: SearchParams): void;
     disabledAllFields?: boolean;
 };
@@ -32,10 +34,12 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
     params,
     onChangeFilter,
     disabledAllFields,
+    onChangeParent,
+    initialParentUserData,
 }) => {
     const [clientApps, setClientApps] = useState<ClientAppDto[]>([]);
     const partnerMethods = useRef({} as AutoCompleteMethods<UserInfo>);
-    const isExistFilters = params.clientAppCode || params.loginType || params.parentUserName;
+    const isExistFilters = params.clientAppCode || params.loginType || params.parentId;
 
     useEffect(() => {
         (async () => {
@@ -44,17 +48,15 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
         })();
     }, []);
 
-    const onParentUserSelect = (data: UserInfo | null) => {
-        const parentUserName = data?.personalNumber || '';
-
-        if (!parentUserName && !params.parentUserName) {
+    const onParentUserSelect = (user: UserInfo | null) => {
+        onChangeParent(user);
+        if (!user && !params.parentId) {
             return;
         }
 
         onChangeFilter({
             ...params,
-            parentUserName,
-            parentId: data?.id ?? '',
+            parentId: user?.id ?? '',
         });
     };
 
@@ -72,11 +74,12 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
 
     const clearFilters = () => {
         partnerMethods.current.clearState();
+        onChangeParent(null);
         onChangeFilter({
             ...params,
             loginType: '',
             clientAppCode: '',
-            parentUserName: '',
+            parentId: '',
         });
     };
 
@@ -91,18 +94,18 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
                 {TITLE}
             </div>
             <div className={styles.filterBlock}>
-                <div className={styles.autoComplete}>
-                    <AutoCompleteComponent
-                        value={params.parentUserName as string}
-                        placeholder={FILTER_TYPES.BY_PARTNER}
-                        onSelect={onParentUserSelect}
-                        requestFunction={getPartnersList}
-                        renderOptionItemLabel={(option) => option.personalNumber}
-                        renderOptionStringValue={(option) => option.personalNumber}
-                        componentMethods={partnerMethods}
-                        disabled={disabledAllFields}
-                    />
-                </div>
+                <AutoCompleteComponent
+                    className={styles.filterItem}
+                    value={initialParentUserData}
+                    placeholder={FILTER_TYPES.BY_PARTNER}
+                    inputMaxLength={15}
+                    onSelect={onParentUserSelect}
+                    requestFunction={getPartnersList}
+                    renderOptionItemLabel={(option) => option.personalNumber}
+                    renderOptionStringValue={(option) => option.personalNumber}
+                    componentMethods={partnerMethods}
+                    disabled={disabledAllFields}
+                />
                 <Select<string | number>
                     dropdownMatchSelectWidth={false}
                     className={styles.filterItem}
