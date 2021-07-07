@@ -497,7 +497,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                                     {LOGIN_TYPE_FIELD.label}
                                 </label>
                                 <div className={styles.noEditField}>
-                                    {LOGIN_TYPE[loginType.current as LoginTypes] || LOGIN_TYPE.PASSWORD}
+                                    {LOGIN_TYPE[loginType.current as LoginTypes]}
                                 </div>
                             </Col>
                             <Col span={8} className={styles.labelCol}>
