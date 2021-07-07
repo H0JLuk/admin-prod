@@ -26,7 +26,7 @@ import {
 import { LoginTypes, LOGIN_TYPES_ENUM } from '@constants/loginTypes';
 import { NOTIFICATION_TYPES } from '@constants/clientAppsConstants';
 import { IPropertiesSettings, ISettings } from '../ClientAppContainer';
-import { BusinessRoleDto, ConsentDto } from '@types';
+import { BusinessRoleDto, ConsentDto, SettingDto } from '@types';
 import { compareArrayOfNumbers } from '@utils/helper';
 
 import styles from './ClientAppProperties.module.css';
@@ -79,7 +79,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 setLoading(true);
                 await addClientApp({ code, displayName, isDeleted: false, name, businessRoleIds });
 
-                const settings = [
+                const settings: SettingDto[] = [
                     {
                         clientAppCode: code,
                         value: JSON.stringify(mechanics || []),
@@ -112,7 +112,13 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 history.replace(`${ matchPath }${CLIENT_APPS_PAGES.EDIT_APP}`);
             } else {
                 const clientAppCode = getAppCode() || '';
-                const { displayName, code, name, businessRoleIds, ...restData } = formData;
+                const {
+                    displayName,
+                    code,
+                    name,
+                    businessRoleIds,
+                    ...restData
+                } = formData;
                 const changedParams = Object.keys(restData).reduce<IChangedParam[]>((result, key) => {
                     const valueFromServer = keysToString.includes(key)
                         ? JSON.stringify(propertiesSettings[key])
@@ -120,13 +126,14 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     const valueInForm = keysToString.includes(key)
                         ? JSON.stringify(restData[key])
                         : restData[key];
+                    const commonObj = { clientAppCode, key, value: valueInForm };
 
                     if (valueFromServer === undefined && valueInForm) {
-                        return [...result, { clientAppCode, key, value: valueInForm, type: SETTINGS_TYPES.CREATE }];
+                        return [...result, { ...commonObj, type: SETTINGS_TYPES.CREATE }];
                     }
 
                     if ((!valueFromServer && valueInForm) || (valueFromServer && valueInForm !== valueFromServer)) {
-                        return [...result, { clientAppCode, key, value: valueInForm, type: SETTINGS_TYPES.EDIT }];
+                        return [...result, { ...commonObj, type: SETTINGS_TYPES.EDIT }];
                     }
                     return result;
                 }, []);
@@ -173,6 +180,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     notifies.forEach(fn => fn());
                     setBtnStatus(true);
                     updateSettings({ ...formData, id: id! });
+                    setLoading(false);
                 }
             }
         } catch ({ message }) {
@@ -182,8 +190,8 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 </span>
             ) : message;
             showNotify(messageToShow, true);
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     const updateCheckboxStatus = (value: LoginTypes[] = []) => {
@@ -234,6 +242,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                             key={index}
                             row={row}
                             isEdit={isEdit}
+                            isCreate={!isEdit}
                         />
                     ))}
                 </div>
@@ -243,6 +252,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                             key={index}
                             row={row}
                             disabledFields={disabledFields}
+                            isCreate={!isEdit}
                         />
                     ))}
                     <Row gutter={24} className={styles.row}>

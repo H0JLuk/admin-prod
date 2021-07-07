@@ -13,6 +13,7 @@ import { FormItemProps, InputProps, SelectProps } from 'antd';
 import { CheckboxGroupProps } from 'antd/lib/checkbox';
 import { TextAreaProps } from 'antd/lib/input';
 import { BannerProps, IBanner } from './MainPageDesign/Banner';
+import { trimValue } from '@utils/helper';
 
 const defaultImg = 'default_main_illustration';
 const february23 = 'February23_main_illustration';
@@ -135,12 +136,12 @@ export enum FORM_MODES {
     EDIT = 'edit',
 }
 
-export type CommonFormConstructorItem = {
+export type CommonFormConstructorItem = Pick<FormItemProps, 'rules' | 'normalize'> & {
     label: string;
     span: number | string;
-    rules?: FormItemProps['rules'];
     name: string;
     canEdit?: boolean;
+    hideWhenCreate?: boolean;
 };
 
 export type FormConstructorInput = Omit<InputProps, 'type'> & {
@@ -241,6 +242,7 @@ export const formElements: FormConstructorItem[][] = [
             rules: [
                 RULES.NUMBER,
             ],
+            normalize: trimValue,
             name: 'token_lifetime',
             placeholder: '1800 секунд по умолчанию',
             maxLength: 12,
@@ -252,6 +254,7 @@ export const formElements: FormConstructorItem[][] = [
             rules: [
                 RULES.NUMBER,
             ],
+            normalize: trimValue,
             name: 'inactivity_time',
             placeholder: '15 секунд по умолчанию',
             maxLength: 12,
@@ -263,6 +266,7 @@ export const formElements: FormConstructorItem[][] = [
             rules: [
                 RULES.NUMBER,
             ],
+            normalize: trimValue,
             name: 'tmp_block_time',
             placeholder: '1800 секунд по умолчанию',
             maxLength: 12,
@@ -277,9 +281,11 @@ export const formElements: FormConstructorItem[][] = [
             rules: [
                 RULES.NUMBER,
             ],
-            name: 'referal_lifetime',
+            normalize: trimValue,
+            name: 'referralTokenLifetime',
             placeholder: '30 секунд по умолчанию',
             maxLength: 12,
+            hideWhenCreate: true,
         },
         {
             label: 'Максимальное число попыток входа',
@@ -288,6 +294,7 @@ export const formElements: FormConstructorItem[][] = [
             rules: [
                 RULES.NUMBER,
             ],
+            normalize: trimValue,
             name: 'max_password_attempts',
             placeholder: '3 по умолчанию',
             maxLength: 2,
@@ -299,6 +306,7 @@ export const formElements: FormConstructorItem[][] = [
             rules: [
                 RULES.NUMBER,
             ],
+            normalize: trimValue,
             name: 'max_presents_number',
             placeholder: '3 по умолчанию',
             maxLength: 2,
@@ -326,7 +334,7 @@ export const formElements: FormConstructorItem[][] = [
             span: 12,
             options: GAME_MECHANIC_OPTIONS,
             name: 'game_mechanics',
-        }
+        },
     ],
     [
         {

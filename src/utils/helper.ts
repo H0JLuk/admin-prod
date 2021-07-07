@@ -181,6 +181,10 @@ export function removeExtraSpaces(value?: string) {
     return !value.trim() ? value.trim() : value.replace(/\s{2,}/g, ' ');
 }
 
+export function trimValue(value?: string) {
+    return value?.trim();
+}
+
 export function compareArrayOfNumbers(arrA: number[], arrB: number[]) {
     if (arrA.length === arrB.length) {
         const arrBSorted = [...arrB].sort(getNumberSort);

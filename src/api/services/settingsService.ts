@@ -1,7 +1,12 @@
 import { Api } from '../apiClient';
 import { getReqOptions } from './index';
-import { BusinessRoleDto, DefaultApiResponse, ISettingList, ListResponse } from '@types';
-import { IValueToServer } from '@containers/ClientAppPage/ClientAppForm/utils';
+import {
+    BusinessRoleDto,
+    DefaultApiResponse,
+    ISettingList,
+    ListResponse,
+    SettingDto,
+} from '@types';
 
 const STATIC_URL = 'STATIC_URL';
 
@@ -9,13 +14,13 @@ export function getStaticUrlFromBackend() {
     return Api.get<string>('/settings/getStaticUrl', getReqOptions(), 'text');
 }
 
-export function updateSettingsList(updatedSettingsObj: IValueToServer[]) {
+export function updateSettingsList(updatedSettingsObj: SettingDto[]) {
     const options = getReqOptions();
     delete options.headers.clientAppCode;
     return Api.put<DefaultApiResponse>('/admin/setting', updatedSettingsObj, options);
 }
 
-export function addSettings(settingObj: IValueToServer[]) {
+export function addSettings(settingObj: SettingDto[]) {
     return Api.post<DefaultApiResponse>('/admin/setting/addList', settingObj, getReqOptions());
 }
 
@@ -26,7 +31,7 @@ export function getSettingsList(appCode: string) {
 }
 
 export function getAllSettings() {
-    return Api.get<ISettingList>('/admin/setting/', getReqOptions());
+    return Api.get<ISettingList>('/admin/setting', getReqOptions());
 }
 
 export function saveStaticUrl(staticUrl: string) {

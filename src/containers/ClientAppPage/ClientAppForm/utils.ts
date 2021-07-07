@@ -2,16 +2,12 @@ import { customNotifications } from '@utils/notifications';
 import { ArgsProps } from 'antd/lib/notification';
 import { addSettings, updateSettingsList } from '@apiServices/settingsService';
 import { designKeysForCheck, SETTINGS_TYPES } from './ClientAppFormConstants';
-import { ISettingObject } from '@types';
+import { ISettingObject, SettingDto } from '@types';
+import ROLES from '@constants/roles';
 
-export interface IChangedParam {
-    clientAppCode: string;
-    key: string;
+export interface IChangedParam extends Pick<SettingDto, 'clientAppCode' | 'key' | 'value' | 'userRole'> {
     type: SETTINGS_TYPES;
-    value: string;
 }
-
-export type IValueToServer = Omit<Partial<IChangedParam>, 'type'>;
 
 export const showNotify = (message: React.ReactNode, isError?: boolean) => {
     const config: ArgsProps = {
@@ -28,13 +24,19 @@ export const showNotify = (message: React.ReactNode, isError?: boolean) => {
 };
 
 type UpdateAndAddSettings = {
-    updateSettings: IValueToServer[];
-    addSettingsArr: IValueToServer[];
+    updateSettings: SettingDto[];
+    addSettingsArr: SettingDto[];
 };
 
 export async function createOrUpdateKey(changedParams: IChangedParam[]) {
     const { updateSettings, addSettingsArr } = changedParams.reduce<UpdateAndAddSettings>((result, { type, ...params }) => {
         const key = type === SETTINGS_TYPES.EDIT ? 'updateSettings' : 'addSettingsArr';
+
+        if (params.key === 'referralTokenLifetime') {
+            delete params.clientAppCode;
+            params.key = 'token_lifetime';
+            params.userRole = ROLES.REFERAL_LINK;
+        }
 
         return {
             ...result,

@@ -4,8 +4,9 @@ import cn from 'classnames';
 import { message, Radio, RadioChangeEvent } from 'antd';
 import { useHistory } from 'react-router-dom';
 import Header from '@components/Header/';
-import ClientAppProperties from './ClientAppProperties/';
-import MainPageDesign from './MainPageDesign/';
+import ClientAppProperties from './ClientAppProperties';
+import MainPageDesign from './MainPageDesign';
+import Loading from '@components/Loading';
 import { getAppCode } from '@apiServices/sessionService';
 import {
     addSettings,
@@ -25,15 +26,14 @@ import {
     TextKeysWithDefaultValues,
     BANNER_KEYS,
 } from './ClientAppFormConstants';
-import { checkExistDesignSettings, IValueToServer } from './utils';
+import { checkExistDesignSettings } from './utils';
 import { requestsWithMinWait } from '@utils/utils';
 import { IBanner } from './MainPageDesign/Banner';
-import { BusinessRoleDto, ConsentDto, ISettingObject } from '@types';
-import { getConsentById } from '../../../api/services/consentsService';
+import { BusinessRoleDto, ConsentDto, ISettingObject, SettingDto } from '@types';
+import { getConsentById } from '@apiServices/consentsService';
+import ROLES from '@constants/roles';
 
 import styles from './ClientAppContainer.module.css';
-
-import { ReactComponent as LoadingSpinner } from '@imgs/loading-spinner.svg';
 
 type IClientAppContainerProps = {
     type: FORM_MODES;
@@ -93,14 +93,27 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                 if (!isEdit) {
                     return;
                 }
-                const requests = Promise.all([getSettingsList(currentAppCode), getClientAppInfo(currentAppCode)]);
+                const requests = Promise.all([
+                    getSettingsList(currentAppCode),
+                    getClientAppInfo(currentAppCode),
+                    getAllSettings(),
+                ]);
                 const [
                     { settingDtoList: unformattedSettings = [] },
                     clientAppInfo,
+                    { settingDtoList: allSettings },
                 ] = await requestsWithMinWait(requests, 0);
                 const { list: clientAppRoles = [] } = await getBusinessRolesByClientApp(clientAppInfo.id);
                 const businessRoleIds = clientAppRoles.map(({ id }) => id) as any;
                 const settingsMap = unformattedSettings.reduce<ISettings>((result, item) => ({ ...result, [item.key]: item.value }), { businessRoleIds });
+                const referralTokenLifetime = allSettings.find(
+                    ({ clientAppCode, userRole, key }) =>
+                        !clientAppCode && key === 'token_lifetime' && userRole === ROLES.REFERAL_LINK,
+                );
+
+                if (referralTokenLifetime) {
+                    settingsMap.referralTokenLifetime = referralTokenLifetime.value;
+                }
 
                 settingDtoList.current = settingsMap;
                 propertiesSettings.current = doPropertiesSettings(settingsMap, clientAppInfo);
@@ -124,7 +137,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                         return result;
                     }, {});
 
-                    const defaultSettingsArr: IValueToServer[] = [];
+                    const defaultSettingsArr: SettingDto[] = [];
 
                     designKeysForCheck.forEach(key => {
                         // Если дефолтных настроек на поле нет, то нам надо их создать
@@ -225,7 +238,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                 </Radio.Group>} */}
                 <div className={styles.title}>{mode}</div>
             </div>
-            {loading ? <LoadingSpinner /> : tabRender}
+            {loading ? <Loading className={styles.loading} /> : tabRender}
         </div>
     );
 };

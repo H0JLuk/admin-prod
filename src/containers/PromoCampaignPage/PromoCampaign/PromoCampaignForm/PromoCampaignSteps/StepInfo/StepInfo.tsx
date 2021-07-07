@@ -16,7 +16,7 @@ import { getPatternAndMessage } from '@utils/validators';
 import { getLabel } from '@components/LabelWithTooltip/LabelWithTooltip';
 import { getAppCode } from '@apiServices/sessionService';
 import promoCodeTypes from '@constants/promoCodeTypes';
-import { removeExtraSpaces } from '@utils/helper';
+import { removeExtraSpaces, trimValue } from '@utils/helper';
 import { BANNER_TYPE } from '@constants/common';
 
 import styles from './StepInfo.module.css';
@@ -388,7 +388,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             name="externalId"
                             initialValue={state.externalId}
                             validateFirst
-                            normalize={(value) => value.trim()}
+                            normalize={trimValue}
                             rules={[
                                 {
                                     validator: (_, value) => {

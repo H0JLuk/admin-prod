@@ -16,6 +16,7 @@ type AppFormConstructorProps = {
     isEdit?: boolean;
     row: FormConstructorItem[];
     disabledFields?: Record<string, string[]>;
+    isCreate?: boolean;
 };
 
 const FormInputByType: React.FC<FormInputByTypeProps> = ({ isEdit, disabledFields = {}, ...rest }) => {
@@ -62,15 +63,21 @@ const FormInputByType: React.FC<FormInputByTypeProps> = ({ isEdit, disabledField
     }
 };
 
-const AppFormConstructor: React.FC<AppFormConstructorProps> = ({ row, isEdit, disabledFields }) => (
+const AppFormConstructor: React.FC<AppFormConstructorProps> = ({
+    row,
+    isEdit,
+    isCreate = false,
+    disabledFields,
+}) => (
     <Row className={styles.propertiesRow} gutter={24}>
-        {row.map(({ label, span, rules, name, ...restProps }) => (
+        {row.map(({ label, span, rules, name, normalize, hideWhenCreate, ...restProps }) => !(isCreate && hideWhenCreate) && (
             <Col className={styles.colFlex} key={label} span={span}>
                 <Form.Item
                     rules={rules}
                     name={name}
                     className={cn({ [styles.labelBold]: isEdit })}
                     label={label}
+                    normalize={normalize}
                     validateFirst
                 >
                     <FormInputByType

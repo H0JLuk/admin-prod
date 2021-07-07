@@ -1,20 +1,23 @@
+import ROLES from '@constants/roles';
 import { DefaultApiResponse } from '@types';
 
-export type SettingsDtoRes = {
-    clientAppCode: string;
+export interface SettingDto {
+    clientAppCode?: string;
     key: string;
     value: string;
-};
+    userRole?: ROLES;
+    promoCampaignId?: number | string;
+}
 
 export type ISettingObject = {
     -readonly[setting in keyof typeof ClientSetting]?: string;
 };
 
 export interface ISettingList extends DefaultApiResponse {
-    settingDtoList: SettingsDtoRes[];
+    settingDtoList: SettingDto[];
 }
 
-enum ClientSetting {
+export enum ClientSetting {
     authorization_method,
     code,
     displayName,

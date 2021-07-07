@@ -1,7 +1,6 @@
 import React from 'react';
 import { CloseOutlined, DownOutlined } from '@ant-design/icons';
-import { Checkbox, Select } from 'antd';
-import { SelectProps } from 'antd/es/select';
+import { Checkbox, Select, SelectProps } from 'antd';
 
 import styles from './SelectTags.module.css';
 
@@ -15,6 +14,7 @@ interface ISelectTags<OT> {
     nameKey?: keyof OT;
     idKey?: keyof OT;
     placeholder: string;
+    maxTagTextLength?: number;
 }
 
 const SelectTags = <OT extends Record<string, any>>({
@@ -26,17 +26,21 @@ const SelectTags = <OT extends Record<string, any>>({
     nameKey = 'name',
     idKey = 'code',
     placeholder,
+    maxTagTextLength = 12,
 }: ISelectTags<OT>) => {
     const stringValue = value.map(String);
 
     const onRemoveSelectedTags = () => {
-        onChange && onChange([]);
+        onChange?.([]);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const selectTagRender: SelectProps<string[]>['tagRender'] = ({ value, onClose }) => (
         value ? (
-            <div className={styles.tagSelect} >
-                <p className={styles.selectText}>{findName(data, value as string, nameKey, idKey)}</p>
+            <div className={styles.tagSelect}>
+                <p className={styles.selectText}>
+                    {findName(data, value as string, nameKey, idKey, maxTagTextLength)}
+                </p>
                 {canRemoveSelected && (
                     <CloseOutlined
                         height="15px"
@@ -50,18 +54,18 @@ const SelectTags = <OT extends Record<string, any>>({
 
     const options = data.map((elem) => {
         const name = String(elem[nameKey]);
-        const value = String(elem[idKey]);
+        const optionValue = String(elem[idKey]);
         return {
             label: (
                 <>
                     <Checkbox
                         className={styles.mrr}
-                        checked={stringValue.includes(value)}
+                        checked={stringValue.includes(optionValue)}
                     />
                     {name}
                 </>
             ),
-            value,
+            value: optionValue,
             disabled: elem.disabled,
         };
     });
@@ -75,7 +79,7 @@ const SelectTags = <OT extends Record<string, any>>({
             showArrow
             showSearch={false}
             maxTagCount="responsive"
-            maxTagTextLength={50}
+            maxTagTextLength={maxTagTextLength}
             mode="tags"
             placeholder={placeholder}
             maxTagPlaceholder={<span>...</span>}
@@ -106,10 +110,21 @@ function suffixBlock(selectedCount: number, onRemoveSelectedTag: () => void, sho
     );
 }
 
-function findName<OT>(data: OT[], selectedValue: string, nameKey: keyof OT, keyToCompare: keyof OT) {
+function findName<OT>(
+    data: OT[],
+    selectedValue: string,
+    nameKey: keyof OT,
+    keyToCompare: keyof OT,
+    maxTagTextLength: number,
+) {
     const name = data.find((elem) => String(elem[keyToCompare]) === selectedValue);
+    let displayValue = String(name?.[nameKey] ?? '');
 
-    return name && String(name[nameKey]);
+    if (displayValue.length > maxTagTextLength) {
+        displayValue = `${displayValue.slice(0, maxTagTextLength).trim()}...`;
+    }
+
+    return displayValue;
 }
 
 export default SelectTags;
