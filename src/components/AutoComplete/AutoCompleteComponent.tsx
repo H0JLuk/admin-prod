@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { AutoComplete, AutoCompleteProps, Input, InputProps } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
+import { KeysWithString } from '@types';
 
 import { ReactComponent as Cross } from '@imgs/cross.svg';
 import styles from './AutoCompleteComponent.module.css';
@@ -36,6 +37,10 @@ interface AutoCompleteComponentProps<DataType> extends Omit<AutoCompleteProps, '
     inputMaxLength?: InputProps['maxLength'];
     requestFunction?: (searchValue: string, ...args: any[]) => Promise<DataType[]>;
     componentMethods?: React.MutableRefObject<AutoCompleteMethods<DataType>>;
+    clearValueOnBlur?: boolean;
+    selectExactValueOnBlur?: boolean;
+    selectFirstValueOnBlur?: boolean;
+    keyForCompareSelect?: KeysWithString<DataType>;
 }
 
 type AutoCompleteComponentState<DataType> = {
@@ -57,12 +62,17 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
     renderOptionStringValue,
     onSearch = noop,
     onSelect = noop,
+    onBlur = noop,
     searchCondition = noop as any,
     disabled,
     placeholder,
     inputMaxLength,
     requestFunction = noop as any,
     componentMethods,
+    clearValueOnBlur,
+    selectExactValueOnBlur,
+    selectFirstValueOnBlur,
+    keyForCompareSelect,
     ...restProps
 }: AutoCompleteComponentProps<DataType>) => {
     const [loading, setLoading] = useState(true);
@@ -163,6 +173,43 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
         changeState({ ...state, value });
     };
 
+    const onBlurHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+        onBlur(e);
+        if (clearValueOnBlur && !state.options.length) {
+            return onSelect(null);
+        }
+
+        if (keyForCompareSelect) {
+            if (selectExactValueOnBlur) {
+                const stateValue = state.value.trim().toLowerCase();
+                const exactElem = stateValue && state.options.find(
+                    ({ [keyForCompareSelect]: optionValue }) => (optionValue ?? '' as any).toLowerCase() === stateValue,
+                );
+
+                if (exactElem) {
+                    const inputValue = getOptionValue(exactElem, renderOptionStringValue);
+                    onSelectHandler(inputValue, {
+                        key: 'selectedExactOnBlur',
+                        value: inputValue,
+                        label: getOptionLabel(exactElem, state.value),
+                        data: exactElem,
+                    });
+                }
+            }
+
+            if (selectFirstValueOnBlur && state.options.length) {
+                const [firstOption] = state.options;
+                const inputValue = getOptionValue(firstOption, renderOptionStringValue);
+                onSelectHandler(inputValue, {
+                    key: 'selectFirstOnBlur',
+                    value: inputValue,
+                    label: getOptionLabel(firstOption, firstOption[keyForCompareSelect] as any),
+                    data: firstOption,
+                });
+            }
+        }
+    };
+
     const selectOptions: AutoCompleteOption<DataType>[] = state.options.map((el, idx) => ({
         label: getOptionLabel(el, state.value, renderOptionItemLabel),
         value: getOptionValue(el, renderOptionStringValue),
@@ -187,6 +234,7 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
                 notFoundContent={!state.value || searchCondition(state.value) || loading ? null : 'Ничего не найдено'}
                 onSearch={onSearchHandler}
                 onSelect={onSelectHandler}
+                onBlur={onBlurHandler}
                 value={state.value}
                 allowClear
                 clearIcon={<Cross />}

@@ -17,6 +17,7 @@ import {
     getSettingsList,
     getBusinessRolesByClientApp,
     getBusinessRoles,
+    getAllSettings,
 } from '../../../api/services/settingsService';
 import { getClientAppInfo } from '../../../api/services/clientAppService';
 import { getAppCode } from '../../../api/services/sessionService';
@@ -24,11 +25,11 @@ import { sleep } from '../../../setupTests';
 import { doPropertiesSettings } from './ClientAppContainer';
 import * as consentsService from '../../../api/services/consentsService';
 import { requestsWithMinWait } from '../../../utils/utils';
+import ROLES from '@constants/roles';
 
 const CURRENT_APP_CODE_MOCK = 'greenday-presents';
-const SPINNER_TEXT_NODE = 'loading-spinner.svg';
 
-jest.mock('../../../components/Header/Header', () => () => <div>Header</div>);
+jest.mock('../../../components/Header', () => () => <div>Header</div>);
 jest.mock(
     './ClientAppProperties/ClientAppProperties',
     () => ({ updateSettings, propertiesSettings }) => (
@@ -61,6 +62,7 @@ jest.mock('../../../api/services/settingsService', () => ({
     getSettingsList: jest.fn(),
     getBusinessRoles: jest.fn(),
     getBusinessRolesByClientApp: jest.fn(),
+    getAllSettings: jest.fn(),
 }));
 
 jest.mock('../../../api/services/clientAppService', () => ({
@@ -74,6 +76,12 @@ jest.mock('antd', () => ({
     },
 }));
 
+const defaultSettingsRes = {
+    settingDtoList: [
+        { key: 'token_lifetime', value: '1233', userRole: ROLES.REFERAL_LINK },
+    ],
+};
+
 beforeEach(() => {
     getAppCode.mockImplementation(() => CURRENT_APP_CODE_MOCK);
     getSettingsList.mockResolvedValue(settingDtoListTestData);
@@ -81,9 +89,11 @@ beforeEach(() => {
     getBusinessRoles.mockResolvedValue(businessRolesTestResponse);
     getBusinessRolesByClientApp.mockResolvedValue({ list: [testBusinessRole] });
     consentsService.getConsentById = jest.fn();
+    getAllSettings.mockResolvedValue(defaultSettingsRes);
     requestsWithMinWait.mockResolvedValue([
         settingDtoListTestData,
         clientAppTestData,
+        defaultSettingsRes,
     ]);
 });
 
@@ -110,11 +120,8 @@ describe('<ClientAppContainer /> tests', () => {
     });
 
     it('should load spinner', async () => {
-        await act(async () => {
-            const { getByText } = render(<ClientAppPageContainer { ...props } />);
-
-            expect(getByText(SPINNER_TEXT_NODE)).toBeInTheDocument();
-        });
+        const wrapper = shallow(<ClientAppPageContainer { ...props } />);
+        expect(wrapper.find('Memo(Loading)')).toHaveLength(1);
     });
 
     it('should render ClientAppProperties', async () => {

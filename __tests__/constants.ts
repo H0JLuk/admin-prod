@@ -277,6 +277,7 @@ export const doPropertiesSettingsTestData = {
     ym_token: '55864828',
     promo_show_time: '10',
     privacy_policy: '64',
+    referralTokenLifetime: '1233',
 };
 
 export const propertiesSettingsTestData = {

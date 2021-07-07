@@ -320,9 +320,6 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
 
     const onCancel = async () => {
         if (notNewUser && userData) {
-            setCheckBoxes(getUserAppsCheckboxes(clientApps, userData.clientAppIds));
-            setLocation({ id: userData.locationId, name: userData.locationName } as LocationDto);
-            // setSalePoint({ id: userData.salePointId, name: userData.salePointName } as SalePointDto);
             setError(DEFAULT_ERRORS);
             history.push(generatePath(`${matchPath}${USERS_PAGES.USER_INFO}`, { userId: userData.id }));
         } else {
@@ -461,7 +458,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                                 <AutocompleteLocationAndSalePoint
                                     locationLabel={LOCATION_FIELD.labelEdit}
                                     salePointLabel={SALE_POINT_FIELD.labelEdit}
-                                    salePointLabelClassNames={userData?.role === 'User' || !userData ? 'required' : ''}
+                                    salePointLabelClassNames={!isInfo ? 'required' : ''}
                                     onLocationChange={onLocationChange}
                                     onSalePointChange={onSalePointChange}
                                     locationDisabled={isSendingInfo}
@@ -535,6 +532,9 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                                         renderOptionItemLabel={(option) => option.personalNumber}
                                         renderOptionStringValue={(option) => option.personalNumber}
                                         disabled={!isCorrectRoleForPartner}
+                                        clearValueOnBlur
+                                        selectFirstValueOnBlur
+                                        keyForCompareSelect="personalNumber"
                                     />
                                 ) : (
                                     <div className={styles.noEditField}>

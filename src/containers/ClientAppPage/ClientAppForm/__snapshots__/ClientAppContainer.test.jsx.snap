@@ -8,6 +8,6 @@ exports[`<ClientAppContainer /> tests should match snapshot 1`] = `
       Свойства
     </div>
   </div>
-  <ForwardRef(SvgLoadingSpinner) />
+  <Memo(Loading) className=\\"loading\\" />
 </div>"
 `;

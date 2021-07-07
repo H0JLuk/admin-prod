@@ -4,14 +4,14 @@ exports[`<ClientAppProperties /> test should match snapshot  1`] = `
 "<div className=\\"clientAppForm\\">
   <ForwardRef(InternalForm) className=\\"form\\" form={{...}} onFinish={[Function: handleSubmit]} layout=\\"vertical\\" onFieldsChange={[Function: handleFieldsChange]} id=\\"edit\\">
     <div className=\\"container\\">
-      <AppFormConstructor row={{...}} isEdit={true} />
-      <AppFormConstructor row={{...}} isEdit={true} />
+      <AppFormConstructor row={{...}} isEdit={true} isCreate={false} />
+      <AppFormConstructor row={{...}} isEdit={true} isCreate={false} />
     </div>
     <div className=\\"container\\">
-      <AppFormConstructor row={{...}} disabledFields={{...}} />
-      <AppFormConstructor row={{...}} disabledFields={{...}} />
-      <AppFormConstructor row={{...}} disabledFields={{...}} />
-      <AppFormConstructor row={{...}} disabledFields={{...}} />
+      <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
+      <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
+      <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
+      <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
       <Row gutter={24} className=\\"row\\">
         <Col span={12}>
           <FormItem label=\\"Бизнес-роль, для которой доступно приложение\\" name=\\"businessRoleIds\\" normalize={[Function: normalize]}>
