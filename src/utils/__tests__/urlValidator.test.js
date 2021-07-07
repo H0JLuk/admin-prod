@@ -50,6 +50,7 @@ test('valid url test', () => {
     expect(validateURL('https://okko.tv/#promo-code/?test=13&tyr=223')).toBe(true);
     expect(validateURL('https://okko.tv/#promo-code?test=13&tyr=223')).toBe(true);
     expect(validateURL('https://oKko.tv/#prOMOo-code?tTsT=13&tYr=2R23')).toBe(true);
+    expect(validateURL('https://partner:TloudK4&@dwN@sberdevices.ru/partners_form/vsp/')).toBe(true);
 });
 
 test('not valid url test', () => {

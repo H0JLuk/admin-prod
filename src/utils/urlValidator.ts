@@ -4,7 +4,7 @@ export const URL_VALIDATION_TEXT = 'Допустимые символы лати
 export const URL_HTTPS_VALIDATION_TEXT = 'Ссылка должна начинаться с https';
 const protocols = ['https'];
 const customProtocols = ['sberbankonline', 'android-app'];
-const hostNameRegExp = /^((http|https):\/\/)?[a-zA-Zа-яА-Я0-9]+([-./]{1}[a-zA-Zа-яА-Я0-9-]+)*\.[a-zA-Zа-яА-Я0-9]{2,5}($)?([0-9]{1,5})?(\/?.*)?([^=])?$/;
+const hostNameRegExp = /^(https:\/\/)?[a-zA-Zа-яА-Я0-9]+([-.:/]{1}[a-zA-Zа-яА-Я0-9@&-]+)*\.[a-zA-Zа-яА-Я0-9]{2,5}($)?([0-9]{1,5})?(\/?.*)?([^=])?$/;
 const queryRegExp = /^[а-яё\w/{}?#&[\]~=\-():.%;,+*'!@$]+$/i;
 const customProtocolCheck = /^[а-я\w\d:/=?.-]+$/i;
 
@@ -47,6 +47,8 @@ export function validateURL(url: string) {
             if (!customProtocolCheck.test(url)) {
                 throw new Error('URL contains wrong symbols');
             }
+        } else if (url.includes('http')) {
+            throw new Error('URL contains wrong symbols');
         } else if (!hostNameRegExp.test(url)) {
             throw new Error('URL contains wrong symbols');
         }
