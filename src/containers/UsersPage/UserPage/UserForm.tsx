@@ -391,12 +391,16 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
     };
 
     const onChangePartner = (data: UserInfo | null) => {
-        partner.current = data?.personalNumber ?? null;
-        setError(prev => ({
-            ...prev,
-            backend: '',
-            partner: '',
-        }));
+        const partnerPersonalNumber = data?.personalNumber ?? null;
+
+        if (partner.current !== partnerPersonalNumber) {
+            partner.current = partnerPersonalNumber;
+            setError(prev => ({
+                ...prev,
+                backend: '',
+                partner: '',
+            }));
+        }
     };
 
     return (
@@ -533,6 +537,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                                         renderOptionStringValue={(option) => option.personalNumber}
                                         disabled={!isCorrectRoleForPartner}
                                         clearValueOnBlur
+                                        clearSelectedBySearch
                                         selectFirstValueOnBlur
                                         keyForCompareSelect="personalNumber"
                                     />

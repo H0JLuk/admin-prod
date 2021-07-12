@@ -41,16 +41,19 @@ interface AutoCompleteComponentProps<DataType> extends Omit<AutoCompleteProps, '
     selectExactValueOnBlur?: boolean;
     selectFirstValueOnBlur?: boolean;
     keyForCompareSelect?: KeysWithString<DataType>;
+    clearSelectedBySearch?: boolean;
 }
 
 type AutoCompleteComponentState<DataType> = {
     value: string;
     options: DataType[];
+    selectedElem: DataType | null;
 };
 
 const DEFAULT_STATE = {
     value: '',
     options: [],
+    selectedElem: null,
 };
 
 const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number; value?: string; }>({
@@ -73,17 +76,12 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
     selectExactValueOnBlur,
     selectFirstValueOnBlur,
     keyForCompareSelect,
+    clearSelectedBySearch,
     ...restProps
 }: AutoCompleteComponentProps<DataType>) => {
     const [loading, setLoading] = useState(true);
-    const [state, setState] = useState<AutoCompleteComponentState<DataType>>({
-        options: [],
-        value: '',
-    });
-    const stateRef = useRef<AutoCompleteComponentState<DataType>>({
-        options: [],
-        value: '',
-    });
+    const [state, setState] = useState<AutoCompleteComponentState<DataType>>(DEFAULT_STATE);
+    const stateRef = useRef<AutoCompleteComponentState<DataType>>(DEFAULT_STATE);
 
     const changeState = useCallback((nextState: SetStateAction<AutoCompleteComponentState<DataType>>) => {
         stateRef.current = typeof nextState === 'function' ? nextState(stateRef.current) : nextState;
@@ -145,9 +143,14 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const getResultsDebounced = useCallback(debounce(getSearchResults, 500), [getSearchResults]);
 
+    const selectValue = (selectedElem: DataType | null) => {
+        onSelect(selectedElem);
+        changeState(prev => ({ ...prev, selectedElem }));
+    };
+
     const onSearchHandler = (searchValue: string) => {
-        if (!searchValue) {
-            onSelect(null);
+        if (!searchValue || clearSelectedBySearch) {
+            selectValue(null);
         }
 
         setLoading(true);
@@ -169,20 +172,22 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
     };
 
     const onSelectHandler = (value: string, { data }: OptionData | OptionGroupData) => {
-        onSelect(data);
-        changeState({ ...state, value });
+        selectValue(data);
+        changeState(prev => ({ ...prev, value }));
     };
 
     const onBlurHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+        const currState = stateRef.current;
         onBlur(e);
-        if (clearValueOnBlur && !state.options.length) {
-            return onSelect(null);
+
+        if (clearValueOnBlur && !currState.options.length && currState.selectedElem) {
+            return selectValue(null);
         }
 
-        if (keyForCompareSelect) {
+        if (keyForCompareSelect && !currState.selectedElem) {
             if (selectExactValueOnBlur) {
-                const stateValue = state.value.trim().toLowerCase();
-                const exactElem = stateValue && state.options.find(
+                const stateValue = currState.value.trim().toLowerCase();
+                const exactElem = stateValue && currState.options.find(
                     ({ [keyForCompareSelect]: optionValue }) => (optionValue ?? '' as any).toLowerCase() === stateValue,
                 );
 
@@ -191,14 +196,14 @@ const AutoCompleteComponent = <DataType extends { label?: ReactNode; id?: number
                     onSelectHandler(inputValue, {
                         key: 'selectedExactOnBlur',
                         value: inputValue,
-                        label: getOptionLabel(exactElem, state.value),
+                        label: getOptionLabel(exactElem, currState.value),
                         data: exactElem,
                     });
                 }
             }
 
-            if (selectFirstValueOnBlur && state.options.length) {
-                const [firstOption] = state.options;
+            if (selectFirstValueOnBlur && currState.options.length) {
+                const [firstOption] = currState.options;
                 const inputValue = getOptionValue(firstOption, renderOptionStringValue);
                 onSelectHandler(inputValue, {
                     key: 'selectFirstOnBlur',
