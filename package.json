@@ -57,8 +57,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
-    "test:cov": "craco test --coverage --watchAll=false",
+    "test": "craco test --env=jest-environment-jsdom-sixteen",
+    "test:cov": "craco test --coverage --watchAll=false --env=jest-environment-jsdom-sixteen",
     "docker-build": "docker build --no-cache -t dzo-distributor-admin .",
     "docker-run": "docker run -d --name dzo-distributor-admin -p 80:80 dzo-distributor-admin",
     "docker-stop": "docker stop dzo-distributor-admin",
@@ -120,6 +120,7 @@
     "eslint": "^6.6.0",
     "eslint-plugin-jest": "^23.20.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "jest-environment-jsdom-sixteen": "1.0.3",
     "lint": "^0.7.0",
     "typescript": "4.3.3"
   },

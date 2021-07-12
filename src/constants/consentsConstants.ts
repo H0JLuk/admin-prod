@@ -1,17 +1,4 @@
 
-export const BUTTON_TEXT = {
-    SAVE: 'Сохранить',
-    ADD: 'Добавить',
-    CANCEL: 'Отменить',
-    SELECT: 'Выбрать',
-    SELECT_ALL: 'Выбрать все',
-    CANCEL_ALL: 'Отменить все',
-    DELETE: 'Удалить',
-    CHOSEN: 'Выбрано',
-    EDIT: 'Редактировать',
-    OK: 'Хорошо',
-};
-
 export const CONSENTS_LABELS = {
     CONSENTS_TITLE: 'Согласие',
     EMPTY_CONSENTS_TITLE: 'Нет добавленных согласий',

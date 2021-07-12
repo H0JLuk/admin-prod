@@ -1,0 +1,50 @@
+.container {
+    width: 100%;
+    padding: 0px 60px 0px 30px;
+}
+
+.formWrapper {
+    padding: 32px;
+    background-color: #f8f8f8;
+}
+
+.formContainer {
+    max-width: 800px;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -.38px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+.datePicker {
+    width: 100%;
+    max-width: 250px;
+}
+
+.error {
+    margin-top: 5px;
+    color: #dd283b;
+}
+
+.btnGroup {
+    margin: 24px 0;
+}
+
+.btnGroup > button {
+    margin-right: 12px;
+}
+
+.noEditField {
+    display: flex;
+    align-items: center;
+    color: #494949;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 32px;
+    max-width: 300px;
+}

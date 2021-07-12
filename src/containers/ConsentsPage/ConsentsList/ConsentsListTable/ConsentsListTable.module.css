@@ -16,6 +16,7 @@
 }
 
 .table :global(.ant-table-tbody > tr > td) {
+    vertical-align: middle;
     border-bottom: none;
 }
 

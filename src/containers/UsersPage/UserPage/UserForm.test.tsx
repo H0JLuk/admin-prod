@@ -16,7 +16,7 @@ import {
     userTestData,
     clientAppListTestResponse,
     searchSalePointTestData,
-    salePointTest,
+    testSalePoint,
 } from '../../../../__tests__/constants';
 import { getResultsByTextAndType, createSearchDataAndPassLocation } from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper';
 import { confirmModal } from '@utils/utils';
@@ -138,7 +138,7 @@ jest.mock('react-router-dom', () => ({
 const TEST_PASSWORD = 'TEST_PASSWORD_123';
 
 const SearchData = {
-    results: [salePointTest],
+    results: [testSalePoint],
     value: 'Московская область, Москва',
 };
 

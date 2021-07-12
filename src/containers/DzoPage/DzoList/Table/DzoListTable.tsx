@@ -1,26 +1,18 @@
 import React from 'react';
-import { Table, Empty, TableProps } from 'antd';
+import { Table, TableProps } from 'antd';
+import EmptyMessage from '@components/EmptyMessage';
 import { DzoDto } from '@types';
 
 import styles from './DzoListTable.module.css';
 
 type IDzoListTable = TableProps<DzoDto> & {
     dzoList: DzoDto[];
+    rowSelection: TableProps<DzoDto>['rowSelection'];
+    onRow: TableProps<DzoDto>['onRow'];
+    loading: boolean;
 };
 
 const { Column } = Table;
-
-const EMPTY_TABLE = {
-    firstMessagePart: 'Мы ничего не нашли.',
-    secondMessagePart: 'Измените значение поиска и попробуйте еще раз',
-};
-
-const EmptyMessage = (
-    <Empty description={null} >
-        <div>{EMPTY_TABLE.firstMessagePart}</div>
-        <div>{EMPTY_TABLE.secondMessagePart}</div>
-    </Empty>
-);
 
 const DZO_NAME = 'Название';
 const DZO_ID = 'ID';
@@ -42,7 +34,7 @@ const DzoListTable: React.FC<IDzoListTable> = ({
             className={styles.table}
             rowSelection={rowSelection}
             onRow={onRow}
-            locale={{ emptyText: EmptyMessage }}
+            locale={{ emptyText: <EmptyMessage /> }}
             pagination={false}
         >
             <Column width="45%" dataIndex="dzoName" render={(item) => columnRender(item, DZO_NAME)} />

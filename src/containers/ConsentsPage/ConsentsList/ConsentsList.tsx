@@ -8,7 +8,8 @@ import ConsentsListTable from './ConsentsListTable';
 import TableDeleteModal from '@components/TableDeleteModal';
 import { getConsentsList, deleteConsent } from '@apiServices/consentsService';
 import { CONSENTS_PAGES } from '@constants/route';
-import { BUTTON_TEXT, CONSENTS_LABELS } from '@constants/consentsConstants';
+import { BUTTON_TEXT } from '@constants/common';
+import { CONSENTS_LABELS } from '@constants/consentsConstants';
 import { ConsentDto } from '@types';
 
 import styles from './ConsentsList.module.css';

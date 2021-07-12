@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
-import { Empty, Table, TableProps } from 'antd';
-import { UserInfo } from '@types';
+import { Table, TableProps } from 'antd';
+import EmptyMessage from '@components/EmptyMessage';
 import ROLES, { ROLES_RU } from '@constants/roles';
 import { LOGIN_TYPE, LoginTypes } from '@constants/loginTypes';
+import { UserInfo } from '@types';
 
 import styles from './UsersListTable.module.css';
 
@@ -24,17 +25,6 @@ const SALE_POINT = 'Точка продажи';
 const ROLE = 'Роль';
 const LOGIN_METHOD = 'Способ входа';
 const PARTNER = 'Партнёр';
-const EMPTY_TABLE = {
-    firstMessagePart: 'Мы ничего не нашли.',
-    secondMessagePart: 'Измените значение поиска и попробуйте еще раз',
-};
-
-const EmptyMessage = (
-    <Empty description={null} >
-        <div>{EMPTY_TABLE.firstMessagePart}</div>
-        <div>{EMPTY_TABLE.secondMessagePart}</div>
-    </Empty>
-);
 
 const UsersListTable: React.FC<UsersListTableProps> = ({
     loadingData,
@@ -55,7 +45,7 @@ const UsersListTable: React.FC<UsersListTableProps> = ({
             pagination={pagination}
             showHeader={false}
             onChange={onChangePage}
-            locale={{ emptyText: EmptyMessage }}
+            locale={{ emptyText: <EmptyMessage /> }}
         >
             <Table.Column
                 width="15%"

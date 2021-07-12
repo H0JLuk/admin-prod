@@ -143,7 +143,12 @@ describe('tests `sortItemsBySearchParams` func', () => {
             filterText: '',
         };
         expect(sortItemsBySearchParams(params, items, 'test')).toEqual(items);
-        expect(sortItemsBySearchParams({ ...params, direction: 'DESC' }, items, 'test')).toEqual(items);
+        expect(sortItemsBySearchParams({ ...params, direction: 'DESC' }, items, 'test')).toEqual([
+            { id: 11, name: 'test4' },
+            { id: 21, name: 'testName3' },
+            { id: 221, name: 'testName2' },
+            { id: 1, name: 'testName1' },
+        ]);
     });
 
     it('test filter by `name`', () => {

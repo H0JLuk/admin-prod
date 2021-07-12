@@ -17,6 +17,8 @@ appNavigation.getLinkForCreatePromoCampaign = jest.fn();
 
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useLocation: () => ({ pathname: '/testpath' }),
     useHistory: () => ({
         push: mockHistoryPush,
         location: jest.fn(),

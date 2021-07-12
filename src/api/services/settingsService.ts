@@ -1,12 +1,6 @@
 import { Api } from '../apiClient';
 import { getReqOptions } from './index';
-import {
-    BusinessRoleDto,
-    DefaultApiResponse,
-    ISettingList,
-    ListResponse,
-    SettingDto,
-} from '@types';
+import { DefaultApiResponse, ISettingList, SettingDto } from '@types';
 
 const STATIC_URL = 'STATIC_URL';
 
@@ -40,12 +34,4 @@ export function saveStaticUrl(staticUrl: string) {
 
 export function getStaticUrl() {
     return window.localStorage.getItem(STATIC_URL);
-}
-
-export function getBusinessRoles() {
-    return Api.get<ListResponse<BusinessRoleDto>>('/business-role/list', getReqOptions());
-}
-
-export function getBusinessRolesByClientApp(clientAppId: number) {
-    return Api.get<ListResponse<BusinessRoleDto>>(`/admin/business-role/list?clientAppId=${clientAppId}`, getReqOptions());
 }

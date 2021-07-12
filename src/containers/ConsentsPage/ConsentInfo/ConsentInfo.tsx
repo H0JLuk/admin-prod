@@ -10,7 +10,8 @@ import Loading from '@components/Loading';
 import { getRole } from '@apiServices/sessionService';
 import { confirmModal, errorModal, successModal } from '@utils/utils';
 import { deleteConsent, getConsentById } from '@apiServices/consentsService';
-import { BUTTON_TEXT, CONSENTS_LABELS, EMPTY_VALUE } from '@constants/consentsConstants';
+import { CONSENTS_LABELS, EMPTY_VALUE } from '@constants/consentsConstants';
+import { BUTTON_TEXT } from '@constants/common';
 import { ROLES } from '@constants/roles';
 import { ConsentDto } from '@types';
 

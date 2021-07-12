@@ -2,6 +2,7 @@ export const menuItemLabels = {
     AUDIT: 'Журнал аудита',
     CATEGORY: 'Категории',
     DZO: 'ДЗО',
+    REFERENCE_BOOKS: 'Справочники',
     REPORTS: 'Отчёты',
     USERS: 'Пользователи',
     PROMO_CAMPAIGNS: 'Промо-кампании',
@@ -12,4 +13,10 @@ export const menuItemLabels = {
     APP: 'Приложения',
     GROUPS: 'Группы',
     CONSENTS: 'Согласие',
+    SALE_POINT: 'Точка продажи',
+    LOCATION: 'Локация',
+    BUSINESS_ROLE: 'Бизнес-роль',
+    ROLE_IN_CANAL: 'Роль в канале',
+    DEVICE_TYPE: 'Тип устройства',
+    CANAL_TYPE: 'Тип канала',
 };

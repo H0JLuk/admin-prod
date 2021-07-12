@@ -214,7 +214,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                 };
 
                 if (notNewUser) {
-                    await saveUser(userData!.id, requestData);
+                    await saveUser((userData as UserInfo).id, requestData);
                     showNotify({ login: userData?.personalNumber, mode: MODE.EDIT });
                 } else {
                     const { userName, generatedPassword } = await addUser({

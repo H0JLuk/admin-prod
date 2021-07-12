@@ -5,7 +5,7 @@ import UserMultiEdit, { CHOSE_USERS_COUNT } from './UserMultiEdit';
 import { editLocationAndSalePointUsers, removeUser } from '@apiServices/usersService';
 import { sleep } from '../../../../setupTests';
 import { act } from 'react-dom/test-utils';
-import { salePointTest, testLocation, usersTestArray } from '../../../../../__tests__/constants';
+import { testSalePoint, testLocation, usersTestArray } from '../../../../../__tests__/constants';
 import AutocompleteLocationAndSalePoint from '@components/Form/AutocompleteLocationAndSalePoint';
 import UserFormButtonGroup from '../UserFormButtonGroup';
 
@@ -36,7 +36,7 @@ const TEST_PROPS = {
 
 const TEST_USER_DATA = {
     LOCATION: testLocation,
-    SALE_POINT: salePointTest,
+    SALE_POINT: testSalePoint,
 };
 
 describe('<UserMultiEdit /> test', () => {

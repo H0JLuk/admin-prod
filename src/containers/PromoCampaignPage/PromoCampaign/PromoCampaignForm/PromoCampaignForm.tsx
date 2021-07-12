@@ -120,7 +120,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
             const visibilitySettings = getVisibilitySettingsWithUpdatedErrors(
                 prevState.visibilitySettings,
                 index,
-                hasErrors
+                hasErrors,
             );
 
             const newState = { ...prevState, visibilitySettings };
@@ -176,7 +176,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                 const visibilitySettings= getVisibilitySettingsWithUpdatedErrors(
                     prevState.visibilitySettings,
                     index,
-                    hasErrors
+                    hasErrors,
                 );
                 return { ...prevState, visibilitySettings: visibilitySettings.filter((_, idx) => idx !== index) };
             }
@@ -192,7 +192,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
         if (isVisibilityErrors) {
             const nextState = { ...state };
             nextState.visibilitySettings = nextState.visibilitySettings.map(({ location, ...rest }) =>
-                !location ? { location, ...rest, errors: { location: 'Укажите локацию' } } : { location, ...rest }
+                !location ? { location, ...rest, errors: { location: 'Укажите локацию' } } : { location, ...rest },
             );
             setState(nextState);
             return false;
@@ -234,7 +234,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                                 ? behaviorTypes.QR
                                 : behaviorTypes.WEB,
                         },
-                        copyVisibilitySettings
+                        copyVisibilitySettings,
                     );
                     oldPromoCampaignData = await copyPromoCampaign(oldPromoCampaignData.id, dataForCopy as unknown as PromoCampaignDto, currentData.appCode as string);
                 } else {
@@ -246,7 +246,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                     const visibilityPromises = createVisibilities(
                         visibilitySettings,
                         oldPromoCampaignData.id,
-                        state.appCode as string
+                        state.appCode as string,
                     );
                     await Promise.all(visibilityPromises);
                 }
@@ -257,7 +257,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
             const textEditPromises = editTextBanners(
                 currentData.texts as BannerCreateTextDto,
                 oldPromoCampaignData,
-                currentData.appCode as string
+                currentData.appCode as string,
             );
 
             await Promise.all(textEditPromises);
@@ -265,7 +265,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                 currentData.banners as BannerCreateDto,
                 oldPromoCampaignData,
                 changedImgs.current as string[],
-                currentData.appCode as string
+                currentData.appCode as string,
             );
 
             if (savedPromoCampaignData.current.id && !isCopy) {
@@ -273,7 +273,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                 const visibilityPromises = createVisibilities(
                     visibilitySettings,
                     oldPromoCampaignData.id,
-                    state.appCode as string
+                    state.appCode as string,
                 );
                 await Promise.all(visibilityPromises);
             }
@@ -446,7 +446,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                 ...state.banners,
                 ...banners,
                 ...arrayToObject(bannersToSave, 'type', 'url'),
-            } as BannerCreateDto
+            } as BannerCreateDto,
         };
     };
 
@@ -504,7 +504,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
     const editImageAndBannersRef = async (
         val: Partial<PromoCampaignFormInitialState>,
         appCode: string,
-        onTextDelete: (id: number, type: string) => void
+        onTextDelete: (id: number, type: string) => void,
     ) => {
         setLoading(true);
 
@@ -515,7 +515,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
             val.banners as BannerCreateDto,
             savedPromoCampaignData.current as PromoCampaignDto,
             changedImgs.current as string[],
-            appCode
+            appCode,
         );
 
         const { texts, banners } = saveTextAndBanners(editedTexts, editedBanners);
@@ -550,7 +550,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
             let oldPromoCampaignData = getPromoCampaignValue(promoCampaign, savedPromoCampaignData.current) as PromoCampaignDto;
             const dataForCopy = getPromoCampaignForCopy(
                 { ...oldPromoCampaignData, ...currentData },
-                copyVisibilitySettings
+                copyVisibilitySettings,
             ) as unknown as PromoCampaignDto;
             oldPromoCampaignData = await copyPromoCampaign(oldPromoCampaignData.id, dataForCopy, currentData.appCode as string);
 

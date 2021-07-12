@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import PromoCampaignVisibilitySettingForm from './PromoCampaignVisibilitySettingForm';
-import { testLocation as location, salePointTest as salePoint } from '../../../../../../__tests__/constants';
+import { testLocation, testSalePoint } from '../../../../../../__tests__/constants';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
 import { act } from '@testing-library/react';
 
@@ -24,21 +24,21 @@ describe('<PromoCampaignVisibilitySettingForm /> tests', () => {
 
     it('should add new visibility setting', async () => {
         const VisibilityForm = shallow(<PromoCampaignVisibilitySettingForm { ...props } />);
-        VisibilityForm.find('PromoCampaignVisibilitySettingInput').first().prop('onLocationChange')(location);
-        VisibilityForm.find('PromoCampaignVisibilitySettingInput').first().prop('onSalePointChange')(salePoint);
+        VisibilityForm.find('PromoCampaignVisibilitySettingInput').first().prop('onLocationChange')(testLocation);
+        VisibilityForm.find('PromoCampaignVisibilitySettingInput').first().prop('onSalePointChange')(testSalePoint);
 
         await act(async () => {
             VisibilityForm.find('Button').last().prop('onClick')();
         });
 
-        expect(props.onSubmit).toBeCalledWith({ location, salePoint, visibility: true });
+        expect(props.onSubmit).toBeCalledWith({ location: testLocation, salePoint: testSalePoint, visibility: true });
     });
 
     it('should catch in onFinish func', async () => {
         addVisibilitySetting.mockRejectedValue({ message: 'catch test' });
         const VisibilityForm = shallow(<PromoCampaignVisibilitySettingForm { ...props } />);
-        VisibilityForm.find('PromoCampaignVisibilitySettingInput').prop('onLocationChange')(location);
-        VisibilityForm.find('PromoCampaignVisibilitySettingInput').prop('onSalePointChange')(salePoint);
+        VisibilityForm.find('PromoCampaignVisibilitySettingInput').prop('onLocationChange')(testLocation);
+        VisibilityForm.find('PromoCampaignVisibilitySettingInput').prop('onSalePointChange')(testSalePoint);
 
         await act(async () => {
             VisibilityForm.find('Button').last().prop('onClick')();

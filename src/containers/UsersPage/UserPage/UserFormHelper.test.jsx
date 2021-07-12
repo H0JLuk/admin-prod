@@ -1,5 +1,5 @@
 import React from 'react';
-import { salePointTest } from '../../../../__tests__/constants';
+import { testSalePoint } from '../../../../__tests__/constants';
 import { LOGIN_TYPES_ENUM } from '../../../constants/loginTypes';
 import ROLES from '../../../constants/roles';
 import { customNotifications } from '../../../utils/notifications';
@@ -62,8 +62,9 @@ describe('UserFormHelper test', () => {
     });
 
     it('test `validateSalePoint` function', () => {
-        expect(validateSalePoint(salePointTest)).toBe(undefined);
-        expect(() => validateSalePoint()).toThrow(validateMessages.salePoint.require);
+        expect(validateSalePoint(testSalePoint)).toBe(undefined);
+        expect(() => validateSalePoint(testSalePoint, true)).toThrow(validateMessages.salePoint.shouldExternal);
+        expect(() => validateSalePoint(null)).toThrow(validateMessages.salePoint.require);
     });
 
     it('test `validatePartner` function', () => {

@@ -11,10 +11,9 @@ import { getAppCode } from '@apiServices/sessionService';
 import {
     addSettings,
     getAllSettings,
-    getBusinessRoles,
-    getBusinessRolesByClientApp,
     getSettingsList,
 } from '@apiServices/settingsService';
+import { getBusinessRoles, getBusinessRolesByClientApp } from '@apiServices/businessRoleService';
 import { getClientAppInfo } from '@apiServices/clientAppService';
 import {
     FORM_MODES,

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, Empty } from 'antd';
+import { Button } from 'antd';
 import GroupPromoCampaignListItem from './GroupPromoCampaigns/GroupPromoCampaignListItem';
 import GroupBundlesListItem from './GroupBundles/GroupBundlesListItem';
-import { BUTTON, EMPTY_TABLE } from './groupListConstants';
-import { GroupListByTypeProps } from './types';
+import EmptyMessage from '@components/EmptyMessage';
+import { BUTTON } from './groupListConstants';
 import { BundleTypes } from '../groupPageConstants';
+import { GroupListByTypeProps } from './types';
 
 import styles from './GroupList.module.css';
 
@@ -40,12 +41,7 @@ export const GroupListByType: React.FC<GroupListByTypeProps> = ({
     const Component = type === BundleTypes.IDEA ? GroupBundlesListItem : GroupPromoCampaignListItem;
 
     if (!dataList.length) {
-        return (
-            <Empty description={null} className={styles.emptyMessage}>
-                <div>{EMPTY_TABLE.firstMessagePart}</div>
-                <div>{EMPTY_TABLE.secondMessagePart}</div>
-            </Empty>
-        );
+        return <EmptyMessage />;
     }
 
     return dataList.map(item => (

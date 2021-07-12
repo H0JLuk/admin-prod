@@ -11,6 +11,7 @@ import PresentationPage from '@containers/PresentationPage/PresentationPage';
 import PromoCampaignPageRouter from '@containers/PromoCampaignPage/PromoCampaignPageRouter';
 import ClientAppPageRouter from '@containers/ClientAppPage/ClientAppPageRouter';
 import GroupsPageRouter from '@containers/GroupsPage/GroupsPageRouter';
+import ReferenceBooksRouter from '@containers/ReferenceBooks/ReferenceBooksRouter';
 import ConsentsPageRouter from '@containers/ConsentsPage/ConsentsPageRouter';
 import Sidebar from '@components/Sidebar';
 
@@ -26,6 +27,7 @@ const AdminPage = () => (
                 <Route path={ROUTE_ADMIN.DASHBOARD} component={Dashboard} />
                 <Route path={ROUTE_ADMIN.REPORTS} component={ReportsPage} />
                 <Route path={ROUTE_ADMIN.DZO} component={DzoPageRouter} />
+                <Route path={ROUTE_ADMIN.REFERENCE_BOOKS} component={ReferenceBooksRouter} />
                 <Route path={ROUTE_ADMIN.CATEGORY} component={CategoryPage} />
                 <Route path={ROUTE_ADMIN.PRESENTATION} component={PresentationPage} />
                 <Route path={ROUTE_ADMIN.APPS} component={ClientAppPageRouter} />

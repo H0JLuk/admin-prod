@@ -1,0 +1,21 @@
+.tableWrapper {
+    padding: 20px;
+}
+
+.tableTitle {
+    color: #697382;
+    font-family: Roboto, sans-serif;
+}
+
+.tableCell {
+    font-weight: 700;
+}
+
+.table :global(.ant-table-tbody > tr:hover td) {
+    cursor: pointer;
+    background-color: #f8f8f8;
+}
+
+.table :global(.ant-table-tbody > tr > td) {
+    border-bottom: none;
+}

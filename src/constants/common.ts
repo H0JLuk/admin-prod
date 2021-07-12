@@ -31,3 +31,16 @@ export enum SALE_POINT_TYPE {
     INTERNAL = 'INTERNAL',
     EXTERNAL = 'EXTERNAL',
 }
+
+export const BUTTON_TEXT = {
+    SAVE: 'Сохранить',
+    ADD: 'Добавить',
+    CANCEL: 'Отменить',
+    SELECT: 'Выбрать',
+    SELECT_ALL: 'Выбрать все',
+    CANCEL_ALL: 'Отменить все',
+    DELETE: 'Удалить',
+    CHOSEN: 'Выбрано',
+    EDIT: 'Редактировать',
+    OK: 'Хорошо',
+};

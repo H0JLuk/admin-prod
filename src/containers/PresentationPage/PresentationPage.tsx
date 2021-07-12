@@ -20,9 +20,10 @@ import { populateFormWithData } from '@components/Form/formHelper';
 import ButtonLabels from '@components/Button/ButtonLables';
 import { getAppCode } from '@apiServices/sessionService';
 import Header from '@components/Header';
-import { Empty, message } from 'antd';
+import { message } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
 import { LandingDto, SaveLandingRequest } from '@types';
+import EmptyMessage from '@components/EmptyMessage';
 
 const LANDINGS_EMPTY = {
     firstMessagePart: 'Для этой витрины пока нет лендингов',
@@ -37,13 +38,6 @@ const REMOVE_QUESTION = 'Удалить лендинг?';
 const LANDINGS_LIST_TITLE = 'Список лендингов';
 const UPLOAD_IMAGE_PLEASE = 'Пожалуйста загрузите изображение!';
 const LANDING_DIR = 'landing';
-
-const EmptyMessage = () => (
-    <Empty description={null} className={styles.emptyMessage} >
-        <div>{LANDINGS_EMPTY.firstMessagePart}</div>
-        <div>{LANDINGS_EMPTY.secondMessagePart}</div>
-    </Empty>
-);
 
 const initialEditingLanding = {
     landingId: null,
@@ -248,7 +242,13 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
                     {...landing}
                 />
             ))
-            : <EmptyMessage />;
+            : (
+                <EmptyMessage
+                    className={styles.emptyMessage}
+                    firstMessage={LANDINGS_EMPTY.firstMessagePart}
+                    secondMessage={LANDINGS_EMPTY.secondMessagePart}
+                />
+            );
     };
 
     renderModifyModal = () => (

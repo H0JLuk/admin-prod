@@ -40,11 +40,6 @@ export const GROUP_OPTIONS = [
     { label: TITLE.PROMO_CAMPAIGNS, value: BundleTypes.ASSOCIATION },
 ];
 
-export const EMPTY_TABLE = {
-    firstMessagePart: 'Мы ничего не нашли.',
-    secondMessagePart: 'Измените значение поиска и попробуйте еще раз',
-};
-
 export enum groupTypes {
     BUNDLE = 'bundles',
     RELATED_CAMPAIGN = 'relatedCampaigns',

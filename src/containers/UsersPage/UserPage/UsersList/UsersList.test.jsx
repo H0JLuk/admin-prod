@@ -3,7 +3,7 @@ import { generatePath } from 'react-router-dom';
 import UserList from './UsersList';
 import { fireEvent, render, act, screen } from '@testing-library/react';
 import { sleep } from '../../../../setupTests';
-import { permissionsTestData, usersListTestData, usersTestArray } from '../../../../../__tests__/constants';
+import { permissionsTestData, testUsersListResponse, usersTestArray } from '../../../../../__tests__/constants';
 import * as usersService from '../../../../api/services/usersService';
 import { shallow } from 'enzyme';
 import { USERS_PAGES } from '../../../../constants/route';
@@ -81,7 +81,7 @@ jest.mock('react-router-dom', () => ({
 
 beforeEach(() => {
     usersService.getUser = jest.fn().mockResolvedValue({ ...usersTestArray[0], role: 'Partner' });
-    usersService.getUsersList = jest.fn().mockResolvedValue(usersListTestData);
+    usersService.getUsersList = jest.fn().mockResolvedValue(testUsersListResponse);
     usersService.generateQRCodes = jest.fn();
     permissions.getCurrUserInteractions = jest.fn().mockReturnValue(permissionsTestData);
 });

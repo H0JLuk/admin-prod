@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BusinessRoleTable test should match snapshot 1`] = `
+"<div className=\\"tableWrapper\\">
+  <Table loading={false} showHeader={false} dataSource={{...}} rowKey=\\"id\\" className=\\"table\\" rowSelection={{...}} onRow={[Function: onRow]} locale={{...}} pagination={false}>
+    <Column width=\\"80%\\" dataIndex=\\"name\\" render={[Function: render]} />
+    <Column width=\\"20%\\" dataIndex=\\"startDate\\" render={[Function: render]} />
+  </Table>
+</div>"
+`;

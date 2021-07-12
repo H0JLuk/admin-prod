@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import { testLocation as location, salePointTest as salePoint } from '../../../../../../__tests__/constants';
+import { testLocation, testSalePoint } from '../../../../../../__tests__/constants';
 import { addVisibilitySetting } from '../../../../../api/services/promoCampaignService';
 import PromoCampaignVisibilitySettingModal from './PromoCampaignVisibilitySettingModal';
 
@@ -25,8 +25,8 @@ describe('<PromoCampaignVisibilitySettingModal /> tests', () => {
     it('should open modal, add company and close modal', async () => {
         addVisibilitySetting.mockResolvedValue();
         const VisibilityModal = shallow(<PromoCampaignVisibilitySettingModal { ...props } />);
-        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onLocationChange')(location);
-        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onSalePointChange')(salePoint);
+        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onLocationChange')(testLocation);
+        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onSalePointChange')(testSalePoint);
         await VisibilityModal.find('Modal').prop('onOk')();
 
         VisibilityModal.setProps({ ...props, isModalVisible: false });
@@ -39,8 +39,8 @@ describe('<PromoCampaignVisibilitySettingModal /> tests', () => {
     it('should catch in onFinish func', async () => {
         addVisibilitySetting.mockRejectedValue({ message: 'catch test' });
         const VisibilityModal = shallow(<PromoCampaignVisibilitySettingModal { ...props } />);
-        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onLocationChange')(location);
-        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onSalePointChange')(salePoint);
+        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onLocationChange')(testLocation);
+        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onSalePointChange')(testSalePoint);
         await VisibilityModal.find('Modal').prop('onOk')();
         VisibilityModal.setProps({ ...props, isModalVisible: false });
 
@@ -68,7 +68,7 @@ describe('<PromoCampaignVisibilitySettingModal /> tests', () => {
 
     it('should add promo campaign without salePoint', async () => {
         const VisibilityModal = shallow(<PromoCampaignVisibilitySettingModal { ...props } />);
-        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onLocationChange')(location);
+        VisibilityModal.find('PromoCampaignVisibilitySettingInput').prop('onLocationChange')(testLocation);
         await VisibilityModal.find('Modal').prop('onOk')();
         expect(props.closeModal).toBeCalled();
         expect(props.forceUpdate).toBeCalled();

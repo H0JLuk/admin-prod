@@ -83,3 +83,11 @@ input.ant-input:placeholder-shown ~ .ant-input-suffix .anticon-close-circle {
 .ck.ck-editor__main ul {
     padding-inline-start: 40px;
 }
+
+.ant-table-tbody {
+    vertical-align: top;
+}
+
+.ant-table-selection-column {
+    vertical-align: middle;
+}

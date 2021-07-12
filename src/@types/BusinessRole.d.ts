@@ -8,9 +8,6 @@ export type BusinessRoleDto = {
 };
 
 export type SaveBusinessRoleRequest = {
-    clientAppIds: number[];
     name: string;
     description?: string;
-    startDate: string;
-    endDate?: string;
 };

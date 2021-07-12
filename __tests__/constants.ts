@@ -266,44 +266,6 @@ export const settingDtoListTestData: ISettingList = {
     ],
 };
 
-export const doPropertiesSettingsTestData = {
-    id: 6,
-    code: 'greenday-presents',
-    name: 'Витрина экосистемы с подарками',
-    displayName: 'Витрина ВСП',
-
-    businessRoleIds: [1],
-    tmp_block_time: '1800',
-    ym_token: '55864828',
-    promo_show_time: '10',
-    privacy_policy: '64',
-    referralTokenLifetime: '1233',
-};
-
-export const propertiesSettingsTestData = {
-    doPropertiesSettingsTestData,
-    name: 'Витрина экосистемы с подарками',
-    mechanics: [
-        'BUNDLE',
-    ],
-    login_types: [
-        'PASSWORD',
-        'SBOL_PRO',
-    ],
-    privacy_policy: 'Я, абонент номера мобильного телефона ${phoneNumber},  выражаю свое согласие ПАО Сбербанк (адрес: Российская Федерация, 117997, г. Москва, ул. Вавилова, д. 19) на обработку и хранение моих персональных данных (номера телефона, файлы cookie, сведения о действиях пользователя на сайте, сведения об оборудовании пользователя, дата и время сессии) в т.ч. с использованием метрических программ Яндекс.Метрика. В связи с предоставлением настоящего согласия Банк вправе без ограничения с использованием средств автоматизации осуществлять любые действия (операции) с моими персональными данными, включая сбор, запись, систематизацию, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, обезличивание, блокирование, удаление, уничтожение, передачу (распространение, предоставление, доступ) персональных данных.',
-    max_presents_number: '3',
-    max_password_attempts: '3',
-    home_page_header: 'Сбер изменился, чтобы стать еще ближе к вам',
-    inactivity_time: '152',
-    token_lifetime: '18001223',
-    notification_types: undefined,
-    game_mechanics: undefined,
-    tmp_block_time: '1800',
-    id: 6,
-    code: 'greenday-presents',
-    displayName: 'Витрина ВСП',
-};
-
 export const settingsMapTestData = {
     tmp_block_time: '1800',
     mechanics: '["BUNDLE"]',
@@ -335,7 +297,7 @@ export const testLocation: LocationDto = {
     parentName: 'Ярославская область',
 };
 
-export const salePointTest: SalePointDto = {
+export const testSalePoint: SalePointDto = {
     id: 3163,
     name: '040_0017_0251',
     description: 'Доп.офис №0017/0251',
@@ -596,7 +558,7 @@ export const usersTestArray: UserInfo[] = [
     },
 ];
 
-export const usersListTestData: UserPaginationResponse = {
+export const testUsersListResponse: UserPaginationResponse = {
     users: usersTestArray,
     pageNo: 0,
     totalPages: 2,

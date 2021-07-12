@@ -12,17 +12,18 @@ export const ROUTE = {
 };
 
 const PAGE = {
-    AUDIT:          'audit',
-    CATEGORY:       'category',
-    DZO:            'dzo',
-    DASHBOARD:      'dashboard',
-    REPORTS:        'reports',
-    PRESENTATION:   'presentation',
-    PROMO_CAMPAIGN: 'promo-campaign',
-    USERS:          'users',
-    CONSENTS:       'consents',
-    APPS:           'client-apps',
-    GROUPS:         'groups',
+    AUDIT:           'audit',
+    CATEGORY:        'category',
+    DZO:             'dzo',
+    REFERENCE_BOOKS: 'reference-books',
+    DASHBOARD:       'dashboard',
+    REPORTS:         'reports',
+    PRESENTATION:    'presentation',
+    PROMO_CAMPAIGN:  'promo-campaign',
+    USERS:           'users',
+    CONSENTS:        'consents',
+    APPS:            'client-apps',
+    GROUPS:          'groups',
 };
 
 export const USERS_PAGES = {
@@ -59,6 +60,13 @@ export const GROUPS_PAGES = {
     INFO_GROUP:     '/:groupId/info',
 };
 
+export const BUSINESS_ROLE_PAGES = {
+    LIST:               '/business-role',
+    ADD_BUSINESS_ROLE:  '/create',
+    INFO_BUSINESS_ROLE: '/:businessRoleId/info',
+    EDIT_BUSINESS_ROLE: '/:businessRoleId/edit',
+};
+
 export const CONSENTS_PAGES = {
     ADD_CONSENT:    '/create',
     INFO_CONSENT:   '/:consentId/info',
@@ -86,6 +94,7 @@ export const ROUTE_ADMIN = {
     USERS:          `${ ROUTE.ADMIN }/${ PAGE.USERS }`,
     REPORTS:        `${ ROUTE.ADMIN }/${ PAGE.REPORTS }`,
     DZO:            `${ ROUTE.ADMIN }/${ PAGE.DZO }`,
+    REFERENCE_BOOKS: `${ROUTE.ADMIN}/${PAGE.REFERENCE_BOOKS}`,
     PRESENTATION:   `${ ROUTE.ADMIN }/${ PAGE.PRESENTATION }`,
     CATEGORY:       `${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,

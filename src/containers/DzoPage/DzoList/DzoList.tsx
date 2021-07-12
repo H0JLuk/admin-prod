@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { generatePath, useHistory } from 'react-router-dom';
 import { Button } from 'antd';
 import { deleteDzo, getAllDzoList, getDzoList } from '@apiServices/dzoService';
@@ -17,12 +17,8 @@ type IDzoPageProp = {
 };
 
 type ISelectedItems = {
-    rowKeys: number[];
+    rowKeys: React.Key[];
     rowValues: DzoDto[];
-};
-
-type ISortByFieldKey = {
-    NAME: keyof DzoDto;
 };
 
 const MODAL_TITLE = 'Вы уверены, что хотите удалить эти ДЗО?';
@@ -49,10 +45,6 @@ const BUTTON_TEXT = {
 
 const SEARCH_INPUT_PLACEHOLDER = 'Поиск по названию дзо';
 
-const sortByFieldKey: ISortByFieldKey = {
-    NAME: 'dzoName',
-};
-
 const defaultSelected = { rowValues: [], rowKeys: [] };
 
 const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
@@ -66,7 +58,7 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
 
     const onAddDzo = () => history.push(generatePath(`${matchPath}${DZO_PAGES.ADD_DZO}`), { dzoCodes: dzoCodes.current });
 
-    const loadDzoList = useCallback(async () => {
+    const loadDzoList = async () => {
         setLoadingTable(true);
         try {
             const requests = Promise.all([getDzoList(), getAllDzoList()]);
@@ -82,13 +74,12 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
             console.warn(e);
         }
         setLoadingTable(false);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    };
 
     useEffect(() => {
         loadDzoList();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loadDzoList]);
+    }, []);
 
     const clearSelectedItems = () => {
         setSelectedItems(defaultSelected);
@@ -99,26 +90,26 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
         clearSelectedItems();
     };
 
-    const updateSelected = useCallback((rowKeys, rowValues) => {
+    const onSelect = () => setSelect(true);
+
+    const updateSelected = (rowKeys: React.Key[], rowValues: DzoDto[]) => {
         setSelectedItems({ rowKeys, rowValues });
-    }, []);
+    };
 
-    const onSelect = useCallback(() => setSelect(true), []);
-
-    const rowSelection = useMemo(() => ({
+    const rowSelection = {
         selectedRowKeys: selectedItems.rowKeys,
         onChange: updateSelected,
-    }), [selectedItems, updateSelected]);
+    };
 
-    const selectAll = useCallback(() => {
+    const selectAll = () => {
         if (dzoList.length !== selectedItems.rowKeys.length) {
             setSelectedItems({ rowKeys: dzoList.map(({ dzoId }) => dzoId), rowValues: dzoList });
             return;
         }
         clearSelectedItems();
-    }, [dzoList, selectedItems.rowKeys.length]);
+    };
 
-    const onRow = useCallback((dzoData) => ({
+    const onRow = (dzoData: DzoDto) => ({
         onClick: () => {
             const { dzoId } = dzoData;
 
@@ -135,7 +126,7 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
                 : selectedItems.rowValues.filter((selectedItem) => selectedItem.dzoId !== dzoId);
             setSelectedItems({ rowKeys, rowValues });
         },
-    }), [select, selectedItems.rowKeys, selectedItems.rowValues, history, matchPath]);
+    });
 
     const refreshTable = () => {
         loadDzoList();
@@ -164,16 +155,6 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
         );
     }
 
-    const searchAndSortParams = {
-        setDataList: setDzoList,
-        copyDataList: copyDzoList.current,
-        matchPath,
-        inputPlaceholder: SEARCH_INPUT_PLACEHOLDER,
-        sortByFieldKey: sortByFieldKey.NAME,
-        menuItems: DROPDOWN_SORT_MENU,
-        onChangeInput: clearSelectedItems,
-    };
-
     return (
         <>
             <div className={styles.container}>
@@ -181,7 +162,13 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
                 {<HeaderWithActions<DzoDto>
                     title={DZO_TITLE}
                     buttons={buttons}
-                    {...searchAndSortParams}
+                    setDataList={setDzoList}
+                    copyDataList={copyDzoList.current}
+                    matchPath={matchPath}
+                    inputPlaceholder={SEARCH_INPUT_PLACEHOLDER}
+                    sortByFieldKey="dzoName"
+                    menuItems={DROPDOWN_SORT_MENU}
+                    onChangeInput={clearSelectedItems}
                 />}
                 <DzoListTable
                     loading={loadingTable}
@@ -199,7 +186,7 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
                             </div>
                             <TableDeleteModal<DzoDto>
                                 listNameKey="dzoName"
-                                listIdForRemove={selectedItems.rowKeys}
+                                listIdForRemove={selectedItems.rowKeys as number[]}
                                 sourceForRemove={selectedItems.rowValues}
                                 deleteFunction={deleteDzo}
                                 refreshTable={refreshTable}

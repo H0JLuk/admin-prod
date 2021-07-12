@@ -109,7 +109,7 @@ function sortItems(type: string, direction: DIRECTION, sortableItems: [any, any]
             return getStringSort(a[type], b[type], direction);
         }
         default: {
-            return 0;
+            return getDefaultSort(direction);
         }
     }
 }
@@ -128,6 +128,10 @@ export function getStringSort(a: string, b: string, direction = DIRECTION.ASC) {
 
 function getNumberSort(a: number, b: number, direction = DIRECTION.ASC) {
     return direction === DIRECTION.ASC ? a - b : b - a;
+}
+
+function getDefaultSort(direction = DIRECTION.ASC) {
+    return direction === DIRECTION.ASC ? 0 : -1;
 }
 
 function stringToLowerCase(value: string) {
