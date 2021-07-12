@@ -1,7 +1,6 @@
 import { UploadPictureProps } from '@components/UploadPicture';
-import { getPatternAndMessage } from '@utils/validators';
+import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
 import { DzoApplication, DzoDto } from '@types';
-import { Rule } from 'rc-field-form/lib/interface';
 import { BANNER_TYPE } from '@constants/common';
 
 export interface IDzoInfoRow {
@@ -26,12 +25,8 @@ type BannersUploadTemplate = Pick<UploadPictureProps, 'accept' | 'type' | 'descr
 };
 
 export const NEW_DZO_TITLE = 'Новое ДЗО';
-export const CANCEL_BUTTON_TITLE = 'Отменить';
 export const VALIDATION_TEXT = 'Заполните обязательное поле';
-export const ADD_BUTTON_TITLE = 'Добавить';
-export const SAVE_BUTTON_TITLE = 'Сохранить';
 export const URL_VALIDATION_TEXT = 'Введите url в формате http://site.ru';
-export const DELETE_BUTTON_LABEL = 'Удалить';
 export const DELETE_CONFIRMATION_MODAL_TITLE = 'Вы действительно хотите удалить ДЗО';
 export const LINK_VIDEO_LABEL = 'Ссылка на видеоэкскурсию';
 export const LINK_INPUT_PLACEHOLDER = 'Укажите ссылку';
@@ -43,9 +38,6 @@ export const DZO_CODE_NOT_UNIQUE = 'ДЗО с таким кодом уже ес�
 export const DZO_NAME = 'Название';
 export const DZO_CODE = 'Код';
 export const DZO_DESCRIPTION = 'Описание';
-export const EDIT = 'Редактировать';
-export const DELETE = 'Удалить';
-export const OK_TEXT = 'Хорошо';
 export const ERROR_DELETE_DZO = 'Ошибка удаления ДЗО';
 export const BANNER_IS_EMPTY = 'Логотип отсутствует';
 export const DZO_APPLICATION_LIST_NAME = 'applicationList';
@@ -60,11 +52,6 @@ export const TYPES = {
     SELECT: 'select',
 };
 
-export const RULES: Record<string, Rule[]> = {
-    STANDARD: [],
-    STANDARD_REQUIRED: [{ required: true, message: VALIDATION_TEXT, validateTrigger: 'onSubmit' }],
-};
-
 export const APP_OPTIONS = [
     { label: 'OTHER', value: 'OTHER' },
     { label: 'IOS', value: 'IOS' },
@@ -77,7 +64,7 @@ export const FORM_ELEMENTS = [
             label: DZO_NAME,
             type: TYPES.INPUT,
             rules: [
-                ...RULES.STANDARD_REQUIRED,
+                FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('dzo', 'name'),
                     validateTrigger: 'onSubmit',
@@ -90,7 +77,7 @@ export const FORM_ELEMENTS = [
             label: 'Код',
             type: TYPES.INPUT,
             rules: [
-                ...RULES.STANDARD_REQUIRED,
+                FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('dzo', 'code'),
                     validateTrigger: 'onSubmit',

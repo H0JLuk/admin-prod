@@ -92,25 +92,27 @@ module.exports = {
                 'react/prop-types': 0, // Disabled checking of prop-types
                 'react/jsx-key': 1, // Always warn on missing jsx-key inside iterator functions
                 'react/jsx-curly-brace-presence': [1, { props: 'never', children: 'ignore' }],
-                // 'prettier/prettier': 'error',
-                // '@typescript-eslint/no-empty-function': 0,
                 '@typescript-eslint/explicit-module-boundary-types': 0,
                 '@typescript-eslint/no-explicit-any': 0,
-                'react/jsx-curly-spacing': [1, { when: 'never', children: true }],       // warn: <App {...props} />   ok: <App { ...props } />    warn: <App>{children}</App>     ok: <App>{ children }</App>
+                'react/jsx-curly-spacing': [1, { when: 'never', children: true }],       // warn: <App { ...props } />   ok: <App {...props} />    warn: <App>{ children }</App>     ok: <App>{children}</App>
                 'react/jsx-tag-spacing': [ 1, { beforeSelfClosing: 'always' } ],  // warn: <Component/>   ok: <Component />
                 'react/jsx-equals-spacing': [1, 'never'],
-                'semi': 'off',      // Always warn on missing semicolon ;
-                '@typescript-eslint/semi': 2,
+                'semi': 'off',
+                '@typescript-eslint/semi': 2, // Always warn on missing semicolon ;
                 'object-curly-spacing': [1, 'always'],       // Always warn on missing spaces inside object / destruct literal,
-                'quotes': ['error', 'single'],       //
+                'quotes': 'off',
+                '@typescript-eslint/quotes': ['error', 'single'],
                 'space-in-parens': ['error', 'never'],
-                'keyword-spacing': ['error', { before: true, after: true }],
+                'keyword-spacing': 'off',
+                '@typescript-eslint/keyword-spacing': ['error', { before: true, after: true }],
                 'no-multi-spaces': 'error',
                 'no-var': 'error',
                 'prefer-const': ['warn', { destructuring: 'all' }],
-                'comma-spacing': 'error',
+                'comma-spacing': "off",
+                '@typescript-eslint/comma-spacing': ['error'],
                 'no-trailing-spaces': "error",
-                'indent': ['warn', 4, { SwitchCase: 1 }],
+                'indent': 'off',
+                '@typescript-eslint/indent': ['warn', 4, { SwitchCase: 1 }],
                 'key-spacing': ['warn', { mode: 'minimum' }],
                 'jsx-quotes': ['warn', 'prefer-double'],
                 'no-else-return': 'error',
@@ -151,6 +153,11 @@ module.exports = {
                         logical: 'parens-new-line',
                     },
                 ],
+                'space-infix-ops': 'off',
+                '@typescript-eslint/space-infix-ops': ['error'],
+                '@typescript-eslint/no-shadow': 1,
+                '@typescript-eslint/no-duplicate-imports': 1,
+                '@typescript-eslint/prefer-optional-chain': 1,
             },
             settings: {
                 react: {

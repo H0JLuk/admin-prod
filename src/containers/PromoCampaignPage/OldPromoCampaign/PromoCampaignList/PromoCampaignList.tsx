@@ -19,15 +19,15 @@ import {
 import { SortableHandle } from 'react-sortable-hoc';
 import PROMO_CAMPAIGNS from '@constants/promoCampaigns';
 import { BannerDto, BannerTextDto, PromoCampaignDto } from '@types';
+import { BUTTON_TEXT } from '@constants/common';
 
 enum PromoCampaignsValue {
     NORMAL = 'NORMAL',
     PRESENT = 'PRESENT',
-    LANDING = 'LANDING'
+    LANDING = 'LANDING',
 }
 
 const { Panel } = Collapse;
-const DELETE_BUTTON_LABEL = 'Удалить';
 const EDIT_BUTTON_LABEL = 'Редактировать';
 const DragHandle = SortableHandle(() => (
     <SwapOutlined style={{ cursor: 'pointer', color: '#999', transform: 'rotate(90deg)' }} />
@@ -125,7 +125,7 @@ const PromoCampaignList: React.FC<PromoCampaignListProps> = ({
                                         onClick={() => onEditPromoCampaignBanner(item, promoCampaign)} />
                                     <Confirm text="Вы уверены, что хотите удалить баннер?"
                                         onConfirm={() => onDeletePromoCampaignBanner(item, promoCampaign)}>
-                                        <TooltipButton text={DELETE_BUTTON_LABEL}
+                                        <TooltipButton text={BUTTON_TEXT.DELETE}
                                             shape="circle"
                                             danger
                                             icon={<DeleteOutlined />} />
@@ -181,7 +181,7 @@ const PromoCampaignList: React.FC<PromoCampaignListProps> = ({
                                     <Confirm
                                         text="Вы уверены, что хотите удалить текст?"
                                         onConfirm={() => onDeletePromoCampaignText(item, promoCampaign)}>
-                                        <TooltipButton text={DELETE_BUTTON_LABEL}
+                                        <TooltipButton text={BUTTON_TEXT.DELETE}
                                             shape="circle"
                                             danger
                                             icon={<DeleteOutlined />} />

@@ -3,15 +3,16 @@ import { generatePath, Link } from 'react-router-dom';
 import { Menu, Dropdown } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import PromoCodeStatisticModal from './PromoCampaignModalMenu/PromoCodeStatisticModal';
-import { errorNotice } from '../../../../../../components/toast/Notice';
+import { errorNotice } from '@components/toast/Notice';
 import UploadPromoCodesModal from './PromoCampaignModalMenu';
 import PromoCampaignCopyModal from '../../../PromoCampaignCopyModal';
-import { uploadPromoCodes } from '../../../../../../api/services/promoCampaignService';
-import { PROMO_CAMPAIGN_PAGES } from '../../../../../../constants/route';
-import { confirmModal } from '../../../../../../utils/utils';
+import { uploadPromoCodes } from '@apiServices/promoCampaignService';
+import { PROMO_CAMPAIGN_PAGES } from '@constants/route';
+import { confirmModal } from '@utils/utils';
 import { getDeleteTitleConfirm, onConfirmDeletePromoCampaign } from '../../../../PromoCampaignUtils';
 import { PromoCampaignDto } from '@types';
 import { customNotifications } from '@utils/notifications';
+import { BUTTON_TEXT } from '@constants/common';
 
 import styles from './PromoCampaignItemMenu.module.css';
 
@@ -131,7 +132,7 @@ const MENU = {
     VISIBILITY_SETTINGS: 'Настроить видимость промо-кампании',
     EDIT_PROMO_CAMPAIGN: 'Редактировать промо-кампанию',
     COPY_PROMO: 'Копировать промо-кампанию',
-    DELETE: 'Удалить',
+    DELETE: BUTTON_TEXT.DELETE,
 };
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
@@ -161,7 +162,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             <Link
                 to={generatePath(
                     `${ matchUrl }${PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS}`,
-                    { promoCampaignId: promoCampaign.id }
+                    { promoCampaignId: promoCampaign.id },
                 )}
             >
                 {MENU.VISIBILITY_SETTINGS}
@@ -172,7 +173,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                 to={{
                     pathname: generatePath(
                         `${ matchUrl }${PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT}`,
-                        { promoCampaignId: promoCampaign.id }
+                        { promoCampaignId: promoCampaign.id },
                     ),
                     state: { promoCampaign },
                 }}

@@ -197,3 +197,5 @@ export function compareArrayOfNumbers(arrA: number[], arrB: number[]) {
 
     return false;
 }
+
+export const numberTransform = (value: string) => value ? Number(value) : '';

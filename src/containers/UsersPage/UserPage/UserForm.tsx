@@ -20,7 +20,7 @@ import AutoCompleteComponent from '@components/AutoComplete';
 import UserBlockStatus from '@components/UserBlockStatus';
 import UserSkeletonLoading from './UserSkeletonLoading';
 import Checkboxes from '@components/Checkboxes';
-import UserFormButtonGroup, { BUTTON } from './UserFormButtonGroup';
+import UserFormButtonGroup from './UserFormButtonGroup';
 import { confirmModal, getStringOptionValue } from '@utils/utils';
 import {
     CommonPermissions,
@@ -45,6 +45,7 @@ import {
 } from './UserFormHelper';
 import { USERS_PAGES } from '@constants/route';
 import { LOGIN_TYPES_ENUM, LOGIN_TYPE, LoginTypes } from '@constants/loginTypes';
+import { BUTTON_TEXT } from '@constants/common';
 import ROLES, { ROLES_OPTIONS, ROLES_RU } from '@constants/roles';
 
 import styles from './UserForm.module.css';
@@ -147,10 +148,10 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
 
             if (notNewUser) {
                 user = await getUser(userId);
-                const salePoint = await getSalePointByText(user.salePointName, user.salePointId, user.locationId);
+                const userSalePoint = await getSalePointByText(user.salePointName, user.salePointId, user.locationId);
 
                 setLocation({ id: user.locationId, name: user.locationName } as LocationDto);
-                setSalePoint(salePoint ?? null);
+                setSalePoint(userSalePoint ?? null);
                 setUserData(user);
                 setRole(user.role);
                 loginType.current = user.loginType;
@@ -243,6 +244,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
             } else {
                 redirectToUsersPage();
             }
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         } catch ({ message, name }) {
             return setError({ ...DEFAULT_ERRORS, [name]: message });
         }
@@ -345,7 +347,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
         confirmModal({
             onOk: onDelete,
             title: <span>Вы уверены, что хотите удалить пользователя с табельным номером <b>{userData?.personalNumber}</b>?</span>,
-            okText: BUTTON.DELETE_TEXT,
+            okText: BUTTON_TEXT.DELETE,
             okButtonProps: { danger: true },
         });
     };
@@ -372,8 +374,8 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
         setRole(value);
     };
 
-    const onLocationChange = (location: LocationDto | null) => {
-        setLocation(location);
+    const onLocationChange = (selectedLocation: LocationDto | null) => {
+        setLocation(selectedLocation);
         setError((state) => ({
             ...state,
             location: '',

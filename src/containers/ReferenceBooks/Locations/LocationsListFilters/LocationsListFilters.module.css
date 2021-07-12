@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 0 15px 15px;
+}
+
+.title {
+    margin-right: 15px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.filterBlock {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.filterItem {
+    width: 220px;
+}
+
+.filterItem:first-child {
+    width: 270px;
+    /* height: 32px; */
+}
+
+.clearButton {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    background-color: #f3f3f3;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.clearButton:hover {
+    background-color: #e7e6e6;
+}
+
+.clearButton[data-disabled=true] {
+    cursor: not-allowed;
+    background-color: #e0e0e0;
+}

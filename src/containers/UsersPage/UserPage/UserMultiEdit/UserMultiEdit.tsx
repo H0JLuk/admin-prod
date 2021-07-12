@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Form } from 'antd';
 
@@ -56,15 +56,15 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const onLocationChange = useCallback((location) => {
-        setLocation(location);
+    const onLocationChange = (selectedLocation: LocationDto | null) => {
+        setLocation(selectedLocation);
         setError({ location: '', salePoint: '', backend: '' });
-    }, []);
+    };
 
-    const onSalePointChange = useCallback((salePoint) => {
-        setSalePoint(salePoint);
+    const onSalePointChange = (selectedSalePoint: SalePointDto | null) => {
+        setSalePoint(selectedSalePoint);
         setError({ location: '', salePoint: '', backend: '' });
-    }, []);
+    };
 
     const onDelete = async () => {
         setIsSendingInfo(true);

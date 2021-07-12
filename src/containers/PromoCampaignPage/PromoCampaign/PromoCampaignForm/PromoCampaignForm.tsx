@@ -12,12 +12,10 @@ import Header from '@components/Header/Header';
 import {
     allStep,
     bannersFields,
-    CANCEL,
     COMPLETE,
     modes,
     modsTitle,
     NEXT,
-    SAVE,
     STEP,
     steps,
 } from './PromoCampaignFormConstants';
@@ -57,6 +55,7 @@ import { INFO_ROWS_KEYS } from './PromoCampaignSteps/StepTextAndImage/Templates/
 import { ReactComponent as LoadingSpinner } from '@imgs/loading-spinner.svg';
 
 import styles from './PromoCampaignForm.module.css';
+import { BUTTON_TEXT } from '@constants/common';
 
 export type PromoCampaignFormProps = {
     mode?: 'create' | 'edit';
@@ -173,7 +172,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
     const onDeleteState = useCallback((index: number, hasErrors) => {
         setState((prevState) => {
             if (index !== undefined) {
-                const visibilitySettings= getVisibilitySettingsWithUpdatedErrors(
+                const visibilitySettings = getVisibilitySettingsWithUpdatedErrors(
                     prevState.visibilitySettings,
                     index,
                     hasErrors,
@@ -342,9 +341,9 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
     const handleCancel = () => history.push(matchPath);
     const handleBackClick = useCallback(() => setStep((prev) => prev - 1), []);
 
-    const validStepChange = useCallback((step, finish = true) => {
-        if (validStep !== step && !(step < validStep && finish)) {
-            setValidStep(step);
+    const validStepChange = useCallback((newStep: number, finish = true) => {
+        if (validStep !== newStep && !(newStep < validStep && finish)) {
+            setValidStep(newStep);
         }
     }, [validStep]);
 
@@ -504,11 +503,11 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
     const editImageAndBannersRef = async (
         val: Partial<PromoCampaignFormInitialState>,
         appCode: string,
-        onTextDelete: (id: number, type: string) => void,
+        textDeleteCallback: (id: number, type: string) => void,
     ) => {
         setLoading(true);
 
-        const textPromises = editTextBanners(val.texts as BannerCreateTextDto, savedPromoCampaignData.current as PromoCampaignDto, appCode, onTextDelete);
+        const textPromises = editTextBanners(val.texts as BannerCreateTextDto, savedPromoCampaignData.current as PromoCampaignDto, appCode, textDeleteCallback);
 
         const editedTexts = (await Promise.all(textPromises)).filter(Boolean);
         const { banners: editedBanners, deletedBannersId } = await EditImgBanners(
@@ -728,7 +727,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                         className={styles.btnMR}
                         onClick={handleCancel}
                     >
-                        {CANCEL}
+                        {BUTTON_TEXT.CANCEL}
                     </Button>
                     <Button
                         type="primary"
@@ -743,7 +742,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                             onClick={handleSaveInfo}
                             disabled={saveStatus || loading}
                         >
-                            {SAVE}
+                            {BUTTON_TEXT.SAVE}
                         </Button>
                     )}
                     {messageError && <div className={styles.error}>{messageError}</div>}

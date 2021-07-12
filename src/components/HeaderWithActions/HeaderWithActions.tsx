@@ -32,7 +32,7 @@ function HeaderWithActions<DataList>({
     copyDataList = EMPTY_ARRAY,
     matchPath,
     sortByFieldKey,
-    menuItems=[],
+    menuItems = [],
     inputPlaceholder,
     resetLabel,
     params = EMPTY_OBJECT,

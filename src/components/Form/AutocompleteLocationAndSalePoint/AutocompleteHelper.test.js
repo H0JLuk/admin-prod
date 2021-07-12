@@ -1,16 +1,19 @@
-import {
-    getLocationsByText,
-    getSalePointsByText,
-} from '../../../api/services/promoCampaignService';
+
+import { getLocationsByText } from '@apiServices/locationService';
+import { getSalePointsByText } from '@apiServices/promoCampaignService';
 import { getStringOptionValue } from '../../../utils/utils';
 import {
     createSearchDataAndPassLocation,
     getResultsByTextAndType,
 } from './AutocompleteHelper';
 
-jest.mock('../../../api/services/promoCampaignService', () => ({
-    getLocationsByText: jest.fn(),
+
+jest.mock('@apiServices/promoCampaignService', () => ({
     getSalePointsByText: jest.fn(),
+}));
+
+jest.mock('@apiServices/locationService', () => ({
+    getLocationsByText: jest.fn(),
 }));
 
 jest.mock('../../../utils/utils', () => ({

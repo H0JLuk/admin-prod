@@ -162,8 +162,8 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
         const settings = settingDtoList.reduce((result, elem) => ({ ...result, [elem.key]: elem.value }), {} as InitialState['clientAppProperties']);
 
         const url = getStaticUrl() || '';
-        const installation_url = settings.installation_url && settings.installation_url.replace(url, '');
-        const usage_url = settings.usage_url && settings.usage_url.replace(url, '');
+        const installation_url = settings.installation_url?.replace(url, '') ?? null;
+        const usage_url = settings.usage_url?.replace(url, '') ?? null;
 
         this.setState({
             clientAppProperties: { ...settings, installation_url, usage_url, clientAppCode },
@@ -192,7 +192,7 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
         const value = target.type === 'checkbox' ? target.checked : target.value;
 
         this.setState({
-            editingClientApp: { ...this.state.editingClientApp, isDeleted: value as boolean }
+            editingClientApp: { ...this.state.editingClientApp, isDeleted: value as boolean },
         });
     };
 
@@ -210,7 +210,7 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
                     ...this.state.editingClientApp.mechanics,
                     [name]: checked,
                 },
-            }
+            },
         });
     };
 
@@ -262,7 +262,7 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
                     formError={!!formError}
                     errorClassName={styles.error}
                 />
-                {isDeletedCheckbox ?
+                {isDeletedCheckbox ? (
                     <form className={styles.clientAppForm}>
                         <label className={styles.clientAppForm__field}>
                             {IS_DELETED}
@@ -273,24 +273,26 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
                             checked={editingClientApp.isDeleted}
                             onChange={this.handleInputChange}
                         />
-                    </form> : null
+                    </form>
+                ) : null
                 }
-                {isMechanics &&
-            (<div className={styles.clientAppForm}>
-                <h3 className={styles.mechanics_title} >{MECHANICS}</h3>
-                {APP_MECHANIC_OPTIONS.map(({ label, value: name }) => (
-                    <div key={name}>
-                        <label className={styles.clientAppForm__field}>{label}</label>
-                        <input
-                            name={name}
-                            type="checkbox"
-                            checked={mechanics[name as MechanicsCheckboxes]}
-                            onChange={this.changeMechanicHandler}
-                        />
+                {isMechanics && (
+                    <div className={styles.clientAppForm}>
+                        <h3 className={styles.mechanics_title} >{MECHANICS}</h3>
+                        {APP_MECHANIC_OPTIONS.map(({ label, value: name }) => (
+                            <div key={name}>
+                                <label className={styles.clientAppForm__field}>{label}</label>
+                                <input
+                                    name={name}
+                                    type="checkbox"
+                                    checked={mechanics[name as MechanicsCheckboxes]}
+                                    onChange={this.changeMechanicHandler}
+                                />
+                            </div>
+                        ))}
+                        {mechanicsError && <span className={styles.error}>{mechanicsError}</span>}
                     </div>
-                ))}
-                {mechanicsError && <span className={styles.error}>{mechanicsError}</span>}
-            </div>)}
+                )}
             </div>
         );
     };
@@ -312,7 +314,7 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
     async pushToClientAppList(id: number, clientAppDto: SaveClientApp) {
         const newClientApp = {
             ...clientAppDto,
-            id: id
+            id: id,
         };
         const clientAppList = [...this.state.clientAppList, newClientApp as ClientAppDto];
         this.setState({ clientAppList }, this.closeModal);
@@ -433,17 +435,21 @@ class ClientAppPage extends Component<ClientAppPageProps, InitialState> {
                 {
                     (isSuccess && clientAppList.length) ?
                         clientAppList.map((app, i) =>
-                            showDeleted ? <ClientAppItem
-                                key={`clientAppItem-${i}`}
-                                handleEditProperties={this.handleEditProperties}
-                                handleAdministrate={this.handleAdministrate}
-                                {...app}
-                            /> : !app.isDeleted && <ClientAppItem
-                                key={`clientAppItem-${i}`}
-                                handleEditProperties={this.handleEditProperties}
-                                handleAdministrate={this.handleAdministrate}
-                                {...app}
-                            />) : <LoadingStatus loading />
+                            showDeleted ? (
+                                <ClientAppItem
+                                    key={`clientAppItem-${i}`}
+                                    handleEditProperties={this.handleEditProperties}
+                                    handleAdministrate={this.handleAdministrate}
+                                    {...app}
+                                />
+                            ) : !app.isDeleted && (
+                                <ClientAppItem
+                                    key={`clientAppItem-${i}`}
+                                    handleEditProperties={this.handleEditProperties}
+                                    handleAdministrate={this.handleAdministrate}
+                                    {...app}
+                                />
+                            )) : <LoadingStatus loading />
                 }
             </Fragment>
         );

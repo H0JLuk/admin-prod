@@ -7,15 +7,12 @@ import { getReqOptions } from '@apiServices';
 import { getActiveClientApps } from '@apiServices/clientAppService';
 import { addUsersWithTemplate, deleteUsersWithTemplate } from '@apiServices/usersService';
 import { downloadFileFunc } from '@utils/helper';
+import { BUTTON_TEXT } from '@constants/common';
 
 import styles from './TemplateUploadButtonsWithModal.module.css';
 
 const DOWNLOAD_FILE_NAME = 'Результат обработки пользователей';
-// const ERROR_WRONG_FILE_TEXT = 'Неверный формат файла';
 const BUTTON_OK_LABEL = 'Отправить';
-const BUTTON_CANCEL_LABEL = 'Отменить';
-const BUTTON_ADD_LABEL = 'Добавить';
-const BUTTON_DELETE_LABEL = 'Удалить';
 const BUTTON_DOWNLOAD_LABEL = 'Загрузить файл';
 const APP_LABEL_TEXT = 'Приложение';
 const FILE_LABEL_TEXT = 'Файл';
@@ -33,11 +30,6 @@ const FETCH_ERRORS: Record<UploadModalTypes, string> = {
 const MODAL_TITLE: Record<UploadModalTypes, string> = {
     edit: 'Загрузка пользователей',
     delete: 'Удаление пользователей',
-};
-
-const RULES = {
-    FILE: 'Выберите файл',
-    APP_CODE: 'Выберите приложение',
 };
 
 const fileTypes = ['csv'];
@@ -61,9 +53,9 @@ type AppListOptions = Exclude<SelectProps<string>['options'], undefined>;
 const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalProps> = ({
     onSuccess = noop,
     btnAddShow = true,
-    btnAddLabel = BUTTON_ADD_LABEL,
+    btnAddLabel = BUTTON_TEXT.ADD,
     btnDeleteShow = true,
-    btnDeleteLabel = BUTTON_DELETE_LABEL,
+    btnDeleteLabel = BUTTON_TEXT.DELETE,
 }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -129,7 +121,7 @@ const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalPro
 
         setFileList([info.file]);
 
-        return info && info.file;
+        return info?.file;
     };
 
     return (
@@ -155,7 +147,7 @@ const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalPro
                 onCancel={handleCancel}
                 onOk={form.submit}
                 okText={BUTTON_OK_LABEL}
-                cancelText={BUTTON_CANCEL_LABEL}
+                cancelText={BUTTON_TEXT.CANCEL}
                 centered
             >
                 <Form
@@ -167,7 +159,7 @@ const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalPro
                 >
                     <Form.Item
                         className={styles.formItem}
-                        rules={[{ required: true, message: RULES.FILE }]}
+                        rules={[{ required: true, message: 'Выберите файл' }]}
                         label={FILE_LABEL_TEXT}
                         name="file"
                         valuePropName="file"
@@ -192,7 +184,7 @@ const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalPro
                         className={styles.formItem}
                         label={APP_LABEL_TEXT}
                         name="appCode"
-                        rules={[{ required: true, message: RULES.APP_CODE }]}
+                        rules={[{ required: true, message: 'Выберите приложение' }]}
                     >
                         <Select
                             placeholder="Выберите приложение"

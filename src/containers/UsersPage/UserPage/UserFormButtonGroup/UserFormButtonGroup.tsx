@@ -6,6 +6,7 @@ import UserGenerateQRModal from './UserGenerateQRModal';
 import { LOGIN_TYPES_ENUM } from '@constants/loginTypes';
 import { InteractionsCurrUserToOtherUser } from '@constants/permissions';
 import { ClientAppDto, UserInfo } from '@types';
+import { BUTTON_TEXT } from '@constants/common';
 
 type UserFormButtonGroupProps = {
     type?: 'info' | 'new' | 'edit' | string;
@@ -18,13 +19,6 @@ type UserFormButtonGroupProps = {
     disableAllButtons?: boolean;
     userData?: UserInfo | null;
     actionPermissions?: InteractionsCurrUserToOtherUser;
-};
-
-export const BUTTON = {
-    DELETE_TEXT: 'Удалить',
-    CANCEL_TEXT: 'Отменить',
-    ADD_USER_TEXT: 'Добавить',
-    SAVE_EDIT_USER_TEXT: 'Сохранить',
 };
 
 export const INFO_USER_BUTTONS = {
@@ -56,7 +50,7 @@ const UserFormButtonGroup: React.FC<UserFormButtonGroupProps> = ({
             disabled={disableAllButtons}
             danger
         >
-            {BUTTON.DELETE_TEXT}
+            {BUTTON_TEXT.DELETE}
         </Button>
     );
 
@@ -66,7 +60,7 @@ const UserFormButtonGroup: React.FC<UserFormButtonGroupProps> = ({
             onClick={onCancel}
             disabled={disableAllButtons}
         >
-            {BUTTON.CANCEL_TEXT}
+            {BUTTON_TEXT.CANCEL}
         </Button>
     );
 
@@ -80,7 +74,7 @@ const UserFormButtonGroup: React.FC<UserFormButtonGroupProps> = ({
                         onClick={onSubmit}
                         disabled={disableAllButtons}
                     >
-                        {BUTTON.ADD_USER_TEXT}
+                        {BUTTON_TEXT.ADD}
                     </Button>
                 </>
             );
@@ -94,7 +88,7 @@ const UserFormButtonGroup: React.FC<UserFormButtonGroupProps> = ({
                         onClick={onSubmit}
                         disabled={disableAllButtons}
                     >
-                        {BUTTON.SAVE_EDIT_USER_TEXT}
+                        {BUTTON_TEXT.SAVE}
                     </Button>
                     {deleteButton}
                 </>

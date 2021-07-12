@@ -41,7 +41,7 @@ export function createTexts(promoCampaignTexts: BannerCreateTextDto, promoCampai
 export async function createImgBanners(
     promoCampaignBanners: BannerCreateDto,
     promoCampaignId: number,
-    appCode: string
+    appCode: string,
 ) {
     for (const formBannerType of Object.keys(promoCampaignBanners)) {
         if (!promoCampaignBanners[formBannerType] || !(promoCampaignBanners[formBannerType] as any[]).length) {
@@ -60,7 +60,7 @@ export async function createImgBanners(
             BANNER_REQUEST,
             new Blob([JSON.stringify(promoCampaignBanner)], {
                 type: APPLICATION_JSON_TYPE,
-            })
+            }),
         );
 
         await newCreatePromoCampaignBanner(formData, appCode);
@@ -70,7 +70,7 @@ export async function createImgBanners(
 export function createVisibilities(
     visibilitySettings: PromoCampaignFormVisibilitySettingCreateDto[],
     promoCampaignId: number,
-    appCode: string
+    appCode: string,
 ) {
     return visibilitySettings
         .filter(({ salePoint, location }) => !!salePoint || !!location)
@@ -82,8 +82,8 @@ export function createVisibilities(
                     salePointId: setting.salePoint?.id,
                     visible: setting.visible,
                 },
-                appCode
-            )
+                appCode,
+            ),
         );
 }
 
@@ -91,7 +91,7 @@ export function editTextBanners(
     promoCampaignTexts: BannerCreateTextDto,
     promoCampaign: PromoCampaignDto,
     appCode: string,
-    onDelete?: PromoCampaignOnDeleteFunction
+    onDelete?: PromoCampaignOnDeleteFunction,
 ) {
     return Object.keys(promoCampaignTexts).map((type) => {
         const textWithType = promoCampaign.texts.find((text) => text.type === type);
@@ -132,7 +132,7 @@ export async function EditImgBanners(
     promoCampaignBanners: BannerCreateDto,
     promoCampaign: PromoCampaignDto,
     changedImgs: string[],
-    appCode: string
+    appCode: string,
 ) {
     const banners = [];
     const deletedBannersId = [];
@@ -164,7 +164,7 @@ export async function EditImgBanners(
                 BANNER_REQUEST,
                 new Blob([JSON.stringify(promoCampaignBanner)], {
                     type: APPLICATION_JSON_TYPE,
-                })
+                }),
             );
             const request = bannerId
                 ? newEditPromoCampaignBanner(bannerId, formData, appCode)
@@ -238,25 +238,25 @@ export const getDataForSend = <DataForSend extends {[key in keyof PromoCampaignF
     externalId,
     behaviorType,
 }: DataForSend) => ({
-        name,
-        dzoId,
-        webUrl,
-        active,
-        offerDuration,
-        finishDate,
-        startDate,
-        promoCodeType,
-        settings,
-        standalone,
-        type,
-        categoryIdList,
-        oneLinkAppUrl,
-        externalId: externalId || null,
-        behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
-    });
+    name,
+    dzoId,
+    webUrl,
+    active,
+    offerDuration,
+    finishDate,
+    startDate,
+    promoCodeType,
+    settings,
+    standalone,
+    type,
+    categoryIdList,
+    oneLinkAppUrl,
+    externalId: externalId || null,
+    behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
+});
 
 export function getPromoCampaignForCopy<
-    PromoCampaignState extends { [key in keyof PromoCampaignDto]: PromoCampaignState[key] }, visibilitySettings = any[]
+    PromoCampaignState extends { [key in keyof PromoCampaignDto]: PromoCampaignState[key] }, visibilitySettings = any[],
 >(promoCampaign: PromoCampaignState, copyVisibilitySettings: visibilitySettings) {
     return {
         active: promoCampaign.active,
@@ -296,7 +296,7 @@ export function checkUniqVisibilitySettings(setting: PromoCampaignFormVisibility
 
 export function getVisibilitySettingsWithDoubleError(
     visibilitySettings: PromoCampaignFormVisibilitySettingCreateDto[],
-    samePositions: number[][]
+    samePositions: number[][],
 ) {
     const nextVisibilitySettings = [...visibilitySettings];
     samePositions.forEach(([firstRepeat, repeat]) => {
@@ -315,7 +315,7 @@ export function getVisibilitySettingsWithDoubleError(
 export function getVisibilitySettingsWithUpdatedErrors(
     settings: PromoCampaignFormVisibilitySettingCreateDto[],
     idx: number,
-    needUpdate: boolean
+    needUpdate: boolean,
 ) {
     if (needUpdate) {
         settings = settings.slice();
@@ -342,7 +342,7 @@ export function getVisibilitySettingsWithUpdatedErrors(
 
 export function checkPromoCodes(
     promoCampaignRef: PromoCampaignFormSavedStateRef,
-    promoCampaignFromLocation: PromoCampaignDto
+    promoCampaignFromLocation: PromoCampaignDto,
 ) {
     if (promoCampaignRef.promoCodeType !== promoCampaignFromLocation?.promoCodeType) {
         return promoCampaignRef.promoCodeType;
@@ -353,7 +353,7 @@ export function checkPromoCodes(
 
 export function getPromoCampaignValue(
     promoCampaign: PromoCampaignDto,
-    refPromoCampaign?: PromoCampaignFormSavedStateRef
+    refPromoCampaign?: PromoCampaignFormSavedStateRef,
 ) {
     return refPromoCampaign ?? promoCampaign;
 }

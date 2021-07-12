@@ -34,10 +34,6 @@
 }
 
 /* GLOBALS */
-.table :global(.ant-table) {
-    color: #171725;
-}
-
 .table :global(.ant-table-tbody > tr:hover td) {
     cursor: pointer;
     background-color: #f8f8f8;

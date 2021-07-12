@@ -10,7 +10,6 @@ import { getCampaignGroupList, deleteCampaignGroup } from '@apiServices/campaign
 import { GROUPS_PAGES } from '@constants/route';
 import { EmptyGroup, GroupListByType } from './GroupListComponents';
 import {
-    BUTTON,
     SEARCH_INPUT,
     DROPDOWN_SORT_MENU,
     GROUP_OPTIONS,
@@ -19,6 +18,7 @@ import {
     RESET_LABEL,
     groupTypes,
 } from './groupListConstants';
+import { BUTTON_TEXT } from '@constants/common';
 import { BundleTypes } from '../groupPageConstants';
 import { BundleDtoWithLinksLength, BundlesRelatedCampaigns, CheckedItem } from './types';
 
@@ -130,16 +130,16 @@ const GroupList: React.FC<GroupListProps> = ({ matchPath }) => {
         isSelect ? {
             type: 'primary',
             label: dataList.length && dataList.length === selectedItems?.length
-                ? BUTTON.CHOOSE_ALL_REMOVE
-                : BUTTON.CHOOSE_ALL,
+                ? BUTTON_TEXT.CANCEL_ALL
+                : BUTTON_TEXT.SELECT_ALL,
             onClick: handleSelectAllItem,
         } : {
             type: 'primary',
-            label: BUTTON.ADD,
+            label: BUTTON_TEXT.ADD,
             onClick: onAddGroupClick,
         },
         {
-            label: isSelect ? BUTTON.CANCEL : BUTTON.CHOOSE,
+            label: isSelect ? BUTTON_TEXT.CANCEL : BUTTON_TEXT.SELECT,
             onClick: toggleSelect,
         },
     ];
@@ -220,7 +220,7 @@ const GroupList: React.FC<GroupListProps> = ({ matchPath }) => {
                                     disabled={!selectedItems?.length}
                                     danger
                                 >
-                                    {BUTTON.DELETE}
+                                    {BUTTON_TEXT.DELETE}
                                 </Button>
                             </TableDeleteModal>
                         </div>

@@ -76,8 +76,8 @@ export const onFileUploadInputChange = async (e: React.ChangeEvent<HTMLInputElem
             method: 'POST',
             body: data,
         });
-    } catch (e) {
-        throw new Error(`Не удалось загрузить пользователей. ${e.message}`);
+    } catch (err) {
+        throw new Error(`Не удалось загрузить пользователей. ${err.message}`);
     }
 
     if (response.ok) {
@@ -114,8 +114,8 @@ export async function onDeleteFileUploadInputChange(e: React.ChangeEvent<HTMLInp
             method: 'POST',
             body: data,
         });
-    } catch (e) {
-        throw new Error(`Не удалось удалить пользователей. ${e.message}`);
+    } catch (err) {
+        throw new Error(`Не удалось удалить пользователей. ${err.message}`);
     }
 
     const result = await response.json();
@@ -128,6 +128,6 @@ export async function onDeleteFileUploadInputChange(e: React.ChangeEvent<HTMLInp
 }
 
 export function validateFile(file?: File) {
-    return file && file.name && file.name.includes('.csv');
+    return file?.name?.includes('.csv');
 }
 export { initialState as usersPageInitialState, reducer as usersReducer };

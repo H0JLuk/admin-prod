@@ -4,6 +4,7 @@ import { Typography, Form, Modal, Upload, Button, UploadProps } from 'antd';
 import { warnNotice } from '@components/toast/Notice';
 import example from '@imgs/promoCodeUploadExample.png';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
+import { BUTTON_TEXT } from '@constants/common';
 import { PromoCampaignDto } from '@types';
 
 import styles from './UploadPromoCodesModal.module.css';
@@ -11,8 +12,6 @@ import styles from './UploadPromoCodesModal.module.css';
 const { Paragraph } = Typography;
 
 const TITLE = 'Загрузить промо-коды';
-const CANCEL_TEXT = 'Отменить';
-const OK_TEXT = 'Сохранить';
 const UPLOAD_TEXT = 'Загрузить файл';
 const FORMAT_TEXT = 'Файл с промокодами должен быть в формате .csv.';
 const REQUIRE_TEXT = 'Промокоды в файле должны быть перечислены в первом столбце (столбце "A") первого листа файла.';
@@ -46,7 +45,7 @@ const UploadPromoCodesModal: React.FC<UploadPromoCodesModalProps> = ({ open, onC
     const [state, setState] = useState<UploadPromoCodesModalState>(initialState);
 
     const handleSubmit = (e: MouseEvent) => {
-        e && e.preventDefault();
+        e?.preventDefault();
         handleUpload();
     };
 
@@ -72,11 +71,11 @@ const UploadPromoCodesModal: React.FC<UploadPromoCodesModalProps> = ({ open, onC
         accept: acceptedTypes,
         fileList: state.fileList,
         onRemove: (file: UploadFile) => {
-            setState((state) => {
-                const index = state.fileList.indexOf(file);
-                const newFileList = state.fileList.slice();
+            setState((prev) => {
+                const index = prev.fileList.indexOf(file);
+                const newFileList = prev.fileList.slice();
                 newFileList.splice(index, 1);
-                return { ...state, fileList: newFileList };
+                return { ...prev, fileList: newFileList };
             });
         },
         beforeUpload: (file: File) => {
@@ -112,9 +111,9 @@ const UploadPromoCodesModal: React.FC<UploadPromoCodesModalProps> = ({ open, onC
             visible={open}
             onOk={handleSubmit}
             okButtonProps={{ loading: state.uploading }}
-            okText={OK_TEXT}
+            okText={BUTTON_TEXT.SAVE}
             onCancel={handleClose}
-            cancelText={CANCEL_TEXT}
+            cancelText={BUTTON_TEXT.CANCEL}
             cancelButtonProps={{ className: styles.btn }}
             maskClosable={false}
             destroyOnClose

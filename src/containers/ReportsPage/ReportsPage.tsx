@@ -8,10 +8,9 @@ import Button from '@components/Button';
 import AutoCompleteComponent from '@components/AutoComplete';
 import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { getOffers } from '@apiServices/adminService';
-import { getSalePointsByText } from '@apiServices/promoCampaignService';
+import { getSalePointsByText, getPromoCampaignList } from '@apiServices/promoCampaignService';
 import { getDzoList } from '@apiServices/dzoService';
 import { getPromoCodeStatistics } from '@apiServices/promoCodeService';
-import { getPromoCampaignList } from '@apiServices/promoCampaignService';
 import { DEFAULT_SLEEP_TIME } from '@constants/common';
 import { sleep } from '@utils/utils';
 import { downloadFile } from '@utils/helper';
@@ -246,7 +245,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                                 requestFunction={getSalePointsByText}
                                 placeholder={UNSPECIFIED_TITLE}
                                 renderOptionStringValue={
-                                    ({ name, description }) => description ? `${name}, ${description}`: name
+                                    ({ name, description }) => description ? `${name}, ${description}` : name
                                 }
                                 renderOptionItemLabel={({ name, parentName }: any, value: string) => (
                                     <AutocompleteOptionLabel
@@ -304,7 +303,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                                     requestFunction={getSalePointsByText}
                                     placeholder={UNSPECIFIED_TITLE}
                                     renderOptionStringValue={
-                                        ({ name, description }) => description ? `${name}, ${description}`: name
+                                        ({ name, description }) => description ? `${name}, ${description}` : name
                                     }
                                     renderOptionItemLabel={({ name, parentName }: any, value: string) => (
                                         <AutocompleteOptionLabel

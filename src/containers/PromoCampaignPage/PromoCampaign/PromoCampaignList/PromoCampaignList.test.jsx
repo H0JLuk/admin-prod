@@ -14,7 +14,6 @@ promoCampaignService.getFilteredPromoCampaignList = jest.fn();
 promoCampaignService.reorderPromoCampaigns = jest.fn();
 appNavigation.getLinkForCreatePromoCampaign = jest.fn();
 
-
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -23,7 +22,14 @@ jest.mock('react-router-dom', () => ({
         push: mockHistoryPush,
         location: jest.fn(),
     }),
+    matchPath: jest.fn(),
     useRouteMatch: () => ({ path: 'test' }),
+    useLocation: () => ({
+        pathname: 'test',
+    }),
+    NavLink() {
+        return <a>NavLink</a>;
+    },
 }));
 
 describe('<PromoCampaignList /> test', () => {

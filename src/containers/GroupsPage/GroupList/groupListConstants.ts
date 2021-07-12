@@ -14,16 +14,6 @@ export const PRE_TITLE = {
     CREATE_PROMO_CAMPAIGN: 'Создайте первую связанную промо-кампанию прямо сейчас',
 };
 
-export const BUTTON = {
-    ADD: 'Добавить',
-    CANCEL: 'Отменить',
-    CREATE: 'Создать',
-    CHOOSE: 'Выбрать',
-    CHOOSE_ALL: 'Выбрать все',
-    CHOOSE_ALL_REMOVE: 'Отменить выбор',
-    DELETE: 'Удалить',
-};
-
 export const SEARCH_INPUT = {
     PROMO_SEARCH: 'Поиск промо-кампании',
     BUNDLE_SEARCH: 'Поиск бандла',

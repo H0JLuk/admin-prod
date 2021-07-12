@@ -1,10 +1,10 @@
 import React from 'react';
-import { Redirect, Route, Switch, match } from 'react-router-dom';
+import { Redirect, Route, Switch, match as Match } from 'react-router-dom';
 import PromoCampaignRouter from '../PromoCampaign/PromoCampaignRouter';
 import PromoCampaignPage from './PromoCampaignPage';
 
 type IPromoCampaignPageRouter = {
-    match: match;
+    match: Match;
 };
 
 const PromoCampaignPageRouter: React.FC<IPromoCampaignPageRouter> = ({ match }) => (

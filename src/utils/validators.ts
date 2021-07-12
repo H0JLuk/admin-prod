@@ -1,3 +1,6 @@
+import { Rule } from 'antd/lib/form';
+import { numberTransform } from './helper';
+
 const commonMessage = 'кириллица, латинские буквы, цифры, и символы ".", "-", ",", "_"';
 const commonPattern = /^[а-яё\s\w.,-]+$/i;
 const commonRule = {
@@ -42,6 +45,20 @@ export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
             message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", """, "№"`,
         },
     },
+    salePoint: {
+        name: commonRule,
+        description: {
+            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+        },
+    },
+    location: {
+        name: commonRule,
+        description: {
+            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+        },
+    },
     consent: {
         consentEditorText: {
             pattern: /^[а-яё\s\w.,/:;+%()?!$№«»“”"{}–-]+$/i,
@@ -65,6 +82,26 @@ export function getPatternAndMessage(page: string, fieldName: string) {
         message: `Допустимы ${message}`,
     };
 }
+
+export const FORM_RULES = {
+    REQUIRED: {
+        required: true,
+        message: 'Заполните обязательное поле',
+        validateTrigger: 'onSubmit',
+    } as Rule,
+    NUMBER: {
+        type: 'number',
+        message: 'Значение может быть только числовым',
+        transform: numberTransform,
+        validateTrigger: 'onSubmit',
+    } as Rule,
+    get REQUIRED_ARRAY() {
+        return { ...this.REQUIRED, type: 'array' } as Rule;
+    },
+    get REQUIRED_OBJECT() {
+        return { ...this.REQUIRED, type: 'object' } as Rule;
+    },
+};
 
 export const isRequired = (value: string) => {
     const regexp = /^[^ ]/;

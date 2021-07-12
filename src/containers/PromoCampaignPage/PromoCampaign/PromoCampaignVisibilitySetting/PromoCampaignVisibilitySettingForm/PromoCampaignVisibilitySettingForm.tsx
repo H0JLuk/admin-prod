@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { match } from 'react-router-dom';
+import { match as Match } from 'react-router-dom';
 import noop from 'lodash/noop';
 import { Button } from 'antd';
 import { addVisibilitySetting } from '@apiServices/promoCampaignService';
@@ -19,7 +19,7 @@ type SubmitData = {
 type PromoCampaignVisibilitySettingFormProps = {
     onCancel: () => void;
     onSubmit: (data?: SubmitData) => void;
-    match: match<{ promoCampaignId: string; }>;
+    match: Match<{ promoCampaignId: string; }>;
 };
 
 const CANCEL_BUTTON_TEXT = 'Отменить';
@@ -30,7 +30,7 @@ const DEFAULT_ERRORS = { location: '', salePoint: '', server: '' };
 const PromoCampaignVisibilitySettingForm: React.FC<PromoCampaignVisibilitySettingFormProps> = ({
     onCancel,
     onSubmit,
-    match = {} as match<{ promoCampaignId: string; }>,
+    match = {} as Match<{ promoCampaignId: string; }>,
 }) => {
     const [location, setLocation] = useState<LocationDto | null>(null);
     const [salePoint, setSalePoint] = useState<SalePointDto | null>(null);
@@ -58,13 +58,13 @@ const PromoCampaignVisibilitySettingForm: React.FC<PromoCampaignVisibilitySettin
         }
     }, [onSubmit, match.params, visibility, location, salePoint]);
 
-    const onLocationChange = useCallback((location) => {
-        setLocation(location);
+    const onLocationChange = useCallback((selectedLocation) => {
+        setLocation(selectedLocation);
         setError(DEFAULT_ERRORS);
     }, []);
 
-    const onSalePointChange = useCallback((salePoint) => {
-        setSalePoint(salePoint);
+    const onSalePointChange = useCallback((selectedSalePoint) => {
+        setSalePoint(selectedSalePoint);
         setError(DEFAULT_ERRORS);
     }, []);
 

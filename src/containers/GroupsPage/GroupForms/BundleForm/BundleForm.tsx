@@ -23,7 +23,7 @@ import {
 } from '../groupForm.utils';
 import { BundleTypes, BUNDLE_LOCATION_KEY, MODES } from '../../groupPageConstants';
 import { normalizeBundle, getDataForBundleCreate } from './Bundle.utils';
-import { BANNER_TYPE, BANNER_TEXT_TYPE } from '@constants/common';
+import { BANNER_TYPE, BANNER_TEXT_TYPE, BUTTON_TEXT } from '@constants/common';
 
 import styles from './BundleForm.module.css';
 
@@ -40,9 +40,6 @@ export type BundleFormProps = {
     redirectToBundleList: () => void;
 };
 
-const CREATE = 'Создать';
-const EDIT = 'Сохранить';
-const CANCEL = 'Отменить';
 const NEW_BUNDLE = 'Новый бандл';
 const BUNDLE_ON = 'Бандл включен';
 const BUNDLE_OFF = 'Бандл выключен';
@@ -238,10 +235,10 @@ const BundleForm: React.FC<BundleFormProps> = ({
                 <div className={styles.title}>{isEdit ? bundle.current.name : NEW_BUNDLE}</div>
                 <div className={styles.buttonBlock}>
                     <Button type="default" onClick={redirectToBundleList}>
-                        {CANCEL}
+                        {BUTTON_TEXT.CANCEL}
                     </Button>
                     <Button type="primary" onClick={isEdit ? handleEdit : handleCreate} disabled={loading}>
-                        {isEdit ? EDIT : CREATE}
+                        {isEdit ? BUTTON_TEXT.SAVE : BUTTON_TEXT.CREATE}
                     </Button>
                 </div>
             </div>

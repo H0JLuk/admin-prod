@@ -3,8 +3,8 @@ import { Button } from 'antd';
 import GroupPromoCampaignListItem from './GroupPromoCampaigns/GroupPromoCampaignListItem';
 import GroupBundlesListItem from './GroupBundles/GroupBundlesListItem';
 import EmptyMessage from '@components/EmptyMessage';
-import { BUTTON } from './groupListConstants';
 import { BundleTypes } from '../groupPageConstants';
+import { BUTTON_TEXT } from '@constants/common';
 import { GroupListByTypeProps } from './types';
 
 import styles from './GroupList.module.css';
@@ -27,7 +27,7 @@ export const EmptyGroup: React.FC<EmptyGroupProps> = ({ title, preTitle, onCreat
             type="primary"
             onClick={onCreateClick}
         >
-            {BUTTON.CREATE}
+            {BUTTON_TEXT.CREATE}
         </Button>
     </div>
 );

@@ -1,0 +1,34 @@
+.tableWrapper {
+    padding: 20px;
+}
+
+.cellRight {
+    text-align: right;
+    width: 100%;
+}
+
+.tableTitle {
+    color: #697382;
+    font-family: Roboto, sans-serif;
+}
+
+.tableCell {
+    font-weight: 700;
+}
+
+/* GLOBALS */
+
+.table :global(.ant-table) {
+    margin-bottom: 20px;
+}
+
+.table :global(.ant-table-tbody > tr > td) {
+    border-bottom: none;
+}
+
+.table :global(.ant-table-tbody > tr:hover td) {
+    cursor: pointer;
+    background-color: #f8f8f8;
+}
+
+/* GLOBALS */

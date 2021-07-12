@@ -12,9 +12,9 @@ import { BUSINESS_ROLE_PAGES } from '@constants/route';
 import { getFormattedDate } from '@utils/helper';
 
 import styles from './BusinessRoleInfo.module.css';
+import { BUTTON_TEXT } from '@constants/common';
 
 const EDIT_BUTTON_LABEL = 'Редактировать';
-const DELETE_BUTTON_LABEL = 'Удалить';
 const BUSINESS_ROLE_INFO_FIELDS: { label: string; name: keyof BusinessRoleDto; }[] = [
     {
         label: 'Название',
@@ -70,8 +70,8 @@ const BusinessRoleInfo: React.FC<BusinessRoleInfoProps> = ({
                     startDate: getFormattedDate(businessRoleData.startDate),
                     endDate:  getFormattedDate(businessRoleData.endDate),
                 };
-            } catch (error) {
-                setError(error.message);
+            } catch (err) {
+                setError(err.message);
             }
             setLoading(false);
         })();
@@ -142,7 +142,7 @@ const BusinessRoleInfo: React.FC<BusinessRoleInfoProps> = ({
                     danger
                     onClick={onDeleteClick}
                 >
-                    {DELETE_BUTTON_LABEL}
+                    {BUTTON_TEXT.DELETE}
                 </Button>
             </div>
         </div>

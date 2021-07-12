@@ -10,7 +10,7 @@ type ITemplateProps = Pick<PromoCampaignDto, 'banners' | 'type' | 'texts'>;
 
 const getBanners = (banners: ITemplateProps['banners']) => banners.reduce<Record<string, string>>(
     (result, { type, url }) => ({ ...result, [type]: url }),
-    {}
+    {},
 );
 
 const getTexts = (texts: ITemplateProps['texts']) => texts.reduce<Record<string, string>>((result, { type, value }) => {
@@ -20,7 +20,7 @@ const getTexts = (texts: ITemplateProps['texts']) => texts.reduce<Record<string,
     return { ...result, [type]: value };
 }, {});
 
-const Template: React.FC<ITemplateProps>= ({ banners, texts, type }) => {
+const Template: React.FC<ITemplateProps> = ({ banners, texts, type }) => {
     const [filteredBanners] = useState(() => getBanners(banners));
     const [filteredTexts] = useState(() => getTexts(texts));
     const [infoRows] = useState<IRow[]>(INFO_ROWS[type] || []);

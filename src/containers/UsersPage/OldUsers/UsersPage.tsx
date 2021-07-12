@@ -96,8 +96,8 @@ const UsersPage = () => {
                 response = await fetch(uploadUrl.toString(), { ...getReqOptions(), method: 'POST', body: data });
                 result = await response.json();
                 dispatch({ type: response.ok ? showSuccessMessage : showErrorMessage, payload: result.message });
-            } catch (e) {
-                dispatch({ type: showErrorMessage, payload: e.message });
+            } catch (err) {
+                dispatch({ type: showErrorMessage, payload: err.message });
             }
         } else {
             dispatch({ type: showErrorMessage, payload: 'Файл не совпадает с шаблоном' });
@@ -108,8 +108,8 @@ const UsersPage = () => {
         dispatch({ type: hideMessage });
         try {
             await onFileUploadInputChange(e);
-        } catch (e) {
-            dispatch({ type: showErrorMessage, payload: e.message });
+        } catch (err) {
+            dispatch({ type: showErrorMessage, payload: err.message });
         }
     };
 

@@ -1,16 +1,16 @@
 import React from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { Button } from 'antd';
-import Header from '../../../../../components/Header/Header';
-import TemplateUploadButtonsWithModal from '../../../../../components/ButtonWithModal/TemplateUploadButtonsWithModal';
-import { templateLink } from '../../../../../utils/helper';
-import { USERS_PAGES } from '../../../../../constants/route';
+import Header from '@components/Header/Header';
+import TemplateUploadButtonsWithModal from '@components/ButtonWithModal/TemplateUploadButtonsWithModal';
+import { templateLink } from '@utils/helper';
+import { USERS_PAGES } from '@constants/route';
+import { BUTTON_TEXT } from '@constants/common';
 
 import styles from './EmptyUsersPage.module.css';
 
 const TITLE = 'Нет добавленных пользователей';
 const DESCRIPTION = 'Начните добавлять прямо сейчас';
-const ADD_NEW_USER_BUTTON_TEXT = 'Добавить';
 const PACKAGE_ADD_NEW_BUTTON_TEXT = 'Пакетная загрузка';
 const GET_TEMPLATE_BUTTON_TEXT = 'Шаблон загрузки';
 
@@ -39,7 +39,7 @@ const EmptyUsersPage: React.FC<EmptyUsersPageProps> = ({ refreshTable }) => {
                         type="primary"
                         onClick={onAddUser}
                     >
-                        {ADD_NEW_USER_BUTTON_TEXT}
+                        {BUTTON_TEXT.ADD}
                     </Button>
                     <TemplateUploadButtonsWithModal
                         btnAddLabel={PACKAGE_ADD_NEW_BUTTON_TEXT}

@@ -1,6 +1,7 @@
 import { LocationDto, SalePointDto, SearchType } from '@types';
-import { getLocationsByText, getSalePointsByText } from '@apiServices/promoCampaignService';
+import { getSalePointsByText } from '@apiServices/promoCampaignService';
 import { getStringOptionValue } from '@utils/utils';
+import { getLocationsByText } from '@apiServices/locationService';
 
 export function getResultsByTextAndType<T extends SearchType>(
     searchValue: string,
@@ -11,7 +12,7 @@ export function getResultsByTextAndType<T extends SearchType>(
 export function getResultsByTextAndType(
     searchValue: string,
     typeSearch: SearchType = 'searchLocation',
-    locationId?: number
+    locationId?: number,
 ) {
     switch (typeSearch) {
         case 'searchLocation':

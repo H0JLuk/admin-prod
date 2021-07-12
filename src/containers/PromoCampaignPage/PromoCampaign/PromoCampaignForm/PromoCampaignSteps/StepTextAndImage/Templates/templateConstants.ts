@@ -6,7 +6,7 @@ import main_banner from '@imgs/main_banner.png';
 import presents_main_banner from '@imgs/presents_main_banner.png';
 import presents_main_logo_1 from '@imgs/presents_main_logo_1.png';
 import presents_main_logo_2 from '@imgs/presents_main_logo_2.png';
-import { getPatternAndMessage } from '@utils/validators';
+import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
 import { BANNER_TEXT_TYPE, BANNER_TYPE } from '@constants/common';
 
 export type TemplateRowsValues = {
@@ -29,7 +29,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             description: 'Добавить баннер',
             tooltipImg: main_banner,
             access_type: '.jpg,.jpeg,.png',
-            rules: [{ required: true, message: 'Заполните поле' }],
+            rules: [FORM_RULES.REQUIRED],
             type: 'banner',
             maxSize: 2,
             get setting() {
@@ -56,7 +56,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             tooltipImg: landing,
             access_type: '.jpg,.jpeg,.png',
             type: 'banner',
-            rules: [{ required: true, message: 'Заполните поле' }],
+            rules: [FORM_RULES.REQUIRED],
             maxSize: 2,
             get setting() {
                 return `834px, ${this.maxSize}МБ ${this.access_type}`;
@@ -92,7 +92,7 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             placeholder: 'Текст заголовка',
             maxLength: 60,
             rules: [
-                { required: true, message: 'Заполните поле' },
+                FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('promoCampaign', 'textContent'),
                     validateTrigger: 'onSubmit',
@@ -111,7 +111,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             tooltipImg: presents_main_banner,
             access_type: '.jpg,.jpeg,.png',
             type: 'banner',
-            rules: [{ required: true, message: 'Заполните поле' }],
+            rules: [FORM_RULES.REQUIRED],
             maxSize: 2,
             get setting() {
                 return `370px x 220px, ${this.maxSize}МБ ${this.access_type}`;
@@ -151,7 +151,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             placeholder: 'Заголовок',
             maxLength: 60,
             rules: [
-                { required: true, message: 'Заполните поле' },
+                FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('promoCampaign', 'textContent'),
                     validateTrigger: 'onSubmit',
@@ -164,7 +164,7 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             placeholder: 'Описание',
             maxLength: 120,
             rules: [
-                { required: true, message: 'Заполните поле' },
+                FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('promoCampaign', 'textContent'),
                     validateTrigger: 'onSubmit',

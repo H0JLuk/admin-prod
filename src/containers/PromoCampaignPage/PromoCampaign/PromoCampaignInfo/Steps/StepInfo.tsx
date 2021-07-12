@@ -45,7 +45,7 @@ const STATUS_TYPE = {
     INACTIVE: 'Неактивная',
 };
 
-const StepInfo: React.FC<IStepInfoProps>= ({ promoCampaign }) => {
+const StepInfo: React.FC<IStepInfoProps> = ({ promoCampaign }) => {
     const [clientApp, setClientApp] = useState<ClientAppDto>();
     const appCode = getAppCode() || '';
 
@@ -203,7 +203,7 @@ const StepInfo: React.FC<IStepInfoProps>= ({ promoCampaign }) => {
                         <div className={style.container}>
                             <div className={style.infoTitle}>{SHOW_PROMO_CAMPAIGN}</div>
                             <div className={style.infoText}>
-                                {clientApp && clientApp.displayName}
+                                {clientApp?.displayName}
                             </div>
                         </div>
                     </Col>

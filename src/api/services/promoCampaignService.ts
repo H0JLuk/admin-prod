@@ -5,7 +5,6 @@ import {
     DefaultApiResponse,
     DefaultCreateDtoResponse,
     ListResponse,
-    LocationDto,
     PromoCampaignCreateDto,
     PromoCampaignDto,
     PromoCampaignListResponse,
@@ -90,11 +89,6 @@ export function uploadPromoCodes(campaignId: number, data: Blob) {
 
 export function deletePromoCampaign(promoCampaignId: number) {
     return Api.delete<DefaultApiResponse>(`/admin/promoCampaign/${promoCampaignId}`, getReqOptions());
-}
-
-export async function getLocationsByText(value: string) {
-    const { list } = await Api.get<ListResponse<LocationDto>>(`/location/search?name=${value}`, getReqOptions());
-    return list;
 }
 
 export async function getSalePointsByText(name: string, locationId?: number) {

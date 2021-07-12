@@ -15,7 +15,7 @@ const AutocompleteOptionLabel: React.FC<AutocompleteOptionLabelProps> = ({
     parentName,
     name,
     highlightValue,
-    highlightClassName,
+    highlightClassName = styles.highlight,
 }) => (
     <div className={styles.autocompleteOption}>
         <div className={styles.optionParentName}>

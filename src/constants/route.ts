@@ -60,6 +60,18 @@ export const GROUPS_PAGES = {
     INFO_GROUP:     '/:groupId/info',
 };
 
+export const LOCATIONS_PAGES = {
+    LIST:           '/location',
+    ADD_LOCATION:   '/add',
+    EDIT_LOCATION:  '/:locationId/edit',
+};
+
+export const SALE_POINT_PAGES = {
+    LIST:            '/sale-point',
+    ADD_SALE_POINT:  '/add',
+    EDIT_SALE_POINT: '/:salePointId/edit',
+};
+
 export const BUSINESS_ROLE_PAGES = {
     LIST:               '/business-role',
     ADD_BUSINESS_ROLE:  '/create',

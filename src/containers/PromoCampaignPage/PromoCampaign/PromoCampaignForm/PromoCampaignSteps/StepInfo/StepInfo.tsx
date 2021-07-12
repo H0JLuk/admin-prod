@@ -12,7 +12,7 @@ import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList 
 import { TOOLTIP_TEXT_FOR_URL_LABEL } from '@constants/jsxConstants';
 import PROMO_CAMPAIGNS from '@constants/promoCampaigns';
 import { urlCheckRule } from '@utils/urlValidator';
-import { getPatternAndMessage } from '@utils/validators';
+import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
 import { getLabel } from '@components/LabelWithTooltip/LabelWithTooltip';
 import { getAppCode } from '@apiServices/sessionService';
 import promoCodeTypes from '@constants/promoCodeTypes';
@@ -158,9 +158,8 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             validateFirst
                             rules={[
                                 {
-                                    required: true,
+                                    ...FORM_RULES.REQUIRED,
                                     message: 'Укажите название промо-кампании',
-                                    validateTrigger: 'onSubmit',
                                 },
                                 {
                                     ...getPatternAndMessage('promoCampaign', 'name'),
@@ -276,7 +275,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
                         <Form.Item
                             name={namePathPriorityOnWebUrl}
                             label={URL_SOURCE_LABEL}
-                            rules={[{ required: true, message: 'Укажите источник ссылки для QR-кода' }]}
+                            rules={[
+                                {
+                                    ...FORM_RULES.REQUIRED,
+                                    message: 'Укажите источник ссылки для QR-кода',
+                                },
+                            ]}
                             initialValue={
                                 state.settings.priority_on_web_url === true
                                     ? URL_SOURCE_VALUE_PROMO_CAMPAIGN
@@ -316,7 +320,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             className={styles.formItem}
                             name="dzoId"
                             initialValue={state.dzoId}
-                            rules={[{ required: true, message: 'Выберите ДЗО' }]}
+                            rules={[
+                                {
+                                    ...FORM_RULES.REQUIRED,
+                                    message: 'Выберите ДЗО',
+                                },
+                            ]}
                         >
                             <Select placeholder={SELECT}>
                                 {dzoList.map(option => (
@@ -365,7 +374,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             className={styles.formItem}
                             name="promoCodeType"
                             initialValue={state.promoCodeType}
-                            rules={[{ required: true, message: 'Выберите тип промокодов' }]}
+                            rules={[
+                                {
+                                    ...FORM_RULES.REQUIRED,
+                                    message: 'Выберите тип промокодов',
+                                },
+                            ]}
                         >
                             <Select placeholder={SELECT}>
                                 {types_promo.map(type => (
@@ -512,7 +526,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 name="appCode"
                                 label={SHOW_PROMO_CAMPAIGN}
                                 initialValue={state.appCode}
-                                rules={[{ required: true, message: 'Выберите витрину' }]}
+                                rules={[
+                                    {
+                                        ...FORM_RULES.REQUIRED,
+                                        message: 'Выберите витрину',
+                                    },
+                                ]}
                             >
                                 <Select placeholder={CHOOSE_SHOWCASE}>
                                     {clientApps.map(({ code, displayName }) => (
@@ -530,7 +549,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             <Form.Item
                                 name="type"
                                 label={TYPE_PROMO_CAMPAIGN}
-                                rules={[{ required: true, message: 'Укажите тип промо-кампании' }]}
+                                rules={[
+                                    {
+                                        ...FORM_RULES.REQUIRED,
+                                        message: 'Укажите тип промо-кампании',
+                                    },
+                                ]}
                                 initialValue={state.type}
                             >
                                 <Radio.Group onChange={changeTypePromo}>

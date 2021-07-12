@@ -47,8 +47,3 @@
 .table :global(.ant-table-tbody > tr:hover) {
     cursor: pointer;
 }
-
-.table :global(.ant-select-focused:not(.ant-select-disabled).ant-select-single .ant-select-selector),
-.table :global(.ant-pagination-options-quick-jumper input:focus) {
-    box-shadow: none !important;
-}

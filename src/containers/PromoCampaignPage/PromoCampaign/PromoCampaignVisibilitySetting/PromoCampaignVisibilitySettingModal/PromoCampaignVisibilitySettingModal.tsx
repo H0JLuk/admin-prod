@@ -3,9 +3,8 @@ import PromoCampaignVisibilitySettingInput from '../../PromoCampaignVisibilitySe
 import { addVisibilitySetting } from '@apiServices/promoCampaignService';
 import { Modal } from 'antd';
 import { LocationDto, SalePointDto } from '@types';
+import { BUTTON_TEXT } from '@constants/common';
 
-const BUTTON_ADD_MODAL = 'Добавить';
-const BUTTON_CANCEL_MODAL = 'Отменить';
 const DEFAULT_ERRORS = { location: '', salePoint: '', server: '' };
 
 type PromoCampaignVisibilitySettingModalProps = {
@@ -35,13 +34,13 @@ const PromoCampaignVisibilitySettingModal: React.FC<PromoCampaignVisibilitySetti
         closeModal();
     }, [closeModal]);
 
-    const onLocationChange = useCallback((location: LocationDto | null) => {
-        setLocation(location);
+    const onLocationChange = useCallback((selectedLocation: LocationDto | null) => {
+        setLocation(selectedLocation);
         setError(DEFAULT_ERRORS);
     }, []);
 
-    const onSalePointChange = useCallback((salePoint: SalePointDto | null) => {
-        setSalePoint(salePoint);
+    const onSalePointChange = useCallback((selectedSalePoint: SalePointDto | null) => {
+        setSalePoint(selectedSalePoint);
         setError(DEFAULT_ERRORS);
     }, []);
 
@@ -77,8 +76,8 @@ const PromoCampaignVisibilitySettingModal: React.FC<PromoCampaignVisibilitySetti
             onOk={onFinish}
             onCancel={handleModalClose}
             confirmLoading={loading}
-            okText={BUTTON_ADD_MODAL}
-            cancelText={BUTTON_CANCEL_MODAL}
+            okText={BUTTON_TEXT.ADD}
+            cancelText={BUTTON_TEXT.CANCEL}
         >
             <PromoCampaignVisibilitySettingInput
                 error={error}

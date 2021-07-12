@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { CloseOutlined, DownOutlined } from '@ant-design/icons';
 import { Checkbox, Select, SelectProps } from 'antd';
 
@@ -6,6 +7,7 @@ import styles from './SelectTags.module.css';
 
 // OT = OptionType
 interface ISelectTags<OT> {
+    className?: string;
     showClearIcon?: boolean;
     canRemoveSelected?: boolean;
     onChange?: (value: string[]) => void;
@@ -14,10 +16,12 @@ interface ISelectTags<OT> {
     nameKey?: keyof OT;
     idKey?: keyof OT;
     placeholder: string;
+    disabled?: boolean;
     maxTagTextLength?: number;
 }
 
 const SelectTags = <OT extends Record<string, any>>({
+    className,
     showClearIcon = true,
     canRemoveSelected = true,
     onChange,
@@ -26,6 +30,7 @@ const SelectTags = <OT extends Record<string, any>>({
     nameKey = 'name',
     idKey = 'code',
     placeholder,
+    disabled,
     maxTagTextLength = 12,
 }: ISelectTags<OT>) => {
     const stringValue = value.map(String);
@@ -74,7 +79,7 @@ const SelectTags = <OT extends Record<string, any>>({
 
     return (
         <Select<string[]>
-            className={styles.select}
+            className={cn(styles.select, className)}
             suffixIcon={suffix}
             showArrow
             showSearch={false}
@@ -88,6 +93,7 @@ const SelectTags = <OT extends Record<string, any>>({
             dropdownClassName={styles.dropdown}
             options={options}
             value={stringValue}
+            disabled={disabled}
         />
     );
 };

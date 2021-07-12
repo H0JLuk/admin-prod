@@ -12,15 +12,12 @@ import { BundleLink } from '@types';
 import { RuleObject, RuleRender } from 'antd/lib/form';
 import { NamePath } from 'rc-field-form/lib/interface';
 import { customNotifications } from '@utils/notifications';
-import { BANNER_TEXT_TYPE, BANNER_TYPE } from '@constants/common';
+import { BANNER_TEXT_TYPE, BANNER_TYPE, BUTTON_TEXT } from '@constants/common';
 
 import styles from './RelatedPromoCampaignsForm.module.css';
 
 export type RelatedPromoCampaignFormProps = BundleFormProps;
 
-const CREATE = 'Создать';
-const EDIT = 'Сохранить';
-const CANCEL = 'Отменить';
 const ASSOCIATION_CREATE = 'Новая связанная промо-кампания';
 const ADD_ASSOCIATION_CAMPAIGN = 'Добавить связанную кампанию';
 const SELECT_CAMPAIGN_PLACEHOLDER = 'Выберите промо-кампанию';
@@ -214,10 +211,10 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
                 <div className={styles.title}>{isEdit ? association.current.name : ASSOCIATION_CREATE}</div>
                 <div className={styles.buttonBlock}>
                     <Button type="default" onClick={redirectToBundleList}>
-                        {CANCEL}
+                        {BUTTON_TEXT.CANCEL}
                     </Button>
                     <Button type="primary" onClick={isEdit ? handleEdit : handleCreate} disabled={loading}>
-                        {isEdit ? EDIT : CREATE}
+                        {isEdit ? BUTTON_TEXT.SAVE : BUTTON_TEXT.CREATE}
                     </Button>
                 </div>
             </div>

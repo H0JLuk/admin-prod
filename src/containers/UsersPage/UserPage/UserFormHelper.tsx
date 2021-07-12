@@ -104,6 +104,7 @@ export function validatePartner(partnerPersonalNumber: string | null, isCorrectR
 }
 
 export function validateCheck(name: string) {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     return ({ isInvalid, message }: { isInvalid: boolean; message: string; }) => {
         if (isInvalid) {
             const error = new Error(message);

@@ -3,7 +3,6 @@ import { Button, Form } from 'antd';
 import { getAppCode } from '@apiServices/sessionService';
 import {
     designElements,
-    EDIT_BUTTON_LABEL,
     keysToString,
     SETTINGS_TYPES,
 } from '../ClientAppFormConstants';
@@ -11,6 +10,7 @@ import { createOrUpdateKey, IChangedParam, showNotify } from '../utils';
 import AppFormConstructor from '../FormConstructor/';
 import Loading from '@components/Loading/';
 import { ISettings, IDesignSettings } from '../ClientAppContainer';
+import { BUTTON_TEXT } from '@constants/common';
 import { ClientSetting } from '@types';
 import { IBanner } from './Banner';
 
@@ -28,7 +28,7 @@ type IFormData = Record<string, string> & {
 
 type IFormattedFormData = Record<string, string | string[]>;
 
-const MainPageDesign: React.FC<IMainPageDesignProps>= ({
+const MainPageDesign: React.FC<IMainPageDesignProps> = ({
     designSettings: { current: designSettings },
     updateSettings,
     initialData: { current: initialData },
@@ -110,7 +110,7 @@ const MainPageDesign: React.FC<IMainPageDesignProps>= ({
                         type="primary"
                         htmlType="submit"
                     >
-                        {EDIT_BUTTON_LABEL}
+                        {BUTTON_TEXT.SAVE}
                     </Button>
                 </div>
             </Form>

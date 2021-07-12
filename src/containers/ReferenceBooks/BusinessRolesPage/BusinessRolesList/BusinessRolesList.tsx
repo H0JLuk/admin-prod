@@ -6,6 +6,7 @@ import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
 import TableDeleteModal from '@components/TableDeleteModal';
 import BusinessRolesTable from './BusinessRolesTable';
 import { BUSINESS_ROLE_PAGES } from '@constants/route';
+import { BUTTON_TEXT } from '@constants/common';
 import { BusinessRoleDto } from '@types';
 
 import styles from './BusinessRolesList.module.css';
@@ -24,17 +25,6 @@ const DROPDOWN_SORT_MENU = [
     { name: 'startDate', label: 'По дате начала' },
     { name: 'endDate', label: 'По дате окончания' },
 ];
-
-export const BUTTON_TEXT = {
-    SAVE: 'Сохранить',
-    ADD: 'Добавить',
-    CANCEL: 'Отменить',
-    SELECT: 'Выбрать',
-    SELECT_ALL: 'Выбрать все',
-    CANCEL_ALL: 'Отменить все',
-    DELETE: 'Удалить',
-    CHOSEN: 'Выбрано',
-};
 
 const MODAL_TITLE = 'Вы уверены, что хотите удалить эти бизнес-роли?';
 const MODAL_SUCCESS_TITLE = 'Результат удаления бизнес-ролей';

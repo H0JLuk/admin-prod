@@ -71,13 +71,13 @@ const ConsentInfo: React.FC<ConsentInfoProps> = ({ matchPath }) => {
                 okText: BUTTON_TEXT.OK,
             });
         } catch (e) {
-            const { message } = e;
+            const { message: errMessage } = e;
             errorModal({
                 title: (
                     <span>
                         {CONSENTS_LABELS.ERROR_DELETE}
                         <span className={styles.errorMessage}>
-                            {message}
+                            {errMessage}
                         </span>
                     </span>
                 ),
@@ -150,8 +150,8 @@ const ConsentInfo: React.FC<ConsentInfoProps> = ({ matchPath }) => {
                                     </div>
                                     <div className={styles.tagsBlock}>
                                         {clientApplications.length > 0
-                                            ? clientApplications.map(({ displayName, id }) => (
-                                                <div key={id} className={styles.tag}>
+                                            ? clientApplications.map(({ displayName, id: clientAppId }) => (
+                                                <div key={clientAppId} className={styles.tag}>
                                                     {displayName}
                                                 </div>
                                             )) : <i>{EMPTY_VALUE[CONSENTS_LABELS.CLIENT_APPS_DTO_LIST]}</i>

@@ -21,10 +21,6 @@ import {
     APP_TYPE_LABEL,
     QR_LINK_LABEL,
     APP_TYPE_PLACEHOLDER,
-    CANCEL_BUTTON_TITLE,
-    ADD_BUTTON_TITLE,
-    SAVE_BUTTON_TITLE,
-    DELETE_BUTTON_LABEL,
     LINK_INPUT_PLACEHOLDER,
     LINK_VIDEO_LABEL,
 } from '../dzoConstants';
@@ -43,7 +39,7 @@ import {
     InitialDzoData,
     DzoFormLogos,
 } from './dzoFormFunctions';
-import { BANNER_TYPE } from '@constants/common';
+import { BANNER_TYPE, BUTTON_TEXT } from '@constants/common';
 
 import styles from './DzoForm.module.css';
 
@@ -102,10 +98,10 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                 const response = await Promise.allSettled(appPromises);
 
                 if (hasRejectedPromises(response)) {
-                    const { applicationList, errorApps } = makeErrorAndSuccessObj(response, appDataFromForm);
+                    const { applicationList: appList, errorApps } = makeErrorAndSuccessObj(response, appDataFromForm);
 
                     history.replace(`${matchPath}/${id}/edit`);
-                    initialData.current = { ...dataFromForm, dzoId: id, applicationList };
+                    initialData.current = { ...dataFromForm, dzoId: id, applicationList: appList };
 
                     errorsToForm(errorApps, form);
                     throw new Error();
@@ -122,11 +118,11 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
 
                     const isInFormButWithBlankValue = applicationList.find(
                         appFromForm =>
-                            appFromForm.applicationType === appTypeFromServer && appFromForm.applicationUrl === ''
+                            appFromForm.applicationType === appTypeFromServer && appFromForm.applicationUrl === '',
                     );
 
                     const isNotInForm = !applicationList.find(
-                        appFromForm => appFromForm.applicationType === appTypeFromServer
+                        appFromForm => appFromForm.applicationType === appTypeFromServer,
                     );
 
                     if (appId && (isInFormButWithBlankValue || isNotInForm)) {
@@ -145,15 +141,15 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                 const namesToUpdate: number[] = [];
                 const appsToUpdate = appFromServer.reduce<SaveDzoApplicationRequest[]>((result, app, index) => {
                     const formAppParams = applicationList.find(
-                        ({ applicationType }) => applicationType === app.applicationType
+                        ({ applicationType }) => applicationType === app.applicationType,
                     );
 
-                    if (formAppParams && formAppParams.applicationUrl && app.applicationUrl !== formAppParams.applicationUrl) {
+                    if (formAppParams?.applicationUrl && app.applicationUrl !== formAppParams.applicationUrl) {
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        const { dzoId, applicationId, ...appParams } = formAppParams;
+                        const { dzoId: dzoID, applicationId, ...appParams } = formAppParams;
                         namesToUpdate.push(index);
                         const applicationIdOld = appFromServer.find(
-                            app => app.applicationType === formAppParams.applicationType
+                            appEl => appEl.applicationType === formAppParams.applicationType,
                         );
                         return [...result, ({ ...appParams, applicationId: applicationIdOld?.applicationId }) as DzoApplication];
                     }
@@ -293,7 +289,7 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                                 {(row || []).map(({ rules, ...props }) => (
                                     <Col key={props.label} span={24 / row.length}>
                                         <FormItem
-                                            dzoValue={(props.name ==='dzoCode' && isEdit && initialData.current.dzoCode) || undefined}
+                                            dzoValue={(props.name === 'dzoCode' && isEdit && initialData.current.dzoCode) || undefined}
                                             rules={[
                                                 ...(rules || []),
                                                 props.name === 'dzoCode' && !isEdit ? {
@@ -309,22 +305,18 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                             </Row>
                         ))}
                         <Row justify="space-between">
-                            {BANNERS_UPLOAD_TEMPLATE.map(({ label, name, accept, type, description, setting, maxFileSize }) => (
+                            {BANNERS_UPLOAD_TEMPLATE.map(({ label, name, ...rest }) => (
                                 <Col
                                     key={label}
                                     className={styles.uploadImage}
                                     span={8}
                                 >
                                     <UploadPicture
-                                        description={description}
-                                        uploadButtonText="Добавить"
+                                        {...rest}
+                                        uploadButtonText={BUTTON_TEXT.ADD}
                                         name={name}
-                                        setting={setting}
                                         label={label}
-                                        accept={accept}
-                                        type={type}
                                         removeIconView={false}
-                                        maxFileSize={maxFileSize}
                                         footer
                                         initialValue={initialBanners.current[name[1]]}
                                     />
@@ -391,7 +383,7 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                 </div>
                 <div className={styles.btnGroup}>
                     <Button type="default" onClick={handleCancel}>
-                        {CANCEL_BUTTON_TITLE}
+                        {BUTTON_TEXT.CANCEL}
                     </Button>
                     <Button
                         htmlType="submit"
@@ -399,11 +391,11 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                         type="primary"
                         disabled={isEdit && isSaveButtonDisabled}
                     >
-                        {isEdit ? SAVE_BUTTON_TITLE : ADD_BUTTON_TITLE}
+                        {isEdit ? BUTTON_TEXT.SAVE : BUTTON_TEXT.ADD}
                     </Button>
                     {isEdit && (
                         <Button type="primary" danger onClick={handleDelete}>
-                            {DELETE_BUTTON_LABEL}
+                            {BUTTON_TEXT.DELETE}
                         </Button>
                     )}
                 </div>

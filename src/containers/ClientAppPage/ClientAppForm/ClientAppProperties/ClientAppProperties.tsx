@@ -11,11 +11,9 @@ import AppFormConstructor from '../FormConstructor';
 import SelectTags from '@components/SelectTags';
 import PrivacyPolicy from './PrivacyPolicy';
 import {
-    ADD_BUTTON_TITLE,
     BACKEND_ERROR_ALREADY_EXIST_ENDING,
     BUSINESS_ROLE_FOR_APPLICATION,
     BUSINESS_ROLE_FOR_APP_PLACEHOLDER,
-    EDIT_BUTTON_LABEL,
     formElements,
     FORM_MODES,
     keysToString,
@@ -27,6 +25,7 @@ import { LoginTypes, LOGIN_TYPES_ENUM } from '@constants/loginTypes';
 import { NOTIFICATION_TYPES } from '@constants/clientAppsConstants';
 import { IPropertiesSettings, ISettings } from '../ClientAppContainer';
 import { BusinessRoleDto, ConsentDto, SettingDto } from '@types';
+import { BUTTON_TEXT } from '@constants/common';
 import { compareArrayOfNumbers } from '@utils/helper';
 
 import styles from './ClientAppProperties.module.css';
@@ -280,7 +279,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         type="primary"
                         htmlType="submit"
                     >
-                        {!isEdit ? ADD_BUTTON_TITLE : EDIT_BUTTON_LABEL}
+                        {!isEdit ? BUTTON_TEXT.ADD : BUTTON_TEXT.SAVE}
                     </Button>
                 </div>
             </Form>

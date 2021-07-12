@@ -10,6 +10,7 @@ import { confirmModal, errorModal, successModal } from '@utils/utils';
 import { deleteCampaignGroup } from '@apiServices/campaignGroupService';
 import { BundleTypes, BUNDLE_LOCATION_KEY } from '../../groupPageConstants';
 import { normalizedLinksDto } from '../types';
+import { BUTTON_TEXT } from '@constants/common';
 
 import styles from './RelatedFormInfo.module.css';
 
@@ -20,8 +21,6 @@ export type RelatedFormInfoProps = {
     history: History;
 };
 
-const EDIT = 'Редактировать';
-const DELETE = 'Удалить';
 const DELETE_CONFIRMATION_MODAL_TITLE = 'Вы действительно хотите удалить связанную кампанию';
 const ERROR_DELETE = 'Ошибка удаления';
 const OK_TEXT = 'ОК';
@@ -42,7 +41,7 @@ const RelatedFormInfo: React.FC<RelatedFormInfoProps> = ({ matchPath, history, g
                 ...rest,
             },
         ],
-        []
+        [],
     );
 
     const handleEdit = () => {
@@ -83,7 +82,7 @@ const RelatedFormInfo: React.FC<RelatedFormInfoProps> = ({ matchPath, history, g
                     {DELETE_CONFIRMATION_MODAL_TITLE} <span className={styles.text}>{`${name}?`}</span>
                 </span>
             ),
-            okText: DELETE,
+            okText: BUTTON_TEXT.DELETE,
             onOk: onDelete,
             okButtonProps: { danger: true },
         });
@@ -97,10 +96,10 @@ const RelatedFormInfo: React.FC<RelatedFormInfoProps> = ({ matchPath, history, g
                 </div>
                 <div className={styles.buttonBlock}>
                     <Button type="primary" onClick={handleEdit}>
-                        {EDIT}
+                        {BUTTON_TEXT.EDIT}
                     </Button>
                     <Button type="primary" danger onClick={onDeleteClick}>
-                        {DELETE}
+                        {BUTTON_TEXT.DELETE}
                     </Button>
                 </div>
             </div>
@@ -112,8 +111,8 @@ const RelatedFormInfo: React.FC<RelatedFormInfoProps> = ({ matchPath, history, g
                                 <span className={cn(styles.infoTitle, styles.campaignTitle)}>{name}</span>
                             </Col>
                             {associationGroupRows.map((row: Record<string, BundleRowsValueDto>) =>
-                                Object.keys(row).map((key, index) => (
-                                    <Col span={12} key={index}>
+                                Object.keys(row).map((key, idx) => (
+                                    <Col span={12} key={idx}>
                                         {row[key].type === 'text' && (
                                             <>
                                                 <div className={styles.infoTitle}>{row[key].label}</div>

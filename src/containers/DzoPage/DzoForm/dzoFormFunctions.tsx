@@ -203,12 +203,12 @@ export function errorsToForm(errorApps: ErrorApp[], form: FormInstance, namesToU
 export function checkBackendErrors(
     updateResponse: PromiseSettledResult<DefaultApiResponse>[],
     form: FormInstance,
-    namesToUpdate: number[]
+    namesToUpdate: number[],
 ) {
     if (hasRejectedPromises(updateResponse)) {
         const errorApps = updateResponse.reduce<ErrorApp[]>(
             (result, response, index) => (response.status === 'rejected' ? [...result, { index, reason: response.reason }] : result),
-            []
+            [],
         );
         errorsToForm(errorApps, form, namesToUpdate);
         return true;
@@ -218,27 +218,27 @@ export function checkBackendErrors(
 
 export function makeErrorAndSuccessObj(
     response: PromiseSettledResult<DefaultCreateDtoResponse>[],
-    appDataFromForm: SaveDzoApplicationRequest[] = []
+    appDataFromForm: SaveDzoApplicationRequest[] = [],
 ) {
     const key = {
         fulfilled: 'applicationList',
         rejected: 'errorApps',
     };
 
-    return response.reduce<ResultSaveDzoApplications>((result, response, index) => {
+    return response.reduce<ResultSaveDzoApplications>((result, responseEl, index) => {
         let newValue: ResultSaveDzoApplications['applicationList'] | ResultSaveDzoApplications['errorApps'];
 
-        if (response.status === 'fulfilled') {
+        if (responseEl.status === 'fulfilled') {
             const { applicationType, applicationUrl } = appDataFromForm[index];
             const appList = result.applicationList;
-            const applicationId = response.value.id;
+            const applicationId = responseEl.value.id;
             newValue = [...appList, { applicationType, applicationUrl, applicationId }];
         } else {
-            const { reason } = response;
+            const { reason } = responseEl;
             const { errorApps } = result;
             newValue = [...errorApps, { index, reason }];
         }
 
-        return { ...result, [key[response.status]]: newValue };
+        return { ...result, [key[responseEl.status]]: newValue };
     }, { applicationList: [], errorApps: [] });
 }

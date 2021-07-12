@@ -16,7 +16,7 @@ export type StepTextAndImageProps = {
     isCopy: boolean | undefined;
 };
 
-const StepTextAndImage: React.FC<StepTextAndImageProps>= ({
+const StepTextAndImage: React.FC<StepTextAndImageProps> = ({
     typePromoCampaign,
     addChangedImg,
     banners,

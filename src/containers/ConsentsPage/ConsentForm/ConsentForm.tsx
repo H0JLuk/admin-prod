@@ -7,9 +7,10 @@ import moment, { Moment } from 'moment';
 import Header from '@components/Header';
 import SelectTags from '@components/SelectTags';
 import Loading from '@components/Loading';
-import { getPatternAndMessage } from '@utils/validators';
+import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
 import { attachConsentToClientApp, createConsent, getConsentById, updateConsent } from '@apiServices/consentsService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
+import { BUTTON_TEXT } from '@constants/common';
 import { ClientAppDto, ConsentDto } from '@types';
 
 import styles from './ConsentForm.module.css';
@@ -38,11 +39,6 @@ type OnFinishData = Pick<ConsentDto, 'text' | 'version'> & {
 };
 
 const RichTextEditor = React.lazy(() => import('@components/RichTextEditor'));
-
-const BUTTON_TEXT = {
-    SAVE: 'Сохранить',
-    CANCEL: 'Отменить',
-};
 
 const CONSENT_DATE = 'Дата начала действия';
 const DATE_PICKER_PLACEHOLDER = 'дд.мм.гг';
@@ -193,7 +189,9 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
                                 <Form.Item
                                     label={CONSENT_DATE}
                                     name="createDate"
-                                    rules={[{ required: true, message: 'Поле обязательно' }]}
+                                    rules={[
+                                        FORM_RULES.REQUIRED,
+                                    ]}
                                 >
                                     <DatePicker
                                         className={styles.createDate}
@@ -210,7 +208,7 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
                                     label={VERSION}
                                     name="version"
                                     rules={[
-                                        { required: true, message: 'Поле обязательно' },
+                                        FORM_RULES.REQUIRED,
                                     ]}
                                 >
                                     <Input
@@ -228,13 +226,14 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
                                     label={CONSENTS_TEXT}
                                     name="text"
                                     rules={[
-                                        { required: true, message: 'Поле обязательно' },
+                                        FORM_RULES.REQUIRED,
                                         {
                                             message: consentTextMessage,
                                             validator: consentTextValidator,
                                             validateTrigger: 'onSubmit',
                                         },
                                     ]}
+                                    validateFirst
                                     initialValue={consentData?.text}
                                     getValueFromEvent={(_, editor) => editor.getData()}
                                 >
@@ -248,7 +247,9 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
                                 <Form.Item
                                     name="clientApplications"
                                     label="Приложения в которых показывается согласие"
-                                    rules={[{ required: true, message: 'Поле обязательно' }]}
+                                    rules={[
+                                        FORM_RULES.REQUIRED,
+                                    ]}
                                 >
                                     <SelectTags
                                         placeholder="Приложения в которых показывается согласие"

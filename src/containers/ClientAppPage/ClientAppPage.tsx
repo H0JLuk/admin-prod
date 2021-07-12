@@ -13,6 +13,7 @@ import { getRole } from '@apiServices/sessionService';
 import { arrayMove } from '@utils/helper';
 import { CLIENT_APPS_PAGES } from '@constants/route';
 import ROLES from '@constants/roles';
+import { BUTTON_TEXT } from '@constants/common';
 
 import style from './ClientAppPage.module.css';
 
@@ -20,13 +21,6 @@ const SortableContainerList = SortableContainer((props: SortableContainerListPro
 const SortableElementItem = SortableElement(ClientAppItem);
 
 const SEARCH_INPUT_PLACEHOLDER = 'Поиск по названию';
-
-const BUTTON_TEXT = {
-    SAVE: 'Сохранить',
-    ADD: 'Добавить',
-    CHANGE_ORDER: 'Изменить порядок',
-    CANCEL: 'Отменить',
-};
 
 const DROPDOWN_SORT_MENU = [
     { name: 'displayName', label: 'По названию' },

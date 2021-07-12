@@ -7,8 +7,8 @@ import {
 } from '@constants/clientAppsConstants';
 import { LOGIN_TYPE_OPTIONS } from '@constants/loginTypes';
 import { showCount } from '@constants/common';
-import { getPatternAndMessage } from '@utils/validators';
-import { ValidatorRule, Rule } from 'rc-field-form/lib/interface';
+import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
+import { ValidatorRule } from 'rc-field-form/lib/interface';
 import { FormItemProps, InputProps, SelectProps } from 'antd';
 import { CheckboxGroupProps } from 'antd/lib/checkbox';
 import { TextAreaProps } from 'antd/lib/input';
@@ -20,10 +20,7 @@ const february23 = 'February23_main_illustration';
 const march8 = 'March8_main_illustration';
 
 export const CREATE_APP_TITLE = 'Новое приложение';
-export const CANCEL_BUTTON_TITLE = 'Отменить';
-export const ADD_BUTTON_TITLE = 'Добавить';
 export const PROPERTIES_TITLE = 'Свойства';
-export const EDIT_BUTTON_LABEL = 'Сохранить';
 export const DESIGN_RADIO_TITLE = 'Оформление';
 export const PROPERTIES_RADIO_TITLE = 'Свойства';
 export const SUCCESS_MESSAGE = 'Операция завершена';
@@ -48,8 +45,6 @@ export const keysToString = [
     'notification_types',
     'game_mechanics',
 ];
-
-const numberTransform = (value: string) => value ? Number(value) : '';
 
 export const TextKeysWithDefaultValues = ['home_page_header_present', 'home_page_header_wow'];
 
@@ -95,29 +90,6 @@ export const DEFAULT_DESIGN_SETTINGS: IDefaultDesignSettings = {
 
 export const designKeysForCheck = [...Object.keys(DEFAULT_DESIGN_SETTINGS), ...TextKeysWithDefaultValues];
 
-const REQUIRED_VALIDATE_MESSAGE = 'Это обязательное поле';
-const NUMBER_VALIDATE_MESSAGE = 'Значение может быть только числовым';
-
-export const RULES = {
-    REQUIRED: {
-        required: true,
-        message: REQUIRED_VALIDATE_MESSAGE,
-        validateTrigger: 'onSubmit',
-    } as Rule,
-    NUMBER: {
-        type: 'number',
-        message: NUMBER_VALIDATE_MESSAGE,
-        transform: numberTransform,
-        validateTrigger: 'onSubmit',
-    } as Rule,
-    get CHECKBOX_GROUP() {
-        return {
-            ...this.REQUIRED,
-            type: 'array',
-        } as Rule;
-    },
-};
-
 export enum FORM_TYPES {
     INPUT = 'INPUT',
     CHECKBOX_GROUP = 'CHECKBOX_GROUP',
@@ -132,7 +104,7 @@ export enum SETTINGS_TYPES {
 }
 
 export enum FORM_MODES {
-    NEW ='new',
+    NEW = 'new',
     EDIT = 'edit',
 }
 
@@ -190,7 +162,7 @@ export const mainInfoElements: FormConstructorItem[][] = [
             type: FORM_TYPES.INPUT,
             span: 16,
             rules: [
-                RULES.REQUIRED,
+                FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('clientApp', 'name'),
                     validateTrigger: 'onSubmit',
@@ -204,7 +176,7 @@ export const mainInfoElements: FormConstructorItem[][] = [
             type: FORM_TYPES.INPUT,
             span: 8,
             rules: [
-                RULES.REQUIRED,
+                FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('clientApp', 'code'),
                     validateTrigger: 'onSubmit',
@@ -221,7 +193,7 @@ export const mainInfoElements: FormConstructorItem[][] = [
             span: 16,
             canEdit: true,
             rules: [
-                RULES.REQUIRED,
+                FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('clientApp', 'name'),
                     validateTrigger: 'onSubmit',
@@ -240,7 +212,7 @@ export const formElements: FormConstructorItem[][] = [
             type: FORM_TYPES.INPUT,
             span: 8,
             rules: [
-                RULES.NUMBER,
+                FORM_RULES.NUMBER,
             ],
             normalize: trimValue,
             name: 'token_lifetime',
@@ -252,7 +224,7 @@ export const formElements: FormConstructorItem[][] = [
             type: FORM_TYPES.INPUT,
             span: 8,
             rules: [
-                RULES.NUMBER,
+                FORM_RULES.NUMBER,
             ],
             normalize: trimValue,
             name: 'inactivity_time',
@@ -264,7 +236,7 @@ export const formElements: FormConstructorItem[][] = [
             type: FORM_TYPES.INPUT,
             span: 8,
             rules: [
-                RULES.NUMBER,
+                FORM_RULES.NUMBER,
             ],
             normalize: trimValue,
             name: 'tmp_block_time',
@@ -279,7 +251,7 @@ export const formElements: FormConstructorItem[][] = [
             type: FORM_TYPES.INPUT,
             span: 8,
             rules: [
-                RULES.NUMBER,
+                FORM_RULES.NUMBER,
             ],
             normalize: trimValue,
             name: 'referralTokenLifetime',
@@ -292,7 +264,7 @@ export const formElements: FormConstructorItem[][] = [
             type: FORM_TYPES.INPUT,
             span: 8,
             rules: [
-                RULES.NUMBER,
+                FORM_RULES.NUMBER,
             ],
             normalize: trimValue,
             name: 'max_password_attempts',
@@ -304,7 +276,7 @@ export const formElements: FormConstructorItem[][] = [
             type: FORM_TYPES.INPUT,
             span: 8,
             rules: [
-                RULES.NUMBER,
+                FORM_RULES.NUMBER,
             ],
             normalize: trimValue,
             name: 'max_presents_number',
@@ -319,7 +291,7 @@ export const formElements: FormConstructorItem[][] = [
             type: FORM_TYPES.CHECKBOX_GROUP,
             span: 12,
             rules: [
-                RULES.CHECKBOX_GROUP,
+                FORM_RULES.REQUIRED_ARRAY,
                 {
                     validator: checkBoxValidator,
                     validateTrigger: 'onSubmit',
@@ -342,7 +314,7 @@ export const formElements: FormConstructorItem[][] = [
             type: FORM_TYPES.CHECKBOX_GROUP,
             options: LOGIN_TYPE_OPTIONS,
             rules: [
-                RULES.CHECKBOX_GROUP,
+                FORM_RULES.REQUIRED_ARRAY,
             ],
             columnMode: true,
             span: 12,

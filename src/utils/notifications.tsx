@@ -19,7 +19,7 @@ class Notifications {
 
     private showNotification(
         { onClose, style = {}, ...rest } = {} as ArgsProps,
-        action: NotificationInstance['open']
+        action: NotificationInstance['open'],
     ) {
         const key = `key_${Date.now()}`;
         this.noticeKeys.push(key);
@@ -68,7 +68,7 @@ class Notifications {
                     Очистить все
                 </Button>
             ) : <></>,
-            this.btnContainerNode
+            this.btnContainerNode,
         );
     }
 }

@@ -8,6 +8,7 @@ import Header from '@components/Header';
 import { getFilteredPromoCampaignList, reorderPromoCampaigns } from '@apiServices/promoCampaignService';
 import { arrayMove, defaultSearchParams } from '@utils/helper';
 import { getLinkForCreatePromoCampaign } from '@utils/appNavigation';
+import { BUTTON_TEXT } from '@constants/common';
 import { PromoCampaignDto } from '@types';
 
 import style from './PromoCampaignList.module.css';
@@ -16,13 +17,6 @@ const SortableContainerList = SortableContainer((props: { children: React.ReactN
 const SortableElementItem = SortableElement(PromoCampaignItem);
 
 const SEARCH_INPUT_PLACEHOLDER = 'Поиск промо-кампании';
-
-const BUTTON_TEXT = {
-    SAVE: 'Сохранить',
-    ADD: 'Добавить',
-    CHANGE_ORDER: 'Изменить порядок',
-    CANCEL: 'Отменить',
-};
 
 const DROPDOWN_SORT_MENU = [
     { name: 'type', label: 'По типу' },

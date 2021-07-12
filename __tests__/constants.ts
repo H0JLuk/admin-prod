@@ -295,6 +295,7 @@ export const testLocation: LocationDto = {
         deleted: false,
     },
     parentName: 'Ярославская область',
+    parentId: 99,
 };
 
 export const testSalePoint: SalePointDto = {
@@ -332,7 +333,9 @@ export const testSalePoint: SalePointDto = {
             deleted: false,
         },
         parentName: 'Ярославская область',
+        parentId: 99,
     },
+    parentId: 99,
 };
 
 export const searchSalePointTestData: SalePointDto[] = [
@@ -354,6 +357,7 @@ export const searchSalePointTestData: SalePointDto[] = [
             deleted: false,
         },
         parentName: '8626',
+        parentId: 11,
         location: {
             id: 137,
             name: 'Москва',
@@ -371,6 +375,7 @@ export const searchSalePointTestData: SalePointDto[] = [
                 deleted: false,
             },
             parentName: 'Ханты-Мансийский автономный округ — Югра',
+            parentId: 99,
         },
     },
 ];
@@ -745,16 +750,27 @@ export const searchLocation = [
         id: 163,
         name: 'Москва',
         parentName: 'Ханты-Мансийский автономный округ — Югра',
+        parentId: 1,
         startDate: '2020-11-01',
     },
     {
-        deleted: false,
+        id: 2046,
+        name: 'Ростов',
         description: null,
-        endDate: null,
-        id: 164,
-        name: 'НеМосква',
-        parentName: 'НеЮгра',
         startDate: '2020-11-01',
+        endDate: null,
+        deleted: false,
+        type: {
+            id: 11,
+            name: 'Город',
+            description: null,
+            startDate: '2020-01-01',
+            endDate: null,
+            priority: 6,
+            deleted: false,
+        },
+        parentName: 'Ярославская область',
+        parentId: 99,
     },
 ];
 

@@ -6,14 +6,14 @@ import Header from './Header';
 const TEST_PROPS = {
     menuMode: false,
     buttonBack: true,
-    onClickFunc: jest.fn()
+    onClickFunc: jest.fn(),
 };
 
 const mockHistoryGoBack = jest.fn();
 
 jest.mock('react-router-dom', () => ({
     useHistory: () => ({
-        goBack: mockHistoryGoBack
+        goBack: mockHistoryGoBack,
     }),
 }));
 

@@ -7,6 +7,7 @@ import { deleteClientApp } from '@apiServices/clientAppService';
 import { saveAppCode } from '@apiServices/sessionService';
 import { CLIENT_APPS_PAGES } from '@constants/route';
 import { ClientAppDto } from '@types';
+import { BUTTON_TEXT } from '@constants/common';
 
 import style from './ClientAppMenu.module.css';
 
@@ -25,7 +26,7 @@ interface IClientAppMenu {
 
 const MENU = {
     PROPERTIES: 'Свойства',
-    DELETE: 'Удалить',
+    DELETE: BUTTON_TEXT.DELETE,
 };
 
 const getDeleteTitleConfirm = (appName: string) => (
@@ -34,7 +35,7 @@ const getDeleteTitleConfirm = (appName: string) => (
     </span>
 );
 
-const ClientAppMenu: React.FC<IClientAppMenu>= ({ matchPath, clientAppItem, forceUpdate, history }) => {
+const ClientAppMenu: React.FC<IClientAppMenu> = ({ matchPath, clientAppItem, forceUpdate, history }) => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
 
     const redirectToEditPage = () => {

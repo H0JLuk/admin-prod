@@ -1,6 +1,7 @@
 import { SALE_POINT_TYPE } from '@constants/common';
+import { DefaultPaginationResponse } from './Api';
 
-type LocationType = {
+export type LocationTypeDto = {
     id: number;
     name: string;
     description?: string | null;
@@ -15,10 +16,11 @@ export type LocationDto = {
     name: string;
     parentName?: string;
     description?: string | null;
-    type: LocationType;
+    type: LocationTypeDto;
     deleted: boolean;
     startDate?: string;
     endDate?: string | null;
+    parentId: number;
 };
 
 type SalePointType = {
@@ -36,6 +38,7 @@ export type SalePointDto = {
     id: number;
     name: string;
     parentName?: string;
+    parentId: number;
     description?: string;
     location: LocationDto;
     type: SalePointType;
@@ -44,4 +47,25 @@ export type SalePointDto = {
     endDate?: string | null;
 };
 
+
+export type SalePointRequest = {
+    description: string;
+    locationId: number;
+    name: string;
+    parentId: number;
+    typeId: number;
+};
+
+export type SalePointTypesList = DefaultPaginationResponse & {
+    salePoints: SalePointDto[];
+};
+
 export type SearchType = 'searchLocation' | 'searchSalePoint';
+
+export type LocationsListResponse = DefaultPaginationResponse & {
+    locations: LocationDto[];
+};
+
+export type SaveLocationRequest = Pick<LocationDto, 'description' | 'name' | 'parentId'> & {
+    typeId: number;
+};

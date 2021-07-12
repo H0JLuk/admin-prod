@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, useHistory, useLocation, generatePath, useRouteMatch } from 'react-router-dom';
-import HeaderWithActions from '@components/HeaderWithActions';
+import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
 import PromoCampaignVisibilitySettingTable
     from './PromoCampaignVisibilitySettingTable';
 import { Button, message, TablePaginationConfig, TableProps } from 'antd';
@@ -15,8 +15,7 @@ import {
 import { getPathForCreatePromoCampaignVisibititySetting } from '@utils/appNavigation';
 import { getSearchParamsFromUrl } from '@utils/helper';
 import { VisibilitySettingDto } from '@types';
-import { ButtonProps } from '@components/HeaderWithActions';
-import { DIRECTION } from '@constants/common';
+import { BUTTON_TEXT, DIRECTION } from '@constants/common';
 import { SearchParams } from '@components/HeaderWithActions/types';
 
 import styles from './PromoCampaignVisibilitySetting.module.css';
@@ -42,13 +41,7 @@ const locale = {
 };
 
 const SEARCH_SETTING = 'Поиск настройки';
-const BUTTON_ADD = 'Добавить';
 const HEADER_TITLE = 'Настройки видимости промо-кампании';
-const BUTTON_CHOOSE = 'Выбрать';
-const BUTTON_CHOOSE_ALL = 'Выбрать все';
-const BUTTON_UNSELECT_ALL = 'Отменить выбор';
-const BUTTON_CANCEL = 'Отмена';
-const BUTTON_DELETE = 'Удалить';
 const TURN_ON_ALL = 'Включить все';
 const TURN_OFF_ALL = 'Выключить все';
 
@@ -92,11 +85,11 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
 
         try {
             const urlSearchParams = getURLSearchParams(searchParams);
-            const { visibilitySettings, pageNo, totalElements } = await getPromoCampaignVisibilitySettings(+promoCampaignId, urlSearchParams);
+            const { visibilitySettings: visibilitySettingsList, pageNo, totalElements } = await getPromoCampaignVisibilitySettings(+promoCampaignId, urlSearchParams);
 
             history.replace(`${match.url}?${urlSearchParams}`, state);
             setParams({ ...searchParams, pageNo, totalElements });
-            setVisibilitySettings(visibilitySettings);
+            setVisibilitySettings(visibilitySettingsList);
         } catch (e) {
             console.error(e); // TODO: add error handler
         }
@@ -186,7 +179,7 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
 
     const selectAll = useCallback(() => {
         setSelectedSettings(
-            (state) => state!.length === visibilitySettings.length ? [] : visibilitySettings.map(({ id }) => id),
+            (prev) => prev!.length === visibilitySettings.length ? [] : visibilitySettings.map(({ id }) => id),
         );
     }, [visibilitySettings]);
 
@@ -200,7 +193,7 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
     const selectRow = useCallback((id) => {
         if (selectedSettings !== null) {
             setSelectedSettings(
-                (state) => state!.includes(id) ? state!.filter(el => el !== id) : [...state!, id],
+                (prev) => prev!.includes(id) ? prev!.filter(el => el !== id) : [...prev!, id],
             );
         }
     }, [selectedSettings]);
@@ -232,12 +225,12 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
             return [
                 {
                     type: 'primary',
-                    label: BUTTON_ADD,
+                    label: BUTTON_TEXT.ADD,
                     onClick: addNewByModal ? showModal : onCreate,
                     disabled: loading,
                 },
                 {
-                    label: BUTTON_CHOOSE,
+                    label: BUTTON_TEXT.SELECT,
                     onClick: onEnableSelection,
                     disabled: loading,
                 },
@@ -247,10 +240,10 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
         return [
             {
                 type: 'primary',
-                label:  isSelectAll ? BUTTON_UNSELECT_ALL : BUTTON_CHOOSE_ALL,
+                label:  isSelectAll ? BUTTON_TEXT.CANCEL_ALL : BUTTON_TEXT.SELECT_ALL,
                 onClick: selectAll, disabled: loading,
             },
-            { label: BUTTON_CANCEL, onClick: onDisableSelection, disabled: loading },
+            { label: BUTTON_TEXT.CANCEL, onClick: onDisableSelection, disabled: loading },
         ];
     }, [
         selectedSettings,
@@ -265,7 +258,7 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
     ]);
 
     const onChangeSort = useCallback(() => {
-        setSelectedSettings((state) => !state ? null : []);
+        setSelectedSettings((prev) => !prev ? null : []);
     }, []);
 
     return (
@@ -322,7 +315,7 @@ const PromoCampaignVisibilitySetting: React.FC<PromoCampaignVisibilitySettingPro
                                 type="primary"
                                 danger
                             >
-                                {BUTTON_DELETE}
+                                {BUTTON_TEXT.DELETE}
                             </Button>
                         )}
                     </div>

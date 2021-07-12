@@ -1,8 +1,9 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import UserFormButtonGroup, { BUTTON, INFO_USER_BUTTONS } from './UserFormButtonGroup';
+import UserFormButtonGroup, { INFO_USER_BUTTONS } from './UserFormButtonGroup';
 import { LOGIN_TYPES_ENUM } from '../../../../constants/loginTypes';
 import { userTestData } from '../../../../../__tests__/constants';
+import { BUTTON_TEXT } from '@constants/common';
 
 const CASE_TYPES = {
     NEW: 'new',
@@ -58,15 +59,15 @@ describe('<UserFormButtonGroup /> test', () => {
     });
 
     it('should be visible type edit buttons and call functions', () => {
-        expect(ComponentButtons.at(0).text()).toBe(BUTTON.CANCEL_TEXT);
+        expect(ComponentButtons.at(0).text()).toBe(BUTTON_TEXT.CANCEL);
         ComponentButtons.at(0).simulate('click');
         expect(TEST_PROPS.onCancel).toBeCalledTimes(1);
 
-        expect(ComponentButtons.at(1).text()).toBe(BUTTON.SAVE_EDIT_USER_TEXT);
+        expect(ComponentButtons.at(1).text()).toBe(BUTTON_TEXT.SAVE);
         ComponentButtons.at(1).simulate('click');
         expect(TEST_PROPS.onSubmit).toBeCalledTimes(1);
 
-        expect(ComponentButtons.at(2).text()).toBe(BUTTON.DELETE_TEXT);
+        expect(ComponentButtons.at(2).text()).toBe(BUTTON_TEXT.DELETE);
         ComponentButtons.at(2).simulate('click');
         expect(TEST_PROPS.onDelete).toBeCalledTimes(1);
     });
@@ -75,11 +76,11 @@ describe('<UserFormButtonGroup /> test', () => {
         const ComponentNew = Component(CASE_TYPES.NEW);
         const ComponentNewButtons = ComponentNew.find('button');
 
-        expect(ComponentNewButtons.at(0).text()).toBe(BUTTON.CANCEL_TEXT);
+        expect(ComponentNewButtons.at(0).text()).toBe(BUTTON_TEXT.CANCEL);
         ComponentNewButtons.at(0).simulate('click');
         expect(TEST_PROPS.onCancel).toBeCalledTimes(1);
 
-        expect(ComponentNewButtons.at(1).text()).toBe(BUTTON.ADD_USER_TEXT);
+        expect(ComponentNewButtons.at(1).text()).toBe(BUTTON_TEXT.ADD);
         ComponentNewButtons.at(1).simulate('click');
         expect(TEST_PROPS.onSubmit).toBeCalledTimes(1);
     });
@@ -96,7 +97,7 @@ describe('<UserFormButtonGroup /> test', () => {
         ComponentInfoButtons.at(1).simulate('click');
         expect(TEST_PROPS.onEditUser).toBeCalledTimes(1);
 
-        expect(ComponentInfoButtons.at(2).text()).toBe(BUTTON.DELETE_TEXT);
+        expect(ComponentInfoButtons.at(2).text()).toBe(BUTTON_TEXT.DELETE);
         ComponentInfoButtons.at(2).simulate('click');
         expect(TEST_PROPS.onDelete).toBeCalledTimes(1);
     });

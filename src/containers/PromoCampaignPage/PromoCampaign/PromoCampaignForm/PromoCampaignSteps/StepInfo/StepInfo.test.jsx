@@ -20,6 +20,7 @@ import {
 } from '../../../../../../../__tests__/constants';
 
 jest.mock('../../../../../../utils/validators', () => ({
+    ...jest.requireActual('../../../../../../utils/validators'),
     getPatternAndMessage: jest.fn(),
 }));
 

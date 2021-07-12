@@ -17,7 +17,7 @@ import { USERS_PAGES } from '@constants/route';
 import { downloadFileFunc, getSearchParamsFromUrl } from '@utils/helper';
 import { PaginationConfig } from 'antd/lib/pagination';
 import { UserInfo } from '@types';
-import { DIRECTION } from '@constants/common';
+import { BUTTON_TEXT, DIRECTION } from '@constants/common';
 import { SearchParams } from '@components/HeaderWithActions/types';
 import { customNotifications } from '@utils/notifications';
 import { LOGIN_TYPES_ENUM } from '@constants/loginTypes';
@@ -36,21 +36,9 @@ type SelectedItems = {
 };
 
 const TITLE = 'Пользователи';
-
 const RESET_LABEL = 'По умолчанию';
-
-const BUTTON_ADD = 'Добавить';
-const BUTTON_CHOOSE = 'Выбрать';
-const BUTTON_CANCEL = 'Отменить';
-const BUTTON_SELECT_ALL = 'Выбрать все';
-const BUTTON_UNSELECT_ALL = 'Отменить выбор';
-const BUTTON_DELETE = 'Удалить';
-
 const SEARCH_INPUT = 'Поиск по логину, локации и точке продажи';
-
-const CHOSEN_USER = 'Выбрано';
 const TITLE_DOWNLOAD_USER = 'Пакетная обработка пользователей';
-
 const MODAL_TITLE = 'Вы уверены что хотите удалить этих пользователей?';
 const MODAL_SUCCESS_TITLE = 'Результат удаления пользователей';
 
@@ -129,7 +117,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         setLoadingTableData(true);
 
         try {
-            const { users = [], totalElements, pageNo } = await getUsersList(urlSearchParams, parentUser.current?.personalNumber);
+            const { users: usersList = [], totalElements, pageNo } = await getUsersList(urlSearchParams, parentUser.current?.personalNumber);
             /* use `replace` instead of `push` for correct work `history.goBack()` */
             history.replace(`${matchPath}?${urlSearchParams}`);
             clearSelectedItems();
@@ -138,7 +126,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                 pageNo,
                 totalElements,
             });
-            setUsers(users);
+            setUsers(usersList);
         } catch (e) {
             console.error(e);
         }
@@ -253,7 +241,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
 
         try {
             const response = await Promise.allSettled(requestPromises);
-            const { users, errors } = response.reduce<{ users: RestoredUser[]; errors: string[]; }>((prev, result, index) => {
+            const { users: restoredUsers, errors } = response.reduce<{ users: RestoredUser[]; errors: string[]; }>((prev, result, index) => {
                 if (result.status === 'rejected') {
                     const { message } = result.reason;
                     prev.errors.push(message);
@@ -265,8 +253,8 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                 return prev;
             }, { users: [], errors: [] });
 
-            if (users.length) {
-                showRestoredUsersNotification(users);
+            if (restoredUsers.length) {
+                showRestoredUsersNotification(restoredUsers);
             }
             if (errors.length) {
                 showRestoredErrorsNotification(errors);
@@ -312,22 +300,21 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         const selectedAll = canSelectUsers.length === selectedItems.rowKeys.length;
         buttons.push({
             type: 'primary',
-            label: selectedAll ? BUTTON_UNSELECT_ALL : BUTTON_SELECT_ALL,
+            label: selectedAll ? BUTTON_TEXT.CANCEL_ALL : BUTTON_TEXT.SELECT_ALL,
             onClick: selectAll,
             disabled: loadingTableData,
         },
         {
-            label: BUTTON_CANCEL,
+            label: BUTTON_TEXT.CANCEL,
             onClick: setSelectedRow,
             disabled: loadingTableData,
         });
     } else {
         buttons.push(
-            { type: 'primary', label: BUTTON_ADD, onClick: onAddUser, disabled: loadingTableData },
-            { label: BUTTON_CHOOSE, onClick: setSelectedRow, disabled: loadingTableData },
+            { type: 'primary', label: BUTTON_TEXT.ADD, onClick: onAddUser, disabled: loadingTableData },
+            { label: BUTTON_TEXT.SELECT, onClick: setSelectedRow, disabled: loadingTableData },
         );
     }
-
 
     const onChangeFilter = (requestOptions: SearchParams) => {
         const newParams: SearchParams = { ...requestOptions, pageNo: 0 };
@@ -393,7 +380,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                     <div className={styles.space}>
                         <div className={styles.section}>
                             <span className={styles.label}>
-                                {CHOSEN_USER} {selectedItems.rowKeys.length}
+                                {BUTTON_TEXT.CHOSEN} {selectedItems.rowKeys.length}
                             </span>
                             <ActionsDropDown
                                 selectedItems={selectedItems}
@@ -421,7 +408,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                                 danger
                                 disabled={!selectedItems.rowKeys.length}
                             >
-                                {BUTTON_DELETE}
+                                {BUTTON_TEXT.DELETE}
                             </Button>
                         </TableDeleteModal>
                     </div>

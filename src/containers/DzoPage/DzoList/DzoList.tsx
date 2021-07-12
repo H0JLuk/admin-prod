@@ -8,6 +8,7 @@ import TableDeleteModal from '@components/TableDeleteModal';
 import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
 import { DZO_PAGES } from '@constants/route';
 import { requestsWithMinWait } from '@utils/utils';
+import { BUTTON_TEXT } from '@constants/common';
 import { DzoDto } from '@types';
 
 import styles from './DzoList.module.css';
@@ -31,17 +32,6 @@ const DROPDOWN_SORT_MENU = [
     { name: 'dzoId', label: 'По ID' },
     { name: 'dzoCode', label: 'По коду' },
 ];
-
-const BUTTON_TEXT = {
-    SAVE: 'Сохранить',
-    ADD: 'Добавить',
-    CANCEL: 'Отменить',
-    SELECT: 'Выбрать',
-    SELECT_ALL: 'Выбрать все',
-    CANCEL_ALL: 'Отменить все',
-    DELETE: 'Удалить',
-    CHOSEN: 'Выбрано',
-};
 
 const SEARCH_INPUT_PLACEHOLDER = 'Поиск по названию дзо';
 

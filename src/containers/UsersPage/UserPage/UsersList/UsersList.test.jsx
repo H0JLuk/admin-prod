@@ -166,7 +166,7 @@ describe('<UsersList /> test', () => {
 
             fireEvent.click(getByText(/Выбрать/));
             fireEvent.click(getByText(/Выбрать все/));
-            fireEvent.click(getByText(/Отменить выбор/));
+            fireEvent.click(getByText(/Отменить все/));
 
             expect(getByText(/Выбрать все/)).toBeInTheDocument();
         });

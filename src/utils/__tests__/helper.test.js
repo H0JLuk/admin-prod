@@ -12,8 +12,17 @@ import {
     arrayMove,
     getSearchParamsFromUrl,
     sortItemsBySearchParams,
+    numberTransform,
 } from '../helper';
 
+
+it('test `numberTransform` function', () => {
+    expect(numberTransform('123')).toBe(123);
+    expect(numberTransform('')).toBe('');
+    expect(numberTransform()).toBe('');
+    expect(numberTransform('test')).toBe(NaN);
+    expect(numberTransform(undefined)).toBe('');
+});
 
 it('test `arrayToObject` function', () => {
     const promoCampaignBannersObject = {

@@ -15,7 +15,7 @@ export function highlightSearchingText(value = '', searchValue = '', highlightCl
         .indexOf(
             searchValue
                 .trim()
-                .toLocaleUpperCase()
+                .toLocaleUpperCase(),
         );
 
     if (index + 1) {
@@ -23,7 +23,7 @@ export function highlightSearchingText(value = '', searchValue = '', highlightCl
         newValue.push(
             <span key={index} className={highlightClassName}>
                 {value.substring(index, index + searchValue.length)}
-            </span>
+            </span>,
         );
         newValue.push(value.substring(index + searchValue.length));
     } else {

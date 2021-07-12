@@ -5,6 +5,7 @@ import UploadPicture from '@components/UploadPicture/UploadPicture';
 import { getLabel } from '@components/LabelWithTooltip/LabelWithTooltip';
 import TextBlock from '../TextBlock';
 import { INFO_ROWS, INFO_ROWS_KEYS, TemplateRowsValues } from './templateConstants';
+import { BUTTON_TEXT } from '@constants/common';
 
 import styles from './Template.module.css';
 
@@ -15,8 +16,6 @@ export type TemplateProps = {
     onRemoveImg: (name: FormItemProps['name']) => void;
     isCopy?: boolean;
 };
-
-const ADD = 'Добавить';
 
 const Template: React.FC<TemplateProps> = ({ banners, texts, type, onRemoveImg, isCopy }) => {
     const [infoRows] = useState<Record<string, TemplateRowsValues>[]>(INFO_ROWS[type] || []);
@@ -44,7 +43,7 @@ const Template: React.FC<TemplateProps> = ({ banners, texts, type, onRemoveImg, 
                             onRemoveImg={onRemoveImg}
                             type={row[key].type}
                             label={getLabel(row[key].title, row[key].tooltipImg, true)}
-                            uploadButtonText={ADD}
+                            uploadButtonText={BUTTON_TEXT.ADD}
                             maxFileSize={row[key].maxSize}
                             validateFileSize={!isCopy}
                             footer

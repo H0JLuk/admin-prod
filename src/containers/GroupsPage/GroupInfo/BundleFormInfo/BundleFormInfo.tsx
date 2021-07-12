@@ -10,7 +10,7 @@ import { BundleRowsDto, BundleRowsValueDto, BUNDLE_ROWS, groupBundleRows } from 
 import { deleteCampaignGroup } from '@apiServices/campaignGroupService';
 import { confirmModal, errorModal, successModal } from '@utils/utils';
 import { BundleTypes, BUNDLE_LOCATION_KEY } from '../../groupPageConstants';
-import { BANNER_TYPE } from '@constants/common';
+import { BANNER_TYPE, BUTTON_TEXT } from '@constants/common';
 
 import styles from './BundleFormInfo.module.css';
 
@@ -21,8 +21,6 @@ export type BundleFormInfoProps = {
     history: History;
 };
 
-const EDIT = 'Редактировать';
-const DELETE = 'Удалить';
 const DELETE_CONFIRMATION_MODAL_TITLE = 'Вы действительно хотите удалить Бандл';
 const ERROR_DELETE = 'Ошибка удаления';
 const OK_TEXT = 'ОК';
@@ -38,7 +36,7 @@ const BundleFormInfo: React.FC<BundleFormInfoProps> = ({ matchPath, history, bun
 
     const redirectToBundleList = () => history.push(matchPath);
 
-    const { name, active, banners, links, /* texts */ } = bundleData;
+    const { name, active, banners, links/*, texts */ } = bundleData;
 
     const normalizeLinks = links.reduce(
         (prev: normalizedLinksDto<Omit<BundleLink, 'banners' | 'texts'>>[], { banners, texts, ...rest }) => [
@@ -49,7 +47,7 @@ const BundleFormInfo: React.FC<BundleFormInfoProps> = ({ matchPath, history, bun
                 ...rest,
             },
         ],
-        []
+        [],
     );
 
     const handleEdit = () => {
@@ -89,7 +87,7 @@ const BundleFormInfo: React.FC<BundleFormInfoProps> = ({ matchPath, history, bun
                     {DELETE_CONFIRMATION_MODAL_TITLE} <span className={styles.text}>{`${name}?`}</span>
                 </span>
             ),
-            okText: DELETE,
+            okText: BUTTON_TEXT.DELETE,
             onOk: onDelete,
             okButtonProps: { danger: true },
         });
@@ -106,10 +104,10 @@ const BundleFormInfo: React.FC<BundleFormInfoProps> = ({ matchPath, history, bun
                 </div>
                 <div className={styles.buttonBlock}>
                     <Button type="primary" onClick={handleEdit}>
-                        {EDIT}
+                        {BUTTON_TEXT.EDIT}
                     </Button>
                     <Button type="primary" danger onClick={onDeleteClick}>
-                        {DELETE}
+                        {BUTTON_TEXT.DELETE}
                     </Button>
                 </div>
             </div>
@@ -142,8 +140,8 @@ const BundleFormInfo: React.FC<BundleFormInfoProps> = ({ matchPath, history, bun
                                 <span className={cn(styles.infoTitle, styles.campaignTitle)}>{name}</span>
                             </Col>
                             {groupBundleRows.map((row: Record<string, BundleRowsValueDto>) =>
-                                Object.keys(row).map((key, index) => (
-                                    <Col span={12} key={index}>
+                                Object.keys(row).map((key, idx) => (
+                                    <Col span={12} key={idx}>
                                         {['banner', 'logo'].includes(row[key].type) && (
                                             <>
                                                 <div className={styles.infoTitle}>{row[key].label}</div>

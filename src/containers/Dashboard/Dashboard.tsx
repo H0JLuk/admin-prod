@@ -96,7 +96,7 @@ const Dashboard = () => {
             const [
                 dashboardInfo,
                 clientAppList,
-                { dzoDtoList = [] }
+                { dzoDtoList = [] },
             ] = await requestsWithMinWait(requests);
 
             setList(dashboardInfo);
@@ -139,14 +139,14 @@ const Dashboard = () => {
                 setFilteredList(
                     filterIdList.length
                         ? list.filter(({ clientApplicationId: id }) => filterIdList.includes(id))
-                        : list
+                        : list,
                 );
                 break;
             case BY_DZO:
                 setFilteredList(
                     filterIdList.length
                         ? list.filter(({ dzoId }) => filterIdList.includes(dzoId))
-                        : list
+                        : list,
                 );
                 break;
             case WITHOUT_FILTER:

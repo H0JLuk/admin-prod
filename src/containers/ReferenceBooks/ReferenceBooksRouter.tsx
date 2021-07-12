@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect, Route, Switch, useRouteMatch, useLocation, matchPath } from 'react-router-dom';
 import useBodyClassForSidebar from '@hooks/useBodyClassForSidebar';
-import Header from '@components/Header/Header';
+import Header from '@components/Header';
+import LocationsRouter from './Locations/LocationsRouter';
+import SalePointsRouter from './SalePoints/SalePointsRouter';
 import BusinessRolesRouter from './BusinessRolesPage/BusinessRolesRouter';
 import {
     BUSINESS_ROLE_PAGES,
+    LOCATIONS_PAGES,
     ROUTE_ADMIN,
+    SALE_POINT_PAGES,
 } from '@constants/route';
 
 import styles from './ReferenceBooksRouter.module.css';
@@ -21,8 +25,8 @@ const HIDE_MENU_AND_SHOW_BACK_BTN = {
 };
 
 const PATHS_FOR_MENU_MODE = [
-    // `${ROUTE_ADMIN.REFERENCE_BOOKS}${ LOCATIONS_PAGES.LIST }`,
-    // `${ROUTE_ADMIN.REFERENCE_BOOKS}${ SALE_POINT_PAGES.LIST }`,
+    `${ROUTE_ADMIN.REFERENCE_BOOKS}${ LOCATIONS_PAGES.LIST }`,
+    `${ROUTE_ADMIN.REFERENCE_BOOKS}${ SALE_POINT_PAGES.LIST }`,
     `${ROUTE_ADMIN.REFERENCE_BOOKS}${ BUSINESS_ROLE_PAGES.LIST }`,
 ];
 
@@ -41,21 +45,20 @@ const ReferenceBooksRouter = () => {
         <div className={styles.container}>
             <Header {...state} />
             <Switch>
-                {/* <Route
-                    path={ `${ match.path }${ LOCATIONS_PAGES.LIST }` }
-                    component={ LocationsRouter }
+                <Route
+                    path={`${match.path}${LOCATIONS_PAGES.LIST}`}
+                    component={LocationsRouter}
                 />
                 <Route
-                    path={ `${ match.path }${ SALE_POINT_PAGES.LIST }` }
-                    component={ SalePointsRouter }
-                /> */}
+                    path={`${match.path}${SALE_POINT_PAGES.LIST}`}
+                    component={SalePointsRouter}
+                />
                 <Route
                     path={`${match.path}${BUSINESS_ROLE_PAGES.LIST}`}
                     component={BusinessRolesRouter}
                 />
-                {/* Здесь будут роуты для остальных страниц справочников */}
 
-                <Redirect to={`${match.path}${BUSINESS_ROLE_PAGES.LIST}`} />
+                <Redirect to={`${match.path}${SALE_POINT_PAGES.LIST}`} />
             </Switch>
         </div>
     );

@@ -127,7 +127,7 @@ describe('<PromoCampaignVisibilitySetting /> tests', () => {
             await sleep();
             fireEvent.click(getByText(/Выбрать/));
             expect(getByText(/Выбрано настроек: 0/)).toBeInTheDocument();
-            fireEvent.click(getByText(/Отмена/));
+            fireEvent.click(getByText(/Отменить/));
             expect(getByText(/Выбрать/)).toBeInTheDocument();
         });
     });

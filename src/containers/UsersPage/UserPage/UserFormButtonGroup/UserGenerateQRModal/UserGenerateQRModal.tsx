@@ -7,6 +7,7 @@ import { getLinkForQR } from '@apiServices/usersService';
 import { downloadFileFunc } from '@utils/helper';
 import { showNotify, MODE } from '../../UserFormHelper';
 import { ClientAppDto, UserInfo } from '@types';
+import { FORM_RULES } from '@utils/validators';
 
 type UserGenerateQRModalProps = {
     clientApps?: ClientAppDto[];
@@ -19,7 +20,6 @@ type UserGenerateQRModalProps = {
 const MODAL_BUTTON_OK_LABEL = 'Сгенерировать';
 const MODAL_BUTTON_CANCEL_LABEL = 'Отменить';
 const MODAL_APP_LABEL_TEXT = 'Витрина';
-const APP_CODE_RULES = 'Необходимо выбрать витрину';
 const APP_CODE_PLACEHOLDER = 'Выберите витрину';
 const MODAL_TEXT = 'Выберите витрину, для которой нужно сгенерировать QR-код';
 const options = {
@@ -100,7 +100,7 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
                     <Form.Item
                         label={MODAL_APP_LABEL_TEXT}
                         name="clientAppCode"
-                        rules={[{ required: true, message: APP_CODE_RULES }]}
+                        rules={[FORM_RULES.REQUIRED]}
                     >
                         <Select
                             placeholder={APP_CODE_PLACEHOLDER}

@@ -10,7 +10,7 @@ import {
 import { getUser, unblockUser, resetUser, removeUser, saveUser, addUser } from '@apiServices/usersService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
 import { sleep } from '../../../setupTests';
-import { BUTTON, INFO_USER_BUTTONS } from './UserFormButtonGroup/UserFormButtonGroup';
+import { INFO_USER_BUTTONS } from './UserFormButtonGroup/UserFormButtonGroup';
 import { customNotifications } from '@utils/notifications';
 import {
     userTestData,
@@ -21,6 +21,7 @@ import {
 import { getResultsByTextAndType, createSearchDataAndPassLocation } from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper';
 import { confirmModal } from '@utils/utils';
 import { getSalePointByText } from '@apiServices/promoCampaignService';
+import { BUTTON_TEXT } from '@constants/common';
 
 const mockSalePointSelect = {
     ...searchSalePointTestData[0],
@@ -232,7 +233,7 @@ describe('<UserForm /> test', () => {
 
         expect(screen.getByText(INFO_USER_BUTTONS.RESET_PASSWORD)).toBeTruthy();
         expect(screen.getByText(INFO_USER_BUTTONS.EDIT)).toBeTruthy();
-        expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
+        expect(screen.getByText(BUTTON_TEXT.DELETE)).toBeTruthy();
 
         await act(async () => {
             fireEvent.click(screen.getByText(/Сбросить/i));
@@ -252,7 +253,7 @@ describe('<UserForm /> test', () => {
 
         expect(screen.getByText(INFO_USER_BUTTONS.RESET_PASSWORD)).toBeTruthy();
         expect(screen.getByText(INFO_USER_BUTTONS.EDIT)).toBeTruthy();
-        expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
+        expect(screen.getByText(BUTTON_TEXT.DELETE)).toBeTruthy();
 
         await act(async () => {
             fireEvent.click(screen.getByText(/Сбросить/i));
@@ -273,8 +274,8 @@ describe('<UserForm /> test', () => {
     it('should call confirmModal and delete function', async () => {
         Component();
         await sleep();
-        expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
-        fireEvent.click(screen.getByText(BUTTON.DELETE_TEXT));
+        expect(screen.getByText(BUTTON_TEXT.DELETE)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON_TEXT.DELETE));
         await sleep();
         expect(confirmModal).toBeCalledTimes(1);
 
@@ -289,8 +290,8 @@ describe('<UserForm /> test', () => {
         customNotifications.error = jest.fn();
         Component();
         await sleep();
-        expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
-        fireEvent.click(screen.getByText(BUTTON.DELETE_TEXT));
+        expect(screen.getByText(BUTTON_TEXT.DELETE)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON_TEXT.DELETE));
         expect(confirmModal).toBeCalledTimes(1);
 
         await act(async () => {
@@ -305,8 +306,8 @@ describe('<UserForm /> test', () => {
         (getUser as jest.Mock).mockResolvedValue({ ...userTestData, id: null });
         Component();
         await sleep();
-        expect(screen.getByText(BUTTON.DELETE_TEXT)).toBeTruthy();
-        fireEvent.click(screen.getByText(BUTTON.DELETE_TEXT));
+        expect(screen.getByText(BUTTON_TEXT.DELETE)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON_TEXT.DELETE));
         expect(confirmModal).toBeCalledTimes(1);
 
         await act(async () => {
@@ -328,8 +329,8 @@ describe('<UserForm /> test', () => {
         Component(CASE_TYPES.EDIT);
         await sleep();
 
-        expect(screen.getByText(BUTTON.SAVE_EDIT_USER_TEXT)).toBeTruthy();
-        fireEvent.click(screen.getByText(BUTTON.SAVE_EDIT_USER_TEXT));
+        expect(screen.getByText(BUTTON_TEXT.SAVE)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON_TEXT.SAVE));
         await sleep();
 
         expect(saveUser).toBeCalledTimes(1);
@@ -349,8 +350,8 @@ describe('<UserForm /> test', () => {
         Component(CASE_TYPES.EDIT);
         await sleep();
 
-        expect(screen.getByText(BUTTON.SAVE_EDIT_USER_TEXT)).toBeTruthy();
-        fireEvent.click(screen.getByText(BUTTON.SAVE_EDIT_USER_TEXT));
+        expect(screen.getByText(BUTTON_TEXT.SAVE)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON_TEXT.SAVE));
         await sleep();
         expect(saveUser).toBeCalledTimes(1);
         expect(generatePath).toBeCalledTimes(0);
@@ -362,7 +363,7 @@ describe('<UserForm /> test', () => {
         });
 
         await act(async () => {
-            fireEvent.click(screen.getByText(BUTTON.ADD_USER_TEXT));
+            fireEvent.click(screen.getByText(BUTTON_TEXT.ADD));
         });
         expect(screen.getByText(/Укажите/i)).toBeTruthy();
 
@@ -370,7 +371,7 @@ describe('<UserForm /> test', () => {
             fireEvent.change(screen.getByPlaceholderText(LOGIN_FIELD.placeholder), { target: { value: TEST_USER_DATA.FALSE_LOGIN } });
         });
         await act(async () => {
-            fireEvent.click(screen.getByText(BUTTON.ADD_USER_TEXT));
+            fireEvent.click(screen.getByText(BUTTON_TEXT.ADD));
         });
         expect(screen.getByText(/латинские/i)).toBeTruthy();
 
@@ -378,7 +379,7 @@ describe('<UserForm /> test', () => {
             fireEvent.change(screen.getByPlaceholderText(LOGIN_FIELD.placeholder), { target: { value: TEST_USER_DATA.LOGIN } });
         });
         await act(async () => {
-            fireEvent.click(screen.getByText(BUTTON.ADD_USER_TEXT));
+            fireEvent.click(screen.getByText(BUTTON_TEXT.ADD));
         });
         expect(screen.getByText(/продажи/i)).toBeTruthy();
     });
@@ -407,7 +408,7 @@ describe('<UserForm /> test', () => {
 
         expect(screen.getByTestId('locationId').innerHTML).toBe('2');
 
-        fireEvent.click(screen.getByText(BUTTON.ADD_USER_TEXT));
+        fireEvent.click(screen.getByText(BUTTON_TEXT.ADD));
         expect(addUser).toBeCalledTimes(1);
         await sleep();
         expect(customNotifications.success).toBeCalledTimes(1);
@@ -446,16 +447,16 @@ describe('<UserForm /> test', () => {
     it('should call cancel function', async () => {
         Component(CASE_TYPES.EDIT);
         await sleep();
-        expect(screen.getByText(BUTTON.CANCEL_TEXT)).toBeTruthy();
-        fireEvent.click(screen.getByText(BUTTON.CANCEL_TEXT));
+        expect(screen.getByText(BUTTON_TEXT.CANCEL)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON_TEXT.CANCEL));
         expect(generatePath).toBeCalledTimes(1);
     });
 
     it('should call cancel function with redirect', async () => {
         Component(CASE_TYPES.NEW);
         await sleep();
-        expect(screen.getByText(BUTTON.CANCEL_TEXT)).toBeTruthy();
-        fireEvent.click(screen.getByText(BUTTON.CANCEL_TEXT));
+        expect(screen.getByText(BUTTON_TEXT.CANCEL)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON_TEXT.CANCEL));
         expect(mockHistoryPush).toBeCalledTimes(1);
     });
 

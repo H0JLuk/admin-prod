@@ -32,9 +32,15 @@ export enum SALE_POINT_TYPE {
     EXTERNAL = 'EXTERNAL',
 }
 
+export const SALE_POINT_TYPE_RU = {
+    [SALE_POINT_TYPE.EXTERNAL]: 'Внешняя',
+    [SALE_POINT_TYPE.INTERNAL]: 'Внутренняя',
+};
+
 export const BUTTON_TEXT = {
     SAVE: 'Сохранить',
     ADD: 'Добавить',
+    CREATE: 'Создать',
     CANCEL: 'Отменить',
     SELECT: 'Выбрать',
     SELECT_ALL: 'Выбрать все',
@@ -43,4 +49,6 @@ export const BUTTON_TEXT = {
     CHOSEN: 'Выбрано',
     EDIT: 'Редактировать',
     OK: 'Хорошо',
+    COPY: 'Копировать',
+    CHANGE_ORDER: 'Изменить порядок',
 };

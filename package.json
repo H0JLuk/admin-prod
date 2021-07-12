@@ -59,6 +59,7 @@
     "build": "craco build",
     "test": "craco test --env=jest-environment-jsdom-sixteen",
     "test:cov": "craco test --coverage --watchAll=false --env=jest-environment-jsdom-sixteen",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "docker-build": "docker build --no-cache -t dzo-distributor-admin .",
     "docker-run": "docker run -d --name dzo-distributor-admin -p 80:80 dzo-distributor-admin",
     "docker-stop": "docker stop dzo-distributor-admin",

@@ -74,7 +74,7 @@ export function editLocationAndSalePointUsers(data: UpdateUsersSalePoint) {
 }
 
 export function getLinkForQR(data: DirectLinkRequest) {
-    return Api.post('/admin/user/direct/link', data, getReqOptions(), 'text');
+    return Api.post<string>('/admin/user/direct/link', data, getReqOptions(), 'text');
 }
 
 export function generateQRCodes(data: QRRequest) {

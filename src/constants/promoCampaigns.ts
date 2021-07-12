@@ -1,16 +1,16 @@
 const PROMO_CAMPAIGNS = {
     NORMAL: {
         value: 'NORMAL',
-        label: 'Экскурсия'
+        label: 'Экскурсия',
     },
     PRESENT: {
         value: 'PRESENT',
-        label: 'Подарки'
+        label: 'Подарки',
     },
     LANDING: {
         value: 'landing',
-        label: 'Лендинг'
-    }
+        label: 'Лендинг',
+    },
 };
 
 export default PROMO_CAMPAIGNS;

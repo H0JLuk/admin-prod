@@ -104,7 +104,7 @@ const UploadPicture: React.FC<UploadPictureProps> = ({
             return [];
         }
 
-        return info && info.fileList.slice(-1);
+        return info?.fileList.slice(-1);
     }, [maxFileSize, validateFileSize, onRemoveImg, name]);
 
     const draggerClassName = cn(styles.dragContainer, {

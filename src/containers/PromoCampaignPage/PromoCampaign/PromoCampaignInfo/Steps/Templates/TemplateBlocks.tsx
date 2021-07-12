@@ -10,7 +10,7 @@ interface ITextBlock {
 
 type IImageBlockProps = {
     label?: string;
-    type?: 'logo' | 'banner'| 'text';
+    type?: 'logo' | 'banner' | 'text';
     src?: string;
     size?: string | number;
 };

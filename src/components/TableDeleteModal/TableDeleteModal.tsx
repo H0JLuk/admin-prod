@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Modal, { ModalProps } from 'antd/lib/modal/Modal';
 import PropTypes from 'prop-types';
+import { BUTTON_TEXT } from '@constants/common';
 import { DefaultApiResponse } from '@types';
 
 import styles from './TableDeleteModal.module.css';
 
-const CANCEL_TEXT = 'Отменить';
-const OK_TEXT_DELETE = 'Удалить';
-const OK_TEXT_SUCCESS = 'Хорошо';
 const SUCCESSFULLY_DELETED = 'Успешно удалено';
 const FAILED_DELETE = 'Ошибка удаления';
 
@@ -52,9 +50,9 @@ function TableDeleteModal<DataType extends { id: number; } | { dzoId: number; }>
     refreshTable,
     modalTitle = 'Вы точно хотите удалить эти данные?',
     modalSuccessTitle = 'Результат удаления',
-    okTextSuccess = OK_TEXT_SUCCESS,
-    okTextDelete = OK_TEXT_DELETE,
-    cancelText = CANCEL_TEXT,
+    okTextSuccess = BUTTON_TEXT.OK,
+    okTextDelete = BUTTON_TEXT.DELETE,
+    cancelText = BUTTON_TEXT.CANCEL,
     children,
 }: TableDeleteModalProps<DataType>) {
     const [isModalRender, setIsModalRender] = useState(false);

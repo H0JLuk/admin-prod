@@ -7,14 +7,12 @@ import { deleteDzo } from '@apiServices/dzoService';
 import { confirmModal, errorModal, successModal } from '@utils/utils';
 import { ImageBlock } from '../../PromoCampaignPage/PromoCampaign/PromoCampaignInfo/Steps/Templates/TemplateBlocks';
 import {
-    DELETE_BUTTON_LABEL,
     DELETE_CONFIRMATION_MODAL_TITLE,
-    ERROR_DELETE_DZO, OK_TEXT,
+    ERROR_DELETE_DZO,
     DZO_INFO_TEMPLATE_DATA,
     DZO_BANNERS_TEMPLATE,
     BANNER_IS_EMPTY,
     DZO_INFO_APPS_TEMPLATE,
-    EDIT,
     LINK_VIDEO_LABEL,
     IMainDataRow,
     IDzoBannersRow,
@@ -22,7 +20,7 @@ import {
 import { DzoDto } from '@types';
 
 import styles from './DzoInfo.module.css';
-import { BANNER_TYPE } from '@constants/common';
+import { BANNER_TYPE, BUTTON_TEXT } from '@constants/common';
 
 interface IDzoInfoProps {
     matchPath: string;
@@ -76,7 +74,7 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                         ДЗО <span className={styles.text}>{dzoData.dzoName}</span> успешно удалено
                     </span>
                 ),
-                okText: OK_TEXT,
+                okText: BUTTON_TEXT.OK,
             });
         } catch (e) {
             const { message } = e;
@@ -99,7 +97,7 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                     {DELETE_CONFIRMATION_MODAL_TITLE} <span className={styles.text}>{`${dzoData.dzoName}?`}</span>
                 </span>
             ),
-            okText: DELETE_BUTTON_LABEL,
+            okText: BUTTON_TEXT.DELETE,
             onOk: onDelete,
             okButtonProps: { danger: true },
         });
@@ -175,14 +173,14 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                             type="primary"
                             onClick={onEdit}
                         >
-                            {EDIT}
+                            {BUTTON_TEXT.EDIT}
                         </Button>
                         <Button
                             type="primary"
                             danger
                             onClick={onDeleteClick}
                         >
-                            {DELETE_BUTTON_LABEL}
+                            {BUTTON_TEXT.DELETE}
                         </Button>
                     </Space>
                 </div>

@@ -11,6 +11,7 @@ import StepVisibility from './Steps/StepVisibility';
 import PromoCampaignCopyModal from '../PromoCampaignCopyModal';
 import { confirmModal } from '@utils/utils';
 import { onConfirmDeletePromoCampaign, getDeleteTitleConfirm } from '../../PromoCampaignUtils';
+import { BUTTON_TEXT } from '@constants/common';
 import { PromoCampaignDto } from '@types';
 
 import styles from './PromoCampaignInfo.module.css';
@@ -23,25 +24,21 @@ interface ILocationState {
     promoCampaign: PromoCampaignDto;
 }
 
-const EDIT = 'Редактировать';
-const COPY = 'Копировать';
-const DELETE = 'Удалить';
-
-const PromoCampaignInfo: React.FC<PromoCampaignInfoProps>= ({ matchPath }) => {
+const PromoCampaignInfo: React.FC<PromoCampaignInfoProps> = ({ matchPath }) => {
     const history = useHistory();
     const [promoCampaign, setPromoCampaign] = useState({} as PromoCampaignDto);
     const { state: stateFromLocation } = useLocation<ILocationState>();
     const [step, setStep] = useState(0);
 
     useEffect(() => {
-        const { promoCampaign } = stateFromLocation || {};
-        if (!promoCampaign) {
+        const { promoCampaign: promoCampaignFromLocation } = stateFromLocation || {};
+        if (!promoCampaignFromLocation) {
             return history.push(matchPath);
         }
         setPromoCampaign({
-            ...promoCampaign,
-            startDate: getFormattedDate(promoCampaign.startDate),
-            finishDate: getFormattedDate(promoCampaign.finishDate),
+            ...promoCampaignFromLocation,
+            startDate: getFormattedDate(promoCampaignFromLocation.startDate),
+            finishDate: getFormattedDate(promoCampaignFromLocation.finishDate),
         });
         setStep(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,8 +46,8 @@ const PromoCampaignInfo: React.FC<PromoCampaignInfoProps>= ({ matchPath }) => {
 
     const onEdit = useCallback(() => {
         const path = `${ matchPath }${ PROMO_CAMPAIGN_PAGES.PROMO_CAMPAIGN_EDIT }`;
-        const { promoCampaign } = stateFromLocation || {};
-        history.push(generatePath(path, { promoCampaignId: promoCampaign.id }), { promoCampaign });
+        const { promoCampaign: promoCampaignFromLocation } = stateFromLocation || {};
+        history.push(generatePath(path, { promoCampaignId: promoCampaignFromLocation.id }), { promoCampaign: promoCampaignFromLocation });
     }, [history, matchPath, stateFromLocation]);
 
     const onConfirmDelete = useCallback(async () => {
@@ -103,11 +100,11 @@ const PromoCampaignInfo: React.FC<PromoCampaignInfoProps>= ({ matchPath }) => {
                                 type="primary"
                                 onClick={onEdit}
                             >
-                                {EDIT}
+                                {BUTTON_TEXT.EDIT}
                             </Button>
                             <PromoCampaignCopyModal promoCampaignData={stateFromLocation?.promoCampaign}>
                                 <Button type="primary">
-                                    {COPY}
+                                    {BUTTON_TEXT.COPY}
                                 </Button>
                             </PromoCampaignCopyModal>
                             <Button
@@ -115,7 +112,7 @@ const PromoCampaignInfo: React.FC<PromoCampaignInfoProps>= ({ matchPath }) => {
                                 danger
                                 onClick={onDeleteClick}
                             >
-                                {DELETE}
+                                {BUTTON_TEXT.DELETE}
                             </Button>
                         </div>
                     </div>
