@@ -184,6 +184,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                     layout="vertical"
                     id="salePoint"
                     onFinish={onFinish}
+                    validateTrigger="onSubmit"
                 >
                     <div className={styles.formWrapper}>
                         <Row gutter={24}>
@@ -192,10 +193,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                     label={SALE_POINT_TYPE_FIELD.label}
                                     name={SALE_POINT_TYPE_FIELD.name}
                                     rules={[
-                                        {
-                                            ...FORM_RULES.REQUIRED,
-                                            type: 'number',
-                                        },
+                                        FORM_RULES.REQUIRED,
                                     ]}
                                 >
                                     <Select
@@ -215,7 +213,6 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                         FORM_RULES.REQUIRED,
                                         {
                                             ...getPatternAndMessage('salePoint', 'name'),
-                                            validateTrigger: 'onSubmit',
                                         },
                                     ]}
                                     validateFirst
@@ -266,7 +263,6 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                     rules={[
                                         {
                                             ...getPatternAndMessage('salePoint', 'description'),
-                                            validateTrigger: 'onSubmit',
                                         },
                                     ]}
                                     validateFirst
@@ -289,7 +285,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                     rules={[
                                         {
                                             ...FORM_RULES.REQUIRED_OBJECT,
-                                            message: 'Локаций обязательна',
+                                            message: 'Локация обязательна',
                                         },
                                     ]}
                                 >

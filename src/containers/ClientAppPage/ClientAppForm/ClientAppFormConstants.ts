@@ -48,7 +48,7 @@ export const keysToString = [
 
 export const TextKeysWithDefaultValues = ['home_page_header_present', 'home_page_header_wow'];
 
-const checkBoxValidator: ValidatorRule['validator'] = (_, value) => {
+const mechanicsValidator: ValidatorRule['validator'] = (_, value) => {
     if (
         value.includes(APP_MECHANIC.PRESENTS) ||
         value.includes(APP_MECHANIC.ECOSYSTEM) ||
@@ -165,7 +165,6 @@ export const mainInfoElements: FormConstructorItem[][] = [
                 FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('clientApp', 'name'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
             name: 'name',
@@ -179,7 +178,6 @@ export const mainInfoElements: FormConstructorItem[][] = [
                 FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('clientApp', 'code'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
             name: 'code',
@@ -196,7 +194,6 @@ export const mainInfoElements: FormConstructorItem[][] = [
                 FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('clientApp', 'name'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
             name: 'displayName',
@@ -293,8 +290,7 @@ export const formElements: FormConstructorItem[][] = [
             rules: [
                 FORM_RULES.REQUIRED_ARRAY,
                 {
-                    validator: checkBoxValidator,
-                    validateTrigger: 'onSubmit',
+                    validator: mechanicsValidator,
                 },
             ],
             options: APP_MECHANIC_OPTIONS,

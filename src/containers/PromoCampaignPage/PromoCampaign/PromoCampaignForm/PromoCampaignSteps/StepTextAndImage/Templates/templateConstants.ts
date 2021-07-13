@@ -46,7 +46,6 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             get setting() {
                 return `48px, ${this.maxSize}МБ ${this.access_type}`;
             },
-            // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
     {
@@ -72,7 +71,6 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             get setting() {
                 return `48px, ${this.maxSize}МБ ${this.access_type}`;
             },
-            // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
     {
@@ -83,7 +81,6 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             rules: [
                 {
                     ...getPatternAndMessage('promoCampaign', 'textContent'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
         },
@@ -95,7 +92,6 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('promoCampaign', 'textContent'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
             type: 'text',
@@ -127,7 +123,6 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             get setting() {
                 return `48px, ${this.maxSize}МБ ${this.access_type}`;
             },
-            // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
     {
@@ -141,7 +136,6 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             get setting() {
                 return `48px, ${this.maxSize}МБ ${this.access_type}`;
             },
-            // rules: [{ required: true, message: 'Заполните поле' }],
         },
     },
     {
@@ -154,7 +148,6 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('promoCampaign', 'textContent'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
         },
@@ -167,7 +160,6 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
                 FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('promoCampaign', 'textContent'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
         },
@@ -180,7 +172,6 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             rules: [
                 {
                     ...getPatternAndMessage('promoCampaign', 'textContent'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
         },

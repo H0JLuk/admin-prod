@@ -124,6 +124,7 @@ const UploadPicture: React.FC<UploadPictureProps> = ({
                 valuePropName="file"
                 rules={rules || []}
                 getValueFromEvent={normFile}
+                validateTrigger="onSubmit"
             >
                 <Upload.Dragger
                     {...customProps}

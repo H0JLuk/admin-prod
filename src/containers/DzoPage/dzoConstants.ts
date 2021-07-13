@@ -67,7 +67,6 @@ export const FORM_ELEMENTS = [
                 FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('dzo', 'name'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
             name: 'dzoName',
@@ -80,7 +79,6 @@ export const FORM_ELEMENTS = [
                 FORM_RULES.REQUIRED,
                 {
                     ...getPatternAndMessage('dzo', 'code'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
             name: 'dzoCode',
@@ -94,7 +92,6 @@ export const FORM_ELEMENTS = [
             rules: [
                 {
                     ...getPatternAndMessage('dzo', 'description'),
-                    validateTrigger: 'onSubmit',
                 },
             ],
             name: 'description',

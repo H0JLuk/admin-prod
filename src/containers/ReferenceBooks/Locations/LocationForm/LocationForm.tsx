@@ -162,6 +162,7 @@ const LocationForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
                     layout="vertical"
                     id="location"
                     onFinish={onFinish}
+                    validateTrigger="onSubmit"
                 >
                     <div className={styles.formWrapper}>
                         <Row gutter={24}>
@@ -172,7 +173,6 @@ const LocationForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
                                     rules={[
                                         {
                                             ...FORM_RULES.REQUIRED,
-                                            type: 'number',
                                             message: 'Тип локации обязательный',
                                         },
                                     ]}
@@ -226,7 +226,6 @@ const LocationForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
                                         FORM_RULES.REQUIRED,
                                         {
                                             ...getPatternAndMessage('location', 'name'),
-                                            validateTrigger: 'onSubmit',
                                         },
                                     ]}
                                     validateFirst
@@ -244,7 +243,6 @@ const LocationForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
                                     rules={[
                                         {
                                             ...getPatternAndMessage('location', 'description'),
-                                            validateTrigger: 'onSubmit',
                                         },
                                     ]}
                                     validateFirst

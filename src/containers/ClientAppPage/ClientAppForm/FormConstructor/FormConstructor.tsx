@@ -78,6 +78,7 @@ const AppFormConstructor: React.FC<AppFormConstructorProps> = ({
                     className={cn({ [styles.labelBold]: isEdit })}
                     label={label}
                     normalize={normalize}
+                    validateTrigger="onSubmit"
                     validateFirst
                 >
                     <FormInputByType

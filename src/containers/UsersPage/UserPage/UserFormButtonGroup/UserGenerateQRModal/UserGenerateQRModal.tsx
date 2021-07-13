@@ -96,6 +96,7 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
                     form={form}
                     onFinish={handleFinish}
                     layout="vertical"
+                    validateTrigger="onSubmit"
                 >
                     <Form.Item
                         label={MODAL_APP_LABEL_TEXT}

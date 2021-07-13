@@ -183,6 +183,7 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
                         onFinish={handleFormFinish}
                         form={form}
                         layout="vertical"
+                        validateTrigger="onSubmit"
                     >
                         <Row>
                             <Col span={7}>

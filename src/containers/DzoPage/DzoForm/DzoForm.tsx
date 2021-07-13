@@ -279,6 +279,7 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                         onFinish={onFinish}
                         initialValues={initialData.current}
                         onFieldsChange={(isEdit && (() => setIsSaveButtonDisabled(false))) || undefined}
+                        validateTrigger="onSubmit"
                     >
                         {(FORM_ELEMENTS || []).map((row, index) => (
                             <Row
@@ -295,7 +296,6 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                                                 props.name === 'dzoCode' && !isEdit ? {
                                                     validator: checkUniqCode,
                                                     message: DZO_CODE_NOT_UNIQUE,
-                                                    validateTrigger: 'onSubmit',
                                                 } : {},
                                             ]}
                                             {...props}

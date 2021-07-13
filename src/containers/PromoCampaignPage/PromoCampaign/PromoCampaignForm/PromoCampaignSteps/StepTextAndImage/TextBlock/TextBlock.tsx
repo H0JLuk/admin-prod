@@ -29,6 +29,7 @@ const TextBlock: React.FC<TextBlockProps> = ({
             name={name}
             initialValue={initialValue}
             rules={rules}
+            validateTrigger="onSubmit"
             validateFirst
         >
             <Input.TextArea

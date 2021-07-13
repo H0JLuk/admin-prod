@@ -83,17 +83,20 @@ export function getPatternAndMessage(page: string, fieldName: string) {
     };
 }
 
+/**
+ * При работе с объектами правил для форм antd нужно обращать внимание на объект при создании правила с `required = true`
+ * Если кроме свойств `required` и `message` есть любое другое поле, а значение поля отличается от `string`,
+ * то необходимо ОБЯЗАТЕЛЬНО добавить свойство `type` в объект правила, иначе валидация будет работать некорректно
+ */
 export const FORM_RULES = {
     REQUIRED: {
         required: true,
         message: 'Заполните обязательное поле',
-        validateTrigger: 'onSubmit',
     } as Rule,
     NUMBER: {
         type: 'number',
         message: 'Значение может быть только числовым',
         transform: numberTransform,
-        validateTrigger: 'onSubmit',
     } as Rule,
     get REQUIRED_ARRAY() {
         return { ...this.REQUIRED, type: 'array' } as Rule;

@@ -156,6 +156,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             initialValue={isCopy ? `Копия: ${state.name}` : state.name}
                             normalize={removeExtraSpaces}
                             validateFirst
+                            validateTrigger="onSubmit"
                             rules={[
                                 {
                                     ...FORM_RULES.REQUIRED,
@@ -163,7 +164,6 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 },
                                 {
                                     ...getPatternAndMessage('promoCampaign', 'name'),
-                                    validateTrigger: 'onSubmit',
                                 },
                                 ({ getFieldValue }) => ({
                                     message: 'Нельзя создать копию промо-кампании с таким же названием',
@@ -175,7 +175,6 @@ const StepInfo: React.FC<StepInfoProps> = ({
 
                                         return Promise.resolve();
                                     },
-                                    validateTrigger: 'onSubmit',
                                 }),
                                 ({ getFieldValue }) => ({
                                     validator: async (_, value) => {
@@ -203,7 +202,6 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                             }
                                         }
                                     },
-                                    validateTrigger: 'onSubmit',
                                 }),
                             ]}
                         >
@@ -326,6 +324,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                     message: 'Выберите ДЗО',
                                 },
                             ]}
+                            validateTrigger="onSubmit"
                         >
                             <Select placeholder={SELECT}>
                                 {dzoList.map(option => (
@@ -380,6 +379,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                     message: 'Выберите тип промокодов',
                                 },
                             ]}
+                            validateTrigger="onSubmit"
                         >
                             <Select placeholder={SELECT}>
                                 {types_promo.map(type => (
@@ -532,6 +532,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                         message: 'Выберите витрину',
                                     },
                                 ]}
+                                validateTrigger="onSubmit"
                             >
                                 <Select placeholder={CHOOSE_SHOWCASE}>
                                     {clientApps.map(({ code, displayName }) => (
@@ -556,6 +557,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                     },
                                 ]}
                                 initialValue={state.type}
+                                validateTrigger="onSubmit"
                             >
                                 <Radio.Group onChange={changeTypePromo}>
                                     <Radio

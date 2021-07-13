@@ -14,6 +14,7 @@ import { confirmModal } from '@utils/utils';
 import { getFormattedDate } from '@utils/helper';
 import { BUTTON_TEXT } from '@constants/common';
 import { BusinessRoleDto, SaveBusinessRoleRequest } from '@types';
+import { FORM_RULES } from '@utils/validators';
 
 import styles from './BusinessRoleForm.module.css';
 
@@ -174,13 +175,14 @@ const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
                         layout="vertical"
                         onFinish={onFinish}
                         onFieldsChange={isEdit ? (() => setIsSubmitDisabled(false)) : undefined}
+                        validateTrigger="onSubmit"
                     >
                         <Row gutter={[24, 6]}>
                             <Col span={12}>
                                 <Form.Item
                                     name="name"
                                     label={LABEL.NAME}
-                                    rules={[{ required: true, message: 'Название обязательно' }]}
+                                    rules={[FORM_RULES.REQUIRED]}
                                     required
                                 >
                                     <Input
