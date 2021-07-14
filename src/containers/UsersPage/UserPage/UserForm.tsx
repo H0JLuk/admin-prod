@@ -540,7 +540,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                                         disabled={!isCorrectRoleForPartner}
                                         clearValueOnBlur
                                         clearSelectedBySearch
-                                        selectFirstValueOnBlur
+                                        selectExactValueOnBlur
                                         keyForCompareSelect="personalNumber"
                                     />
                                 ) : (
