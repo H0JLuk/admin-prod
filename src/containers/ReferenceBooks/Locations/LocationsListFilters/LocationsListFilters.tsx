@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import noop from 'lodash/noop';
-import SelectTags from '@components/SelectTags';
+import SelectTagsOnChangeByClose from '@components/SelectTags/SelectTagsOnChangeByClose';
 import AutoCompleteComponent, { AutoCompleteMethods } from '@components/AutoComplete';
 import { SearchParams } from '@components/HeaderWithActions';
 import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
@@ -36,7 +36,7 @@ const LocationsListFilters: React.FC<LocationsListFiltersProps> = ({
         })();
     }, []);
 
-    const onChangeLocationTypes = (selected: string[]) => {
+    const onChangeLocationTypes = (selected: string[] | number[]) => {
         onChangeFilter({
             ...params,
             locationTypeIds: selected as any,
@@ -61,7 +61,7 @@ const LocationsListFilters: React.FC<LocationsListFiltersProps> = ({
                 Фильтры
             </div>
             <div className={styles.filterBlock}>
-                <SelectTags
+                <SelectTagsOnChangeByClose
                     className={styles.filterItem}
                     data={locationTypesOptions.current}
                     placeholder="Тип локации"

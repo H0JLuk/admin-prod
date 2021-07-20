@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import noop from 'lodash/noop';
 import { Radio, RadioChangeEvent } from 'antd';
-import SelectTags from '@components/SelectTags';
+import SelectTagsOnChangeByClose from '@components/SelectTags/SelectTagsOnChangeByClose';
 import AutoCompleteComponent, { AutoCompleteMethods } from '@components/AutoComplete';
 import { SearchParams } from '@components/HeaderWithActions';
 import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
@@ -9,9 +9,9 @@ import { getSalePointsByText, getSalePointTypesOptions } from '@apiServices/sale
 import { getLocationsByText, getLocationTypeOptions } from '@apiServices/locationService';
 import { requestsWithMinWait } from '@utils/utils';
 import { LocationDto, SalePointDto } from '@types';
+import { SALE_POINT_TYPE, SALE_POINT_TYPE_RU } from '@constants/common';
 
 import styles from './SalePointsListFilters.module.css';
-import { SALE_POINT_TYPE, SALE_POINT_TYPE_RU } from '@constants/common';
 
 type SalePointsListFilterProps = {
     params: SearchParams;
@@ -55,14 +55,14 @@ const SalePointsListFilters: React.FC<SalePointsListFilterProps> = ({
         })();
     }, []);
 
-    const onChangeLocationTypes = (selected: string[]) => {
+    const onChangeLocationTypes = (selected: string[] | number[]) => {
         onChangeFilter({
             ...params,
             locationTypeIds: selected as any,
         });
     };
 
-    const onChangeSalePointTypes = (selected: string[]) => {
+    const onChangeSalePointTypes = (selected: string[] | number[]) => {
         onChangeFilter({
             ...params,
             salePointTypeIds: selected as any,
@@ -106,7 +106,7 @@ const SalePointsListFilters: React.FC<SalePointsListFilterProps> = ({
                 Фильтры
             </div>
             <div className={styles.filterBlock}>
-                <SelectTags
+                <SelectTagsOnChangeByClose
                     className={styles.filterItem}
                     data={locationTypesOptions.current}
                     placeholder="Тип локации"
@@ -135,7 +135,7 @@ const SalePointsListFilters: React.FC<SalePointsListFilterProps> = ({
                 />
             </div>
             <div className={styles.filterBlock}>
-                <SelectTags
+                <SelectTagsOnChangeByClose
                     className={styles.filterItem}
                     data={salePointTypesOptions.current}
                     placeholder="Тип точки продажи"

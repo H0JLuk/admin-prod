@@ -33,7 +33,7 @@
 }
 
 .select :global(.ant-select-selection-overflow) {
-    max-width: 85%;
+    max-width: calc(100% - 70px);
 }
 /*  /select */
 

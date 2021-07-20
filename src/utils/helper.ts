@@ -199,3 +199,8 @@ export function compareArrayOfNumbers(arrA: number[], arrB: number[]) {
 }
 
 export const numberTransform = (value: string) => value ? Number(value) : '';
+
+export function onPreventAndStop(event: React.BaseSyntheticEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+}

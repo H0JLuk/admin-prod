@@ -2,22 +2,24 @@ import React from 'react';
 import cn from 'classnames';
 import { CloseOutlined, DownOutlined } from '@ant-design/icons';
 import { Checkbox, Select, SelectProps } from 'antd';
+import { onPreventAndStop } from '@utils/helper';
 
 import styles from './SelectTags.module.css';
 
 // OT = OptionType
-interface ISelectTags<OT> {
+export interface ISelectTags<OT = any> {
     className?: string;
     showClearIcon?: boolean;
     canRemoveSelected?: boolean;
-    onChange?: (value: string[]) => void;
+    onChange?: (value: string[] | number[]) => void;
     data: OT[];
-    value?: number[];
+    value?: number[] | string[];
     nameKey?: keyof OT;
     idKey?: keyof OT;
     placeholder: string;
     disabled?: boolean;
     maxTagTextLength?: number;
+    onDropdownVisibleChange?: SelectProps<OT>['onDropdownVisibleChange'];
 }
 
 const SelectTags = <OT extends Record<string, any>>({
@@ -32,6 +34,7 @@ const SelectTags = <OT extends Record<string, any>>({
     placeholder,
     disabled,
     maxTagTextLength = 12,
+    onDropdownVisibleChange,
 }: ISelectTags<OT>) => {
     const stringValue = value.map(String);
 
@@ -50,6 +53,7 @@ const SelectTags = <OT extends Record<string, any>>({
                     <CloseOutlined
                         height="15px"
                         width="15px"
+                        onMouseDown={onPreventAndStop}
                         onClick={onClose}
                     />
                 )}
@@ -91,6 +95,7 @@ const SelectTags = <OT extends Record<string, any>>({
             tagRender={selectTagRender}
             onChange={onChange}
             dropdownClassName={styles.dropdown}
+            onDropdownVisibleChange={onDropdownVisibleChange}
             options={options}
             value={stringValue}
             disabled={disabled}
