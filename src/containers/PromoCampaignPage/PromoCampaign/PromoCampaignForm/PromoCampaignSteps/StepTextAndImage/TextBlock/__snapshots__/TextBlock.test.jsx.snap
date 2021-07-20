@@ -2,7 +2,7 @@
 
 exports[`<TextBlock /> tests TextBlock snapshot 1`] = `
 "<div className=\\"textBlock\\">
-  <FormItem label=\\"Условия\\" name={{...}} initialValue=\\"\\" rules={{...}} validateFirst={true}>
+  <FormItem label=\\"Условия\\" name={{...}} initialValue=\\"\\" rules={{...}} validateTrigger=\\"onSubmit\\" validateFirst={true}>
     <ForwardRef maxLength={60} placeholder=\\"Текст условий\\" rows={3} className=\\"textArea\\" showCount={{...}} />
   </FormItem>
 </div>"

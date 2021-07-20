@@ -9,7 +9,6 @@ const SALE_POINT_NAME = 'Точка продажи';
 const SALE_POINT_TYPE_LABEL = 'Тип';
 const SALE_POINT_KIND = 'Вид точки продажи';
 const LOCATION_NAME = 'Локация';
-const LOCATION_TYPE = 'Тип локации';
 
 const EMPTY_TABLE = {
     firstMessagePart: 'Мы ничего не нашли.',
@@ -54,16 +53,14 @@ const SalePointsList: React.FC<LocationsListProps> = ({
                 render={(item) => columnRender(item, SALE_POINT_TYPE_LABEL)}
             />
             <Table.Column
-                width="20%"
+                width="45%"
                 key="locationName"
                 dataIndex={['location', 'name']}
-                render={(item) => columnRender(item, LOCATION_NAME)}
-            />
-            <Table.Column
-                width="25%"
-                key="locationType"
-                dataIndex={['location', 'type', 'name']}
-                render={(item) => columnRender(item, LOCATION_TYPE)}
+                render={(item, row: SalePointDto) => {
+                    const parentName = row.location.parentName ? `, ${row.location.parentName}` : '';
+                    const locationType = row.location.type.name || '';
+                    return columnRender(`${locationType} ${item}${parentName}`, LOCATION_NAME);
+                }}
             />
             <Table.Column
                 width="15%"
