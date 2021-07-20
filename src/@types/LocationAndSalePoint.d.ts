@@ -20,7 +20,7 @@ export type LocationDto = {
     deleted: boolean;
     startDate?: string;
     endDate?: string | null;
-    parentId: number;
+    parentId?: number;
 };
 
 type SalePointType = {

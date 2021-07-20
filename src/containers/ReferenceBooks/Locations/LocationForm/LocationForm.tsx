@@ -115,11 +115,12 @@ const LocationForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
                 typeId,
                 parentLocation,
             } = dataFromForm;
+
             const requestData = {
                 name,
                 description,
                 typeId,
-                parentId: parentLocation.id,
+                parentId: parentLocation?.id,
             };
 
             setLoading(true);
@@ -188,12 +189,6 @@ const LocationForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
                                     label={PARENT_LOCATION_FIELD.label}
                                     name={PARENT_LOCATION_FIELD.name}
                                     validateFirst
-                                    rules={[
-                                        {
-                                            ...FORM_RULES.REQUIRED_OBJECT,
-                                            message: 'Родительская локация обязательна',
-                                        },
-                                    ]}
                                     trigger="onSelect"
                                 >
                                     <AutoCompleteComponent<LocationDto>

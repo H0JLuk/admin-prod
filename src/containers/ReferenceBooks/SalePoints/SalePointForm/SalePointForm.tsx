@@ -150,7 +150,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                 description,
                 name,
                 locationId: location.id,
-                parentId: parentSalePoint.id,
+                parentId: parentSalePoint?.id,
                 typeId,
             };
             setLoading(true);
@@ -229,12 +229,6 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                     label={PARENT_SALE_POINT_FIELD.label}
                                     name={PARENT_SALE_POINT_FIELD.name}
                                     validateFirst
-                                    rules={[
-                                        {
-                                            ...FORM_RULES.REQUIRED_OBJECT,
-                                            message: 'Родительская точка продажи обязательна',
-                                        },
-                                    ]}
                                     trigger="onSelect"
                                 >
                                     <AutoCompleteComponent<SalePointDto>
