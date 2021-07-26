@@ -14,6 +14,8 @@ import {
     VisibilitySettingsRequest,
 } from '@types';
 
+const stringPropertiesNames = ['details_button_label', 'details_button_url', 'disabled_banner_types'];
+
 export function getPromoCampaignList() {
     return Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { checkVisibility: false }, getReqOptions());
 }
@@ -47,12 +49,14 @@ export function getPromoCampaignById(id: number) {
 }
 
 function normalizePromoCampaign<PromoCampaign extends PromoCampaignCreateDto>(promoCampaign: PromoCampaign) {
+    const stringProperties = stringPropertiesNames
+        .reduce((acc, curr) => ({ ...acc, [curr]: JSON.stringify(promoCampaign.settings[curr]) }), {});
     return {
         ...promoCampaign,
         offerDuration: promoCampaign?.offerDuration || DEFAULT_OFFER_DURATION,
         settings: {
             ...promoCampaign.settings,
-            disabled_banner_types: JSON.stringify(promoCampaign.settings.disabled_banner_types),
+            ...stringProperties,
         },
     };
 }
