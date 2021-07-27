@@ -1,8 +1,8 @@
 import React from 'react';
 import { Location } from 'history';
-import BundleFormInfo from './BundleFormInfo/BundleFormInfo';
-import RelatedFormInfo from './RelatedFormInfo/RelatedFormInfo';
-import Header from '@components/Header/Header';
+import BundleFormInfo from './BundleFormInfo';
+import RelatedFormInfo from './RelatedFormInfo';
+import Header from '@components/Header';
 import { BundleTypes, BUNDLE_LOCATION_KEY } from '../groupPageConstants';
 import { RouteComponentProps } from 'react-router-dom';
 import { BundleData } from '../GroupForms';

@@ -156,7 +156,7 @@ const DzoPage: React.FC<IDzoPageProp> = ({ matchPath }) => {
                     copyDataList={copyDzoList.current}
                     matchPath={matchPath}
                     inputPlaceholder={SEARCH_INPUT_PLACEHOLDER}
-                    sortByFieldKey="dzoName"
+                    filterByFieldKey="dzoName"
                     menuItems={DROPDOWN_SORT_MENU}
                     onChangeInput={clearSelectedItems}
                 />}

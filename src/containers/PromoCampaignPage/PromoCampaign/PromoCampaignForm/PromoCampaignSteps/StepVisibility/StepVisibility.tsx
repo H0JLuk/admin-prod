@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { Button } from 'antd';
 import { PromoCampaignFormVisibilitySettingCreateDto } from '../../types';
-import PromoCampaignVisibilitySettingInput from '../../../PromoCampaignVisibilitySettingInput/PromoCampaignVisibilitySettingInput';
-import PromoCampaignVisibilitySetting from '../../../PromoCampaignVisibilitySetting/PromoCampaignVisibilitySetting';
+import PromoCampaignVisibilitySettingInput from '../../../PromoCampaignVisibilitySettingInput';
+import PromoCampaignVisibilitySetting from '../../../PromoCampaignVisibilitySetting';
 import { LocationDto, SalePointDto } from '@types';
 
 import cross from '@imgs/cross.svg';

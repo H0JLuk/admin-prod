@@ -106,7 +106,7 @@ const PromoCampaignList: React.FC = () => {
                     showSearchInput={!sortable}
                     showSorting={!sortable}
                     triggerResetParams={history.location}
-                    sortByFieldKey="name"
+                    filterByFieldKey="name"
                     setDataList={setPromoCampaignList}
                     copyDataList={copyPromoCampaignList.current}
                     matchPath={match.path}

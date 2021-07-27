@@ -6,7 +6,7 @@ import noop from 'lodash/noop';
 import { DIRECTION } from '@constants/common';
 import ButtonsBlock from './ButtonsBlock';
 import SearchInputWithAction from './SearchInputWithAction';
-import DropdownWithAction from '../DropdownWithAction/DropdownWithAction';
+import DropdownWithAction from '@components/DropdownWithAction';
 import {
     defaultSearchParams,
     getURLSearchParams,
@@ -31,7 +31,8 @@ function HeaderWithActions<DataList>({
     setDataList = noop,
     copyDataList = EMPTY_ARRAY,
     matchPath,
-    sortByFieldKey,
+    filterByFieldKey,
+    initialSortBy,
     menuItems = [],
     inputPlaceholder,
     resetLabel,
@@ -46,7 +47,12 @@ function HeaderWithActions<DataList>({
 }: HeaderWithActionsProps<DataList>) {
     const history = useHistory();
     const { search } = history.location;
-    const [paramsSync, setParamsSync] = useState<SearchParams>(getSearchParamsFromUrl(search));
+    const [paramsSync, setParamsSync] = useState<SearchParams>(
+        () => getSearchParamsFromUrl(search, {
+            ...defaultSearchParams,
+            sortBy: initialSortBy || defaultSearchParams.sortBy,
+        }),
+    );
     const initialRender = useRef(true);
 
     useEffect(() => {
@@ -96,8 +102,8 @@ function HeaderWithActions<DataList>({
             return;
         }
 
-        setDataList(sortItemsBySearchParams(searchParams, copyDataList, sortByFieldKey!));
-    }, [copyDataList, enableHistoryReplace, history, matchPath, setDataList, sortByFieldKey]);
+        setDataList(sortItemsBySearchParams(searchParams, copyDataList, filterByFieldKey!));
+    }, [copyDataList, enableHistoryReplace, history, matchPath, setDataList, filterByFieldKey]);
 
     const sortData = enableAsyncSort ? setAsyncParams : setSyncParams;
 

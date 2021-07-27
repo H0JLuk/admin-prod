@@ -3,12 +3,12 @@ import { BannerCreateDto, BannerCreateTextDto, BannerDto, BannerTextDto, PromoCa
 import cn from 'classnames';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Button, Form, FormItemProps, FormProps } from 'antd';
-import StepInfo from './PromoCampaignSteps/StepInfo/StepInfo';
-import StepVisibility from './PromoCampaignSteps/StepVisibility/StepVisibility';
-import StepTextAndImage from './PromoCampaignSteps/StepTextAndImage/StepTextAndImage';
-import PromoCampaignSideBar from '../PromoCampaignSideBar/PromoCampaignSideBar';
-import callConfirmModalForPromoCodeTypeChanging from './PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging/ConfirmModalForPromoCodeTypeChanging';
-import Header from '@components/Header/Header';
+import StepInfo from './PromoCampaignSteps/StepInfo';
+import StepVisibility from './PromoCampaignSteps/StepVisibility';
+import StepTextAndImage from './PromoCampaignSteps/StepTextAndImage';
+import PromoCampaignSideBar from '../PromoCampaignSideBar';
+import callConfirmModalForPromoCodeTypeChanging from './PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging';
+import Header from '@components/Header';
 import {
     allStep,
     bannersFields,

@@ -4,14 +4,14 @@ import { ROUTE, ROUTE_OWNER } from '@constants/route';
 
 import PromoCampaignPageRouter from '@containers/PromoCampaignPage/PromoCampaignPageRouter';
 import ClientAppPageRouter from '@containers/ClientAppPage/ClientAppPageRouter';
-import CategoryPage from '@containers/CategoryPage/CategoryPage';
-import Dashboard from '@containers/Dashboard/Dashboard';
+import CategoryPage from '@containers/CategoryPage';
+import Dashboard from '@containers/Dashboard';
 import DzoPageRouter from '@containers/DzoPage/DzoPageRouter';
-import ReportsPage from '@containers/ReportsPage/ReportsPage';
-import PresentationPage from '@containers/PresentationPage/PresentationPage';
+import ReportsPage from '@containers/ReportsPage';
+import PresentationPage from '@containers/PresentationPage';
 import GroupsPageRouter from '@containers/GroupsPage/GroupsPageRouter';
 import ConsentsPageRouter from '@containers/ConsentsPage/ConsentsPageRouter';
-import Sidebar from '@components/Sidebar/Sidebar';
+import Sidebar from '@components/Sidebar';
 
 import styles from './OwnerPage.module.css';
 

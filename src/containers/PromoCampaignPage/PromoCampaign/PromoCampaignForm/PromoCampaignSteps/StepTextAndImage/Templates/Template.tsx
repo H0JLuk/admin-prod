@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { BannerCreateDto, BannerCreateTextDto } from '@types';
 import { Col, FormItemProps, Row } from 'antd';
-import UploadPicture from '@components/UploadPicture/UploadPicture';
-import { getLabel } from '@components/LabelWithTooltip/LabelWithTooltip';
+import UploadPicture from '@components/UploadPicture';
+import { getLabel } from '@components/LabelWithTooltip';
 import TextBlock from '../TextBlock';
 import { INFO_ROWS, INFO_ROWS_KEYS, TemplateRowsValues } from './templateConstants';
 import { BUTTON_TEXT } from '@constants/common';

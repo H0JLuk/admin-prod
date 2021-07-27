@@ -5,8 +5,7 @@ import { History } from 'history';
 
 import Header from '@components/Header';
 import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
-import { ClientAppDto } from '@types';
-import ClientAppItem from './ClientAppItem/ClientAppItem';
+import ClientAppItem from './ClientAppItem';
 
 import { getActiveClientApps, reorderClientApp } from '@apiServices/clientAppService';
 import { getRole } from '@apiServices/sessionService';
@@ -14,6 +13,7 @@ import { arrayMove } from '@utils/helper';
 import { CLIENT_APPS_PAGES } from '@constants/route';
 import ROLES from '@constants/roles';
 import { BUTTON_TEXT } from '@constants/common';
+import { ClientAppDto } from '@types';
 
 import style from './ClientAppPage.module.css';
 
@@ -126,7 +126,7 @@ const ClientAppPage: React.FC<ClientAppPageProps> = ({ matchPath, history }) => 
                     matchPath={matchPath}
                     copyDataList={copyDataList.current}
                     inputPlaceholder={SEARCH_INPUT_PLACEHOLDER}
-                    sortByFieldKey="displayName"
+                    filterByFieldKey="displayName"
                     menuItems={DROPDOWN_SORT_MENU}
                 />
                 <div className={style.content}>

@@ -140,7 +140,8 @@ const BusinessRolesList: React.FC<BusinessRolesListProps> = ({
                 copyDataList={copyBusinessRolesList.current}
                 matchPath={matchPath}
                 inputPlaceholder={SEARCH_INPUT_PLACEHOLDER}
-                sortByFieldKey="name"
+                filterByFieldKey="name"
+                initialSortBy="name"
                 menuItems={DROPDOWN_SORT_MENU}
                 onChangeInput={clearSelectedItems}
             />

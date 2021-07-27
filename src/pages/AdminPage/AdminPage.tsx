@@ -7,7 +7,7 @@ import Dashboard from '@containers/Dashboard';
 import DzoPageRouter from '@containers/DzoPage/DzoPageRouter';
 import UserPageRouter from '@containers/UsersPage/UserPageRouter';
 import ReportsPage from '@containers/ReportsPage';
-import PresentationPage from '@containers/PresentationPage/PresentationPage';
+import PresentationPage from '@containers/PresentationPage';
 import PromoCampaignPageRouter from '@containers/PromoCampaignPage/PromoCampaignPageRouter';
 import ClientAppPageRouter from '@containers/ClientAppPage/ClientAppPageRouter';
 import GroupsPageRouter from '@containers/GroupsPage/GroupsPageRouter';

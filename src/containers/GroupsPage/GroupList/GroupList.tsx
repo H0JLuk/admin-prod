@@ -189,7 +189,7 @@ const GroupList: React.FC<GroupListProps> = ({ matchPath }) => {
                         copyDataList={copyDataList}
                         matchPath={matchPath}
                         inputPlaceholder={selectedSection === BundleTypes.IDEA ? SEARCH_INPUT.BUNDLE_SEARCH : SEARCH_INPUT.PROMO_SEARCH}
-                        sortByFieldKey="name"
+                        filterByFieldKey="name"
                         menuItems={DROPDOWN_SORT_MENU}
                         onChangeInput={onChangeInput}
                     />

@@ -8,7 +8,7 @@ import { getDzoList } from '@apiServices/dzoService';
 import { getPromoCampaignById } from '@apiServices/promoCampaignService';
 import { saveAppCode } from '@apiServices/sessionService';
 import useBodyClassForSidebar from '@hooks/useBodyClassForSidebar';
-import Header from '@components//Header/Header';
+import Header from '@components/Header';
 import { requestsWithMinWait } from '@utils/utils';
 import DashboardFilterTag from './DashboardFilterTag';
 import { DASHBOARD_FILTERS } from './dashboardFilterTypes';

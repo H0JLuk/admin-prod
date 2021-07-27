@@ -4,7 +4,7 @@ import { match as Match } from 'react-router-dom';
 import noop from 'lodash/noop';
 import { Button } from 'antd';
 import { addVisibilitySetting } from '@apiServices/promoCampaignService';
-import PromoCampaignVisibilitySettingInput from '../../PromoCampaignVisibilitySettingInput/PromoCampaignVisibilitySettingInput';
+import PromoCampaignVisibilitySettingInput from '../../PromoCampaignVisibilitySettingInput';
 import Header from '@components/Header';
 import { LocationDto, SalePointDto } from '@types';
 

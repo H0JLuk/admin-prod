@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState, useRef, useLayoutEffect } from 'react';
 import { Form, Input, Row, Col, Button, Select, FormItemProps, SelectProps } from 'antd';
-import UploadPicture from '@components/UploadPicture/UploadPicture';
+import UploadPicture from '@components/UploadPicture';
 import { ReactComponent as Cross } from '@imgs/cross.svg';
 import { ReactComponent as LoadingSpinner } from '@imgs/loading-spinner.svg';
 import { createGroupLink, editCampaignGroupTextAndBanners, editCampaignGroupLinks, getInitialValue } from '../groupForm.utils';

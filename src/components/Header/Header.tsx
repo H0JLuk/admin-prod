@@ -1,7 +1,7 @@
 import React from 'react';
 import { LeftOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
-import DropdownWithLogout from '../DropdownWithLogout/DropdownWithLogout';
+import DropdownWithLogout from '@components/DropdownWithLogout';
 import MenuLinks from './MenuLinks';
 
 import styles from './Header.module.css';

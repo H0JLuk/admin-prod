@@ -9,10 +9,10 @@ import {
 import { getStaticUrl } from '@apiServices/settingsService';
 import { Button } from 'antd';
 import { CATEGORY_FORM } from '@components/Form/forms';
-import Header from '@components/Header/Header';
+import Header from '@components/Header';
 import { Errors, getErrorText } from '@constants/errors';
-import CustomModal from '@components/CustomModal/CustomModal';
-import CategoryItem from '@components/CategoryItem/CategoryItem';
+import CustomModal from '@components/CustomModal';
+import CategoryItem from '@components/CategoryItem';
 import { movementDirections } from '@constants/movementDirections';
 import Form from '@components/Form';
 import cross from '@imgs/cross.svg';

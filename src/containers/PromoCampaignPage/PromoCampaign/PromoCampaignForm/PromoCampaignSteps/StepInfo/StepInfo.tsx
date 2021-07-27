@@ -13,7 +13,7 @@ import { TOOLTIP_TEXT_FOR_URL_LABEL } from '@constants/jsxConstants';
 import PROMO_CAMPAIGNS from '@constants/promoCampaigns';
 import { urlCheckRule } from '@utils/urlValidator';
 import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
-import { getLabel } from '@components/LabelWithTooltip/LabelWithTooltip';
+import { getLabel } from '@components/LabelWithTooltip';
 import { getAppCode } from '@apiServices/sessionService';
 import promoCodeTypes from '@constants/promoCodeTypes';
 import { removeExtraSpaces, trimValue } from '@utils/helper';

@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { getFormattedDate } from '@utils/helper';
 import { PROMO_CAMPAIGN_PAGES } from '@constants/route';
 import Header from '@components/Header';
-import PromoCampaignSideBar from '../PromoCampaignSideBar/PromoCampaignSideBar';
+import PromoCampaignSideBar from '../PromoCampaignSideBar';
 import StepInfo from './Steps/StepInfo';
 import StepTextAndImage from './Steps/StepTextAndImage';
 import StepVisibility from './Steps/StepVisibility';

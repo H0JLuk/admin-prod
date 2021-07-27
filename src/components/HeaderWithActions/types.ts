@@ -33,7 +33,8 @@ export type HeaderWithActionsProps<DataList> = {
     setDataList?: ((data: DataList[]) => void) | React.Dispatch<React.SetStateAction<DataList[]>>;
     copyDataList?: DataList[];
     matchPath?: string;
-    sortByFieldKey?: keyof DataList;
+    filterByFieldKey?: keyof DataList;
+    initialSortBy?: keyof DataList & string;
     menuItems: MenuItem[];
     inputPlaceholder: string;
     resetLabel?: string;

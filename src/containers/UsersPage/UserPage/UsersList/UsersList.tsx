@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useEffect, useMemo, useRef } from 'react';
 import { useHistory, generatePath, useLocation } from 'react-router-dom';
 import { Button, TableProps } from 'antd';
-import RestoredTableUser from './RestoredTableUser/RestoredTableUser';
-import EmptyUsersPage from './EmptyUsersPage/EmptyUsersPage';
-import DownloadDropDown from './DownloadDropDown/DownloadDropDown';
+import RestoredTableUser from './RestoredTableUser';
+import EmptyUsersPage from './EmptyUsersPage';
+import DownloadDropDown from './DownloadDropDown';
 import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
 import TableDeleteModal from '@components/TableDeleteModal';
 import Header from '@components/Header';

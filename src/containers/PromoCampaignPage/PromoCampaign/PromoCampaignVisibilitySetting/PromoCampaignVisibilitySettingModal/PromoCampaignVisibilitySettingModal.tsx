@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import PromoCampaignVisibilitySettingInput from '../../PromoCampaignVisibilitySettingInput/PromoCampaignVisibilitySettingInput';
+import PromoCampaignVisibilitySettingInput from '../../PromoCampaignVisibilitySettingInput';
 import { addVisibilitySetting } from '@apiServices/promoCampaignService';
 import { Modal } from 'antd';
 import { LocationDto, SalePointDto } from '@types';

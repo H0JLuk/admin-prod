@@ -42,7 +42,7 @@ const SEARCH_INPUT_PLACEHOLDER = 'Поиск точки продажи';
 const DEFAULT_PARAMS: SearchParams = {
     pageNo: 0,
     pageSize: 10,
-    sortBy: '',
+    sortBy: 'salePointName',
     direction: DIRECTION.ASC,
     filterText: '',
     totalElements: 0,

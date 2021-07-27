@@ -1,8 +1,8 @@
 import React from 'react';
 import { MenuOutlined } from '@ant-design/icons';
-import ClientAppMenu from '../ClientAppMenu/ClientAppMenu';
-import { getLinkForPromoCampaignPage } from '../../../utils/appNavigation';
-import { saveAppCode } from '../../../api/services/sessionService';
+import ClientAppMenu from '../ClientAppMenu';
+import { getLinkForPromoCampaignPage } from '@utils/appNavigation';
+import { saveAppCode } from '@apiServices/sessionService';
 import { History } from 'history';
 import { ClientAppDto } from '@types';
 

@@ -41,7 +41,7 @@ const SEARCH_INPUT_PLACEHOLDER = 'Поиск локации';
 const DEFAULT_PARAMS: SearchParams = {
     pageNo: 0,
     pageSize: 10,
-    sortBy: '',
+    sortBy: 'locationName',
     direction: DIRECTION.ASC,
     filterText: '',
     totalElements: 0,

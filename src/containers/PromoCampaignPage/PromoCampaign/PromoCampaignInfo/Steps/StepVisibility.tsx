@@ -1,5 +1,5 @@
 import React from 'react';
-import PromoCampaignVisibilitySetting from '../../PromoCampaignVisibilitySetting/PromoCampaignVisibilitySetting';
+import PromoCampaignVisibilitySetting from '../../PromoCampaignVisibilitySetting';
 
 const StepVisibility = () => (
     <PromoCampaignVisibilitySetting hideHeader searchAndSortMode={false} addNewByModal />

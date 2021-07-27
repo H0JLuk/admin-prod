@@ -4,7 +4,7 @@ import { BundleDto, BundleLink } from '@types';
 import { History } from 'history';
 import cn from 'classnames';
 import { Row, Col, Button } from 'antd';
-import ImagesBlock from '@components/ImagesBlock/ImagesBlock';
+import ImagesBlock from '@components/ImagesBlock';
 import { associationGroupRows, BundleRowsValueDto } from '../groupInfo.constants';
 import { confirmModal, errorModal, successModal } from '@utils/utils';
 import { deleteCampaignGroup } from '@apiServices/campaignGroupService';
