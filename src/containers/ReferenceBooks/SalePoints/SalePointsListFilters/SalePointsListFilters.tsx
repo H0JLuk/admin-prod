@@ -7,7 +7,7 @@ import { SearchParams } from '@components/HeaderWithActions';
 import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { getSalePointsByText, getSalePointTypesOptions } from '@apiServices/salePointService';
 import { getLocationsByText, getLocationTypeOptions } from '@apiServices/locationService';
-import { requestsWithMinWait } from '@utils/utils';
+import { getStringOptionValueByDescription, getStringOptionValue, requestsWithMinWait } from '@utils/utils';
 import { LocationDto, SalePointDto } from '@types';
 import { SALE_POINT_TYPE, SALE_POINT_TYPE_RU } from '@constants/common';
 
@@ -129,7 +129,7 @@ const SalePointsListFilters: React.FC<SalePointsListFilterProps> = ({
                             highlightValue={searchValue}
                         />
                     )}
-                    renderOptionStringValue={({ name }) => name}
+                    renderOptionStringValue={getStringOptionValue}
                     disabled={disabledAll}
                     componentMethods={parentLocationMethods}
                 />
@@ -158,7 +158,7 @@ const SalePointsListFilters: React.FC<SalePointsListFilterProps> = ({
                             highlightValue={searchValue}
                         />
                     )}
-                    renderOptionStringValue={({ name }) => name}
+                    renderOptionStringValue={getStringOptionValueByDescription}
                     disabled={disabledAll}
                     componentMethods={parentSalePointMethods}
                 />

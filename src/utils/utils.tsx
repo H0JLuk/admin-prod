@@ -46,6 +46,14 @@ export function getStringOptionValue({ parentName = '', name = '' } = {}) {
     return [parentName, name].join(', ');
 }
 
+export function getStringOptionValueByDescription({ name = '', description = '' } = {}) {
+    if (!description) {
+        return name ?? '';
+    }
+
+    return [name, description].join(', ');
+}
+
 export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

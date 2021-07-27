@@ -12,7 +12,7 @@ import { getSalePointsByText, getPromoCampaignList } from '@apiServices/promoCam
 import { getDzoList } from '@apiServices/dzoService';
 import { getPromoCodeStatistics } from '@apiServices/promoCodeService';
 import { DEFAULT_SLEEP_TIME } from '@constants/common';
-import { sleep } from '@utils/utils';
+import { getStringOptionValueByDescription, sleep } from '@utils/utils';
 import { downloadFile } from '@utils/helper';
 import { PromoCampaignDto, DzoDto, SalePointDto } from '@types';
 
@@ -244,9 +244,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                                 onSelect={this.handleSalePointOfferSelect}
                                 requestFunction={getSalePointsByText}
                                 placeholder={UNSPECIFIED_TITLE}
-                                renderOptionStringValue={
-                                    ({ name, description }) => description ? `${name}, ${description}` : name
-                                }
+                                renderOptionStringValue={getStringOptionValueByDescription}
                                 renderOptionItemLabel={({ name, parentName }: any, value: string) => (
                                     <AutocompleteOptionLabel
                                         name={name}
@@ -302,9 +300,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                                     onSelect={this.handleSalePointPromoSelect}
                                     requestFunction={getSalePointsByText}
                                     placeholder={UNSPECIFIED_TITLE}
-                                    renderOptionStringValue={
-                                        ({ name, description }) => description ? `${name}, ${description}` : name
-                                    }
+                                    renderOptionStringValue={getStringOptionValueByDescription}
                                     renderOptionItemLabel={({ name, parentName }: any, value: string) => (
                                         <AutocompleteOptionLabel
                                             name={name}

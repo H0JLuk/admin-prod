@@ -5,6 +5,7 @@ import AutoCompleteComponent, { AutoCompleteMethods } from '@components/AutoComp
 import { SearchParams } from '@components/HeaderWithActions';
 import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { getLocationsByText, getLocationTypeOptions } from '@apiServices/locationService';
+import { getStringOptionValue } from '@utils/utils';
 import { LocationDto } from '@types';
 
 import styles from './LocationsListFilters.module.css';
@@ -84,7 +85,7 @@ const LocationsListFilters: React.FC<LocationsListFiltersProps> = ({
                             highlightValue={searchValue}
                         />
                     )}
-                    renderOptionStringValue={({ name }) => name}
+                    renderOptionStringValue={getStringOptionValue}
                     disabled={disabledAll}
                     componentMethods={parentLocationMethods}
                 />

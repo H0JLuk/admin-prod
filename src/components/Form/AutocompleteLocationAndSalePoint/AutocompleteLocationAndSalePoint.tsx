@@ -7,7 +7,7 @@ import { AutoComplete, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import AutocompleteOptionLabel from './AutocompleteOptionLabel';
 import { createSearchDataAndPassLocation, getResultsByTextAndType } from './AutocompleteHelper';
-import { getStringOptionValue } from '@utils/utils';
+import { getStringOptionValueByDescription, getStringOptionValue } from '@utils/utils';
 import { LocationDto, SalePointDto, SearchType } from '@types';
 import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
 
@@ -122,10 +122,10 @@ const AutocompleteLocationAndSalePoint: React.FC<AutocompleteLocationAndSalePoin
         try {
             const searchResult = await getResultsByTextAndType(searchValue, typeSearch, newLocationId);
 
-            setState((state) => ({
-                ...state,
+            setState((prev) => ({
+                ...prev,
                 [typeSearch]: {
-                    ...state[typeSearch],
+                    ...prev[typeSearch],
                     results: searchResult,
                 },
             }));
@@ -142,28 +142,28 @@ const AutocompleteLocationAndSalePoint: React.FC<AutocompleteLocationAndSalePoin
             throw Error('Incorrect `typeSearch` param');
         }
 
-        setState(state => ({
-            ...state,
+        setState(prev => ({
+            ...prev,
             [typeSearch]: {
-                ...state[typeSearch],
+                ...prev[typeSearch],
                 value: searchValue,
             },
         }));
 
         if (typeSearch === 'searchLocation') {
             if (!searchValue && !state.searchSalePoint.value) {
-                setState(state => ({
-                    ...state,
+                setState(prev => ({
+                    ...prev,
                     searchSalePoint: {
-                        ...state.searchSalePoint,
+                        ...prev.searchSalePoint,
                         results: [],
                     },
                 }));
             }
 
             if (searchValue.length < 2) {
-                setState(state => ({
-                    ...state,
+                setState(prev => ({
+                    ...prev,
                     [typeSearch]: {
                         value: searchValue,
                         results: [],
@@ -200,9 +200,9 @@ const AutocompleteLocationAndSalePoint: React.FC<AutocompleteLocationAndSalePoin
         }
 
         changeLocation(data);
-        setState((state) => ({
-            ...state,
-            searchLocation: { ...state.searchLocation, value },
+        setState((prev) => ({
+            ...prev,
+            searchLocation: { ...prev.searchLocation, value },
         }));
     };
 
@@ -215,10 +215,10 @@ const AutocompleteLocationAndSalePoint: React.FC<AutocompleteLocationAndSalePoin
         }
 
         changeSalePoint(salePoint);
-        setState((state) => ({
-            ...state,
-            searchSalePoint: { ...state.searchSalePoint, value },
-            searchLocation: searchLocation ? searchLocation : state.searchLocation,
+        setState((prev) => ({
+            ...prev,
+            searchSalePoint: { ...prev.searchSalePoint, value },
+            searchLocation: searchLocation ? searchLocation : prev.searchLocation,
         }));
     };
 
@@ -258,7 +258,7 @@ const AutocompleteLocationAndSalePoint: React.FC<AutocompleteLocationAndSalePoin
 
     const salePointOptions: SalePointOption[] = searchSalePoint.results.map((el) => ({
         label: renderOptionLabelByType(el, 'searchSalePoint'),
-        value: `${el.name}, ${el.description}`,
+        value: getStringOptionValueByDescription(el),
         key: el.id,
         data: el,
     }));

@@ -13,7 +13,7 @@ import {
     getSalePointsByText,
     getSalePointTypesOptions,
 } from '@apiServices/salePointService';
-import { confirmModal, getStringOptionValue } from '@utils/utils';
+import { confirmModal, getStringOptionValueByDescription, getStringOptionValue } from '@utils/utils';
 import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
 import {
     EDIT_MODE,
@@ -235,7 +235,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                         placeholder={PARENT_SALE_POINT_FIELD.placeholder}
                                         requestFunction={getSalePointsByText}
                                         componentMethods={salePointMethods}
-                                        renderOptionStringValue={getStringOptionValue}
+                                        renderOptionStringValue={getStringOptionValueByDescription}
                                         renderOptionItemLabel={
                                             ({ name, parentName }, value) => (
                                                 <AutocompleteOptionLabel
