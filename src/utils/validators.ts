@@ -52,6 +52,13 @@ export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
             message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
         },
     },
+    businessRole: {
+        name: commonRule,
+        description: {
+            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+        },
+    },
     location: {
         name: commonRule,
         description: {

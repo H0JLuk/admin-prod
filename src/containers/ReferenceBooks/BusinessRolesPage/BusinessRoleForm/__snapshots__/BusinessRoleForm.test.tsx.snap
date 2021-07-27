@@ -54,6 +54,7 @@ exports[`BusinessRoleList test should match snapshot 1`] = `
                       <input
                         class="ant-input"
                         id="name"
+                        maxlength="50"
                         placeholder="Укажите название"
                         type="text"
                         value=""

@@ -220,6 +220,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                     <Input
                                         placeholder={SALE_POINT_NAME_FIELD.placeholder}
                                         allowClear
+                                        maxLength={50}
                                     />
                                 </Form.Item>
                             </Col>
@@ -263,7 +264,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                 >
                                     <Input.TextArea
                                         placeholder={SALE_POINT_DESCRIPTION_FIELD.placeholder}
-                                        maxLength={140}
+                                        maxLength={300}
                                     />
                                 </Form.Item>
                             </Col>

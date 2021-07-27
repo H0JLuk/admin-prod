@@ -36,6 +36,7 @@ jest.mock('../../../../api/services/promoCampaignService', () => ({
 }));
 
 jest.mock('../../../../utils/helper', () => ({
+    ...jest.requireActual('../../../../utils/helper'),
     getSearchParamsFromUrl: jest.fn(),
 }));
 

@@ -14,7 +14,7 @@ import { confirmModal } from '@utils/utils';
 import { getFormattedDate } from '@utils/helper';
 import { BUTTON_TEXT } from '@constants/common';
 import { BusinessRoleDto, SaveBusinessRoleRequest } from '@types';
-import { FORM_RULES } from '@utils/validators';
+import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
 
 import styles from './BusinessRoleForm.module.css';
 
@@ -182,12 +182,18 @@ const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
                                 <Form.Item
                                     name="name"
                                     label={LABEL.NAME}
-                                    rules={[FORM_RULES.REQUIRED]}
+                                    rules={[
+                                        FORM_RULES.REQUIRED,
+                                        {
+                                            ...getPatternAndMessage('businessRole', 'name'),
+                                        },
+                                    ]}
                                     required
                                 >
                                     <Input
                                         placeholder={PLACEHOLDER.NAME}
                                         allowClear
+                                        maxLength={50}
                                     />
                                 </Form.Item>
                             </Col>
@@ -196,10 +202,16 @@ const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
                                 <Form.Item
                                     name="description"
                                     label={LABEL.DESCRIPTION}
+                                    rules={[
+                                        {
+                                            ...getPatternAndMessage('businessRole', 'description'),
+                                        },
+                                    ]}
                                 >
                                     <Input.TextArea
                                         placeholder={PLACEHOLDER.DESCRIPTION}
                                         rows={2}
+                                        maxLength={300}
                                     />
                                 </Form.Item>
                             </Col>

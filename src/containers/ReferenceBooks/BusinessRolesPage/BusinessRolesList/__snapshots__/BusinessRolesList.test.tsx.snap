@@ -101,7 +101,7 @@ Object {
               type="button"
             >
               <span>
-                Сортировать 
+                По названию 
               </span>
               <span
                 aria-label="down"
@@ -163,37 +163,6 @@ Object {
                         >
                           <tr
                             class="ant-table-row ant-table-row-level-0"
-                            data-row-key="1"
-                          >
-                            <td
-                              class="ant-table-cell"
-                            >
-                              <div
-                                class="tableTitle"
-                              >
-                                Название
-                              </div>
-                              <div
-                                class="tableCell"
-                              >
-                                Мобильный менеджер по продажам
-                              </div>
-                            </td>
-                            <td
-                              class="ant-table-cell"
-                            >
-                              <div
-                                class="tableTitle"
-                              >
-                                Начало действия
-                              </div>
-                              <div
-                                class="tableCell"
-                              />
-                            </td>
-                          </tr>
-                          <tr
-                            class="ant-table-row ant-table-row-level-0"
                             data-row-key="2"
                           >
                             <td
@@ -239,6 +208,37 @@ Object {
                                 class="tableCell"
                               >
                                 Заместитель руководителя доп. офиса
+                              </div>
+                            </td>
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Начало действия
+                              </div>
+                              <div
+                                class="tableCell"
+                              />
+                            </td>
+                          </tr>
+                          <tr
+                            class="ant-table-row ant-table-row-level-0"
+                            data-row-key="1"
+                          >
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Название
+                              </div>
+                              <div
+                                class="tableCell"
+                              >
+                                Мобильный менеджер по продажам
                               </div>
                             </td>
                             <td
@@ -363,7 +363,7 @@ Object {
             type="button"
           >
             <span>
-              Сортировать 
+              По названию 
             </span>
             <span
               aria-label="down"
@@ -425,37 +425,6 @@ Object {
                       >
                         <tr
                           class="ant-table-row ant-table-row-level-0"
-                          data-row-key="1"
-                        >
-                          <td
-                            class="ant-table-cell"
-                          >
-                            <div
-                              class="tableTitle"
-                            >
-                              Название
-                            </div>
-                            <div
-                              class="tableCell"
-                            >
-                              Мобильный менеджер по продажам
-                            </div>
-                          </td>
-                          <td
-                            class="ant-table-cell"
-                          >
-                            <div
-                              class="tableTitle"
-                            >
-                              Начало действия
-                            </div>
-                            <div
-                              class="tableCell"
-                            />
-                          </td>
-                        </tr>
-                        <tr
-                          class="ant-table-row ant-table-row-level-0"
                           data-row-key="2"
                         >
                           <td
@@ -501,6 +470,37 @@ Object {
                               class="tableCell"
                             >
                               Заместитель руководителя доп. офиса
+                            </div>
+                          </td>
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Начало действия
+                            </div>
+                            <div
+                              class="tableCell"
+                            />
+                          </td>
+                        </tr>
+                        <tr
+                          class="ant-table-row ant-table-row-level-0"
+                          data-row-key="1"
+                        >
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Название
+                            </div>
+                            <div
+                              class="tableCell"
+                            >
+                              Мобильный менеджер по продажам
                             </div>
                           </td>
                           <td

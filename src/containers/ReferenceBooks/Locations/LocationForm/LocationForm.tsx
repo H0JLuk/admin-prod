@@ -228,6 +228,7 @@ const LocationForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
                                     <Input
                                         placeholder={LOCATION_NAME_FIELD.placeholder}
                                         allowClear
+                                        maxLength={50}
                                     />
                                 </Form.Item>
                             </Col>
@@ -244,7 +245,7 @@ const LocationForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
                                 >
                                     <Input.TextArea
                                         placeholder={LOCATION_DESCRIPTION_FIELD.placeholder}
-                                        maxLength={140}
+                                        maxLength={300}
                                     />
                                 </Form.Item>
                             </Col>
