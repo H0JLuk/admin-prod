@@ -74,6 +74,8 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
     const { signed = false } = consentData;
     const editorDisabled = isEditMode && signed;
 
+    const redirectToList = () => history.push(matchPath);
+
     useEffect(() => {
         (async () => {
             let clientAppList = await getActiveClientApps();
@@ -83,6 +85,12 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
 
                 if (!state?.consentData) {
                     consent.current = await getConsentById(+consentId) || {} as ConsentDto;
+
+                    if (!consent.current.id) {
+                        message.error(`Согласие с id ${consentId} отсутствует`);
+                        redirectToList();
+                        return;
+                    }
                 }
 
                 const { createDate, version, text, clientApplications } = consent.current;
@@ -117,8 +125,6 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
     const onReadyRichText = () => {
         setLoadingTextEditor(false);
     };
-
-    const redirectToList = () => history.push(matchPath);
 
     const handleFormFinish = async (data: OnFinishData) => {
         const { createDate, version, text, clientApplications } = data;

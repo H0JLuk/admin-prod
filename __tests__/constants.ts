@@ -12,8 +12,10 @@ import {
     ISettingList,
     ListResponse,
     LocationDto,
+    LocationTypeDto,
     PromoCampaignDto,
     SalePointDto,
+    SalePointType,
     UserInfo,
     UserPaginationResponse,
     VisibilitySettingDto,
@@ -137,7 +139,15 @@ export const dzoListTestData: DzoDto[] = [
         dzoId: 0,
         dzoName: 'Беру!',
         dzoCode: 'beru_code',
-        dzoBannerList: [],
+        dzoBannerList: [{
+            default: true,
+            id: 0,
+            kind: 'INTERNAL',
+            orderNumber: 0,
+            // @ts-ignore
+            type: 'LOGO_MAIN',
+            url: 'https://goo.gle/icon.png',
+        }],
         applicationList: dzoApplicationsTestData,
         header: 'Скидки до -40% на покупку товаров.',
         logoUrl: 'http://distributor-fs:8081/distributor-fs/file?path=dzo/beru/beru@3x.png',
@@ -239,6 +249,37 @@ export const businessRolesTestResponse: ListResponse<BusinessRoleDto> = {
     message: '',
 };
 
+export const testSalePointType: SalePointType = {
+    id: 0,
+    name: 'СБЕР',
+    description: 'СБЕР',
+    startDate: '2020-01-01',
+    endDate: null,
+    priority: 1,
+    kind: SALE_POINT_TYPE.INTERNAL,
+    deleted: false,
+};
+
+export const salePointTypeTestResponse: ListResponse<SalePointType> = {
+    list: [
+        testSalePointType,
+        {
+            id: 1,
+            name: 'ТБ',
+            description: 'Территориальный банк Сбербанка',
+            startDate: '2020-01-01',
+            endDate: null,
+            priority: 3,
+            kind: SALE_POINT_TYPE.INTERNAL,
+            deleted: false,
+        },
+    ],
+    status: 'Ok',
+    message: '',
+};
+
+
+
 export const settingDtoListTestData: ISettingList = {
     message: '',
     status: 'Ok',
@@ -278,6 +319,23 @@ export const settingsMapTestData = {
     inactivity_time: '152',
 };
 
+export const testLocationType: LocationTypeDto = {
+    id: 11,
+    name: 'Город',
+    description: 'Описание',
+    deleted: false,
+    priority: 6,
+    startDate: '2020-01-01',
+    endDate: null,
+};
+
+export const testLocationsTypesArray: LocationTypeDto[] = new Array(3)
+    .fill(testLocationType)
+    .map((_, index) => ({
+        ...testLocationType,
+        id: index,
+    }));
+
 export const testLocation: LocationDto = {
     id: 2046,
     name: 'Ростов',
@@ -285,15 +343,7 @@ export const testLocation: LocationDto = {
     startDate: '2020-11-01',
     endDate: null,
     deleted: false,
-    type: {
-        id: 11,
-        name: 'Город',
-        description: null,
-        startDate: '2020-01-01',
-        endDate: null,
-        priority: 6,
-        deleted: false,
-    },
+    type: testLocationType,
     parentName: 'Ярославская область',
     parentId: 99,
 };
@@ -323,15 +373,7 @@ export const testSalePoint: SalePointDto = {
         startDate: '2020-11-01',
         endDate: null,
         deleted: false,
-        type: {
-            id: 11,
-            name: 'Город',
-            description: null,
-            startDate: '2020-01-01',
-            endDate: null,
-            priority: 6,
-            deleted: false,
-        },
+        type: testLocationType,
         parentName: 'Ярославская область',
         parentId: 99,
     },
@@ -365,15 +407,7 @@ export const searchSalePointTestData: SalePointDto[] = [
             startDate: '2020-11-01',
             endDate: null,
             deleted: false,
-            type: {
-                id: 11,
-                name: 'Город',
-                description: null,
-                startDate: '2020-01-01',
-                endDate: null,
-                priority: 6,
-                deleted: false,
-            },
+            type: testLocationType,
             parentName: 'Ханты-Мансийский автономный округ — Югра',
             parentId: 99,
         },
@@ -760,15 +794,7 @@ export const searchLocation = [
         startDate: '2020-11-01',
         endDate: null,
         deleted: false,
-        type: {
-            id: 11,
-            name: 'Город',
-            description: null,
-            startDate: '2020-01-01',
-            endDate: null,
-            priority: 6,
-            deleted: false,
-        },
+        type: testLocationType,
         parentName: 'Ярославская область',
         parentId: 99,
     },

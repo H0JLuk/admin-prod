@@ -97,7 +97,7 @@ function dateToNumber(args: [string, string]) {
 function sortItems(type: string, direction: DIRECTION, sortableItems: [any, any]) {
     const [a, b] = sortableItems;
 
-    if (type === 'finishDate') {
+    if (['finishDate', 'startDate', 'endDate'].includes(type)) {
         [a[type], b[type]] = dateToNumber([a[type], b[type]]);
     }
 

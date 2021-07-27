@@ -69,3 +69,7 @@ export type LocationsListResponse = DefaultPaginationResponse & {
 export type SaveLocationRequest = Pick<LocationDto, 'description' | 'name' | 'parentId'> & {
     typeId: number;
 };
+
+export type SaveLocationTypeRequest = Pick<LocationTypeDto, 'name' | 'description' | 'priority'>;
+
+export type SaveSalePointTypeRequest = Pick<SalePointType, 'name' | 'description' | 'priority' | 'kind'>;

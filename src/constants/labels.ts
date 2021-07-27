@@ -15,6 +15,8 @@ export const menuItemLabels = {
     CONSENTS: 'Согласие',
     SALE_POINT: 'Точка продажи',
     LOCATION: 'Локация',
+    SALE_POINT_TYPE: 'Тип точки продаж',
+    LOCATION_TYPE: 'Тип локации',
     BUSINESS_ROLE: 'Бизнес-роль',
     ROLE_IN_CANAL: 'Роль в канале',
     DEVICE_TYPE: 'Тип устройства',

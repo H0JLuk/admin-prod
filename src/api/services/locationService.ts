@@ -8,6 +8,7 @@ import {
     LocationDto,
     LocationTypeDto,
     SaveLocationRequest,
+    SaveLocationTypeRequest,
 } from '@types';
 
 export function getLocations(searchParams: string) {
@@ -38,4 +39,21 @@ export function editLocation(id: number, data: SaveLocationRequest) {
 
 export function deleteLocation(id: number) {
     return Api.delete<DefaultApiResponse>(`/admin/location/${id}`, getReqOptions());
+}
+
+export function addLocationType(data: SaveLocationTypeRequest) {
+    return Api.post<DefaultCreateDtoResponse>('/admin/location/type', data, getReqOptions());
+}
+
+export async function getLocationTypeById(id: number) {
+    const { list } = await getLocationTypeList();
+    return list.filter((i) => i.id === id)[0];
+}
+
+export function editLocationType(id: number, data: SaveLocationTypeRequest) {
+    return Api.put<DefaultApiResponse>(`/admin/location/type/${id}`, data, getReqOptions());
+}
+
+export function deleteLocationType(id: number) {
+    return Api.delete<DefaultApiResponse>(`/admin/location/type/${id}`, getReqOptions());
 }

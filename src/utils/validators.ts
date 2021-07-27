@@ -66,6 +66,16 @@ export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
             message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
         },
     },
+    locationType: {
+        name: {
+            pattern: /^[а-яё\s.,_-]+$/i,
+            message: 'кириллица, ".", ",", "_", "-"',
+        },
+        description: {
+            pattern: /^[а-яё\d\s.,\-_  /:%()?!№"]+$/i,
+            message: 'кириллица, цифры, ".", ",", "_", "-", "/", ":", "%", "(", ")", "?", "!", "№", """',
+        },
+    },
     consent: {
         consentEditorText: {
             pattern: /^[а-яё\s\w.,/:;+%()?!$№«»“”"{}–-]+$/i,

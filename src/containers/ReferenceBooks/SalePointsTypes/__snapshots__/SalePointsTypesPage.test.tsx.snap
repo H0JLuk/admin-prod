@@ -1,0 +1,634 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SalePointsTypesPage test should match snapshot 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="container"
+      >
+        <div
+          class="wrapper"
+        >
+          <div
+            class="actions"
+          >
+            <div
+              class="buttons"
+            >
+              <button
+                class="ant-btn ant-btn-primary"
+                type="button"
+              >
+                <span>
+                  Добавить
+                </span>
+              </button>
+              <button
+                class="ant-btn"
+                type="button"
+              >
+                <span>
+                  Выбрать
+                </span>
+              </button>
+              <span
+                class="ant-input-affix-wrapper"
+              >
+                <span
+                  class="ant-input-prefix"
+                >
+                  <span
+                    aria-label="search"
+                    class="anticon anticon-search"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="search"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
+                      />
+                    </svg>
+                  </span>
+                </span>
+                <input
+                  class="ant-input"
+                  placeholder="Поиск точки продаж"
+                  type="text"
+                  value=""
+                />
+                <span
+                  class="ant-input-suffix"
+                >
+                  <span
+                    aria-label="close-circle"
+                    class="anticon anticon-close-circle ant-input-clear-icon-hidden ant-input-clear-icon"
+                    role="button"
+                    tabindex="-1"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="close-circle"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z"
+                      />
+                    </svg>
+                  </span>
+                </span>
+              </span>
+            </div>
+            <button
+              class="ant-btn ant-dropdown-trigger dropdownButton"
+              type="button"
+            >
+              <span>
+                По названию 
+              </span>
+              <span
+                aria-label="down"
+                class="anticon anticon-down"
+                role="img"
+                style="font-size: 14px; color: rgb(195, 201, 208);"
+              >
+                <svg
+                  aria-hidden="true"
+                  data-icon="down"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+        <div
+          class="tableWrapper"
+        >
+          <div
+            class="ant-table-wrapper table"
+          >
+            <div
+              class="ant-spin-nested-loading"
+            >
+              <div
+                class="ant-spin-container"
+              >
+                <div
+                  class="ant-table"
+                >
+                  <div
+                    class="ant-table-container"
+                  >
+                    <div
+                      class="ant-table-content"
+                    >
+                      <table
+                        style="table-layout: auto;"
+                      >
+                        <colgroup>
+                          <col
+                            style="width: 30%;"
+                          />
+                          <col
+                            style="width: 20%;"
+                          />
+                          <col
+                            style="width: 25%;"
+                          />
+                          <col
+                            style="width: 25%;"
+                          />
+                        </colgroup>
+                        <tbody
+                          class="ant-table-tbody"
+                        >
+                          <tr
+                            class="ant-table-row ant-table-row-level-0"
+                            data-row-key="0"
+                          >
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Тип точки продаж
+                              </div>
+                              <div
+                                class="tableCell"
+                              >
+                                СБЕР
+                              </div>
+                            </td>
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Приоритет
+                              </div>
+                              <div
+                                class="tableCell"
+                              >
+                                1
+                              </div>
+                            </td>
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Начало действия
+                              </div>
+                              <div
+                                class="tableCell"
+                              >
+                                01.01.2020
+                              </div>
+                            </td>
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Окончание действия
+                              </div>
+                              <div
+                                class="tableCell"
+                              />
+                            </td>
+                          </tr>
+                          <tr
+                            class="ant-table-row ant-table-row-level-0"
+                            data-row-key="1"
+                          >
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Тип точки продаж
+                              </div>
+                              <div
+                                class="tableCell"
+                              >
+                                ТБ
+                              </div>
+                            </td>
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Приоритет
+                              </div>
+                              <div
+                                class="tableCell"
+                              >
+                                3
+                              </div>
+                            </td>
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Начало действия
+                              </div>
+                              <div
+                                class="tableCell"
+                              >
+                                01.01.2020
+                              </div>
+                            </td>
+                            <td
+                              class="ant-table-cell"
+                            >
+                              <div
+                                class="tableTitle"
+                              >
+                                Окончание действия
+                              </div>
+                              <div
+                                class="tableCell"
+                              />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="container"
+    >
+      <div
+        class="wrapper"
+      >
+        <div
+          class="actions"
+        >
+          <div
+            class="buttons"
+          >
+            <button
+              class="ant-btn ant-btn-primary"
+              type="button"
+            >
+              <span>
+                Добавить
+              </span>
+            </button>
+            <button
+              class="ant-btn"
+              type="button"
+            >
+              <span>
+                Выбрать
+              </span>
+            </button>
+            <span
+              class="ant-input-affix-wrapper"
+            >
+              <span
+                class="ant-input-prefix"
+              >
+                <span
+                  aria-label="search"
+                  class="anticon anticon-search"
+                  role="img"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="search"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"
+                    />
+                  </svg>
+                </span>
+              </span>
+              <input
+                class="ant-input"
+                placeholder="Поиск точки продаж"
+                type="text"
+                value=""
+              />
+              <span
+                class="ant-input-suffix"
+              >
+                <span
+                  aria-label="close-circle"
+                  class="anticon anticon-close-circle ant-input-clear-icon-hidden ant-input-clear-icon"
+                  role="button"
+                  tabindex="-1"
+                >
+                  <svg
+                    aria-hidden="true"
+                    data-icon="close-circle"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z"
+                    />
+                  </svg>
+                </span>
+              </span>
+            </span>
+          </div>
+          <button
+            class="ant-btn ant-dropdown-trigger dropdownButton"
+            type="button"
+          >
+            <span>
+              По названию 
+            </span>
+            <span
+              aria-label="down"
+              class="anticon anticon-down"
+              role="img"
+              style="font-size: 14px; color: rgb(195, 201, 208);"
+            >
+              <svg
+                aria-hidden="true"
+                data-icon="down"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div
+        class="tableWrapper"
+      >
+        <div
+          class="ant-table-wrapper table"
+        >
+          <div
+            class="ant-spin-nested-loading"
+          >
+            <div
+              class="ant-spin-container"
+            >
+              <div
+                class="ant-table"
+              >
+                <div
+                  class="ant-table-container"
+                >
+                  <div
+                    class="ant-table-content"
+                  >
+                    <table
+                      style="table-layout: auto;"
+                    >
+                      <colgroup>
+                        <col
+                          style="width: 30%;"
+                        />
+                        <col
+                          style="width: 20%;"
+                        />
+                        <col
+                          style="width: 25%;"
+                        />
+                        <col
+                          style="width: 25%;"
+                        />
+                      </colgroup>
+                      <tbody
+                        class="ant-table-tbody"
+                      >
+                        <tr
+                          class="ant-table-row ant-table-row-level-0"
+                          data-row-key="0"
+                        >
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Тип точки продаж
+                            </div>
+                            <div
+                              class="tableCell"
+                            >
+                              СБЕР
+                            </div>
+                          </td>
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Приоритет
+                            </div>
+                            <div
+                              class="tableCell"
+                            >
+                              1
+                            </div>
+                          </td>
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Начало действия
+                            </div>
+                            <div
+                              class="tableCell"
+                            >
+                              01.01.2020
+                            </div>
+                          </td>
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Окончание действия
+                            </div>
+                            <div
+                              class="tableCell"
+                            />
+                          </td>
+                        </tr>
+                        <tr
+                          class="ant-table-row ant-table-row-level-0"
+                          data-row-key="1"
+                        >
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Тип точки продаж
+                            </div>
+                            <div
+                              class="tableCell"
+                            >
+                              ТБ
+                            </div>
+                          </td>
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Приоритет
+                            </div>
+                            <div
+                              class="tableCell"
+                            >
+                              3
+                            </div>
+                          </td>
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Начало действия
+                            </div>
+                            <div
+                              class="tableCell"
+                            >
+                              01.01.2020
+                            </div>
+                          </td>
+                          <td
+                            class="ant-table-cell"
+                          >
+                            <div
+                              class="tableTitle"
+                            >
+                              Окончание действия
+                            </div>
+                            <div
+                              class="tableCell"
+                            />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

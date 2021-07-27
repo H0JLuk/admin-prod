@@ -109,7 +109,6 @@ function HeaderWithActions<DataList>({
 
     const changeSort = useCallback((sortBy) => {
         onChangeSort();
-
         if (typeof sortBy !== 'string') {
             sortBy = '';
         }

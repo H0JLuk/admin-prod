@@ -8,6 +8,7 @@ import {
     DefaultApiResponse,
     SalePointTypesList,
     SalePointType,
+    SaveSalePointTypeRequest,
 } from '@types';
 
 export async function getSalePoints(searchParams: string) {
@@ -46,4 +47,21 @@ export async function getSalePointsByText(name: string, locationId?: number) {
     const { list } = await Api.get<ListResponse<SalePointDto>>(`/salepoint/search?${new URLSearchParams(params).toString()}`, getReqOptions());
 
     return list;
+}
+
+export function addSalePointType(data: SaveSalePointTypeRequest) {
+    return Api.post<DefaultCreateDtoResponse>('/admin/salepoint/type', data, getReqOptions());
+}
+
+export function editSalePointType(id: number, data: SaveSalePointTypeRequest) {
+    return Api.put<DefaultApiResponse>(`/admin/salepoint/type/${id}`, data, getReqOptions());
+}
+
+export function deleteSalePointType(id: number) {
+    return Api.delete<DefaultApiResponse>(`/admin/salepoint/type/${id}`, getReqOptions());
+}
+
+export async function getSalePointTypeById(salePointTypeId: number) {
+    const { list = [] } = await getSalePointTypesList();
+    return list.find(({ id }) => id === salePointTypeId);
 }

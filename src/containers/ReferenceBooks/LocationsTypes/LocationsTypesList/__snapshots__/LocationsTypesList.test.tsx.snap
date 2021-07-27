@@ -1,0 +1,233 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LocationsTypesList tests /> should match snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="tableWrapper"
+  >
+    <div
+      class="ant-table-wrapper table"
+    >
+      <div
+        class="ant-spin-nested-loading"
+      >
+        <div
+          class="ant-spin-container"
+        >
+          <div
+            class="ant-table"
+          >
+            <div
+              class="ant-table-container"
+            >
+              <div
+                class="ant-table-content"
+              >
+                <table
+                  style="table-layout: auto;"
+                >
+                  <colgroup>
+                    <col
+                      style="width: 30%;"
+                    />
+                    <col
+                      style="width: 30%;"
+                    />
+                    <col
+                      style="width: 20%;"
+                    />
+                    <col
+                      style="width: 20%;"
+                    />
+                  </colgroup>
+                  <tbody
+                    class="ant-table-tbody"
+                  >
+                    <tr
+                      class="ant-table-row ant-table-row-level-0"
+                      data-row-key="0"
+                    >
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Тип локации
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          Город
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Приоритет типа локации
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          6
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Начало действия
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          01.01.2020
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Окончание действия
+                        </div>
+                        <div
+                          class="tableCell"
+                        />
+                      </td>
+                    </tr>
+                    <tr
+                      class="ant-table-row ant-table-row-level-0"
+                      data-row-key="1"
+                    >
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Тип локации
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          Город
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Приоритет типа локации
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          6
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Начало действия
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          01.01.2020
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Окончание действия
+                        </div>
+                        <div
+                          class="tableCell"
+                        />
+                      </td>
+                    </tr>
+                    <tr
+                      class="ant-table-row ant-table-row-level-0"
+                      data-row-key="2"
+                    >
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Тип локации
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          Город
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Приоритет типа локации
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          6
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Начало действия
+                        </div>
+                        <div
+                          class="tableCell"
+                        >
+                          01.01.2020
+                        </div>
+                      </td>
+                      <td
+                        class="ant-table-cell"
+                      >
+                        <div
+                          class="tableTitle"
+                        >
+                          Окончание действия
+                        </div>
+                        <div
+                          class="tableCell"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

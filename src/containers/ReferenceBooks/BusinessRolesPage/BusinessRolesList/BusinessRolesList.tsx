@@ -23,7 +23,6 @@ const SEARCH_INPUT_PLACEHOLDER = 'Поиск по бизнес-ролям';
 const DROPDOWN_SORT_MENU = [
     { name: 'name', label: 'По названию' },
     { name: 'startDate', label: 'По дате начала' },
-    { name: 'endDate', label: 'По дате окончания' },
 ];
 
 const MODAL_TITLE = 'Вы уверены, что хотите удалить эти бизнес-роли?';

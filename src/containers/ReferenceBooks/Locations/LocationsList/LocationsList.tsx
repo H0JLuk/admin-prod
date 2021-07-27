@@ -6,6 +6,7 @@ import { LocationDto } from '@types';
 import styles from './LocationsList.module.css';
 
 const LOCATION_NAME = 'Локация';
+const PARENT_NAME = 'Родительская локация';
 const LOCATION_TYPE = 'Тип локации';
 const START_DATE = 'Начало действия';
 
@@ -40,13 +41,19 @@ const LocationsList: React.FC<LocationsListProps> = ({
             locale={{ emptyText: EmptyMessage }}
         >
             <Table.Column
-                width="40%"
+                width="30%"
                 key="locationName"
                 dataIndex="name"
                 render={(item) => columnRender(item, LOCATION_NAME)}
             />
             <Table.Column
-                width="40%"
+                width="30%"
+                key="parentName"
+                dataIndex="parentName"
+                render={(item) => columnRender(item, PARENT_NAME)}
+            />
+            <Table.Column
+                width="20%"
                 key="locationType"
                 dataIndex={['type', 'name']}
                 render={(item) => columnRender(item, LOCATION_TYPE)}

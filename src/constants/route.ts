@@ -72,6 +72,18 @@ export const SALE_POINT_PAGES = {
     EDIT_SALE_POINT: '/:salePointId/edit',
 };
 
+export const LOCATIONS_TYPES_PAGES = {
+    LIST:               '/location-type',
+    ADD_LOCATION_TYPE:  '/add',
+    EDIT_LOCATION_TYPE: '/:locationTypeId/edit',
+};
+
+export const SALE_POINT_TYPES_PAGES = {
+    LIST:                 '/sale-point-type',
+    ADD_SALE_POINT_TYPE:  '/add',
+    EDIT_SALE_POINT_TYPE: '/:salePointTypeId/edit',
+};
+
 export const BUSINESS_ROLE_PAGES = {
     LIST:               '/business-role',
     ADD_BUSINESS_ROLE:  '/create',

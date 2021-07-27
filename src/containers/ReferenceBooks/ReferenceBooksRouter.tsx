@@ -4,12 +4,16 @@ import useBodyClassForSidebar from '@hooks/useBodyClassForSidebar';
 import Header from '@components/Header';
 import LocationsRouter from './Locations/LocationsRouter';
 import SalePointsRouter from './SalePoints/SalePointsRouter';
+import LocationsTypesRouter from './LocationsTypes/LocationsTypesRouter';
+import SalePointsTypesRouter from './SalePointsTypes/SalePointsTypesRouter';
 import BusinessRolesRouter from './BusinessRolesPage/BusinessRolesRouter';
 import {
     BUSINESS_ROLE_PAGES,
     LOCATIONS_PAGES,
+    LOCATIONS_TYPES_PAGES,
     ROUTE_ADMIN,
     SALE_POINT_PAGES,
+    SALE_POINT_TYPES_PAGES,
 } from '@constants/route';
 
 import styles from './ReferenceBooksRouter.module.css';
@@ -27,6 +31,8 @@ const HIDE_MENU_AND_SHOW_BACK_BTN = {
 const PATHS_FOR_MENU_MODE = [
     `${ROUTE_ADMIN.REFERENCE_BOOKS}${ LOCATIONS_PAGES.LIST }`,
     `${ROUTE_ADMIN.REFERENCE_BOOKS}${ SALE_POINT_PAGES.LIST }`,
+    `${ROUTE_ADMIN.REFERENCE_BOOKS}${ SALE_POINT_TYPES_PAGES.LIST }`,
+    `${ROUTE_ADMIN.REFERENCE_BOOKS}${ LOCATIONS_TYPES_PAGES.LIST }`,
     `${ROUTE_ADMIN.REFERENCE_BOOKS}${ BUSINESS_ROLE_PAGES.LIST }`,
 ];
 
@@ -52,6 +58,14 @@ const ReferenceBooksRouter = () => {
                 <Route
                     path={`${match.path}${SALE_POINT_PAGES.LIST}`}
                     component={SalePointsRouter}
+                />
+                <Route
+                    path={`${match.path}${LOCATIONS_TYPES_PAGES.LIST}`}
+                    component={LocationsTypesRouter}
+                />
+                <Route
+                    path={`${match.path}${SALE_POINT_TYPES_PAGES.LIST}`}
+                    component={SalePointsTypesRouter}
                 />
                 <Route
                     path={`${match.path}${BUSINESS_ROLE_PAGES.LIST}`}

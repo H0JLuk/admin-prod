@@ -8,6 +8,8 @@ import {
     ROUTE_USER_MANAGER,
     SALE_POINT_PAGES,
     LOCATIONS_PAGES,
+    LOCATIONS_TYPES_PAGES,
+    SALE_POINT_TYPES_PAGES,
 } from './route';
 import { menuItemLabels as labels } from './labels';
 import { getDefaultAppCode } from '@apiServices/clientAppService';
@@ -122,10 +124,9 @@ const ADMIN_TOP_MENU_ITEMS: MenuItem[] = [
 const ADMIN_REFERENCE_BOOKS_MENU_ITEMS = [
     { label: labels.SALE_POINT, path: `${ROUTE_ADMIN.REFERENCE_BOOKS}${SALE_POINT_PAGES.LIST}` },
     { label: labels.LOCATION, path: `${ROUTE_ADMIN.REFERENCE_BOOKS}${LOCATIONS_PAGES.LIST}` },
+    { label: labels.SALE_POINT_TYPE, path: `${ROUTE_ADMIN.REFERENCE_BOOKS}${SALE_POINT_TYPES_PAGES.LIST}` },
+    { label: labels.LOCATION_TYPE, path: `${ROUTE_ADMIN.REFERENCE_BOOKS}${LOCATIONS_TYPES_PAGES.LIST}` },
     { label: labels.BUSINESS_ROLE, path: `${ROUTE_ADMIN.REFERENCE_BOOKS}${BUSINESS_ROLE_PAGES.LIST}` },
-    // { label: labels.ROLE_IN_CANAL, path: `${ROUTE_ADMIN.REFERENCE_BOOKS}${ROLE_IN_CANAL_PAGES.LIST}` },
-    // { label: labels.DEVICE_TYPE, path: `${ROUTE_ADMIN.REFERENCE_BOOKS}${DEVICE_TYPE_PAGES.LIST}` },
-    // { label: labels.CANAL_TYPE, path: `${ROUTE_ADMIN.REFERENCE_BOOKS}${CANAL_TYPE_PAGES.LIST}` },
 ];
 
 // Список доступных вкладок для приложений с кодом оканчивающимся на "-point", таких как "promo-point" и "mcdonalds-point"
