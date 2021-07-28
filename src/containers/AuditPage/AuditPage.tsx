@@ -65,6 +65,7 @@ type AuditEvent = {
     userAgent: string;
     userIp: string;
     userLogin: string;
+    requestId: string;
 };
 
 type AuditEventsResponse = DefaultPaginationResponse & {
@@ -136,6 +137,10 @@ const columns = [
     {
         Header: 'IP пользователя',
         accessor: 'userIp',
+    },
+    {
+        Header: 'ID запроса',
+        accessor: 'requestId',
     },
     {
         Header: 'Дата',

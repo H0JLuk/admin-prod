@@ -8,6 +8,7 @@ export type AuditFiltersFormValues = {
     clientAppCode?: string;
     userLogin?: string;
     userIp?: string;
+    requestId?: string;
     date?: [moment.Moment, moment.Moment];
     success?: boolean | null;
 };
@@ -221,6 +222,13 @@ const AuditFilter: React.FC<AuditFilterProps> = ({ submit, applications }) => {
             <Form.Item
                 label="IP пользователя"
                 name="userIp"
+                normalize={trimValue}
+            >
+                <Input autoComplete="off" />
+            </Form.Item>
+            <Form.Item
+                label="ID запроса"
+                name="requestId"
                 normalize={trimValue}
             >
                 <Input autoComplete="off" />
