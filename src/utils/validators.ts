@@ -8,8 +8,8 @@ const commonRule = {
     message: commonMessage,
 };
 const codeRule = {
-    pattern: /^[a-z_-]+$/,
-    message: 'латинские буквы в нижнем регистре, "_", "-"',
+    pattern: /^[a-zA-Z_-]+$/,
+    message: 'латинские буквы, "_", "-"',
 };
 
 export type PageFieldsValidate = Record<string, typeof commonRule>;
