@@ -49,6 +49,11 @@ export async function getSalePointsByText(name: string, locationId?: number) {
     return list;
 }
 
+export async function getSalePointByText(text: string, salePointId: number, locationId?: number) {
+    const result = await getSalePointsByText(text, locationId);
+    return result.find(({ id }) => id === salePointId);
+}
+
 export function addSalePointType(data: SaveSalePointTypeRequest) {
     return Api.post<DefaultCreateDtoResponse>('/admin/salepoint/type', data, getReqOptions());
 }

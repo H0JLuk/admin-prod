@@ -11,7 +11,8 @@ import {
     deleteSalePoint,
     editSalePoint,
     getSalePointsByText,
-    getSalePointTypesOptions,
+    getSalePointByText,
+    getSalePointTypesList,
 } from '@apiServices/salePointService';
 import { confirmModal, getStringOptionValueByDescription, getStringOptionValue } from '@utils/utils';
 import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
@@ -25,10 +26,11 @@ import {
     SALE_POINT_TYPE_FIELD,
 } from './salePointsConstants';
 import { getLocationsByText } from '@apiServices/locationService';
-import { LocationDto, SalePointDto } from '@types';
+import { LocationDto, SalePointDto, SalePointType } from '@types';
 
 import styles from './SalePointForm.module.css';
 import { BUTTON_TEXT } from '@constants/common';
+import { handleSalePointKindMismatch, getSalePointKindById } from './salePointForm.utils';
 
 export type SalePointFormProps = {
     matchPath: string;
@@ -51,6 +53,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
     const params = useParams<{ salePointId: string; }>();
     const [loading, setLoading] = useState(true);
     const typeOptions = useRef<{ label: string; value: number; }[]>([]);
+    const salePointTypes = useRef<SalePointType[]>([]);
 
     const salePointMethods = useRef({} as AutoCompleteMethods<SalePointDto>);
     const locationMethods = useRef({} as AutoCompleteMethods<LocationDto>);
@@ -69,11 +72,11 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                 location,
                 type,
             } = salePointCopy || {};
+            let parentSalePoint: SalePointDto | null = null;
 
-            const parentSalePoint = typeof parentId === 'number' ? {
-                id: parentId,
-                name: parentName,
-            } as SalePointDto : null;
+            if (typeof parentId === 'number') {
+                parentSalePoint = (await getSalePointByText(parentName!, parentId)) || null;
+            }
 
             const locationField = typeof location?.id === 'number' ? {
                 id: location.id,
@@ -81,9 +84,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
             } as LocationDto : null;
 
             form.setFieldsValue({
-                // TODO: заменить channelType, когда появится инфа с бэка
                 name: salePoint?.name ?? '',
-                channelType: location?.parentName ?? null,
                 description: description ?? '',
                 location: locationField,
                 parentSalePoint,
@@ -102,8 +103,9 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                     location?.name ?? '', { data: locationField, value: location?.name ?? '' },
                 );
             }
-
-            typeOptions.current = await getSalePointTypesOptions();
+            const { list: salePointsTypesList } = await getSalePointTypesList();
+            salePointTypes.current = salePointsTypesList;
+            typeOptions.current = salePointsTypesList.map(({ name, id }) => ({ label: name, value: id }));
             setLoading(false);
         })();
     }, [form, isEdit, salePoint]);
@@ -194,6 +196,17 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                     name={SALE_POINT_TYPE_FIELD.name}
                                     rules={[
                                         FORM_RULES.REQUIRED,
+                                        {
+                                            validator: (_, value) => {
+                                                const parentSalePointField = form.getFieldValue('parentSalePoint');
+                                                const salePointKind = getSalePointKindById(salePointTypes.current, value);
+                                                if (salePointKind && parentSalePointField) {
+                                                    return salePointKind === parentSalePointField.kind
+                                                        ? Promise.resolve()
+                                                        : Promise.reject(handleSalePointKindMismatch(isEdit, salePointKind, parentSalePointField.kind));
+                                                }
+                                            },
+                                        },
                                     ]}
                                 >
                                     <Select

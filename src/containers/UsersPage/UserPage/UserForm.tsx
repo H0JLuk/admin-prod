@@ -29,7 +29,7 @@ import {
     InteractionsCurrUserToOtherUser,
 } from '@constants/permissions';
 import { getActiveClientApps } from '@apiServices/clientAppService';
-import { getSalePointByText } from '@apiServices/promoCampaignService';
+import { getSalePointByText } from '@apiServices/salePointService';
 import {
     errorEditPermissions,
     getLoginTypeByRole,
