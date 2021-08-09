@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { Col, Form, Input, message, Row, Select } from 'antd';
-import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
+import AutocompleteOptionLabel from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import Loading from '@components/Loading';
 import AutoCompleteComponent, { AutoCompleteMethods } from '@components/AutoComplete';
 import { showNotify } from '@containers/ClientAppPage/ClientAppForm/utils';
@@ -27,10 +27,10 @@ import {
 } from './salePointsConstants';
 import { getLocationsByText } from '@apiServices/locationService';
 import { LocationDto, SalePointDto, SalePointType } from '@types';
-
-import styles from './SalePointForm.module.css';
 import { BUTTON_TEXT } from '@constants/common';
 import { handleSalePointKindMismatch, getSalePointKindById } from './salePointForm.utils';
+
+import styles from './SalePointForm.module.css';
 
 export type SalePointFormProps = {
     matchPath: string;
@@ -175,7 +175,7 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
 
     return (
         <div>
-            {loading && <Loading />}
+            {loading && <Loading className={styles.loading} />}
             <div className={styles.wrapper}>
                 <div className={styles.pageTitle}>
                     {isEdit ? `Точка продажи ${salePoint?.name}` : NEW_SALE_POINT_TITLE}
@@ -198,13 +198,15 @@ const SalePointForm: React.FC<SalePointFormProps> = ({ mode, matchPath }) => {
                                         FORM_RULES.REQUIRED,
                                         {
                                             validator: (_, value) => {
-                                                const parentSalePointField = form.getFieldValue('parentSalePoint');
+                                                const parentSalePointField: SalePointDto = form.getFieldValue('parentSalePoint');
                                                 const salePointKind = getSalePointKindById(salePointTypes.current, value);
+
                                                 if (salePointKind && parentSalePointField) {
-                                                    return salePointKind === parentSalePointField.kind
+                                                    return salePointKind === parentSalePointField.type.kind
                                                         ? Promise.resolve()
-                                                        : Promise.reject(handleSalePointKindMismatch(isEdit, salePointKind, parentSalePointField.kind));
+                                                        : Promise.reject(handleSalePointKindMismatch(isEdit, salePointKind, parentSalePointField.type.kind));
                                                 }
+                                                return Promise.resolve();
                                             },
                                         },
                                     ]}

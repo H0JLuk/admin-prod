@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { generatePath, useHistory } from 'react-router-dom';
 import cn from 'classnames';
 import { MenuOutlined } from '@ant-design/icons';
-import PromoCampaignItemMenu from './PromoCampaignItemMenu/PromoCampaignItemMenu';
+import PromoCampaignItemMenu from './PromoCampaignItemMenu';
 import PROMO_CAMPAIGNS from '@constants/promoCampaigns';
 import promoCodeTypes from '@constants/promoCodeTypes';
 import { PROMO_CAMPAIGN_PAGES } from '@constants/route';

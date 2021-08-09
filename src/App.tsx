@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect, useHistory, RouteComponentProps } from 'react-router-dom';
-import './App.less';
-// import 'antd/dist/antd.css'; // Ant styles will be here, before another styles imports
+import './App.less'; // App styles will be here, before another styles imports
 import './static/fonts/fonts.css';
 import 'moment/locale/ru';
 import { History } from 'history';
@@ -10,12 +9,9 @@ import ROLES from '@constants/roles';
 import { getRole } from './api/services/sessionService';
 import { isLoggedIn } from './api/services/authService';
 import LoginPage from '@containers/LoginPage/LoginPage';
-import OldDesignAdminPage from './pages/AdminPage/OldDesign/AdminPage';
 import AdminPage from './pages/AdminPage';
 import AuditorPage from './pages/AuditorPage/AuditorPage';
-import OldDesignOwnerPage from './pages/OwnerPage/OldDesignOwnerPage/OwnerPage';
 import OwnerPage from './pages/OwnerPage';
-import ClientAppPage from '@containers/ClientAppPage/OldClientAppPage/ClientAppPage';
 import UserManagerPage from './pages/UserManagerPage';
 import PartnerPage from './pages/PartnerPage';
 import { goToStartPage } from '@utils/appNavigation';
@@ -35,9 +31,6 @@ const App = () => {
             <Route exact path={ROUTE.CORE} component={CorePage} />
 
             <Route path={ROUTE.LOGIN} component={LoginPage} />
-            <Route path={ROUTE.CLIENT_APPS} component={ClientAppPage} />
-            <Route path={`${ROUTE.OLD_DESIGN}${ROUTE.ADMIN}`} component={withRedirect(OldDesignAdminPage, ROLES.ADMIN)} />
-            <Route path={`${ROUTE.OLD_DESIGN}${ROUTE.OWNER}`} component={withRedirect(OldDesignOwnerPage, ROLES.PRODUCT_OWNER)} />
             <Route path={ROUTE.AUDITOR} component={withRedirect(AuditorPage, ROLES.AUDITOR)} />
             <Route path={ROUTE.USER_MANAGER} component={withRedirect(UserManagerPage, ROLES.USER_MANAGER)} />
             <Route path={ROUTE.PARTNER} component={withRedirect(PartnerPage, ROLES.PARTNER)} />

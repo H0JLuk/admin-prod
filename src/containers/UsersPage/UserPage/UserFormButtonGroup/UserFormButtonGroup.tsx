@@ -22,8 +22,6 @@ type UserFormButtonGroupProps = {
 };
 
 export const INFO_USER_BUTTONS = {
-    RESET_PASSWORD: 'Сбросить пароль',
-    EDIT: 'Редактировать',
     UNBLOCK: 'Разблокировать',
     QR_CODE_GEN_TEXT: 'Сгенерировать QR-код',
 };
@@ -119,7 +117,7 @@ const UserFormButtonGroup: React.FC<UserFormButtonGroupProps> = ({
                             onClick={onResetPassword}
                             disabled={disableAllButtons}
                         >
-                            {tmpBlocked ? INFO_USER_BUTTONS.UNBLOCK : INFO_USER_BUTTONS.RESET_PASSWORD}
+                            {tmpBlocked ? INFO_USER_BUTTONS.UNBLOCK : BUTTON_TEXT.RESET_PASS}
                         </Button>
                     )}
                     {editUser && (
@@ -128,7 +126,7 @@ const UserFormButtonGroup: React.FC<UserFormButtonGroupProps> = ({
                             onClick={onEditUser}
                             disabled={disableAllButtons}
                         >
-                            {INFO_USER_BUTTONS.EDIT}
+                            {BUTTON_TEXT.EDIT}
                         </Button>
                     )}
                     {deleteButton}

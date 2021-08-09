@@ -11,7 +11,7 @@ import Loading from '@components/Loading';
 import UsersListTable from './UsersListTable';
 import FiltrationBlock from './FiltrationBlock';
 import ActionsDropDown from './ActionsDropDown';
-import TemplateUploadButtonsWithModal from '@components/ButtonWithModal/TemplateUploadButtonsWithModal';
+import TemplateUploadButtonsWithModal from '@components/TemplateUploadButtonsWithModal';
 import { generateQRCodes, getUser, getUsersList, removeUser, resetUser } from '@apiServices/usersService';
 import { USERS_PAGES } from '@constants/route';
 import { downloadFileFunc, getSearchParamsFromUrl } from '@utils/helper';

@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { Form, Input, Button } from 'antd';
 import { goToStartPage } from '@utils/appNavigation';
 import { getStaticUrlFromBackend, saveStaticUrl } from '@apiServices/settingsService';
-import { LOGIN_FORM } from '@components/Form/forms';
-import Form from '@components/Form';
 import { login } from '@apiServices/authService';
 import { storeUserData } from '@apiServices/sessionService';
 import { Errors, getErrorText } from '@constants/errors';
 import { ROLES } from '@constants/roles';
-import ButtonLabels from '@components/Button/ButtonLables';
 import { customNotifications } from '@utils/notifications';
-import { UserDto } from '@types';
+import { BUTTON_TEXT } from '@constants/common';
+import { FORM_RULES } from '@utils/validators';
 
 import styles from './LoginPage.module.css';
+
+type FormValues = {
+    personalNumber: string;
+    password: string;
+};
 
 const availableRoles = [
     ROLES.ADMIN,
@@ -22,18 +26,16 @@ const availableRoles = [
     ROLES.USER_MANAGER,
 ];
 
-const LoginPage: React.FC<RouteComponentProps> = (props) => {
-
+const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
     const [ error, setError ] = useState<Errors | null>(null);
-    const { history } = props;
 
     useEffect(() => {
         customNotifications.closeAll();
     }, []);
 
-    const onSubmit = async (data: Record<string, string>) => {
+    const onSubmit = async (data: FormValues) => {
         try {
-            const { token, authority } = await login(data as UserDto) ?? {};
+            const { token, authority } = await login(data);
             if (!availableRoles.includes(authority)) {
                 setError(Errors.FAIL);
                 return;
@@ -48,20 +50,52 @@ const LoginPage: React.FC<RouteComponentProps> = (props) => {
         }
     };
 
+    const clearError = () => setError(null);
+
     return (
         <div className={styles.container}>
             <Form
-                data={LOGIN_FORM}
-                buttonText={ButtonLabels.LOGIN}
-                onSubmit={onSubmit}
-                formClassName={styles.loginForm}
-                fieldClassName={styles.loginForm__field}
-                activeLabelClassName={styles.loginForm__field__activeLabel}
-                buttonClassName={styles.loginForm__button}
-                errorText={getErrorText(error)}
-                formError={!!error}
-                errorClassName={styles.error}
-            />
+                className={styles.loginForm}
+                layout="vertical"
+                validateTrigger="onSubmit"
+                onFinish={onSubmit}
+            >
+                <Form.Item
+                    name="personalNumber"
+                    label="Табельный номер"
+                    rules={[
+                        FORM_RULES.REQUIRED,
+                        FORM_RULES.NUMBER,
+                    ]}
+                    validateFirst
+                >
+                    <Input
+                        maxLength={30}
+                        allowClear
+                    />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    label="Пароль"
+                    rules={[FORM_RULES.REQUIRED]}
+                >
+                    <Input.Password
+                        maxLength={30}
+                        visibilityToggle={false}
+                        allowClear
+                    />
+                </Form.Item>
+                {error && <p className={styles.error}>{getErrorText(error)}</p>}
+                <Button
+                    className={styles.loginForm__button}
+                    type="primary"
+                    htmlType="submit"
+                    shape="round"
+                    onClick={clearError}
+                >
+                    {BUTTON_TEXT.LOGIN}
+                </Button>
+            </Form>
         </div>
     );
 };

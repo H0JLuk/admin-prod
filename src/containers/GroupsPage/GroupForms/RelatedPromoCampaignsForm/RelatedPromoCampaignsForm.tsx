@@ -392,7 +392,6 @@ const campaignIdValidator: RuleRender = ({ getFieldValue }) => ({
 
 const validatorsContentData = [
     {
-        // TODO: change type to normal
         validator: async (_: RuleObject, contentData: any[]) => {
             if (!contentData?.length) {
                 return Promise.reject(Error('Добавьте хотя бы один блок'));

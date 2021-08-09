@@ -7,6 +7,7 @@ type FieldProps = {
     value: string;
 };
 
+// TODO: Удалить после редизайна и удаления старого компонента страницы категорий
 const Field: React.FC<FieldProps> = ({ label, value }) => (
     <p className={styles.text}>
         <span className={styles.bold}>{label}</span>

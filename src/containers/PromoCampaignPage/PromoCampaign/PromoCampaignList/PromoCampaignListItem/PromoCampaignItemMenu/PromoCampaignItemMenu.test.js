@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { message } from 'antd';
 import PromoCampaignItemMenu from './PromoCampaignItemMenu';
 
 import * as utils from '../../../../../../utils/utils';
 import * as promoCampaignService from '../../../../../../api/services/promoCampaignService';
-import * as notice from '../../../../../../components/toast/Notice';
 import * as promoCampaignUtils from '../../../../PromoCampaignUtils';
 
 promoCampaignService.uploadPromoCodes = jest.fn();
@@ -98,8 +98,8 @@ describe('<PromoCampaignItemMenu /> test', () => {
 
     it('errorNotice should be called when promoCodeUpload rejected', async () => {
         promoCampaignService.uploadPromoCodes.mockImplementation(() => Promise.reject(new Error ('test error')));
-        notice.errorNotice = jest.fn();
+        message.error = jest.fn();
         await container.find('UploadPromoCodesModal').prop('onSave')();
-        expect(notice.errorNotice).toHaveBeenCalledWith('test error');
+        expect(message.error).toHaveBeenCalledWith('test error');
     });
 });

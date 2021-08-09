@@ -11,41 +11,6 @@
     margin: 0 auto;
 }
 
-.loginForm__field {
-    padding-top: 36px;
-}
-
-.loginForm__field input {
-    display: block;
-    height: 20px;
-    margin-bottom: 8px;
-    bottom: 6px;
-    padding-left: 2px;
-    width: calc(100% - 30px);
-    font-size: 16px;
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.55);
-}
-
-.loginForm__field label {
-    display: block;
-    bottom: 6px;
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.29;
-    letter-spacing: normal;
-    color: rgba(0, 0, 0, 0.55);
-}
-
-.loginForm__field__activeLabel {
-    font-size: 14px;
-    transform: translateY(calc(-1 * 26px));
-    -ms-transform: translateY(calc(-1 * 26px));
-}
-
 ::-ms-clear, ::-ms-reveal {
     display: none;
 }
@@ -53,7 +18,7 @@
 .loginForm__button {
     position: absolute;
     bottom: 0;
-    padding: 5px 30px;
+    padding: 0px 30px;
 }
 
 .error {

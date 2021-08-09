@@ -19,11 +19,7 @@ export const goToLogin = (history: History) => {
     window.location.href = ROUTE.LOGIN;
 };
 
-export const goToClientApps = (history: History, redirect?: boolean) => {
-    (redirect ? history.replace : history.push)(ROUTE.CLIENT_APPS);
-};
-
-export const goToDashboard = (history: History, role: string) => {
+export const goToDashboard = (history: History, role: ROLES) => {
     switch (role) {
         case ROLES.ADMIN:
             history.push(ROUTE_ADMIN.DASHBOARD);
@@ -32,7 +28,7 @@ export const goToDashboard = (history: History, role: string) => {
             history.push(ROUTE_OWNER.DASHBOARD);
             break;
         default:
-            goToClientApps(history);
+            break;
     }
 };
 
@@ -66,7 +62,7 @@ export function goToStartPage(history: History, redirect: boolean, role: ROLES |
             return;
         }
         default:
-            goToClientApps(history, redirect);
+            return;
     }
 }
 
@@ -74,11 +70,7 @@ export const goToAudit = (history: History, redirect?: boolean) => {
     (redirect ? history.replace : history.push)(ROUTE.AUDITOR);
 };
 
-export const goToAdmin = (history: History, oldDesign?: boolean) => {
-    if (oldDesign) {
-        history.push(`${ROUTE.OLD_DESIGN}${ROUTE.ADMIN}`);
-        return;
-    }
+export const goToAdmin = (history: History) => {
     history.push(ROUTE_ADMIN.PROMO_CAMPAIGN);
 };
 
@@ -90,21 +82,17 @@ export const goToPartner = (history: History, redirect?: boolean) => {
     (redirect ? history.replace : history.push)(ROUTE_PARTNER.USERS);
 };
 
-export const goToProduct = (history: History, oldDesign?: boolean) => {
-    if (oldDesign) {
-        history.push(`${ROUTE.OLD_DESIGN}${ROUTE.OWNER}`);
-        return;
-    }
+export const goToProduct = (history: History) => {
     history.push(ROUTE_OWNER.PROMO_CAMPAIGN);
 };
 
-export const goApp = (history: History, role: string, oldDesign?: boolean) => {
+export const goApp = (history: History, role: string) => {
     switch (role) {
         case ROLES.AUDITOR:
             goToAudit(history);
             break;
         case ROLES.ADMIN:
-            goToAdmin(history, oldDesign);
+            goToAdmin(history);
             break;
         case ROLES.USER_MANAGER:
             goToUserManager(history);
@@ -114,25 +102,9 @@ export const goApp = (history: History, role: string, oldDesign?: boolean) => {
             break;
         case ROLES.PRODUCT_OWNER:
         default:
-            goToProduct(history, oldDesign);
+            goToProduct(history);
     }
 };
-
-// TODO: remove after delete old user page
-export function getLinkForUsersPage() {
-    switch (getRole()) {
-        case ROLES.ADMIN:
-            return ROUTE_ADMIN.USERS;
-        case ROLES.PRODUCT_OWNER:
-            return ROUTE_OWNER.DASHBOARD;
-        case ROLES.USER_MANAGER:
-            return ROUTE_USER_MANAGER.USERS;
-        case ROLES.PARTNER:
-            return ROUTE_PARTNER.USERS;
-        default:
-            return '';
-    }
-}
 
 export function getLinkForCreatePromoCampaign() {
     switch (getRole()) {
@@ -178,17 +150,6 @@ export function getPathForCreatePromoCampaignVisibititySetting() {
     }
 }
 
-export function getPathForPromoCampaignVisibititySettings() {
-    switch (getRole()) {
-        case ROLES.ADMIN:
-            return `${ ROUTE_ADMIN.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }`;
-        case ROLES.PRODUCT_OWNER:
-            return `${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }`;
-        default:
-            return '';
-    }
-}
-
 export function getPathForConsentInfo() {
     switch (getRole()) {
         case ROLES.ADMIN:
@@ -211,7 +172,6 @@ export function getPathForConsentsList() {
     }
 }
 
-// TODO: remove after delete old promo-campaign page
 export function getLinkForPromoCampaignPage() {
     switch (getRole()) {
         case ROLES.ADMIN:

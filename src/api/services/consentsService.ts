@@ -16,17 +16,18 @@ export function deleteConsent(id: number) {
     return Api.delete<DefaultApiResponse>(`/admin/consent/${id}`, getReqOptions());
 }
 
-export async function createConsent(consent: Omit<SaveConsentRequest, 'id'>) {
+export function createConsent(consent: Omit<SaveConsentRequest, 'id'>) {
     return Api.post<DefaultCreateDtoResponse>('/admin/consent', consent, getReqOptions());
 }
 
-export async function updateConsent(consent: SaveConsentRequest) {
+export function updateConsent(consent: SaveConsentRequest) {
     return Api.put<DefaultApiResponse>('/admin/consent', consent, getReqOptions());
 }
 
-export async function attachConsentToClientApp(id: number, appCode: string) {
+export function attachConsentToClientApp(id: number, appCode: string) {
     return Api.post<DefaultApiResponse>(`/admin/consent/${id}?clientAppCode=${appCode}`, {}, getReqOptions());
 }
+
 export async function getConsentById(consentId: number) {
     const { list = [] } = await getConsentsList();
     return list.find(({ id }) => id === consentId) || null;

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import PromoCampaignForm from './PromoCampaignForm';
 import callConfirmModalForPromoCodeTypeChanging from './PromoCampaignSteps/ConfirmModalForPromoCodeTypeChanging/ConfirmModalForPromoCodeTypeChanging';
-import { editPromoCampaign, newPromoCampaign, copyPromoCampaign } from '../../../../api/services/promoCampaignService';
+import { editPromoCampaign, createPromoCampaign, copyPromoCampaign } from '../../../../api/services/promoCampaignService';
 import { getUnissuedPromoCodeStatistics } from '../../../../api/services/promoCodeService';
 import { filterBanner, deleteText } from './PromoCampaignFormSave.utils';
 import {
@@ -47,7 +47,7 @@ jest.mock(
 
 jest.mock('../../../../api/services/promoCampaignService', () => ({
     editPromoCampaign: jest.fn(),
-    newPromoCampaign: jest.fn(),
+    createPromoCampaign: jest.fn(),
     copyPromoCampaign: jest.fn(),
 }));
 
@@ -76,7 +76,7 @@ jest.mock('./PromoCampaignFormUtils', () => ({
 }));
 
 jest.mock('./PromoCampaignSteps/StepInfo/StepInfo', () =>
-    /* Сделано именно так, потому что нам нужно чтобы в редеринге enzyme отображалось имя компонента */
+    /* Сделано именно так, потому что нам нужно чтобы в рендеринге enzyme отображалось имя компонента */
     function StepInfo() {
         return <div>StepInfo</div>;
     }
@@ -218,7 +218,7 @@ describe('<PromoCampaignForm /> tests', () => {
     });
 
     it('should call `newPromoCampaign` function and history.push', async () => {
-        newPromoCampaign.mockReturnValue({ id: 99 });
+        createPromoCampaign.mockReturnValue({ id: 99 });
         createTexts.mockReturnValue([]);
         createVisibilities.mockReturnValue([]);
         createImgBanners.mockResolvedValue();
@@ -226,18 +226,18 @@ describe('<PromoCampaignForm /> tests', () => {
         wrapper.find('Button').at(1).simulate('click');
         await sleep();
 
-        expect(newPromoCampaign).toBeCalledTimes(1);
+        expect(createPromoCampaign).toBeCalledTimes(1);
         expect(mockHistoryPush).toBeCalledTimes(1);
         expect(mockHistoryPush).toBeCalledWith(testProps.matchPath);
     });
 
     it('save promoCampaign should rejected and render error', async () => {
-        newPromoCampaign.mockRejectedValue(new Error('test Error when create'));
+        createPromoCampaign.mockRejectedValue(new Error('test Error when create'));
         wrapper.find('PromoCampaignSideBar').simulate('click', 3);
         wrapper.find('Button').at(1).simulate('click');
         await sleep();
 
-        expect(newPromoCampaign).toBeCalledTimes(1);
+        expect(createPromoCampaign).toBeCalledTimes(1);
         expect(mockHistoryPush).toBeCalledTimes(0);
         expect(wrapper.find('.error').text()).toBe('test Error when create');
     });
@@ -260,7 +260,7 @@ describe('<PromoCampaignForm /> tests', () => {
     });
 
     it('should reject `newPromoCampaign` function when click on Save btn', async () => {
-        newPromoCampaign.mockRejectedValue(new Error('new test Error when create'));
+        createPromoCampaign.mockRejectedValue(new Error('new test Error when create'));
         getDataForSend.mockReturnValue({ test: 'test data for send' });
         wrapper.find('ForwardRef(InternalForm)').simulate('valuesChange', {
             test: 'test_change',
@@ -268,17 +268,17 @@ describe('<PromoCampaignForm /> tests', () => {
         wrapper.find('Button').last().simulate('click');
         await sleep();
 
-        expect(newPromoCampaign).toBeCalledTimes(1);
+        expect(createPromoCampaign).toBeCalledTimes(1);
         expect(wrapper.find('.error').text()).toBe('new test Error when create');
     });
 
     it('should call `newPromoCampaign` function when click on Save btn', async () => {
-        newPromoCampaign.mockReturnValue({ id: 99 });
+        createPromoCampaign.mockReturnValue({ id: 99 });
         getDataForSend.mockReturnValue({ test: 'test data for send' });
         wrapper.find('Button').last().simulate('click');
         await sleep();
 
-        expect(newPromoCampaign).toBeCalledTimes(1);
+        expect(createPromoCampaign).toBeCalledTimes(1);
     });
 
     it('should reject call `editPromoCampaign` function', async () => {
@@ -354,7 +354,7 @@ describe('<PromoCampaignForm /> tests', () => {
 
     it('should call `editTextBanners`, `EditImgBanners` and newPromoCampaign functions', async () => {
         const wrapper = shallow(<PromoCampaignForm { ...testProps } />);
-        newPromoCampaign.mockReturnValue({ id: 98 });
+        createPromoCampaign.mockReturnValue({ id: 98 });
         getDataForSend.mockReturnValue({ test: 'test data for send' });
         editTextBanners.mockReturnValue([]);
         filterBanner.mockReturnValue({
@@ -376,7 +376,7 @@ describe('<PromoCampaignForm /> tests', () => {
         expect(editTextBanners).toBeCalledTimes(1);
         expect(EditImgBanners).toBeCalledTimes(1);
         expect(filterBanner).toBeCalledTimes(1);
-        expect(newPromoCampaign).toBeCalledTimes(1);
+        expect(createPromoCampaign).toBeCalledTimes(1);
     });
 
     it('should call `callConfirmModalForPromoCodeTypeChanging` function when edit', async () => {

@@ -102,7 +102,7 @@ export const promoCampaignTestData: PromoCampaignDto = {
     webUrl: 'https://www.promo.sberhealth.ru/vvo',
 };
 
-export const userTestData = {
+export const userTestData: UserInfo = {
     blocked: false,
     clientAppIds: [],
     id: 136,
@@ -110,7 +110,8 @@ export const userTestData = {
     locationName: 'Калининград',
     loginType: 'PASSWORD',
     personalNumber: '111111',
-    role: 'User',
+    parentUserName: null,
+    role: ROLES.USER,
     salePointId: 887,
     salePointName: '055_8626_1236',
     tempPassword: true,

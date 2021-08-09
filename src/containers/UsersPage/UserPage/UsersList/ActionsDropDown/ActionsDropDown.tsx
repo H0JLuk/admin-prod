@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { LOGIN_TYPES_ENUM } from '@constants/loginTypes';
 import { UserInfo } from '@types';
 import { ROLES_FOR_EXTERNAL_SALE_POINT } from '../../UserFormHelper';
+import { BUTTON_TEXT } from '@constants/common';
 
 import styles from './ActionsDropDown.module.css';
 
@@ -19,9 +20,7 @@ type ActionsDropDownProps = {
     generateQR(): Promise<void>;
 };
 
-const BUTTON_CHANGE_PASSWORD = 'Сбросить пароль';
 const BUTTON_GENERATE_QR = 'Сгенерировать QR-код';
-const BUTTON_EDIT = 'Редактировать';
 const CHOOSE_ACTION = 'Выбрать действие';
 
 const ActionsDropDown: React.FC<ActionsDropDownProps> = ({
@@ -115,7 +114,7 @@ const EditSomeUsersBtn: React.FC<EditSomeUsersBtnProps> = memo(({
                 disabled={!selectedUsers.length || isExistBothSalePointKind}
                 onClick={onClick}
             >
-                {BUTTON_EDIT}
+                {BUTTON_TEXT.EDIT}
             </Button>
         </Tooltip>
     );
@@ -164,7 +163,7 @@ const ResetUsersPasswordBtn: React.FC<ResetUsersPasswordBtnProps> = memo(({
                 disabled={!selectedUsers.length || !!length}
                 onClick={onClick}
             >
-                {BUTTON_CHANGE_PASSWORD}
+                {BUTTON_TEXT.RESET_PASS}
             </Button>
         </Tooltip>
     );

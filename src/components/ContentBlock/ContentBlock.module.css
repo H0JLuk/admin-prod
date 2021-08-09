@@ -1,0 +1,9 @@
+.contentContainer {
+    background-color: #f7f7f7;
+    padding: 25px;
+    height: 100%;
+}
+
+.contentContainer ~ .contentContainer {
+    margin-top: 15px;
+}

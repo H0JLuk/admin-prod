@@ -7,9 +7,9 @@ import {
     getCurrUserInteractionsForOtherUser,
     getCommonPermissionsByRole,
 } from '@constants/permissions';
-import { getUser, unblockUser, resetUser, removeUser, saveUser, addUser } from '@apiServices/usersService';
+import { getUser, unblockUser, resetUser, removeUser, editUser, addUser } from '@apiServices/usersService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
-import { sleep } from '../../../setupTests';
+import { sleep } from '@setupTests';
 import { INFO_USER_BUTTONS } from './UserFormButtonGroup/UserFormButtonGroup';
 import { customNotifications } from '@utils/notifications';
 import {
@@ -17,10 +17,10 @@ import {
     clientAppListTestResponse,
     searchSalePointTestData,
     testSalePoint,
-} from '../../../../__tests__/constants';
-import { getResultsByTextAndType, createSearchDataAndPassLocation } from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper';
+} from '@testConstants';
+import { getResultsByTextAndType, createSearchDataAndPassLocation } from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteHelper';
 import { confirmModal } from '@utils/utils';
-import { getSalePointByText } from '@apiServices/promoCampaignService';
+import { getSalePointByText } from '@apiServices/salePointService';
 import { BUTTON_TEXT } from '@constants/common';
 
 const mockSalePointSelect = {
@@ -31,7 +31,7 @@ const mockSalePointSelect = {
     },
 };
 jest.mock(
-    '@components/Form/AutocompleteLocationAndSalePoint',
+    '@components/AutoComplete/AutocompleteLocationAndSalePoint',
     () => ({ onLocationChange, onSalePointChange, error, locationId }: any) => (
         <>
             {error.salePoint}
@@ -76,11 +76,11 @@ jest.mock(
     },
 );
 
-jest.mock('@apiServices/promoCampaignService', () => ({
+jest.mock('@apiServices/salePointService', () => ({
     getSalePointByText: jest.fn(),
 }));
 
-jest.mock('@components/Form/AutocompleteLocationAndSalePoint/AutocompleteHelper', () => ({
+jest.mock('@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteHelper', () => ({
     getResultsByTextAndType: jest.fn(),
     createSearchDataAndPassLocation: jest.fn(),
 }));
@@ -110,7 +110,7 @@ jest.mock('@apiServices/usersService', () => ({
     unblockUser: jest.fn(),
     resetUser: jest.fn(),
     removeUser: jest.fn(),
-    saveUser: jest.fn(),
+    editUser: jest.fn(),
     addUser: jest.fn(),
 }));
 
@@ -231,8 +231,8 @@ describe('<UserForm /> test', () => {
             Component();
         });
 
-        expect(screen.getByText(INFO_USER_BUTTONS.RESET_PASSWORD)).toBeTruthy();
-        expect(screen.getByText(INFO_USER_BUTTONS.EDIT)).toBeTruthy();
+        expect(screen.getByText(BUTTON_TEXT.RESET_PASS)).toBeTruthy();
+        expect(screen.getByText(BUTTON_TEXT.EDIT)).toBeTruthy();
         expect(screen.getByText(BUTTON_TEXT.DELETE)).toBeTruthy();
 
         await act(async () => {
@@ -251,8 +251,8 @@ describe('<UserForm /> test', () => {
             Component();
         });
 
-        expect(screen.getByText(INFO_USER_BUTTONS.RESET_PASSWORD)).toBeTruthy();
-        expect(screen.getByText(INFO_USER_BUTTONS.EDIT)).toBeTruthy();
+        expect(screen.getByText(BUTTON_TEXT.RESET_PASS)).toBeTruthy();
+        expect(screen.getByText(BUTTON_TEXT.EDIT)).toBeTruthy();
         expect(screen.getByText(BUTTON_TEXT.DELETE)).toBeTruthy();
 
         await act(async () => {
@@ -266,8 +266,8 @@ describe('<UserForm /> test', () => {
     it('should call `generatePath` function', async () => {
         Component();
         await sleep();
-        expect(screen.getByText(INFO_USER_BUTTONS.EDIT)).toBeTruthy();
-        fireEvent.click(screen.getByText(INFO_USER_BUTTONS.EDIT));
+        expect(screen.getByText(BUTTON_TEXT.EDIT)).toBeTruthy();
+        fireEvent.click(screen.getByText(BUTTON_TEXT.EDIT));
         expect(generatePath).toBeCalledTimes(1);
     });
 
@@ -325,7 +325,7 @@ describe('<UserForm /> test', () => {
                 kind: 'INTERNAL',
             },
         });
-        (saveUser as jest.Mock).mockResolvedValue(TEST_PASSWORDS);
+        (editUser as jest.Mock).mockResolvedValue(TEST_PASSWORDS);
         Component(CASE_TYPES.EDIT);
         await sleep();
 
@@ -333,7 +333,7 @@ describe('<UserForm /> test', () => {
         fireEvent.click(screen.getByText(BUTTON_TEXT.SAVE));
         await sleep();
 
-        expect(saveUser).toBeCalledTimes(1);
+        expect(editUser).toBeCalledTimes(1);
         expect(generatePath).toBeCalledTimes(1);
     });
 
@@ -346,14 +346,14 @@ describe('<UserForm /> test', () => {
                 kind: 'INTERNAL',
             },
         });
-        (saveUser as jest.Mock).mockRejectedValue(new Error('Error'));
+        (editUser as jest.Mock).mockRejectedValue(new Error('Error'));
         Component(CASE_TYPES.EDIT);
         await sleep();
 
         expect(screen.getByText(BUTTON_TEXT.SAVE)).toBeTruthy();
         fireEvent.click(screen.getByText(BUTTON_TEXT.SAVE));
         await sleep();
-        expect(saveUser).toBeCalledTimes(1);
+        expect(editUser).toBeCalledTimes(1);
         expect(generatePath).toBeCalledTimes(0);
     });
 

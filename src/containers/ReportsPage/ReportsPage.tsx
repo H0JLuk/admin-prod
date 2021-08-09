@@ -1,14 +1,14 @@
 import React, { ChangeEvent, Component } from 'react';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import classNames from 'classnames';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import { Button, DatePicker } from 'antd';
+import localeDatePicker from 'antd/es/date-picker/locale/ru_RU';
 import Header from '@components/Header';
-import Button from '@components/Button';
 import AutoCompleteComponent from '@components/AutoComplete';
-import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
+import AutocompleteOptionLabel from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { getOffers } from '@apiServices/adminService';
-import { getSalePointsByText, getPromoCampaignList } from '@apiServices/promoCampaignService';
+import { getPromoCampaignList } from '@apiServices/promoCampaignService';
+import { getSalePointsByText } from '@apiServices/salePointService';
 import { getDzoList } from '@apiServices/dzoService';
 import { getPromoCodeStatistics } from '@apiServices/promoCodeService';
 import { DEFAULT_SLEEP_TIME } from '@constants/common';
@@ -18,7 +18,7 @@ import { PromoCampaignDto, DzoDto, SalePointDto } from '@types';
 
 import styles from './ReportsPage.module.css';
 
-const DATE_FORMAT = 'dd/MM/yyyy';
+const DATE_FORMAT = 'DD/MM/yyyy';
 
 const OFFERS_NAME = 'offers';
 const PROMOCODES_NAME = 'promocodes';
@@ -36,8 +36,8 @@ const EXPORT_TITLE = 'Экспорт использованных промоко
 const FILTER_ERROR_MESSAGE = 'Введены некорректные данные для фильтра по дате';
 
 type ReportsPageState = {
-    startDate: Date | null;
-    endDate: Date | null;
+    startDate: Moment | null;
+    endDate: Moment | null;
     isFiltered: boolean;
     dzoList: DzoDto[];
     dzoId: number | null;
@@ -72,9 +72,8 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
     }
 
     componentDidMount() {
-        const currentDate = new Date();
-        const startDate = new Date(currentDate.getTime());
-        startDate.setDate(startDate.getDate() - 14);
+        const currentDate = moment();
+        const startDate = moment().subtract(14, 'days');
         this.setState({ startDate, endDate: currentDate });
         const loadData = async () => {
             try {
@@ -88,7 +87,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         loadData();
     }
 
-    checkDate = (start: Date | null, end: Date | null) => {
+    checkDate = (start: Moment | null, end: Moment | null) => {
         const momentStartDate = moment(start);
         const momentEndDate = moment(end);
         if (
@@ -118,8 +117,8 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
             return;
         }
 
-        const startTime = isFiltered && startDate ? startDate.getTime() : null;
-        const endTime = isFiltered && endDate ? endDate.getTime() : null;
+        const startTime = isFiltered && startDate ? startDate.valueOf() : null;
+        const endTime = isFiltered && endDate ? endDate.valueOf() : null;
         try {
             this.setState({ loading: true });
             func(startTime, endTime, salePointOfferId).then(data => downloadFile(data, name));
@@ -131,7 +130,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         }
     };
 
-    handleChangeDate = (date: Date | null, isStartDate: boolean) => {
+    handleChangeDate = (date: Moment | null, isStartDate: boolean) => {
         if (isStartDate) {
             this.setState({ startDate: date });
         } else {
@@ -204,9 +203,10 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                 </label>
                 <DatePicker
                     className={styles.datepicker}
-                    dateFormat={DATE_FORMAT}
-                    selected={startDate}
-                    onChange={date => { this.handleChangeDate(date as Date, true); }}
+                    locale={localeDatePicker}
+                    format={DATE_FORMAT}
+                    value={startDate}
+                    onChange={date => { this.handleChangeDate(date, true); }}
                 />
 
                 <label className={styles.textFieldFormat}>
@@ -214,9 +214,10 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                 </label>
                 <DatePicker
                     className={styles.datepicker}
-                    dateFormat={DATE_FORMAT}
-                    selected={endDate}
-                    onChange={date => { this.handleChangeDate(date as Date, false); }}
+                    locale={localeDatePicker}
+                    format={DATE_FORMAT}
+                    value={endDate}
+                    onChange={date => { this.handleChangeDate(date, false); }}
                 />
             </div>
         );
@@ -261,13 +262,13 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
 
                     <div className={styles.container__block}>
                         <Button
-                            label={OFFERS_LABLE}
                             onClick={this.getData(getOffers, OFFERS_NAME)}
                             className={styles.container__button}
-                            type="green"
-                            font="roboto"
+                            type="primary"
                             disabled={loading}
-                        />
+                        >
+                            {OFFERS_LABLE}
+                        </Button>
                     </div>
 
                     <hr />
@@ -316,11 +317,11 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                         <div className={styles.container__block}>
                             <Button
                                 onClick={this.downloadPromoCodes}
-                                label={EXPORT_LABLE}
-                                font="roboto"
-                                type="green"
+                                type="primary"
                                 disabled={loading}
-                            />
+                            >
+                                {EXPORT_LABLE}
+                            </Button>
                         </div>
                     </div>
                 </div>

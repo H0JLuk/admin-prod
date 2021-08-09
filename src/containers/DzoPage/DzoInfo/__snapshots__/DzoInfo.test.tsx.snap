@@ -290,35 +290,22 @@ exports[`<DzoInfo /> test should match the snapshot 1`] = `
       <div
         class="footer"
       >
-        <div
-          class="ant-space ant-space-horizontal ant-space-align-center"
+        <button
+          class="ant-btn ant-btn-primary"
+          type="button"
         >
-          <div
-            class="ant-space-item"
-            style="margin-right: 8px;"
-          >
-            <button
-              class="ant-btn ant-btn-primary"
-              type="button"
-            >
-              <span>
-                Редактировать
-              </span>
-            </button>
-          </div>
-          <div
-            class="ant-space-item"
-          >
-            <button
-              class="ant-btn ant-btn-primary ant-btn-dangerous"
-              type="button"
-            >
-              <span>
-                Удалить
-              </span>
-            </button>
-          </div>
-        </div>
+          <span>
+            Редактировать
+          </span>
+        </button>
+        <button
+          class="ant-btn ant-btn-primary ant-btn-dangerous"
+          type="button"
+        >
+          <span>
+            Удалить
+          </span>
+        </button>
       </div>
     </div>
   </div>

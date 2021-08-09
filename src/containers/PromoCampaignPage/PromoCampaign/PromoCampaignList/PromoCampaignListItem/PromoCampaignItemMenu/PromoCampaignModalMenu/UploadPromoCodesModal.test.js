@@ -1,11 +1,10 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
+import { message } from 'antd';
 
 import UploadPromoCodesModal from './UploadPromoCodesModal';
 
-import * as notice from '../../../../../../../components/toast/Notice';
-
-notice.warnNotice = jest.fn();
+message.warn = jest.fn();
 
 describe('<UploadPromoCodesModal /> test', () => {
     const initialProps = {
@@ -36,7 +35,7 @@ describe('<UploadPromoCodesModal /> test', () => {
             preventDefault: jest.fn(),
         };
         container.find('Modal').simulate('ok', event);
-        expect(notice.warnNotice).toHaveBeenCalledWith('Выберите файл для загрузки!');
+        expect(message.warn).toHaveBeenCalledWith('Выберите файл для загрузки!');
         expect(event.preventDefault).toHaveBeenCalledTimes(1);
     });
 

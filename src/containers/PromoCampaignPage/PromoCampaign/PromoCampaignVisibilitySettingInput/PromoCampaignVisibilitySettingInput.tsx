@@ -2,7 +2,7 @@ import React from 'react';
 import { LocationDto, SalePointDto } from '@types';
 import cn from 'classnames';
 import { Switch } from 'antd';
-import AutocompleteLocationAndSalePoint from '@components/Form/AutocompleteLocationAndSalePoint';
+import AutocompleteLocationAndSalePoint from '@components/AutoComplete/AutocompleteLocationAndSalePoint';
 import { getStringOptionValue } from '@utils/utils';
 
 import styles from './PromoCampaignVisibilitySettingInput.module.css';

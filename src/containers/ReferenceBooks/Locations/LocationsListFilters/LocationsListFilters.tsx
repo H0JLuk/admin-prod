@@ -3,7 +3,7 @@ import noop from 'lodash/noop';
 import SelectTagsOnChangeByClose from '@components/SelectTags/SelectTagsOnChangeByClose';
 import AutoCompleteComponent, { AutoCompleteMethods } from '@components/AutoComplete';
 import { SearchParams } from '@components/HeaderWithActions';
-import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
+import AutocompleteOptionLabel from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { getLocationsByText, getLocationTypeOptions } from '@apiServices/locationService';
 import { getStringOptionValue } from '@utils/utils';
 import { LocationDto } from '@types';

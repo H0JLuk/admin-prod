@@ -1,10 +1,11 @@
 import React from 'react';
-import { generatePath, useHistory, useLocation } from 'react-router-dom';
-import { Col, Row, Space, Button } from 'antd';
+import { generatePath, RouteComponentProps } from 'react-router-dom';
+import { Col, Row, Button } from 'antd';
 import Header from '@components/Header';
 import { DZO_PAGES } from '@constants/route';
 import { deleteDzo } from '@apiServices/dzoService';
-import { confirmModal, errorModal, successModal } from '@utils/utils';
+import { confirmModal, errorModal } from '@utils/utils';
+import { customNotifications } from '@utils/notifications';
 import { ImageBlock } from '../../PromoCampaignPage/PromoCampaign/PromoCampaignInfo/Steps/Templates/TemplateBlocks';
 import {
     DELETE_CONFIRMATION_MODAL_TITLE,
@@ -17,17 +18,17 @@ import {
     IMainDataRow,
     IDzoBannersRow,
 } from '../dzoConstants';
+import { BANNER_TYPE, BUTTON_TEXT } from '@constants/common';
 import { DzoDto } from '@types';
 
 import styles from './DzoInfo.module.css';
-import { BANNER_TYPE, BUTTON_TEXT } from '@constants/common';
-
-interface IDzoInfoProps {
-    matchPath: string;
-}
 
 interface ILocationState {
-    dzoData: DzoDto;
+    dzoData?: DzoDto;
+}
+
+interface IDzoInfoProps extends RouteComponentProps<any, any, ILocationState | undefined> {
+    matchPath: string;
 }
 
 type INormalizedBannerList = {
@@ -41,14 +42,17 @@ interface IDzoInfoBlock {
     colSpan: number;
 }
 
-const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
-    const history = useHistory();
-    const { state: stateFromLocation } = useLocation();
-    const { dzoData } = (stateFromLocation || {}) as ILocationState;
+const DzoInfo: React.FC<IDzoInfoProps> = ({
+    matchPath,
+    history,
+    location,
+}) => {
+    const { state: stateFromLocation } = location;
+    const { dzoData } = stateFromLocation || {};
     const redirectToDzoList = () => history.push(matchPath);
 
     if (!dzoData) {
-        history.push(matchPath);
+        redirectToDzoList();
         return null;
     }
 
@@ -66,23 +70,22 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
         try {
             await deleteDzo(dzoId);
 
-            // TODO: maybe later change this to notification
-            successModal({
-                onOk: redirectToDzoList,
-                title: (
+            customNotifications.success({
+                message: (
                     <span>
                         ДЗО <span className={styles.text}>{dzoData.dzoName}</span> успешно удалено
                     </span>
                 ),
-                okText: BUTTON_TEXT.OK,
             });
+            redirectToDzoList();
         } catch (e) {
             const { message } = e;
 
             errorModal({
                 title: (
                     <span>
-                        {ERROR_DELETE_DZO} <span className={styles.text}>{message}</span>
+                        <b>{ERROR_DELETE_DZO}</b>
+                        <div>{message}</div>
                     </span>
                 ),
             });
@@ -168,21 +171,19 @@ const DzoInfo = ({ matchPath }: IDzoInfoProps) => {
                     </div>
                 </div>
                 <div className={styles.footer}>
-                    <Space>
-                        <Button
-                            type="primary"
-                            onClick={onEdit}
-                        >
-                            {BUTTON_TEXT.EDIT}
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            onClick={onDeleteClick}
-                        >
-                            {BUTTON_TEXT.DELETE}
-                        </Button>
-                    </Space>
+                    <Button
+                        type="primary"
+                        onClick={onEdit}
+                    >
+                        {BUTTON_TEXT.EDIT}
+                    </Button>
+                    <Button
+                        type="primary"
+                        danger
+                        onClick={onDeleteClick}
+                    >
+                        {BUTTON_TEXT.DELETE}
+                    </Button>
                 </div>
             </div>
         </div>

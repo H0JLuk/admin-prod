@@ -1,28 +1,24 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { uploadFile, swapPositions } from '@apiServices/adminService';
 import {
     addCategory,
     deleteCategory,
     getCategoryList,
-    updateCategory
+    updateCategory,
 } from '@apiServices/categoryService';
 import { getStaticUrl } from '@apiServices/settingsService';
-import { Button } from 'antd';
-import { CATEGORY_FORM } from '@components/Form/forms';
+import { Button, Checkbox, Form, Input, Modal } from 'antd';
+import { UploadFile } from 'antd/lib/upload/interface';
 import Header from '@components/Header';
 import { Errors, getErrorText } from '@constants/errors';
-import CustomModal from '@components/CustomModal';
 import CategoryItem from '@components/CategoryItem';
 import { movementDirections } from '@constants/movementDirections';
-import Form from '@components/Form';
-import cross from '@imgs/cross.svg';
 import styles from './CategoryPage.module.css';
-import { populateFormWithData } from '@components/Form/formHelper';
-import ButtonLabels from '@components/Button/ButtonLables';
-import { getAppCode } from '@apiServices/sessionService';
 import { addBodyClassForSidebar, removeBodyClassForSidebar } from '@hooks/useBodyClassForSidebar';
-import { CategoryDto, DefaultCreateDtoResponse } from '@types';
-
+import { CategoryDto } from '@types';
+import { BUTTON_TEXT } from '@constants/common';
+import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
+import UploadPicture from '@components/UploadPicture';
 
 const CATEGORIES_GET_ERROR = 'Ошибка получения категорий!';
 const CATEGORY_DELETE_ERROR = 'Ошибка удаления категории!';
@@ -31,13 +27,25 @@ const ADD_CATEGORY_TITLE = 'Добавить категорию';
 const REMOVE_QUESTION = 'Удалить категорию?';
 const CATEGORY_LIST_TITLE = 'Список категорий';
 const LOADING_LIST_LABEL = 'Загрузка';
-const UPLOAD_IMAGE_PLEASE = 'Пожалуйста загрузите изображение!';
 const CATEGORY_DIR = 'category';
 const CATEGORY_MOVE_ERROR = 'Ошибка изменения порядка категорий';
+
+const DEFAULT_EDIT_CAT_STATE = {
+    id: null,
+    name: null,
+    url: null,
+    active: null,
+};
 
 const LoadingStatus: React.FC<{ loading?: boolean; }> = ({ loading }) => (
     <p className={styles.loadingLabel}>{loading ? LOADING_LIST_LABEL : CATEGORIES_GET_ERROR}</p>
 );
+
+type FormValues = {
+    categoryName: string;
+    active: boolean;
+    categoryUrl: string | UploadFile[];
+};
 
 type CategoryPageState = {
     editingCategory: {
@@ -53,24 +61,15 @@ type CategoryPageState = {
 };
 
 class CategoryPage extends Component<Record<string, unknown>, CategoryPageState> {
-    categoryRef: React.RefObject<HTMLInputElement>;
-
     constructor(props: Record<string, unknown>) {
         super(props);
-        this.categoryRef = React.createRef();
         this.state = {
-            editingCategory: {
-                id: null,
-                name: null,
-                url: null,
-                active: null,
-            },
+            editingCategory: DEFAULT_EDIT_CAT_STATE,
             staticUrl: getStaticUrl(),
             categories: [],
             isOpen: false,
-            formError: null
+            formError: null,
         };
-        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     componentDidMount() {
@@ -87,7 +86,7 @@ class CategoryPage extends Component<Record<string, unknown>, CategoryPageState>
     }
 
     clearState = () => this.setState({
-        editingCategory: { id: null, name: null, url: null, active: null }
+        editingCategory: { ...DEFAULT_EDIT_CAT_STATE },
     });
 
     openModal = () => this.setState({ isOpen: true });
@@ -104,17 +103,8 @@ class CategoryPage extends Component<Record<string, unknown>, CategoryPageState>
     };
 
     handleEdit = (id: number, name: string, url: string, active: boolean) => this.setState({
-        editingCategory: { id, name, url, active }
+        editingCategory: { id, name, url, active },
     }, this.openModal);
-
-    handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-
-        this.setState({
-            editingCategory: { ...this.state.editingCategory, active: value as boolean }
-        });
-    }
 
     handleMove = (id: number, direction: movementDirections) => {
         const { categories } = this.state;
@@ -136,149 +126,157 @@ class CategoryPage extends Component<Record<string, unknown>, CategoryPageState>
     };
 
     renderModalForm = () => {
-        const { formError, editingCategory: { id, name, active } } = this.state;
-        const formData = id != null
-            ? populateFormWithData(CATEGORY_FORM, { categoryName: name })
-            : CATEGORY_FORM;
+        const { formError, editingCategory: { id, name, active, url } } = this.state;
+
         return (
             <div className={styles.modalForm}>
-                <img src={cross} onClick={this.closeModal} className={styles.crossSvg} alt={ButtonLabels.CLOSE} />
                 <Form
-                    data={formData}
-                    buttonText={ButtonLabels.SAVE}
-                    onSubmit={this.onSubmit}
-                    formClassName={styles.categoryForm}
-                    fieldClassName={styles.categoryForm__field}
-                    activeLabelClassName={styles.categoryForm__field__activeLabel}
-                    buttonClassName={styles.categoryForm__button}
-                    errorText={getErrorText(formError)}
-                    formError={!!formError}
-                    errorClassName={styles.error}
-                />
-                <form className={styles.categoryForm}>
-                    <label className={styles.categoryForm__field} >
-                        Is Active:
-                    </label>
-                    <input
-                        name="Active"
-                        type="checkbox"
-                        disabled={id == null}
-                        checked={id == null ? true : !!active}
-                        onChange={this.handleInputChange}
+                    className={styles.categoryForm}
+                    layout="vertical"
+                    validateTrigger="onSubmit"
+                    onFinish={this.onSubmit}
+                >
+                    <Form.Item
+                        name="categoryName"
+                        label="Имя категории"
+                        rules={[
+                            FORM_RULES.REQUIRED,
+                            {
+                                ...getPatternAndMessage('category', 'name'),
+                            },
+                        ]}
+                        initialValue={name ?? ''}
+                        validateFirst
+                    >
+                        <Input maxLength={2048} />
+                    </Form.Item>
+                    <Form.Item
+                        name="active"
+                        label="Активность"
+                        initialValue={id == null ? true : !!active}
+                        valuePropName="checked"
+                    >
+                        <Checkbox disabled={id === null} />
+                    </Form.Item>
+
+                    <UploadPicture
+                        name="categoryUrl"
+                        label="Изображение категории"
+                        initialValue={url || []}
+                        rules={[FORM_RULES.REQUIRED]}
+                        type="logo"
+                        removeIconView={false}
+                        accept="image/*"
+                        footer
                     />
-                </form>
-                <form className={styles.imageUploadContainer}>
-                    <label htmlFor="categoryImageInput">Изображение категории</label>
-                    <input type="file" id="categoryImageInput" ref={this.categoryRef} className={styles.imageUpload} />
-                </form>
+
+                    {formError && <p className={styles.error}>{getErrorText(formError)}</p>}
+
+                    <Button
+                        className={styles.categoryForm__button}
+                        type="primary"
+                        htmlType="submit"
+                    >
+                        {BUTTON_TEXT.SAVE}
+                    </Button>
+                </Form>
             </div>
         );
     };
 
-    reloadCategory(categoryDto: CategoryDto) {
-        const { categories, staticUrl, editingCategory: { id, url, active } } = this.state;
-        const newCategories = categories.slice();
-        newCategories.forEach(elem => {
+    reloadCategory({ categoryName, categoryUrl, active }: CategoryDto) {
+        const { categories, staticUrl, editingCategory: { id } } = this.state;
+        const newCategories = categories.map(elem => {
             if (elem.categoryId === id) {
-                if (this.categoryRef.current?.files?.length && elem.categoryUrl === url) {
-                    elem.categoryUrl = '';
-                    this.setState({ categories: newCategories });
-                }
-                elem.categoryName = categoryDto.categoryName;
-                elem.categoryUrl = (staticUrl || '') + categoryDto.categoryUrl;
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                elem.active = active!;
+                return {
+                    ...elem,
+                    categoryName,
+                    categoryUrl: `${(staticUrl || '')}${categoryUrl}`,
+                    active,
+                };
             }
+
+            return elem;
         });
         this.setState({ categories: newCategories }, this.closeModal);
     }
 
-    pushToCategoriesList(categoryResponse: DefaultCreateDtoResponse, categoryDto: CategoryDto) {
-        const { id } = categoryResponse;
+    pushToCategoriesList(categoryId: number, categoryDto: CategoryDto) {
         const newCategoryItem = {
             ...categoryDto,
             categoryUrl: (this.state.staticUrl || '') + categoryDto.categoryUrl,
-            dzoList: null, active: true, categoryId: id
+            dzoList: null,
+            active: true,
+            categoryId,
         };
         const categories = [newCategoryItem, ...this.state.categories];
         this.setState({ categories }, this.closeModal);
     }
 
-    onSubmit = (data: Record<string, string>) => {
-        if (!this.categoryRef.current?.files?.length && !this.state.editingCategory.url) {
-            alert(UPLOAD_IMAGE_PLEASE);
-            return;
-        }
-        let categoryDto: CategoryDto;
-        if (!this.categoryRef.current?.files?.length && this.state.editingCategory.id !== null) {
-            categoryDto = {
-                ...data,
-                active: !!this.state.editingCategory.active,
-                categoryUrl: this.state.editingCategory.url?.slice((this.state.staticUrl || '').length)
-            } as CategoryDto;
-            updateCategory(this.state.editingCategory.id, categoryDto).then(() => {
-                this.reloadCategory(categoryDto);
-            }).catch(error => console.error(error.message));
-        } else {
-            const imageFile = this.categoryRef.current?.files?.[0];
-            const imageName = `${ getAppCode() }/${ CATEGORY_DIR }/${ imageFile?.name }`;
+    onSubmit = async ({ categoryUrl, ...data }: FormValues) => {
+        let imageUrl = categoryUrl;
+        let categoryId = this.state.editingCategory.id;
 
-            if (!imageFile) {
-                return;
+        try {
+            if (typeof imageUrl !== 'string') {
+                try {
+                    const imageFile = imageUrl[0].originFileObj!;
+                    const imageName = `${ CATEGORY_DIR }/${ imageFile.name.replace(/\s/g, '_').replace(/[()]+/g, '') }`;
+                    const { path } = await uploadFile(imageFile, imageName);
+                    imageUrl = path;
+                } catch (err) {
+                    alert(IMAGE_UPLOAD_ERROR);
+                    console.error(err.message);
+                }
+            } else {
+                imageUrl = this.state.editingCategory.url?.slice((this.state.staticUrl || '').length) ?? '';
             }
 
-            uploadFile(imageFile, imageName)
-                .then((response) => {
-                    categoryDto = { ...data, active: !!this.state.editingCategory.active, categoryUrl: response.path } as CategoryDto;
-                    if (this.state.editingCategory.id !== null) {
-                        return updateCategory(this.state.editingCategory.id, categoryDto);
-                    } else {
-                        return addCategory(categoryDto);
-                    }
-                })
-                .then((categoryId) => {
-                    if (this.state.editingCategory.id !== null) {
-                        this.reloadCategory(categoryDto);
-                    } else {
-                        this.pushToCategoriesList(categoryId as DefaultCreateDtoResponse, categoryDto);
-                    }
-                })
-                .catch(error => {
-                    alert(IMAGE_UPLOAD_ERROR);
-                    console.error(error.message);
-                });
+            const categoryDto = {
+                ...data,
+                categoryUrl: imageUrl,
+            } as CategoryDto;
+
+            if (categoryId !== null) {
+                await updateCategory(categoryId, categoryDto);
+                this.reloadCategory(categoryDto);
+            } else {
+                ({ id: categoryId } = await addCategory(categoryDto));
+                this.pushToCategoriesList(categoryId, categoryDto);
+            }
+        } catch (error) {
+            console.error(error.message);
         }
     };
 
     renderCategoriesList = () => {
         const { categories } = this.state;
         const isSuccess = Array.isArray(categories);
-        return (
-            <Fragment>
-                {isSuccess ? (
-                    categories.length ?
-                        categories.map((category, i) =>
-                            <CategoryItem
-                                key={`categoryItem-${i}`}
-                                handleDelete={this.handleDelete}
-                                handleEdit={this.handleEdit}
-                                handleMove={this.handleMove}
-                                {...category}
-                            />
-                        ) : <LoadingStatus loading />
-                ) : (
-                    <LoadingStatus />
-                )}
-            </Fragment>
+        return isSuccess ? (
+            categories.length ?
+                categories.map((category, i) => (
+                    <CategoryItem
+                        key={`categoryItem-${i}`}
+                        handleDelete={this.handleDelete}
+                        handleEdit={this.handleEdit}
+                        handleMove={this.handleMove}
+                        {...category}
+                    />
+                )) : <LoadingStatus loading />
+        ) : (
+            <LoadingStatus />
         );
     };
 
     renderModifyModal = () => (
-        <CustomModal
-            isOpen={this.state.isOpen}
-            onRequestClose={this.closeModal}>
+        <Modal
+            visible={this.state.isOpen}
+            onCancel={this.closeModal}
+            footer={null}
+            destroyOnClose
+        >
             {this.renderModalForm()}
-        </CustomModal>
+        </Modal>
     );
 
     render() {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Empty, Table, TableProps } from 'antd';
+import { Table, TableProps } from 'antd';
+import EmptyMessage from '@components/EmptyMessage';
 import { getFormattedDate } from '@utils/helper';
 import { LocationDto } from '@types';
 
@@ -9,19 +10,6 @@ const LOCATION_NAME = 'Локация';
 const PARENT_NAME = 'Родительская локация';
 const LOCATION_TYPE = 'Тип локации';
 const START_DATE = 'Начало действия';
-
-const EMPTY_TABLE = {
-    firstMessagePart: 'Мы ничего не нашли.',
-    secondMessagePart: 'Измените значение поиска и попробуйте еще раз',
-};
-
-// TODO: Заменить компонентом после мержа ветки WDZO-2164
-const EmptyMessage = (
-    <Empty description={null} >
-        <div>{EMPTY_TABLE.firstMessagePart}</div>
-        <div>{EMPTY_TABLE.secondMessagePart}</div>
-    </Empty>
-);
 
 type LocationsListProps = Pick<TableProps<LocationDto>, 'onRow' | 'rowSelection' | 'pagination' | 'onChange' | 'loading'> & {
     locationsList: LocationDto[];
@@ -38,7 +26,7 @@ const LocationsList: React.FC<LocationsListProps> = ({
             className={styles.table}
             dataSource={locationsList}
             showHeader={false}
-            locale={{ emptyText: EmptyMessage }}
+            locale={{ emptyText: <EmptyMessage /> }}
         >
             <Table.Column
                 width="30%"

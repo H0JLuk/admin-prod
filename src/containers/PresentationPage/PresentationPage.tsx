@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
 import { swapPositions, uploadFile } from '@apiServices/adminService';
 import {
-    addLanding,
-    deleteLanding,
-    getLandingList,
-    updateLanding,
+    addPresentation,
+    deletePresentation,
+    getPresentationList,
+    updatePresentation,
 } from '@apiServices/landingService';
 import { getStaticUrl } from '@apiServices/settingsService';
-import { LANDING_EDIT_FORM } from '@components/Form/forms';
 import { Errors, getErrorText } from '@constants/errors';
-import CustomModal from '@components/CustomModal/CustomModal';
 import LandingItem from '@components/LandingItem';
 import { movementDirections } from '@constants/movementDirections';
-import Form from '@components/Form';
-import Button from '@components/Button';
-import cross from '@imgs/cross.svg';
 import styles from './PresentationPage.module.css';
-import { populateFormWithData } from '@components/Form/formHelper';
-import ButtonLabels from '@components/Button/ButtonLables';
 import { getAppCode } from '@apiServices/sessionService';
 import Header from '@components/Header';
-import { message } from 'antd';
+import { Button, Form, Input, message, Modal } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
-import { LandingDto, SaveLandingRequest } from '@types';
+import { PresentationDto, SavePresentationRequest } from '@types';
 import EmptyMessage from '@components/EmptyMessage';
+import { BUTTON_TEXT } from '@constants/common';
+import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
+import UploadPicture from '@components/UploadPicture';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 const LANDINGS_EMPTY = {
     firstMessagePart: 'Для этой витрины пока нет лендингов',
@@ -36,7 +33,6 @@ const LANDINGS_MOVE_ERROR = 'Ошибка изменения порядка ле
 const ADD_LANDING_TITLE = 'Добавить лендинг';
 const REMOVE_QUESTION = 'Удалить лендинг?';
 const LANDINGS_LIST_TITLE = 'Список лендингов';
-const UPLOAD_IMAGE_PLEASE = 'Пожалуйста загрузите изображение!';
 const LANDING_DIR = 'landing';
 
 const initialEditingLanding = {
@@ -44,6 +40,12 @@ const initialEditingLanding = {
     header: null,
     description: null,
     imageUrl: null,
+};
+
+type FormValues = {
+    header: string;
+    description: string;
+    imageUrl: string | UploadFile[];
 };
 
 export type initialEditingLandingType = {
@@ -56,18 +58,15 @@ export type initialEditingLandingType = {
 type PresentationPageState = {
     loading: boolean;
     editingLanding: initialEditingLandingType;
-    landings: LandingDto[];
+    landings: PresentationDto[];
     isOpen: boolean;
     formError: Errors | null;
     staticServerUrl: string;
 };
 
 class PresentationPage extends Component<Record<string, unknown>, PresentationPageState> {
-    private landingRef: React.RefObject<HTMLInputElement & { files: File[]; }>;
-
     constructor(props: Record<string, string>) {
         super(props);
-        this.landingRef = React.createRef();
         this.state = {
             loading: true,
             editingLanding: initialEditingLanding,
@@ -79,7 +78,7 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
     }
 
     componentDidMount() {
-        getLandingList()
+        getPresentationList()
             .then(response => {
                 const { landingDtoList } = response;
                 this.setState({ landings: landingDtoList, loading: false });
@@ -98,7 +97,7 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
 
     handleDelete = (id: number) => {
         if (window.confirm(REMOVE_QUESTION)) {
-            deleteLanding(id)
+            deletePresentation(id)
                 .then(() => {
                     const croppedLandings = this.state.landings.filter(landing => landing.landingId !== id);
                     this.setState({ landings: croppedLandings });
@@ -129,44 +128,77 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
 
     renderModalForm = () => {
         const { formError, editingLanding } = this.state;
-        const formData = editingLanding.landingId !== null ? populateFormWithData(LANDING_EDIT_FORM, {
-            landingId: editingLanding.landingId as string,
-            header: editingLanding.header,
-            description: editingLanding.description,
-            imageUrl: editingLanding.imageUrl,
-        }) : LANDING_EDIT_FORM;
+
         return (
             <div className={styles.modalForm}>
-                <img src={cross} onClick={this.closeModal} className={styles.crossSvg} alt={ButtonLabels.CLOSE} />
                 <Form
-                    data={formData}
-                    buttonText={ButtonLabels.SAVE}
-                    onSubmit={this.onSubmit}
-                    formClassName={styles.landingForm}
-                    fieldClassName={styles.landingForm__field}
-                    activeLabelClassName={styles.landingForm__field__activeLabel}
-                    buttonClassName={styles.landingForm__button}
-                    errorText={getErrorText(formError)}
-                    formError={!!formError}
-                    errorClassName={styles.error}
-                />
-                <form className={styles.imageUploadContainer}>
-                    <label htmlFor="landingImageInput">Изображение лендинга</label>
-                    <input type="file" id="landingImageInput" ref={this.landingRef} className={styles.imageUpload} />
-                </form>
+                    className={styles.presentationForm}
+                    layout="vertical"
+                    onFinish={this.onSubmit}
+                    validateTrigger="onSubmit"
+                >
+                    <Form.Item
+                        name="header"
+                        label="Заголовок"
+                        rules={[
+                            FORM_RULES.REQUIRED,
+                            {
+                                ...getPatternAndMessage('presentation', 'common'),
+                            },
+                        ]}
+                        initialValue={editingLanding.header ?? ''}
+                        validateFirst
+                    >
+                        <Input
+                            maxLength={60}
+                            allowClear
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        name="description"
+                        label="Описание"
+                        rules={[
+                            FORM_RULES.REQUIRED,
+                            {
+                                ...getPatternAndMessage('presentation', 'common'),
+                            },
+                        ]}
+                        initialValue={editingLanding.description ?? ''}
+                        validateFirst
+                    >
+                        <Input.TextArea maxLength={150} />
+                    </Form.Item>
+
+                    <UploadPicture
+                        name="imageUrl"
+                        label="Изображение презентации"
+                        initialValue={editingLanding.imageUrl || []}
+                        rules={[FORM_RULES.REQUIRED]}
+                        type="banner"
+                        removeIconView={false}
+                        accept="image/*"
+                        footer
+                    />
+
+                    {formError && <p className={styles.error}>{getErrorText(formError)}</p>}
+
+                    <Button
+                        className={styles.presentationForm__button}
+                        type="primary"
+                        htmlType="submit"
+                    >
+                        {BUTTON_TEXT.SAVE}
+                    </Button>
+                </Form>
             </div>
         );
     };
 
-    reloadLandings = (data: SaveLandingRequest, url: string) => {
+    reloadLandings = (data: SavePresentationRequest, url: string) => {
         const { landings, editingLanding: { landingId } } = this.state;
         const newLandings = landings.slice();
         newLandings.forEach(elem => {
-            if (elem.landingId === landingId && this.landingRef.current) {
-                if (this.landingRef.current.files.length > 0 && elem.imageUrl === url) {
-                    elem.imageUrl = '';
-                    this.setState({ landings: newLandings });
-                }
+            if (elem.landingId === landingId) {
                 elem.imageUrl = url;
                 elem.header = data.header;
                 elem.description = data.description;
@@ -175,47 +207,43 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
         this.setState({ landings: newLandings }, this.closeModal);
     };
 
-    onSubmit = (data: SaveLandingRequest | Record<string, string>) => {
-        const { editingLanding: { imageUrl, landingId }, staticServerUrl } = this.state;
-        if (this.landingRef.current && !this.landingRef.current.files.length && !imageUrl) {
-            alert(UPLOAD_IMAGE_PLEASE);
-            return;
-        }
-        let landingDto: SaveLandingRequest;
-        if (landingId !== null && this.landingRef.current && !this.landingRef.current.files.length && imageUrl) {
-            landingDto = { ...data, imageUrl: imageUrl.slice(staticServerUrl.length) } as SaveLandingRequest;
-            updateLanding(landingId as number, landingDto)
-                .catch(error => console.log(error.message));
-            this.reloadLandings(data as SaveLandingRequest, imageUrl);
-        } else {
-            const imageFile = this.landingRef.current && this.landingRef.current.files[0];
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const imageName = `${getAppCode()}/${LANDING_DIR}/${imageFile!.name}`;
+    onSubmit = async ({ imageUrl: formImage, ...data }: FormValues) => {
+        const { editingLanding, staticServerUrl } = this.state;
+        let { landingId } = editingLanding;
+        let landingImage = formImage;
 
-            uploadFile(imageFile as File, imageName)
-                .then(response => {
-                    landingDto = { ...data, imageUrl: response.path } as SaveLandingRequest;
-                    if (landingId !== null) {
-                        return updateLanding(landingId as number, landingDto);
-                    } else {
-                        return addLanding(landingDto);
-                    }
-                })
-                .then(response => {
-                    const imageUrl = `${this.state?.staticServerUrl}${landingDto?.imageUrl}`;
-                    if (landingId !== null) {
-                        this.reloadLandings(data as SaveLandingRequest, imageUrl);
-                    } else {
-                        const { id } = response;
-                        const newLandingItem = { ...landingDto, landingId: id, imageUrl };
-                        const landings = [...this.state.landings, newLandingItem];
-                        this.setState({ landings }, this.closeModal);
-                    }
-                })
-                .catch(error => {
+        try {
+            if (typeof landingImage !== 'string') {
+                try {
+                    const imageFile = landingImage[0].originFileObj!;
+                    const imageName = `${getAppCode()}/${LANDING_DIR}/${imageFile.name.replace(/\s/g, '_').replace(/[()]+/g, '')}`;
+                    const { path } = await uploadFile(imageFile, imageName);
+                    landingImage = path;
+                } catch (err) {
                     alert(IMAGE_UPLOAD_ERROR);
-                    console.log(error.message);
-                });
+                    console.log(err.message);
+                }
+            } else {
+                landingImage = editingLanding.imageUrl?.slice(staticServerUrl.length) ?? '';
+            }
+
+            const landingDto = {
+                ...data,
+                imageUrl: landingImage,
+            } as SavePresentationRequest;
+            const imageUrl = `${staticServerUrl}${landingDto.imageUrl}`;
+
+            if (landingId !== null) {
+                await updatePresentation(landingId as number, landingDto);
+                this.reloadLandings(landingDto, imageUrl);
+            } else {
+                ({ id: landingId } = await addPresentation(landingDto));
+                const newLandingItem = { ...landingDto, landingId, imageUrl };
+                const landings = [...this.state.landings, newLandingItem];
+                this.setState({ landings }, this.closeModal);
+            }
+        } catch (error) {
+            console.error(error.message);
         }
     };
 
@@ -252,11 +280,14 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
     };
 
     renderModifyModal = () => (
-        <CustomModal
-            isOpen={this.state.isOpen}
-            onRequestClose={this.closeModal}>
+        <Modal
+            visible={this.state.isOpen}
+            onCancel={this.closeModal}
+            footer={null}
+            destroyOnClose
+        >
             {this.renderModalForm()}
-        </CustomModal>
+        </Modal>
     );
 
     render() {
@@ -273,10 +304,11 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
                         <div>
                             <Button
                                 onClick={openWithParam}
-                                label={ADD_LANDING_TITLE}
-                                font="roboto"
-                                type="green"
-                            />
+                                type="primary"
+                                shape="round"
+                            >
+                                {ADD_LANDING_TITLE}
+                            </Button>
                         </div>
                     </div>
                     <div className={styles.landingList}>

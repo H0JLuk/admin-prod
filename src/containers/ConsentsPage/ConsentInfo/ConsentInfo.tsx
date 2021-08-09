@@ -6,6 +6,7 @@ import { generatePath, useHistory, useParams } from 'react-router-dom';
 import Header from '@components/Header';
 import { getFormattedDate } from '@utils/helper';
 import { CONSENTS_PAGES } from '@constants/route';
+import ContentBlock from '@components/ContentBlock';
 import Loading from '@components/Loading';
 import { getRole } from '@apiServices/sessionService';
 import { confirmModal, errorModal, successModal } from '@utils/utils';
@@ -127,38 +128,36 @@ const ConsentInfo: React.FC<ConsentInfoProps> = ({ matchPath }) => {
                             )}
                         </div>
                         <div className={styles.container}>
-                            <div className={styles.infoWrapper}>
-                                <div className={styles.infoContainer}>
-                                    <div className={styles.title}>
-                                        {CONSENTS_LABELS.CREATE_DATE}
-                                    </div>
-                                    <div className={styles.text}>
-                                        {getFormattedDate(createDate)}
-                                    </div>
-                                    <div className={styles.title}>
-                                        {CONSENTS_LABELS.VERSION}
-                                    </div>
-                                    <div className={styles.text}>
-                                        {version}
-                                    </div>
-                                    <div className={styles.title}>
-                                        {CONSENTS_LABELS.CONSENTS_TEXT}
-                                    </div>
-                                    <Markup allowAttributes content={text} />
-                                    <div className={styles.title}>
-                                        {CONSENTS_LABELS.CONSENTS_APPS}
-                                    </div>
-                                    <div className={styles.tagsBlock}>
-                                        {clientApplications.length > 0
-                                            ? clientApplications.map(({ displayName, id: clientAppId }) => (
-                                                <div key={clientAppId} className={styles.tag}>
-                                                    {displayName}
-                                                </div>
-                                            )) : <i>{EMPTY_VALUE[CONSENTS_LABELS.CLIENT_APPS_DTO_LIST]}</i>
-                                        }
-                                    </div>
+                            <ContentBlock maxWidth={800}>
+                                <div className={styles.title}>
+                                    {CONSENTS_LABELS.CREATE_DATE}
                                 </div>
-                            </div>
+                                <div className={styles.text}>
+                                    {getFormattedDate(createDate)}
+                                </div>
+                                <div className={styles.title}>
+                                    {CONSENTS_LABELS.VERSION}
+                                </div>
+                                <div className={styles.text}>
+                                    {version}
+                                </div>
+                                <div className={styles.title}>
+                                    {CONSENTS_LABELS.CONSENTS_TEXT}
+                                </div>
+                                <Markup allowAttributes content={text} />
+                                <div className={styles.title}>
+                                    {CONSENTS_LABELS.CONSENTS_APPS}
+                                </div>
+                                <div className={styles.tagsBlock}>
+                                    {clientApplications.length > 0
+                                        ? clientApplications.map(({ displayName, id: clientAppId }) => (
+                                            <div key={clientAppId} className={styles.tag}>
+                                                {displayName}
+                                            </div>
+                                        )) : <i>{EMPTY_VALUE[CONSENTS_LABELS.CLIENT_APPS_DTO_LIST]}</i>
+                                    }
+                                </div>
+                            </ContentBlock>
                         </div>
                     </>
                 )}

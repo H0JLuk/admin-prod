@@ -1,4 +1,5 @@
 import React from 'react';
+import ContentBlock from '@components/ContentBlock';
 import Template from './Templates/Template';
 import { PromoCampaignDto } from '@types';
 
@@ -17,13 +18,13 @@ const StepTextAndImage: React.FC<IStepTextAndImageProps> = ({ banners, texts, ty
             <div className={styles.title}>
                 {TITLE_BY_TYPE[type as keyof typeof TITLE_BY_TYPE]}
             </div>
-            <div className={styles.container}>
+            <ContentBlock>
                 <Template
                     banners={banners}
                     texts={texts}
                     type={type}
                 />
-            </div>
+            </ContentBlock>
         </div>
     </div>
 );

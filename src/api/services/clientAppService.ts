@@ -25,14 +25,6 @@ export function addClientApp(clientAppDto: SaveClientApp) {
     return Api.post<DefaultCreateDtoResponse>('/admin/clientApplication', clientAppDto, getReqOptions());
 }
 
-export function copyClientApp(clientAppDto: SaveClientApp) {
-    return Api.post<DefaultCreateDtoResponse>(
-        '/admin/clientApplication/copy',
-        clientAppDto,
-        getReqOptions(),
-    );
-}
-
 export function updateClientApp(id: number, clientAppDto: SaveClientApp) {
     return Api.put<DefaultApiResponse>(`/admin/clientApplication/${id}`, clientAppDto, getReqOptions());
 }

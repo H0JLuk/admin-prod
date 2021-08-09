@@ -1,7 +1,6 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
-import { Typography, Form, Modal, Upload, Button, UploadProps } from 'antd';
-import { warnNotice } from '@components/toast/Notice';
+import { Typography, Form, Modal, Upload, Button, UploadProps, message } from 'antd';
 import example from '@imgs/promoCodeUploadExample.png';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { BUTTON_TEXT } from '@constants/common';
@@ -53,9 +52,9 @@ const UploadPromoCodesModal: React.FC<UploadPromoCodesModalProps> = ({ open, onC
         const { file } = state;
 
         if (!state.file) {
-            return warnNotice('Выберите файл для загрузки!');
+            return message.warn('Выберите файл для загрузки!');
         } else if (state.fileList.length > 1) {
-            return warnNotice('Можно загрузить только один файл за раз!');
+            return message.warn('Можно загрузить только один файл за раз!');
         }
 
         setState((prev) => ({ ...prev, uploading: false }));

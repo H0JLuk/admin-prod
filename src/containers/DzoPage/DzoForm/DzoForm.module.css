@@ -2,17 +2,10 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
 }
 
 .container {
-    width: 100%;
     padding: 0px 60px 0px 15px;
-}
-
-.formWrapper {
-    padding: 32px;
-    background-color: #f8f8f8;
 }
 
 .loadingContainer {
@@ -52,20 +45,12 @@
     margin-right: 12px;
 }
 
-.formContainer {
-    max-width: 900px;
-}
-
 .mainInfoRow {
     max-width: 750px;
 }
 
 .uploadImage {
     max-width: 250px;
-}
-
-.container :global(.ant-select-item-option-selected:not(.ant-select-item-option-disabled)) {
-    background-color: inherit;
 }
 
 .formWrapper > form > div:last-child :global(.ant-form-item) {

@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState, MouseEvent } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Dropdown, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
@@ -22,7 +22,6 @@ type DropdownWithActionProps = {
     withReset?: boolean;
 };
 
-// InferProps<DropdownWithActionProps>
 const DropdownWithAction: React.FC<DropdownWithActionProps> = ({
     dropdownLabel,
     onMenuItemClick,
@@ -73,17 +72,18 @@ const DropdownWithAction: React.FC<DropdownWithActionProps> = ({
     );
 };
 
-// TODO: Решить проблему с типизацией menuItems
-// DropdownWithAction.propTypes = {
-//     dropdownLabel: PropTypes.string.isRequired,
-//     onMenuItemClick: PropTypes.func.isRequired,
-//     resetLabel: PropTypes.string,
-//     menuItems: PropTypes.arrayOf(PropTypes.shape({
-//         name: PropTypes.string.isRequired,
-//         label: PropTypes.string.isRequired,
-//         active: PropTypes.bool,
-//     })).isRequired,
-//     withReset: PropTypes.bool,
-// };
+DropdownWithAction.propTypes = {
+    dropdownLabel: PropTypes.string.isRequired,
+    onMenuItemClick: PropTypes.func.isRequired,
+    resetLabel: PropTypes.string,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    menuItems: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+        active: PropTypes.bool,
+    })).isRequired,
+    withReset: PropTypes.bool,
+};
 
 export default memo(DropdownWithAction);

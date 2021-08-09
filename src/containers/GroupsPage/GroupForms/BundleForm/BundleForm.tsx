@@ -452,7 +452,6 @@ const campaignIdValidator: RuleRender = ({ getFieldValue }) => ({
     validateTrigger: 'onChange',
 });
 
-// TODO: change type to normal
 async function tagsValidator(_: RuleObject, data: any[]) {
     if (data?.length < 1 || !data) {
         return Promise.reject(Error('Создайте хотя бы одну связь для бандлов'));

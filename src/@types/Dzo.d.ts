@@ -1,5 +1,6 @@
 import { BannerDto } from './Banner';
 
+// TODO: Вынести в отдельный файл и переименовать после добавления функционала разных ссылок в промо-кампании
 export type DzoApplication = {
     applicationId: number;
     applicationType: string;

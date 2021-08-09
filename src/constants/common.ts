@@ -1,6 +1,7 @@
 import { TextAreaProps } from 'antd/lib/input';
 
 export const showCount: TextAreaProps['showCount'] = {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     formatter: ({ count, maxLength }) => `Осталось символов ${maxLength! - count}`,
 };
 
@@ -38,17 +39,22 @@ export const SALE_POINT_TYPE_RU = {
 };
 
 export const BUTTON_TEXT = {
-    SAVE: 'Сохранить',
     ADD: 'Добавить',
-    CREATE: 'Создать',
     CANCEL: 'Отменить',
+    CANCEL_ALL: 'Отменить все',
+    CHANGE: 'Изменить',
+    CHANGE_ORDER: 'Изменить порядок',
+    CHOSEN: 'Выбрано',
+    COPY: 'Копировать',
+    CREATE: 'Создать',
+    DELETE: 'Удалить',
+    EDIT: 'Редактировать',
+    LOGIN: 'Вход',
+    MOVE_UP: 'Переместить вверх',
+    MOVE_DOWN: 'Переместить вниз',
+    OK: 'Хорошо',
+    RESET_PASS: 'Сбросить пароль',
+    SAVE: 'Сохранить',
     SELECT: 'Выбрать',
     SELECT_ALL: 'Выбрать все',
-    CANCEL_ALL: 'Отменить все',
-    DELETE: 'Удалить',
-    CHOSEN: 'Выбрано',
-    EDIT: 'Редактировать',
-    OK: 'Хорошо',
-    COPY: 'Копировать',
-    CHANGE_ORDER: 'Изменить порядок',
 };

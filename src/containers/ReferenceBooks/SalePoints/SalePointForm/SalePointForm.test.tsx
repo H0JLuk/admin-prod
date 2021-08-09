@@ -5,24 +5,31 @@ import { waitFor } from '@testing-library/react';
 import { Form } from 'antd';
 import { mount, shallow } from 'enzyme';
 import {
+    salePointTypeTestResponse,
     searchLocation,
     searchSalePointTestData,
     testLocation,
     testSalePoint,
-} from '../../../../../__tests__/constants';
-import { addSalePoint, deleteSalePoint, getSalePointsByText, editSalePoint } from '@apiServices/salePointService';
+} from '@testConstants';
+import {
+    addSalePoint,
+    deleteSalePoint,
+    getSalePointByText,
+    getSalePointsByText,
+    getSalePointTypesList,
+    editSalePoint,
+} from '@apiServices/salePointService';
 import { getLocationsByText } from '@apiServices/locationService';
 import { confirmModal } from '@utils/utils';
-import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
+import AutocompleteOptionLabel from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { act } from 'react-dom/test-utils';
-import { sleep } from '../../../../../src/setupTests';
+import { sleep } from '@setupTests';
 
 const testFormData = {
     name: 'test salePoint',
-    typeId: 2,
+    typeId: 1,
     location: testLocation,
     parentSalePoint: testSalePoint,
-    channelType: 2,
 };
 
 let mockEmptyStateLocation = false;
@@ -46,7 +53,8 @@ jest.mock('@apiServices/salePointService', () => ({
     editSalePoint: jest.fn(),
     getChannelOptions: jest.fn(),
     getSalePointsByText: jest.fn(),
-    getSalePointTypesOptions: jest.fn(),
+    getSalePointByText: jest.fn(),
+    getSalePointTypesList: jest.fn(),
 }));
 
 jest.mock('@apiServices/locationService', () => ({
@@ -65,6 +73,8 @@ describe('<SalePointForm /> tests', () => {
 
     beforeEach(() => {
         (getLocationsByText as jest.Mock).mockImplementation(() => searchLocation);
+        (getSalePointByText as jest.Mock).mockImplementation(() => testSalePoint);
+        (getSalePointTypesList as jest.Mock).mockImplementation(() => salePointTypeTestResponse);
         (getSalePointsByText as jest.Mock).mockImplementation(() => searchSalePointTestData);
     });
 

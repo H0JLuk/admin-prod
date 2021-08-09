@@ -30,10 +30,6 @@
     align-items: flex-end;
 }
 
-.propertiesRow {
-    max-width: 950px;
-}
-
 .propertiesRow:not(:last-child) {
     margin-bottom: 5px;
 }

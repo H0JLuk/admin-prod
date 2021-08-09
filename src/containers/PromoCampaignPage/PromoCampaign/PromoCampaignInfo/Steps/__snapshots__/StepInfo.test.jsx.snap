@@ -3,276 +3,288 @@
 exports[`<StepInfo/> test should match to snapshot 1`] = `
 "<StepInfo promoCampaign={{...}}>
   <div className=\\"containerStep\\">
-    <div className=\\"container\\">
-      <Row gutter={{...}}>
-        <div className=\\"ant-row\\" style={{...}}>
-          <Col span={16}>
-            <div style={{...}} className=\\"ant-col ant-col-16\\">
-              <div className=\\"infoTitle\\">
-                Категории
-              </div>
-              <div className=\\"infoText\\">
-                Test category Name 1, Test category Name 2
-              </div>
-            </div>
-          </Col>
-          <Col span={8} className=\\"switchContainer\\">
-            <div style={{...}} className=\\"ant-col ant-col-8 switchContainer\\">
-              <div className=\\"switch\\">
-                <div className=\\"infoTitle\\">
-                  Отображать видеоэкскурсию
-                </div>
-                <Switch checked={true} disabled={true}>
-                  <Wave insertExtraNode={true}>
-                    <Switch checked={true} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
-                      <button type=\\"button\\" role=\\"switch\\" aria-checked={true} disabled={true} className=\\"ant-switch ant-switch-checked ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
-                        <div className=\\"ant-switch-handle\\" />
-                        <span className=\\"ant-switch-inner\\" />
-                      </button>
-                    </Switch>
-                  </Wave>
-                </Switch>
-              </div>
-            </div>
-          </Col>
-          <Col span={8}>
-            <div style={{...}} className=\\"ant-col ant-col-8\\">
-              <div className=\\"infoTitle\\">
-                Ссылка на страницу промо-кампании
-              </div>
-              <div className=\\"webLink\\">
-                https://www.promo.sberhealth.ru/vvo
-              </div>
-            </div>
-          </Col>
-          <Col span={8}>
-            <div style={{...}} className=\\"ant-col ant-col-8\\">
-              <div className=\\"infoTitle\\">
-                Источник ссылки
-              </div>
-              <div className=\\"flexRow\\">
-                <Radio className=\\"checkbox\\" checked={false} disabled={true} type=\\"radio\\">
-                  <label className=\\"ant-radio-wrapper ant-radio-wrapper-disabled checkbox\\" style={[undefined]} onMouseEnter={[undefined]} onMouseLeave={[undefined]}>
-                    <Checkbox checked={false} disabled={true} type=\\"radio\\" prefixCls=\\"ant-radio\\" className=\\"\\" style={{...}} defaultChecked={false} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onChange={[Function: onChange]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onKeyUp={[Function: onKeyUp]}>
-                      <span className=\\"ant-radio ant-radio-disabled\\" style={{...}}>
-                        <input name={[undefined]} id={[undefined]} type=\\"radio\\" required={[undefined]} readOnly={[undefined]} disabled={true} tabIndex={[undefined]} className=\\"ant-radio-input\\" checked={false} onClick={[undefined]} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onKeyUp={[Function: onKeyUp]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onChange={[Function (anonymous)]} autoFocus={[undefined]} value={[undefined]} />
-                        <span className=\\"ant-radio-inner\\" />
-                      </span>
-                    </Checkbox>
-                    <span>
-                      ДЗО
-                    </span>
-                  </label>
-                </Radio>
-                <Radio className=\\"checkbox\\" checked={true} disabled={true} type=\\"radio\\">
-                  <label className=\\"ant-radio-wrapper ant-radio-wrapper-checked ant-radio-wrapper-disabled checkbox\\" style={[undefined]} onMouseEnter={[undefined]} onMouseLeave={[undefined]}>
-                    <Checkbox checked={true} disabled={true} type=\\"radio\\" prefixCls=\\"ant-radio\\" className=\\"\\" style={{...}} defaultChecked={false} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onChange={[Function: onChange]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onKeyUp={[Function: onKeyUp]}>
-                      <span className=\\"ant-radio ant-radio-checked ant-radio-disabled\\" style={{...}}>
-                        <input name={[undefined]} id={[undefined]} type=\\"radio\\" required={[undefined]} readOnly={[undefined]} disabled={true} tabIndex={[undefined]} className=\\"ant-radio-input\\" checked={true} onClick={[undefined]} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onKeyUp={[Function: onKeyUp]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onChange={[Function (anonymous)]} autoFocus={[undefined]} value={[undefined]} />
-                        <span className=\\"ant-radio-inner\\" />
-                      </span>
-                    </Checkbox>
-                    <span>
-                      Промо-кампания
-                    </span>
-                  </label>
-                </Radio>
-              </div>
-            </div>
-          </Col>
-          <Col span={8} className=\\"switchContainer\\">
-            <div style={{...}} className=\\"ant-col ant-col-8 switchContainer\\">
-              <div className=\\"switch\\">
-                <div className=\\"infoTitle\\">
-                  Отображать кнопку &quot;Перейти на сайт&quot;
-                </div>
-                <Switch disabled={true} checked={false}>
-                  <Wave insertExtraNode={true}>
-                    <Switch checked={false} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
-                      <button type=\\"button\\" role=\\"switch\\" aria-checked={false} disabled={true} className=\\"ant-switch ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
-                        <div className=\\"ant-switch-handle\\" />
-                        <span className=\\"ant-switch-inner\\" />
-                      </button>
-                    </Switch>
-                  </Wave>
-                </Switch>
-              </div>
-            </div>
-          </Col>
-          <Col span={8}>
-            <div style={{...}} className=\\"ant-col ant-col-8\\">
-              <div className=\\"infoTitle\\">
-                ДЗО
-              </div>
-              <div className=\\"infoText\\">
-                СберЗдоровье
-              </div>
-            </div>
-          </Col>
-          <Col span={8}>
-            <div style={{...}} className=\\"ant-col ant-col-8\\">
-              <div className=\\"infoTitle\\">
-                Период действия
-              </div>
-              <div className=\\"infoText\\">
-                2021-02-12T21:00:00
-                 - 
-                2021-03-08T20:59:59.999
-              </div>
-            </div>
-          </Col>
-          <Col span={8} className=\\"switchContainer\\">
-            <div style={{...}} className=\\"ant-col ant-col-8 switchContainer\\">
-              <div className=\\"switch\\">
-                <div className=\\"infoTitle\\">
-                  Отображать только в составе бандла
-                </div>
-                <Switch disabled={true} checked={false}>
-                  <Wave insertExtraNode={true}>
-                    <Switch checked={false} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
-                      <button type=\\"button\\" role=\\"switch\\" aria-checked={false} disabled={true} className=\\"ant-switch ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
-                        <div className=\\"ant-switch-handle\\" />
-                        <span className=\\"ant-switch-inner\\" />
-                      </button>
-                    </Switch>
-                  </Wave>
-                </Switch>
-              </div>
-            </div>
-          </Col>
-          <Col span={8}>
-            <div style={{...}} className=\\"ant-col ant-col-8\\">
-              <div className=\\"infoTitle\\">
-                Тип промокода
-              </div>
-              <div className=\\"infoText\\">
-                Персональный
-              </div>
-            </div>
-          </Col>
-          <Col span={8}>
-            <div style={{...}} className=\\"ant-col ant-col-8\\">
-              <div className=\\"infoTitle\\">
-                Внешний ID
-              </div>
-              <div className=\\"infoText\\">
-                <i>
-                  Внешний ID не выбран
-                </i>
-              </div>
-            </div>
-          </Col>
-          <Col span={8}>
-            <div style={{...}} className=\\"ant-col ant-col-8\\">
-              <div className=\\"infoTitle\\">
-                Активность промо-кампании
-              </div>
-              <div className=\\"status\\">
-                Активная
-              </div>
-            </div>
-          </Col>
-          <Col span={8}>
-            <div style={{...}} className=\\"ant-col ant-col-8\\">
-              <div className=\\"infoTitle\\">
-                Отображать QR-код
-              </div>
-              <div className=\\"infoText\\">
-                <Switch disabled={true} checked={true}>
-                  <Wave insertExtraNode={true}>
-                    <Switch checked={true} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
-                      <button type=\\"button\\" role=\\"switch\\" aria-checked={true} disabled={true} className=\\"ant-switch ant-switch-checked ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
-                        <div className=\\"ant-switch-handle\\" />
-                        <span className=\\"ant-switch-inner\\" />
-                      </button>
-                    </Switch>
-                  </Wave>
-                </Switch>
-              </div>
-            </div>
-          </Col>
-          <Col span={16} className=\\"formGroup\\">
-            <div style={{...}} className=\\"ant-col ant-col-16 formGroup\\">
-              <span className=\\"formGroupLabel\\">
-                Настройки детальной кнопки
-              </span>
-              <Col span={12}>
-                <div style={{...}} className=\\"ant-col ant-col-12\\">
+    <Memo(ContentBlock)>
+      <div className=\\"contentContainer\\">
+        <div style={{...}}>
+          <Row gutter={{...}}>
+            <div className=\\"ant-row\\" style={{...}}>
+              <Col span={16}>
+                <div style={{...}} className=\\"ant-col ant-col-16\\">
                   <div className=\\"infoTitle\\">
-                    Текст кнопки
+                    Категории
+                  </div>
+                  <div className=\\"infoText\\">
+                    Test category Name 1, Test category Name 2
+                  </div>
+                </div>
+              </Col>
+              <Col span={8} className=\\"switchContainer\\">
+                <div style={{...}} className=\\"ant-col ant-col-8 switchContainer\\">
+                  <div className=\\"switch\\">
+                    <div className=\\"infoTitle\\">
+                      Отображать видеоэкскурсию
+                    </div>
+                    <Switch checked={true} disabled={true}>
+                      <Wave insertExtraNode={true}>
+                        <Switch checked={true} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
+                          <button type=\\"button\\" role=\\"switch\\" aria-checked={true} disabled={true} className=\\"ant-switch ant-switch-checked ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
+                            <div className=\\"ant-switch-handle\\" />
+                            <span className=\\"ant-switch-inner\\" />
+                          </button>
+                        </Switch>
+                      </Wave>
+                    </Switch>
+                  </div>
+                </div>
+              </Col>
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
+                  <div className=\\"infoTitle\\">
+                    Ссылка на страницу промо-кампании
+                  </div>
+                  <div className=\\"webLink\\">
+                    https://www.promo.sberhealth.ru/vvo
+                  </div>
+                </div>
+              </Col>
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
+                  <div className=\\"infoTitle\\">
+                    Источник ссылки
+                  </div>
+                  <div className=\\"flexRow\\">
+                    <Radio className=\\"checkbox\\" checked={false} disabled={true} type=\\"radio\\">
+                      <label className=\\"ant-radio-wrapper ant-radio-wrapper-disabled checkbox\\" style={[undefined]} onMouseEnter={[undefined]} onMouseLeave={[undefined]}>
+                        <Checkbox checked={false} disabled={true} type=\\"radio\\" prefixCls=\\"ant-radio\\" className=\\"\\" style={{...}} defaultChecked={false} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onChange={[Function: onChange]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onKeyUp={[Function: onKeyUp]}>
+                          <span className=\\"ant-radio ant-radio-disabled\\" style={{...}}>
+                            <input name={[undefined]} id={[undefined]} type=\\"radio\\" required={[undefined]} readOnly={[undefined]} disabled={true} tabIndex={[undefined]} className=\\"ant-radio-input\\" checked={false} onClick={[undefined]} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onKeyUp={[Function: onKeyUp]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onChange={[Function (anonymous)]} autoFocus={[undefined]} value={[undefined]} />
+                            <span className=\\"ant-radio-inner\\" />
+                          </span>
+                        </Checkbox>
+                        <span>
+                          ДЗО
+                        </span>
+                      </label>
+                    </Radio>
+                    <Radio className=\\"checkbox\\" checked={true} disabled={true} type=\\"radio\\">
+                      <label className=\\"ant-radio-wrapper ant-radio-wrapper-checked ant-radio-wrapper-disabled checkbox\\" style={[undefined]} onMouseEnter={[undefined]} onMouseLeave={[undefined]}>
+                        <Checkbox checked={true} disabled={true} type=\\"radio\\" prefixCls=\\"ant-radio\\" className=\\"\\" style={{...}} defaultChecked={false} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onChange={[Function: onChange]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onKeyUp={[Function: onKeyUp]}>
+                          <span className=\\"ant-radio ant-radio-checked ant-radio-disabled\\" style={{...}}>
+                            <input name={[undefined]} id={[undefined]} type=\\"radio\\" required={[undefined]} readOnly={[undefined]} disabled={true} tabIndex={[undefined]} className=\\"ant-radio-input\\" checked={true} onClick={[undefined]} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onKeyUp={[Function: onKeyUp]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onChange={[Function (anonymous)]} autoFocus={[undefined]} value={[undefined]} />
+                            <span className=\\"ant-radio-inner\\" />
+                          </span>
+                        </Checkbox>
+                        <span>
+                          Промо-кампания
+                        </span>
+                      </label>
+                    </Radio>
+                  </div>
+                </div>
+              </Col>
+              <Col span={8} className=\\"switchContainer\\">
+                <div style={{...}} className=\\"ant-col ant-col-8 switchContainer\\">
+                  <div className=\\"switch\\">
+                    <div className=\\"infoTitle\\">
+                      Отображать кнопку &quot;Перейти на сайт&quot;
+                    </div>
+                    <Switch disabled={true} checked={false}>
+                      <Wave insertExtraNode={true}>
+                        <Switch checked={false} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
+                          <button type=\\"button\\" role=\\"switch\\" aria-checked={false} disabled={true} className=\\"ant-switch ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
+                            <div className=\\"ant-switch-handle\\" />
+                            <span className=\\"ant-switch-inner\\" />
+                          </button>
+                        </Switch>
+                      </Wave>
+                    </Switch>
+                  </div>
+                </div>
+              </Col>
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
+                  <div className=\\"infoTitle\\">
+                    ДЗО
+                  </div>
+                  <div className=\\"infoText\\">
+                    СберЗдоровье
+                  </div>
+                </div>
+              </Col>
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
+                  <div className=\\"infoTitle\\">
+                    Период действия
+                  </div>
+                  <div className=\\"infoText\\">
+                    2021-02-12T21:00:00
+                     - 
+                    2021-03-08T20:59:59.999
+                  </div>
+                </div>
+              </Col>
+              <Col span={8} className=\\"switchContainer\\">
+                <div style={{...}} className=\\"ant-col ant-col-8 switchContainer\\">
+                  <div className=\\"switch\\">
+                    <div className=\\"infoTitle\\">
+                      Отображать только в составе бандла
+                    </div>
+                    <Switch disabled={true} checked={false}>
+                      <Wave insertExtraNode={true}>
+                        <Switch checked={false} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
+                          <button type=\\"button\\" role=\\"switch\\" aria-checked={false} disabled={true} className=\\"ant-switch ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
+                            <div className=\\"ant-switch-handle\\" />
+                            <span className=\\"ant-switch-inner\\" />
+                          </button>
+                        </Switch>
+                      </Wave>
+                    </Switch>
+                  </div>
+                </div>
+              </Col>
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
+                  <div className=\\"infoTitle\\">
+                    Тип промокода
+                  </div>
+                  <div className=\\"infoText\\">
+                    Персональный
+                  </div>
+                </div>
+              </Col>
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
+                  <div className=\\"infoTitle\\">
+                    Внешний ID
                   </div>
                   <div className=\\"infoText\\">
                     <i>
-                      Текст не задан
+                      Внешний ID не выбран
                     </i>
                   </div>
                 </div>
               </Col>
-              <Col span={12}>
-                <div style={{...}} className=\\"ant-col ant-col-12\\">
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
                   <div className=\\"infoTitle\\">
-                    Ссылка для кнопки
+                    Активность промо-кампании
                   </div>
-                  <div className=\\"infoText\\">
-                    <i>
-                      Нет ссылки
-                    </i>
+                  <div className=\\"status\\">
+                    Активная
                   </div>
                 </div>
               </Col>
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
+                  <div className=\\"infoTitle\\">
+                    Отображать QR-код
+                  </div>
+                  <div className=\\"infoText\\">
+                    <Switch disabled={true} checked={true}>
+                      <Wave insertExtraNode={true}>
+                        <Switch checked={true} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
+                          <button type=\\"button\\" role=\\"switch\\" aria-checked={true} disabled={true} className=\\"ant-switch ant-switch-checked ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
+                            <div className=\\"ant-switch-handle\\" />
+                            <span className=\\"ant-switch-inner\\" />
+                          </button>
+                        </Switch>
+                      </Wave>
+                    </Switch>
+                  </div>
+                </div>
+              </Col>
+              <Col span={16} className=\\"formGroup\\">
+                <div style={{...}} className=\\"ant-col ant-col-16 formGroup\\">
+                  <span className=\\"formGroupLabel\\">
+                    Настройки детальной кнопки
+                  </span>
+                  <Col span={12}>
+                    <div style={{...}} className=\\"ant-col ant-col-12\\">
+                      <div className=\\"infoTitle\\">
+                        Текст кнопки
+                      </div>
+                      <div className=\\"infoText\\">
+                        <i>
+                          Текст не задан
+                        </i>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    <div style={{...}} className=\\"ant-col ant-col-12\\">
+                      <div className=\\"infoTitle\\">
+                        Ссылка для кнопки
+                      </div>
+                      <div className=\\"infoText\\">
+                        <i>
+                          Нет ссылки
+                        </i>
+                      </div>
+                    </div>
+                  </Col>
+                </div>
+              </Col>
             </div>
-          </Col>
+          </Row>
         </div>
-      </Row>
-    </div>
+      </div>
+    </Memo(ContentBlock)>
     <div className=\\"infoDetail\\">
       <Row gutter={{...}}>
         <div className=\\"ant-row\\" style={{...}}>
           <Col span={12}>
             <div style={{...}} className=\\"ant-col ant-col-12\\">
-              <div className=\\"container\\">
-                <div className=\\"infoTitle\\">
-                  Витрина, в которой отображается промо-кампания
+              <Memo(ContentBlock)>
+                <div className=\\"contentContainer\\">
+                  <div style={{...}}>
+                    <div className=\\"infoTitle\\">
+                      Витрина, в которой отображается промо-кампания
+                    </div>
+                    <div className=\\"infoText\\" />
+                  </div>
                 </div>
-                <div className=\\"infoText\\" />
-              </div>
+              </Memo(ContentBlock)>
             </div>
           </Col>
           <Col span={12}>
             <div style={{...}} className=\\"ant-col ant-col-12\\">
-              <div className=\\"container\\">
-                <div className=\\"infoTitle\\">
-                  Тип промо-кампании
+              <Memo(ContentBlock)>
+                <div className=\\"contentContainer\\">
+                  <div style={{...}}>
+                    <div className=\\"infoTitle\\">
+                      Тип промо-кампании
+                    </div>
+                    <div className=\\"flex\\">
+                      <Radio className=\\"checkbox\\" checked={false} disabled={true} type=\\"radio\\">
+                        <label className=\\"ant-radio-wrapper ant-radio-wrapper-disabled checkbox\\" style={[undefined]} onMouseEnter={[undefined]} onMouseLeave={[undefined]}>
+                          <Checkbox checked={false} disabled={true} type=\\"radio\\" prefixCls=\\"ant-radio\\" className=\\"\\" style={{...}} defaultChecked={false} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onChange={[Function: onChange]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onKeyUp={[Function: onKeyUp]}>
+                            <span className=\\"ant-radio ant-radio-disabled\\" style={{...}}>
+                              <input name={[undefined]} id={[undefined]} type=\\"radio\\" required={[undefined]} readOnly={[undefined]} disabled={true} tabIndex={[undefined]} className=\\"ant-radio-input\\" checked={false} onClick={[undefined]} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onKeyUp={[Function: onKeyUp]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onChange={[Function (anonymous)]} autoFocus={[undefined]} value={[undefined]} />
+                              <span className=\\"ant-radio-inner\\" />
+                            </span>
+                          </Checkbox>
+                          <span>
+                            Экскурсия
+                          </span>
+                        </label>
+                      </Radio>
+                      <Radio className=\\"checkbox\\" checked={true} disabled={true} type=\\"radio\\">
+                        <label className=\\"ant-radio-wrapper ant-radio-wrapper-checked ant-radio-wrapper-disabled checkbox\\" style={[undefined]} onMouseEnter={[undefined]} onMouseLeave={[undefined]}>
+                          <Checkbox checked={true} disabled={true} type=\\"radio\\" prefixCls=\\"ant-radio\\" className=\\"\\" style={{...}} defaultChecked={false} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onChange={[Function: onChange]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onKeyUp={[Function: onKeyUp]}>
+                            <span className=\\"ant-radio ant-radio-checked ant-radio-disabled\\" style={{...}}>
+                              <input name={[undefined]} id={[undefined]} type=\\"radio\\" required={[undefined]} readOnly={[undefined]} disabled={true} tabIndex={[undefined]} className=\\"ant-radio-input\\" checked={true} onClick={[undefined]} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onKeyUp={[Function: onKeyUp]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onChange={[Function (anonymous)]} autoFocus={[undefined]} value={[undefined]} />
+                              <span className=\\"ant-radio-inner\\" />
+                            </span>
+                          </Checkbox>
+                          <span>
+                            Подарок
+                          </span>
+                        </label>
+                      </Radio>
+                    </div>
+                  </div>
                 </div>
-                <div className=\\"flex\\">
-                  <Radio className=\\"checkbox\\" checked={false} disabled={true} type=\\"radio\\">
-                    <label className=\\"ant-radio-wrapper ant-radio-wrapper-disabled checkbox\\" style={[undefined]} onMouseEnter={[undefined]} onMouseLeave={[undefined]}>
-                      <Checkbox checked={false} disabled={true} type=\\"radio\\" prefixCls=\\"ant-radio\\" className=\\"\\" style={{...}} defaultChecked={false} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onChange={[Function: onChange]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onKeyUp={[Function: onKeyUp]}>
-                        <span className=\\"ant-radio ant-radio-disabled\\" style={{...}}>
-                          <input name={[undefined]} id={[undefined]} type=\\"radio\\" required={[undefined]} readOnly={[undefined]} disabled={true} tabIndex={[undefined]} className=\\"ant-radio-input\\" checked={false} onClick={[undefined]} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onKeyUp={[Function: onKeyUp]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onChange={[Function (anonymous)]} autoFocus={[undefined]} value={[undefined]} />
-                          <span className=\\"ant-radio-inner\\" />
-                        </span>
-                      </Checkbox>
-                      <span>
-                        Экскурсия
-                      </span>
-                    </label>
-                  </Radio>
-                  <Radio className=\\"checkbox\\" checked={true} disabled={true} type=\\"radio\\">
-                    <label className=\\"ant-radio-wrapper ant-radio-wrapper-checked ant-radio-wrapper-disabled checkbox\\" style={[undefined]} onMouseEnter={[undefined]} onMouseLeave={[undefined]}>
-                      <Checkbox checked={true} disabled={true} type=\\"radio\\" prefixCls=\\"ant-radio\\" className=\\"\\" style={{...}} defaultChecked={false} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onChange={[Function: onChange]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onKeyUp={[Function: onKeyUp]}>
-                        <span className=\\"ant-radio ant-radio-checked ant-radio-disabled\\" style={{...}}>
-                          <input name={[undefined]} id={[undefined]} type=\\"radio\\" required={[undefined]} readOnly={[undefined]} disabled={true} tabIndex={[undefined]} className=\\"ant-radio-input\\" checked={true} onClick={[undefined]} onFocus={[Function: onFocus]} onBlur={[Function: onBlur]} onKeyUp={[Function: onKeyUp]} onKeyDown={[Function: onKeyDown]} onKeyPress={[Function: onKeyPress]} onChange={[Function (anonymous)]} autoFocus={[undefined]} value={[undefined]} />
-                          <span className=\\"ant-radio-inner\\" />
-                        </span>
-                      </Checkbox>
-                      <span>
-                        Подарок
-                      </span>
-                    </label>
-                  </Radio>
-                </div>
-              </div>
+              </Memo(ContentBlock)>
             </div>
           </Col>
         </div>

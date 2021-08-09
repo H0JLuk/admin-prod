@@ -10,7 +10,6 @@ import {
 } from '../../constants/route';
 import {
     goToLogin,
-    goToClientApps,
     goToAudit,
     goToUserManager,
     goToPartner,
@@ -23,9 +22,7 @@ import {
     getPathForCopyPromoCampaign,
     getPathForPromoCampaignInfo,
     getPathForCreatePromoCampaignVisibititySetting,
-    getPathForPromoCampaignVisibititySettings,
     getLinkForPromoCampaignPage,
-    getLinkForUsersPage,
 } from '../appNavigation';
 
 describe('history api should be call', () => {
@@ -42,18 +39,6 @@ describe('history api should be call', () => {
     it('should go to the login page', () => {
         goToLogin(history);
         expect(pushSpy).toHaveBeenCalledWith(ROUTE.LOGIN);
-    });
-
-    it('should go to the client-apps page using the push method', () => {
-        goToClientApps(history);
-        expect(pushSpy).toHaveBeenCalledWith(ROUTE.CLIENT_APPS);
-        expect(replaceSpy).not.toHaveBeenCalled();
-    });
-
-    it('should go to the client-apps page using the replace method', () => {
-        goToClientApps(history, true);
-        expect(replaceSpy).toHaveBeenCalledWith(ROUTE.CLIENT_APPS);
-        expect(pushSpy).not.toHaveBeenCalled();
     });
 
     it('should go to the auditor page using the push method', () => {
@@ -97,19 +82,9 @@ describe('history api should be call', () => {
         expect(pushSpy).toHaveBeenCalledWith(ROUTE_OWNER.PROMO_CAMPAIGN);
     });
 
-    it('should go to the old design owner page', () => {
-        goToProduct(history, true);
-        expect(pushSpy).toHaveBeenCalledWith(`${ROUTE.OLD_DESIGN}${ROUTE.OWNER}`);
-    });
-
     it('should go to the promo campaign page as an admin', () => {
         goToAdmin(history);
         expect(pushSpy).toHaveBeenCalledWith(ROUTE_ADMIN.PROMO_CAMPAIGN);
-    });
-
-    it('should go to the old design admin page', () => {
-        goToAdmin(history, true);
-        expect(pushSpy).toHaveBeenCalledWith(`${ROUTE.OLD_DESIGN}${ROUTE.ADMIN}`);
     });
 
     describe('should shape the path depending on the role', () => {
@@ -122,11 +97,6 @@ describe('history api should be call', () => {
             it('should go to the owner dashboard', () => {
                 goToDashboard(history, 'Owner');
                 expect(pushSpy).toHaveBeenCalledWith(ROUTE_OWNER.DASHBOARD);
-            });
-
-            it('by default should go to the client-apps', () => {
-                goToDashboard(history, 'other');
-                expect(pushSpy).toHaveBeenCalledWith(ROUTE.CLIENT_APPS);
             });
         });
 
@@ -200,11 +170,6 @@ describe('history api should be call', () => {
                 goToStartPage(history, false, '');
                 expect(pushSpy).toHaveBeenCalledWith(ROUTE.LOGIN);
             });
-
-            it('by default should go to the client-apps', () => {
-                goToStartPage(history, false, 'other');
-                expect(pushSpy).toHaveBeenCalledWith(ROUTE.CLIENT_APPS);
-            });
         });
 
         describe('should go to the app depending on the role', () => {
@@ -216,11 +181,6 @@ describe('history api should be call', () => {
             it('should go to the admin/promo-campaign page', () => {
                 goApp(history, 'Admin');
                 expect(pushSpy).toHaveBeenCalledWith(ROUTE_ADMIN.PROMO_CAMPAIGN);
-            });
-
-            it('should go to the old design admin page', () => {
-                goApp(history, 'Admin', true);
-                expect(pushSpy).toHaveBeenCalledWith(`${ROUTE.OLD_DESIGN}${ROUTE.ADMIN}`);
             });
 
             it('should go to the user manager page', () => {
@@ -238,19 +198,9 @@ describe('history api should be call', () => {
                 expect(pushSpy).toHaveBeenCalledWith(ROUTE_OWNER.PROMO_CAMPAIGN);
             });
 
-            it('should go to the old design owner page', () => {
-                goApp(history, 'Owner', true);
-                expect(pushSpy).toHaveBeenCalledWith(`${ROUTE.OLD_DESIGN}${ROUTE.OWNER}`);
-            });
-
             it('by default should go to the promo campaign page as an owner', () => {
                 goApp(history, 'other');
                 expect(pushSpy).toHaveBeenCalledWith(ROUTE_OWNER.PROMO_CAMPAIGN);
-            });
-
-            it('by default should go to the old design owner page', () => {
-                goApp(history, '', true);
-                expect(pushSpy).toHaveBeenCalledWith(`${ROUTE.OLD_DESIGN}${ROUTE.OWNER}`);
             });
         });
     });
@@ -324,23 +274,6 @@ describe('history api should be call', () => {
             });
         });
 
-        describe('should create link to promo campaign visibility settings', () => {
-            it('should create link to promo campaign visibility settings for admin', () => {
-                sessionService.getRole = jest.fn(() => 'Admin');
-                expect(getPathForPromoCampaignVisibititySettings()).toBe(`${ ROUTE_ADMIN.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }`);
-            });
-
-            it('should create link to promo campaign visibility settings for owner', () => {
-                sessionService.getRole = jest.fn(() => 'Owner');
-                expect(getPathForPromoCampaignVisibititySettings()).toBe(`${ ROUTE_OWNER.PROMO_CAMPAIGN }${ PROMO_CAMPAIGN_PAGES.VISIBILITY_SETTINGS }`);
-            });
-
-            it('by default should return empty string', () => {
-                sessionService.getRole = jest.fn(() => 'test');
-                expect(getPathForPromoCampaignVisibititySettings()).toBe('');
-            });
-        });
-
         describe('should create link to promo campaign page', () => {
             it('should create link to promo campaign page for admin', () => {
                 sessionService.getRole = jest.fn(() => 'Admin');
@@ -358,31 +291,5 @@ describe('history api should be call', () => {
             });
         });
 
-        describe('should create link to users page', () => {
-            it('should create link to users page for admin', () => {
-                sessionService.getRole = jest.fn(() => 'Admin');
-                expect(getLinkForUsersPage()).toBe(ROUTE_ADMIN.USERS);
-            });
-
-            it('should create link to users page for owner', () => {
-                sessionService.getRole = jest.fn(() => 'Owner');
-                expect(getLinkForUsersPage()).toBe(ROUTE_OWNER.DASHBOARD);
-            });
-
-            it('should create link to users page for user manager', () => {
-                sessionService.getRole = jest.fn(() => 'UserManager');
-                expect(getLinkForUsersPage()).toBe(ROUTE_USER_MANAGER.USERS);
-            });
-
-            it('should create link to users page for partner', () => {
-                sessionService.getRole = jest.fn(() => 'Partner');
-                expect(getLinkForUsersPage()).toBe(ROUTE_PARTNER.USERS);
-            });
-
-            it('by default should return empty string', () => {
-                sessionService.getRole = jest.fn(() => 'test');
-                expect(getLinkForUsersPage()).toBe('');
-            });
-        });
     });
 });

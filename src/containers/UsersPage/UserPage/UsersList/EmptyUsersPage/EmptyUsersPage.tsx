@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { Button } from 'antd';
 import Header from '@components/Header';
-import TemplateUploadButtonsWithModal from '@components/ButtonWithModal/TemplateUploadButtonsWithModal';
+import TemplateUploadButtonsWithModal from '@components/TemplateUploadButtonsWithModal';
 import { templateLink } from '@utils/helper';
 import { USERS_PAGES } from '@constants/route';
 import { BUTTON_TEXT } from '@constants/common';

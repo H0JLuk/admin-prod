@@ -37,7 +37,6 @@ export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
     },
     category: {
         name: commonRule,
-        description: commonRule,
     },
     presentation: {
         common: {
@@ -121,26 +120,4 @@ export const FORM_RULES = {
     get REQUIRED_OBJECT() {
         return { ...this.REQUIRED, type: 'object' } as Rule;
     },
-};
-
-export const isRequired = (value: string) => {
-    const regexp = /^[^ ]/;
-    return !!value.match(regexp) && value.length > 0;
-};
-
-export const digitValidator = (value: string) => {
-    const regexp = /^\d*$/;
-    return !!value.match(regexp);
-};
-
-export const categoryNameValidator = (value: string) => {
-    const { pattern } = getPatternAndMessage('category', 'name');
-    pattern.lastIndex = 0;
-    return pattern.test(value);
-};
-
-export const presentationValidator = (value: string) => {
-    const { pattern } = getPatternAndMessage('presentation', 'common');
-    pattern.lastIndex = 0;
-    return pattern.test(value);
 };

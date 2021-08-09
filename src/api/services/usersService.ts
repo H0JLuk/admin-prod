@@ -11,7 +11,6 @@ import {
     QRRequest,
     UpdateUserRequest,
     UpdateUsersSalePoint,
-    UserDto,
     UserInfo,
     UserPaginationResponse,
 } from '@types';
@@ -21,16 +20,8 @@ export function getUser(userId: string | number) {
     return Api.get<UserInfo>(`/admin/user/${userId}`, getReqOptions());
 }
 
-export function oldAddUser(data: UserDto) {
-    return Api.post<SaveUserResponse>('/admin/user', data, getReqOptions());
-}
-
 export function addUser(data: RegisterUserRequest) {
     return Api.post<SaveUserResponse>('/admin/user/register', data, getReqOptions());
-}
-
-export function oldRemoveUser(pn: string) {
-    return Api.delete<DefaultApiResponse>(`/admin/user/${pn}`, getReqOptions());
 }
 
 export function removeUser(userId: number) {
@@ -56,7 +47,6 @@ export async function getPartnersList(filterText = '') {
     return users;
 }
 
-
 export function resetUser(pn: string) {
     return Api.post<ResetUserPassword>(`/admin/user/reset/${pn}`, {}, getReqOptions());
 }
@@ -65,7 +55,7 @@ export function unblockUser(pn: string) {
     return Api.post<DefaultApiResponse>(`/admin/user/unblock/${pn}`, {}, getReqOptions());
 }
 
-export function saveUser(id: number, data: UpdateUserRequest) {
+export function editUser(id: number, data: UpdateUserRequest) {
     return Api.post<DefaultApiResponse & { newPassword?: string; }>(`/admin/user/edit/${id}`, data, getReqOptions());
 }
 

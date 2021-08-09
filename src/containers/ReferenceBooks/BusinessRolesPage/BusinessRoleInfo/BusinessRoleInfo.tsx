@@ -10,11 +10,10 @@ import { customNotifications } from '@utils/notifications';
 import { confirmModal } from '@utils/utils';
 import { BUSINESS_ROLE_PAGES } from '@constants/route';
 import { getFormattedDate } from '@utils/helper';
-
-import styles from './BusinessRoleInfo.module.css';
 import { BUTTON_TEXT } from '@constants/common';
 
-const EDIT_BUTTON_LABEL = 'Редактировать';
+import styles from './BusinessRoleInfo.module.css';
+
 const BUSINESS_ROLE_INFO_FIELDS: { label: string; name: keyof BusinessRoleDto; }[] = [
     {
         label: 'Название',
@@ -34,7 +33,7 @@ function getNotifyDeletedMessage(name: string) {
     return <span>Бизнес-роль <b>{name}</b> успешно удалена</span>;
 }
 
-interface BusinessRoleInfoProps extends RouteComponentProps <{ businessRoleId: string; }> {
+interface BusinessRoleInfoProps extends RouteComponentProps<{ businessRoleId: string; }> {
     matchPath: string;
 }
 
@@ -135,7 +134,7 @@ const BusinessRoleInfo: React.FC<BusinessRoleInfoProps> = ({
                     type="primary"
                     onClick={onEdit}
                 >
-                    {EDIT_BUTTON_LABEL}
+                    {BUTTON_TEXT.EDIT}
                 </Button>
                 <Button
                     type="primary"

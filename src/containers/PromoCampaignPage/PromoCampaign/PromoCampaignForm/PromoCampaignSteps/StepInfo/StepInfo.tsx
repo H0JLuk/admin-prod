@@ -5,6 +5,7 @@ import noop from 'lodash/noop';
 import { Input, Switch, Select, DatePicker, Form, Row, Col, Radio, SwitchProps } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/ru_RU';
 import SelectTags from '@components/SelectTags';
+import ContentBlock from '@components/ContentBlock';
 import { getDzoList } from '@apiServices/dzoService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
 import { getCategoryList } from '@apiServices/categoryService';
@@ -146,7 +147,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
 
     return (
         <>
-            <div className={styles.container}>
+            <ContentBlock className={styles.container}>
                 <Row gutter={[24, 5]}>
                     <Col span={24}>
                         <Form.Item
@@ -516,12 +517,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
                     </Col>
                 </Row>
 
-            </div>
+            </ContentBlock>
 
             <div className={styles.infoDetail}>
                 <Row gutter={24}>
                     <Col span={12}>
-                        <div className={styles.container}>
+                        <ContentBlock>
                             <Form.Item
                                 name="appCode"
                                 label={SHOW_PROMO_CAMPAIGN}
@@ -542,11 +543,11 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                     ))}
                                 </Select>
                             </Form.Item>
-                        </div>
+                        </ContentBlock>
                     </Col>
 
                     <Col span={12}>
-                        <div className={styles.container}>
+                        <ContentBlock>
                             <Form.Item
                                 name="type"
                                 label={TYPE_PROMO_CAMPAIGN}
@@ -587,7 +588,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             >
                                 <Input />
                             </Form.Item>
-                        </div>
+                        </ContentBlock>
                     </Col>
                 </Row>
             </div>

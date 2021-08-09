@@ -2,6 +2,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "@setupTests": ["./src/setupTests.js"],
+      "@testConstants": ["./__tests__"],
       "@types": ["./src/@types"],
       "@types/*": ["./src/@types/*"],
       "@apiServices": ["./src/api/services"],

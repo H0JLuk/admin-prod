@@ -4,12 +4,10 @@ import { DEFAULT_OFFER_DURATION } from '@constants/promoCampaigns';
 import {
     DefaultApiResponse,
     DefaultCreateDtoResponse,
-    ListResponse,
     PromoCampaignCreateDto,
     PromoCampaignDto,
     PromoCampaignListResponse,
     PromoCampaignStatisticsResponse,
-    SalePointDto,
     VisibilitySettingsPaginationResponse,
     VisibilitySettingsRequest,
 } from '@types';
@@ -61,11 +59,7 @@ function normalizePromoCampaign<PromoCampaign extends PromoCampaignCreateDto>(pr
     };
 }
 
-export function createPromoCampaign(promoCampaign: PromoCampaignCreateDto) {
-    return Api.post<DefaultCreateDtoResponse>('/admin/promoCampaign', normalizePromoCampaign(promoCampaign), getReqOptions());
-}
-
-export function newPromoCampaign(promoCampaign: PromoCampaignCreateDto, appCode: string) {
+export function createPromoCampaign(promoCampaign: PromoCampaignCreateDto, appCode: string) {
     const options = getReqOptions();
     options.headers.clientAppCode = appCode;
     return Api.post<DefaultCreateDtoResponse>('/admin/promoCampaign', normalizePromoCampaign(promoCampaign), options);
@@ -94,20 +88,6 @@ export function uploadPromoCodes(campaignId: number, data: Blob) {
 export function deletePromoCampaign(promoCampaignId: number) {
     return Api.delete<DefaultApiResponse>(`/admin/promoCampaign/${promoCampaignId}`, getReqOptions());
 }
-
-export async function getSalePointsByText(name: string, locationId?: number) {
-    const params = Object.entries({ name, locationId }).reduce((result, [key, val]) => {
-        if (!val) {
-            return result;
-        }
-
-        return { ...result, [key]: val };
-    }, {});
-    const { list } = await Api.get<ListResponse<SalePointDto>>(`/salepoint/search?${new URLSearchParams(params).toString()}`, getReqOptions());
-
-    return list;
-}
-
 
 export function addVisibilitySetting(data: VisibilitySettingsRequest) {
     return Api.post<DefaultCreateDtoResponse>('/admin/visibility-setting', data, getReqOptions());

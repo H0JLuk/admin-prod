@@ -1,15 +1,15 @@
 import React, { memo, useState, useEffect } from 'react';
 import { loadImageWithPromise } from '@utils/helper';
 import PropTypes from 'prop-types';
-import Button from '../Button';
+import { Button } from 'antd';
 import droidSvg from '@imgs/droid.svg';
 import spinner from '@imgs/loading-spinner.svg';
 import styles from './LandingItem.module.css';
-import ButtonLabels from '../Button/ButtonLables';
 import { movementDirections } from '@constants/movementDirections';
-import { LandingDto } from '@types';
+import { PresentationDto } from '@types';
+import { BUTTON_TEXT } from '@constants/common';
 
-type ILandingItemProps = LandingDto & {
+type ILandingItemProps = PresentationDto & {
     handleDelete: (landingId: number) => void;
     handleEdit: (landingId: number, header: string, description: string, imageUrl: string) => void;
     handleMove: (landingId: number, direction: movementDirections) => void;
@@ -45,19 +45,30 @@ export const LandingItem: React.FC<ILandingItemProps> = (props) => {
                     <div>
                         <img src={require('../../static/images/up-arrow.svg')}
                             onClick={handleMoveUp}
-                            alt={ButtonLabels.MOVE_UP}
+                            alt={BUTTON_TEXT.MOVE_UP}
                             className={styles.arrow_image}
                         />
                     </div>
                     <div>
                         <img src={require('../../static/images/down-arrow.svg')}
                             onClick={handleMoveDown}
-                            alt={ButtonLabels.MOVE_DOWN}
+                            alt={BUTTON_TEXT.MOVE_DOWN}
                             className={styles.arrow_image}
                         />
                     </div>
-                    <Button type="green" onClick={handleEdit} label={ButtonLabels.EDIT} />
-                    <Button type="red" onClick={handleDelete} label={ButtonLabels.DELETE} />
+                    <Button
+                        type="primary"
+                        onClick={handleEdit}
+                    >
+                        {BUTTON_TEXT.CHANGE}
+                    </Button>
+                    <Button
+                        type="primary"
+                        onClick={handleDelete}
+                        danger
+                    >
+                        {BUTTON_TEXT.DELETE}
+                    </Button>
                 </div>
             </div>
         </div>

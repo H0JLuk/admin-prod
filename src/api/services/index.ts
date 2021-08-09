@@ -1,5 +1,4 @@
-import { ApiRequestHeaders, ApiRequestOptions, DefaultApiResponse } from '@types';
-import { Api } from '../apiClient';
+import { ApiRequestHeaders, ApiRequestOptions } from '@types';
 import { getDefaultAppCode } from './clientAppService';
 import { getAppCode, getSession } from './sessionService';
 
@@ -18,7 +17,3 @@ export const getReqOptions = (contentType?: string): ApiRequestOptions => {
     contentType && (headers[CONTENT_TYPE] = contentType);
     return { headers };
 };
-
-export function updateTokenLifetime() {
-    return Api.post<DefaultApiResponse>('/user/token/update', {}, getReqOptions());
-}

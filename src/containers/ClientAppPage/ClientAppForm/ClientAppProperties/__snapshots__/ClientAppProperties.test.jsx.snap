@@ -3,11 +3,11 @@
 exports[`<ClientAppProperties /> test should match snapshot  1`] = `
 "<div className=\\"clientAppForm\\">
   <ForwardRef(InternalForm) className=\\"form\\" form={{...}} onFinish={[Function: handleSubmit]} layout=\\"vertical\\" onFieldsChange={[Function: handleFieldsChange]} id=\\"edit\\">
-    <div className=\\"container\\">
+    <Memo(ContentBlock) maxWidth={950}>
       <AppFormConstructor row={{...}} isEdit={true} isCreate={false} />
       <AppFormConstructor row={{...}} isEdit={true} isCreate={false} />
-    </div>
-    <div className=\\"container\\">
+    </Memo(ContentBlock)>
+    <Memo(ContentBlock) maxWidth={950}>
       <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
       <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
       <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
@@ -19,10 +19,10 @@ exports[`<ClientAppProperties /> test should match snapshot  1`] = `
           </FormItem>
         </Col>
       </Row>
-    </div>
-    <div className=\\"container\\">
+    </Memo(ContentBlock)>
+    <Memo(ContentBlock)>
       <PrivacyPolicy consent={[undefined]} />
-    </div>
+    </Memo(ContentBlock)>
     <div className=\\"buttonGroup\\">
       <Button disabled={true} type=\\"primary\\" htmlType=\\"submit\\">
         Сохранить

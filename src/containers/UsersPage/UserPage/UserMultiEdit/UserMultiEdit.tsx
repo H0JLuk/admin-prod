@@ -4,7 +4,7 @@ import { Form } from 'antd';
 
 import { editLocationAndSalePointUsers, removeUser } from '@apiServices/usersService';
 import { LocationDto, SalePointDto, UserInfo } from '@types';
-import AutocompleteLocationAndSalePoint from '@components/Form/AutocompleteLocationAndSalePoint';
+import AutocompleteLocationAndSalePoint from '@components/AutoComplete/AutocompleteLocationAndSalePoint';
 import Header from '@components/Header';
 import UserFormButtonGroup from '../UserFormButtonGroup';
 import { ROLES_FOR_EXTERNAL_SALE_POINT, validateSalePoint } from '../UserFormHelper';

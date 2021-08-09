@@ -8,6 +8,7 @@ import { confirmModal } from '@utils/utils';
 import { urlCheckRule, urlHttpsRule } from '@utils/urlValidator';
 import { DzoApplication, DzoDto, SaveDzoApplicationRequest } from '@types';
 import Header from '@components/Header';
+import ContentBlock from '@components/ContentBlock';
 import UploadPicture from '@components/UploadPicture';
 import {
     APP_OPTIONS,
@@ -270,12 +271,11 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                 <div className={styles.title}>
                     {isEdit ? initialData.current.dzoName : NEW_DZO_TITLE}
                 </div>
-                <div className={styles.formWrapper}>
+                <ContentBlock maxWidth={900}>
                     <Form
                         id="info"
                         form={form}
                         layout="vertical"
-                        className={styles.formContainer}
                         onFinish={onFinish}
                         initialValues={initialData.current}
                         onFieldsChange={(isEdit && (() => setIsSaveButtonDisabled(false))) || undefined}
@@ -380,7 +380,7 @@ const DzoForm: React.FC<DzoFormProps> = ({ type, matchPath }) => {
                         </Row>
                     </Form>
                     {error && <span className={styles.error}>{error}</span>}
-                </div>
+                </ContentBlock>
                 <div className={styles.btnGroup}>
                     <Button type="default" onClick={handleCancel}>
                         {BUTTON_TEXT.CANCEL}

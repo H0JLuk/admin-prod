@@ -3,7 +3,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { Col, Form, Input, message, Row, Select } from 'antd';
 import Loading from '@components/Loading';
 import AutoCompleteComponent, { AutoCompleteMethods } from '@components/AutoComplete';
-import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
+import AutocompleteOptionLabel from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { showNotify } from '@containers/ClientAppPage/ClientAppForm/utils';
 import ReferenceButtons from '@containers/ReferenceBooks/ReferenceButtons';
 import {

@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, message } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import PromoCodeStatisticModal from './PromoCampaignModalMenu/PromoCodeStatisticModal';
-import { errorNotice } from '@components/toast/Notice';
 import UploadPromoCodesModal from './PromoCampaignModalMenu';
 import PromoCampaignCopyModal from '../../../PromoCampaignCopyModal';
 import { uploadPromoCodes } from '@apiServices/promoCampaignService';
@@ -19,8 +18,8 @@ import styles from './PromoCampaignItemMenu.module.css';
 const ON_PROMO_CODES_LOADED = 'Промокоды успешно загружены';
 const NONE_PROMO_CODES = 'NONE';
 
-const showSuccessNotification = (message: React.ReactNode) => {
-    customNotifications.success({ message });
+const showSuccessNotification = (messageText: React.ReactNode) => {
+    customNotifications.success({ message: messageText });
 };
 
 type PromoCampaignItemMenuProps = {
@@ -81,7 +80,7 @@ const PromoCampaignItemMenu: React.FC<PromoCampaignItemMenuProps> = ({ onDeleteI
             closeUploadPromoCodesModal();
             showSuccessNotification(ON_PROMO_CODES_LOADED);
         } catch (error) {
-            errorNotice(error.message);
+            message.error(error.message);
         }
     }, [closeUploadPromoCodesModal, promoCampaign.id]);
 

@@ -42,17 +42,6 @@
     color: #ff4d4f;
 }
 
-.formStyle {
-    background-color: #f7f7f7;
-    padding: 28px 25px ;
-    margin-bottom: 15px;
-}
-
-.checkboxesWrapper {
-    background-color: #f7f7f7;
-    padding: 25px;
-}
-
 .loginContainer {
     display: flex;
     flex-direction: column;
@@ -114,7 +103,6 @@
 .formWrapper {
     align-items: baseline;
     width: 100%;
-    max-width: 1100px;
 }
 
 .title {
@@ -133,8 +121,4 @@
 
 .suffixStyle {
     cursor: pointer;
-}
-
-.copyable :global(.ant-typography-copy) {
-    color: #09a552;
 }

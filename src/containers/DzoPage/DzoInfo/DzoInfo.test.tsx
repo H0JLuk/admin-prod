@@ -1,20 +1,30 @@
 import React from 'react';
-import { generatePath, useLocation } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { confirmModal, errorModal, successModal } from '@utils/utils';
+import { confirmModal, errorModal } from '@utils/utils';
 import { BUTTON_TEXT } from '@constants/common';
 import {
     deleteDzo,
-} from '../../../api/services/dzoService';
+} from '@apiServices/dzoService';
 import DzoInfo from './DzoInfo';
-import { dzoListTestData } from '../../../../__tests__/constants';
+import { dzoListTestData } from '@testConstants';
+import { customNotifications } from '@utils/notifications';
 
+const mockHistoryPush = jest.fn();
 const props = {
     matchPath: 'matchPath',
-};
-const mockHistoryPush = jest.fn();
+    location: {
+        state: {
+            dzoCodes: ['doc_old_4', 'delivery_club_old_3', 'sberbox'],
+            dzoData: dzoListTestData[0],
+        },
+    },
+    history: {
+        push: mockHistoryPush,
+    },
+} as any;
 
 jest.mock('@utils/utils', () => ({
     confirmModal: jest.fn(),
@@ -22,15 +32,19 @@ jest.mock('@utils/utils', () => ({
     errorModal: jest.fn(),
 }));
 
-jest.mock('../../../api/services/dzoService', () => ({
+jest.mock('@utils/notifications', () => ({
+    customNotifications: {
+        success: jest.fn(),
+        error: jest.fn(),
+    },
+}));
+
+jest.mock('@apiServices/dzoService', () => ({
     deleteDzo: jest.fn(),
 }));
 
 jest.mock('react-router-dom', () => ({
-    useLocation: jest.fn(),
-    useHistory: () => ({
-        push: mockHistoryPush,
-    }),
+    ...jest.requireActual('react-router-dom'),
     generatePath: jest.fn(),
 }));
 
@@ -41,31 +55,29 @@ const mockLocationState = {
 };
 
 describe('<DzoInfo /> test', () => {
-    beforeEach(() => {
-        (useLocation as jest.Mock).mockImplementation(() => ({
-            state: mockLocationState,
-        }));
-    });
-
     it('should match the snapshot', () => {
         const Component = render(<DzoInfo {...props} />);
         expect(Component.container).toMatchSnapshot();
     });
 
     it('should redirect without dzoData from location state', () => {
-        (useLocation as jest.Mock).mockImplementation(() => ({ state: {} }));
-        render(<DzoInfo {...props} />);
+        render(
+            <DzoInfo
+                {...props}
+                location={{ state: undefined }}
+            />,
+        );
         expect(mockHistoryPush).toBeCalledTimes(1);
         expect(mockHistoryPush).toBeCalledWith(props.matchPath);
     });
 
     it('should edit dzo', () => {
-        (generatePath as jest.Mock).mockReturnValue(props.matchPath);
+        (generatePath as jest.Mock).mockReturnValue(props.matchPath + '/test');
         render(<DzoInfo {...props} />);
 
         userEvent.click(screen.getByText(BUTTON_TEXT.EDIT));
         const { dzoData } = mockLocationState;
-        expect(mockHistoryPush).toBeCalledWith(props.matchPath, { dzoData });
+        expect(mockHistoryPush).toBeCalledWith(props.matchPath + '/test', { dzoData });
     });
 
     it('should delete dzo after submit modal window', async () => {
@@ -77,7 +89,7 @@ describe('<DzoInfo /> test', () => {
         await (confirmModal as jest.Mock).mock.calls[0][0].onOk();
         expect(deleteDzo).toBeCalledWith(dzoId);
 
-        await (successModal as jest.Mock).mock.calls[0][0].onOk();
+        expect(customNotifications.success).toBeCalledTimes(1);
         expect(mockHistoryPush).toBeCalledWith(props.matchPath);
     });
 

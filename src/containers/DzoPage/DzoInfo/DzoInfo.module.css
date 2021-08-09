@@ -44,6 +44,10 @@
     margin-bottom: 25px;
 }
 
+.footer > button:not(:last-child) {
+    margin-right: 15px;
+}
+
 .bannersRow {
     padding: 26px 0 46px;
 }

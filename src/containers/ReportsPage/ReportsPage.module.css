@@ -24,12 +24,13 @@
 
 .container__button {
     margin-right: 30px;
-    padding: 10px 20px;
 }
 
 .datepicker {
     margin-right: 15px;
     font-size: 15px;
+    max-width: 200px;
+    width: 100%;
 }
 
 .select {

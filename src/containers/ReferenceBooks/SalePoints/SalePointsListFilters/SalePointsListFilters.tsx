@@ -4,7 +4,7 @@ import { Radio, RadioChangeEvent } from 'antd';
 import SelectTagsOnChangeByClose from '@components/SelectTags/SelectTagsOnChangeByClose';
 import AutoCompleteComponent, { AutoCompleteMethods } from '@components/AutoComplete';
 import { SearchParams } from '@components/HeaderWithActions';
-import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
+import AutocompleteOptionLabel from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
 import { getSalePointsByText, getSalePointTypesOptions } from '@apiServices/salePointService';
 import { getLocationsByText, getLocationTypeOptions } from '@apiServices/locationService';
 import { getStringOptionValueByDescription, getStringOptionValue, requestsWithMinWait } from '@utils/utils';

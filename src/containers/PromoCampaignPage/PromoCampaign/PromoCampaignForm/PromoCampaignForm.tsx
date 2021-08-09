@@ -37,10 +37,11 @@ import {
 } from './PromoCampaignFormUtils';
 import { filterBanner, deleteText } from './PromoCampaignFormSave.utils';
 import { getUnissuedPromoCodeStatistics } from '@apiServices/promoCodeService';
-import { editPromoCampaign, newPromoCampaign, copyPromoCampaign } from '@apiServices/promoCampaignService';
+import { editPromoCampaign, createPromoCampaign, copyPromoCampaign } from '@apiServices/promoCampaignService';
 import { DEFAULT_OFFER_DURATION } from '@constants/promoCampaigns';
 import { arrayToObject } from '@utils/helper';
 import behaviorTypes from '@constants/behaviorTypes';
+import { BUTTON_TEXT } from '@constants/common';
 import {
     PromoCampaignDtoWithAppCode,
     PromoCampaignFormDataFormSend,
@@ -55,7 +56,6 @@ import { INFO_ROWS_KEYS } from './PromoCampaignSteps/StepTextAndImage/Templates/
 import { ReactComponent as LoadingSpinner } from '@imgs/loading-spinner.svg';
 
 import styles from './PromoCampaignForm.module.css';
-import { BUTTON_TEXT } from '@constants/common';
 
 export type PromoCampaignFormProps = {
     mode?: 'create' | 'edit';
@@ -312,7 +312,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
         try {
             const { visibilitySettings } = state;
             const dataForSend = getDataForSend<any>(state) as unknown as PromoCampaignCreateDto;
-            const { id } = await newPromoCampaign(dataForSend, state.appCode as string);
+            const { id } = await createPromoCampaign(dataForSend, state.appCode as string);
             const textPromises = createTexts(state.texts as BannerCreateTextDto, id, state.appCode as string);
             const visibilityPromises = createVisibilities(visibilitySettings, id, state.appCode as string);
 
@@ -419,7 +419,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
     const onCreatePromoCampaign = async (dataForSend: PromoCampaignFormDataFormSend, appCode: string) => {
         setLoading(true);
         try {
-            const { id } = await newPromoCampaign(dataForSend as unknown as PromoCampaignCreateDto, appCode);
+            const { id } = await createPromoCampaign(dataForSend as unknown as PromoCampaignCreateDto, appCode);
             savePromoCampaignData({ ...dataForSend, id, texts: [], banners: [] });
         } catch ({ message }) {
             setMessageError(message);

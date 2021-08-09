@@ -3,10 +3,10 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import UserMultiEdit, { CHOSE_USERS_COUNT } from './UserMultiEdit';
 import { editLocationAndSalePointUsers, removeUser } from '@apiServices/usersService';
-import { sleep } from '../../../../setupTests';
+import { sleep } from '@setupTests';
 import { act } from 'react-dom/test-utils';
-import { testSalePoint, testLocation, usersTestArray } from '../../../../../__tests__/constants';
-import AutocompleteLocationAndSalePoint from '@components/Form/AutocompleteLocationAndSalePoint';
+import { testSalePoint, testLocation, usersTestArray } from '@testConstants';
+import AutocompleteLocationAndSalePoint from '@components/AutoComplete/AutocompleteLocationAndSalePoint';
 import UserFormButtonGroup from '../UserFormButtonGroup';
 
 jest.mock('@apiServices/usersService', () => ({

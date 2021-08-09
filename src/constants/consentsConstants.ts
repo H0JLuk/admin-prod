@@ -1,4 +1,3 @@
-
 export const CONSENTS_LABELS = {
     CONSENTS_TITLE: 'Согласие',
     EMPTY_CONSENTS_TITLE: 'Нет добавленных согласий',

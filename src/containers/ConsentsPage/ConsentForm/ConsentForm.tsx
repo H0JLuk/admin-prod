@@ -4,6 +4,7 @@ import { Col, DatePicker, Form, Row, Input, message, notification, Button } from
 import { ValidatorRule } from 'rc-field-form/lib/interface';
 import localeDatePicker from 'antd/es/date-picker/locale/ru_RU';
 import moment, { Moment } from 'moment';
+import ContentBlock from '@components/ContentBlock';
 import Header from '@components/Header';
 import SelectTags from '@components/SelectTags';
 import Loading from '@components/Loading';
@@ -183,9 +184,8 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
                 </div>
             </div>
             <div className={styles.consentFormContainer}>
-                <div className={styles.container}>
+                <ContentBlock maxWidth={800}>
                     <Form
-                        className={styles.form}
                         onFinish={handleFormFinish}
                         form={form}
                         layout="vertical"
@@ -269,7 +269,7 @@ const ConsentForm: React.FC<ConsentFormProps> = ({ history, matchPath, mode }) =
                             </div>
                         </div>
                     </Form>
-                </div>
+                </ContentBlock>
             </div>
             {loadingTextEditor && (
                 <Loading className={styles.loadingContainer} />

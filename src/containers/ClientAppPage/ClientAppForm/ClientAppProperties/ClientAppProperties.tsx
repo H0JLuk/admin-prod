@@ -7,6 +7,7 @@ import { getAppCode, saveAppCode } from '@apiServices/sessionService';
 import { addSettings } from '@apiServices/settingsService';
 import { CLIENT_APPS_PAGES } from '@constants/route';
 import Loading from '@components/Loading';
+import ContentBlock from '@components/ContentBlock';
 import AppFormConstructor from '../FormConstructor';
 import SelectTags from '@components/SelectTags';
 import PrivacyPolicy from './PrivacyPolicy';
@@ -235,7 +236,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 onFieldsChange={handleFieldsChange}
                 id={type}
             >
-                <div className={styles.container}>
+                <ContentBlock maxWidth={950}>
                     {mainInfoElements.map((row, index) => (
                         <AppFormConstructor
                             key={index}
@@ -244,8 +245,8 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                             isCreate={!isEdit}
                         />
                     ))}
-                </div>
-                <div className={styles.container}>
+                </ContentBlock>
+                <ContentBlock maxWidth={950}>
                     {formElements.map((row, index) => (
                         <AppFormConstructor
                             key={index}
@@ -269,10 +270,10 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                             </Form.Item>
                         </Col>
                     </Row>
-                </div>
-                <div className={styles.container}>
+                </ContentBlock>
+                <ContentBlock>
                     <PrivacyPolicy consent={consent} />
-                </div>
+                </ContentBlock>
                 <div className={styles.buttonGroup}>
                     <Button
                         disabled={btnStatus}

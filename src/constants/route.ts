@@ -7,8 +7,6 @@ export const ROUTE = {
     OWNER:          '/owner',
     PARTNER:        '/partner',
     USER_MANAGER:   '/user-manager',
-    CLIENT_APPS:    '/client-apps',
-    OLD_DESIGN:     '/old_design',
 };
 
 const PAGE = {
@@ -39,8 +37,6 @@ export const PROMO_CAMPAIGN_PAGES = {
     PROMO_CAMPAIGN_INFO:       '/:promoCampaignId/info',
     PROMO_CAMPAIGN_EDIT:       '/:promoCampaignId/edit',
     VISIBILITY_SETTINGS:       '/:promoCampaignId/visibility-setting',
-    LOAD_PROMO_CODES:          '/:promoCampaignId/load-promo-codes',
-    PROMO_CODES_STATISTIC:     '/:promoCampaignId/promo-codes-statistic',
 };
 
 export const CLIENT_APPS_PAGES = {
@@ -112,8 +108,6 @@ export const ROUTE_PARTNER = {
 };
 
 export const ROUTE_ADMIN = {
-    OLD_DESIGN_USERS: `${ ROUTE.OLD_DESIGN }${ ROUTE.ADMIN }/${ PAGE.USERS }`,
-    OLD_DESIGN_PROMO_CAMPAIGN: `${ ROUTE.OLD_DESIGN }${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
     DASHBOARD:      `${ ROUTE.ADMIN }/${ PAGE.DASHBOARD }`,
     USERS:          `${ ROUTE.ADMIN }/${ PAGE.USERS }`,
     REPORTS:        `${ ROUTE.ADMIN }/${ PAGE.REPORTS }`,
@@ -122,7 +116,6 @@ export const ROUTE_ADMIN = {
     PRESENTATION:   `${ ROUTE.ADMIN }/${ PAGE.PRESENTATION }`,
     CATEGORY:       `${ ROUTE.ADMIN }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.ADMIN }/${ PAGE.PROMO_CAMPAIGN }`,
-    OLD_DESIGN_APPS: `${ ROUTE.OLD_DESIGN }${ ROUTE.ADMIN }/${ PAGE.APPS }`,
     CONSENTS:       `${ ROUTE.ADMIN }/${ PAGE.CONSENTS }`,
     APPS:           `${ ROUTE.ADMIN }/${ PAGE.APPS }`,
     APP_SETTINGS:   `${ ROUTE.ADMIN }/${ PAGE.APPS }${ CLIENT_APPS_PAGES.EDIT_APP }`,
@@ -130,14 +123,12 @@ export const ROUTE_ADMIN = {
 };
 
 export const ROUTE_OWNER = {
-    OLD_DESIGN_PROMO_CAMPAIGN: `${ ROUTE.OLD_DESIGN }${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
     DASHBOARD:      `${ ROUTE.OWNER }/${ PAGE.DASHBOARD }`,
     DZO:            `${ ROUTE.OWNER }/${ PAGE.DZO }`,
     PRESENTATION:   `${ ROUTE.OWNER }/${ PAGE.PRESENTATION }`,
     REPORTS:        `${ ROUTE.OWNER }/${ PAGE.REPORTS }`,
     CATEGORY:       `${ ROUTE.OWNER }/${ PAGE.CATEGORY }`,
     PROMO_CAMPAIGN: `${ ROUTE.OWNER }/${ PAGE.PROMO_CAMPAIGN }`,
-    OLD_DESIGN_APPS: `${ ROUTE.OLD_DESIGN }${ ROUTE.OWNER }/${ PAGE.APPS }`,
     CONSENTS:       `${ ROUTE.OWNER }/${ PAGE.CONSENTS }`,
     APPS:           `${ ROUTE.OWNER }/${ PAGE.APPS }`,
     GROUPS:         `${ ROUTE.OWNER }/${ PAGE.GROUPS }`,

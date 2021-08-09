@@ -1,7 +1,8 @@
 import React from 'react';
-import { Empty, Table, TableProps } from 'antd';
+import { Table, TableProps } from 'antd';
 import { SalePointDto } from '@types';
 import { SALE_POINT_TYPE, SALE_POINT_TYPE_RU } from '@constants/common';
+import EmptyMessage from '@components/EmptyMessage';
 
 import styles from './SalePointsList.module.css';
 
@@ -9,19 +10,6 @@ const SALE_POINT_NAME = 'Точка продажи';
 const SALE_POINT_TYPE_LABEL = 'Тип';
 const SALE_POINT_KIND = 'Вид точки продажи';
 const LOCATION_NAME = 'Локация';
-
-const EMPTY_TABLE = {
-    firstMessagePart: 'Мы ничего не нашли.',
-    secondMessagePart: 'Измените значение поиска и попробуйте еще раз',
-};
-
-// TODO: Заменить компонентом после мержа ветки WDZO-2164
-const EmptyMessage = (
-    <Empty description={null} >
-        <div>{EMPTY_TABLE.firstMessagePart}</div>
-        <div>{EMPTY_TABLE.secondMessagePart}</div>
-    </Empty>
-);
 
 type LocationsListProps = Pick<TableProps<SalePointDto>, 'onRow' | 'rowSelection' | 'pagination' | 'onChange' | 'loading'> & {
     salePointsList: SalePointDto[];
@@ -38,7 +26,7 @@ const SalePointsList: React.FC<LocationsListProps> = ({
             className={styles.table}
             dataSource={salePointsList}
             showHeader={false}
-            locale={{ emptyText: EmptyMessage }}
+            locale={{ emptyText: <EmptyMessage /> }}
         >
             <Table.Column
                 width="20%"

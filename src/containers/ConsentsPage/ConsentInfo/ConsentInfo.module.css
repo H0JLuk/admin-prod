@@ -23,17 +23,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: 0px 60px 0px 15px;
-}
-
-.infoWrapper {
-    padding: 30px;
-    background-color: #f8f8f8;
-    margin: 25px 0;
-}
-
-.infoContainer {
-    max-width: 800px;
+    padding: 25px 60px 0px 20px;
 }
 
 .title {

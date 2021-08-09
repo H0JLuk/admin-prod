@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import omit from 'lodash/omit';
-import { sleep } from '../../../../setupTests';
+import { sleep } from '@setupTests';
 import LocationForm from './LocationForm';
 import { mount, shallow } from 'enzyme';
 import { addLocation, deleteLocation, editLocation, getLocationsByText } from '@apiServices/locationService';
@@ -9,8 +9,8 @@ import { act } from 'react-dom/test-utils';
 import { Button, Form } from 'antd';
 import { confirmModal } from '@utils/utils';
 import AutoCompleteComponent from '@components/AutoComplete';
-import AutocompleteOptionLabel from '@components/Form/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
-import { testLocation } from '../../../../../__tests__/constants';
+import AutocompleteOptionLabel from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteOptionLabel';
+import { testLocation } from '@testConstants';
 
 const mockHistoryPush = jest.fn();
 

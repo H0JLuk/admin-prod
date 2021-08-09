@@ -11,14 +11,15 @@ import {
     getUser,
     removeUser,
     resetUser,
-    saveUser,
+    editUser,
     unblockUser,
 } from '@apiServices/usersService';
 import Header from '@components/Header';
-import AutocompleteLocationAndSalePoint from '@components/Form/AutocompleteLocationAndSalePoint';
+import AutocompleteLocationAndSalePoint from '@components/AutoComplete/AutocompleteLocationAndSalePoint';
 import AutoCompleteComponent from '@components/AutoComplete';
 import UserBlockStatus from '@components/UserBlockStatus';
 import UserSkeletonLoading from './UserSkeletonLoading';
+import ContentBlock from '@components/ContentBlock';
 import Checkboxes from '@components/Checkboxes';
 import UserFormButtonGroup from './UserFormButtonGroup';
 import { confirmModal, getStringOptionValue } from '@utils/utils';
@@ -215,7 +216,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                 };
 
                 if (notNewUser) {
-                    await saveUser((userData as UserInfo).id, requestData);
+                    await editUser((userData as UserInfo).id, requestData);
                     showNotify({ login: userData?.personalNumber, mode: MODE.EDIT });
                 } else {
                     const { userName, generatedPassword } = await addUser({
@@ -409,21 +410,21 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
         <>
             {header}
             <div className={styles.container}>
-                <div className={styles.pageWrapper}>
-                    <div className={styles.pageTitle}>
-                        {notNewUser && userData ? `Пользователь ${userData.personalNumber}` : NEW_USER_TITLE}
-                        {notNewUser && (
-                            <>
-                                <UserBlockStatus className={styles.userStatus} blocked={userData?.tmpBlocked} />
-                                {userData?.tempPassword && isInfo && (
-                                    <div className={styles.status}>
-                                        {TEMP_PASSWORD_FIELD}
-                                    </div>
-                                )}
-                            </>
-                        )}
-                    </div>
-                    <Form className={styles.formStyle}>
+                <div className={styles.pageTitle}>
+                    {notNewUser && userData ? `Пользователь ${userData.personalNumber}` : NEW_USER_TITLE}
+                    {notNewUser && (
+                        <>
+                            <UserBlockStatus className={styles.userStatus} blocked={userData?.tmpBlocked} />
+                            {userData?.tempPassword && isInfo && (
+                                <div className={styles.status}>
+                                    {TEMP_PASSWORD_FIELD}
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
+                <ContentBlock maxWidth={1100}>
+                    <Form>
                         <Row
                             className={styles.formWrapper}
                             gutter={[0, 15]}
@@ -552,8 +553,8 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                         </Row>
                         {!!error.backend && <div className={styles.formError}>{error.backend}</div>}
                     </Form>
-                </div>
-                <div className={styles.checkboxesWrapper}>
+                </ContentBlock>
+                <ContentBlock>
                     <h4 className={styles.title}>{USER_AVAILABLE_APPS}</h4>
                     <div className={styles.checkBoxesCol}>
                         <Checkboxes
@@ -563,7 +564,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                             disabledAll={isInfo || isSendingInfo}
                         />
                     </div>
-                </div>
+                </ContentBlock>
                 <div className={styles.buttonsContainer}>
                     <UserFormButtonGroup
                         type={type}

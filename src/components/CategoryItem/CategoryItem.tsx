@@ -7,8 +7,8 @@ import spinner from '@imgs/loading-spinner.svg';
 import { Button } from 'antd';
 import Field from '../Field';
 import styles from './CategoryItem.module.css';
-import ButtonLabels from '../Button/ButtonLables';
 import { movementDirections } from '@constants/movementDirections';
+import { BUTTON_TEXT } from '@constants/common';
 import { CategoryDto } from '@types';
 
 const CATEGORY_HEADER_LABEL = 'Заголовок: ';
@@ -58,22 +58,22 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                     <div>
                         <img src={require('../../static/images/up-arrow.svg')}
                             onClick={handleMoveUp}
-                            alt={ButtonLabels.MOVE_UP}
+                            alt={BUTTON_TEXT.MOVE_UP}
                             className={styles.arrow_image}
                         />
                     </div>
                     <div>
                         <img src={require('../../static/images/down-arrow.svg')}
                             onClick={handleMoveDown}
-                            alt={ButtonLabels.MOVE_DOWN}
+                            alt={BUTTON_TEXT.MOVE_DOWN}
                             className={styles.arrow_image}
                         />
                     </div>
                     <Button type="primary" onClick={onEditClick}>
-                        {ButtonLabels.EDIT}
+                        {BUTTON_TEXT.CHANGE}
                     </Button>
                     <Button type="primary" danger onClick={onDeleteClick}>
-                        {ButtonLabels.DELETE}
+                        {BUTTON_TEXT.DELETE}
                     </Button>
                 </div>
             </div>
@@ -87,7 +87,7 @@ CategoryItem.propTypes = {
     categoryUrl: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired,
     handleDelete: PropTypes.func.isRequired,
-    handleEdit: PropTypes.func.isRequired
+    handleEdit: PropTypes.func.isRequired,
 };
 
 export default memo(CategoryItem);

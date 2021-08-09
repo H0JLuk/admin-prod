@@ -1,14 +1,14 @@
 import moment from 'moment';
 import {
     deletePromoCampaignBanner,
-    newCreatePromoCampaignBanner,
-    newEditPromoCampaignBanner,
+    createPromoCampaignBanner,
+    editPromoCampaignBanner,
 } from '@apiServices/promoCampaignBannerService';
 import { newVisibilitySetting } from '@apiServices/promoCampaignService';
 import {
     deletePromoCampaignText,
-    newEditPromoCampaignText,
-    newPromoCampaignText,
+    editPromoCampaignText,
+    createPromoCampaignText,
 } from '@apiServices/promoCampaignTextService';
 import {
     BANNER_REQUEST,
@@ -34,7 +34,7 @@ export function createTexts(promoCampaignTexts: BannerCreateTextDto, promoCampai
         .filter((type) => Boolean(promoCampaignTexts[type]))
         .map((type) => {
             const value = promoCampaignTexts[type];
-            return newPromoCampaignText({ promoCampaignId, type, value }, appCode);
+            return createPromoCampaignText({ promoCampaignId, type, value }, appCode);
         });
 }
 
@@ -63,7 +63,7 @@ export async function createImgBanners(
             }),
         );
 
-        await newCreatePromoCampaignBanner(formData, appCode);
+        await createPromoCampaignBanner(formData, appCode);
     }
 }
 
@@ -114,14 +114,14 @@ export function editTextBanners(
                     id: textId,
                 };
 
-                return newEditPromoCampaignText(text.id, text, appCode);
+                return editPromoCampaignText(text.id, text, appCode);
             } else if (newValue?.trim()) {
                 const text = {
                     type,
                     promoCampaignId: promoCampaign.id,
                     value: newValue,
                 };
-                return newPromoCampaignText(text, appCode);
+                return createPromoCampaignText(text, appCode);
             }
         }
         return null;
@@ -167,8 +167,8 @@ export async function EditImgBanners(
                 }),
             );
             const request = bannerId
-                ? newEditPromoCampaignBanner(bannerId, formData, appCode)
-                : newCreatePromoCampaignBanner(formData, appCode);
+                ? editPromoCampaignBanner(bannerId, formData, appCode)
+                : createPromoCampaignBanner(formData, appCode);
             const response = await request;
             banners.push(response);
         }

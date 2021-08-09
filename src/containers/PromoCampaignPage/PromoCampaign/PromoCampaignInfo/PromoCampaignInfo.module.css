@@ -56,21 +56,11 @@
 }
 
 .infoDetail {
-    padding-bottom: 15px;
+    margin-top: 15px;
 }
 
 .containerStep {
     padding: 15px;
-}
-
-.container {
-    background-color: #f8f8f8;
-    padding: 20px 30px;
-    height: 100%;
-}
-
-.container + .infoDetail {
-    margin-top: 15px;
 }
 
 .flex {

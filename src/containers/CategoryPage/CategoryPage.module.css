@@ -1,6 +1,3 @@
-.categoryPageWrapper {
-}
-
 .headerSection {
     display: flex;
     justify-content: space-between;
@@ -35,49 +32,7 @@
 
 .modalForm {
     position: relative;
-    padding: 40px 40px 80px 40px;
-}
-
-.modalForm .crossSvg {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 35px;
-}
-
-.modalForm .imageUploadContainer {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 40px 0 10px;
-    color: rgba(0, 0, 0, 0.55);
-}
-
-.modalForm .imageUploadContainer > label {
-    padding-bottom: 15px;
-    font-family: Roboto, sans-serif;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.29;
-    letter-spacing: normal;
-    text-transform: uppercase;
-}
-
-.modalForm .imageUpload {
-    padding: 40px;
-
-    font-family: Roboto, sans-serif;
-    font-size: 14px;
-    font-weight: 300;
-    text-align: center;
-
-    border: 1px solid #bcbcbc;
-    border-radius: 4px;
-    background-color: #f7f7f7;
+    padding: 0px 40px 80px 40px;
 }
 
 
@@ -101,56 +56,10 @@
     margin-bottom: 30px;
 }
 
-.container {
-    position: relative;
-    height: 250px;
-    margin: 100px auto 0;
-    width: 50%;
-}
-
 .categoryForm {
     max-width: 400px;
     width: 100%;
     margin: 0 auto;
-}
-
-.categoryForm__field {
-    padding-top: 36px;
-}
-
-.categoryForm__field input {
-    display: block;
-    height: 20px;
-    margin-bottom: 8px;
-    bottom: 6px;
-    padding-left: 2px;
-    width: calc(100% - 30px);
-    font-size: 16px;
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.55);
-}
-
-.categoryForm__field label {
-    display: block;
-    bottom: 0;
-    font-family: Roboto, sans-serif;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.29;
-    letter-spacing: normal;
-    color: rgba(0, 0, 0, 0.55);
-}
-
-.categoryForm__field__activeLabel {
-    font-size: 14px;
-    transform: translateY(calc(-1 * 26px));
-    -ms-transform: translateY(calc(-1 * 26px));
-}
-
-::-ms-clear, ::-ms-reveal {
-    display: none;
 }
 
 .categoryForm__button {

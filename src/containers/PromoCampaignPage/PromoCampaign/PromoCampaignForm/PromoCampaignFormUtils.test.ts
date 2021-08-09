@@ -2,14 +2,14 @@ import pick from 'lodash/pick';
 import moment from 'moment';
 import {
     deletePromoCampaignBanner,
-    newCreatePromoCampaignBanner,
-    newEditPromoCampaignBanner,
+    createPromoCampaignBanner,
+    editPromoCampaignBanner,
 } from '@apiServices/promoCampaignBannerService';
 import { newVisibilitySetting } from '@apiServices/promoCampaignService';
 import {
     deletePromoCampaignText,
-    newEditPromoCampaignText,
-    newPromoCampaignText,
+    editPromoCampaignText,
+    createPromoCampaignText,
 } from '@apiServices/promoCampaignTextService';
 import { getAppCode } from '@apiServices/sessionService';
 import {
@@ -42,8 +42,8 @@ import { PromoCampaignFormVisibilitySettingCreateDto } from './types';
 
 jest.mock('@apiServices/promoCampaignBannerService', () => ({
     deletePromoCampaignBanner: jest.fn(),
-    newCreatePromoCampaignBanner: jest.fn(),
-    newEditPromoCampaignBanner: jest.fn(),
+    createPromoCampaignBanner: jest.fn(),
+    editPromoCampaignBanner: jest.fn(),
 }));
 
 jest.mock('@apiServices/promoCampaignService', () => ({
@@ -56,8 +56,8 @@ jest.mock('@apiServices/sessionService', () => ({
 
 jest.mock('@apiServices/promoCampaignTextService', () => ({
     deletePromoCampaignText: jest.fn(),
-    newEditPromoCampaignText: jest.fn(),
-    newPromoCampaignText: jest.fn(),
+    editPromoCampaignText: jest.fn(),
+    createPromoCampaignText: jest.fn(),
 }));
 
 const promoCampaignBannersObject = {
@@ -85,7 +85,7 @@ describe('PromoCampaignFormUtils tests', () => {
 
     describe('test `createTexts` function', () => {
         beforeEach(() => {
-            (newPromoCampaignText as jest.Mock).mockImplementation((data, appCode) => ({ ...data, appCode }));
+            (createPromoCampaignText as jest.Mock).mockImplementation((data, appCode) => ({ ...data, appCode }));
         });
 
         it('should create all texts', () => {
@@ -103,7 +103,7 @@ describe('PromoCampaignFormUtils tests', () => {
                     appCode: 'test',
                 },
             ]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(2);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(2);
         });
 
         it('should don`t create empty text', () => {
@@ -117,22 +117,22 @@ describe('PromoCampaignFormUtils tests', () => {
                 value: 'Доставка забытого горошка для оливье за 15 мин',
                 appCode: 'test',
             }]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(1);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(1);
         });
     });
 
     describe('test `createImgBanners` function', () => {
         beforeEach(() => {
-            (newCreatePromoCampaignBanner as jest.Mock).mockImplementation(() => Promise.resolve());
+            (createPromoCampaignBanner as jest.Mock).mockImplementation(() => Promise.resolve());
         });
 
         it('should create all banners', async () => {
             await createImgBanners(promoCampaignBannersForSend, 1, 'test-code');
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(2);
+            expect(createPromoCampaignBanner).toBeCalledTimes(2);
             const [
                 [firstFormData, firstAppCode],
                 [secondFormData, secondCode],
-            ] = (newCreatePromoCampaignBanner as jest.Mock).mock.calls;
+            ] = (createPromoCampaignBanner as jest.Mock).mock.calls;
             expect(firstFormData.get('image').name).toBe('test-filename0.jpg');
             expect(secondFormData.get('image').name).toBe('test-filename1.jpg');
             expect(firstAppCode).toBe('test-code');
@@ -145,8 +145,8 @@ describe('PromoCampaignFormUtils tests', () => {
                 LOGO_MAIN: [],
             };
             await createImgBanners(newPromoCampaignBannersForSend, 2, 'test-code2');
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(1);
-            const [[firstFormData, firstAppCode]] = (newCreatePromoCampaignBanner as jest.Mock).mock.calls;
+            expect(createPromoCampaignBanner).toBeCalledTimes(1);
+            const [[firstFormData, firstAppCode]] = (createPromoCampaignBanner as jest.Mock).mock.calls;
             expect(firstFormData.get('image').name).toBe('test-filename1.jpg');
             expect(firstAppCode).toBe('test-code2');
         });
@@ -214,8 +214,8 @@ describe('PromoCampaignFormUtils tests', () => {
     describe('test `editTextBanners` function', () => {
         beforeEach(() => {
             (deletePromoCampaignText as jest.Mock).mockImplementation(id => id);
-            (newEditPromoCampaignText as jest.Mock).mockImplementation((id, text, appCode) => ({ id, text, appCode }));
-            (newPromoCampaignText as jest.Mock).mockImplementation((text, appCode) => ({ text, appCode }));
+            (editPromoCampaignText as jest.Mock).mockImplementation((id, text, appCode) => ({ id, text, appCode }));
+            (createPromoCampaignText as jest.Mock).mockImplementation((text, appCode) => ({ text, appCode }));
         });
 
         it('should all create new texts', () => {
@@ -241,8 +241,8 @@ describe('PromoCampaignFormUtils tests', () => {
                     appCode: 'code',
                 },
             ]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(2);
-            expect(newEditPromoCampaignText).toHaveBeenCalledTimes(0);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(2);
+            expect(editPromoCampaignText).toHaveBeenCalledTimes(0);
             expect(deletePromoCampaignText).toHaveBeenCalledTimes(0);
         });
 
@@ -273,8 +273,8 @@ describe('PromoCampaignFormUtils tests', () => {
                     appCode: 'code',
                 },
             ]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(0);
-            expect(newEditPromoCampaignText).toHaveBeenCalledTimes(2);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(0);
+            expect(editPromoCampaignText).toHaveBeenCalledTimes(2);
             expect(deletePromoCampaignText).toHaveBeenCalledTimes(0);
         });
 
@@ -285,8 +285,8 @@ describe('PromoCampaignFormUtils tests', () => {
             };
 
             expect(editTextBanners(newTexts, promoCampaignTestData, 'code')).toEqual([78, 79]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(0);
-            expect(newEditPromoCampaignText).toHaveBeenCalledTimes(0);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(0);
+            expect(editPromoCampaignText).toHaveBeenCalledTimes(0);
             expect(deletePromoCampaignText).toHaveBeenCalledTimes(2);
         });
 
@@ -314,8 +314,8 @@ describe('PromoCampaignFormUtils tests', () => {
                     appCode: 'code',
                 },
             ]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(1);
-            expect(newEditPromoCampaignText).toHaveBeenCalledTimes(0);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(1);
+            expect(editPromoCampaignText).toHaveBeenCalledTimes(0);
             expect(deletePromoCampaignText).toHaveBeenCalledTimes(1);
             expect(onDeleteMock).toBeCalledWith(78, 'HEADER');
         });
@@ -340,8 +340,8 @@ describe('PromoCampaignFormUtils tests', () => {
                 },
                 79,
             ]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(0);
-            expect(newEditPromoCampaignText).toHaveBeenCalledTimes(1);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(0);
+            expect(editPromoCampaignText).toHaveBeenCalledTimes(1);
             expect(deletePromoCampaignText).toHaveBeenCalledTimes(1);
             expect(onDeleteMock).toBeCalledWith(79, 'DESCRIPTION');
         });
@@ -374,15 +374,15 @@ describe('PromoCampaignFormUtils tests', () => {
                     appCode: 'code',
                 },
             ]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(1);
-            expect(newEditPromoCampaignText).toHaveBeenCalledTimes(1);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(1);
+            expect(editPromoCampaignText).toHaveBeenCalledTimes(1);
             expect(deletePromoCampaignText).toHaveBeenCalledTimes(0);
         });
 
         it('should return `null`', () => {
             expect(editTextBanners(promoCampaignTextsObject, promoCampaignTestData, 'code')).toEqual([null, null]);
-            expect(newPromoCampaignText).toHaveBeenCalledTimes(0);
-            expect(newEditPromoCampaignText).toHaveBeenCalledTimes(0);
+            expect(createPromoCampaignText).toHaveBeenCalledTimes(0);
+            expect(editPromoCampaignText).toHaveBeenCalledTimes(0);
             expect(deletePromoCampaignText).toHaveBeenCalledTimes(0);
         });
     });
@@ -390,10 +390,10 @@ describe('PromoCampaignFormUtils tests', () => {
     describe('test `EditImgBanners` function', () => {
         beforeEach(() => {
             (deletePromoCampaignBanner as jest.Mock).mockImplementation(id => `delete ${id}`);
-            (newEditPromoCampaignBanner as jest.Mock).mockImplementation(
+            (editPromoCampaignBanner as jest.Mock).mockImplementation(
                 (id, formData, appCode) => Promise.resolve({ id, formData, appCode }),
             );
-            (newCreatePromoCampaignBanner as jest.Mock).mockImplementation(
+            (createPromoCampaignBanner as jest.Mock).mockImplementation(
                 (formData, appCode) => Promise.resolve({ formData, appCode }),
             );
         });
@@ -413,8 +413,8 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(deletedBannersId.length).toBe(0);
             expect(banners.length).toBe(2);
 
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(2);
-            expect(newEditPromoCampaignBanner).toBeCalledTimes(0);
+            expect(createPromoCampaignBanner).toBeCalledTimes(2);
+            expect(editPromoCampaignBanner).toBeCalledTimes(0);
             expect(deletePromoCampaignBanner).toBeCalledTimes(0);
         });
 
@@ -429,8 +429,8 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(deletedBannersId.length).toBe(0);
             expect(banners.length).toBe(2);
 
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(0);
-            expect(newEditPromoCampaignBanner).toBeCalledTimes(2);
+            expect(createPromoCampaignBanner).toBeCalledTimes(0);
+            expect(editPromoCampaignBanner).toBeCalledTimes(2);
             expect(deletePromoCampaignBanner).toBeCalledTimes(0);
         });
 
@@ -449,8 +449,8 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(deletedBannersId.length).toBe(2);
             expect(banners.length).toBe(0);
 
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(0);
-            expect(newEditPromoCampaignBanner).toBeCalledTimes(0);
+            expect(createPromoCampaignBanner).toBeCalledTimes(0);
+            expect(editPromoCampaignBanner).toBeCalledTimes(0);
             expect(deletePromoCampaignBanner).toBeCalledTimes(2);
         });
 
@@ -473,8 +473,8 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(deletedBannersId.length).toBe(0);
             expect(banners.length).toBe(0);
 
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(0);
-            expect(newEditPromoCampaignBanner).toBeCalledTimes(0);
+            expect(createPromoCampaignBanner).toBeCalledTimes(0);
+            expect(editPromoCampaignBanner).toBeCalledTimes(0);
             expect(deletePromoCampaignBanner).toBeCalledTimes(0);
         });
 
@@ -496,8 +496,8 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(deletedBannersId.length).toBe(0);
             expect(banners.length).toBe(2);
 
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(1);
-            expect(newEditPromoCampaignBanner).toBeCalledTimes(1);
+            expect(createPromoCampaignBanner).toBeCalledTimes(1);
+            expect(editPromoCampaignBanner).toBeCalledTimes(1);
             expect(deletePromoCampaignBanner).toBeCalledTimes(0);
         });
 
@@ -516,8 +516,8 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(deletedBannersId.length).toBe(1);
             expect(banners.length).toBe(1);
 
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(0);
-            expect(newEditPromoCampaignBanner).toBeCalledTimes(1);
+            expect(createPromoCampaignBanner).toBeCalledTimes(0);
+            expect(editPromoCampaignBanner).toBeCalledTimes(1);
             expect(deletePromoCampaignBanner).toBeCalledTimes(1);
         });
 
@@ -542,8 +542,8 @@ describe('PromoCampaignFormUtils tests', () => {
             expect(deletedBannersId.length).toBe(1);
             expect(banners.length).toBe(1);
 
-            expect(newCreatePromoCampaignBanner).toBeCalledTimes(1);
-            expect(newEditPromoCampaignBanner).toBeCalledTimes(0);
+            expect(createPromoCampaignBanner).toBeCalledTimes(1);
+            expect(editPromoCampaignBanner).toBeCalledTimes(0);
             expect(deletePromoCampaignBanner).toBeCalledTimes(1);
         });
     });

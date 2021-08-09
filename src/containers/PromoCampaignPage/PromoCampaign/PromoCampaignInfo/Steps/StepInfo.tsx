@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Col, Radio, Row, Switch } from 'antd';
+import ContentBlock from '@components/ContentBlock';
 import { getClientAppInfo } from '@apiServices/clientAppService';
 import { getAppCode } from '@apiServices/sessionService';
 import promoCodeTypes from '@constants/promoCodeTypes';
@@ -63,7 +64,7 @@ const StepInfo: React.FC<IStepInfoProps> = ({ promoCampaign }) => {
 
     return (
         <div className={style.containerStep}>
-            <div className={style.container}>
+            <ContentBlock>
                 <Row gutter={[24, 40]}>
                     <Col span={16}>
                         <div className={style.infoTitle}>{CATEGORY}</div>
@@ -195,20 +196,20 @@ const StepInfo: React.FC<IStepInfoProps> = ({ promoCampaign }) => {
                     </Col>
 
                 </Row>
-            </div>
+            </ContentBlock>
 
             <div className={style.infoDetail}>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
-                        <div className={style.container}>
+                        <ContentBlock>
                             <div className={style.infoTitle}>{SHOW_PROMO_CAMPAIGN}</div>
                             <div className={style.infoText}>
                                 {clientApp?.displayName}
                             </div>
-                        </div>
+                        </ContentBlock>
                     </Col>
                     <Col span={12}>
-                        <div className={style.container}>
+                        <ContentBlock>
                             <div className={style.infoTitle}>{TYPE_PROMO_CAMPAIGN}</div>
                             <div className={style.flex}>
                                 <Radio
@@ -226,7 +227,7 @@ const StepInfo: React.FC<IStepInfoProps> = ({ promoCampaign }) => {
                                     {GIFT}
                                 </Radio>
                             </div>
-                        </div>
+                        </ContentBlock>
                     </Col>
                 </Row>
             </div>

@@ -18,19 +18,41 @@ const DzoPageRouter = () => {
             <Route
                 exact
                 path={match.path}
-                render={routeProps => <DzoList {...routeProps} matchPath={match.path} />}
+                render={routeProps => (
+                    <DzoList
+                        {...routeProps}
+                        matchPath={match.path}
+                    />
+                )}
             />
             <Route
                 path={`${ match.path }${ DZO_PAGES.ADD_DZO }`}
-                render={routeProps => <DzoForm {...routeProps} matchPath={match.path} type="create" />}
+                render={routeProps => (
+                    <DzoForm
+                        {...routeProps}
+                        matchPath={match.path}
+                        type="create"
+                    />
+                )}
             />
             <Route
                 path={`${ match.path }${ DZO_PAGES.DZO_EDIT }`}
-                render={routeProps => <DzoForm {...routeProps} matchPath={match.path} type="edit" />}
+                render={routeProps => (
+                    <DzoForm
+                        {...routeProps}
+                        matchPath={match.path}
+                        type="edit"
+                    />
+                )}
             />
             <Route
                 path={`${ match.path }${ DZO_PAGES.DZO_INFO }`}
-                render={routeProps => <DzoInfo {...routeProps} matchPath={match.path} />}
+                render={(routeProps: any) => (
+                    <DzoInfo
+                        {...routeProps}
+                        matchPath={match.path}
+                    />
+                )}
             />
             <Redirect to={`${ match.path }`} />
         </Switch>

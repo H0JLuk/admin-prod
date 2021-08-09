@@ -27,12 +27,7 @@ export function updateDzo(id: number, dzoDto: FormData) {
     return Api.update<DefaultApiResponse>(`/admin/dzo/${id}`, dzoDto, getReqOptions(FORM_DATA_CONTENT_TYPE));
 }
 
-/*
-export function getBehaviorTypes() {
-    return Api.get('/dzo/behaviorTypes', getReqOptions());
-}
-*/
-
+// TODO: Вынести в отдельный сервис, когда будет внедряться функционал с разными ссылками на приложения в промо-кампаниях
 export function addApplication(newApplication: SaveDzoApplicationRequest) {
     return Api.post<DefaultCreateDtoResponse>('/admin/application', newApplication, getReqOptions());
 }

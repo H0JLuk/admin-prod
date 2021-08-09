@@ -63,149 +63,157 @@ Object {
         class="container"
       >
         <div
-          class="pageWrapper"
+          class="pageTitle"
         >
+          Пользователь 111111
           <div
-            class="pageTitle"
+            class="userStatus"
           >
-            Пользователь 111111
             <div
-              class="userStatus"
-            >
-              <div
-                class="statusOn"
-              />
-            </div>
-            <div
-              class="status"
-            >
-              Временный пароль
-            </div>
+              class="statusOn"
+            />
           </div>
-          <form
-            class="ant-form ant-form-horizontal formStyle"
+          <div
+            class="status"
           >
-            <div
-              class="ant-row ant-row-space-between formWrapper"
-              style="margin-top: -7.5px; margin-bottom: -7.5px;"
-            >
-              <div
-                class="loginContainer"
-              >
-                <label
-                  class=""
-                  for="login"
-                >
-                  Логин пользователя
-                </label>
-                <div
-                  class="noEditField"
-                  id="idInput"
-                >
-                  111111
-                </div>
-              </div>
-              <div
-                class="labelCol"
-              >
-                <label>
-                  Локация
-                </label>
-                <div
-                  class="noEditField"
-                >
-                  Калининград
-                </div>
-              </div>
-              <div
-                class="labelCol"
-              >
-                <label>
-                  Точка продажи
-                </label>
-                <div
-                  class="noEditField"
-                >
-                  055_8626_1232
-                </div>
-              </div>
-              <div
-                class="ant-col ant-col-8 roleBlock"
-                style="padding-top: 7.5px; padding-bottom: 7.5px;"
-              >
-                <label>
-                  Способ авторизации
-                </label>
-                <div
-                  class="noEditField"
-                >
-                  Логин/Пароль
-                </div>
-              </div>
-              <div
-                class="ant-col ant-col-8 labelCol"
-                style="padding-top: 7.5px; padding-bottom: 7.5px;"
-              >
-                <label
-                  for="role"
-                >
-                  Роль
-                </label>
-                <div
-                  class="noEditField"
-                >
-                  Пользователь
-                </div>
-              </div>
-              <div
-                class="ant-col ant-col-8 labelCol"
-                style="padding-top: 7.5px; padding-bottom: 7.5px;"
-              >
-                <label
-                  class=""
-                >
-                  Партнёр
-                </label>
-                <div
-                  class="noEditField"
-                >
-                  <i>
-                    Нет партнёра
-                  </i>
-                </div>
-              </div>
-            </div>
-          </form>
+            Временный пароль
+          </div>
         </div>
         <div
-          class="checkboxesWrapper"
+          class="contentContainer"
         >
-          <h4
-            class="title"
-          >
-            Доступные приложения
-          </h4>
           <div
-            class="checkBoxesCol"
+            style="max-width: 1100px;"
           >
-            <div
-              data-testid="checkboxes"
+            <form
+              class="ant-form ant-form-horizontal"
             >
-              <span
-                data-testid="checkboxesData"
+              <div
+                class="ant-row ant-row-space-between formWrapper"
+                style="margin-top: -7.5px; margin-bottom: -7.5px;"
               >
-                {"digital-village":{"checked":false,"disabled":false,"id":9,"label":"Партнеры"}}
-              </span>
-              <button
-                data-testid="changeAllCheckboxes"
+                <div
+                  class="loginContainer"
+                >
+                  <label
+                    class=""
+                    for="login"
+                  >
+                    Логин пользователя
+                  </label>
+                  <div
+                    class="noEditField"
+                    id="idInput"
+                  >
+                    111111
+                  </div>
+                </div>
+                <div
+                  class="labelCol"
+                >
+                  <label>
+                    Локация
+                  </label>
+                  <div
+                    class="noEditField"
+                  >
+                    Калининград
+                  </div>
+                </div>
+                <div
+                  class="labelCol"
+                >
+                  <label>
+                    Точка продажи
+                  </label>
+                  <div
+                    class="noEditField"
+                  >
+                    055_8626_1232
+                  </div>
+                </div>
+                <div
+                  class="ant-col ant-col-8 roleBlock"
+                  style="padding-top: 7.5px; padding-bottom: 7.5px;"
+                >
+                  <label>
+                    Способ авторизации
+                  </label>
+                  <div
+                    class="noEditField"
+                  >
+                    Логин/Пароль
+                  </div>
+                </div>
+                <div
+                  class="ant-col ant-col-8 labelCol"
+                  style="padding-top: 7.5px; padding-bottom: 7.5px;"
+                >
+                  <label
+                    for="role"
+                  >
+                    Роль
+                  </label>
+                  <div
+                    class="noEditField"
+                  >
+                    Пользователь
+                  </div>
+                </div>
+                <div
+                  class="ant-col ant-col-8 labelCol"
+                  style="padding-top: 7.5px; padding-bottom: 7.5px;"
+                >
+                  <label
+                    class=""
+                  >
+                    Партнёр
+                  </label>
+                  <div
+                    class="noEditField"
+                  >
+                    <i>
+                      Нет партнёра
+                    </i>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div
+          class="contentContainer"
+        >
+          <div
+            style="max-width: 100%;"
+          >
+            <h4
+              class="title"
+            >
+              Доступные приложения
+            </h4>
+            <div
+              class="checkBoxesCol"
+            >
+              <div
+                data-testid="checkboxes"
               >
-                changeAllCheckboxes
-              </button>
-              <button
-                data-testid="changeOneCheckbox"
-              >
-                changeOneCheckbox
-              </button>
+                <span
+                  data-testid="checkboxesData"
+                >
+                  {"digital-village":{"checked":false,"disabled":false,"id":9,"label":"Партнеры"}}
+                </span>
+                <button
+                  data-testid="changeAllCheckboxes"
+                >
+                  changeAllCheckboxes
+                </button>
+                <button
+                  data-testid="changeOneCheckbox"
+                >
+                  changeOneCheckbox
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -299,149 +307,157 @@ Object {
       class="container"
     >
       <div
-        class="pageWrapper"
+        class="pageTitle"
       >
+        Пользователь 111111
         <div
-          class="pageTitle"
+          class="userStatus"
         >
-          Пользователь 111111
           <div
-            class="userStatus"
-          >
-            <div
-              class="statusOn"
-            />
-          </div>
-          <div
-            class="status"
-          >
-            Временный пароль
-          </div>
+            class="statusOn"
+          />
         </div>
-        <form
-          class="ant-form ant-form-horizontal formStyle"
+        <div
+          class="status"
         >
-          <div
-            class="ant-row ant-row-space-between formWrapper"
-            style="margin-top: -7.5px; margin-bottom: -7.5px;"
-          >
-            <div
-              class="loginContainer"
-            >
-              <label
-                class=""
-                for="login"
-              >
-                Логин пользователя
-              </label>
-              <div
-                class="noEditField"
-                id="idInput"
-              >
-                111111
-              </div>
-            </div>
-            <div
-              class="labelCol"
-            >
-              <label>
-                Локация
-              </label>
-              <div
-                class="noEditField"
-              >
-                Калининград
-              </div>
-            </div>
-            <div
-              class="labelCol"
-            >
-              <label>
-                Точка продажи
-              </label>
-              <div
-                class="noEditField"
-              >
-                055_8626_1232
-              </div>
-            </div>
-            <div
-              class="ant-col ant-col-8 roleBlock"
-              style="padding-top: 7.5px; padding-bottom: 7.5px;"
-            >
-              <label>
-                Способ авторизации
-              </label>
-              <div
-                class="noEditField"
-              >
-                Логин/Пароль
-              </div>
-            </div>
-            <div
-              class="ant-col ant-col-8 labelCol"
-              style="padding-top: 7.5px; padding-bottom: 7.5px;"
-            >
-              <label
-                for="role"
-              >
-                Роль
-              </label>
-              <div
-                class="noEditField"
-              >
-                Пользователь
-              </div>
-            </div>
-            <div
-              class="ant-col ant-col-8 labelCol"
-              style="padding-top: 7.5px; padding-bottom: 7.5px;"
-            >
-              <label
-                class=""
-              >
-                Партнёр
-              </label>
-              <div
-                class="noEditField"
-              >
-                <i>
-                  Нет партнёра
-                </i>
-              </div>
-            </div>
-          </div>
-        </form>
+          Временный пароль
+        </div>
       </div>
       <div
-        class="checkboxesWrapper"
+        class="contentContainer"
       >
-        <h4
-          class="title"
-        >
-          Доступные приложения
-        </h4>
         <div
-          class="checkBoxesCol"
+          style="max-width: 1100px;"
         >
-          <div
-            data-testid="checkboxes"
+          <form
+            class="ant-form ant-form-horizontal"
           >
-            <span
-              data-testid="checkboxesData"
+            <div
+              class="ant-row ant-row-space-between formWrapper"
+              style="margin-top: -7.5px; margin-bottom: -7.5px;"
             >
-              {"digital-village":{"checked":false,"disabled":false,"id":9,"label":"Партнеры"}}
-            </span>
-            <button
-              data-testid="changeAllCheckboxes"
+              <div
+                class="loginContainer"
+              >
+                <label
+                  class=""
+                  for="login"
+                >
+                  Логин пользователя
+                </label>
+                <div
+                  class="noEditField"
+                  id="idInput"
+                >
+                  111111
+                </div>
+              </div>
+              <div
+                class="labelCol"
+              >
+                <label>
+                  Локация
+                </label>
+                <div
+                  class="noEditField"
+                >
+                  Калининград
+                </div>
+              </div>
+              <div
+                class="labelCol"
+              >
+                <label>
+                  Точка продажи
+                </label>
+                <div
+                  class="noEditField"
+                >
+                  055_8626_1232
+                </div>
+              </div>
+              <div
+                class="ant-col ant-col-8 roleBlock"
+                style="padding-top: 7.5px; padding-bottom: 7.5px;"
+              >
+                <label>
+                  Способ авторизации
+                </label>
+                <div
+                  class="noEditField"
+                >
+                  Логин/Пароль
+                </div>
+              </div>
+              <div
+                class="ant-col ant-col-8 labelCol"
+                style="padding-top: 7.5px; padding-bottom: 7.5px;"
+              >
+                <label
+                  for="role"
+                >
+                  Роль
+                </label>
+                <div
+                  class="noEditField"
+                >
+                  Пользователь
+                </div>
+              </div>
+              <div
+                class="ant-col ant-col-8 labelCol"
+                style="padding-top: 7.5px; padding-bottom: 7.5px;"
+              >
+                <label
+                  class=""
+                >
+                  Партнёр
+                </label>
+                <div
+                  class="noEditField"
+                >
+                  <i>
+                    Нет партнёра
+                  </i>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div
+        class="contentContainer"
+      >
+        <div
+          style="max-width: 100%;"
+        >
+          <h4
+            class="title"
+          >
+            Доступные приложения
+          </h4>
+          <div
+            class="checkBoxesCol"
+          >
+            <div
+              data-testid="checkboxes"
             >
-              changeAllCheckboxes
-            </button>
-            <button
-              data-testid="changeOneCheckbox"
-            >
-              changeOneCheckbox
-            </button>
+              <span
+                data-testid="checkboxesData"
+              >
+                {"digital-village":{"checked":false,"disabled":false,"id":9,"label":"Партнеры"}}
+              </span>
+              <button
+                data-testid="changeAllCheckboxes"
+              >
+                changeAllCheckboxes
+              </button>
+              <button
+                data-testid="changeOneCheckbox"
+              >
+                changeOneCheckbox
+              </button>
+            </div>
           </div>
         </div>
       </div>
