@@ -109,7 +109,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 await addSettings(settings);
                 showNotify(SUCCESS_PROPERTIES_CREATE_DESCRIPTION);
                 saveAppCode(code);
-                history.replace(`${ matchPath }${CLIENT_APPS_PAGES.EDIT_APP}`);
             } else {
                 const clientAppCode = getAppCode() || '';
                 const {
@@ -191,6 +190,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
             ) : message;
             showNotify(messageToShow, true);
             setLoading(false);
+            return Promise.reject(message);
         }
     };
 
@@ -225,13 +225,25 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
         setBtnStatus(false);
     };
 
+    const handleConsentListClick = async () => {
+        const formValues = await form.validateFields();
+        await handleSubmit(formValues);
+    };
+
+    const handleFinish = async (formData: Record<string, any>) => {
+        await handleSubmit(formData);
+        if (!isEdit) {
+            history.replace(`${ matchPath }${CLIENT_APPS_PAGES.EDIT_APP}`);
+        }
+    };
+
     return (
         <div className={styles.clientAppForm}>
             {loading && <Loading />}
             <Form
                 className={styles.form}
                 form={form}
-                onFinish={handleSubmit}
+                onFinish={handleFinish}
                 layout="vertical"
                 onFieldsChange={handleFieldsChange}
                 id={type}
@@ -272,7 +284,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     </Row>
                 </ContentBlock>
                 <ContentBlock>
-                    <PrivacyPolicy consent={consent} />
+                    <PrivacyPolicy consent={consent} handleConsentListClick={handleConsentListClick} />
                 </ContentBlock>
                 <div className={styles.buttonGroup}>
                     <Button

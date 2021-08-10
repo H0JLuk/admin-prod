@@ -12,13 +12,20 @@ import styles from './PrivacyPolicy.module.css';
 
 type PrivacyPolicyProps = {
     consent: ConsentDto | null;
+    handleConsentListClick: () => Promise<void>;
 };
 
-const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ consent }) => {
+const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ consent, handleConsentListClick }) => {
     const history = useHistory();
 
-    const redirectToConsentsList = () => {
-        history.push(getPathForConsentsList());
+    const redirectToConsentsList = async () => {
+        try {
+            await handleConsentListClick();
+            history.push(getPathForConsentsList());
+        }
+        catch (err) {
+            console.error(err);
+        }
     };
 
     if (!consent) {
