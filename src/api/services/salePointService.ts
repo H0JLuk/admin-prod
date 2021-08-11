@@ -31,6 +31,11 @@ export function getSalePointTypesList() {
     return Api.get<ListResponse<SalePointType>>('/admin/salepoint/type', getReqOptions());
 }
 
+export async function getActiveSalePointTypesList() {
+    const { list = [] } = await getSalePointTypesList();
+    return list.filter(({ deleted }) => !deleted);
+}
+
 export async function getSalePointTypesOptions() {
     const { list } = await getSalePointTypesList();
     return list.map(({ name, id }) => ({ label: name, value: id }));

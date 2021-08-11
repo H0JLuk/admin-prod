@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { generatePath, RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
+import { deleteSalePointType, getActiveSalePointTypesList } from '@apiServices/salePointService';
+import SalePointsTypesList from './SalePointTypesList';
 import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
 import { SALE_POINT_TYPES_PAGES } from '@constants/route';
 import TableDeleteModal from '@components/TableDeleteModal';
@@ -8,8 +10,6 @@ import { SalePointType } from '@types';
 import { BUTTON_TEXT } from '@constants/common';
 
 import styles from './SalePointsTypesPage.module.css';
-import { deleteSalePointType, getSalePointTypesList } from '@apiServices/salePointService';
-import SalePointsTypesList from './SalePointTypesList';
 
 type SalePointPageProps = RouteComponentProps & {
     matchPath: string;
@@ -44,7 +44,7 @@ const SalePointsTypesPage: React.FC<SalePointPageProps> = ({ matchPath = '', his
     const loadData = useCallback(async () => {
         setLoading(true);
         try {
-            const { list } = await getSalePointTypesList();
+            const list = await getActiveSalePointTypesList();
             setSalePointsTypesData(list);
             copySalePointTypesData.current = list;
             clearSelectedItems();

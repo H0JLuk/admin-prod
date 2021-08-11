@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { generatePath, RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
-import { deleteLocationType, getLocationTypeList } from '@apiServices/locationService';
+import { deleteLocationType, getActiveLocationTypeList } from '@apiServices/locationService';
 import HeaderWithActions, { ButtonProps } from '@components/HeaderWithActions';
 import LocationsTypesList from './LocationsTypesList';
 import { LOCATIONS_TYPES_PAGES } from '@constants/route';
@@ -45,7 +45,7 @@ const LocationsTypesPage: React.FC<LocationPageProps> = ({ matchPath = '', histo
     const loadData = useCallback(async () => {
         setLoading(true);
         try {
-            const { list: locationTypes } = await getLocationTypeList();
+            const locationTypes = await getActiveLocationTypeList();
             clearSelectedItems();
             setLocationsTypesData(locationTypes);
             copyLocationsTypesData.current = locationTypes;

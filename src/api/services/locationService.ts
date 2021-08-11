@@ -24,6 +24,11 @@ export function getLocationTypeList() {
     return Api.get<ListResponse<LocationTypeDto>>('/admin/location/type', getReqOptions());
 }
 
+export async function getActiveLocationTypeList() {
+    const { list = [] } = await getLocationTypeList();
+    return list.filter(({ deleted }) => !deleted);
+}
+
 export async function getLocationTypeOptions() {
     const { list } = await getLocationTypeList();
     return list.map(({ id, name }) => ({ label: name, value: id }));
