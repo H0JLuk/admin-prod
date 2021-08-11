@@ -58,35 +58,22 @@ const LocationTypeForm: React.FC<LocationFormProps> = ({ matchPath, mode }) => {
     const redirectToList = () => history.push(matchPath);
 
     useEffect(() => {
-        let locationFromState = (isEdit && locationType) ? locationType : null;
         (async () => {
-            if (isEdit && !locationFromState) {
-                locationFromState = await getLocationTypeById(locationTypeId);
-
-                if (!locationFromState) {
-                    message.error(`Тип локации с id ${locationTypeId} отсутствует`);
-                    redirectToList();
-                    return;
+            if (isEdit) {
+                locationTypeData.current = locationType || {} as LocationTypeFormType;
+                if (!locationType) {
+                    locationTypeData.current = await getLocationTypeById(locationTypeId);
+                    if (!locationTypeData.current) {
+                        message.error(`Тип локации с id ${locationTypeId} отсутствует`);
+                        redirectToList();
+                        return;
+                    }
                 }
+                form.setFieldsValue(locationTypeData.current);
             }
-
-            const {
-                name,
-                description,
-                priority,
-            } = locationFromState || {};
-
-            locationTypeData.current = {
-                name: name ?? '',
-                description: description ?? '',
-                priority: priority ?? 1,
-            };
-
-            form.setFieldsValue(locationTypeData.current);
-
             setLoading(false);
         })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onDeleteLocation = async () => {
