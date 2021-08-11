@@ -11,6 +11,13 @@
     margin: 0 auto;
 }
 
+.loginForm :global(.ant-form-item-has-error .ant-input:focus),
+.loginForm :global(.ant-form-item-has-error .ant-input-affix-wrapper:focus),
+.loginForm :global(.ant-form-item-has-error .ant-input-focused),
+.loginForm :global(.ant-form-item-has-error .ant-input-affix-wrapper-focused) {
+    border-color: #eb505a;
+}
+
 ::-ms-clear, ::-ms-reveal {
     display: none;
 }

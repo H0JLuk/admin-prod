@@ -45,24 +45,33 @@ export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
         },
     },
     salePoint: {
-        name: commonRule,
+        name: {
+            pattern: /^[а-яё0-9\s.,_-]+$/i,
+            message: 'кириллица, цифры, ".", ",", "_", "-"',
+        },
         description: {
-            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
-            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+            pattern: /^[а-яё\d\s.,\-_  /:%()?!№"]+$/i,
+            message: 'кириллица, цифры, ".", ",", "_", "-", "/", ":", "%", "(", ")", "?", "!", "№", """',
         },
     },
     businessRole: {
-        name: commonRule,
+        name: {
+            pattern: /^[а-яё\s.,_-]+$/i,
+            message: 'кириллица, ".", ",", "_", "-"',
+        },
         description: {
-            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
-            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+            pattern: /^[а-яё\d\s.,\-_  /:%()?!№"]+$/i,
+            message: 'кириллица, цифры, ".", ",", "_", "-", "/", ":", "%", "(", ")", "?", "!", "№", """',
         },
     },
     location: {
-        name: commonRule,
+        name: {
+            pattern: /^[а-яё\s.,_-]+$/i,
+            message: 'кириллица, ".", ",", "_", "-"',
+        },
         description: {
-            pattern: /^[а-яё\s\w.,-/:%()?!№"]+$/i,
-            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+            pattern: /^[а-яё\d\s.,\-_  /:%()?!№"]+$/i,
+            message: 'кириллица, цифры, ".", ",", "_", "-", "/", ":", "%", "(", ")", "?", "!", "№", """',
         },
     },
     locationType: {
