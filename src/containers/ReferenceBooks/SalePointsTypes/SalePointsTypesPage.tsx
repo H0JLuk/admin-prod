@@ -153,6 +153,7 @@ const SalePointsTypesPage: React.FC<SalePointPageProps> = ({ matchPath = '', his
                 buttons={buttons}
                 sortByFieldKey="name"
                 initialSortBy="name"
+                filterByFieldKey="name"
                 setDataList={setSalePointsTypesData}
                 copyDataList={copySalePointTypesData.current}
                 matchPath={matchPath}

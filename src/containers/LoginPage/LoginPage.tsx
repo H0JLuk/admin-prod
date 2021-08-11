@@ -59,6 +59,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({ history }) => {
                 layout="vertical"
                 validateTrigger="onSubmit"
                 onFinish={onSubmit}
+                requiredMark={false}
             >
                 <Form.Item
                     name="personalNumber"

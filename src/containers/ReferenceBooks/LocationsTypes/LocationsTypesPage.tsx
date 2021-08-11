@@ -159,6 +159,7 @@ const LocationsTypesPage: React.FC<LocationPageProps> = ({ matchPath = '', histo
                 menuItems={DROPDOWN_SORT_MENU}
                 sortByFieldKey="name"
                 initialSortBy="name"
+                filterByFieldKey="name"
                 buttons={buttons}
                 loading={loading}
             />
