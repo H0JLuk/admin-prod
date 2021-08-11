@@ -9,7 +9,7 @@ import { getFilteredPromoCampaignList } from '@apiServices/promoCampaignService'
 import { getCampaignGroupList } from '@apiServices/campaignGroupService';
 import { BundleTypes, BUNDLE_LOCATION_KEY } from '../groupPageConstants';
 
-export type GroupFormProps = RouteComponentProps<{ groupId: string; }> & {
+export type GroupFormProps = RouteComponentProps<{[x: string]: string | undefined;}> & {
     matchPath: string;
     mode: string;
 };

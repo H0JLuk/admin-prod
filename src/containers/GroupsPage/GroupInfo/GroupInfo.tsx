@@ -7,7 +7,7 @@ import { BundleTypes, BUNDLE_LOCATION_KEY } from '../groupPageConstants';
 import { RouteComponentProps } from 'react-router-dom';
 import { BundleData } from '../GroupForms';
 
-export type GroupInfoProps = RouteComponentProps<{ groupId: string; }> & {
+export type GroupInfoProps = RouteComponentProps<{[x: string]: string | undefined;}> & {
     matchPath: string;
 };
 

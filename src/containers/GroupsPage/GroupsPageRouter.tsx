@@ -17,15 +17,15 @@ const GroupsPageRouter: React.FC = () => {
             />
             <Route
                 path={`${ match.path }${ GROUPS_PAGES.ADD_GROUP }`}
-                render={routeProps => <GroupForm {...routeProps} match={match} matchPath={match.path} mode="create" />}
+                render={routeProps => <GroupForm {...routeProps} matchPath={match.path} mode="create" />}
             />
             <Route
                 path={`${ match.path }${ GROUPS_PAGES.EDIT_GROUP }`}
-                render={routeProps => <GroupForm {...routeProps} match={match} matchPath={match.path} mode="edit" />}
+                render={routeProps => <GroupForm {...routeProps} matchPath={match.path} mode="edit" />}
             />
             <Route
                 path={`${ match.path }${ GROUPS_PAGES.INFO_GROUP}`}
-                render={routeProps => <GroupInfo {...routeProps} match={match} matchPath={match.path} />}
+                render={routeProps => <GroupInfo {...routeProps} matchPath={match.path} />}
             />
 
             <Redirect to={`${ match.path }`} />
