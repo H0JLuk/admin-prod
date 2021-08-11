@@ -133,6 +133,7 @@ describe('<ClientAppProperties /> test', () => {
     });
 
     it('should properly handle errors', async () => {
+        const consoleErrSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
         await act(async () => {
             const ClientAppPropertiesComponent = mount(
                 <MemoryRouter>
@@ -140,6 +141,7 @@ describe('<ClientAppProperties /> test', () => {
                 </MemoryRouter>
             );
 
+            clientAppPropertiesUtils.createOrUpdateKey = jest.fn();
             clientAppPropertiesUtils.createOrUpdateKey.mockRejectedValue({
                 message: BACKEND_ERROR_ALREADY_EXIST_ENDING,
             });
@@ -151,7 +153,7 @@ describe('<ClientAppProperties /> test', () => {
                     privacyPolicy: 'test',
                     token_lifetime: '33',
                 });
-            ClientAppPropertiesComponent.find(Form)
+            await ClientAppPropertiesComponent.find(Form)
                 .props()
                 .form.submit();
             await sleep();
@@ -161,6 +163,7 @@ describe('<ClientAppProperties /> test', () => {
                 <span>Клиентское приложение с кодом <b>code</b> уже существует</span>,
                 true
             );
+            expect(consoleErrSpy).toBeCalledTimes(1);
         });
     });
 });

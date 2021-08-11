@@ -7,9 +7,9 @@ import {
     editBusinessRole,
     getBusinessRoleById,
 } from '@apiServices/businessRoleService';
-import { sleep } from '../../../../setupTests';
+import { sleep } from '@setupTests';
 import { BUTTON_TEXT } from '@constants/common';
-import { testBusinessRole } from '../../../../../__tests__/constants';
+import { testBusinessRole } from '@testConstants';
 
 jest.mock('@apiServices/businessRoleService', () => ({
     createBusinessRole: jest.fn(),
@@ -18,7 +18,7 @@ jest.mock('@apiServices/businessRoleService', () => ({
     getBusinessRoleById: jest.fn(),
 }));
 
-const TEST = 'TEST';
+const TEST = 'Тест';
 
 const mockHistoryPush = jest.fn();
 const mockHistoryReplace = jest.fn();
@@ -109,7 +109,7 @@ describe('BusinessRoleList test', () => {
         });
 
         await act(async () => {
-            fireEvent.change(screen.getByPlaceholderText(PLACEHOLDER.NAME), { target: { value: 'Some value' } });
+            fireEvent.change(screen.getByPlaceholderText(PLACEHOLDER.NAME), { target: { value: 'Тестовое имя.' } });
         });
 
         await act(async () => {

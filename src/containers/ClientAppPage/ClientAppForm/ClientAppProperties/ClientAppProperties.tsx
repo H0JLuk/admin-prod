@@ -231,9 +231,13 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
     };
 
     const handleFinish = async (formData: Record<string, any>) => {
-        await handleSubmit(formData);
-        if (!isEdit) {
-            history.replace(`${ matchPath }${CLIENT_APPS_PAGES.EDIT_APP}`);
+        try {
+            await handleSubmit(formData);
+            if (!isEdit) {
+                history.replace(`${ matchPath }${CLIENT_APPS_PAGES.EDIT_APP}`);
+            }
+        } catch (e) {
+            console.error(e);
         }
     };
 

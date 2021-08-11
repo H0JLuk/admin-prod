@@ -5,7 +5,7 @@ import { shallow, mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { match, useLocation } from 'react-router-dom';
 
-import { sleep } from '../../../../setupTests';
+import { sleep } from '@setupTests';
 import SalePointTypeForm from './SalePointTypeForm';
 import {
     getSalePointTypeById,
@@ -37,11 +37,11 @@ const mockTestSalePointType = {
     state: {
         salePoint: {
             deleted: false,
-            description: 'test',
+            description: 'Тестовое описание',
             endDate: null,
             id: 0,
             kind: 'INTERNAL',
-            name: 'test',
+            name: 'Тест',
             priority: 1,
             startDate: '2020-01-01',
         },
@@ -49,9 +49,9 @@ const mockTestSalePointType = {
 };
 
 const testFormData = {
-    description: 'test',
+    description: 'Тест',
     kind: 'EXTERNAL',
-    name: 'test',
+    name: 'Тестовое имя',
     priority: 1,
 };
 
@@ -89,7 +89,7 @@ describe('<SalePointTypeForm /> test', () => {
         const newProps = { ...TEST_PROPS, mode: 'edit' };
         (useLocation as jest.Mock).mockImplementation(() => mockTestSalePointType);
         const EditableComponent = mount(<SalePointTypeForm {...newProps} />);
-        expect(EditableComponent.find('.pageTitle').text()).toBe('Тип точки продажи test');
+        expect(EditableComponent.find('.pageTitle').text()).toBe('Тип точки продажи Тест');
     });
 
     it('should get sale point from server', async () => {

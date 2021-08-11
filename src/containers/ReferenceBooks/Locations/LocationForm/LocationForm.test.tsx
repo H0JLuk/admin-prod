@@ -98,7 +98,7 @@ describe('<LocationForm /> tests', () => {
         const formInstance = wrapper.find(Form).prop('form')!;
 
         formInstance.setFieldsValue({
-            name: 'testLocation',
+            name: 'тестовая локация',
             parentLocation: testLocation,
             typeId: 2,
         });
@@ -124,7 +124,7 @@ describe('<LocationForm /> tests', () => {
         const wrapper = mount(<LocationForm {...defaultProps} />);
         const formInstance = wrapper.find(Form).prop('form')!;
         const testData = {
-            name: 'test Location',
+            name: 'Тестовая локация',
             parentLocation: testLocation,
             typeId: 1,
         };

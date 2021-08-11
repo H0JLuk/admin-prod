@@ -27,7 +27,7 @@ exports[`<LocationTypeForm test /> Add mode should match the snapshot at add mod
               style="padding: 2.5px 12px 2.5px 12px;"
             >
               <div
-                class="ant-row ant-form-item ant-form-item-has-success"
+                class="ant-row ant-form-item"
               >
                 <div
                   class="ant-col ant-form-item-label"
@@ -95,7 +95,7 @@ exports[`<LocationTypeForm test /> Add mode should match the snapshot at add mod
               style="padding: 2.5px 12px 2.5px 12px;"
             >
               <div
-                class="ant-row ant-form-item ant-form-item-has-success"
+                class="ant-row ant-form-item"
               >
                 <div
                   class="ant-col ant-form-item-label"
@@ -126,14 +126,14 @@ exports[`<LocationTypeForm test /> Add mode should match the snapshot at add mod
                           maxlength="3"
                           placeholder="Приоритет"
                           type="text"
-                          value="1"
+                          value=""
                         />
                         <span
                           class="ant-input-suffix"
                         >
                           <span
                             aria-label="close-circle"
-                            class="anticon anticon-close-circle ant-input-clear-icon"
+                            class="anticon anticon-close-circle ant-input-clear-icon-hidden ant-input-clear-icon"
                             role="button"
                             tabindex="-1"
                           >
@@ -163,7 +163,7 @@ exports[`<LocationTypeForm test /> Add mode should match the snapshot at add mod
               style="padding: 2.5px 12px 2.5px 12px;"
             >
               <div
-                class="ant-row ant-form-item ant-form-item-has-success"
+                class="ant-row ant-form-item"
               >
                 <div
                   class="ant-col ant-form-item-label"

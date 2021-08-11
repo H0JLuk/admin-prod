@@ -26,7 +26,7 @@ import { act } from 'react-dom/test-utils';
 import { sleep } from '@setupTests';
 
 const testFormData = {
-    name: 'test salePoint',
+    name: 'Тестовое имя точки',
     typeId: 1,
     location: testLocation,
     parentSalePoint: testSalePoint,

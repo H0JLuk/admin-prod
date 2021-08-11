@@ -69,7 +69,7 @@ describe('<LocationTypeForm test />', () => {
             render(<LocationTypeForm {...props} />);
             const defaultValues = {
                 name: '',
-                priority: '1',
+                priority: '',
                 description: '',
             };
 

@@ -3,11 +3,11 @@ import { generatePath } from 'react-router-dom';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { getLocationTypeList } from '@apiServices/locationService';
+import { getActiveLocationTypeList } from '@apiServices/locationService';
 import { BUTTON_TEXT } from '@constants/common';
 import { LOCATIONS_TYPES_PAGES } from '@constants/route';
-import { sleep } from '../../../setupTests';
-import { testLocationsTypesArray, testLocationType } from '../../../../__tests__/constants';
+import { sleep } from '@setupTests';
+import { testLocationsTypesArray, testLocationType } from '@testConstants';
 import LocationsTypesPage from './LocationsTypesPage';
 
 const mockHistoryPush = jest.fn();
@@ -24,8 +24,8 @@ jest.mock('react-router-dom', () => ({
     generatePath: jest.fn().mockReturnValue(''),
 }));
 
-jest.mock('../../../api/services/locationService', () => ({
-    getLocationTypeList: jest.fn(),
+jest.mock('@apiServices/locationService', () => ({
+    getActiveLocationTypeList: jest.fn(),
     deleteLocationType: jest.fn(),
 }));
 
@@ -76,7 +76,7 @@ const props = {
 
 describe('<LocationsTypesPage tests />', () => {
     beforeEach(() => {
-        (getLocationTypeList as jest.Mock).mockResolvedValue({ list: testLocationsTypesArray });
+        (getActiveLocationTypeList as jest.Mock).mockResolvedValue(testLocationsTypesArray);
     });
 
     it('should match the snapshot', async () => {
@@ -153,7 +153,7 @@ describe('<LocationsTypesPage tests />', () => {
     it('should catch error at locations types list loading', async () => {
         const loadingWarn = new Error('loading error');
         const errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => '');
-        (getLocationTypeList as jest.Mock).mockRejectedValue(loadingWarn);
+        (getActiveLocationTypeList as jest.Mock).mockRejectedValue(loadingWarn);
 
         render(<LocationsTypesPage {...props} />);
 
@@ -180,12 +180,12 @@ describe('<LocationsTypesPage tests />', () => {
             screen.getByRole('button', { name: BUTTON_TEXT.DELETE }),
         );
 
-        expect(getLocationTypeList).toBeCalledTimes(1);
+        expect(getActiveLocationTypeList).toBeCalledTimes(1);
 
         await act(async () =>
             userEvent.click(await screen.findByTestId('refreshTable')),
         );
 
-        expect(getLocationTypeList).toBeCalledTimes(2);
+        expect(getActiveLocationTypeList).toBeCalledTimes(2);
     });
 });

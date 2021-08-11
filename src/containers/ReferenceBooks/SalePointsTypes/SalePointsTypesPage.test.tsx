@@ -1,10 +1,10 @@
 import React from 'react';
 import { fireEvent, render, act, screen } from '@testing-library/react';
 import { BUTTON_TEXT } from '@constants/common';
-import { deleteSalePointType, getSalePointTypesList } from '@apiServices/salePointService';
+import { deleteSalePointType, getActiveSalePointTypesList } from '@apiServices/salePointService';
 import SalePointsTypesPage from './SalePointsTypesPage';
-import { salePointTypeTestResponse, testSalePointType } from '../../../../__tests__/constants';
-import { sleep } from '../../../../src/setupTests';
+import { salePointTypeTestResponse, testSalePointType } from '@testConstants';
+import { sleep } from '@setupTests';
 
 type mockTableDeleteModalType = {
     listIdForRemove: number[];
@@ -35,7 +35,7 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('@apiServices/salePointService', () => ({
     deleteSalePointType: jest.fn(),
-    getSalePointTypesList: jest.fn(),
+    getActiveSalePointTypesList: jest.fn(),
 }));
 
 const SalePointTypesPageTestProps: any = {
@@ -50,7 +50,7 @@ describe('SalePointsTypesPage test', () => {
 
 
     beforeEach(() => {
-        (getSalePointTypesList as jest.Mock).mockResolvedValue(salePointTypeTestResponse);
+        (getActiveSalePointTypesList as jest.Mock).mockResolvedValue(salePointTypeTestResponse.list);
         (deleteSalePointType as jest.Mock).mockResolvedValue({ message: 'Successful', status: 'Ok' });
     });
 
@@ -65,11 +65,11 @@ describe('SalePointsTypesPage test', () => {
             Component();
         });
         expect(screen.getByText(/ТБ/)).toBeTruthy();
-        expect(getSalePointTypesList).toBeCalledTimes(1);
+        expect(getActiveSalePointTypesList).toBeCalledTimes(1);
     });
 
     it('should call getSalePointTypesList function with error', async () => {
-        (getSalePointTypesList as jest.Mock).mockRejectedValue('Error');
+        (getActiveSalePointTypesList as jest.Mock).mockRejectedValue(new Error('Error'));
 
         const consoleSpy = jest.spyOn(console, 'warn').mockImplementationOnce(() => undefined);
 
@@ -77,7 +77,7 @@ describe('SalePointsTypesPage test', () => {
             Component();
         });
 
-        expect(getSalePointTypesList).toBeCalledTimes(1);
+        expect(getActiveSalePointTypesList).toBeCalledTimes(1);
         expect(consoleSpy).toBeCalledTimes(1);
     });
 
@@ -202,12 +202,12 @@ describe('SalePointsTypesPage test', () => {
             fireEvent.click(screen.getByTestId('deleteFunction'));
         });
 
-        expect(getSalePointTypesList).toBeCalledTimes(1);
+        expect(getActiveSalePointTypesList).toBeCalledTimes(1);
 
         await act(async () => {
             fireEvent.click(screen.getByTestId('refreshTable'));
         });
 
-        expect(getSalePointTypesList).toBeCalledTimes(2);
+        expect(getActiveSalePointTypesList).toBeCalledTimes(2);
     });
 });
