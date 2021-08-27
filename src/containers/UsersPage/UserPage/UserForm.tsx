@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ClientAppDto, LocationDto, SalePointDto, UserInfo } from '@types';
+import { ClientAppDto, LocationDto, SalePointDto, SettingDto, UserInfo } from '@types';
 import PropTypes from 'prop-types';
 import { useHistory, useParams, generatePath } from 'react-router-dom';
 import cn from 'classnames';
@@ -31,6 +31,7 @@ import {
 } from '@constants/permissions';
 import { getActiveClientApps } from '@apiServices/clientAppService';
 import { getSalePointByText } from '@apiServices/salePointService';
+import { getAllSettings } from '@apiServices/settingsService';
 import {
     errorEditPermissions,
     getLoginTypeByRole,
@@ -48,9 +49,9 @@ import { USERS_PAGES } from '@constants/route';
 import { LOGIN_TYPES_ENUM, LOGIN_TYPE, LoginTypes } from '@constants/loginTypes';
 import { BUTTON_TEXT } from '@constants/common';
 import ROLES, { ROLES_OPTIONS, ROLES_RU } from '@constants/roles';
+import { BLOCKING_CONDITIONS } from '@constants/settings';
 
 import styles from './UserForm.module.css';
-
 
 export type UserFormProps = {
     type: 'edit' | 'info' | 'new' | string;
@@ -139,6 +140,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
     const { canSetUserRole, canSetUserPartner } = commonPermissions.current;
     const userInteractions = useRef({} as InteractionsCurrUserToOtherUser);
     const partnerFieldMethods = useRef<any>(null);
+    const settingsListRef = useRef<SettingDto[]>([]);
 
     const redirectToUsersPage = useCallback(() => history.push(matchPath), [history, matchPath]);
 
@@ -146,6 +148,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
         try {
             let user;
             const clientAppList = await getActiveClientApps();
+            const { settingDtoList } = await getAllSettings();
 
             if (notNewUser) {
                 user = await getUser(userId);
@@ -165,7 +168,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                     return;
                 }
             }
-
+            settingsListRef.current = settingDtoList;
             clientAppsRef.current = clientAppList;
             setCheckBoxes(getUserAppsCheckboxes(clientAppList, user?.clientAppIds));
             setLoading(false);
@@ -195,6 +198,19 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isInfo]);
+
+    useEffect(() => {
+        const checkboxDisabled = settingsListRef.current.reduce((acc, el) =>
+            el.clientAppCode
+            && typeof BLOCKING_CONDITIONS[el.key] === 'function'
+            && BLOCKING_CONDITIONS[el.key](el.value)
+            && role !== ROLES.USER
+                ? { ...acc, [el.clientAppCode]: true }
+                : acc, {});
+
+        setCheckBoxes(getUserAppsCheckboxes(clientAppsRef.current, userData?.clientAppIds, checkboxDisabled));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [role]);
 
     const onSubmit = async () => {
         try {

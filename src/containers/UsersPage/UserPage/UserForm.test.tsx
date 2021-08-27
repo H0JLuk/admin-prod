@@ -9,6 +9,7 @@ import {
 } from '@constants/permissions';
 import { getUser, unblockUser, resetUser, removeUser, editUser, addUser } from '@apiServices/usersService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
+import { getAllSettings } from '@apiServices/settingsService';
 import { sleep } from '@setupTests';
 import { INFO_USER_BUTTONS } from './UserFormButtonGroup/UserFormButtonGroup';
 import { customNotifications } from '@utils/notifications';
@@ -17,6 +18,7 @@ import {
     clientAppListTestResponse,
     searchSalePointTestData,
     testSalePoint,
+    settingDtoListTestData,
 } from '@testConstants';
 import { getResultsByTextAndType, createSearchDataAndPassLocation } from '@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteHelper';
 import { confirmModal } from '@utils/utils';
@@ -78,6 +80,10 @@ jest.mock(
 
 jest.mock('@apiServices/salePointService', () => ({
     getSalePointByText: jest.fn(),
+}));
+
+jest.mock('@apiServices/settingsService', () => ({
+    getAllSettings: jest.fn(),
 }));
 
 jest.mock('@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteHelper', () => ({
@@ -210,6 +216,7 @@ describe('<UserForm /> test', () => {
         (getCommonPermissionsByRole as jest.Mock).mockReturnValue(TEST_COMMON_PERMISSIONS);
         (getUserAppsCheckboxes as jest.Mock).mockReturnValue(TEST_CHECKBOX);
         (getSalePointByText as jest.Mock).mockReturnValue({ ...searchSalePointTestData[0], id: userTestData.salePointId });
+        (getAllSettings as jest.Mock).mockResolvedValue(settingDtoListTestData);
         cleanup();
         document.body.innerHTML = '';
     });
@@ -220,7 +227,7 @@ describe('<UserForm /> test', () => {
         expect(getActiveClientApps).toBeCalledTimes(1);
         expect(getUser).toBeCalledTimes(1);
         expect(getCurrUserInteractionsForOtherUser).toBeCalledTimes(1);
-        expect(getUserAppsCheckboxes).toBeCalledTimes(1);
+        expect(getUserAppsCheckboxes).toBeCalledTimes(2);
         await sleep();
         expect(ComponentInfo).toMatchSnapshot();
     });
