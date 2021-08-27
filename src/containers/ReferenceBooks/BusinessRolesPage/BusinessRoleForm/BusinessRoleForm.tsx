@@ -120,7 +120,6 @@ const BusinessRoleForm: React.FC<BusinessRoleFormProps> = ({
 
     const onFinish = async (formData: SaveBusinessRoleRequest) => {
         setLoading(true);
-
         try {
             if (isEdit) {
                 await editBusinessRole(businessRoleId, formData);

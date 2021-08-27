@@ -21,7 +21,6 @@ export enum ClientSetting {
     authorization_method,
     code,
     displayName,
-    gradient,
     home_page_description,
     home_page_header,
     home_page_header_present,
@@ -40,7 +39,5 @@ export enum ClientSetting {
     token_lifetime,
     usage_url,
     vitrina_theme,
-    where_to_use,
     ym_token,
-    design_elements,
 }

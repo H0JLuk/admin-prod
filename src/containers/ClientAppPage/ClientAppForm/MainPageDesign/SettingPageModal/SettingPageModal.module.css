@@ -1,3 +1,8 @@
+.modal :global(.ant-modal-body) {
+    max-height: 600px;
+    overflow: auto;
+}
+
 .imageBlock {
     position: relative;
     cursor: pointer;

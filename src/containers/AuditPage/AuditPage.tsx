@@ -51,12 +51,12 @@ const antColumns: TableProps<AuditEvent>['columns'] = [
         title: 'IP пользователя',
         dataIndex: 'userIp',
         sorter: true,
-        width: '14%',
+        width: '13%',
     },
     {
         title: 'ID запроса',
         dataIndex: 'requestId',
-        width: '12%',
+        width: '11%',
     },
     {
         title: 'Дата',
@@ -67,7 +67,7 @@ const antColumns: TableProps<AuditEvent>['columns'] = [
     {
         title: 'Детали',
         dataIndex: 'details',
-        width: '21%',
+        width: '23%',
         // eslint-disable-next-line react/display-name
         render: (details: string | null) => details && (
             <div className={styles.reactJson}>

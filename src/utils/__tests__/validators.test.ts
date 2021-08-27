@@ -96,6 +96,7 @@ describe('validate clientApp fields', () => {
         expect(validateField(pattern, 'Test for Code clientApp')).toBe(false);
         expect(validateField(pattern, 'тест_кода')).toBe(false);
         expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyz-_')).toBe(true);
+        expect(validateField(pattern, 'abcdefghijklmnopqrstuvwxyzA$')).toBe(false);
         expect(
             validateField(
                 pattern,

@@ -10,7 +10,7 @@
 }
 
 .buttonGroup {
-    margin-top: 15px;
+    margin-bottom: 15px;
     margin-left: 15px;
 }
 
@@ -18,8 +18,62 @@
     padding-bottom: 30px;
 }
 
-.container > div{
+.container > div {
     align-items: flex-start !important;
+}
+
+.default {
+    background-image: linear-gradient(
+        228.35deg,
+        #eaef00 7.94%,
+        #cbea0a 15.79%,
+        #9cdd16 21.25%,
+        #5dca23 28.58%,
+        #00b944 38.54%,
+        #00a3a7 57.42%,
+        #009bc5 64.31%,
+        #0096d3 67.8%,
+        #018fdb 72.33%,
+        #0489d6 76.41%,
+        #047fcf 82.5%,
+        #0073c8 87.4%,
+        #0051b7 99.87%
+    );
+}
+
+.defenderFatherlandDay {
+    background-image: linear-gradient(
+        262.6deg,
+        #9cdd16 -9.99%,
+        #84e73b 7.47%,
+        #7dea44 13.24%,
+        #18cd6d 32.14%,
+        #06ac9a 43.29%,
+        #00a3a7 51.61%,
+        #00a0b2 57.73%,
+        #0098b6 67.72%,
+        #0073c8 90.72%
+    );
+}
+
+.summer {
+    background-image: linear-gradient(239.39deg, #ffeb37 -8.62%, #ff9839 36.53%, #fd6f4c 58.9%, #eb0457 90.81%);
+}
+
+.victoryDay {
+    background-image: linear-gradient(
+        269.16deg,
+        #9cdd16 -22.29%,
+        #7dea44 -0.03%,
+        #1dd661 17.89%,
+        #00a3a7 94.22%,
+        #009bc5 133.03%,
+        #0073c8 153.43%
+    );
+}
+
+.womensDay {
+    background-image: linear-gradient(226.93deg, #ffeb37 5.76%, #ff8c39 52.43%, #f01d71 99.68%);
 }
 
 

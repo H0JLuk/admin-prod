@@ -573,12 +573,6 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                     >
                                         {PROMO_CAMPAIGNS.PRESENT.label}
                                     </Radio>
-                                    {/* <Radio
-                                        className={styles.checkbox}
-                                        value="landing"
-                                    >
-                                        {LANDING}
-                                    </Radio> */}
                                 </Radio.Group>
                             </Form.Item>
                             <Form.Item

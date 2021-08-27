@@ -4,6 +4,14 @@ exports[`<ClientAppContainer /> tests should match snapshot 1`] = `
 "<div className=\\"clientAppForm\\">
   <Component menuMode={true} buttonBack={false} />
   <div className=\\"header\\">
+    <Memo(ForwardRef) className=\\"radio\\" onChange={[Function: handleModeChange]} value=\\"Свойства\\">
+      <ForwardRef(RadioButton) disabled={true} value=\\"Оформление\\">
+        Оформление
+      </ForwardRef(RadioButton)>
+      <ForwardRef(RadioButton) value=\\"Свойства\\" disabled={true}>
+        Свойства
+      </ForwardRef(RadioButton)>
+    </Memo(ForwardRef)>
     <div className=\\"title\\">
       Свойства
     </div>

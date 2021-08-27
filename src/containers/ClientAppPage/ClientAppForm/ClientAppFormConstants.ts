@@ -12,12 +12,9 @@ import { ValidatorRule } from 'rc-field-form/lib/interface';
 import { FormItemProps, InputProps, SelectProps } from 'antd';
 import { CheckboxGroupProps } from 'antd/lib/checkbox';
 import { TextAreaProps } from 'antd/lib/input';
-import { BannerProps, IBanner } from './MainPageDesign/Banner';
+import { BannerProps } from './MainPageDesign/Banner';
 import { trimValue } from '@utils/helper';
-
-const defaultImg = 'default_main_illustration';
-const february23 = 'February23_main_illustration';
-const march8 = 'March8_main_illustration';
+import Themes from '@constants/themes';
 
 export const CREATE_APP_TITLE = 'Новое приложение';
 export const PROPERTIES_TITLE = 'Свойства';
@@ -40,13 +37,11 @@ export const EDIT_MODE = {
 export const keysToString = [
     'mechanics',
     'login_types',
-    'where_to_use',
-    'design_elements',
     'notification_types',
     'game_mechanics',
 ];
 
-export const TextKeysWithDefaultValues = ['home_page_header_present', 'home_page_header_wow'];
+export const TextKeysWithDefaultValues = ['home_page_header_present', 'home_page_header_bundle'];
 
 const mechanicsValidator: ValidatorRule['validator'] = (_, value) => {
     if (
@@ -59,32 +54,10 @@ const mechanicsValidator: ValidatorRule['validator'] = (_, value) => {
     return Promise.reject(MECHANICS_ERROR);
 };
 
-const DEFAULT_BANNER = {
-    vitrina_theme: defaultImg,
-    gradient: '228.35deg, #eaef00 7.94%, #cbea0a 15.79%, #9cdd16 21.25%, #5dca23 28.58%, #00b944 38.54%, #00a3a7 57.42%, #009bc5 64.31%, #0096d3 67.8%, #018fdb 72.33%, #0489d6 76.41%, #047fcf 82.5%, #0073c8 87.4%, #0051b7 99.87%',
-    design_elements: [],
-};
+export const banners = Object.values(Themes);
 
-export const BANNER_KEYS = Object.keys(DEFAULT_BANNER) as (keyof IBanner)[];
-
-export const banners: IBanner[] = [
-    { ...DEFAULT_BANNER },
-    {
-        vitrina_theme: february23,
-        gradient: '262.6deg, #9cdd16 -9.99%, #84e73b 7.47%, #7dea44 13.24%, #18cd6d 32.14%, #06ac9a 43.29%, #00a3a7 51.61%, #00a0b2 57.73%, #0098b6 67.72%, #0073c8 90.72%',
-        design_elements: [],
-    },
-    {
-        vitrina_theme: march8,
-        gradient: '269.17deg, #ffeb37 3.13%, #ff8c39 50.88%, #f01d71 99.82%',
-        design_elements: [],
-    },
-];
-
-type IDefaultDesignSettings = Record<string, string | string[]>;
-
-export const DEFAULT_DESIGN_SETTINGS: IDefaultDesignSettings = {
-    ...DEFAULT_BANNER,
+export const DEFAULT_DESIGN_SETTINGS: Record<string, string> = {
+    vitrina_theme: Themes.DEFAULT,
     home_page_header: 'Сбер изменился, чтобы стать еще ближе к вам',
 };
 
@@ -329,42 +302,42 @@ export const formElements: FormConstructorItem[][] = [
 export const designElements: FormConstructorItem[][] = [
     [
         {
-            label: 'Текст для главной(Продукты)',
+            label: 'Заголовок для главной "Продукты"',
             type: FORM_TYPES.TEXT_AREA,
             span: 12,
             rows: 3,
-            maxLength: 70,
+            maxLength: 60,
             showCount,
             name: 'home_page_header',
-            placeholder: 'Текст для главной(Продукты)',
+            placeholder: 'Заголовок для главной "Продукты"',
         },
         {
-            label: 'Текст для главной(Подарки)',
+            label: 'Заголовок для главной "Подарки"',
             type: FORM_TYPES.TEXT_AREA,
             span: 12,
             rows: 3,
-            maxLength: 70,
+            maxLength: 60,
             showCount,
             name: 'home_page_header_present',
-            placeholder: 'Текст для главной(Подарки)',
+            placeholder: 'Заголовок для главной "Подарки"',
         },
     ],
     [
         {
-            label: 'Текст для главной(WOW)',
+            label: 'Заголовок для главной "ВАУ"',
             type: FORM_TYPES.TEXT_AREA,
             span: 12,
             rows: 3,
-            maxLength: 70,
+            maxLength: 60,
             showCount,
-            name: 'home_page_header_wow',
-            placeholder: 'Текст для главной(WOW)',
+            name: 'home_page_header_bundle',
+            placeholder: 'Заголовок для главной "ВАУ"',
         },
         {
-            label: 'Тема',
+            label: 'Тема для витрины',
             type: FORM_TYPES.BANNER,
             span: 12,
-            name: 'home_page_theme',
+            name: 'vitrina_theme',
         },
     ],
 ];

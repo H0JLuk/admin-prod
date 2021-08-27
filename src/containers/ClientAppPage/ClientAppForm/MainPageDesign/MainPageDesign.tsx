@@ -7,12 +7,11 @@ import {
     SETTINGS_TYPES,
 } from '../ClientAppFormConstants';
 import { createOrUpdateKey, IChangedParam, showNotify } from '../utils';
-import AppFormConstructor from '../FormConstructor/';
-import Loading from '@components/Loading/';
+import AppFormConstructor from '../FormConstructor';
+import Loading from '@components/Loading';
 import { ISettings, IDesignSettings } from '../ClientAppContainer';
 import { BUTTON_TEXT } from '@constants/common';
 import { ClientSetting } from '@types';
-import { IBanner } from './Banner';
 
 import styles from './MainPageDesign.module.css';
 
@@ -20,20 +19,17 @@ type IMainPageDesignProps = {
     designSettings: React.MutableRefObject<IDesignSettings>;
     updateSettings: (newParams: ISettings) => void;
     initialData: React.MutableRefObject<ISettings>;
+    appDisplayName?: string;
 };
 
-type IFormData = Record<string, string> & {
-    home_page_theme: IBanner;
-};
-
-type IFormattedFormData = Record<string, string | string[]>;
+type IFormData = Record<string, string>;
 
 const MainPageDesign: React.FC<IMainPageDesignProps> = ({
     designSettings: { current: designSettings },
     updateSettings,
     initialData: { current: initialData },
+    appDisplayName,
 }) => {
-
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [canSave, setCanSave] = useState(false);
@@ -43,13 +39,7 @@ const MainPageDesign: React.FC<IMainPageDesignProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleSubmit = async ({ home_page_theme, ...rest }: IFormData) => {
-        const formData: IFormattedFormData = { ...rest, ...home_page_theme };
-        const oldDesignedSettings = {
-            ...designSettings,
-            ...designSettings.home_page_theme,
-            design_elements: JSON.stringify(designSettings.home_page_theme?.design_elements || []),
-        };
+    const handleSubmit = async (formData: IFormData) => {
 
         try {
             const clientAppCode = getAppCode() || '';
@@ -57,7 +47,7 @@ const MainPageDesign: React.FC<IMainPageDesignProps> = ({
                 const valueFromServer = initialData[key];
                 const valueInForm = keysToString.includes(key) ? JSON.stringify(formData[key]) : formData[key];
 
-                if (valueInForm !== oldDesignedSettings[key as keyof typeof ClientSetting]) {
+                if (valueInForm !== designSettings[key as keyof typeof ClientSetting]) {
                     if (valueFromServer === undefined) {
                         return [...result, { clientAppCode, key, value: (valueInForm as string), type: SETTINGS_TYPES.CREATE }];
                     }
@@ -73,7 +63,7 @@ const MainPageDesign: React.FC<IMainPageDesignProps> = ({
                 await createOrUpdateKey(changedParams);
                 setCanSave(false);
                 updateSettings(changedParams.reduce((result, { key, value }) => ({ ...result, [key]: value }), {}));
-                showNotify(`Оформление для витрины '${designSettings.displayName}' обновлено`);
+                showNotify(`Оформление для витрины '${appDisplayName}' обновлено`);
             }
         } catch ({ message }) {
             showNotify(message, true);
@@ -96,14 +86,6 @@ const MainPageDesign: React.FC<IMainPageDesignProps> = ({
                 onFieldsChange={enableBtn}
                 id="edit"
             >
-                <div className={styles.container}>
-                    {designElements.map((row, index) => (
-                        <AppFormConstructor
-                            key={index}
-                            row={row}
-                        />
-                    ))}
-                </div>
                 <div className={styles.buttonGroup}>
                     <Button
                         disabled={!canSave}
@@ -112,6 +94,14 @@ const MainPageDesign: React.FC<IMainPageDesignProps> = ({
                     >
                         {BUTTON_TEXT.SAVE}
                     </Button>
+                </div>
+                <div className={styles.container}>
+                    {designElements.map((row, index) => (
+                        <AppFormConstructor
+                            key={index}
+                            row={row}
+                        />
+                    ))}
                 </div>
             </Form>
         </div>

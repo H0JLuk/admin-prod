@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import FormConstructor from './FormConstructor';
 import { FORM_TYPES } from '../ClientAppFormConstants';
 import { LOGIN_TYPES_ENUM, LOGIN_TYPE_OPTIONS } from '../../../../constants/loginTypes';
+import Themes from '../../../../constants/themes';
 
 describe('<FormConstructor /> test', () => {
     const props = {
@@ -13,10 +14,7 @@ describe('<FormConstructor /> test', () => {
                 span: 'span',
                 rules: 'rules',
                 name: 'name',
-                value: {
-                    vitrina_theme: 'vitrina_theme',
-                    gradient: 'gradient',
-                },
+                value: Themes,
                 type: FORM_TYPES.INPUT,
             },
         ],

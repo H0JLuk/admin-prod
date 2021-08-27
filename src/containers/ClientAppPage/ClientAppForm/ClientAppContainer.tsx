@@ -1,20 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState, useRef } from 'react';
-import cn from 'classnames';
 import { message, Radio, RadioChangeEvent } from 'antd';
 import { useHistory } from 'react-router-dom';
-import Header from '@components/Header/';
+import Header from '@components/Header';
 import ClientAppProperties from './ClientAppProperties';
 import MainPageDesign from './MainPageDesign';
 import Loading from '@components/Loading';
 import { getAppCode } from '@apiServices/sessionService';
 import {
-    addSettings,
+    /* addSettings, */
     getAllSettings,
     getSettingsList,
 } from '@apiServices/settingsService';
 import { getBusinessRoles, getBusinessRolesByClientApp } from '@apiServices/businessRoleService';
 import { getClientAppInfo } from '@apiServices/clientAppService';
+import { getConsentById } from '@apiServices/consentsService';
 import {
     FORM_MODES,
     EDIT_MODE,
@@ -23,13 +22,10 @@ import {
     designKeysForCheck,
     DEFAULT_DESIGN_SETTINGS,
     TextKeysWithDefaultValues,
-    BANNER_KEYS,
 } from './ClientAppFormConstants';
 import { checkExistDesignSettings } from './utils';
 import { requestsWithMinWait } from '@utils/utils';
-import { IBanner } from './MainPageDesign/Banner';
-import { BusinessRoleDto, ConsentDto, ISettingObject, SettingDto } from '@types';
-import { getConsentById } from '@apiServices/consentsService';
+import { BusinessRoleDto, ConsentDto, ISettingObject } from '@types';
 import ROLES from '@constants/roles';
 
 import styles from './ClientAppContainer.module.css';
@@ -43,9 +39,7 @@ export type ISettings = Record<string, string> & ISettingObject & {
     businessRoleIds?: any;
 };
 
-export type IDesignSettings = Record<string, string> & ISettingObject & {
-    home_page_theme?: IBanner;
-};
+export type IDesignSettings = Record<string, string> & ISettingObject;
 
 type IDoPropertiesSettings = {
     id: number;
@@ -60,7 +54,6 @@ export type IPropertiesSettings = ISettings & {
 };
 
 const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPath }) => {
-
     const [mode, setMode] = useState(EDIT_MODE.PROPERTIES);
     const history = useHistory();
     const [loading, setLoading] = useState(true);
@@ -124,10 +117,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                 const settingsForDesign = { ...settingsMap };
 
                 /* Проверяем, есть ли хоть одна настройка, которая не записана в настройках оформления клиентского приложения*/
-                /* TODO: раскомментировать условие когда будет добавляться функционал для оформления витрин (темы) WDZO-1393
                 if (checkExistDesignSettings(settingsMap)) {
-                    const { settingDtoList: allSettings = [] } = await getAllSettings();
-
                     // Фильтруем настройки и получаем только дефолтные
                     const defaultDesignSettingsMap = allSettings.reduce<ISettings>((result, { clientAppCode, key, value }) => {
                         if (clientAppCode === null && designKeysForCheck.includes(key)) {
@@ -135,8 +125,6 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                         }
                         return result;
                     }, {});
-
-                    const defaultSettingsArr: SettingDto[] = [];
 
                     designKeysForCheck.forEach(key => {
                         // Если дефолтных настроек на поле нет, то нам надо их создать
@@ -147,24 +135,20 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                             typeof value !== 'undefined'
                         ) {
                             defaultDesignSettingsMap[key] = value;
-                            defaultSettingsArr.push({ key, value });
                         }
                     });
 
-                    defaultSettingsArr.length && await addSettings(defaultSettingsArr);
-
                     // Проверяем каждое свойство оформления и если у свойства значение undefined или null, то тогда берем значение из дефолтных
                     designKeysForCheck.forEach(key => {
-                        if (!TextKeysWithDefaultValues.includes(key)) {
-                            settingsForDesign[key] = settingsForDesign[key] ?? defaultDesignSettingsMap[key];
-                        } else {
+                        if (TextKeysWithDefaultValues.includes(key)) {
                             settingsForDesign[key] = settingsForDesign[key] ?? defaultDesignSettingsMap['home_page_header'];
+                        } else {
+                            settingsForDesign[key] = settingsForDesign[key] ?? defaultDesignSettingsMap[key];
                         }
                     });
                 }
 
-                designSettings.current = doDesignSettings(settingsForDesign, clientAppInfo.displayName);
-                */
+                designSettings.current = settingsForDesign;
             } catch ({ message: error }) {
                 message.error(error);
             } finally {
@@ -176,18 +160,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
 
 
     const updateDesignSettings = (newParams: ISettings) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const currentHomePageTheme = (designSettings.current.home_page_theme!);
-        const home_page_theme = BANNER_KEYS.reduce<IBanner>(
-            (result, key) => ({
-                ...result,
-                [key]: newParams[key] ?? currentHomePageTheme[key],
-            }),
-            { ...currentHomePageTheme },
-        );
-
         designSettings.current = { ...designSettings.current, ...newParams };
-        designSettings.current.home_page_theme = home_page_theme;
         settingDtoList.current = {
             ...settingDtoList.current,
             ...newParams,
@@ -203,6 +176,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
             designSettings={designSettings}
             updateSettings={updateDesignSettings}
             initialData={settingDtoList}
+            appDisplayName={propertiesSettings.current.displayName}
         />
     ) : (
         <ClientAppProperties
@@ -217,24 +191,29 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
 
     return (
         <div className={styles.clientAppForm}>
-            <Header menuMode={isEdit} buttonBack={!isEdit} />
+            <Header
+                menuMode={isEdit}
+                buttonBack={!isEdit}
+            />
             <div className={styles.header}>
-                {/* {<Radio.Group className={styles.radio} onChange={handleModeChange} value={mode}>
+                <Radio.Group
+                    className={styles.radio}
+                    onChange={handleModeChange}
+                    value={mode}
+                >
                     <Radio.Button
                         disabled={!isEdit || loading}
-                        className={cn({ [styles.active]: isMainPageDesignEdit })}
                         value={EDIT_MODE.DESIGN}
                     >
                         {DESIGN_RADIO_TITLE}
                     </Radio.Button>
                     <Radio.Button
-                        className={cn({ [styles.active]: !isMainPageDesignEdit })}
                         value={EDIT_MODE.PROPERTIES}
                         disabled={loading}
                     >
                         {PROPERTIES_RADIO_TITLE}
                     </Radio.Button>
-                </Radio.Group>} */}
+                </Radio.Group>
                 <div className={styles.title}>{mode}</div>
             </div>
             {loading ? <Loading className={styles.loading} /> : tabRender}
@@ -244,17 +223,8 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
 
 export default ClientAppContainer;
 
-function doDesignSettings(settings: ISettings, displayName: string): IDesignSettings {
-    const { vitrina_theme, gradient, design_elements: designElementsString, ...restSettings } = settings;
-    const design_elements: string[] = designElementsString && JSON.parse(designElementsString);
-    const home_page_theme = { gradient, design_elements, vitrina_theme } as IBanner;
-    const result: IDesignSettings = { displayName, ...restSettings };
-    result.home_page_theme = home_page_theme;
 
-    return result;
-}
-
-export function doPropertiesSettings (settings: ISettings, { id, displayName, code, name }: IDoPropertiesSettings): IPropertiesSettings {
+export function doPropertiesSettings(settings: ISettings, { id, displayName, code, name }: IDoPropertiesSettings): IPropertiesSettings {
     const {
         mechanics,
         game_mechanics,

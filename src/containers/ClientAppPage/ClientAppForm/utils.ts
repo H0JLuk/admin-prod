@@ -53,7 +53,7 @@ export function checkExistDesignSettings(settings: ISettingObject) {
 }
 
 export function getImage(imageName: string) {
-    return `${process.env.PUBLIC_URL}/images/clientAppDesign/${imageName}.png`;
+    return `${process.env.PUBLIC_URL}/themes/${imageName}/main-page-image.svg`;
 }
 
 

@@ -27,7 +27,7 @@ describe('ClientAppForm utils test', () => {
     it('should return src to image', () => {
         process.env.PUBLIC_URL = 'sberbank.ru';
         expect(getImage('test')).toEqual(
-            'sberbank.ru/images/clientAppDesign/test.png'
+            'sberbank.ru/themes/test/main-page-image.svg'
         );
     });
 

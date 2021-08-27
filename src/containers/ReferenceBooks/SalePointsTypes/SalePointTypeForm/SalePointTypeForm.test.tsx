@@ -104,31 +104,58 @@ describe('<SalePointTypeForm /> test', () => {
 
     it('sale point type should be edited', async () => {
         const newProps = { ...TEST_PROPS, mode: 'edit' };
+        const formData = {
+            description: 'Тестовое описание',
+            kind: 'EXTERNAL',
+            name: 'Тест имени',
+            priority: 1,
+        };
         (useLocation as jest.Mock).mockImplementation(() => mockTestSalePointType);
         const EditableComponent = mount(<SalePointTypeForm {...newProps} />);
-        EditableComponent.find('form').simulate('submit');
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const formInstance = EditableComponent.find(Form).prop('form')!;
+        formInstance.setFieldsValue(formData);
+        formInstance.submit();
         await sleep();
         expect(editSalePointType).toHaveBeenCalled();
     });
 
     it('sale point type should not be edited', async () => {
         const newProps = { ...TEST_PROPS, mode: 'edit' };
+        const formData = {
+            description: 'тест некорректного описания&',
+            kind: 'EXTERNAL',
+            name: 'test',
+            priority: 1,
+        };
         const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => ({}));
         (useLocation as jest.Mock).mockImplementation(() => mockTestSalePointType);
         (editSalePointType as jest.Mock).mockRejectedValue('Error');
         const EditableComponent = mount(<SalePointTypeForm {...newProps} />);
-        EditableComponent.find('form').simulate('submit');
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const formInstance = EditableComponent.find(Form).prop('form')!;
+        formInstance.setFieldsValue(formData);
+        formInstance.submit();
         await sleep();
-        expect(warnSpy).toHaveBeenCalledTimes(1);
+        expect(warnSpy).toHaveBeenCalledTimes(2);
     });
 
     it('sale point type should not be edited with error message', async () => {
+        const formData = {
+            description: 'Тестовое описание',
+            kind: 'EXTERNAL',
+            name: 'Тестовое имя',
+            priority: 1,
+        };
         console.warn = jest.fn(() => '');
         const newProps = { ...TEST_PROPS, mode: 'edit' };
         (useLocation as jest.Mock).mockImplementation(() => mockTestSalePointType);
         (editSalePointType as jest.Mock).mockRejectedValue(new Error('Error'));
         const EditableComponent = mount(<SalePointTypeForm {...newProps} />);
-        EditableComponent.find('form').simulate('submit');
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const formInstance = EditableComponent.find(Form).prop('form')!;
+        formInstance.setFieldsValue(formData);
+        formInstance.submit();
         await sleep();
         expect(message.error).toHaveBeenCalledWith('Ошибка изменения типа точки продажи: Error');
     });

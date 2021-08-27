@@ -76,9 +76,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     ...restData
                 } = formData;
 
-                setLoading(true);
-                await addClientApp({ code, displayName, isDeleted: false, name, businessRoleIds });
-
                 const settings: SettingDto[] = [
                     {
                         clientAppCode: code,
@@ -101,12 +98,16 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         key: 'notification_types',
                     },
                 ];
+
                 Object.keys(restData).forEach((key) => {
                     const value = restData[key];
                     value && settings.push({ clientAppCode: code, value, key });
                 });
 
+                setLoading(true);
+                await addClientApp({ code, displayName, isDeleted: false, name, businessRoleIds });
                 await addSettings(settings);
+
                 showNotify(SUCCESS_PROPERTIES_CREATE_DESCRIPTION);
                 saveAppCode(code);
             } else {
@@ -134,6 +135,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     if ((!valueFromServer && valueInForm) || (valueFromServer && valueInForm !== valueFromServer)) {
                         return [...result, { ...commonObj, type: SETTINGS_TYPES.EDIT }];
                     }
+
                     return result;
                 }, []);
 
