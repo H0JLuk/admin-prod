@@ -1,6 +1,7 @@
 /* colFlex */
 .colFlex :global(.ant-checkbox-group) {
     display: flex;
+    flex-wrap: wrap;
 }
 /* /colFlex */
 
