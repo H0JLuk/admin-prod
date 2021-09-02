@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import noop from 'lodash/noop';
 import SettingPageModal from '../SettingPageModal';
-import { getImage } from '../../utils';
 import Themes from '@constants/themes';
 
 import styles from './Banner.module.css';
@@ -30,7 +29,7 @@ const Banner: React.FC<BannerProps> = ({ value = Themes.DEFAULT, onChange = noop
             <div className={styles.imageContainer}>
                 <img
                     className={cn(styles.img, bannerStyles[value])}
-                    src={getImage(value)}
+                    src={require(`../../../../../static/images/themes/${value}/main-page-image.svg`)}
                     alt="banner"
                 />
             </div>

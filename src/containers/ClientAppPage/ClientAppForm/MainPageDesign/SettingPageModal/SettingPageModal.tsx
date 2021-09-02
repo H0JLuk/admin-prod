@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, Row, Modal } from 'antd';
-import { getImage } from '../../utils';
 import Themes from '@constants/themes';
 import { banners } from '../../ClientAppFormConstants';
 
@@ -33,7 +32,7 @@ const SettingPageModal: React.FC<ISettingPageModal> = ({ visible, onClose, handl
             >
                 <Image
                     className={bannerStyles[appTheme]}
-                    src={getImage(appTheme)}
+                    src={require(`../../../../../static/images/themes/${appTheme}/main-page-image.svg`)}
                     preview={false}
                 />
                 <div className={styles.imageMask} />

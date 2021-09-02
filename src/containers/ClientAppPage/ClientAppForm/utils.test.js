@@ -1,6 +1,6 @@
 import * as notification from '../../../utils/notifications';
 import * as settingsService from '../../../api/services/settingsService';
-import { getImage, showNotify, createOrUpdateKey, checkExistDesignSettings } from './utils';
+import { showNotify, createOrUpdateKey, checkExistDesignSettings } from './utils';
 import { designKeysForCheck } from './ClientAppFormConstants';
 
 describe('ClientAppForm utils test', () => {
@@ -22,13 +22,6 @@ describe('ClientAppForm utils test', () => {
 
         expect(notification.customNotifications.success).toBeCalledTimes(1);
         expect(notification.customNotifications.success).toBeCalledWith(config);
-    });
-
-    it('should return src to image', () => {
-        process.env.PUBLIC_URL = 'sberbank.ru';
-        expect(getImage('test')).toEqual(
-            'sberbank.ru/themes/test/main-page-image.svg'
-        );
     });
 
     it('should add or update settings on server', async () => {

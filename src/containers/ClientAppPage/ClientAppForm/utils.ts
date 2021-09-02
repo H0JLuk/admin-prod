@@ -52,8 +52,4 @@ export function checkExistDesignSettings(settings: ISettingObject) {
     return designKeysForCheck.some(key => !Object.prototype.hasOwnProperty.call(settings, key));
 }
 
-export function getImage(imageName: string) {
-    return `${process.env.PUBLIC_URL}/themes/${imageName}/main-page-image.svg`;
-}
-
 
