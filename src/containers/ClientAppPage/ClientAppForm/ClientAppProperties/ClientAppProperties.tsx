@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, FormProps, Row } from 'antd';
+import { Button, Col, Form, FormProps, Row, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { createOrUpdateKey, IChangedParam, showNotify } from '../utils';
 import { addClientApp, updateClientApp } from '@apiServices/clientAppService';
+import { attachConsentToClientApp } from '@apiServices/consentsService';
 import { getAppCode, saveAppCode } from '@apiServices/sessionService';
 import { addSettings } from '@apiServices/settingsService';
 import { CLIENT_APPS_PAGES } from '@constants/route';
@@ -15,6 +16,8 @@ import {
     BACKEND_ERROR_ALREADY_EXIST_ENDING,
     BUSINESS_ROLE_FOR_APPLICATION,
     BUSINESS_ROLE_FOR_APP_PLACEHOLDER,
+    CONSENT_FOR_APPLICATION,
+    CONSENT_FOR_APP_PLACEHOLDER,
     formElements,
     FORM_MODES,
     keysToString,
@@ -22,17 +25,20 @@ import {
     SETTINGS_TYPES,
     SUCCESS_PROPERTIES_CREATE_DESCRIPTION,
 } from '../ClientAppFormConstants';
+import { CONSENTS_LABELS } from '@constants/consentsConstants';
 import { LoginTypes, LOGIN_TYPES_ENUM } from '@constants/loginTypes';
 import { NOTIFICATION_TYPES } from '@constants/clientAppsConstants';
 import { IPropertiesSettings, ISettings } from '../ClientAppContainer';
 import { BusinessRoleDto, ConsentDto, SettingDto } from '@types';
 import { BUTTON_TEXT } from '@constants/common';
 import { compareArrayOfNumbers } from '@utils/helper';
+import { FORM_RULES } from '@utils/validators';
 
 import styles from './ClientAppProperties.module.css';
 
 type ClientAppPropertiesProps = {
     businessRoles: React.MutableRefObject<BusinessRoleDto[]>;
+    consents: React.MutableRefObject<ConsentDto[]>;
     type: FORM_MODES;
     matchPath: string;
     propertiesSettings: React.MutableRefObject<Partial<ISettings>>;
@@ -42,6 +48,7 @@ type ClientAppPropertiesProps = {
 
 const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
     businessRoles: { current: businessRoles },
+    consents: { current: consents },
     type,
     matchPath,
     propertiesSettings: { current: propertiesSettings },
@@ -50,6 +57,8 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
 }) => {
     const history = useHistory();
     const [form] = Form.useForm();
+    const initialValues = { consentId: consent?.id };
+    const consentsFields = consents.map(i => ({ label: `${CONSENTS_LABELS.INFO_TITLE} ${i.version}`, value: i.id }));
     const isEdit = type === FORM_MODES.EDIT;
     const [loading, setLoading] = useState(false);
     const [btnStatus, setBtnStatus] = useState(true);
@@ -73,6 +82,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     login_types,
                     notification_types,
                     businessRoleIds,
+                    consentId,
                     ...restData
                 } = formData;
 
@@ -106,6 +116,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
 
                 setLoading(true);
                 await addClientApp({ code, displayName, isDeleted: false, name, businessRoleIds });
+                await attachConsentToClientApp(consentId, code);
                 await addSettings(settings);
 
                 showNotify(SUCCESS_PROPERTIES_CREATE_DESCRIPTION);
@@ -117,6 +128,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     code,
                     name,
                     businessRoleIds,
+                    consentId,
                     ...restData
                 } = formData;
                 const changedParams = Object.keys(restData).reduce<IChangedParam[]>((result, key) => {
@@ -143,9 +155,12 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 const requests: Promise<any>[] = [];
                 const notifies: (() => void)[] = [];
 
+                const consentIdEdited = consent?.id !== consentId;
+
                 if (
                     displayName !== propertiesSettings.displayName ||
-                    !compareArrayOfNumbers(businessRoleIds, propertiesSettings.businessRoleIds)
+                    !compareArrayOfNumbers(businessRoleIds, propertiesSettings.businessRoleIds) ||
+                    consentIdEdited
                 ) {
                     requests.push(updateClientApp(id as any, { displayName, code, isDeleted: false, name, businessRoleIds }));
                     if (displayName !== propertiesSettings.displayName) {
@@ -163,6 +178,14 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                             </span>,
                         ));
                     }
+
+                    if (consentIdEdited) {
+                        notifies.push(() => showNotify(
+                            <span>
+                                Соглашение для витрины <b>&quot;{propertiesSettings.displayName}&quot;</b> успешно обновлено
+                            </span>,
+                        ));
+                    }
                 }
 
                 if (changedParams.length) {
@@ -174,9 +197,11 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     ));
                 }
 
-                if (requests.length) {
+                if (requests.length || consentIdEdited) {
                     setLoading(true);
-                    await Promise.all(requests);
+
+                    requests.length && await Promise.all(requests);
+                    consentIdEdited && await attachConsentToClientApp(consentId, code);
 
                     notifies.forEach(fn => fn());
                     setBtnStatus(true);
@@ -248,6 +273,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
             {loading && <Loading />}
             <Form
                 className={styles.form}
+                initialValues={initialValues}
                 form={form}
                 onFinish={handleFinish}
                 layout="vertical"
@@ -284,6 +310,18 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                                     data={businessRoles}
                                     idKey="id"
                                     placeholder={BUSINESS_ROLE_FOR_APP_PLACEHOLDER}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                label={CONSENT_FOR_APPLICATION}
+                                name="consentId"
+                                rules={[ FORM_RULES.REQUIRED ]}
+                            >
+                                <Select
+                                    placeholder={CONSENT_FOR_APP_PLACEHOLDER}
+                                    options={consentsFields}
                                 />
                             </Form.Item>
                         </Col>

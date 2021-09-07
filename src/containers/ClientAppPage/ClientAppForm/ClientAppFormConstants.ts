@@ -28,6 +28,8 @@ export const SUCCESS_PROPERTIES_CREATE_DESCRIPTION = 'Клиентское пр�
 export const BACKEND_ERROR_ALREADY_EXIST_ENDING = 'already exists';
 export const BUSINESS_ROLE_FOR_APPLICATION = 'Бизнес-роль, для которой доступно приложение';
 export const BUSINESS_ROLE_FOR_APP_PLACEHOLDER = 'Выберите роль/роли';
+export const CONSENT_FOR_APPLICATION = 'Согласие';
+export const CONSENT_FOR_APP_PLACEHOLDER = 'Выберите согласие';
 
 export const EDIT_MODE = {
     DESIGN: 'Оформление',

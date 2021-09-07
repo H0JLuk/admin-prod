@@ -13,7 +13,7 @@ import {
 } from '@apiServices/settingsService';
 import { getBusinessRoles, getBusinessRolesByClientApp } from '@apiServices/businessRoleService';
 import { getClientAppInfo } from '@apiServices/clientAppService';
-import { getConsentById } from '@apiServices/consentsService';
+import { getConsentById, getConsentsList } from '@apiServices/consentsService';
 import {
     FORM_MODES,
     EDIT_MODE,
@@ -58,10 +58,11 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
     const history = useHistory();
     const [loading, setLoading] = useState(true);
     const businessRoles = useRef<BusinessRoleDto[]>([]);
+    const consents = useRef<ConsentDto[]>([]);
     const settingDtoList = useRef<ISettings>({});
     const designSettings = useRef<IDesignSettings>({});
     const propertiesSettings = useRef<IPropertiesSettings>({});
-    const consent = useRef<ConsentDto | null>(null);
+    const [consent, setConsent] = useState<ConsentDto | null>(null);
     const isEdit = type === FORM_MODES.EDIT;
     const isMainPageDesignEdit = mode === EDIT_MODE.DESIGN;
 
@@ -81,6 +82,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
         (async () => {
             try {
                 businessRoles.current = (await getBusinessRoles()).list;
+                consents.current = (await getConsentsList()).list;
 
                 if (!isEdit) {
                     return;
@@ -111,7 +113,8 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                 propertiesSettings.current = doPropertiesSettings(settingsMap, clientAppInfo);
 
                 if (settingsMap.privacy_policy !== undefined && typeof Number(settingsMap.privacy_policy) === 'number') {
-                    consent.current = await getConsentById(Number(settingsMap.privacy_policy));
+                    const consentData = await getConsentById(Number(settingsMap.privacy_policy));
+                    setConsent(consentData);
                 }
 
                 const settingsForDesign = { ...settingsMap };
@@ -169,6 +172,11 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
 
     const updatePropertiesSettings = (newParams: IPropertiesSettings) => {
         propertiesSettings.current = { ...(designSettings.current as Record<string, string>), ...newParams };
+        const findConsent = (el: ConsentDto) => el.id === +newParams.consentId;
+        if (consent?.id !== +newParams.consentId) {
+            const newConsent = consents.current.find((findConsent)) as ConsentDto;
+            setConsent(newConsent);
+        }
     };
 
     const tabRender = isMainPageDesignEdit ? (
@@ -185,7 +193,8 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
             propertiesSettings={propertiesSettings}
             updateSettings={updatePropertiesSettings}
             businessRoles={businessRoles}
-            consent={consent.current}
+            consent={consent}
+            consents={consents}
         />
     );
 
