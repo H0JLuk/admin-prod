@@ -64,6 +64,8 @@ const MainPageDesign: React.FC<IMainPageDesignProps> = ({
                 setCanSave(false);
                 updateSettings(changedParams.reduce((result, { key, value }) => ({ ...result, [key]: value }), {}));
                 showNotify(`Оформление для витрины '${appDisplayName}' обновлено`);
+            } else {
+                showNotify('Настройки не изменились', true);
             }
         } catch ({ message }) {
             showNotify(message, true);

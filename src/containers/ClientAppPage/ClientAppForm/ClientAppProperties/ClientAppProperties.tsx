@@ -207,6 +207,9 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     setBtnStatus(true);
                     updateSettings({ ...formData, id: id! });
                     setLoading(false);
+                } else {
+                    showNotify('Настройки не изменились', true);
+                    setBtnStatus(true);
                 }
             }
         } catch ({ message }) {
