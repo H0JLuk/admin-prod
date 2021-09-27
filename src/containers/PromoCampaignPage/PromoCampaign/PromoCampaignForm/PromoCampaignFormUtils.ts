@@ -205,6 +205,7 @@ export function normalizePromoCampaignData<Data extends Record<string, any>>({ p
         active: promoCampaign.active,
         dzoId: promoCampaign.dzoId,
         type: promoCampaign.type,
+        saleEnabled: promoCampaign.settings.sale_enabled,
         categoryIdList: (promoCampaign as PromoCampaignDto).categoryList.map(({ categoryId }) => categoryId),
         banners: arrayToObject(banners, 'type', 'url'),
         texts: arrayToObject(texts, 'type', 'value'),
@@ -221,7 +222,9 @@ export function normalizePromoCampaignData<Data extends Record<string, any>>({ p
     };
 }
 
-export const getDataForSend = <DataForSend extends {[key in keyof PromoCampaignFormInitialState]: DataForSend[key] }>({
+type DataForSendType = {[key in keyof PromoCampaignFormInitialState]: PromoCampaignFormInitialState[key] };
+export const getDataForSend = <DataForSend extends DataForSendType & {id?: number;}>({
+    id,
     name,
     dzoId,
     webUrl,
@@ -235,25 +238,41 @@ export const getDataForSend = <DataForSend extends {[key in keyof PromoCampaignF
     settings,
     oneLinkAppUrl,
     standalone,
+    productOfferingId,
     externalId,
     behaviorType,
-}: DataForSend) => ({
-    name,
-    dzoId,
-    webUrl,
-    active,
-    offerDuration,
-    finishDate,
-    startDate,
-    promoCodeType,
-    settings,
-    standalone,
-    type,
-    categoryIdList,
-    oneLinkAppUrl,
-    externalId: externalId || null,
-    behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
-});
+    saleEnabled,
+}: DataForSend, isEdit: boolean, isCopy: boolean) => {
+    const data = {
+        name,
+        dzoId,
+        webUrl,
+        active,
+        offerDuration,
+        finishDate,
+        startDate,
+        promoCodeType,
+        settings,
+        standalone,
+        type,
+        categoryIdList,
+        oneLinkAppUrl,
+        productOfferingId,
+        externalId: externalId || null,
+        behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
+    };
+    if (saleEnabled) {
+        data.productOfferingId = +(data.productOfferingId!);
+        settings.sale_enabled = true;
+    } else {
+        data.productOfferingId = null;
+
+        if (isEdit || isCopy) {
+            settings.sale_enabled = false;
+        }
+    }
+    return data;
+};
 
 export function getPromoCampaignForCopy<
     PromoCampaignState extends { [key in keyof PromoCampaignDto]: PromoCampaignState[key] }, visibilitySettings = any[],

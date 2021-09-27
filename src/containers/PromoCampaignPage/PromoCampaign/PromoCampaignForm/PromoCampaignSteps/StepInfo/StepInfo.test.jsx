@@ -72,11 +72,13 @@ describe('<StepInfo /> create mode tests.', () => {
         categoryIdList: [],
         appCode: null,
         standalone: false,
+        productOfferingId: null,
         settings: {
             priority_on_web_url: false,
             alternative_offer_mechanic: false,
             details_button_label: '',
             details_button_url: '',
+            sale_enabled: false,
         },
     };
 

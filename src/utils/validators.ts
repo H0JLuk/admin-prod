@@ -12,9 +12,23 @@ const codeRule = {
     message: 'латинские буквы, "_", "-"',
 };
 
-export type PageFieldsValidate = Record<string, typeof commonRule>;
+export type ValidateRule = typeof commonRule;
 
-export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
+type VALIDATE_FIELDS_TYPE = {
+    promoCampaign: Record<'name' | 'textContent' | 'detailsButtonLabel', ValidateRule>;
+    clientApp: Record<'name' | 'code', ValidateRule>;
+    dzo: Record<'name' | 'code' | 'description', ValidateRule>;
+    category: Record<'name', ValidateRule>;
+    presentation: Record<'common', ValidateRule>;
+    salePoint: Record<'name' | 'description', ValidateRule>;
+    businessRole: Record<'name' | 'description', ValidateRule>;
+    location: Record<'name' | 'description', ValidateRule>;
+    locationType: Record<'name' | 'description', ValidateRule>;
+    consent: Record<'consentEditorText', ValidateRule>;
+    users: Record<'login', ValidateRule>;
+};
+
+export const VALIDATE_FIELDS: VALIDATE_FIELDS_TYPE = {
     promoCampaign: {
         name: {
             pattern: /^[а-яё\s\w\-.,/:%()?!№"]+$/i,
@@ -98,10 +112,11 @@ export const VALIDATE_FIELDS: Record<string, PageFieldsValidate> = {
     },
 };
 
-// TODO: подумать как можно с помощью дженериков сделать типы для аргументов,
-// чтобы нельзя было передать в функцию строки, которых нет в константе
-export function getPatternAndMessage(page: string, fieldName: string) {
-    const { pattern, message } = (VALIDATE_FIELDS[page] || {})[fieldName] || {};
+type PageType = keyof VALIDATE_FIELDS_TYPE;
+type FieldType<P extends PageType> = keyof (VALIDATE_FIELDS_TYPE[P]);
+
+export function getPatternAndMessage<P extends PageType, F extends FieldType<P>>(page: P, fieldName: F) {
+    const { message, pattern } = VALIDATE_FIELDS[page][fieldName] as unknown as ValidateRule;
     return {
         pattern,
         message: `Допустимы ${message}`,

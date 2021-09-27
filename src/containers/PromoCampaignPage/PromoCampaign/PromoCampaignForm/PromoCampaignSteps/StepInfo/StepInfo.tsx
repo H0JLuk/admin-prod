@@ -10,17 +10,37 @@ import { getDzoList } from '@apiServices/dzoService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
 import { getCategoryList } from '@apiServices/categoryService';
 import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList } from '@apiServices/promoCampaignService';
-import { TOOLTIP_TEXT_FOR_URL_LABEL } from '@constants/jsxConstants';
 import PROMO_CAMPAIGNS from '@constants/promoCampaigns';
 import { urlCheckRule } from '@utils/urlValidator';
 import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
-import { getLabel } from '@components/LabelWithTooltip';
 import { getAppCode } from '@apiServices/sessionService';
 import promoCodeTypes from '@constants/promoCodeTypes';
 import { removeExtraSpaces, trimValue } from '@utils/helper';
 import { BANNER_TYPE } from '@constants/common';
 
 import styles from './StepInfo.module.css';
+import {
+    ACTIVE_PERIOD,
+    BEHAVIOR_TYPE,
+    CHECKOUT_SALE,
+    DETAIL_BTN_TEXT,
+    DETAIL_BTN_URL,
+    DZO,
+    EXTERNAL_ID,
+    PRODUCT_OFFER_ID,
+    PROMO_CAMPAIGN_CATEGORY,
+    PROMO_CAMPAIGN_NAME,
+    PROMO_CAMPAIGN_TYPE,
+    PROMO_CAMPAIGN_URL,
+    SHOW_GO_TO_LINK,
+    SHOW_ONLY_IN_BUNDLE,
+    PROMO_CAMPAIGN_SHOW,
+    SHOW_VIDEO_TOUR,
+    STATUS,
+    TYPE_PROMO_CODE,
+    URL_SOURCE,
+    OFFER_DURATION,
+} from './stepInfoConstants';
 
 export type StepInfoProps = {
     state: PromoCampaignFormInitialState;
@@ -32,45 +52,8 @@ export type StepInfoProps = {
     changeTypePromo: () => void;
 };
 
-const SELECT = 'Выбрать';
-const URL = 'URL';
-const NAME_PROMO_CAMPAIGN = 'Название промо-кампании';
-const CATEGORY = 'Категории';
-const CATEGORY_PROMO_CAMPAIGN = 'Выберите категорию';
-const TEMPLATE_PROMO_NAME = 'Например: Промо-кампания СберМаркет';
-const URL_PROMO_CAMPAIGN = 'Ссылка на промо-кампанию';
-const TYPE_PROMO_CAMPAIGN = 'Тип промо-кампании';
-const TYPE_PROMO_CODE = 'Тип промокода';
-const ACTIVE_PERIOD = 'Период действия';
-const CHOOSE_SHOWCASE = 'Выберите витрину';
-const SHOW_PROMO_CAMPAIGN = 'Витрина, в которой показывать промо-кампанию';
-const DZO = 'ДЗО';
-const STATUS_ON = 'Промо-кампания включена';
-const STATUS_OFF = 'Промо-кампания отключена';
-const DATE_PICKER_PLACEHOLDER: [string, string] = ['дд.мм.гг', 'дд.мм.гг'];
-const STATUS_TEXT_OFF = 'Пользователи не видят промо-кампанию';
-const STATUS_TEXT_ON = 'Пользователи видят промо-кампанию';
-const URL_SOURCE_LABEL = 'Источник ссылки';
-const URL_SOURCE_VALUE_DZO = 'DZO';
-const URL_SOURCE_VALUE_PROMO_CAMPAIGN = 'PROMO_CAMPAIGN';
-const URL_SOURCE_DZO_LABEL = 'ДЗО';
-const URL_SOURCE_PROMO_CAMPAIGN_LABEL = 'Промо-кампания';
-const SHOW_VIDEO_TOUR_LABEL = 'Отображать видеоэкскурсию';
-const SHOW_GO_TO_LINK_LABEL = 'Отображать кнопку "Перейти на сайт"';
-const SHOW_ONLY_IN_BUNDLE = 'Отображать только в составе бандла';
-const EXTERNAL_ID_LABEL = 'Внешний ID';
-const EXTERNAL_ID_PLACEHOLDER = 'Введите внешний ID';
-const EXTERNAL_ID_DUPLICATE = 'Введенный внешний ID уже используется в другой промо-кампании';
-const DETAIL_BTN_LABEL = 'Текст кнопки';
-const DETAIL_BTN_URL = 'Ссылка для кнопки';
-const BEHAVIOR_TYPE_LABEL = 'Отображать QR-код';
-const types_promo = Object.values(promoCodeTypes);
 
-const namePathPriorityOnWebUrl = ['settings', 'priority_on_web_url'];
-const namePathAlternativeOfferMechanic = ['settings', 'alternative_offer_mechanic'];
-const namePathDisableBannerTypes = ['settings', 'disabled_banner_types'];
-const detailsButtonLabelName = ['settings', 'details_button_label'];
-const detailsButtonURLName = ['settings', 'details_button_url'];
+const types_promo = Object.values(promoCodeTypes);
 
 type ReverseSwitchProps = {
     checked?: boolean;
@@ -152,8 +135,8 @@ const StepInfo: React.FC<StepInfoProps> = ({
                     <Col span={24}>
                         <Form.Item
                             className={styles.promoCampaignName}
-                            label={NAME_PROMO_CAMPAIGN}
-                            name="name"
+                            label={PROMO_CAMPAIGN_NAME.label}
+                            name={PROMO_CAMPAIGN_NAME.name}
                             initialValue={isCopy ? `Копия: ${state.name}` : state.name}
                             normalize={removeExtraSpaces}
                             validateFirst
@@ -164,7 +147,10 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                     message: 'Укажите название промо-кампании',
                                 },
                                 {
-                                    ...getPatternAndMessage('promoCampaign', 'name'),
+                                    ...getPatternAndMessage(
+                                        'promoCampaign',
+                                        'name',
+                                    ),
                                 },
                                 ({ getFieldValue }) => ({
                                     message: 'Нельзя создать копию промо-кампании с таким же названием',
@@ -206,14 +192,14 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 }),
                             ]}
                         >
-                            <Input placeholder={TEMPLATE_PROMO_NAME} />
+                            <Input placeholder={PROMO_CAMPAIGN_NAME.placeholder} />
                         </Form.Item>
                     </Col>
                     <Col span={16}>
                         <Form.Item
                             className={styles.selectCategories}
-                            label={CATEGORY}
-                            name="categoryIdList"
+                            label={PROMO_CAMPAIGN_CATEGORY.label}
+                            name={PROMO_CAMPAIGN_CATEGORY.name}
                             initialValue={state.categoryIdList}
                             normalize={(catArr) => catArr.map(Number)}
                         >
@@ -221,7 +207,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 data={categories}
                                 nameKey="categoryName"
                                 idKey="categoryId"
-                                placeholder={CATEGORY_PROMO_CAMPAIGN}
+                                placeholder={PROMO_CAMPAIGN_CATEGORY.placeholder}
                             />
                         </Form.Item>
                     </Col>
@@ -230,10 +216,10 @@ const StepInfo: React.FC<StepInfoProps> = ({
                         <div className={styles.statusInfo}>
                             <div className={styles.viewInfo}>
                                 <span className={styles.statusText}>
-                                    {SHOW_VIDEO_TOUR_LABEL}
+                                    {SHOW_VIDEO_TOUR.label}
                                 </span>
                                 <Form.Item
-                                    name={namePathDisableBannerTypes}
+                                    name={SHOW_VIDEO_TOUR.name}
                                     initialValue={state.settings?.disabled_banner_types}
                                 >
                                     <DisableBannersSwitch controlledValue={BANNER_TYPE.VIDEO} />
@@ -245,18 +231,18 @@ const StepInfo: React.FC<StepInfoProps> = ({
                     <Col span={8}>
                         <Form.Item
                             noStyle
-                            dependencies={[namePathPriorityOnWebUrl]}
+                            dependencies={[URL_SOURCE.name]}
                         >
                             {({ getFieldValue }) => (
                                 <Form.Item
-                                    label={getLabel(URL_PROMO_CAMPAIGN, TOOLTIP_TEXT_FOR_URL_LABEL)}
+                                    label={PROMO_CAMPAIGN_URL.label}
                                     className={styles.formItem}
-                                    name="webUrl"
+                                    name={PROMO_CAMPAIGN_URL.name}
                                     validateTrigger="onSubmit"
                                     rules={[
                                         {
                                             required: (
-                                                getFieldValue(namePathPriorityOnWebUrl) === URL_SOURCE_VALUE_PROMO_CAMPAIGN
+                                                getFieldValue(URL_SOURCE.name) === URL_SOURCE.buttonsValue.PROMO_CAMPAIGN
                                             ),
                                             message: 'Укажите ссылку',
                                         },
@@ -264,7 +250,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                     ]}
                                     initialValue={decodeURI(state.webUrl || '')}
                                 >
-                                    <Input placeholder={URL} />
+                                    <Input placeholder={PROMO_CAMPAIGN_URL.placeholder} />
                                 </Form.Item>
                             )}
                         </Form.Item>
@@ -272,8 +258,8 @@ const StepInfo: React.FC<StepInfoProps> = ({
 
                     <Col span={8}>
                         <Form.Item
-                            name={namePathPriorityOnWebUrl}
-                            label={URL_SOURCE_LABEL}
+                            name={URL_SOURCE.name}
+                            label={URL_SOURCE.label}
                             rules={[
                                 {
                                     ...FORM_RULES.REQUIRED,
@@ -282,15 +268,15 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             ]}
                             initialValue={
                                 state.settings.priority_on_web_url === true
-                                    ? URL_SOURCE_VALUE_PROMO_CAMPAIGN
-                                    : URL_SOURCE_VALUE_DZO}
+                                    ? URL_SOURCE.buttonsValue.PROMO_CAMPAIGN
+                                    : URL_SOURCE.buttonsValue.DZO}
                         >
                             <Radio.Group className={styles.urlSource}>
-                                <Radio value={URL_SOURCE_VALUE_DZO}>
-                                    {URL_SOURCE_DZO_LABEL}
+                                <Radio value={URL_SOURCE.buttonsValue.DZO}>
+                                    {URL_SOURCE.buttonsLabel.DZO}
                                 </Radio>
-                                <Radio value={URL_SOURCE_VALUE_PROMO_CAMPAIGN}>
-                                    {URL_SOURCE_PROMO_CAMPAIGN_LABEL}
+                                <Radio value={URL_SOURCE.buttonsValue.PROMO_CAMPAIGN}>
+                                    {URL_SOURCE.buttonsLabel.PROMO_CAMPAIGN}
                                 </Radio>
                             </Radio.Group>
                         </Form.Item>
@@ -300,10 +286,10 @@ const StepInfo: React.FC<StepInfoProps> = ({
                         <div className={styles.statusInfo}>
                             <div className={styles.viewInfo}>
                                 <span className={styles.statusText}>
-                                    {SHOW_GO_TO_LINK_LABEL}
+                                    {SHOW_GO_TO_LINK.label}
                                 </span>
                                 <Form.Item
-                                    name={namePathAlternativeOfferMechanic}
+                                    name={SHOW_GO_TO_LINK.name}
                                     initialValue={state.settings?.alternative_offer_mechanic || false}
                                     valuePropName="checked"
                                 >
@@ -315,9 +301,9 @@ const StepInfo: React.FC<StepInfoProps> = ({
 
                     <Col span={8}>
                         <Form.Item
-                            label={DZO}
+                            label={DZO.label}
                             className={styles.formItem}
-                            name="dzoId"
+                            name={DZO.name}
                             initialValue={state.dzoId}
                             rules={[
                                 {
@@ -327,7 +313,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             ]}
                             validateTrigger="onSubmit"
                         >
-                            <Select placeholder={SELECT}>
+                            <Select placeholder={DZO.placeholder}>
                                 {dzoList.map(option => (
                                     <Select.Option key={option.dzoCode} value={option.dzoId}>
                                         {option.dzoName} ({option.dzoCode})
@@ -339,14 +325,14 @@ const StepInfo: React.FC<StepInfoProps> = ({
 
                     <Col span={8}>
                         <Form.Item
-                            label={ACTIVE_PERIOD}
+                            label={ACTIVE_PERIOD.label}
                             className={styles.formItem}
-                            name="datePicker"
+                            name={ACTIVE_PERIOD.name}
                             initialValue={state.datePicker}
                         >
                             <DatePicker.RangePicker
                                 locale={localeDatePicker}
-                                placeholder={DATE_PICKER_PLACEHOLDER}
+                                placeholder={ACTIVE_PERIOD.placeholder}
                                 allowEmpty={[true, true]}
                             />
                         </Form.Item>
@@ -355,10 +341,10 @@ const StepInfo: React.FC<StepInfoProps> = ({
                         <div className={styles.statusInfo}>
                             <div className={styles.viewInfo}>
                                 <span className={styles.statusText}>
-                                    {SHOW_ONLY_IN_BUNDLE}
+                                    {SHOW_ONLY_IN_BUNDLE.label}
                                 </span>
                                 <Form.Item
-                                    name="standalone"
+                                    name={SHOW_ONLY_IN_BUNDLE.name}
                                     initialValue={state.standalone}
                                     valuePropName="checked"
                                 >
@@ -370,9 +356,9 @@ const StepInfo: React.FC<StepInfoProps> = ({
 
                     <Col span={8}>
                         <Form.Item
-                            label={TYPE_PROMO_CODE}
+                            label={TYPE_PROMO_CODE.label}
                             className={styles.formItem}
-                            name="promoCodeType"
+                            name={TYPE_PROMO_CODE.name}
                             initialValue={state.promoCodeType}
                             rules={[
                                 {
@@ -382,7 +368,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             ]}
                             validateTrigger="onSubmit"
                         >
-                            <Select placeholder={SELECT}>
+                            <Select placeholder={TYPE_PROMO_CODE.label}>
                                 {types_promo.map(type => (
                                     <Select.Option
                                         key={type.value}
@@ -398,9 +384,9 @@ const StepInfo: React.FC<StepInfoProps> = ({
 
                     <Col span={8}>
                         <Form.Item
-                            label={EXTERNAL_ID_LABEL}
+                            label={EXTERNAL_ID.label}
                             className={styles.formItem}
-                            name="externalId"
+                            name={EXTERNAL_ID.name}
                             initialValue={state.externalId}
                             validateFirst
                             normalize={trimValue}
@@ -414,7 +400,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                         }
                                         return Promise.resolve();
                                     },
-                                    message: EXTERNAL_ID_DUPLICATE,
+                                    message: EXTERNAL_ID.duplicateError,
                                     validateTrigger: 'onSubmit',
                                 },
                                 {
@@ -426,34 +412,34 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                             }
                                         }
                                     },
-                                    message: EXTERNAL_ID_DUPLICATE,
+                                    message: EXTERNAL_ID.duplicateError,
                                     validateTrigger: 'onSubmit',
                                 },
                             ]}
                         >
-                            <Input maxLength={64} placeholder={EXTERNAL_ID_PLACEHOLDER} />
+                            <Input maxLength={64} placeholder={EXTERNAL_ID.placeholder} />
                         </Form.Item>
                     </Col>
 
                     <Col span={8}>
                         <Form.Item
                             noStyle
-                            dependencies={['active']}
+                            dependencies={[STATUS.name]}
                         >
                             {({ getFieldValue }) => {
-                                const active = getFieldValue('active');
+                                const active = getFieldValue(STATUS.name);
 
                                 return (
                                     <div className={styles.statusInfo}>
                                         <div>
-                                            {active ? STATUS_ON : STATUS_OFF}
+                                            {STATUS.label[active ? 'ON' : 'OFF']}
                                         </div>
                                         <div className={styles.viewInfo}>
                                             <span className={styles.statusText}>
-                                                {active ? STATUS_TEXT_ON : STATUS_TEXT_OFF}
+                                                {STATUS.description[active ? 'ON' : 'OFF']}
                                             </span>
                                             <Form.Item
-                                                name="active"
+                                                name={STATUS.name}
                                                 valuePropName="checked"
                                                 initialValue={state.active}
                                             >
@@ -468,14 +454,61 @@ const StepInfo: React.FC<StepInfoProps> = ({
 
                     <Col span={8} className={styles.switchRow}>
                         <Form.Item
-                            name="behaviorType"
+                            name={BEHAVIOR_TYPE.name}
                             initialValue={state.behaviorType}
-                            label={BEHAVIOR_TYPE_LABEL}
+                            label={BEHAVIOR_TYPE.label}
                             valuePropName="checked"
                         >
                             <Switch />
                         </Form.Item>
                     </Col>
+                    <Col span={8} className={styles.switchRow}>
+                        <Form.Item
+                            name={CHECKOUT_SALE.name}
+                            initialValue={state.saleEnabled}
+                            label={CHECKOUT_SALE.label}
+                            valuePropName="checked"
+                        >
+                            <Switch />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8} className={styles.switchRow} >
+                        <Form.Item
+                            noStyle
+                            dependencies={[CHECKOUT_SALE.name]}
+                        >
+                            {({ getFieldValue }) => {
+                                const active = getFieldValue(CHECKOUT_SALE.name);
+
+                                return (
+                                    <Form.Item
+                                        label={PRODUCT_OFFER_ID.label}
+                                        className={styles.formItem}
+                                        hidden={!active}
+                                        name={PRODUCT_OFFER_ID.name}
+                                        normalize={trimValue}
+                                        initialValue={state.productOfferingId}
+                                        rules={[
+                                            {
+                                                required: active,
+                                                message: PRODUCT_OFFER_ID.requiredError,
+                                            },
+                                            {
+                                                ...FORM_RULES.NUMBER,
+                                                min: 1,
+                                                max: 999,
+                                                message: PRODUCT_OFFER_ID.lengthError,
+                                                validateTrigger: 'onSubmit',
+                                            },
+                                        ]}
+                                    >
+                                        <Input maxLength={3} placeholder={PRODUCT_OFFER_ID.placeholder} />
+                                    </Form.Item>
+                                );
+                            }}
+                        </Form.Item>
+                    </Col>
+
                     <Col span={16} className={styles.formGroup}>
                         <span className={styles.formGroupLabel}>
                             Настройки детальной кнопки
@@ -483,19 +516,22 @@ const StepInfo: React.FC<StepInfoProps> = ({
                         <Col span={12}>
                             <Form.Item
                                 className={styles.formItem}
-                                name={detailsButtonLabelName}
-                                label={DETAIL_BTN_LABEL}
+                                name={DETAIL_BTN_TEXT.name}
+                                label={DETAIL_BTN_TEXT.label}
                                 initialValue={state.settings.details_button_label}
                                 normalize={removeExtraSpaces}
                                 rules={[
                                     {
-                                        ...getPatternAndMessage('promoCampaign', 'detailsButtonLabel'),
+                                        ...getPatternAndMessage(
+                                            'promoCampaign',
+                                            'detailsButtonLabel',
+                                        ),
                                         validateTrigger: 'onSubmit',
                                     },
                                 ]}
                             >
                                 <Input
-                                    placeholder="Детали"
+                                    placeholder={DETAIL_BTN_TEXT.placeholder}
                                     maxLength={30}
                                 />
                             </Form.Item>
@@ -503,15 +539,15 @@ const StepInfo: React.FC<StepInfoProps> = ({
                         <Col span={12}>
                             <Form.Item
                                 className={styles.formItem}
-                                name={detailsButtonURLName}
-                                label={DETAIL_BTN_URL}
+                                name={DETAIL_BTN_URL.name}
+                                label={DETAIL_BTN_URL.label}
                                 initialValue={state.settings.details_button_url}
                                 normalize={removeExtraSpaces}
                                 rules={[
                                     urlCheckRule,
                                 ]}
                             >
-                                <Input placeholder={URL} />
+                                <Input placeholder={DETAIL_BTN_URL.placeholder} />
                             </Form.Item>
                         </Col>
                     </Col>
@@ -524,8 +560,8 @@ const StepInfo: React.FC<StepInfoProps> = ({
                     <Col span={12}>
                         <ContentBlock>
                             <Form.Item
-                                name="appCode"
-                                label={SHOW_PROMO_CAMPAIGN}
+                                name={PROMO_CAMPAIGN_SHOW.name}
+                                label={PROMO_CAMPAIGN_SHOW.label}
                                 initialValue={state.appCode}
                                 rules={[
                                     {
@@ -535,7 +571,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 ]}
                                 validateTrigger="onSubmit"
                             >
-                                <Select placeholder={CHOOSE_SHOWCASE}>
+                                <Select placeholder={PROMO_CAMPAIGN_SHOW.placeholder}>
                                     {clientApps.map(({ code, displayName }) => (
                                         <Select.Option value={code} key={code}>
                                             {displayName}
@@ -549,8 +585,8 @@ const StepInfo: React.FC<StepInfoProps> = ({
                     <Col span={12}>
                         <ContentBlock>
                             <Form.Item
-                                name="type"
-                                label={TYPE_PROMO_CAMPAIGN}
+                                name={PROMO_CAMPAIGN_TYPE.name}
+                                label={PROMO_CAMPAIGN_TYPE.label}
                                 rules={[
                                     {
                                         ...FORM_RULES.REQUIRED,
@@ -576,8 +612,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 </Radio.Group>
                             </Form.Item>
                             <Form.Item
-                                hidden
-                                name="offerDuration"
+                                name={OFFER_DURATION.name}
                                 initialValue={state.offerDuration}
                             >
                                 <Input />

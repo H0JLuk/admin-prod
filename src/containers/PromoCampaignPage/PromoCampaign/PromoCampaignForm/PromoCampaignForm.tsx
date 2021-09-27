@@ -84,6 +84,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
         finishDate: '',
         startDate: '',
         externalId: '',
+        productOfferingId: null,
         visibilitySettings: [{
             id: Date.now(),
             location: null,
@@ -103,7 +104,9 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
             details_button_label: '',
             details_button_url: '',
             disabled_banner_types: [],
+            sale_enabled: false,
         },
+        saleEnabled: false,
         behaviorType: true,
     });
     const [copyPromoCampaignId, setCopyPromoCampaignId] = useState<null | number>(null);
@@ -212,7 +215,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
 
     const editPromoCampaignHandler = async (newValue = {}) => {
         const currentData = { ...state, ...newValue };
-        const dataForSend = getDataForSend(currentData);
+        const dataForSend = getDataForSend(currentData, isEdit, isCopy!);
 
         if ((isCopy || !isEdit) && !copyVisibilitySettings && !validateVisibilitySettings()) {
             return;
@@ -311,7 +314,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
 
         try {
             const { visibilitySettings } = state;
-            const dataForSend = getDataForSend<any>(state) as unknown as PromoCampaignCreateDto;
+            const dataForSend = getDataForSend<any>(state, isEdit, isCopy!) as PromoCampaignCreateDto;
             const { id } = await createPromoCampaign(dataForSend, state.appCode as string);
             const textPromises = createTexts(state.texts as BannerCreateTextDto, id, state.appCode as string);
             const visibilityPromises = createVisibilities(visibilitySettings, id, state.appCode as string);
@@ -460,7 +463,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                 ...state.settings,
                 ...(formValues.settings || {}),
             },
-        }));
+        }), isEdit, isCopy!);
 
         const promoCampaignId = isCopy
             ? copyPromoCampaignId
@@ -535,7 +538,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
 
     const onEditCopyPromoCampaign = async (newValue = {}) => {
         const currentData = { ...state, ...newValue };
-        const dataForSend = getDataForSend(currentData);
+        const dataForSend = getDataForSend(currentData, isEdit, isCopy!);
 
         /**
          * Проверяем создание промо-кампании в режиме копирования,
@@ -586,7 +589,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                             ...(promoCampaign?.settings || {}),
                             ...val.settings,
                         },
-                    }));
+                    }), isEdit, isCopy!);
 
                     // В режиме копирования вызываем функцию для копирования промо-кампании
                     if (isCopy) {
@@ -594,15 +597,18 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
                         return;
                     }
 
-                    // Если ID промо-кампании уже есть, то будет вызывается редактирование кампании, в ином случае создание.
-                    savedPromoCampaignData.current?.id
+                    isEdit
                         ? await handleEditPromoCampaign(dataForSend, savedPromoCampaignData.current.id)
                         : await onCreatePromoCampaign(dataForSend, val.appCode);
                     break;
                 }
                 case steps.textAndBanners: {
                     const { id, appCode } = savedPromoCampaignData.current as PromoCampaignDtoWithAppCode;
-                    const dataForSend = getDataForSend(normalizeFirstStepValue<PromoCampaignFormInitialState>(state));
+                    const dataForSend = getDataForSend(
+                        normalizeFirstStepValue<PromoCampaignFormInitialState>(state),
+                        isEdit,
+                        isCopy!,
+                    );
 
                     /**
                      * В режиме копирования вызываем функцию на редактирование промо-кампании,

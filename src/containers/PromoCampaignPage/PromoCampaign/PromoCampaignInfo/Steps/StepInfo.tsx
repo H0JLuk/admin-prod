@@ -8,6 +8,7 @@ import promoCodeTypes from '@constants/promoCodeTypes';
 import behaviorTypes from '@constants/behaviorTypes';
 import { BANNER_TYPE } from '@constants/common';
 import { ClientAppDto, PromoCampaignDto } from '@types';
+import { CHECKOUT_SALE, PRODUCT_OFFER_ID } from '../../PromoCampaignForm/PromoCampaignSteps/StepInfo/stepInfoConstants';
 
 import style from '../PromoCampaignInfo.module.css';
 
@@ -176,6 +177,25 @@ const StepInfo: React.FC<IStepInfoProps> = ({ promoCampaign }) => {
                             />
                         </div>
                     </Col>
+
+                    <Col span={8}>
+                        <div className={style.infoTitle}>{CHECKOUT_SALE.label}</div>
+                        <div className={style.infoText}>
+                            <Switch
+                                disabled
+                                checked={promoCampaign.productOfferingId !== null}
+                            />
+                        </div>
+                    </Col>
+
+                    {promoCampaign.productOfferingId && (
+                        <Col span={8}>
+                            <div className={style.infoTitle}>{PRODUCT_OFFER_ID.label}</div>
+                            <div className={style.infoText}>
+                                {promoCampaign.productOfferingId}
+                            </div>
+                        </Col>
+                    )}
 
                     <Col span={16} className={style.formGroup}>
                         <span className={style.formGroupLabel}>
