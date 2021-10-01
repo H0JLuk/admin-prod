@@ -494,15 +494,15 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                                 message: PRODUCT_OFFER_ID.requiredError,
                                             },
                                             {
-                                                ...FORM_RULES.NUMBER,
-                                                min: 1,
-                                                max: 999,
-                                                message: PRODUCT_OFFER_ID.lengthError,
+                                                ...getPatternAndMessage(
+                                                    'promoCampaign',
+                                                    'productOfferingId',
+                                                ),
                                                 validateTrigger: 'onSubmit',
                                             },
                                         ]}
                                     >
-                                        <Input maxLength={3} placeholder={PRODUCT_OFFER_ID.placeholder} />
+                                        <Input maxLength={36} placeholder={PRODUCT_OFFER_ID.placeholder} />
                                     </Form.Item>
                                 );
                             }}

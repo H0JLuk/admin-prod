@@ -183,12 +183,12 @@ const StepInfo: React.FC<IStepInfoProps> = ({ promoCampaign }) => {
                         <div className={style.infoText}>
                             <Switch
                                 disabled
-                                checked={promoCampaign.productOfferingId !== null}
+                                checked={promoCampaign.settings.sale_enabled}
                             />
                         </div>
                     </Col>
 
-                    {promoCampaign.productOfferingId && (
+                    {promoCampaign.settings.sale_enabled && (
                         <Col span={8}>
                             <div className={style.infoTitle}>{PRODUCT_OFFER_ID.label}</div>
                             <div className={style.infoText}>

@@ -22,7 +22,7 @@ export type PromoCampaignFormInitialState = {
     saleEnabled: boolean;
     behaviorType: boolean;
     webUrl: string;
-    productOfferingId: number | null;
+    productOfferingId: string | null;
     active: boolean;
     offerDuration: number;
     finishDate: string;

@@ -43,7 +43,7 @@ export type PromoCampaignDto = {
     priority: number;
     promoCodeType: PromoCodeType;
     texts: BannerTextDto[];
-    productOfferingId: number | null;
+    productOfferingId: string | null;
     webUrl: string;
     startDate: string;
     type: string;

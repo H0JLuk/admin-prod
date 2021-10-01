@@ -262,7 +262,6 @@ export const getDataForSend = <DataForSend extends DataForSendType & {id?: numbe
         behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
     };
     if (saleEnabled) {
-        data.productOfferingId = +(data.productOfferingId!);
         settings.sale_enabled = true;
     } else {
         data.productOfferingId = null;
