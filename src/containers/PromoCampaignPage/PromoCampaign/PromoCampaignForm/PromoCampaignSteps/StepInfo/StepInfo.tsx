@@ -11,7 +11,7 @@ import { getActiveClientApps } from '@apiServices/clientAppService';
 import { getCategoryList } from '@apiServices/categoryService';
 import { getExactExternalIDPromoCampaignList, getExactFilteredPromoCampaignList } from '@apiServices/promoCampaignService';
 import PROMO_CAMPAIGNS from '@constants/promoCampaigns';
-import { urlCheckRule } from '@utils/urlValidator';
+import { urlCheckRule, urlHttpsRule } from '@utils/urlValidator';
 import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
 import { getAppCode } from '@apiServices/sessionService';
 import promoCodeTypes from '@constants/promoCodeTypes';
@@ -246,6 +246,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                             ),
                                             message: 'Укажите ссылку',
                                         },
+                                        urlHttpsRule,
                                         urlCheckRule,
                                     ]}
                                     initialValue={decodeURI(state.webUrl || '')}
@@ -544,6 +545,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 initialValue={state.settings.details_button_url}
                                 normalize={removeExtraSpaces}
                                 rules={[
+                                    urlHttpsRule,
                                     urlCheckRule,
                                 ]}
                             >
