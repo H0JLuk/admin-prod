@@ -4,7 +4,7 @@ import { DefaultApiResponse } from '@types';
 export interface SettingDto {
     clientAppCode?: string;
     key: string;
-    value: string;
+    value: string | boolean;
     userRole?: ROLES;
     promoCampaignId?: number | string;
 }

@@ -27,7 +27,7 @@ import {
 } from '../ClientAppFormConstants';
 import { CONSENTS_LABELS } from '@constants/consentsConstants';
 import { LoginTypes, LOGIN_TYPES_ENUM } from '@constants/loginTypes';
-import { NOTIFICATION_TYPES } from '@constants/clientAppsConstants';
+import { APP_MECHANIC, NOTIFICATION_TYPES } from '@constants/clientAppsConstants';
 import { IPropertiesSettings, ISettings } from '../ClientAppContainer';
 import { BusinessRoleDto, ConsentDto, SettingDto } from '@types';
 import { BUTTON_TEXT } from '@constants/common';
@@ -66,7 +66,8 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
 
     useEffect(() => {
         isEdit && form.setFieldsValue(propertiesSettings);
-        updateCheckboxStatus(propertiesSettings.login_types as any);
+        updateAuthCheckboxStatus(propertiesSettings.login_types as any);
+        updateMechanicCheckboxStatus(propertiesSettings.mechanics as any);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -91,6 +92,11 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         clientAppCode: code,
                         value: JSON.stringify(mechanics || []),
                         key: 'mechanics',
+                    },
+                    {
+                        clientAppCode: code,
+                        value: !mechanics.includes(APP_MECHANIC.EXPRESS),
+                        key: 'all_presents_selected',
                     },
                     {
                         clientAppCode: code,
@@ -155,14 +161,11 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 const requests: Promise<any>[] = [];
                 const notifies: (() => void)[] = [];
 
-                const consentIdEdited = consent?.id !== consentId;
-
                 if (
                     displayName !== propertiesSettings.displayName ||
-                    !compareArrayOfNumbers(businessRoleIds, propertiesSettings.businessRoleIds) ||
-                    consentIdEdited
+                    !compareArrayOfNumbers(businessRoleIds, propertiesSettings.businessRoleIds)
                 ) {
-                    requests.push(updateClientApp(id as any, { displayName, code, isDeleted: false, name, businessRoleIds, consentId }));
+                    requests.push(updateClientApp(Number(id), { displayName, code, isDeleted: false, name, businessRoleIds, consentId }));
                     if (displayName !== propertiesSettings.displayName) {
                         notifies.push(() => showNotify(
                             <span>
@@ -178,14 +181,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                             </span>,
                         ));
                     }
-
-                    if (consentIdEdited) {
-                        notifies.push(() => showNotify(
-                            <span>
-                                Соглашение для витрины <b>&quot;{propertiesSettings.displayName}&quot;</b> успешно обновлено
-                            </span>,
-                        ));
-                    }
                 }
 
                 if (changedParams.length) {
@@ -197,11 +192,10 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     ));
                 }
 
-                if (requests.length || consentIdEdited) {
+                if (requests.length) {
                     setLoading(true);
 
                     requests.length && await Promise.all(requests);
-                    consentIdEdited && await attachConsentToClientApp(consentId, code);
 
                     notifies.forEach(fn => fn());
                     setBtnStatus(true);
@@ -224,17 +218,18 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
         }
     };
 
-    const updateCheckboxStatus = (value: LoginTypes[] = []) => {
+    const updateAuthCheckboxStatus = (value: LoginTypes[] = []) => {
         if (!value.length) {
-            setDisabledFields({});
+            setDisabledFields((fields) => ({ ...fields, notification_types: [], login_types: [] }));
             return;
         }
 
         if (value.includes(LOGIN_TYPES_ENUM.DIRECT_LINK)) {
-            setDisabledFields({
+            setDisabledFields((fields) => ({
+                ...fields,
                 notification_types: [NOTIFICATION_TYPES.PUSH],
                 login_types: [LOGIN_TYPES_ENUM.PASSWORD, LOGIN_TYPES_ENUM.SBER_REGISTRY],
-            });
+            }));
             form.setFieldsValue({
                 notification_types: [],
                 login_types: [LOGIN_TYPES_ENUM.DIRECT_LINK],
@@ -242,15 +237,27 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
             return;
         }
 
-        setDisabledFields({
+        setDisabledFields((fields) => ({
+            ...fields,
+            notification_types: [],
             login_types: [LOGIN_TYPES_ENUM.DIRECT_LINK],
-        });
+        }));
+    };
+
+    const updateMechanicCheckboxStatus = (value: APP_MECHANIC[] = []) => {
+        const disabledMechanics = value.includes(APP_MECHANIC.EXPRESS)
+            ? [APP_MECHANIC.PRESENTS, APP_MECHANIC.ECOSYSTEM, APP_MECHANIC.PRESENTATION, APP_MECHANIC.BUNDLE]
+            : value.length
+                ? [APP_MECHANIC.EXPRESS]
+                : [];
+        setDisabledFields((fields) => ({ ...fields, mechanics: disabledMechanics }));
     };
 
     const handleFieldsChange: FormProps['onFieldsChange'] = (fields) => {
         const [ { name, value } ] = fields;
-        if (Array.isArray(name) && name[0] === 'login_types') {
-            updateCheckboxStatus(value);
+        if (Array.isArray(name)) {
+            name[0] === 'login_types' && updateAuthCheckboxStatus(value);
+            name[0] === 'mechanics' && updateMechanicCheckboxStatus(value);
         }
         setBtnStatus(false);
     };
@@ -330,9 +337,11 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         </Col>
                     </Row>
                 </ContentBlock>
-                <ContentBlock>
-                    <PrivacyPolicy consent={consent} handleConsentListClick={handleConsentListClick} />
-                </ContentBlock>
+                {isEdit && (
+                    <ContentBlock>
+                        <PrivacyPolicy consent={consent} handleConsentListClick={handleConsentListClick} />
+                    </ContentBlock>
+                )}
                 <div className={styles.buttonGroup}>
                     <Button
                         disabled={btnStatus}

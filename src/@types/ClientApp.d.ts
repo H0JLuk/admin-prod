@@ -9,4 +9,4 @@ export type ClientAppDto = {
     loginTypes: string[];
 };
 
-export type SaveClientApp = Omit<ClientAppDto, 'id' | 'orderNumber' | 'loginTypes'> & { existingCode?: string; };
+export type SaveClientApp = Omit<ClientAppDto, 'id' | 'orderNumber' | 'loginTypes'> & { existingCode?: string; consentId: string; };
