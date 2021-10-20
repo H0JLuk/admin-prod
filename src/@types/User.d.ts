@@ -32,6 +32,7 @@ export type UserInfo = {
     salePointName: string;
     tempPassword: boolean;
     tmpBlocked: boolean;
+    uuid: string | null;
 };
 
 export type RegisterUserRequest = {
@@ -41,9 +42,10 @@ export type RegisterUserRequest = {
     personalNumber: string;
     salePointId?: number;
     parent: string | null;
+    generateUuid?: boolean;
 };
 
-export type UpdateUserRequest = Omit<RegisterUserRequest, 'personalNumber'>;
+export type UpdateUserRequest = Omit<RegisterUserRequest, 'personalNumber'> & { generateUuid?: boolean; };
 
 export type UserPaginationResponse = DefaultPaginationResponse & {
     users: UserInfo[];

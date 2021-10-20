@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ClientAppDto, LocationDto, SalePointDto, SettingDto, UserInfo } from '@types';
+import { ClientAppDto, LocationDto, SalePointDto, SettingDto, UpdateUserRequest, UserInfo } from '@types';
 import PropTypes from 'prop-types';
 import { useHistory, useParams, generatePath } from 'react-router-dom';
 import cn from 'classnames';
-import { Form, Input, message, Row, Col, Select } from 'antd';
+import { Form, Input, message, Row, Col, Select, Checkbox } from 'antd';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 import {
     addUser,
@@ -84,6 +85,16 @@ const SALE_POINT_FIELD = {
     labelEdit: 'Выберите точку продажи',
 };
 
+const UUID_FIELD = {
+    name: 'uuid',
+    label: 'UUID',
+};
+
+const GENERATE_UUID_FIELD = {
+    name: 'generateUuid',
+    label: 'Сгенерировать новый UUID',
+};
+
 const ROLE_FIELD = {
     name: 'role',
     label: 'Роль',
@@ -125,7 +136,10 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
     const [login, setLogin] = useState<string | null>(null);
     const loginType = useRef<LoginTypes | null | undefined>(LOGIN_TYPES_ENUM.PASSWORD);
     const [role, setRole] = useState(ROLES.USER);
+    const [uuid, setUuid] = useState<string | null>(null);
+    const [generateUuid, setGenerateUuid] = useState(false);
     const isCorrectRoleForPartner = ROLES_FOR_PARTNER_CONNECT.includes(role);
+    const isReferalRole = ROLES.REFERAL_LINK === role;
     const salePointShouldExternal = ROLES_FOR_EXTERNAL_SALE_POINT.includes(role);
     const [location, setLocation] = useState<LocationDto | null>(null);
     const [salePoint, setSalePoint] = useState<SalePointDto | null>(null);
@@ -158,6 +172,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                 setSalePoint(userSalePoint ?? null);
                 setUserData(user);
                 setRole(user.role);
+                setUuid(user.uuid);
                 loginType.current = user.loginType;
                 partner.current = user.parentUserName;
                 userInteractions.current = getCurrUserInteractionsForOtherUser(user.role); // TODO: вынести подобные настройки доступа в контекст, чтобы не вызывать каждый раз функции на получения этих настроек
@@ -225,11 +240,12 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
             setIsSendingInfo(true);
 
             try {
-                const requestData = {
+                const requestData: UpdateUserRequest = {
                     clientAppIds,
                     salePointId: salePoint?.id,
                     parent: partner.current,
                 };
+                isReferalRole && (requestData.generateUuid = generateUuid);
 
                 if (notNewUser) {
                     await editUser((userData as UserInfo).id, requestData);
@@ -376,6 +392,8 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
     };
 
     const onLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => setLogin(e.currentTarget.value.trim());
+
+    const onGenerateUuidChange = (e: CheckboxChangeEvent) => setGenerateUuid(e.target.checked);
 
     const onChangeRole = (value: ROLES) => {
         if (canSetUserPartner && !ROLES_FOR_PARTNER_CONNECT.includes(value)) {
@@ -566,6 +584,32 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                                     </div>
                                 )}
                             </Col>
+                            {isReferalRole && (
+                                <>
+                                    {notNewUser && (
+                                        <Col span={8} className={styles.roleBlock}>
+                                            <label>
+                                                {UUID_FIELD.label}
+                                            </label>
+                                            <div className={styles.noEditField}>
+                                                {uuid}
+                                            </div>
+                                        </Col>
+                                    )}
+                                    {!isInfo && (
+                                        <Col span={8} className={styles.roleBlock}>
+                                            <label htmlFor={GENERATE_UUID_FIELD.name}>
+                                                {GENERATE_UUID_FIELD.label}
+                                            </label>
+                                            <Checkbox
+                                                id={GENERATE_UUID_FIELD.name}
+                                                value={generateUuid}
+                                                onChange={onGenerateUuidChange}
+                                            />
+                                        </Col>
+                                    )}
+                                </>
+                            )}
                         </Row>
                         {!!error.backend && <div className={styles.formError}>{error.backend}</div>}
                     </Form>
