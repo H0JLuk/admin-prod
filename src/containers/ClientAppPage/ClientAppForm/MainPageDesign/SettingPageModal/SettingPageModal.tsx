@@ -34,6 +34,7 @@ const SettingPageModal: React.FC<ISettingPageModal> = ({ visible, onClose, handl
                     className={bannerStyles[appTheme]}
                     src={require(`../../../../../static/images/themes/${appTheme}/main-page-image.svg`)}
                     preview={false}
+                    width="100%"
                 />
                 <div className={styles.imageMask} />
             </Row>

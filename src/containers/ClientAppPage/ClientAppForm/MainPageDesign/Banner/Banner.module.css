@@ -33,12 +33,15 @@
 }
 
 .imageContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
     border: 1px solid #d9d9d9;
     border-radius: 5px;
     background-size: contain;
 }
 
 .img {
-    max-height: 270px;
+    max-height: 200px;
     max-width: 100%;
 }
