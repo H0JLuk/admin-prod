@@ -22,9 +22,9 @@ export default class InsertListValueCommand extends Command {
 
         model.change((writer) => {
             if (isNaN(+startValue)) {
-                writer.removeAttribute('value', block);
+                writer.removeAttribute('value', block!);
             } else {
-                writer.setAttribute('value', startValue, block);
+                writer.setAttribute('value', startValue, block!);
             }
         });
     }

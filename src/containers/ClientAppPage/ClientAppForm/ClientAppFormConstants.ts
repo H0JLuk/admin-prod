@@ -46,14 +46,9 @@ export const keysToString = [
 export const TextKeysWithDefaultValues = ['home_page_header_present', 'home_page_header_bundle'];
 
 const mechanicsValidator: ValidatorRule['validator'] = (_, value) => {
-    if (
-        value.includes(APP_MECHANIC.PRESENTS) ||
-        value.includes(APP_MECHANIC.ECOSYSTEM) ||
-        value.includes(APP_MECHANIC.BUNDLE)
-    ) {
-        return Promise.resolve();
-    }
-    return Promise.reject(MECHANICS_ERROR);
+    const requiredMechanics = [APP_MECHANIC.PRESENTS, APP_MECHANIC.ECOSYSTEM, APP_MECHANIC.BUNDLE, APP_MECHANIC.EXPRESS];
+    const hasRequiredMechanic = requiredMechanics.some(mechanic => value.includes(mechanic));
+    return hasRequiredMechanic ? Promise.resolve() : Promise.reject(MECHANICS_ERROR);
 };
 
 export const banners = Object.values(Themes);

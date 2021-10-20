@@ -22,12 +22,12 @@ import styles from './StepInfo.module.css';
 import {
     ACTIVE_PERIOD,
     BEHAVIOR_TYPE,
-    CHECKOUT_SALE,
+    // CHECKOUT_SALE,
     DETAIL_BTN_TEXT,
     DETAIL_BTN_URL,
     DZO,
     EXTERNAL_ID,
-    PRODUCT_OFFER_ID,
+    // PRODUCT_OFFER_ID,
     PROMO_CAMPAIGN_CATEGORY,
     PROMO_CAMPAIGN_NAME,
     PROMO_CAMPAIGN_TYPE,
@@ -463,7 +463,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             <Switch />
                         </Form.Item>
                     </Col>
-                    <Col span={8} className={styles.switchRow}>
+                    {/* <Col span={8} className={styles.switchRow}>
                         <Form.Item
                             name={CHECKOUT_SALE.name}
                             initialValue={state.saleEnabled}
@@ -508,7 +508,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 );
                             }}
                         </Form.Item>
-                    </Col>
+                    </Col> */}
 
                     <Col span={16} className={styles.formGroup}>
                         <span className={styles.formGroupLabel}>
