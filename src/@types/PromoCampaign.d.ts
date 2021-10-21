@@ -43,7 +43,7 @@ export type PromoCampaignDto = {
     priority: number;
     promoCodeType: PromoCodeType;
     texts: BannerTextDto[];
-    productOfferingId: string | null;
+    // productOfferingId: string | null;
     webUrl: string;
     startDate: string;
     type: string;
@@ -78,7 +78,7 @@ export type PromoCampaignSettingsDto = {
     details_button_label: string;
     details_button_url: string;
     disabled_banner_types: string[];
-    sale_enabled: boolean;
+    // sale_enabled: boolean;
 };
 
 export type PromoCampaignFilterRequest = Omit<PromoCampaignDto, 'categoryList' | 'categoryIdList'> & {

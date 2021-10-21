@@ -84,7 +84,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
         finishDate: '',
         startDate: '',
         externalId: '',
-        productOfferingId: null,
+        // productOfferingId: null,
         visibilitySettings: [{
             id: Date.now(),
             location: null,
@@ -104,9 +104,9 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
             details_button_label: '',
             details_button_url: '',
             disabled_banner_types: [],
-            sale_enabled: false,
+            // sale_enabled: false,
         },
-        saleEnabled: false,
+        // saleEnabled: false,
         behaviorType: true,
     });
     const [copyPromoCampaignId, setCopyPromoCampaignId] = useState<null | number>(null);

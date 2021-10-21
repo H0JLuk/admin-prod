@@ -238,10 +238,10 @@ export const getDataForSend = <DataForSend extends DataForSendType & {id?: numbe
     settings,
     oneLinkAppUrl,
     standalone,
-    productOfferingId,
+    // productOfferingId,
     externalId,
     behaviorType,
-    saleEnabled,
+    // saleEnabled,
 }: DataForSend, isEdit: boolean, isCopy: boolean) => {
     const data = {
         name,
@@ -257,19 +257,19 @@ export const getDataForSend = <DataForSend extends DataForSendType & {id?: numbe
         type,
         categoryIdList,
         oneLinkAppUrl,
-        productOfferingId,
+        // productOfferingId,
         externalId: externalId || null,
         behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
     };
-    if (saleEnabled) {
-        settings.sale_enabled = true;
-    } else {
-        data.productOfferingId = null;
+    // if (saleEnabled) {
+    //     settings.sale_enabled = true;
+    // } else {
+    //     data.productOfferingId = null;
 
-        if (isEdit || isCopy) {
-            settings.sale_enabled = false;
-        }
-    }
+    //     if (isEdit || isCopy) {
+    //         settings.sale_enabled = false;
+    //     }
+    // }
     return data;
 };
 
