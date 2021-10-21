@@ -162,7 +162,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     !compareArrayOfNumbers(businessRoleIds, propertiesSettings.businessRoleIds) ||
                     consentIdEdited
                 ) {
-                    requests.push(updateClientApp(id as any, { displayName, code, isDeleted: false, name, businessRoleIds }));
+                    requests.push(updateClientApp(id as any, { displayName, code, isDeleted: false, name, businessRoleIds, consentId }));
                     if (displayName !== propertiesSettings.displayName) {
                         notifies.push(() => showNotify(
                             <span>
