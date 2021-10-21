@@ -72,6 +72,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
 
     const handleSubmit = async (formData: Record<string, any>) => {
         try {
+            let newAppPresents: string | null = null;
             if (!isEdit) {
                 const {
                     code,
@@ -159,6 +160,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 if (mechanicSetting) {
                     const allPresentValue = JSON.parse(mechanicSetting.value).includes(APP_MECHANIC.EXPRESS);
                     const allPresentType = propertiesSettings.all_presents_selected ? SETTINGS_TYPES.EDIT : SETTINGS_TYPES.CREATE;
+                    newAppPresents = JSON.stringify(allPresentValue);
                     changedParams.push({
                         clientAppCode: mechanicSetting.clientAppCode,
                         value: JSON.stringify(allPresentValue),
@@ -209,7 +211,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
 
                     notifies.forEach(fn => fn());
                     setBtnStatus(true);
-                    updateSettings({ ...formData, id: id! });
+                    updateSettings({ ...formData, all_presents_selected: newAppPresents!, id: id! });
                     setLoading(false);
                 } else {
                     showNotify('Настройки не изменились', true);
