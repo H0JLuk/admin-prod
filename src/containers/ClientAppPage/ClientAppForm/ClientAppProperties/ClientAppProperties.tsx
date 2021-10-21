@@ -155,6 +155,18 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     return result;
                 }, []);
 
+                const mechanicSetting = changedParams.find(param => param.key === 'mechanics');
+                if (mechanicSetting) {
+                    const allPresentValue = JSON.parse(mechanicSetting.value).includes(APP_MECHANIC.EXPRESS);
+                    const allPresentType = propertiesSettings.all_presents_selected ? SETTINGS_TYPES.EDIT : SETTINGS_TYPES.CREATE;
+                    changedParams.push({
+                        clientAppCode: mechanicSetting.clientAppCode,
+                        value: JSON.stringify(allPresentValue),
+                        key: 'all_presents_selected',
+                        type: allPresentType,
+                    });
+                }
+
                 const { id } = propertiesSettings;
                 const requests: Promise<any>[] = [];
                 const notifies: (() => void)[] = [];
