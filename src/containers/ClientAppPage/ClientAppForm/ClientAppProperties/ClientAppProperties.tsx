@@ -94,11 +94,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     },
                     {
                         clientAppCode: code,
-                        value: JSON.stringify(!mechanics.includes(APP_MECHANIC.EXPRESS)),
-                        key: 'all_presents_selected',
-                    },
-                    {
-                        clientAppCode: code,
                         value: JSON.stringify(game_mechanics || []),
                         key: 'game_mechanics',
                     },
@@ -113,6 +108,12 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         key: 'notification_types',
                     },
                 ];
+                mechanics.includes(APP_MECHANIC.EXPRESS) &&
+                    settings.push({
+                        clientAppCode: code,
+                        value: JSON.stringify(true),
+                        key: 'all_presents_selected',
+                    });
 
                 Object.keys(restData).forEach((key) => {
                     const value = restData[key];
