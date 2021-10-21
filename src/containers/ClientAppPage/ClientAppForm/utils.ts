@@ -4,6 +4,7 @@ import { addSettings, updateSettingsList } from '@apiServices/settingsService';
 import { designKeysForCheck, SETTINGS_TYPES } from './ClientAppFormConstants';
 import { ISettingObject, SettingDto } from '@types';
 import ROLES from '@constants/roles';
+import { APP_MECHANIC } from '@constants/clientAppsConstants';
 
 export interface IChangedParam extends Pick<SettingDto, 'clientAppCode' | 'key' | 'value' | 'userRole'> {
     type: SETTINGS_TYPES;
@@ -43,6 +44,18 @@ export async function createOrUpdateKey(changedParams: IChangedParam[]) {
             [key]: [...result[key], params],
         };
     }, { updateSettings: [], addSettingsArr: [] });
+
+    if (updateSettings.length) {
+        const mechanicSetting = updateSettings.find(setting => setting.key === 'mechanics');
+        if (mechanicSetting) {
+            const allPresentValue = JSON.parse(mechanicSetting.value).includes(APP_MECHANIC.EXPRESS);
+            updateSettings.push({
+                clientAppCode: mechanicSetting.clientAppCode,
+                value: JSON.stringify(allPresentValue),
+                key: 'all_presents_selected',
+            });
+        }
+    }
 
     updateSettings.length && (await updateSettingsList(updateSettings));
     addSettingsArr.length && (await addSettings(addSettingsArr));
