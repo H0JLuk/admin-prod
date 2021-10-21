@@ -115,7 +115,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 });
 
                 setLoading(true);
-                await addClientApp({ code, displayName, isDeleted: false, name, businessRoleIds });
+                await addClientApp({ code, displayName, isDeleted: false, name, businessRoleIds, consentId });
                 await attachConsentToClientApp(consentId, code);
                 await addSettings(settings);
 

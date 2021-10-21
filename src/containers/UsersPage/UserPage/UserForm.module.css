@@ -87,6 +87,13 @@
     max-width: unset;
 }
 
+.uuidBlock {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 68%;
+    max-width: unset;
+}
+
 .buttonsContainer {
     display: flex;
     margin-top: 25px;

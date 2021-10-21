@@ -128,6 +128,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
     const { userId } = params ;
     const notNewUser = ['edit', 'info'].includes(type);
     const isInfo = type === 'info';
+    const isEdit = type === 'edit';
 
     const [loading, setLoading] = useState(true);
     const [isSendingInfo, setIsSendingInfo] = useState(false);
@@ -596,8 +597,8 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                                             </div>
                                         </Col>
                                     )}
-                                    {!isInfo && (
-                                        <Col span={8} className={styles.roleBlock}>
+                                    {isEdit && (
+                                        <Col span={16} className={styles.uuidBlock}>
                                             <label htmlFor={GENERATE_UUID_FIELD.name}>
                                                 {GENERATE_UUID_FIELD.label}
                                             </label>
