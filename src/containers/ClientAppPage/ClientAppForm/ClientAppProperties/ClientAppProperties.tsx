@@ -3,7 +3,6 @@ import { Button, Col, Form, FormProps, Row, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { createOrUpdateKey, IChangedParam, showNotify } from '../utils';
 import { addClientApp, updateClientApp } from '@apiServices/clientAppService';
-import { attachConsentToClientApp } from '@apiServices/consentsService';
 import { getAppCode, saveAppCode } from '@apiServices/sessionService';
 import { addSettings } from '@apiServices/settingsService';
 import { CLIENT_APPS_PAGES } from '@constants/route';
@@ -95,7 +94,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     },
                     {
                         clientAppCode: code,
-                        value: !mechanics.includes(APP_MECHANIC.EXPRESS),
+                        value: JSON.stringify(!mechanics.includes(APP_MECHANIC.EXPRESS)),
                         key: 'all_presents_selected',
                     },
                     {
@@ -122,7 +121,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
 
                 setLoading(true);
                 await addClientApp({ code, displayName, isDeleted: false, name, businessRoleIds, consentId });
-                await attachConsentToClientApp(consentId, code);
                 await addSettings(settings);
 
                 showNotify(SUCCESS_PROPERTIES_CREATE_DESCRIPTION);
