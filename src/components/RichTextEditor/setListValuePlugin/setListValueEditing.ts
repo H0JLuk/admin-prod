@@ -24,9 +24,9 @@ export default class SetListValueEditing extends Plugin {
 
         editor.commands.get('enter')!.on('afterExecute', () => {
             const block = first(editor.model.document.selection.getSelectedBlocks());
-            if (block.name === 'listItem' && block.hasAttribute('value')) {
+            if (block!.name === 'listItem' && block!.hasAttribute('value')) {
                 editor.model.change(writer => {
-                    writer.removeAttribute('value', block);
+                    writer.removeAttribute('value', block!);
                 });
             }
         });
