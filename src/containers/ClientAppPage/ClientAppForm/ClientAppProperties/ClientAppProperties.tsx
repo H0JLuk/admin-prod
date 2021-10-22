@@ -3,6 +3,7 @@ import { Button, Col, Form, FormProps, Row, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { createOrUpdateKey, IChangedParam, showNotify } from '../utils';
 import { addClientApp, updateClientApp } from '@apiServices/clientAppService';
+import { attachConsentToClientApp } from '@apiServices/consentsService';
 import { getAppCode, saveAppCode } from '@apiServices/sessionService';
 import { addSettings } from '@apiServices/settingsService';
 import { CLIENT_APPS_PAGES } from '@constants/route';
@@ -159,9 +160,12 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                 const requests: Promise<any>[] = [];
                 const notifies: (() => void)[] = [];
 
+                const consentIdEdited = consent?.id !== consentId;
+
                 if (
                     displayName !== propertiesSettings.displayName ||
-                    !compareArrayOfNumbers(businessRoleIds, propertiesSettings.businessRoleIds)
+                    !compareArrayOfNumbers(businessRoleIds, propertiesSettings.businessRoleIds) ||
+                    consentIdEdited
                 ) {
                     requests.push(updateClientApp(Number(id), { displayName, code, isDeleted: false, name, businessRoleIds, consentId }));
                     if (displayName !== propertiesSettings.displayName) {
@@ -176,6 +180,14 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                         notifies.push(() => showNotify(
                             <span>
                                 Бизнес-роли для витрины <b>&quot;{propertiesSettings.displayName}&quot;</b> успешно обновлены
+                            </span>,
+                        ));
+                    }
+
+                    if (consentIdEdited) {
+                        notifies.push(() => showNotify(
+                            <span>
+                                Соглашение для витрины <b>&quot;{propertiesSettings.displayName}&quot;</b> успешно обновлено
                             </span>,
                         ));
                     }
@@ -204,7 +216,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     ));
                 }
 
-                if (requests.length) {
+                if (requests.length || consentIdEdited) {
                     setLoading(true);
 
                     requests.length && await Promise.all(requests);
