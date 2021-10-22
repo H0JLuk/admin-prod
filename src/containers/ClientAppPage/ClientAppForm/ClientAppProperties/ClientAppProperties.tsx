@@ -72,7 +72,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
 
     const handleSubmit = async (formData: Record<string, any>) => {
         try {
-            let newAppPresents: string | null = null;
             if (!isEdit) {
                 const {
                     code,
@@ -156,19 +155,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     return result;
                 }, []);
 
-                const mechanicSetting = changedParams.find(param => param.key === 'mechanics');
-                if (mechanicSetting) {
-                    const allPresentValue = JSON.parse(mechanicSetting.value).includes(APP_MECHANIC.EXPRESS);
-                    const allPresentType = propertiesSettings.all_presents_selected ? SETTINGS_TYPES.EDIT : SETTINGS_TYPES.CREATE;
-                    newAppPresents = JSON.stringify(allPresentValue);
-                    changedParams.push({
-                        clientAppCode: mechanicSetting.clientAppCode,
-                        value: JSON.stringify(allPresentValue),
-                        key: 'all_presents_selected',
-                        type: allPresentType,
-                    });
-                }
-
                 const { id } = propertiesSettings;
                 const requests: Promise<any>[] = [];
                 const notifies: (() => void)[] = [];
@@ -195,6 +181,20 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     }
                 }
 
+                let newPresentsSetting: string | null = null;
+                const mechanicSetting = changedParams.find(param => param.key === 'mechanics');
+                if (mechanicSetting) {
+                    const allPresentValue = JSON.parse(mechanicSetting.value).includes(APP_MECHANIC.EXPRESS);
+                    const allPresentType = propertiesSettings.all_presents_selected ? SETTINGS_TYPES.EDIT : SETTINGS_TYPES.CREATE;
+                    newPresentsSetting = JSON.stringify(allPresentValue);
+                    changedParams.push({
+                        clientAppCode: mechanicSetting.clientAppCode,
+                        value: JSON.stringify(allPresentValue),
+                        key: 'all_presents_selected',
+                        type: allPresentType,
+                    });
+                }
+
                 if (changedParams.length) {
                     requests.push(createOrUpdateKey(changedParams));
                     notifies.unshift(() => showNotify(
@@ -211,7 +211,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
 
                     notifies.forEach(fn => fn());
                     setBtnStatus(true);
-                    updateSettings({ ...formData, all_presents_selected: newAppPresents!, id: id! });
+                    updateSettings({ ...formData, all_presents_selected: newPresentsSetting!, id: id! });
                     setLoading(false);
                 } else {
                     showNotify('Настройки не изменились', true);
