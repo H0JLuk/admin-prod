@@ -10,30 +10,24 @@ import { getOffers } from '@apiServices/adminService';
 import { getPromoCampaignList } from '@apiServices/promoCampaignService';
 import { getSalePointsByText } from '@apiServices/salePointService';
 import { getDzoList } from '@apiServices/dzoService';
+import { getSalesReport } from '@apiServices/salesReportService';
 import { getPromoCodeStatistics } from '@apiServices/promoCodeService';
 import { DEFAULT_SLEEP_TIME } from '@constants/common';
 import { getStringOptionValueByDescription, sleep } from '@utils/utils';
 import { downloadFile } from '@utils/helper';
 import { PromoCampaignDto, DzoDto, SalePointDto } from '@types';
+import {
+    DATE_FORMAT,
+    DATE_LABELS,
+    OFFERS,
+    PROMOCODES,
+    REPORTS,
+    FILTER_TITLE,
+    UNSPECIFIED_TITLE,
+    FILTER_ERROR_MESSAGE,
+} from './ReportsPageContants';
 
 import styles from './ReportsPage.module.css';
-
-const DATE_FORMAT = 'DD/MM/yyyy';
-
-const OFFERS_NAME = 'offers';
-const PROMOCODES_NAME = 'promocodes';
-
-const OFFERS_LABLE = 'Скачать предложения';
-const EXPORT_LABLE = 'Скачать выданные промокоды';
-const START_DATE_LABLE = 'с';
-const END_DATE_LABLE = 'по';
-
-const EXCEL_FILES_TITLE = 'Экспорт предложений';
-const FILTER_TITLE = 'Фильтровать по дате';
-const UNSPECIFIED_TITLE = 'Не задано';
-const EXPORT_TITLE = 'Экспорт использованных промокодов';
-
-const FILTER_ERROR_MESSAGE = 'Введены некорректные данные для фильтра по дате';
 
 type ReportsPageState = {
     startDate: Moment | null;
@@ -41,33 +35,42 @@ type ReportsPageState = {
     isFiltered: boolean;
     dzoList: DzoDto[];
     dzoId: number | null;
+    salesDzoId: number | null;
     promoCampaignList: PromoCampaignDto[];
     filteredPromoCampaignList: PromoCampaignDto[];
+    filteredPromoCampaignListSales: PromoCampaignDto[];
     promoCampaignId: number | null;
+    salesPromoCampaignId: number | null;
     salePointOfferId: number | null;
     salePointPromoId: number | null;
+    salesReportSalePointId: number | null;
     loading: boolean;
 };
-
 class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
     optionRef: React.RefObject<HTMLSelectElement>;
     pdfRef: React.RefObject<HTMLInputElement>;
+    salesPromoRef: React.RefObject<HTMLSelectElement>;
     constructor(props: Record<string, unknown>) {
         super(props);
         this.optionRef = React.createRef();
         this.pdfRef = React.createRef();
+        this.salesPromoRef = React.createRef();
         this.state = {
             startDate: null,
             endDate: null,
             isFiltered: true,
             dzoList: [],
             dzoId: null,
+            salesDzoId: null,
             promoCampaignList: [],
             filteredPromoCampaignList: [],
+            filteredPromoCampaignListSales: [],
             promoCampaignId: null,
+            salesPromoCampaignId: null,
             loading: false,
             salePointOfferId: null,
             salePointPromoId: null,
+            salesReportSalePointId: null,
         };
     }
 
@@ -81,7 +84,8 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                 const { promoCampaignDtoList: promoCampaignList = [] } = await getPromoCampaignList() ?? {};
                 this.setState({ dzoList, promoCampaignList });
             } catch (e) {
-                console.error(e.message);
+                const error = (e as Error).message;
+                console.error(error);
             }
         };
         loadData();
@@ -163,7 +167,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                 promoCampaignId!,
                 salePointPromoId!,
             );
-            downloadFile(blob, PROMOCODES_NAME);
+            downloadFile(blob, PROMOCODES.NAME);
         } catch (e) {
             console.error(e);
         } finally {
@@ -172,7 +176,45 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         }
     };
 
-    handleDZOSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    downloadSalesReport = async () => {
+        const {
+            startDate,
+            endDate,
+            salesDzoId,
+            salesPromoCampaignId,
+            salesReportSalePointId,
+        } = this.state;
+
+        if (!this.checkDate(startDate, endDate)) {
+            return;
+        }
+
+        const start = moment(startDate).format('DD.MM.YYYY');
+        const end = moment(endDate).format('DD.MM.YYYY');
+
+        const isNumber = (value: number | null): value is number => typeof value === 'number';
+
+        const salesReportArgs = {
+            start,
+            end,
+            ...(isNumber(salesDzoId) && { dzoId: salesDzoId }),
+            ...(isNumber(salesPromoCampaignId) && { promoCampaignId: salesPromoCampaignId }),
+            ...(isNumber(salesReportSalePointId) && { salePointId: salesReportSalePointId }),
+        };
+
+        try {
+            this.setState({ loading: true });
+            const blob = await getSalesReport(salesReportArgs);
+            downloadFile(blob, REPORTS.NAME);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            await sleep(DEFAULT_SLEEP_TIME);
+            this.setState({ loading: false });
+        }
+    };
+
+    handleDZOSelectChangePromo = (event: ChangeEvent<HTMLSelectElement>) => {
         const dzoId = event.target.value ? Number(event.target.value) : null;
         const filteredPromoCampaignList = this.state.promoCampaignList.filter(item => item.dzoId === dzoId);
         if (this.optionRef.current) {
@@ -181,17 +223,31 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         this.setState({ dzoId, filteredPromoCampaignList, promoCampaignId: null });
     };
 
+    handleDZOSelectChangeSales = (event: ChangeEvent<HTMLSelectElement>) => {
+        const salesDzoId = event.target.value ? Number(event.target.value) : null;
+        const filteredPromoCampaignListSales = this.state.promoCampaignList.filter(item => item.dzoId === salesDzoId);
+        if (this.salesPromoRef.current) {
+            this.salesPromoRef.current.value = '';
+        }
+        this.setState({ salesDzoId, filteredPromoCampaignListSales, salesPromoCampaignId: null });
+    };
+
     handlePromoCampaignSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const promoCampaignId = event.target.value ? Number(event.target.value) : null;
         this.setState({ promoCampaignId });
     };
 
+    handlePromoCampaignSalesSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+        const salesPromoCampaignId = event.target.value ? Number(event.target.value) : null;
+        this.setState({ salesPromoCampaignId });
+    };
+
     handleFilterCheckboxChange = () => {
         this.setState(prevState => ({ isFiltered: !prevState.isFiltered }));
     };
-
     handleSalePointPromoSelect = (data: SalePointDto | null) => this.setState({ salePointPromoId: data ? data.id : null });
     handleSalePointOfferSelect = (data: SalePointDto | null) => this.setState({ salePointOfferId: data ? data.id : null });
+    handleSalePointSalesSelect = (data: SalePointDto | null) => this.setState({ salesReportSalePointId: data ? data.id : null });
 
     render() {
         const { startDate, endDate, isFiltered, loading } = this.state;
@@ -199,7 +255,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         const picker = (
             <div className={styles.container__block}>
                 <label className={styles.textFieldFormat}>
-                    {START_DATE_LABLE}
+                    {DATE_LABELS.START}
                 </label>
                 <DatePicker
                     className={styles.datepicker}
@@ -210,7 +266,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                 />
 
                 <label className={styles.textFieldFormat}>
-                    {END_DATE_LABLE}
+                    {DATE_LABELS.END}
                 </label>
                 <DatePicker
                     className={styles.datepicker}
@@ -226,7 +282,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
             <div className={styles.container}>
                 <Header buttonBack={false} menuMode />
                 <div className={styles.filesContainer}>
-                    <h3>{EXCEL_FILES_TITLE}</h3>
+                    <h3>{OFFERS.TITLE}</h3>
                     <div className={styles.container__block}>
                         <div className={styles.container__block__wrapper}>
                             <p className={styles.textFieldFormat}>
@@ -262,22 +318,22 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
 
                     <div className={styles.container__block}>
                         <Button
-                            onClick={this.getData(getOffers, OFFERS_NAME)}
+                            onClick={this.getData(getOffers, OFFERS.NAME)}
                             className={styles.container__button}
                             type="primary"
                             disabled={loading}
                         >
-                            {OFFERS_LABLE}
+                            {OFFERS.LABEL}
                         </Button>
                     </div>
 
                     <hr />
                     <div className={styles.headerSection}>
-                        <h3>{EXPORT_TITLE}</h3>
+                        <h3>{PROMOCODES.TITLE}</h3>
                         <div className={styles.container__block}>
                             <p>ДЗО<br />
                                 <select className={classNames(styles.select, styles.datepicker)}
-                                    onChange={this.handleDZOSelectChange}
+                                    onChange={this.handleDZOSelectChangePromo}
                                 >
                                     <option key="dzo_empty" value="">{UNSPECIFIED_TITLE}</option>
                                     {this.state.dzoList.map((option, index) =>
@@ -320,7 +376,61 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                                 type="primary"
                                 disabled={loading}
                             >
-                                {EXPORT_LABLE}
+                                {PROMOCODES.LABEL}
+                            </Button>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div className={styles.headerSection}>
+                        <h3>{REPORTS.TITLE}</h3>
+                        <div className={styles.container__block}>
+                            <p>ДЗО<br />
+                                <select className={classNames(styles.select, styles.datepicker)}
+                                    onChange={this.handleDZOSelectChangeSales}
+                                >
+                                    <option key="dzo_empty" value="">{UNSPECIFIED_TITLE}</option>
+                                    {this.state.dzoList.map((option, index) =>
+                                        <option key={`dzo_${index}`} value={option.dzoId}>{option.dzoName}</option>)
+                                    }
+                                </select>
+                            </p>
+                            <p>Промокампания<br />
+                                <select ref={this.salesPromoRef} className={classNames(styles.select, styles.datepicker)}
+                                    onChange={this.handlePromoCampaignSalesSelect}
+                                >
+                                    <option key="campaign_empty" value="">{UNSPECIFIED_TITLE}</option>
+                                    {this.state.filteredPromoCampaignListSales.map((option, index) =>
+                                        <option key={`campaign_${index}`} value={option.id}>{option.name}</option>)
+                                    }
+                                </select>
+                            </p>
+                            <div className={styles.autocomplete}>
+                                Точка продажи<br />
+                                <AutoCompleteComponent<SalePointDto>
+                                    onSelect={this.handleSalePointSalesSelect}
+                                    requestFunction={getSalePointsByText}
+                                    placeholder={UNSPECIFIED_TITLE}
+                                    renderOptionStringValue={getStringOptionValueByDescription}
+                                    renderOptionItemLabel={({ name, parentName }: any, value: string) => (
+                                        <AutocompleteOptionLabel
+                                            name={name}
+                                            parentName={parentName}
+                                            highlightValue={value}
+                                            highlightClassName={styles.highlight}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        {picker}
+                        <div className={styles.container__block}>
+                            <Button
+                                onClick={this.downloadSalesReport}
+                                type="primary"
+                                disabled={loading}
+                            >
+                                {REPORTS.LABEL}
                             </Button>
                         </div>
                     </div>
