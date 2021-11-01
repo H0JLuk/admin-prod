@@ -3,7 +3,7 @@ import { Form, Input, Row, Col, Button, Select, FormItemProps, SelectProps } fro
 import UploadPicture from '@components/UploadPicture';
 import { ReactComponent as Cross } from '@imgs/cross.svg';
 import { ReactComponent as LoadingSpinner } from '@imgs/loading-spinner.svg';
-import { createGroupLink, editCampaignGroupTextAndBanners, editCampaignGroupLinks, getInitialValue } from '../groupForm.utils';
+import { createGroupLink, editCampaignGroupTextAndBanners, editCampaignGroupLinks, getInitialValue, addPostfixToPromoCampaign } from '../groupForm.utils';
 import { createCampaignGroup, editCampaignGroup, getCampaignGroupList } from '@apiServices/campaignGroupService';
 import { getDataForAssociationCreate, normalizeAssociationData } from './RelatedPromoCampaignForm.utils';
 import { BundleTypes, BUNDLE_LOCATION_KEY, MODES } from '../../groupPageConstants';
@@ -143,6 +143,8 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
     const handleCreate = async () => {
         showLoading();
         try {
+            const newName = addPostfixToPromoCampaign(mainCampaignName.current);
+            mainCampaignName.current = newName;
             const associationData = await form.validateFields();
             const { id } = await createCampaignGroup(
                 getDataForAssociationCreate({ ...associationData, name: mainCampaignName.current }),

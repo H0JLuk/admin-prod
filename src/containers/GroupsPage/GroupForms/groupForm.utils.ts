@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import moment from 'moment';
 import {
     BannerCreateDto,
     BannerCreateTextDto,
@@ -120,7 +121,7 @@ const createLinksBanner = (banners: BannerCreateDto, linkId: number) =>
 export async function editCampaignGroupTextAndBanners(
     bundleData: EditGroupBannersAndTextsDto,
     prevBundle: BundleDto,
-    groupId: number
+    groupId: number,
 ) {
     const arrayBundle = [{ texts: bundleData.texts || {}, banners: bundleData.banners || {} }];
 
@@ -140,7 +141,7 @@ export async function editCampaignGroupTextAndBanners(
 export function editCampaignGroupTexts(
     currentTexts: BannerCreateTextDto,
     oldTexts: BannerTextDto[] = [],
-    groupId: number
+    groupId: number,
 ) {
     return Object.entries(currentTexts).map(([type, nextValue]) => {
         const text = oldTexts.find((text) => text.type === type) as BannerTextDto;
@@ -168,7 +169,6 @@ export function editCampaignGroupBanners(currentBanners: BannerCreateDto, oldBan
             const isBannerID = typeof banner?.id === 'number';
 
             if (fileIsEmpty && isBannerID) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 return deleteCampaignGroupBanner(banner!.id);
             }
 
@@ -240,7 +240,7 @@ export async function editCampaignGroupLinks(bundleData: LinksCreateDto[], prevB
 export function editCampaignGroupLinkTexts(
     currentTexts: BannerCreateTextDto,
     oldTexts: BannerTextDto[] = [],
-    linkId: number
+    linkId: number,
 ) {
     return Object.entries(currentTexts).map(([type, nextValue]) => {
         const text = oldTexts.find((text) => text.type === type);
@@ -263,7 +263,7 @@ export function editCampaignGroupLinkTexts(
 export function editCampaignGroupLinkBanners(
     currentBanners: BannerCreateDto,
     oldBanners: BannerDto[] = [],
-    linkId: number
+    linkId: number,
 ) {
     return Object.entries(currentBanners).map(([type, file]) => {
         if (Array.isArray(file)) {
@@ -310,4 +310,8 @@ export function getInitialValue(state: BundleDto): BundleDto & { mainCampaignId?
     }
 
     return { ...initialValue, ...state };
+}
+
+export function addPostfixToPromoCampaign(title: string) {
+    return `${title} ${moment().format('DD.MM.YYYY HH:mm:ss')}`;
 }

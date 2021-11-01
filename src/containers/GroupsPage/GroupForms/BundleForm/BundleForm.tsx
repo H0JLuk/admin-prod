@@ -20,6 +20,7 @@ import {
     createGroupBanner,
     editCampaignGroupTextAndBanners,
     getInitialValue,
+    addPostfixToPromoCampaign,
 } from '../groupForm.utils';
 import { BundleTypes, BUNDLE_LOCATION_KEY, MODES } from '../../groupPageConstants';
 import { normalizeBundle, getDataForBundleCreate } from './Bundle.utils';
@@ -178,6 +179,8 @@ const BundleForm: React.FC<BundleFormProps> = ({
     const handleCreate = async () => {
         showLoading();
         try {
+            const name = addPostfixToPromoCampaign(form.getFieldValue('name'));
+            form.setFieldsValue({ name });
             const groupData = await form.validateFields();
             const { id } = await createCampaignGroup(getDataForBundleCreate(groupData));
             await createGroupBanner(groupData.banners, id);
