@@ -95,11 +95,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     },
                     {
                         clientAppCode: code,
-                        value: JSON.stringify(mechanics.includes(APP_MECHANIC.EXPRESS)),
-                        key: 'all_presents_selected',
-                    },
-                    {
-                        clientAppCode: code,
                         value: JSON.stringify(game_mechanics || []),
                         key: 'game_mechanics',
                     },
@@ -193,20 +188,6 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     }
                 }
 
-                let newPresentsSetting: string | null = null;
-                const mechanicSetting = changedParams.find(param => param.key === 'mechanics');
-                if (mechanicSetting) {
-                    const allPresentValue = JSON.parse(mechanicSetting.value).includes(APP_MECHANIC.EXPRESS);
-                    const allPresentType = propertiesSettings.all_presents_selected ? SETTINGS_TYPES.EDIT : SETTINGS_TYPES.CREATE;
-                    newPresentsSetting = JSON.stringify(allPresentValue);
-                    changedParams.push({
-                        clientAppCode: mechanicSetting.clientAppCode,
-                        value: JSON.stringify(allPresentValue),
-                        key: 'all_presents_selected',
-                        type: allPresentType,
-                    });
-                }
-
                 if (changedParams.length) {
                     requests.push(createOrUpdateKey(changedParams));
                     notifies.unshift(() => showNotify(
@@ -222,7 +203,8 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     requests.length && await Promise.all(requests);
 
                     notifies.forEach(fn => fn());
-                    updateSettings({ ...formData, all_presents_selected: newPresentsSetting!, id: id! });
+                    setBtnStatus(true);
+                    updateSettings({ ...formData, id: id! });
                     setLoading(false);
                 } else {
                     showNotify('Настройки не изменились', true);
