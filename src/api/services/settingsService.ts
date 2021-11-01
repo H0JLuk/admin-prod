@@ -1,6 +1,6 @@
 import { Api } from '../apiClient';
 import { getReqOptions } from './index';
-import { DefaultApiResponse, ISettingList, SettingDto } from '@types';
+import { DefaultApiResponse, ISettingList, SettingDto, SettingKeys } from '@types';
 
 const STATIC_URL = 'STATIC_URL';
 
@@ -26,6 +26,14 @@ export function getSettingsList(appCode: string) {
 
 export function getAllSettings() {
     return Api.get<ISettingList>('/admin/setting', getReqOptions());
+}
+
+export function getSettingsByKeys(settingKey: string, { role, code }: SettingKeys = {}) {
+    const keys = {} as Record<string, string>;
+    role && (keys.role = role);
+    code && (keys.code = code);
+    const urlSearchParams = new URLSearchParams(keys);
+    return Api.get<ISettingList>(`/admin/setting/key/${settingKey}?${urlSearchParams}`, getReqOptions());
 }
 
 export function saveStaticUrl(staticUrl: string) {

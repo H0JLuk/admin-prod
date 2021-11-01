@@ -1,8 +1,8 @@
 import { customNotifications } from '@utils/notifications';
 import { ArgsProps } from 'antd/lib/notification';
 import { addSettings, updateSettingsList } from '@apiServices/settingsService';
-import { designKeysForCheck, SETTINGS_TYPES } from './ClientAppFormConstants';
-import { ISettingObject, SettingDto } from '@types';
+import { SETTINGS_TYPES } from './ClientAppFormConstants';
+import { SettingDto } from '@types';
 import ROLES from '@constants/roles';
 
 export interface IChangedParam extends Pick<SettingDto, 'clientAppCode' | 'key' | 'value' | 'userRole'> {
@@ -47,9 +47,3 @@ export async function createOrUpdateKey(changedParams: IChangedParam[]) {
     updateSettings.length && (await updateSettingsList(updateSettings));
     addSettingsArr.length && (await addSettings(addSettingsArr));
 }
-
-export function checkExistDesignSettings(settings: ISettingObject) {
-    return designKeysForCheck.some(key => !Object.prototype.hasOwnProperty.call(settings, key));
-}
-
-

@@ -1,7 +1,6 @@
 import * as notification from '../../../utils/notifications';
 import * as settingsService from '../../../api/services/settingsService';
-import { showNotify, createOrUpdateKey, checkExistDesignSettings } from './utils';
-import { designKeysForCheck } from './ClientAppFormConstants';
+import { showNotify, createOrUpdateKey } from './utils';
 
 describe('ClientAppForm utils test', () => {
     it('should call customNotifications', () => {
@@ -52,24 +51,5 @@ describe('ClientAppForm utils test', () => {
         expect(settingsService.addSettings).toBeCalledTimes(1);
         delete changedParams[1].type;
         expect(settingsService.addSettings).toBeCalledWith([changedParams[1]]);
-
-    });
-
-    it('`checkExistDesignSettings` function should return `false`', () => {
-        const settings = {
-            test_key: 'test',
-        };
-        designKeysForCheck.forEach(key => settings[key] = `test_${key}`);
-
-        expect(checkExistDesignSettings(settings)).toBe(false);
-    });
-
-    it('`checkExistDesignSettings` function should return `true`', () => {
-        const settings = {
-            test_key: 'test',
-            home_page_header: 'test header',
-        };
-
-        expect(checkExistDesignSettings(settings)).toBe(true);
     });
 });

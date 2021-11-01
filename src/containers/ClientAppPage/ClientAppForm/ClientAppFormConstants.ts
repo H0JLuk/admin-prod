@@ -43,8 +43,6 @@ export const keysToString = [
     'game_mechanics',
 ];
 
-export const TextKeysWithDefaultValues = ['home_page_header_present', 'home_page_header_bundle'];
-
 const mechanicsValidator: ValidatorRule['validator'] = (_, value) => {
     const requiredMechanics = [APP_MECHANIC.PRESENTS, APP_MECHANIC.ECOSYSTEM, APP_MECHANIC.BUNDLE, APP_MECHANIC.EXPRESS];
     const hasRequiredMechanic = requiredMechanics.some(mechanic => value.includes(mechanic));
@@ -52,13 +50,6 @@ const mechanicsValidator: ValidatorRule['validator'] = (_, value) => {
 };
 
 export const banners = Object.values(Themes);
-
-export const DEFAULT_DESIGN_SETTINGS: Record<string, string> = {
-    vitrina_theme: Themes.DEFAULT,
-    home_page_header: 'Сбер изменился, чтобы стать еще ближе к вам',
-};
-
-export const designKeysForCheck = [...Object.keys(DEFAULT_DESIGN_SETTINGS), ...TextKeysWithDefaultValues];
 
 export enum FORM_TYPES {
     INPUT = 'INPUT',

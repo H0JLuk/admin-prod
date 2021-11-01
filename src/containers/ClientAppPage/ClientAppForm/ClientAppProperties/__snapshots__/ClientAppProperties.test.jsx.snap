@@ -2,7 +2,7 @@
 
 exports[`<ClientAppProperties /> test should match snapshot  1`] = `
 "<div className=\\"clientAppForm\\">
-  <ForwardRef(InternalForm) className=\\"form\\" form={{...}} onFinish={[Function: handleFinish]} layout=\\"vertical\\" onFieldsChange={[Function: handleFieldsChange]} id=\\"edit\\">
+  <ForwardRef(InternalForm) className=\\"form\\" initialValues={{...}} form={{...}} onFinish={[Function: handleFinish]} layout=\\"vertical\\" onFieldsChange={[Function: handleFieldsChange]} id=\\"edit\\">
     <Memo(ContentBlock) maxWidth={950}>
       <AppFormConstructor row={{...}} isEdit={true} isCreate={false} />
       <AppFormConstructor row={{...}} isEdit={true} isCreate={false} />
@@ -16,6 +16,11 @@ exports[`<ClientAppProperties /> test should match snapshot  1`] = `
         <Col span={12}>
           <FormItem label=\\"Бизнес-роль, для которой доступно приложение\\" name=\\"businessRoleIds\\" normalize={[Function: normalize]}>
             <SelectTags data={{...}} idKey=\\"id\\" placeholder=\\"Выберите роль/роли\\" />
+          </FormItem>
+        </Col>
+        <Col span={12}>
+          <FormItem label=\\"Согласие\\" name=\\"consentId\\" rules={{...}}>
+            <ForwardRef(InternalSelect) placeholder=\\"Выберите согласие\\" options={{...}} />
           </FormItem>
         </Col>
       </Row>

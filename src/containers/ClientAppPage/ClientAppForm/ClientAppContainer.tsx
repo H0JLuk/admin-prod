@@ -8,7 +8,7 @@ import Loading from '@components/Loading';
 import { getAppCode } from '@apiServices/sessionService';
 import {
     /* addSettings, */
-    getAllSettings,
+    getSettingsByKeys,
     getSettingsList,
 } from '@apiServices/settingsService';
 import { getBusinessRoles, getBusinessRolesByClientApp } from '@apiServices/businessRoleService';
@@ -19,11 +19,7 @@ import {
     EDIT_MODE,
     DESIGN_RADIO_TITLE,
     PROPERTIES_RADIO_TITLE,
-    designKeysForCheck,
-    DEFAULT_DESIGN_SETTINGS,
-    TextKeysWithDefaultValues,
 } from './ClientAppFormConstants';
-import { checkExistDesignSettings } from './utils';
 import { requestsWithMinWait } from '@utils/utils';
 import { BusinessRoleDto, ConsentDto, ISettingObject } from '@types';
 import ROLES from '@constants/roles';
@@ -90,68 +86,30 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
                 const requests = Promise.all([
                     getSettingsList(currentAppCode),
                     getClientAppInfo(currentAppCode),
-                    getAllSettings(),
+                    getSettingsByKeys('token_lifetime', { role: ROLES.REFERAL_LINK }),
                 ]);
                 const [
                     { settingDtoList: unformattedSettings = [] },
                     clientAppInfo,
-                    { settingDtoList: allSettings },
+                    { settingDtoList: referralTokenLifetime },
                 ] = await requestsWithMinWait(requests, 0);
                 const { list: clientAppRoles = [] } = await getBusinessRolesByClientApp(clientAppInfo.id);
                 const businessRoleIds = clientAppRoles.map(({ id }) => id) as any;
                 const settingsMap = unformattedSettings.reduce<ISettings>((result, item) => ({ ...result, [item.key]: item.value }), { businessRoleIds });
-                const referralTokenLifetime = allSettings.find(
-                    ({ clientAppCode, userRole, key }) =>
-                        !clientAppCode && key === 'token_lifetime' && userRole === ROLES.REFERAL_LINK,
-                );
 
                 if (referralTokenLifetime) {
-                    settingsMap.referralTokenLifetime = referralTokenLifetime.value;
+                    settingsMap.referralTokenLifetime = referralTokenLifetime[0].value;
                 }
 
                 settingDtoList.current = settingsMap;
                 propertiesSettings.current = doPropertiesSettings(settingsMap, clientAppInfo);
 
-                if (settingsMap.privacy_policy !== undefined && typeof Number(settingsMap.privacy_policy) === 'number') {
+                if (settingsMap.privacy_policy !== undefined) {
                     const consentData = await getConsentById(Number(settingsMap.privacy_policy));
                     setConsent(consentData);
                 }
 
-                const settingsForDesign = { ...settingsMap };
-
-                /* Проверяем, есть ли хоть одна настройка, которая не записана в настройках оформления клиентского приложения*/
-                if (checkExistDesignSettings(settingsMap)) {
-                    // Фильтруем настройки и получаем только дефолтные
-                    const defaultDesignSettingsMap = allSettings.reduce<ISettings>((result, { clientAppCode, key, value }) => {
-                        if (clientAppCode === null && designKeysForCheck.includes(key)) {
-                            return { ...result, [key]: value };
-                        }
-                        return result;
-                    }, {});
-
-                    designKeysForCheck.forEach(key => {
-                        // Если дефолтных настроек на поле нет, то нам надо их создать
-                        const defaultValue = DEFAULT_DESIGN_SETTINGS[key];
-                        const value = Array.isArray(defaultValue) ? JSON.stringify(defaultValue) : defaultValue;
-                        if (
-                            typeof defaultDesignSettingsMap[key] === 'undefined' &&
-                            typeof value !== 'undefined'
-                        ) {
-                            defaultDesignSettingsMap[key] = value;
-                        }
-                    });
-
-                    // Проверяем каждое свойство оформления и если у свойства значение undefined или null, то тогда берем значение из дефолтных
-                    designKeysForCheck.forEach(key => {
-                        if (TextKeysWithDefaultValues.includes(key)) {
-                            settingsForDesign[key] = settingsForDesign[key] ?? defaultDesignSettingsMap['home_page_header'];
-                        } else {
-                            settingsForDesign[key] = settingsForDesign[key] ?? defaultDesignSettingsMap[key];
-                        }
-                    });
-                }
-
-                designSettings.current = settingsForDesign;
+                designSettings.current = settingsMap;
             } catch ({ message: error }) {
                 message.error(error);
             } finally {
@@ -174,7 +132,7 @@ const ClientAppContainer: React.FC<IClientAppContainerProps> = ({ type, matchPat
         propertiesSettings.current = { ...(designSettings.current as Record<string, string>), ...newParams };
         const findConsent = (el: ConsentDto) => el.id === +newParams.consentId;
         if (consent?.id !== +newParams.consentId) {
-            const newConsent = consents.current.find((findConsent)) as ConsentDto;
+            const newConsent = consents.current.find(findConsent) as ConsentDto;
             setConsent(newConsent);
         }
     };

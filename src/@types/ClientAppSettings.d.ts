@@ -1,6 +1,11 @@
 import ROLES from '@constants/roles';
 import { DefaultApiResponse } from '@types';
 
+
+export interface SettingKeys {
+    role?: SettingDto['userRole'];
+    code?: SettingDto['clientAppCode'];
+}
 export interface SettingDto {
     clientAppCode?: string;
     key: string;

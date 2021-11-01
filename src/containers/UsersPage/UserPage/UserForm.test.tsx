@@ -9,7 +9,7 @@ import {
 } from '@constants/permissions';
 import { getUser, unblockUser, resetUser, removeUser, editUser, addUser } from '@apiServices/usersService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
-import { getAllSettings } from '@apiServices/settingsService';
+import { getSettingsByKeys } from '@apiServices/settingsService';
 import { sleep } from '@setupTests';
 import { INFO_USER_BUTTONS } from './UserFormButtonGroup/UserFormButtonGroup';
 import { customNotifications } from '@utils/notifications';
@@ -83,7 +83,7 @@ jest.mock('@apiServices/salePointService', () => ({
 }));
 
 jest.mock('@apiServices/settingsService', () => ({
-    getAllSettings: jest.fn(),
+    getSettingsByKeys: jest.fn(),
 }));
 
 jest.mock('@components/AutoComplete/AutocompleteLocationAndSalePoint/AutocompleteHelper', () => ({
@@ -216,7 +216,7 @@ describe('<UserForm /> test', () => {
         (getCommonPermissionsByRole as jest.Mock).mockReturnValue(TEST_COMMON_PERMISSIONS);
         (getUserAppsCheckboxes as jest.Mock).mockReturnValue(TEST_CHECKBOX);
         (getSalePointByText as jest.Mock).mockReturnValue({ ...searchSalePointTestData[0], id: userTestData.salePointId });
-        (getAllSettings as jest.Mock).mockResolvedValue(settingDtoListTestData);
+        (getSettingsByKeys as jest.Mock).mockResolvedValue(settingDtoListTestData);
         cleanup();
         document.body.innerHTML = '';
     });

@@ -3,20 +3,21 @@ import { fireEvent, render, act } from '@testing-library/react';
 import { shallow } from 'enzyme';
 import { message } from 'antd';
 import ClientAppContainer, { doPropertiesSettings } from './ClientAppContainer';
-import { DEFAULT_DESIGN_SETTINGS, EDIT_MODE } from './ClientAppFormConstants';
+import { EDIT_MODE } from './ClientAppFormConstants';
 import {
     businessRolesTestResponse,
     settingDtoListTestData,
     clientAppTestData,
     settingsMapTestData,
     testBusinessRole,
+    consentsTestData,
 } from '../../../../__tests__/constants';
-import { getSettingsList, getAllSettings } from '../../../api/services/settingsService';
+import { getSettingsList, getSettingsByKeys } from '../../../api/services/settingsService';
 import { getBusinessRoles, getBusinessRolesByClientApp } from '../../../api/services/businessRoleService';
 import { getClientAppInfo } from '../../../api/services/clientAppService';
 import { getAppCode } from '../../../api/services/sessionService';
 import { sleep } from '../../../setupTests';
-import * as consentsService from '../../../api/services/consentsService';
+import { getConsentsList, getConsentById } from '../../../api/services/consentsService';
 import { requestsWithMinWait } from '../../../utils/utils';
 import ROLES from '@constants/roles';
 
@@ -53,7 +54,7 @@ jest.mock('../../../utils/utils', () => ({
 
 jest.mock('../../../api/services/settingsService', () => ({
     getSettingsList: jest.fn(),
-    getAllSettings: jest.fn(),
+    getSettingsByKeys: jest.fn(),
 }));
 
 jest.mock('../../../api/services/businessRoleService', () => ({
@@ -63,6 +64,11 @@ jest.mock('../../../api/services/businessRoleService', () => ({
 
 jest.mock('../../../api/services/clientAppService', () => ({
     getClientAppInfo: jest.fn(),
+}));
+
+jest.mock('../../../api/services/consentsService', () => ({
+    getConsentsList: jest.fn(),
+    getConsentById: jest.fn(),
 }));
 
 jest.mock('antd', () => ({
@@ -129,8 +135,8 @@ describe('<ClientAppContainer /> tests', () => {
         getClientAppInfo.mockResolvedValue(clientAppTestData);
         getBusinessRoles.mockResolvedValue(businessRolesTestResponse);
         getBusinessRolesByClientApp.mockResolvedValue({ list: [testBusinessRole] });
-        consentsService.getConsentById = jest.fn();
-        getAllSettings.mockResolvedValue(defaultSettingsRes);
+        getConsentsList.mockResolvedValue(consentsTestData);
+        getSettingsByKeys.mockResolvedValue(defaultSettingsRes);
         requestsWithMinWait.mockResolvedValue([
             settingDtoListTestData,
             clientAppTestData,
@@ -170,7 +176,7 @@ describe('<ClientAppContainer /> tests', () => {
         expect(getByText('ClientAppProperties')).toBeInTheDocument();
 
         const propertiesSettings = getByTestId('propertiesSettings');
-        expect({ current: doPropertiesSettingsTestData }).toEqual(JSON.parse(propertiesSettings.textContent));
+        expect(JSON.parse(propertiesSettings.textContent)).toEqual({ current: doPropertiesSettingsTestData });
 
         fireEvent.click(getByTestId('updateSettings-btn'));
         rerender(<ClientAppContainer { ...props } />);
@@ -178,10 +184,6 @@ describe('<ClientAppContainer /> tests', () => {
         expect({
             current: {
                 ...doPropertiesSettingsTestData,
-                home_page_header: DEFAULT_DESIGN_SETTINGS.home_page_header,
-                home_page_header_present: DEFAULT_DESIGN_SETTINGS.home_page_header,
-                home_page_header_bundle: DEFAULT_DESIGN_SETTINGS.home_page_header,
-                vitrina_theme: DEFAULT_DESIGN_SETTINGS.vitrina_theme,
                 test: 2,
             },
         }).toEqual(JSON.parse(propertiesSettings.textContent));
@@ -240,7 +242,7 @@ describe('<ClientAppContainer /> tests', () => {
         await act(async () => {
             render(<ClientAppContainer { ...props } />);
             await sleep();
-            expect(consentsService.getConsentById).toHaveBeenCalledTimes(1);
+            expect(getConsentById).toHaveBeenCalledTimes(1);
         });
     });
 });

@@ -32,7 +32,7 @@ import {
 } from '@constants/permissions';
 import { getActiveClientApps } from '@apiServices/clientAppService';
 import { getSalePointByText } from '@apiServices/salePointService';
-import { getAllSettings } from '@apiServices/settingsService';
+import { getSettingsByKeys } from '@apiServices/settingsService';
 import {
     errorEditPermissions,
     getLoginTypeByRole,
@@ -163,7 +163,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
         try {
             let user;
             const clientAppList = await getActiveClientApps();
-            const { settingDtoList } = await getAllSettings();
+            const { settingDtoList } = await getSettingsByKeys('present_type');
 
             if (notNewUser) {
                 user = await getUser(userId);

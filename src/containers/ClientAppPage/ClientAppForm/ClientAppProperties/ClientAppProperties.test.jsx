@@ -10,7 +10,7 @@ import { sleep } from '../../../../setupTests';
 import { act } from 'react-dom/test-utils';
 import ClientAppProperties from './ClientAppProperties';
 
-import { businessRolesTestResponse } from '../../../../../__tests__/constants';
+import { businessRolesTestResponse, consentsTestData } from '../../../../../__tests__/constants';
 import * as clientAppService from '../../../../api/services/clientAppService';
 import * as settingsService from '../../../../api/services/settingsService';
 import * as sessionService from '../../../../api/services/sessionService';
@@ -18,6 +18,7 @@ import * as clientAppPropertiesUtils from '../utils';
 
 clientAppPropertiesUtils.showNotify = jest.fn();
 clientAppService.addClientApp = jest.fn();
+clientAppService.updateClientApp = jest.fn();
 settingsService.addSettings = jest.fn();
 clientAppService.updateBusinessRolesClientApp = jest.fn();
 
@@ -44,11 +45,15 @@ describe('<ClientAppProperties /> test', () => {
                 displayName: 'displayName',
                 businessRoleIds: [],
                 isDeleted: false,
+                consentId: 1,
             },
         },
         updateSettings: jest.fn(),
         businessRoles: {
             current: businessRolesTestResponse.list,
+        },
+        consents: {
+            current: consentsTestData.list,
         },
     };
 
@@ -82,6 +87,7 @@ describe('<ClientAppProperties /> test', () => {
                 isDeleted: props.propertiesSettings.current.isDeleted,
                 name: props.propertiesSettings.current.name,
                 businessRoleIds: props.propertiesSettings.current.businessRoleIds,
+                consentId: props.propertiesSettings.current.consentId,
             });
         });
     });
@@ -104,8 +110,6 @@ describe('<ClientAppProperties /> test', () => {
                 </MemoryRouter>
             );
 
-            clientAppService.addClientApp = jest.fn();
-            settingsService.addSettings = jest.fn();
             clientAppPropertiesUtils.createOrUpdateKey = jest.fn();
             sessionService.getAppCode = jest.fn(() => 'appCode');
 

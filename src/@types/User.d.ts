@@ -21,7 +21,6 @@ export type UserInfo = {
     id: number;
     blocked: boolean;
     clientAppIds: number[] | null;
-    id: number;
     locationId: number;
     locationName: string;
     loginType: LoginTypes | null;

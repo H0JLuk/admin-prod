@@ -3,7 +3,6 @@ import { Button, Col, Form, FormProps, Row, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { createOrUpdateKey, IChangedParam, showNotify } from '../utils';
 import { addClientApp, updateClientApp } from '@apiServices/clientAppService';
-import { attachConsentToClientApp } from '@apiServices/consentsService';
 import { getAppCode, saveAppCode } from '@apiServices/sessionService';
 import { addSettings } from '@apiServices/settingsService';
 import { CLIENT_APPS_PAGES } from '@constants/route';
