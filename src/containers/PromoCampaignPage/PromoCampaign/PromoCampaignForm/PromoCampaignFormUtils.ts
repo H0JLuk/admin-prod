@@ -205,7 +205,6 @@ export function normalizePromoCampaignData<Data extends Record<string, any>>({ p
         active: promoCampaign.active,
         dzoId: promoCampaign.dzoId,
         type: promoCampaign.type,
-        saleEnabled: promoCampaign.settings.sale_enabled,
         categoryIdList: (promoCampaign as PromoCampaignDto).categoryList.map(({ categoryId }) => categoryId),
         banners: arrayToObject(banners, 'type', 'url'),
         texts: arrayToObject(texts, 'type', 'value'),
@@ -224,7 +223,6 @@ export function normalizePromoCampaignData<Data extends Record<string, any>>({ p
 
 type DataForSendType = {[key in keyof PromoCampaignFormInitialState]: PromoCampaignFormInitialState[key] };
 export const getDataForSend = <DataForSend extends DataForSendType & {id?: number;}>({
-    id,
     name,
     dzoId,
     webUrl,
@@ -238,12 +236,11 @@ export const getDataForSend = <DataForSend extends DataForSendType & {id?: numbe
     settings,
     oneLinkAppUrl,
     standalone,
-    // productOfferingId,
+    productOfferingId,
     externalId,
     behaviorType,
-    // saleEnabled,
-}: DataForSend, isEdit: boolean, isCopy: boolean) => {
-    const data = {
+}: DataForSend) => {
+    return {
         name,
         dzoId,
         webUrl,
@@ -257,20 +254,10 @@ export const getDataForSend = <DataForSend extends DataForSendType & {id?: numbe
         type,
         categoryIdList,
         oneLinkAppUrl,
-        // productOfferingId,
+        productOfferingId: settings.sale_enabled ? productOfferingId : null,
         externalId: externalId || null,
         behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
     };
-    // if (saleEnabled) {
-    //     settings.sale_enabled = true;
-    // } else {
-    //     data.productOfferingId = null;
-
-    //     if (isEdit || isCopy) {
-    //         settings.sale_enabled = false;
-    //     }
-    // }
-    return data;
 };
 
 export function getPromoCampaignForCopy<

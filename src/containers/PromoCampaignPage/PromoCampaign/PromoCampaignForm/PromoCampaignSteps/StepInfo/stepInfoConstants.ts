@@ -71,6 +71,7 @@ export const EXTERNAL_ID = {
     name: 'externalId',
     label: 'Внешний ID',
     placeholder: 'Введите внешний ID',
+    requiredError: 'Укажите внешний ID',
     duplicateError: 'Введенный внешний ID уже используется в другой промо-кампании',
 };
 
@@ -87,7 +88,7 @@ export const STATUS = {
 };
 
 export const CHECKOUT_SALE = {
-    name: 'saleEnabled',
+    name: ['settings', 'sale_enabled'],
     label: 'Оформить продажу',
 };
 

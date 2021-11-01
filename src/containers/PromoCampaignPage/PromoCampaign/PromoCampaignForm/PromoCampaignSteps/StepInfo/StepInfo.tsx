@@ -22,12 +22,12 @@ import styles from './StepInfo.module.css';
 import {
     ACTIVE_PERIOD,
     BEHAVIOR_TYPE,
-    // CHECKOUT_SALE,
+    CHECKOUT_SALE,
     DETAIL_BTN_TEXT,
     DETAIL_BTN_URL,
     DZO,
     EXTERNAL_ID,
-    // PRODUCT_OFFER_ID,
+    PRODUCT_OFFER_ID,
     PROMO_CAMPAIGN_CATEGORY,
     PROMO_CAMPAIGN_NAME,
     PROMO_CAMPAIGN_TYPE,
@@ -391,7 +391,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             initialValue={state.externalId}
                             validateFirst
                             normalize={trimValue}
+                            dependencies={[CHECKOUT_SALE.name]}
                             rules={[
+                                ({ getFieldValue }) => ({
+                                    required: getFieldValue(CHECKOUT_SALE.name),
+                                    message: EXTERNAL_ID.requiredError,
+                                }),
                                 {
                                     validator: (_, value) => {
                                         const copyIdExists = typeof copyPromoCampaignId !== 'number';
@@ -463,10 +468,10 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             <Switch />
                         </Form.Item>
                     </Col>
-                    {/* <Col span={8} className={styles.switchRow}>
+                    <Col span={8} className={styles.switchRow}>
                         <Form.Item
                             name={CHECKOUT_SALE.name}
-                            initialValue={state.saleEnabled}
+                            initialValue={state.settings.sale_enabled}
                             label={CHECKOUT_SALE.label}
                             valuePropName="checked"
                         >
@@ -479,19 +484,19 @@ const StepInfo: React.FC<StepInfoProps> = ({
                             dependencies={[CHECKOUT_SALE.name]}
                         >
                             {({ getFieldValue }) => {
-                                const active = getFieldValue(CHECKOUT_SALE.name);
+                                const isActiveCheckout = getFieldValue(CHECKOUT_SALE.name);
 
                                 return (
                                     <Form.Item
                                         label={PRODUCT_OFFER_ID.label}
                                         className={styles.formItem}
-                                        hidden={!active}
+                                        hidden={!isActiveCheckout}
                                         name={PRODUCT_OFFER_ID.name}
                                         normalize={trimValue}
                                         initialValue={state.productOfferingId}
                                         rules={[
                                             {
-                                                required: active,
+                                                required: isActiveCheckout,
                                                 message: PRODUCT_OFFER_ID.requiredError,
                                             },
                                             {
@@ -508,7 +513,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
                                 );
                             }}
                         </Form.Item>
-                    </Col> */}
+                    </Col>
 
                     <Col span={16} className={styles.formGroup}>
                         <span className={styles.formGroupLabel}>

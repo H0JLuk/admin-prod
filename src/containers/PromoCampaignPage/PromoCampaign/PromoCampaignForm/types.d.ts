@@ -19,10 +19,9 @@ export type PromoCampaignFormVisibilitySettingCreateDto = {
 
 export type PromoCampaignFormInitialState = {
     name: string;
-    // saleEnabled: boolean;
     behaviorType: boolean;
     webUrl: string;
-    // productOfferingId: string | null;
+    productOfferingId: string | null;
     active: boolean;
     offerDuration: number;
     finishDate: string;

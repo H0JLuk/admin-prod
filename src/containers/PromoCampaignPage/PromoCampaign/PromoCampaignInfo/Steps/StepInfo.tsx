@@ -178,7 +178,7 @@ const StepInfo: React.FC<IStepInfoProps> = ({ promoCampaign }) => {
                         </div>
                     </Col>
 
-                    {/* <Col span={8}>
+                    <Col span={8}>
                         <div className={style.infoTitle}>{CHECKOUT_SALE.label}</div>
                         <div className={style.infoText}>
                             <Switch
@@ -195,7 +195,7 @@ const StepInfo: React.FC<IStepInfoProps> = ({ promoCampaign }) => {
                                 {promoCampaign.productOfferingId}
                             </div>
                         </Col>
-                    )} */}
+                    )}
 
                     <Col span={16} className={style.formGroup}>
                         <span className={style.formGroupLabel}>
