@@ -61,12 +61,12 @@ const MainPageDesign: React.FC<IMainPageDesignProps> = ({
             if (changedParams.length) {
                 setLoading(true);
                 await createOrUpdateKey(changedParams);
-                setCanSave(false);
                 updateSettings(changedParams.reduce((result, { key, value }) => ({ ...result, [key]: value }), {}));
                 showNotify(`Оформление для витрины '${appDisplayName}' обновлено`);
             } else {
                 showNotify('Настройки не изменились', true);
             }
+            setCanSave(false);
         } catch ({ message }) {
             showNotify(message, true);
         }

@@ -222,13 +222,12 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                     requests.length && await Promise.all(requests);
 
                     notifies.forEach(fn => fn());
-                    setBtnStatus(true);
                     updateSettings({ ...formData, all_presents_selected: newPresentsSetting!, id: id! });
                     setLoading(false);
                 } else {
                     showNotify('Настройки не изменились', true);
-                    setBtnStatus(true);
                 }
+                setBtnStatus(true);
             }
         } catch ({ message }) {
             const messageToShow = message.endsWith(BACKEND_ERROR_ALREADY_EXIST_ENDING) ? (
