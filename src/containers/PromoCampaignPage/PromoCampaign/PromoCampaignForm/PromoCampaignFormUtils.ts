@@ -182,8 +182,8 @@ export function normalizeFirstStepValue<StepValue extends Record<string, any>>(v
 
     return {
         ...val,
-        startDate: startDate?.startOf('day').toISOString(),
-        finishDate: finishDate?.endOf('day').toISOString(),
+        startDate: startDate?.utc().startOf('day').toISOString(),
+        finishDate: finishDate?.utc().endOf('day').toISOString(),
         settings: {
             ...val.settings,
             priority_on_web_url: val.settings.priority_on_web_url === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
@@ -209,8 +209,8 @@ export function normalizePromoCampaignData<Data extends Record<string, any>>({ p
         banners: arrayToObject(banners, 'type', 'url'),
         texts: arrayToObject(texts, 'type', 'value'),
         datePicker: [
-            promoCampaign.startDate ? moment.utc(promoCampaign.startDate).local() : undefined,
-            promoCampaign.finishDate ? moment.utc(promoCampaign.finishDate).local() : undefined,
+            promoCampaign.startDate ? moment.utc(promoCampaign.startDate) : undefined,
+            promoCampaign.finishDate ? moment.utc(promoCampaign.finishDate) : undefined,
         ],
         appCode: isCopy ? undefined : appCode ?? getAppCode(),
         offerDuration: promoCampaign.offerDuration,
@@ -239,26 +239,24 @@ export const getDataForSend = <DataForSend extends DataForSendType & {id?: numbe
     productOfferingId,
     externalId,
     behaviorType,
-}: DataForSend) => {
-    return {
-        name,
-        dzoId,
-        webUrl,
-        active,
-        offerDuration,
-        finishDate,
-        startDate,
-        promoCodeType,
-        settings,
-        standalone,
-        type,
-        categoryIdList,
-        oneLinkAppUrl,
-        productOfferingId: settings.sale_enabled ? productOfferingId : null,
-        externalId: externalId || null,
-        behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
-    };
-};
+}: DataForSend) => ({
+    name,
+    dzoId,
+    webUrl,
+    active,
+    offerDuration,
+    finishDate,
+    startDate,
+    promoCodeType,
+    settings,
+    standalone,
+    type,
+    categoryIdList,
+    oneLinkAppUrl,
+    productOfferingId: settings.sale_enabled ? productOfferingId : null,
+    externalId: externalId || null,
+    behaviorType: behaviorType ? behaviorTypes.QR : behaviorTypes.WEB,
+});
 
 export function getPromoCampaignForCopy<
     PromoCampaignState extends { [key in keyof PromoCampaignDto]: PromoCampaignState[key] }, visibilitySettings = any[],
