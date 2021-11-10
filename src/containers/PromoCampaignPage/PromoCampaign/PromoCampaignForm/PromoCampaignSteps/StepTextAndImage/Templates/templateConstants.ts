@@ -6,7 +6,7 @@ import main_banner from '@imgs/main_banner.png';
 import presents_main_banner from '@imgs/presents_main_banner.png';
 import presents_main_logo_1 from '@imgs/presents_main_logo_1.png';
 import presents_main_logo_2 from '@imgs/presents_main_logo_2.png';
-import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
+import { FORM_RULES, getMaxLengthRule, getPatternAndMessage } from '@utils/validators';
 import { BANNER_TEXT_TYPE, BANNER_TYPE } from '@constants/common';
 
 export type TemplateRowsValues = {
@@ -21,6 +21,8 @@ export type TemplateRowsValues = {
     placeholder?: string;
     maxLength?: number;
 };
+
+const CONDITIONS_FIELD_MAX_LENGTH = 4096;
 
 export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
     {
@@ -79,9 +81,8 @@ export const EXCURSION_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             type: 'text',
             placeholder: 'Текст условий',
             rules: [
-                {
-                    ...getPatternAndMessage('promoCampaign', 'textContent'),
-                },
+                getPatternAndMessage('promoCampaign', 'textContent'),
+                getMaxLengthRule(CONDITIONS_FIELD_MAX_LENGTH),
             ],
         },
         [BANNER_TEXT_TYPE.HEADER]: {
@@ -170,9 +171,8 @@ export const GIFT_TYPE_ROWS: Record<string, TemplateRowsValues>[] = [
             type: 'text',
             placeholder: 'Текст условий',
             rules: [
-                {
-                    ...getPatternAndMessage('promoCampaign', 'textContent'),
-                },
+                getPatternAndMessage('promoCampaign', 'textContent'),
+                getMaxLengthRule(CONDITIONS_FIELD_MAX_LENGTH),
             ],
         },
     },

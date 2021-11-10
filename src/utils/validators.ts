@@ -127,6 +127,11 @@ export function getPatternAndMessage<P extends PageType, F extends FieldType<P>>
     };
 }
 
+export const getMaxLengthRule = (max: number) => ({
+    message: `Максимальное количество символов - ${max}`,
+    max,
+});
+
 /**
  * При работе с объектами правил для форм antd нужно обращать внимание на объект при создании правила с `required = true`
  * Если кроме свойств `required` и `message` есть любое другое поле, а значение поля отличается от `string`,
