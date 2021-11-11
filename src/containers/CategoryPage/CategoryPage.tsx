@@ -166,7 +166,7 @@ class CategoryPage extends Component<Record<string, unknown>, CategoryPageState>
                         rules={[FORM_RULES.REQUIRED]}
                         type="logo"
                         removeIconView={false}
-                        accept="image/*"
+                        accept=".png, .jpg, .jpeg, .svg"
                         footer
                     />
 

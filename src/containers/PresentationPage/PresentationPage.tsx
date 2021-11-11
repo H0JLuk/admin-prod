@@ -176,7 +176,7 @@ class PresentationPage extends Component<Record<string, unknown>, PresentationPa
                         rules={[FORM_RULES.REQUIRED]}
                         type="banner"
                         removeIconView={false}
-                        accept="image/*"
+                        accept=".png, .jpg, .jpeg, .svg"
                         footer
                     />
 
