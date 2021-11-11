@@ -76,6 +76,25 @@
     background-image: linear-gradient(270deg, #02436D -12.37%, #2BA54D 15.56%, #27A844 33.94%, #056690 69.98%, #062C48 103.58%);
 }
 
+.newYear {
+    background-image: linear-gradient(
+        232.36deg,
+        #EAEF00 7.94%,
+        #CBEA0A 15.79%,
+        #9CDD16 21.25%,
+        #5DCA23 28.58%,
+        #00B944 38.54%,
+        #00A3A7 57.42%,
+        #009BC5 64.31%,
+        #0096D3 67.8%,
+        #018FDB 72.33%,
+        #0489D6 76.41%,
+        #047FCF 82.5%,
+        #0073C8 87.4%,
+        #0051B7 99.87%
+    );
+}
+
 .summer {
     background-image: linear-gradient(239.39deg, #ffeb37 -8.62%, #ff9839 36.53%, #fd6f4c 58.9%, #eb0457 90.81%);
 }
