@@ -31,6 +31,8 @@ module.exports = {
         'react/jsx-equals-spacing': [1, 'never'],
         'semi': 1,      // Always warn on missing semicolon ;
         'object-curly-spacing': [1, 'always'],       // Always warn on missing spaces inside object / destruct literal,
+        'curly': 2,
+        'brace-style': ['error', '1tbs'],
         'quotes': ['error', 'single'],       //
         'space-in-parens': ['error', 'never'],
         'keyword-spacing': ['error', { before: true, after: true }],
@@ -100,6 +102,9 @@ module.exports = {
                 'semi': 'off',
                 '@typescript-eslint/semi': 2, // Always warn on missing semicolon ;
                 'object-curly-spacing': [1, 'always'],       // Always warn on missing spaces inside object / destruct literal,
+                'curly': 2,
+                "brace-style": 'off',
+                '@typescript-eslint/brace-style': ['error', '1tbs'],
                 'quotes': 'off',
                 '@typescript-eslint/quotes': ['error', 'single'],
                 'space-in-parens': ['error', 'never'],

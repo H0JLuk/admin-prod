@@ -32,6 +32,7 @@ import { BusinessRoleDto, ConsentDto, SettingDto } from '@types';
 import { BUTTON_TEXT } from '@constants/common';
 import { compareArrayOfNumbers } from '@utils/helper';
 import { FORM_RULES } from '@utils/validators';
+import { computeDisabledMechanics } from './ClientAppProperties.utils';
 
 import styles from './ClientAppProperties.module.css';
 
@@ -249,12 +250,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
     };
 
     const updateMechanicCheckboxStatus = (value: APP_MECHANIC[] = []) => {
-        const disabledMechanics = value.includes(APP_MECHANIC.EXPRESS)
-            ? [APP_MECHANIC.PRESENTS, APP_MECHANIC.ECOSYSTEM, APP_MECHANIC.PRESENTATION, APP_MECHANIC.BUNDLE]
-            : value.length
-                ? [APP_MECHANIC.EXPRESS]
-                : [];
-        setDisabledFields((fields) => ({ ...fields, mechanics: disabledMechanics }));
+        setDisabledFields((fields) => ({ ...fields, mechanics: computeDisabledMechanics(value) }));
     };
 
     const handleFieldsChange: FormProps['onFieldsChange'] = (fields) => {

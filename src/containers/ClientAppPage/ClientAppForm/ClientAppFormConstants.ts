@@ -30,6 +30,8 @@ export const BUSINESS_ROLE_FOR_APPLICATION = 'Бизнес-роль, для ко
 export const BUSINESS_ROLE_FOR_APP_PLACEHOLDER = 'Выберите роль/роли';
 export const CONSENT_FOR_APPLICATION = 'Согласие';
 export const CONSENT_FOR_APP_PLACEHOLDER = 'Выберите согласие';
+export const BUNDLE = 'Бандл';
+export const BUNDLE_NAME = 'Имя переключателя';
 
 export const EDIT_MODE = {
     DESIGN: 'Оформление',
@@ -44,7 +46,7 @@ export const keysToString = [
 ];
 
 const mechanicsValidator: ValidatorRule['validator'] = (_, value) => {
-    const requiredMechanics = [APP_MECHANIC.PRESENTS, APP_MECHANIC.ECOSYSTEM, APP_MECHANIC.BUNDLE, APP_MECHANIC.EXPRESS];
+    const requiredMechanics = [APP_MECHANIC.PRESENTS, APP_MECHANIC.ECOSYSTEM, APP_MECHANIC.BUNDLE, APP_MECHANIC.EXPRESS, APP_MECHANIC.MIX];
     const hasRequiredMechanic = requiredMechanics.some(mechanic => value.includes(mechanic));
     return hasRequiredMechanic ? Promise.resolve() : Promise.reject(MECHANICS_ERROR);
 };
@@ -322,10 +324,27 @@ export const designElements: FormConstructorItem[][] = [
             placeholder: 'Заголовок для главной "ВАУ"',
         },
         {
-            label: 'Тема для витрины',
-            type: FORM_TYPES.BANNER,
+            label: 'Заголовок для главной "Микс"',
+            type: FORM_TYPES.INPUT,
             span: 12,
-            name: 'vitrina_theme',
+            maxLength: 60,
+            name: 'home_page_header_mix',
+            rules: [
+                {
+                    ...getPatternAndMessage('clientApp', 'headerMix'),
+                    validateTrigger: 'onSubmit',
+                },
+            ],
+            placeholder: 'Заголовок для главной "Микс"',
         },
     ],
+];
+
+export const designTheme = [
+    {
+        label: 'Тема для витрины',
+        type: FORM_TYPES.BANNER,
+        span: 12,
+        name: 'vitrina_theme',
+    },
 ];

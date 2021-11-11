@@ -24,10 +24,6 @@ export function getSettingsList(appCode: string) {
     return Api.get<ISettingList>(`/admin/setting/${appCode}`, options);
 }
 
-export function getAllSettings() {
-    return Api.get<ISettingList>('/admin/setting', getReqOptions());
-}
-
 export function getSettingsByKeys(settingKey: string, { role, code }: SettingKeys = {}) {
     const keys = {} as Record<string, string>;
     role && (keys.role = role);

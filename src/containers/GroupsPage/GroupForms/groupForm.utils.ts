@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import moment from 'moment';
+import isEqual from 'lodash/isEqual';
 import {
     BannerCreateDto,
     BannerCreateTextDto,
@@ -33,6 +34,7 @@ import {
     BundleInitialValue,
     CreateGroupLinkDto,
     EditGroupBannersAndTextsDto,
+    GroupLinkSettings,
     LinksCreateDto,
 } from './types';
 
@@ -74,8 +76,8 @@ export async function createGroupTexts(texts: BannerCreateTextDto, groupId: numb
  */
 
 export async function createGroupLink(bundleData: CreateGroupLinkDto[] = [], groupId: number) {
-    for (const { banners, texts, campaignId } of bundleData) {
-        const { id } = await createCampaignGroupLink(Number(campaignId), groupId);
+    for (const { banners, texts, campaignId, settings } of bundleData) {
+        const { id } = await createCampaignGroupLink(Number(campaignId), groupId, settings as GroupLinkSettings);
         const bannersPromises = createLinksBanner(banners, id);
         await Promise.all(bannersPromises);
         const textPromises = createLinksTexts(texts, id);
@@ -179,7 +181,7 @@ export function editCampaignGroupBanners(currentBanners: BannerCreateDto, oldBan
                 formData.append(IMAGE, bannerFile.originFileObj as File, bannerFile.name);
                 formData.append(
                     BANNER_REQUEST,
-                    new Blob([JSON.stringify(bannerRequest)], { type: APPLICATION_JSON_TYPE })
+                    new Blob([JSON.stringify(bannerRequest)], { type: APPLICATION_JSON_TYPE }),
                 );
 
                 if (isBannerID) {
@@ -213,13 +215,16 @@ export async function editCampaignGroupLinks(bundleData: LinksCreateDto[], prevB
 
     await Promise.all<unknown>(deletedGroupLinks);
 
-    for (const { banners, texts, campaignId, id: linkId } of bundleData) {
+    const sortedBundleData = bundleData.sort(i => i.settings.display_logo_on_bundle ? 1 : -1);
+
+    for (const { banners, texts, campaignId, id: linkId, settings } of sortedBundleData) {
         if (typeof linkId === 'number') {
             const link = prevBundle.links.find(({ id }) => +id === linkId) as BundleLink;
             const textsPromises = editCampaignGroupLinkTexts(texts, link.texts, linkId);
 
-            if (Number(campaignId) !== link.campaignId) {
-                await updateCampaignGroupLink(linkId, Number(campaignId), groupId);
+            const serverSettings = { display_logo_on_bundle: link.settings?.display_logo_on_bundle };
+            if (Number(campaignId) !== link.campaignId || !isEqual(settings, serverSettings)) {
+                await updateCampaignGroupLink(linkId, Number(campaignId), groupId, settings as GroupLinkSettings);
             }
 
             await Promise.all<unknown>(textsPromises);
@@ -228,7 +233,7 @@ export async function editCampaignGroupLinks(bundleData: LinksCreateDto[], prevB
 
             await Promise.all<unknown>(bannersPromises);
         } else {
-            const { id: linkId } = await createCampaignGroupLink(Number(campaignId), groupId);
+            const { id: linkId } = await createCampaignGroupLink(Number(campaignId), groupId, settings as GroupLinkSettings);
             const bannersPromises = createLinksBanner(banners, linkId);
             await Promise.all(bannersPromises);
             const textPromises = createLinksTexts(texts, linkId);
@@ -282,7 +287,7 @@ export function editCampaignGroupLinkBanners(
                 formData.append(IMAGE, bannerFile.originFileObj as File, bannerFile.name);
                 formData.append(
                     BANNER_REQUEST,
-                    new Blob([JSON.stringify(bannerRequest)], { type: APPLICATION_JSON_TYPE })
+                    new Blob([JSON.stringify(bannerRequest)], { type: APPLICATION_JSON_TYPE }),
                 );
 
                 if (isBannerID) {

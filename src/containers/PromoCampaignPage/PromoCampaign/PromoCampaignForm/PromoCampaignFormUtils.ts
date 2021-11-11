@@ -193,7 +193,9 @@ export function normalizeFirstStepValue<StepValue extends Record<string, any>>(v
 }
 
 export function normalizePromoCampaignData<Data extends Record<string, any>>({ promoCampaign, appCode, isCopy }: Data) {
-    if (!promoCampaign && typeof promoCampaign !== 'object') return {};
+    if (!promoCampaign && typeof promoCampaign !== 'object') {
+        return {};
+    }
 
     const { banners = [], texts = [] } = promoCampaign;
 

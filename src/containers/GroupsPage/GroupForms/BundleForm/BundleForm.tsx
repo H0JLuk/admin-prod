@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState, useRef, useLayoutEffect } from 'react';
 import { Form, Input, Switch, Row, Col, Button, Select, SelectProps } from 'antd';
 import { History } from 'history';
-import { BundleDto, BundleLink, PromoCampaignDto } from '@types';
+import { BundleDto, BundleLink, BundleLinksFormDto, PromoCampaignDto } from '@types';
 import { BundleGroupDto } from '../types';
 import { RuleObject, RuleRender } from 'antd/lib/form';
 import UploadPicture from '@components/UploadPicture';
@@ -23,7 +23,8 @@ import {
     addPostfixToPromoCampaign,
 } from '../groupForm.utils';
 import { BundleTypes, BUNDLE_LOCATION_KEY, MODES } from '../../groupPageConstants';
-import { normalizeBundle, getDataForBundleCreate } from './Bundle.utils';
+import { normalizeBundle, getDataForBundleCreate, getDataForBundleLinkCreate } from './Bundle.utils';
+import { getPatternAndMessage } from '@utils/validators';
 import { BANNER_TYPE, BANNER_TEXT_TYPE, BUTTON_TEXT } from '@constants/common';
 
 import styles from './BundleForm.module.css';
@@ -49,7 +50,8 @@ const BUNDLE_HIDE = 'Пользователи не видят бандл';
 const BUNDLE_BIND = 'Связать бандл';
 const SELECT_CAMPAIGN_PLACEHOLDER = 'Выберите промо-кампанию';
 const BUNDLE_NAME_PLACEHOLDER = 'Название';
-const MAX_BUNDLE_CAMPAIGN = 4;
+const EXTERNAL_ID_PLACEHOLDER = 'Введите внешний ID';
+const MAX_BUNDLE_LOGO = 4;
 
 const formItemProps = {
     BUNDLE_NAME_FIELD: {
@@ -57,10 +59,10 @@ const formItemProps = {
         label: 'Название бандла',
         rules: [{ required: true, message: 'Укажите название бандла', whitespace: true }],
     },
-    BUNDLE_HEADER_FIELD: {
-        name: ['texts', BANNER_TEXT_TYPE.HEADER],
-        label: 'Текст заголовка',
-        rules: [{ message: 'Текст заголовка обязателен' }],
+    EXTERNAL_ID: {
+        name: 'externalId',
+        label: 'Внешний ID',
+        validateFirst: true,
     },
     BUNDLE_ACTIVE_FIELD: { name: 'active', valuePropName: 'checked', initialValue: false },
     BUNDLE_BANNER_FIELD: {
@@ -83,28 +85,32 @@ const formItemProps = {
         label: 'Промо-кампания, с которой связать бандл',
         required: true,
     },
-    CAMPAIGN_HEADER_FIELD: {
-        label: 'Текст заголовка',
-        rules: [{ message: 'Текст заголовка обязателен', required: true }],
-    },
-    CAMPAIGN_DESCRIPTION_FIELD: {
-        label: 'Текст описания',
-        placeholder: 'Описание',
-        rules: [{ message: 'Текст описания обязателен', required: true }],
+    DISPLAY_LOGO_FIELD: {
+        valuePropName: 'checked',
+        label: 'Отображать лого на баннере Бандла',
     },
     CAMPAIGN_BANNER_FIELD: {
-        label: 'Баннер на карточке',
+        label: 'Логотип на баннере на главной',
         get setting() {
-            return `370px x 220px, до ${this.maxFileSize}МБ .png,.svg`;
+            return `64px x 64px, до ${this.maxFileSize}МБ ${this.accept}`;
+        },
+        maxFileSize: 1,
+        accept: '.png,.svg',
+    },
+    CAMPAIGN_LOGO_FIELD: {
+        label: 'Карточка подарка',
+        get setting() {
+            return `370px x 220px, до ${this.maxFileSize}МБ ${this.accept}`;
         },
         maxFileSize: 2,
-        accept: '.png,.svg',
+        accept: '.png,.jpg,.jpeg',
     },
 };
 
 const RULES_MESSAGE = {
     BUNDLE_NAME_REQUIRED: 'Укажите название бандла',
     BUNDLE_NAME_ALREADY: 'Бандл с таким названием уже существует',
+    EXTERNAL_ID_ALREADY: 'Введенный внешний ID уже используется в другом Бандле',
     CAMPAIGN_ALREADY: 'Такая кампания уже используется',
     CAMPAIGN_REQUIRED: 'Кампания обязательна',
     CAMPAIGN_DIFF_OF_MAIN: 'Выбранная кампания должна отличаться от основной',
@@ -138,8 +144,11 @@ const BundleForm: React.FC<BundleFormProps> = ({
     const bundle = useRef(getInitialValue(bundleData));
     const [errorMessage, setErrorMessage] = useState('');
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
-
     const isEdit = mode === MODES.EDIT;
+
+    const setFieldErrorMessage = (field: string, error: string) => {
+        form.setFields([{ name: field, errors: [error] }]);
+    };
 
     const getCampaignGroup = async (needUpdate?: boolean) => {
         try {
@@ -177,13 +186,12 @@ const BundleForm: React.FC<BundleFormProps> = ({
     const handleCreate = async () => {
         showLoading();
         try {
-            const name = addPostfixToPromoCampaign(form.getFieldValue('name'));
-            form.setFieldsValue({ name });
             const groupData = await form.validateFields();
+            groupData.name = addPostfixToPromoCampaign(groupData.name);
             const { id } = await createCampaignGroup(getDataForBundleCreate(groupData));
             await createGroupBanner(groupData.banners, id);
             // await createGroupTexts(groupData.texts, id);
-            await createGroupLink(groupData.links, id);
+            await createGroupLink(getDataForBundleLinkCreate(groupData.links), id);
             hideLoading();
             showCreatedNotification(groupData.name);
             redirectToBundleList();
@@ -195,6 +203,8 @@ const BundleForm: React.FC<BundleFormProps> = ({
         }
     };
 
+    const isErrorWithExternalId = (query: string) => /внешн.{2,4} id/i.test(query); // TODO: исправить проверку на серверный текст ошибки
+
     const handleEdit = async () => {
         showLoading();
         try {
@@ -202,16 +212,18 @@ const BundleForm: React.FC<BundleFormProps> = ({
             const groupData = await form.validateFields();
             await editCampaignGroup(getDataForBundleCreate(groupData), bundleID);
             await editCampaignGroupTextAndBanners(groupData, bundle.current, bundleID);
-            await editCampaignGroupLinks(groupData.links, bundle.current, bundleID);
+            await editCampaignGroupLinks(getDataForBundleLinkCreate(groupData.links), bundle.current, bundleID);
             const bundleData = await getCampaignGroup(true);
             showSuccessNotification(bundleData!.name);
-            hideLoading();
         } catch (e: any) {
             if (e.message) {
+                if (isErrorWithExternalId(e.message)) {
+                    return setFieldErrorMessage('externalId', RULES_MESSAGE.EXTERNAL_ID_ALREADY);
+                }
                 setErrorMessage(e.message);
             }
-            hideLoading();
         }
+        hideLoading();
     };
 
     const onRemoveImg = useCallback((name) => {
@@ -258,7 +270,9 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                     { required: true, message: RULES_MESSAGE.BUNDLE_NAME_REQUIRED, whitespace: true },
                                     {
                                         validator: async (_, value) => {
-                                            if (value?.trim() === bundle.current.name.trim()) return Promise.resolve();
+                                            if (value?.trim() === bundle.current.name.trim()) {
+                                                return Promise.resolve();
+                                            }
 
                                             const { groups } = await getCampaignGroupList();
                                             const isExist = groups.some(({ name }) => name === value);
@@ -305,20 +319,31 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                 )}
                             </Form.Item>
                         </Col>
-                        {/* <Col span={ 12 }>
-                            <Form.Item { ...formItemProps.BUNDLE_HEADER_FIELD }>
-                                <Input.TextArea placeholder='Заголовок' maxLength={ 48 } showCount autoSize allowClear />
+                        <Col span={11}>
+                            <Form.Item
+                                {...formItemProps.EXTERNAL_ID}
+                                rules={[
+                                    { ...getPatternAndMessage('groups', 'externalId'), validateTrigger: 'onSubmit' },
+                                    {
+                                        validator: async (_, value) => {
+                                            if (value?.trim() === bundle.current.externalId?.trim()) {
+                                                return Promise.resolve();
+                                            }
+
+                                            const { groups } = await getCampaignGroupList();
+                                            const isExist = groups.some(({ externalId }) => externalId === value?.trim());
+
+                                            return isExist
+                                                ? Promise.reject(RULES_MESSAGE.EXTERNAL_ID_ALREADY)
+                                                : Promise.resolve();
+                                        },
+                                        validateTrigger: 'onSubmit',
+                                    },
+                                ]}
+                            >
+                                <Input placeholder={EXTERNAL_ID_PLACEHOLDER} allowClear maxLength={20} />
                             </Form.Item>
-                            <Form.Item { ...formItemProps.BUNDLE_DESCRIPTION_FIELD }>
-                                <Input.TextArea
-                                    placeholder='Описание'
-                                    maxLength={ 70 }
-                                    showCount
-                                    autoSize={ { minRows: 3 } }
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col> */}
+                        </Col>
                     </Row>
                 </div>
 
@@ -348,19 +373,35 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                                 />
                                             </Form.Item>
                                         </Col>
-                                        {/* <Col span={ 12 }>
-                                            <Form.Item
-                                                { ...formItemProps.CAMPAIGN_HEADER_FIELD }
-                                                name={ [field.name, 'texts', BANNER_TEXT_TYPE.HEADER] }
+                                        <Col span={11}>
+                                            <Form.Item<BundleGroupDto>
+                                                noStyle
+                                                shouldUpdate={(prev, curr) => {
+                                                    const [old, fresh] = [prev, curr]
+                                                        .map(({ links }) => (links?.filter((i) => i?.displayLogoOnBundle).length));
+                                                    return old !== fresh;
+                                                }}
                                             >
-                                                <Input.TextArea
-                                                    placeholder='Заголовок'
-                                                    maxLength={ 70 }
-                                                    showCount
-                                                    autoSize={ { minRows: 3 } }
-                                                />
+                                                {({ getFieldValue }) => {
+                                                    const links: BundleLinksFormDto[] = getFieldValue('links');
+                                                    const filteredLinks = links.filter((i) => i?.displayLogoOnBundle);
+                                                    const valueFromServer = bundle.current.links[field.name]?.settings.display_logo_on_bundle;
+                                                    const initValue = valueFromServer ?? (filteredLinks.length) < MAX_BUNDLE_LOGO;
+                                                    const currentValue = getFieldValue(['links', field.name, 'displayLogoOnBundle']);
+                                                    const disabled = !currentValue && (filteredLinks.length) >= MAX_BUNDLE_LOGO;
+                                                    return (
+                                                        <Form.Item
+                                                            name={[field.name, 'displayLogoOnBundle']}
+                                                            {...formItemProps.DISPLAY_LOGO_FIELD}
+                                                            fieldKey="checked"
+                                                            initialValue={initValue}
+                                                        >
+                                                            <Switch disabled={disabled} />
+                                                        </Form.Item>
+                                                    );
+                                                }}
                                             </Form.Item>
-                                        </Col> */}
+                                        </Col>
                                         <Col span={13}>
                                             <Form.Item
                                                 noStyle
@@ -384,19 +425,29 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                                 )}
                                             </Form.Item>
                                         </Col>
-                                        {/* <Col span={ 12 }>
+                                        <Col span={11}>
                                             <Form.Item
-                                                { ...formItemProps.CAMPAIGN_DESCRIPTION_FIELD }
-                                                name={ [field.name, 'texts', BANNER_TEXT_TYPE.DESCRIPTION] }
+                                                noStyle
+                                                dependencies={['links', field.name, 'banners', BANNER_TYPE.CARD]}
                                             >
-                                                <Input.TextArea
-                                                    placeholder='Описание'
-                                                    maxLength={ 70 }
-                                                    showCount
-                                                    autoSize={ { minRows: 3 } }
-                                                />
+                                                {({ getFieldValue }) => (
+                                                    <UploadPicture
+                                                        {...formItemProps.CAMPAIGN_LOGO_FIELD}
+                                                        name={[field.name, 'banners', BANNER_TYPE.CARD]}
+                                                        uploadFileClassName={styles.uploadBackground}
+                                                        initialValue={getFieldValue([
+                                                            'links',
+                                                            field.name,
+                                                            'banners',
+                                                            BANNER_TYPE.CARD,
+                                                        ])}
+                                                        onRemoveImg={() =>
+                                                            onRemoveImg(['links', field.name, 'banners', BANNER_TYPE.CARD])
+                                                        }
+                                                    />
+                                                )}
                                             </Form.Item>
-                                        </Col> */}
+                                        </Col>
                                         <Form.Item hidden name={[field.name, 'id']} initialValue={null}>
                                             <Input />
                                         </Form.Item>
@@ -412,11 +463,9 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                     </Row>
                                 </div>
                             ))}
-                            {fields?.length < MAX_BUNDLE_CAMPAIGN && (
-                                <Form.Item className={styles.addButton}>
-                                    <Button onClick={() => add()}>{BUNDLE_BIND}</Button>
-                                </Form.Item>
-                            )}
+                            <Form.Item className={styles.addButton}>
+                                <Button onClick={() => add()}>{BUNDLE_BIND}</Button>
+                            </Form.Item>
                             {errors && (
                                 <div className={styles.errorBlock}>
                                     <Form.ErrorList errors={errors} />

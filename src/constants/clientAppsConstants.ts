@@ -4,6 +4,7 @@ export enum APP_MECHANIC {
     PRESENTATION = 'PRESENTATION',
     BUNDLE = 'BUNDLE',
     EXPRESS = 'EXPRESS',
+    MIX = 'MIX',
 }
 
 export const APP_MECHANIC_RU: Record<APP_MECHANIC, string> = {
@@ -12,11 +13,12 @@ export const APP_MECHANIC_RU: Record<APP_MECHANIC, string> = {
     [APP_MECHANIC.PRESENTATION]: 'Экскурсия',
     [APP_MECHANIC.BUNDLE]: 'ВАУ',
     [APP_MECHANIC.EXPRESS]: 'Экспресс',
+    [APP_MECHANIC.MIX]: 'Микс',
 };
 
 export const APP_MECHANIC_OPTIONS = Object.entries(APP_MECHANIC_RU).map(([value, label]) => ({ label, value }));
 
-export const MECHANICS_ERROR = `Необходимо выбрать хотя бы одну обязательную механику (${APP_MECHANIC_RU.PRESENTS}, ${APP_MECHANIC_RU.ECOSYSTEM}, ${APP_MECHANIC_RU.BUNDLE} или ${APP_MECHANIC_RU.EXPRESS})`;
+export const MECHANICS_ERROR = `Необходимо выбрать хотя бы одну обязательную механику (${APP_MECHANIC_RU.PRESENTS}, ${APP_MECHANIC_RU.ECOSYSTEM}, ${APP_MECHANIC_RU.BUNDLE}, ${APP_MECHANIC_RU.EXPRESS} или ${APP_MECHANIC_RU.MIX})`;
 
 export enum GAME_MECHANIC {
     SCRATCH = 'SCRATCH',

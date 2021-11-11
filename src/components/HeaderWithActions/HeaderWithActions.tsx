@@ -113,7 +113,9 @@ function HeaderWithActions<DataList>({
             sortBy = '';
         }
 
-        if (!sortBy && !currentParams.sortBy) return;
+        if (!sortBy && !currentParams.sortBy) {
+            return;
+        }
 
         sortData({
             ...currentParams,

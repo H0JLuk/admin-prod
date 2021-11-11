@@ -10,6 +10,7 @@ import {
     BannerDto,
     BannerTextDto,
 } from '@types';
+import { GroupLinkSettings } from '@containers/GroupsPage/GroupForms/types';
 
 export function createCampaignGroup(groupData: BundleCreateDto) {
     return Api.post<DefaultCreateDtoResponse>('/admin/campaign-group', groupData, getReqOptions());
@@ -51,12 +52,12 @@ export function deleteCampaignGroupText(id: number) {
     return Api.delete<DefaultApiResponse>(`/admin/campaign-group/text/${id}`, getReqOptions());
 }
 
-export function createCampaignGroupLink(campaignId: number, groupId: number) {
-    return Api.post<DefaultCreateDtoResponse>('/admin/campaign-group/link', { campaignId, groupId }, getReqOptions());
+export function createCampaignGroupLink(campaignId: number, groupId: number, settings: GroupLinkSettings) {
+    return Api.post<DefaultCreateDtoResponse>('/admin/campaign-group/link', { campaignId, groupId, settings }, getReqOptions());
 }
 
-export function updateCampaignGroupLink(linkId: number, campaignId: number, groupId: number) {
-    return Api.put<DefaultApiResponse>(`/admin/campaign-group/link/${linkId}`, { campaignId, groupId }, getReqOptions());
+export function updateCampaignGroupLink(linkId: number, campaignId: number, groupId: number, settings: GroupLinkSettings) {
+    return Api.put<DefaultApiResponse>(`/admin/campaign-group/link/${linkId}`, { campaignId, groupId, settings }, getReqOptions());
 }
 
 export function deleteCampaignGroupLink(linkId: number) {

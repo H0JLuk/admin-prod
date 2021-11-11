@@ -60,6 +60,7 @@ const DEFAULT_PARAMS: SearchParams = {
     direction: DIRECTION.ASC,
     filterText: '',
     clientAppCode: '',
+    appType: '',
     parentId: '',
     loginType: '',
     totalElements: 0,
@@ -94,7 +95,7 @@ const showRestoredErrorsNotification = (message: React.ReactNode) => {
     });
 };
 
-const IGNORE_SEARCH_PARAMS = ['parentId', 'clientAppCode'];
+const IGNORE_SEARCH_PARAMS = ['parentId', 'clientAppCode', 'appType'];
 const defaultSelected: SelectedItems = { rowValues: [], rowKeys: [] };
 
 const UserList: React.FC<UserListProps> = ({ matchPath }) => {
@@ -261,7 +262,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
             }
             clearSelectedItems();
         } catch (e) {
-            const { message } = e;
+            const { message } = (e as Error);
             showRestoredErrorsNotification(message);
             console.warn(e);
         }
@@ -285,7 +286,8 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         !params.pageNo &&
         !params.clientAppCode &&
         !params.parentId &&
-        !params.loginType
+        !params.loginType &&
+        !params.appType
     ) {
         return <EmptyUsersPage refreshTable={refreshTable} />;
     }
@@ -337,6 +339,8 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                 clientAppCode: params.clientAppCode as string,
                 parentId: params.parentId as number,
                 userIds: selectedItems.rowKeys,
+                ...(params.campaignId && { campaignId: params.campaignId }),
+                ...(params.groupId && { groupId: params.groupId }),
             });
             downloadFileFunc(URL.createObjectURL(file), 'QR-codes', 'zip');
         } catch (err) {
@@ -390,7 +394,9 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                                 generateQRDisabled={
                                     params.loginType !== LOGIN_TYPES_ENUM.DIRECT_LINK ||
                                     !params.clientAppCode ||
-                                    !params.parentId
+                                    !params.parentId ||
+                                    !params.appType ||
+                                    !((params.appType === 'promoCampaign' && params.campaignId) || (params.appType === 'campaignGroup' && params.groupId))
                                 }
                             />
                         </div>

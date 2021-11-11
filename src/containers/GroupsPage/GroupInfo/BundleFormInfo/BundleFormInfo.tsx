@@ -3,7 +3,7 @@ import { History } from 'history';
 import { normalizedLinksDto } from '../types';
 import { BundleDto, BundleLink } from '@types';
 import cn from 'classnames';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Switch } from 'antd';
 import { arrayToObject } from '@utils/helper';
 import ImagesBlock from '@components/ImagesBlock';
 import { BundleRowsDto, BundleRowsValueDto, BUNDLE_ROWS, groupBundleRows } from '../groupInfo.constants';
@@ -26,6 +26,8 @@ const ERROR_DELETE = 'Ошибка удаления';
 const OK_TEXT = 'ОК';
 const BANNER_EMPTY = 'Баннер отсутствует';
 const LOGO_EMPTY = 'Логотип отсутствует';
+const EXTERNAL_ID_EMPTY = 'Внешний ID отсутствует';
+const EXTERNAL_ID_LABEL = 'Внешний ID';
 
 const STATUS = {
     ACTIVE: 'Бандл активен',
@@ -67,11 +69,11 @@ const BundleFormInfo: React.FC<BundleFormInfoProps> = ({ matchPath, history, bun
                 ),
                 okText: OK_TEXT,
             });
-        } catch (e) {
+        } catch (e: any) {
             errorModal({
                 title: (
                     <span>
-                        {ERROR_DELETE} <span className={styles.text}>{e.message}</span>
+                        {ERROR_DELETE} {e?.message ? <span className={styles.text}>{e.message}</span> : ''}
                     </span>
                 ),
             });
@@ -131,13 +133,30 @@ const BundleFormInfo: React.FC<BundleFormInfoProps> = ({ matchPath, history, bun
                                 </React.Fragment>
                             ))}
                         </Col>
+                        <Col span={12}>
+                            <div className={styles.infoTitle}>
+                                {EXTERNAL_ID_LABEL}
+                            </div>
+                            <div className={styles.infoText}>
+                                {bundleData.externalId || <i>{EXTERNAL_ID_EMPTY}</i>}
+                            </div>
+                        </Col>
                     </Row>
                 </div>
-                {normalizeLinks.map(({ banners, /* texts, */ name }, index) => (
+                {normalizeLinks.map(({ banners, name, settings }, index) => (
                     <div key={index} className={styles.rowWrapper}>
                         <Row gutter={[24, 16]} className={styles.row}>
-                            <Col span={13}>
+                            <Col span={12}>
                                 <span className={cn(styles.infoTitle, styles.campaignTitle)}>{name}</span>
+                            </Col>
+                            <Col span={12}>
+                                <div className={styles.infoTitle}>Отображать лого на баннере Бандла</div>
+                                <div className={styles.infoText}>
+                                    <Switch
+                                        disabled
+                                        checked={settings?.display_logo_on_bundle}
+                                    />
+                                </div>
                             </Col>
                             {groupBundleRows.map((row: Record<string, BundleRowsValueDto>) =>
                                 Object.keys(row).map((key, idx) => (

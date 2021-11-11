@@ -118,7 +118,9 @@ export function getStringSort(a: string, b: string, direction = DIRECTION.ASC) {
     const aLowerCase = stringToLowerCase(a);
     const bLowerCase = stringToLowerCase(b);
 
-    if (aLowerCase === bLowerCase) return 0;
+    if (aLowerCase === bLowerCase) {
+        return 0;
+    }
 
     const ASC_SORT = aLowerCase < bLowerCase ? -1 : 1;
     const DESC_SORT = bLowerCase > aLowerCase ? 1 : -1;

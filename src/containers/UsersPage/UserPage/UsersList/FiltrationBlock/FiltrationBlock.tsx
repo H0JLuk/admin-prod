@@ -3,6 +3,9 @@ import { Select } from 'antd';
 
 import AutoCompleteComponent, { AutoCompleteMethods } from '@components/AutoComplete';
 import { getPartnersList } from '@apiServices/usersService';
+import { OptionData } from 'rc-select/lib/interface';
+import { getFilteredPromoCampaignList } from '@apiServices/promoCampaignService';
+import { getCampaignGroupList } from '@apiServices/campaignGroupService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
 import { LOGIN_TYPE_OPTIONS } from '@constants/loginTypes';
 import { SearchParams } from '@components/HeaderWithActions/types';
@@ -26,7 +29,15 @@ const FILTER_TYPES = {
     BY_PARTNER: 'Логин партнёра',
     BY_APP: 'Приложение',
     BY_LOGIN_TYPE: 'Способ авторизации',
+    BY_PROMOCAMPAIGN: 'Промокампания',
+    BY_BUNDLE: 'Бандл',
+    BY_TYPE: 'Тип',
 };
+
+const TYPE_FIELD_OPTIONS = [
+    { value: 'promoCampaign', label: 'Промокампания' },
+    { value: 'campaignGroup', label: 'Бандл' },
+];
 
 const LOGIN_TYPE_OPTIONS_WITH_RESET = [...LOGIN_TYPE_OPTIONS, { label: 'По умолчанию', value: '' }];
 
@@ -38,6 +49,8 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
     initialParentUserData,
 }) => {
     const [clientApps, setClientApps] = useState<ClientAppDto[]>([]);
+    const [promoCampaignList, setPromoCampaignList] = useState<OptionData[]>([]);
+    const [groupCampaignList, setGroupCampaignList] = useState<OptionData[]>([]);
     const partnerMethods = useRef({} as AutoCompleteMethods<UserInfo>);
     const isExistFilters = params.clientAppCode || params.loginType || params.parentId;
 
@@ -47,6 +60,32 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
             setClientApps(clientAppList);
         })();
     }, []);
+
+    useEffect(() => {
+        (async() => {
+            if (params.appType === 'promoCampaign' && !promoCampaignList.length) {
+                try {
+                    const { promoCampaignDtoList } = await getFilteredPromoCampaignList({ type: 'NORMAL' }) ?? {};
+                    const list = promoCampaignDtoList.map((elem) => ({ value: elem.id, label: elem.name }));
+                    setPromoCampaignList(list);
+                } catch (e: any) {
+                    if (e.message) {
+                        console.error(e.message);
+                    }
+                }
+            } else if (params.appType === 'campaignGroup' && !groupCampaignList.length) {
+                try {
+                    const { groups } = await getCampaignGroupList();
+                    const groupList = groups.map((elem) => ({ value: elem.id, label: elem.name }));
+                    setGroupCampaignList(groupList);
+                } catch (e: any) {
+                    if (e.message) {
+                        console.error(e.message);
+                    }
+                }
+            }
+        })();
+    }, [params.appType, groupCampaignList.length, promoCampaignList.length]);
 
     const onParentUserSelect = (user: UserInfo | null) => {
         onChangeParent(user);
@@ -62,6 +101,20 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
 
     const onAppSelect = (clientAppCode: string | number) => {
         onChangeFilter({ ...params, clientAppCode });
+    };
+
+    const onAppTypeSelect = async(appType: string | number) => {
+        onChangeFilter({ ...params, appType });
+    };
+
+    const onPromoCampaignSelect = async(campaignId: string | number) => {
+        const { groupId, ...rest } = params;
+        onChangeFilter({ ...rest, campaignId });
+    };
+
+    const onCampaignGroupSelect = async(groupId: string | number) => {
+        const { campaignId, ...rest } = params;
+        onChangeFilter({ ...rest, groupId });
     };
 
     const onLoginTypeSelect = (loginType: string | number) => {
@@ -80,6 +133,7 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
             loginType: '',
             clientAppCode: '',
             parentId: '',
+            appType: '',
         });
     };
 
@@ -123,6 +177,39 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
                         onSelect={onAppSelect}
                         placeholder={FILTER_TYPES.BY_APP}
                         value={params.clientAppCode || undefined}
+                        disabled={disabledAllFields}
+                    />
+                )}
+                {!!params.clientAppCode && (
+                    <Select
+                        dropdownMatchSelectWidth={false}
+                        className={styles.filterItem}
+                        placeholder={FILTER_TYPES.BY_TYPE}
+                        options={TYPE_FIELD_OPTIONS}
+                        onSelect={onAppTypeSelect}
+                        value={params.appType || undefined}
+                        disabled={disabledAllFields}
+                    />
+                )}
+                {params.appType === 'promoCampaign' && (
+                    <Select<string | number>
+                        dropdownMatchSelectWidth={false}
+                        className={styles.filterItem}
+                        placeholder={FILTER_TYPES.BY_PROMOCAMPAIGN}
+                        options={promoCampaignList}
+                        onSelect={onPromoCampaignSelect}
+                        value={params.promoCampaign || undefined}
+                        disabled={disabledAllFields}
+                    />
+                )}
+                {params.appType === 'campaignGroup' && (
+                    <Select<string | number>
+                        dropdownMatchSelectWidth={false}
+                        className={styles.filterItem}
+                        placeholder={FILTER_TYPES.BY_BUNDLE}
+                        options={groupCampaignList}
+                        onSelect={onCampaignGroupSelect}
+                        value={params.campaignGroup || undefined}
                         disabled={disabledAllFields}
                     />
                 )}

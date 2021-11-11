@@ -26,6 +26,8 @@ export type BundleLink = {
     texts: BannerTextDto[];
 };
 
+export type BundleLinksFormDto = Omit<LinksCreateDto, 'settings'> & { displayLogoOnBundle: boolean; };
+
 export type BundleDto = {
     active?: boolean;
     banners: BannerDto[];
@@ -36,9 +38,10 @@ export type BundleDto = {
     name: string;
     texts: BannerTextDto[];
     type: BundleTypes;
+    externalId?: string;
 };
 
-export type BundleCreateDto = Pick<BundleDto, 'active' | 'type' | 'name'> & {
+export type BundleCreateDto = Pick<BundleDto, 'active' | 'type' | 'name' | 'externalId'> & {
     mainCampaignId?: number;
 };
 

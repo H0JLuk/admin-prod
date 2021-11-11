@@ -79,6 +79,8 @@ export type LoginResponse = {
 export type DirectLinkRequest = {
     clientAppCode: string;
     userId: number;
+    groupId?: number;
+    campaignId?: number;
 };
 
 export type QRRequest = {

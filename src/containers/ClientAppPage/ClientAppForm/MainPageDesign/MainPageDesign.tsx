@@ -3,6 +3,7 @@ import { Button, Form } from 'antd';
 import { getAppCode } from '@apiServices/sessionService';
 import {
     designElements,
+    designTheme,
     keysToString,
     SETTINGS_TYPES,
 } from '../ClientAppFormConstants';
@@ -104,6 +105,9 @@ const MainPageDesign: React.FC<IMainPageDesignProps> = ({
                             row={row}
                         />
                     ))}
+                </div>
+                <div className={styles.container}>
+                    <AppFormConstructor row={designTheme} />
                 </div>
             </Form>
         </div>

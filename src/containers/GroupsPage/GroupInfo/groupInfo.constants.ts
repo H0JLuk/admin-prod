@@ -12,7 +12,8 @@ export const groupBundleRows = [
         // CURRENT_CAMPAIGN: { label:'Кампания с которой связан бандл' },
         // HEADER: { label:'Текст заголовка' },
         // DESCRIPTION: { label:'Описание' },
-        [BANNER_TYPE.LOGO_ICON]: { label: 'Баннер на карточке', type: 'logo' },
+        [BANNER_TYPE.LOGO_ICON]: { label: 'Логотип на баннере на главной', type: 'logo' },
+        [BANNER_TYPE.CARD]: { label: 'Карточка подарка', type: 'banner' },
     },
 ];
 

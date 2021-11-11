@@ -232,7 +232,9 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
                                     { required: true, message: RULES_MESSAGE.CAMPAIGN_REQUIRED },
                                     {
                                         validator: async (_, value) => {
-                                            if (association.current?.mainCampaignId === value) return Promise.resolve();
+                                            if (association.current?.mainCampaignId === value) {
+                                                return Promise.resolve();
+                                            }
 
                                             const { groups } = await getCampaignGroupList();
                                             const currentCampaign = promoCampaignList.find(({ id }) => id === value);

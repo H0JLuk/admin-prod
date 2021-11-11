@@ -1,7 +1,6 @@
-import { BannerCreateDto, BannerCreateTextDto, BundleDto } from '@types';
+import { BannerCreateDto, BannerCreateTextDto, BundleDto, BundleLinksFormDto } from '@types';
 
-export type CreateGroupLinkDto = Pick<LinksCreateDto, 'texts' | 'banners'> & {
-    campaignId?: number;
+export type CreateGroupLinkDto = Pick<LinksCreateDto, 'texts' | 'banners' | 'campaignId' | 'settings'> & {
     id?: number | null;
 };
 
@@ -17,12 +16,15 @@ export type LinksCreateDto = {
     id: number | null;
     campaignId?: number;
     mainCampaignId?: number;
+    settings: Record<string, any>;
 };
 
-export type BundleGroupDto = Pick<BundleDto, 'active' | 'name' | 'type'> & {
+export type GroupLinkSettings = { display_logo_on_bundle: boolean; };
+
+export type BundleGroupDto = Pick<BundleDto, 'active' | 'name' | 'type' | 'externalId'> & {
     texts: Record<string, string>;
     banners: Record<string, string>;
-    links: LinksCreateDto[];
+    links: BundleLinksFormDto[];
 };
 
-export type EditGroupBannersAndTextsDto = Omit<CreateGroupLinkDto, 'campaignId'>;
+export type EditGroupBannersAndTextsDto = Omit<CreateGroupLinkDto, 'campaignId' | 'settings'>;

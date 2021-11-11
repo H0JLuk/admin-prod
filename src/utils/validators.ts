@@ -16,7 +16,8 @@ export type ValidateRule = typeof commonRule;
 
 type VALIDATE_FIELDS_TYPE = {
     promoCampaign: Record<'name' | 'textContent' | 'detailsButtonLabel' | 'productOfferingId', ValidateRule>;
-    clientApp: Record<'name' | 'code', ValidateRule>;
+    clientApp: Record<'name' | 'code' | 'headerMix', ValidateRule>;
+    groups: Record<'externalId', ValidateRule>;
     dzo: Record<'name' | 'code' | 'description', ValidateRule>;
     category: Record<'name', ValidateRule>;
     presentation: Record<'common', ValidateRule>;
@@ -47,6 +48,16 @@ export const VALIDATE_FIELDS: VALIDATE_FIELDS_TYPE = {
     clientApp: {
         name: commonRule,
         code: codeRule,
+        headerMix: {
+            pattern: /^[а-яё\s\w\-.,/:%()?!№"]+$/i,
+            message: `${commonMessage}, "/", ":", "%", "(", ")", "?", "!", "№", """`,
+        },
+    },
+    groups: {
+        externalId: {
+            pattern: /^[a-z-_]+$/i,
+            message: 'латинские буквы большого и маленького регистра, "-", "_".',
+        },
     },
     dzo: {
         name: commonRule,
