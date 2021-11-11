@@ -2,6 +2,7 @@ import ROLES from '@constants/roles';
 import { getURLSearchParams } from '@utils/helper';
 import { Api } from '../apiClient';
 import { getReqOptions } from './index';
+import { DIRECTION } from '@constants/common';
 import {
     DefaultApiResponse,
     DirectLinkRequest,
@@ -13,8 +14,8 @@ import {
     UpdateUsersSalePoint,
     UserInfo,
     UserPaginationResponse,
+    UpdateUsersLoginType,
 } from '@types';
-import { DIRECTION } from '@constants/common';
 
 export function getUser(userId: string | number) {
     return Api.get<UserInfo>(`/admin/user/${userId}`, getReqOptions());
@@ -57,6 +58,10 @@ export function unblockUser(pn: string) {
 
 export function editUser(id: number, data: UpdateUserRequest) {
     return Api.post<DefaultApiResponse & { newPassword?: string; }>(`/admin/user/edit/${id}`, data, getReqOptions());
+}
+
+export function editLoginTypeUsers(data: UpdateUsersLoginType) {
+    return Api.post<DefaultApiResponse>('/admin/user/editLoginType', data, getReqOptions());
 }
 
 export function editLocationAndSalePointUsers(data: UpdateUsersSalePoint) {

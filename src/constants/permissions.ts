@@ -55,40 +55,49 @@ const USERS_INTERACTIONS_BY_ROLE: Record<ROLES, UsersInteractions> = {
 export type CommonPermissions = {
     canSetUserRole: boolean;
     canSetUserPartner: boolean;
+    canSetLoginType: boolean;
 };
 
 const COMMON_PERMISSIONS_BY_ROLE: Record<ROLES, CommonPermissions> = {
     [ROLES.ADMIN]: {
         canSetUserRole: true,
         canSetUserPartner: true,
+        canSetLoginType: true,
     },
     [ROLES.USER_MANAGER]: {
         canSetUserRole: false,
         canSetUserPartner: false,
+        canSetLoginType: true,
     },
     [ROLES.AUDITOR]: {
         canSetUserRole: false,
         canSetUserPartner: false,
+        canSetLoginType: false,
     },
     [ROLES.PRODUCT_OWNER]: {
         canSetUserRole: false,
         canSetUserPartner: false,
+        canSetLoginType: false,
     },
     [ROLES.USER]: {
         canSetUserRole: false,
         canSetUserPartner: false,
+        canSetLoginType: false,
     },
     [ROLES.PARTNER]: {
         canSetUserRole: false,
         canSetUserPartner: false,
+        canSetLoginType: false,
     },
     [ROLES.EXTERNAL_USER]: {
         canSetUserRole: false,
         canSetUserPartner: false,
+        canSetLoginType: false,
     },
     [ROLES.REFERAL_LINK]: {
         canSetUserRole: false,
         canSetUserPartner: false,
+        canSetLoginType: false,
     },
 };
 

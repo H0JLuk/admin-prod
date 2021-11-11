@@ -41,13 +41,14 @@ import {
     MODE,
     ROLES_FOR_EXTERNAL_SALE_POINT,
     ROLES_FOR_PARTNER_CONNECT,
+    ROLES_FOR_LOGIN_TYPE_CHANGE,
     showNotify,
     validateLogin,
     validatePartner,
     validateSalePoint,
 } from './UserFormHelper';
 import { USERS_PAGES } from '@constants/route';
-import { LOGIN_TYPES_ENUM, LOGIN_TYPE, LoginTypes } from '@constants/loginTypes';
+import { LOGIN_TYPES_ENUM, LOGIN_TYPE, LoginTypes, LOGIN_TYPE_OPTIONS } from '@constants/loginTypes';
 import { BUTTON_TEXT } from '@constants/common';
 import ROLES, { ROLES_OPTIONS, ROLES_RU } from '@constants/roles';
 import { BLOCKING_CONDITIONS } from '@constants/settings';
@@ -121,6 +122,10 @@ const USER_ROLES_OPTIONS = ROLES_OPTIONS.filter(({ value }) => [
     ROLES.REFERAL_LINK,
 ].includes(value));
 
+export const LOGIN_TYPE_SELECT_OPTIONS = LOGIN_TYPE_OPTIONS.filter(({ label }) => [
+    LOGIN_TYPE.PASSWORD,
+    LOGIN_TYPE.SBER_REGISTRY,
+].includes(label));
 
 const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
     const history = useHistory();
@@ -135,11 +140,12 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
 
     const [userData, setUserData] = useState<UserInfo | null>(null);
     const [login, setLogin] = useState<string | null>(null);
-    const loginType = useRef<LoginTypes | null | undefined>(LOGIN_TYPES_ENUM.PASSWORD);
     const [role, setRole] = useState(ROLES.USER);
+    const [loginType, setLoginType] = useState<LoginTypes | null | undefined>(LOGIN_TYPES_ENUM.PASSWORD);
     const [uuid, setUuid] = useState<string | null>(null);
     const [generateUuid, setGenerateUuid] = useState(false);
     const isCorrectRoleForPartner = ROLES_FOR_PARTNER_CONNECT.includes(role);
+    const isCorrectRoleForLoginType = ROLES_FOR_LOGIN_TYPE_CHANGE.includes(role);
     const isReferalRole = ROLES.REFERAL_LINK === role;
     const salePointShouldExternal = ROLES_FOR_EXTERNAL_SALE_POINT.includes(role);
     const [location, setLocation] = useState<LocationDto | null>(null);
@@ -152,12 +158,13 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
     const [error, setError] = useState(DEFAULT_ERRORS);
 
     const commonPermissions = useRef({} as CommonPermissions);
-    const { canSetUserRole, canSetUserPartner } = commonPermissions.current;
+    const { canSetUserRole, canSetUserPartner, canSetLoginType } = commonPermissions.current;
     const userInteractions = useRef({} as InteractionsCurrUserToOtherUser);
     const partnerFieldMethods = useRef<any>(null);
     const settingsListRef = useRef<SettingDto[]>([]);
 
     const redirectToUsersPage = useCallback(() => history.push(matchPath), [history, matchPath]);
+    const canEditLoginType = !isInfo && canSetLoginType && isCorrectRoleForLoginType && !partner.current;
 
     const getUserData = async () => {
         try {
@@ -174,7 +181,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                 setUserData(user);
                 setRole(user.role);
                 setUuid(user.uuid);
-                loginType.current = user.loginType;
+                setLoginType(user.loginType);
                 partner.current = user.parentUserName;
                 userInteractions.current = getCurrUserInteractionsForOtherUser(user.role); // TODO: вынести подобные настройки доступа в контекст, чтобы не вызывать каждый раз функции на получения этих настроек
 
@@ -249,14 +256,17 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                 isReferalRole && (requestData.generateUuid = generateUuid);
 
                 if (notNewUser) {
-                    await editUser((userData as UserInfo).id, requestData);
+                    await editUser((userData as UserInfo).id, {
+                        ...requestData,
+                        ...(loginType && loginType !== userData?.loginType && { loginType }),
+                    });
                     showNotify({ login: userData?.personalNumber, mode: MODE.EDIT });
                 } else {
                     const { userName, generatedPassword } = await addUser({
                         ...requestData,
                         role,
                         personalNumber: login as string,
-                        loginType: loginType.current ?? undefined,
+                        loginType: loginType ?? undefined,
                     });
                     showNotify({
                         login: login || userName,
@@ -265,9 +275,11 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                         role,
                     });
                 }
-            } catch (e) {
+            } catch (err: any) {
                 setIsSendingInfo(false);
-                return setError({ ...DEFAULT_ERRORS, backend: e.message });
+                if (err.message) {
+                    return setError({ ...DEFAULT_ERRORS, backend: err.message });
+                }
             }
 
             setIsSendingInfo(false);
@@ -280,7 +292,7 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
             }
         // eslint-disable-next-line @typescript-eslint/no-shadow
         } catch ({ message, name }) {
-            return setError({ ...DEFAULT_ERRORS, [name]: message });
+            return setError({ ...DEFAULT_ERRORS, [name as string]: message });
         }
     };
 
@@ -341,11 +353,12 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                     });
                 }
             }
-        } catch (err) {
-            showNotify({ mode: MODE.ERROR, errorMessage: err.message });
-            setError({ ...DEFAULT_ERRORS, backend: err.message });
+        } catch (err: any) {
+            if (err.message) {
+                showNotify({ mode: MODE.ERROR, errorMessage: err.message });
+                setError({ ...DEFAULT_ERRORS, backend: err.message });
+            }
         }
-
         setIsSendingInfo(false);
     };
 
@@ -371,8 +384,10 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                 showNotify({ login: userData.personalNumber, mode: MODE.DELETE });
                 redirectToUsersPage();
             }
-        } catch (err) {
-            showNotify({ mode: MODE.ERROR, errorMessage: err.message });
+        } catch (err: any) {
+            if (err.message) {
+                showNotify({ mode: MODE.ERROR, errorMessage: err.message });
+            }
             setIsSendingInfo(false);
         }
     };
@@ -406,8 +421,14 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
             setError({ ...error, login: '' });
         }
 
-        loginType.current = getLoginTypeByRole(value);
+        const loginTypeByRole = getLoginTypeByRole(value);
+
+        setLoginType(loginTypeByRole);
         setRole(value);
+    };
+
+    const onLoginTypeChange = (value: LoginTypes) => {
+        setLoginType(value);
     };
 
     const onLocationChange = (selectedLocation: LocationDto | null) => {
@@ -535,9 +556,18 @@ const UserForm: React.FC<UserFormProps> = ({ type, matchPath }) => {
                                 <label>
                                     {LOGIN_TYPE_FIELD.label}
                                 </label>
-                                <div className={styles.noEditField}>
-                                    {LOGIN_TYPE[loginType.current as LoginTypes]}
-                                </div>
+                                {canEditLoginType ? (
+                                    <Select
+                                        className={styles.selectInput}
+                                        options={LOGIN_TYPE_SELECT_OPTIONS}
+                                        onChange={onLoginTypeChange}
+                                        defaultValue={LOGIN_TYPES_ENUM[loginType as LoginTypes]}
+                                    />
+                                ) : (
+                                    <div className={styles.noEditField}>
+                                        {LOGIN_TYPE[loginType as LoginTypes]}
+                                    </div>
+                                )}
                             </Col>
                             <Col span={8} className={styles.labelCol}>
                                 <label htmlFor={ROLE_FIELD.name}>

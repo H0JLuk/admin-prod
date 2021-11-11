@@ -64,6 +64,11 @@ export type UpdateUsersSalePoint = {
     userIds: number[];
 };
 
+export type UpdateUsersLoginType = {
+    loginType: string;
+    userIds: number[];
+};
+
 export type LoginResponse = {
     authority: ROLES;
     availableApps: ClientAppDto[];

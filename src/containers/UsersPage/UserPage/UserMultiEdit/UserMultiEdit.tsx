@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Form } from 'antd';
+import { Form, Select } from 'antd';
 
-import { editLocationAndSalePointUsers, removeUser } from '@apiServices/usersService';
+import { editLocationAndSalePointUsers, editLoginTypeUsers, removeUser } from '@apiServices/usersService';
 import { LocationDto, SalePointDto, UserInfo } from '@types';
 import AutocompleteLocationAndSalePoint from '@components/AutoComplete/AutocompleteLocationAndSalePoint';
 import Header from '@components/Header';
 import UserFormButtonGroup from '../UserFormButtonGroup';
-import { ROLES_FOR_EXTERNAL_SALE_POINT, validateSalePoint } from '../UserFormHelper';
+import { ROLES_FOR_EXTERNAL_SALE_POINT, validateLoginType, validateSalePoint } from '../UserFormHelper';
+import { LOGIN_TYPE_FIELD, LOGIN_TYPE_SELECT_OPTIONS } from '../UserForm';
+import { LoginTypes } from '@constants/loginTypes';
+import ROLES from '@constants/roles';
 
 import styles from './UserMultiEdit.module.css';
 
@@ -37,10 +40,18 @@ type LocationState = {
     users: UserInfo[];
 };
 
+type ErrorType = {
+    location: string;
+    salePoint: string;
+    backend: string;
+    loginType?: string;
+};
+
 const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
     const [location, setLocation] = useState<LocationDto | null>(null);
     const [salePoint, setSalePoint] = useState<SalePointDto | null>(null);
-    const [error, setError] = useState({ location: '', salePoint: '', backend: '' });
+    const [loginType, setLoginType] = useState<LoginTypes | null>(null);
+    const [error, setError] = useState<ErrorType>({ location: '', salePoint: '', backend: '' });
     const [isSendingInfo, setIsSendingInfo] = useState(false);
     const [arrUsersIds, setArrUsersIds] = useState<number[]>([]);
     const history = useHistory();
@@ -66,6 +77,11 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
         setError({ location: '', salePoint: '', backend: '' });
     };
 
+    const onLoginTypeChange = (value: LoginTypes) => {
+        setLoginType(value);
+        setError({ location: '', salePoint: '', backend: '' });
+    };
+
     const onDelete = async () => {
         setIsSendingInfo(true);
 
@@ -83,14 +99,20 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
     const onSubmit = async () => {
         try {
             const salePointShouldExternal = users.every(({ role }) => ROLES_FOR_EXTERNAL_SALE_POINT.includes(role));
-            validateSalePoint(salePoint, salePointShouldExternal);
-
+            const incorrectUser = users.find(({ role }) => role !== ROLES.USER);
+            validateSalePoint(salePoint, salePointShouldExternal, false);
+            validateLoginType(incorrectUser);
+            const userIds = (users).reduce<number[]>((ids, user) => user.loginType === loginType ? ids : [...ids, user.id], []);
             setIsSendingInfo(true);
 
             try {
-                await editLocationAndSalePointUsers({
+                salePoint && await editLocationAndSalePointUsers({
                     userIds: arrUsersIds,
                     salePointId: salePoint?.id,
+                });
+                loginType && await editLoginTypeUsers({
+                    userIds,
+                    loginType,
                 });
                 redirectToUsersPage();
             } catch (e) {
@@ -124,13 +146,24 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
                             salePointDisabled={isSendingInfo}
                             locationLabel={LOCATION_FIELD.label}
                             salePointLabel={SALE_POINT_FIELD.label}
-                            salePointLabelClassNames="required"
                             onLocationChange={onLocationChange}
                             onSalePointChange={onSalePointChange}
                             autoFocusLocation={true}
                             locationId={location?.id}
                             error={error}
                         />
+                        <div className={styles.select}>
+                            <label>
+                                {LOGIN_TYPE_FIELD.label}
+                            </label>
+                            <Select
+                                className={styles.selectInput}
+                                options={LOGIN_TYPE_SELECT_OPTIONS}
+                                onChange={onLoginTypeChange}
+                                placeholder={LOGIN_TYPE_FIELD.label}
+                            />
+                            {!!error.loginType && <div className={styles.formError}>{error.loginType}</div>}
+                        </div>
                     </Form>
                     {!!error.backend && <div className={styles.formError}>{error.backend}</div>}
                 </div>

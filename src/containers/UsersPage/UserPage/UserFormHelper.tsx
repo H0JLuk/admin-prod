@@ -1,10 +1,11 @@
 import React from 'react';
 import Paragraph from 'antd/lib/typography/Paragraph';
+
 import { customNotifications } from '@utils/notifications';
 import ROLES from '@constants/roles';
-import { LOGIN_TYPES_ENUM } from '@constants/loginTypes';
+import { LoginTypes, LOGIN_TYPES_ENUM } from '@constants/loginTypes';
 import { getPatternAndMessage } from '@utils/validators';
-import { ClientAppDto, SalePointDto } from '@types';
+import { ClientAppDto, SalePointDto, UserInfo } from '@types';
 import { SALE_POINT_TYPE } from '@constants/common';
 
 const { pattern: patternLogin, message } = getPatternAndMessage('users', 'login');
@@ -21,6 +22,9 @@ export const validateMessages = {
     },
     partner: {
         require: 'Пользователь должен быть обязательно связан с партнером. Укажите партнера перед созданием пользователя.',
+    },
+    loginType: {
+        validate: 'Указан недопустимый способ авторизации для роли ',
     },
 };
 
@@ -41,12 +45,16 @@ export const ROLES_FOR_PARTNER_CONNECT = [
     ROLES.REFERAL_LINK,
 ];
 
+export const ROLES_FOR_LOGIN_TYPE_CHANGE = [
+    ROLES.USER,
+];
+
 export const ROLES_FOR_EXTERNAL_SALE_POINT = [
     ...ROLES_FOR_PARTNER_CONNECT,
     ROLES.PARTNER,
 ];
 
-export function getLoginTypeByRole(role: ROLES) {
+export function getLoginTypeByRole(role: ROLES): LoginTypes | undefined {
     switch (role) {
         case ROLES.PARTNER:
             return;
@@ -85,9 +93,9 @@ export function validateLogin(login: string | null) {
     ].forEach(validateCheck('login'));
 }
 
-export function validateSalePoint(salePoint: SalePointDto | null, shouldExternal: boolean) {
+export function validateSalePoint(salePoint: SalePointDto | null, shouldExternal: boolean, require = true) {
     [
-        { isInvalid: typeof salePoint?.id !== 'number', message: validateMessages.salePoint.require },
+        { isInvalid: require && typeof salePoint?.id !== 'number', message: validateMessages.salePoint.require },
         {
             isInvalid: shouldExternal && salePoint?.type.kind !== SALE_POINT_TYPE.EXTERNAL,
             message: validateMessages.salePoint.shouldExternal,
@@ -106,6 +114,15 @@ export function validatePartner(partnerPersonalNumber: string | null, isCorrectR
             message: validateMessages.partner.require,
         },
     ].forEach(validateCheck('partner'));
+}
+
+export function validateLoginType(incorrectUser?: UserInfo) {
+    [
+        {
+            isInvalid: !!incorrectUser,
+            message: validateMessages.loginType.validate + incorrectUser?.role,
+        },
+    ].forEach(validateCheck('loginType'));
 }
 
 export function validateCheck(name: string) {

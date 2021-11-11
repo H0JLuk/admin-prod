@@ -47,3 +47,15 @@
 .buttonsContainer :global(.ant-btn[disabled]) {
     color: #ebe8e8 !important;
 }
+
+.select {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    min-width: 240px;
+    max-width: 300px;
+}
+
+.select label {
+    margin-bottom: 8px;
+}

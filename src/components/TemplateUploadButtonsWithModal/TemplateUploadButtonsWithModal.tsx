@@ -106,9 +106,10 @@ const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalPro
             setIsModalVisible(false);
             clearStateAndForm();
             onSuccess();
-        } catch (e) {
+        } catch (e: any) {
             setLoading(false);
-            message.error(`${FETCH_ERRORS[type.current as UploadModalTypes]} ${e.message}`);
+            const errMsg = e?.message || '';
+            message.error(`${FETCH_ERRORS[type.current as UploadModalTypes]} ${errMsg}`);
         }
     };
 
