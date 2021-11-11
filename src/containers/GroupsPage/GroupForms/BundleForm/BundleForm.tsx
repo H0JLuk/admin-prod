@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState, useRef, useLayoutEffect } from 'react';
-import { Form, Input, Switch, Row, Col, Button, Select, FormItemProps, SelectProps } from 'antd';
+import { Form, Input, Switch, Row, Col, Button, Select, SelectProps } from 'antd';
 import { History } from 'history';
 import { BundleDto, BundleLink, PromoCampaignDto } from '@types';
 import { BundleGroupDto } from '../types';
@@ -141,8 +141,6 @@ const BundleForm: React.FC<BundleFormProps> = ({
 
     const isEdit = mode === MODES.EDIT;
 
-    const disabledSelect = (fieldName: FormItemProps['name']) => isEdit && !!fieldName && typeof form.getFieldValue(fieldName) === 'number';
-
     const getCampaignGroup = async (needUpdate?: boolean) => {
         try {
             if (isEdit) {
@@ -189,9 +187,11 @@ const BundleForm: React.FC<BundleFormProps> = ({
             hideLoading();
             showCreatedNotification(groupData.name);
             redirectToBundleList();
-        } catch ({ message }) {
+        } catch (e: any) {
+            if (e.message) {
+                setErrorMessage(e.message);
+            }
             hideLoading();
-            setErrorMessage(message);
         }
     };
 
@@ -206,8 +206,10 @@ const BundleForm: React.FC<BundleFormProps> = ({
             const bundleData = await getCampaignGroup(true);
             showSuccessNotification(bundleData!.name);
             hideLoading();
-        } catch ({ message }) {
-            setErrorMessage(message);
+        } catch (e: any) {
+            if (e.message) {
+                setErrorMessage(e.message);
+            }
             hideLoading();
         }
     };
@@ -342,7 +344,6 @@ const BundleForm: React.FC<BundleFormProps> = ({
                                                     onSelect={validateCampaignId}
                                                     options={selectOptions}
                                                     placeholder={SELECT_CAMPAIGN_PLACEHOLDER}
-                                                    disabled={disabledSelect(['links', field.name, 'id'])}
                                                     virtual={false}
                                                 />
                                             </Form.Item>

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState, useRef, useLayoutEffect } from 'react';
-import { Form, Input, Row, Col, Button, Select, FormItemProps, SelectProps } from 'antd';
+import { Form, Input, Row, Col, Button, Select, SelectProps } from 'antd';
 import UploadPicture from '@components/UploadPicture';
 import { ReactComponent as Cross } from '@imgs/cross.svg';
 import { ReactComponent as LoadingSpinner } from '@imgs/loading-spinner.svg';
@@ -92,9 +92,6 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
 
     const isEdit = mode === MODES.EDIT;
 
-    const disabledSelect = (fieldName: FormItemProps['name']) =>
-        isEdit && !!fieldName && typeof form.getFieldValue(fieldName) === 'number';
-
     const getCampaignGroup = async (needUpdate?: boolean) => {
         try {
             showLoading();
@@ -154,8 +151,10 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
 
             showCreatedNotification(mainCampaignName.current);
             redirectToBundleList();
-        } catch ({ message }) {
-            setErrorMessage(message);
+        } catch (e: any) {
+            if (e.message) {
+                setErrorMessage(e.message);
+            }
             hideLoading();
         }
     };
@@ -176,8 +175,10 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
                 hideLoading();
             }
 
-        } catch ({ message }) {
-            setErrorMessage(message);
+        } catch (e: any) {
+            if (e.message) {
+                setErrorMessage(e.message);
+            }
             hideLoading();
         }
     };
@@ -289,7 +290,6 @@ const RelatedPromoCampaignsForm: React.FC<RelatedPromoCampaignFormProps> = ({
                                                     filterOption={onSearch}
                                                     options={selectOptions}
                                                     placeholder={SELECT_CAMPAIGN_PLACEHOLDER}
-                                                    disabled={disabledSelect(['links', field.name, 'id'])}
                                                     virtual={false}
                                                     onChange={filterSelectedItems}
                                                 />

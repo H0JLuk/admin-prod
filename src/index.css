@@ -35,6 +35,10 @@ input.ant-input:placeholder-shown ~ .ant-input-suffix .anticon-close-circle {
     transform: rotate(-180deg);
 }
 
+.ant-select-open .ant-select-arrow .anticon-search {
+    transform: rotate(-180deg);
+}
+
 .ant-select-arrow {
     transition: transform 0.3s;
 }
