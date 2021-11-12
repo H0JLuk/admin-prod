@@ -1,12 +1,12 @@
-import { BundleDto } from '@types';
+import { BundleCreateDto, BundleDto } from '@types';
 import { arrayToObject } from '@utils/helper';
 import { normalizedBundleDto } from '../BundleForm/Bundle.utils';
 import { BundleInitialValue } from '../types';
 
-export function getDataForAssociationCreate(groupValue: BundleInitialValue & Partial<BundleDto>) {
+export function getDataForAssociationCreate(groupValue: BundleInitialValue & Partial<BundleDto>): BundleCreateDto {
     const { type, name, mainCampaignId } = groupValue;
 
-    return { type, name, mainCampaignId };
+    return { type: type!, name, mainCampaignId };
 }
 
 export function normalizeAssociationData(associationData: BundleDto) {
@@ -16,7 +16,7 @@ export function normalizeAssociationData(associationData: BundleDto) {
             ...prev,
             { banners: arrayToObject(banners, 'type', 'url'), texts: arrayToObject(texts, 'type', 'value'), id, campaignId },
         ],
-        []
+        [],
     );
     const link = links.find(({ mainCampaignId }) => mainCampaignId);
 

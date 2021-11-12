@@ -37,6 +37,7 @@ import {
     GroupLinkSettings,
     LinksCreateDto,
 } from './types';
+import { BundleTypes } from '../groupPageConstants';
 
 //  create group banners
 export async function createGroupBanner(banners: BannerCreateDto, groupId: number) {
@@ -215,7 +216,10 @@ export async function editCampaignGroupLinks(bundleData: LinksCreateDto[], prevB
 
     await Promise.all<unknown>(deletedGroupLinks);
 
-    const sortedBundleData = bundleData.sort(i => i.settings.display_logo_on_bundle ? 1 : -1);
+    let sortedBundleData = bundleData;
+    if (prevBundle.type === BundleTypes.IDEA) {
+        sortedBundleData = bundleData.sort(i => i.settings?.display_logo_on_bundle ? 1 : -1);
+    }
 
     for (const { banners, texts, campaignId, id: linkId, settings } of sortedBundleData) {
         if (typeof linkId === 'number') {

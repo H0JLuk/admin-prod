@@ -9,6 +9,7 @@ import { getCampaignGroupList } from '@apiServices/campaignGroupService';
 import { getActiveClientApps } from '@apiServices/clientAppService';
 import { LOGIN_TYPE_OPTIONS } from '@constants/loginTypes';
 import { SearchParams } from '@components/HeaderWithActions/types';
+import EmptyMessage from '@components/EmptyMessage';
 import { ClientAppDto, UserInfo } from '@types';
 
 import styles from './FiltrationBlock.module.css';
@@ -65,7 +66,10 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
         (async() => {
             if (params.appType === 'promoCampaign' && !promoCampaignList.length) {
                 try {
-                    const { promoCampaignDtoList } = await getFilteredPromoCampaignList({ type: 'NORMAL' }) ?? {};
+                    const { promoCampaignDtoList } = await getFilteredPromoCampaignList(
+                        { type: 'NORMAL' },
+                        params.clientAppCode as string,
+                    ) ?? {};
                     const list = promoCampaignDtoList.map((elem) => ({ value: elem.id, label: elem.name }));
                     setPromoCampaignList(list);
                 } catch (e: any) {
@@ -75,7 +79,7 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
                 }
             } else if (params.appType === 'campaignGroup' && !groupCampaignList.length) {
                 try {
-                    const { groups } = await getCampaignGroupList();
+                    const { groups } = await getCampaignGroupList(params.clientAppCode as string) ?? {};
                     const groupList = groups.map((elem) => ({ value: elem.id, label: elem.name }));
                     setGroupCampaignList(groupList);
                 } catch (e: any) {
@@ -85,7 +89,7 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
                 }
             }
         })();
-    }, [params.appType, groupCampaignList.length, promoCampaignList.length]);
+    }, [params.appType, groupCampaignList.length, promoCampaignList.length, params.clientAppCode]);
 
     const onParentUserSelect = (user: UserInfo | null) => {
         onChangeParent(user);
@@ -100,6 +104,8 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
     };
 
     const onAppSelect = (clientAppCode: string | number) => {
+        setPromoCampaignList([]);
+        setGroupCampaignList([]);
         onChangeFilter({ ...params, clientAppCode });
     };
 
@@ -108,11 +114,13 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
     };
 
     const onPromoCampaignSelect = async(campaignId: string | number) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { groupId, ...rest } = params;
         onChangeFilter({ ...rest, campaignId });
     };
 
     const onCampaignGroupSelect = async(groupId: string | number) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { campaignId, ...rest } = params;
         onChangeFilter({ ...rest, groupId });
     };
@@ -211,6 +219,7 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
                         onSelect={onCampaignGroupSelect}
                         value={params.campaignGroup || undefined}
                         disabled={disabledAllFields}
+                        notFoundContent={<EmptyMessage />}
                     />
                 )}
                 {isExistFilters && (

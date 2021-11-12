@@ -3,6 +3,8 @@ import { CategoryDto } from './Category';
 import { ClientAppDto } from './ClientApp';
 import { BannerTextDto } from './BannerText';
 import { BannerDto } from './Banner';
+import { BundleTypes } from '@containers/GroupsPage/groupPageConstants';
+import { LinksCreateDto } from '@containers/GroupsPage/GroupForms';
 
 export type BundleGroupTextDto = Omit<BannerTextDto, 'id'> & {
     groupId: number;

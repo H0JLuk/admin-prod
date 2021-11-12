@@ -79,6 +79,7 @@ export type PromoCampaignSettingsDto = {
     details_button_url: string;
     disabled_banner_types: string[];
     sale_enabled: boolean;
+    display_logo_on_bundle?: boolean;
 };
 
 export type PromoCampaignFilterRequest = Omit<PromoCampaignDto, 'categoryList' | 'categoryIdList'> & {

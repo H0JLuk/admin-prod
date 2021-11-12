@@ -343,7 +343,12 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                 ...(params.groupId && { groupId: params.groupId }),
             });
             downloadFileFunc(URL.createObjectURL(file), 'QR-codes', 'zip');
-        } catch (err) {
+        } catch (err: any) {
+            if (err.message) {
+                customNotifications.error({
+                    message: err.message,
+                });
+            }
             console.error(err);
         }
     };

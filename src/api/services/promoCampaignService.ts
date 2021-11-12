@@ -18,12 +18,12 @@ export function getPromoCampaignList() {
     return Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { checkVisibility: false }, getReqOptions());
 }
 
-export function getFilteredPromoCampaignList(data: Record<string, string | number>) {
+export function getFilteredPromoCampaignList(data: Record<string, string | number>, appCode?: string) {
     if (!data.sortBy) {
         delete data.sortBy;
         delete data.direction;
     }
-    return Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { ...data, checkVisibility: false }, getReqOptions());
+    return Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { ...data, checkVisibility: false }, getReqOptions(undefined, appCode));
 }
 
 export function getExactFilteredPromoCampaignList(filterText: string, appCode: string) {

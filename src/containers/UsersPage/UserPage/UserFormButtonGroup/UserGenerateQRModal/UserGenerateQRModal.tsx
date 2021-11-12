@@ -105,11 +105,21 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
         }
     };
 
-    const onAppTypeChange = async(val: string) => {
+    const onChangeAppCode = () => {
+        setPromoCampaignList([]);
+        setGroupCampaignList([]);
+    };
+
+    const onAppTypeChange = async (val: string) => {
         setLoading(true);
+        const appCode = form.getFieldValue('clientAppCode');
+
         if (val === 'promoCampaign' && !promoCampaignList.length) {
             try {
-                const { promoCampaignDtoList } = await getFilteredPromoCampaignList({ type: 'NORMAL' }) ?? {};
+                const { promoCampaignDtoList } = await getFilteredPromoCampaignList(
+                    { type: 'NORMAL' },
+                    appCode,
+                ) ?? {};
                 const campaignList = promoCampaignDtoList.map((elem) => ({ value: elem.id, label: elem.name }));
                 setPromoCampaignList(campaignList);
             } catch (e: any) {
@@ -120,7 +130,7 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
         }
         if (val === 'group' && !groupCampaignList.length) {
             try {
-                const { groups } = await getCampaignGroupList() ?? {};
+                const { groups } = await getCampaignGroupList(appCode) ?? {};
                 const groupList = groups.map((elem) => ({ value: elem.id, label: elem.name }));
                 setGroupCampaignList(groupList);
             } catch (e: any) {
@@ -165,6 +175,7 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
                         <Select
                             placeholder={APP_CODE_PLACEHOLDER}
                             options={appsOptions}
+                            onChange={onChangeAppCode}
                             disabled={loading}
                         />
                     </Form.Item>
@@ -177,7 +188,7 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
                             placeholder={TYPE_PLACEHOLDER}
                             options={TYPE_SELECT_OPTIONS}
                             disabled={loading}
-                            onChange={(val) => onAppTypeChange(val as string)}
+                            onChange={onAppTypeChange}
                         />
                     </Form.Item>
                     <Form.Item noStyle dependencies={['type']}>

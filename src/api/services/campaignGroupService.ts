@@ -24,8 +24,8 @@ export function editCampaignGroup(groupData: BundleCreateDto, groupId: number) {
     return Api.put<DefaultApiResponse>(`/admin/campaign-group/${groupId}`, groupData, getReqOptions());
 }
 
-export function getCampaignGroupList() {
-    return Api.get<BundleListResponse>('/admin/campaign-group/list', getReqOptions());
+export function getCampaignGroupList(appCode?: string) {
+    return Api.get<BundleListResponse>('/admin/campaign-group/list', getReqOptions(undefined, appCode));
 }
 
 export function createCampaignGroupBanner(formData: FormData) {

@@ -3,7 +3,7 @@ import { generatePath, useHistory } from 'react-router-dom';
 import cn from 'classnames';
 import { MenuOutlined } from '@ant-design/icons';
 import PromoCampaignItemMenu from './PromoCampaignItemMenu';
-import PROMO_CAMPAIGNS from '@constants/promoCampaigns';
+import PROMO_CAMPAIGNS, { PromoCampaignTypes } from '@constants/promoCampaigns';
 import promoCodeTypes from '@constants/promoCodeTypes';
 import { PROMO_CAMPAIGN_PAGES } from '@constants/route';
 import { getFormattedDate } from '@utils/helper';
@@ -67,8 +67,7 @@ const PromoCampaignItem: React.FC<PromoCampaignItemProps> = ({ promoCampaign, on
                             {TITLE.TYPE}
                         </div>
                         <div className={style.subInfo__value}>
-                            {/* Enum ?? */}
-                            {PROMO_CAMPAIGNS[type as 'NORMAL' | 'PRESENT' | 'LANDING'].label}
+                            {PROMO_CAMPAIGNS[type as PromoCampaignTypes].label}
                         </div>
                     </div>
                     <div className={cn(style.subInfo, style.promoCode)}>

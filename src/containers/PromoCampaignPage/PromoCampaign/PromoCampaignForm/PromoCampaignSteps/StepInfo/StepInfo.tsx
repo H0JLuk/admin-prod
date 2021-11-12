@@ -97,6 +97,12 @@ export const DisableBannersSwitch: React.FC<DisableBannersSwitchProps> = ({
     );
 };
 
+const initData = {
+    dzoList: [] as DzoDto[],
+    categories: [] as CategoryDto[],
+    clientApps: [] as ClientAppDto[],
+};
+
 const StepInfo: React.FC<StepInfoProps> = ({
     state,
     changeTypePromo,
@@ -106,9 +112,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
     copyPromoCampaignId,
     oldExternalId,
 }) => {
-    const [dzoList, setDzoList] = useState<DzoDto[]>([]);
-    const [categories, setCategories] = useState<CategoryDto[]>([]);
-    const [clientApps, setClientApps] = useState<ClientAppDto[]>([]);
+    const [{ dzoList, categories, clientApps }, setData] = useState(initData);
 
     useEffect(() => {
         (async () => {
@@ -121,10 +125,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
                 getCategoryList(),
                 getActiveClientApps(),
             ]);
-            // TODO: Переделать вызов setState на рефки или на один стейт. И возможно вынести эту логику в PromoCampaignForm что не делать каждый раз запросы при открытии этого шага
-            setDzoList(dzoDtoList.filter(item => !item.deleted));
-            setCategories(categoryList.filter(({ active }) => active));
-            setClientApps(clientAppList);
+            // TODO: Возможно вынести эту логику в PromoCampaignForm что не делать каждый раз запросы при открытии этого шага
+            setData({
+                dzoList: dzoDtoList.filter(item => !item.deleted),
+                categories: categoryList.filter(({ active }) => active),
+                clientApps: clientAppList,
+            });
         })();
     }, []);
 

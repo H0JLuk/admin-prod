@@ -155,7 +155,7 @@ const BundleForm: React.FC<BundleFormProps> = ({
             if (isEdit) {
                 let groupData = bundleData;
                 if (!bundleData || needUpdate) {
-                    groupData = (await loadCampaignGroupList())!;
+                    groupData = (await loadCampaignGroupList()) as BundleDto;
                 }
                 const normalizeBundleData = normalizeBundle(groupData);
                 form.setFieldsValue(normalizeBundleData);
@@ -213,8 +213,8 @@ const BundleForm: React.FC<BundleFormProps> = ({
             await editCampaignGroup(getDataForBundleCreate(groupData), bundleID);
             await editCampaignGroupTextAndBanners(groupData, bundle.current, bundleID);
             await editCampaignGroupLinks(getDataForBundleLinkCreate(groupData.links), bundle.current, bundleID);
-            const bundleData = await getCampaignGroup(true);
-            showSuccessNotification(bundleData!.name);
+            const { name: bundleName } = await getCampaignGroup(true) as BundleDto;
+            showSuccessNotification(bundleName);
         } catch (e: any) {
             if (e.message) {
                 if (isErrorWithExternalId(e.message)) {

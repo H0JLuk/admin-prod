@@ -12,7 +12,7 @@ export type normalizedBundleDto = {
 
 
 export function normalizeBundle(bundleData: BundleDto) {
-    const { texts, banners, links } = bundleData || {};
+    const { texts: bundleTexts, banners: bundleBanners, links } = bundleData || {};
 
     const data = links.reduce(
         (prev: normalizedBundleDto[], { banners, texts, id, campaignId, settings }) => [
@@ -30,8 +30,8 @@ export function normalizeBundle(bundleData: BundleDto) {
 
     return {
         active: bundleData.active,
-        texts: arrayToObject(texts, 'type', 'value'),
-        banners: arrayToObject(banners, 'type', 'url'),
+        texts: arrayToObject(bundleTexts, 'type', 'value'),
+        banners: arrayToObject(bundleBanners, 'type', 'url'),
         campaignIdList: bundleData.links.reduce((prev: number[], { campaignId }) => [...prev, campaignId], []),
         name: bundleData.name,
         type: bundleData.type,
@@ -47,11 +47,10 @@ export function getDataForBundleCreate(groupValue: BundleGroupDto) {
     return { type, active, name, externalId };
 }
 
-type LinksCreateDtoWithoutSettings = Omit<LinksCreateDto, 'settings'>;
 export function getDataForBundleLinkCreate(linkValues: BundleLinksFormDto[]): LinksCreateDto[] {
     return linkValues.map((link) => {
         const { displayLogoOnBundle, ...rest } = link;
         const settings = { display_logo_on_bundle: displayLogoOnBundle };
-        return { ...rest as LinksCreateDtoWithoutSettings, settings };
+        return { ...rest, settings };
     });
 }
