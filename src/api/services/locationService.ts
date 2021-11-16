@@ -1,4 +1,4 @@
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 import { Api } from '../apiClient';
 import {
     LocationsListResponse,
@@ -12,16 +12,16 @@ import {
 } from '@types';
 
 export function getLocations(searchParams: string) {
-    return Api.get<LocationsListResponse>(`/admin/location?${searchParams}`, getReqOptions());
+    return withDefaultArrayData(Api.get<LocationsListResponse>(`/admin/location?${searchParams}`, getReqOptions()), 'locations');
 }
 
 export async function getLocationsByText(value: string) {
-    const { list } = await Api.get<ListResponse<LocationDto>>(`/location/search?name=${value}`, getReqOptions());
+    const { list } = await withDefaultArrayData(Api.get<ListResponse<LocationDto>>(`/location/search?name=${value}`, getReqOptions()), 'list');
     return list;
 }
 
 export function getLocationTypeList() {
-    return Api.get<ListResponse<LocationTypeDto>>('/admin/location/type', getReqOptions());
+    return withDefaultArrayData(Api.get<ListResponse<LocationTypeDto>>('/admin/location/type', getReqOptions()), 'list');
 }
 
 export async function getActiveLocationTypeList() {

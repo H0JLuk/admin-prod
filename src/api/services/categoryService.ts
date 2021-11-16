@@ -1,5 +1,5 @@
 import { Api } from '../apiClient';
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 import {
     CategoryListResponse,
     DefaultApiResponse,
@@ -9,7 +9,7 @@ import {
 } from '@types';
 
 export function getCategoryList() {
-    return Api.get<CategoryListResponse>('/categories', getReqOptions());
+    return withDefaultArrayData(Api.get<CategoryListResponse>('/categories', getReqOptions()), 'categoryList');
 }
 
 export function addCategory(categoryDto: NewCategoryRequest) {

@@ -1,5 +1,5 @@
 import { Api, FORM_DATA_CONTENT_TYPE } from '../apiClient';
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 import {
     DefaultApiResponse,
     DefaultCreateDtoResponse,
@@ -8,11 +8,11 @@ import {
 } from '@types';
 
 export function getDzoList() {
-    return Api.get<IDzoListResponse>('/dzo', getReqOptions());
+    return withDefaultArrayData(Api.get<IDzoListResponse>('/dzo', getReqOptions()), 'dzoDtoList');
 }
 
 export function getAllDzoList() {
-    return Api.get<IDzoListResponse>('/admin/dzo/list', getReqOptions());
+    return withDefaultArrayData(Api.get<IDzoListResponse>('/admin/dzo/list', getReqOptions()), 'dzoDtoList');
 }
 
 export function addDzo(dzoDto: FormData) {

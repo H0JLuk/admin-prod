@@ -17,3 +17,11 @@ export const getReqOptions = (contentType?: string, currAppCode?: string): ApiRe
     contentType && (headers[CONTENT_TYPE] = contentType);
     return { headers };
 };
+
+export const withDefaultArrayData = async <R = Record<string, any>>(apiRequest: Promise<R>, fieldKey: Exclude<keyof R, 'message' | 'status'>) => {
+    const response = await apiRequest;
+    if (!response[fieldKey]) {
+        response[fieldKey] = [] as unknown as R[Exclude<keyof R, 'message' | 'status'>];
+    }
+    return response;
+};

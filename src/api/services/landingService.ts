@@ -1,5 +1,5 @@
 import { Api } from '../apiClient';
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 import {
     DefaultApiResponse,
     DefaultCreateDtoResponse,
@@ -8,7 +8,7 @@ import {
 } from '@types';
 
 export function getPresentationList() {
-    return Api.get<PresentationListResponse>('/landing', getReqOptions());
+    return withDefaultArrayData(Api.get<PresentationListResponse>('/landing', getReqOptions()), 'landingDtoList');
 }
 
 export function addPresentation(presentation: SavePresentationRequest) {

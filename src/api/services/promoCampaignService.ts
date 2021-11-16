@@ -1,4 +1,4 @@
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 import { Api, FORM_DATA_CONTENT_TYPE } from '../apiClient';
 import { DEFAULT_OFFER_DURATION } from '@constants/promoCampaigns';
 import {
@@ -15,7 +15,7 @@ import {
 const stringPropertiesNames = ['details_button_label', 'details_button_url', 'disabled_banner_types'];
 
 export function getPromoCampaignList() {
-    return Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { checkVisibility: false }, getReqOptions());
+    return withDefaultArrayData(Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { checkVisibility: false }, getReqOptions()), 'promoCampaignDtoList');
 }
 
 export function getFilteredPromoCampaignList(data: Record<string, string | number>, appCode?: string) {
@@ -23,7 +23,7 @@ export function getFilteredPromoCampaignList(data: Record<string, string | numbe
         delete data.sortBy;
         delete data.direction;
     }
-    return Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { ...data, checkVisibility: false }, getReqOptions(undefined, appCode));
+    return withDefaultArrayData(Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { ...data, checkVisibility: false }, getReqOptions(undefined, appCode)), 'promoCampaignDtoList');
 }
 
 export function getExactFilteredPromoCampaignList(filterText: string, appCode: string) {
@@ -31,11 +31,11 @@ export function getExactFilteredPromoCampaignList(filterText: string, appCode: s
     if (appCode) {
         options.headers.clientAppCode = appCode;
     }
-    return Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { filterText, checkVisibility: false, exactMatch: true }, options);
+    return withDefaultArrayData(Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { filterText, checkVisibility: false, exactMatch: true }, options), 'promoCampaignDtoList');
 }
 
 export function getExactExternalIDPromoCampaignList(externalId: string) {
-    return Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { externalId, checkVisibility: false, ignoreAppCode: true }, getReqOptions());
+    return withDefaultArrayData(Api.post<PromoCampaignListResponse>('/promo-campaign/list/filter', { externalId, checkVisibility: false, ignoreAppCode: true }, getReqOptions()), 'promoCampaignDtoList');
 }
 
 export function getPromoCampaignStatistics(promoCampaignId: number) {
@@ -43,7 +43,7 @@ export function getPromoCampaignStatistics(promoCampaignId: number) {
 }
 
 export function getPromoCampaignById(id: number) {
-    return Api.get<PromoCampaignListResponse>(`/promo-campaign/list/?id=${id}`, getReqOptions());
+    return withDefaultArrayData(Api.get<PromoCampaignListResponse>(`/promo-campaign/list/?id=${id}`, getReqOptions()), 'promoCampaignDtoList');
 }
 
 function normalizePromoCampaign<PromoCampaign extends PromoCampaignCreateDto>(promoCampaign: PromoCampaign) {

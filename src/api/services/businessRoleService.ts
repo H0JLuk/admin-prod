@@ -6,14 +6,14 @@ import {
     SaveBusinessRoleRequest,
 } from '@types';
 import { Api } from '../apiClient';
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 
 export function getBusinessRoles() {
-    return Api.get<ListResponse<BusinessRoleDto>>('/business-role/list', getReqOptions());
+    return withDefaultArrayData(Api.get<ListResponse<BusinessRoleDto>>('/business-role/list', getReqOptions()), 'list');
 }
 
 export function getBusinessRolesByClientApp(clientAppId: number) {
-    return Api.get<ListResponse<BusinessRoleDto>>(`/admin/business-role/list?clientAppId=${clientAppId}`, getReqOptions());
+    return withDefaultArrayData(Api.get<ListResponse<BusinessRoleDto>>(`/admin/business-role/list?clientAppId=${clientAppId}`, getReqOptions()), 'list');
 }
 
 export async function getBusinessRoleById(roleId: number | string) {

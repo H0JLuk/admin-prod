@@ -1,4 +1,4 @@
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 import { Api } from '../apiClient';
 import {
     SalePointRequest,
@@ -28,7 +28,7 @@ export function editSalePoint(id: number, data: SalePointRequest) {
 }
 
 export function getSalePointTypesList() {
-    return Api.get<ListResponse<SalePointType>>('/admin/salepoint/type', getReqOptions());
+    return withDefaultArrayData(Api.get<ListResponse<SalePointType>>('/admin/salepoint/type', getReqOptions()), 'list');
 }
 
 export async function getActiveSalePointTypesList() {
@@ -49,7 +49,7 @@ export async function getSalePointsByText(name: string, locationId?: number) {
 
         return { ...result, [key]: val };
     }, {});
-    const { list } = await Api.get<ListResponse<SalePointDto>>(`/salepoint/search?${new URLSearchParams(params).toString()}`, getReqOptions());
+    const { list } = await withDefaultArrayData(Api.get<ListResponse<SalePointDto>>(`/salepoint/search?${new URLSearchParams(params).toString()}`, getReqOptions()), 'list');
 
     return list;
 }

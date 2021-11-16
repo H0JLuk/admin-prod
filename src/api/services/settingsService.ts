@@ -1,5 +1,5 @@
 import { Api } from '../apiClient';
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 import { DefaultApiResponse, ISettingList, SettingDto, SettingKeys } from '@types';
 
 const STATIC_URL = 'STATIC_URL';
@@ -21,7 +21,7 @@ export function addSettings(settingObj: SettingDto[]) {
 export function getSettingsList(appCode: string) {
     const options = getReqOptions();
     delete options.headers.clientAppCode;
-    return Api.get<ISettingList>(`/admin/setting/${appCode}`, options);
+    return withDefaultArrayData(Api.get<ISettingList>(`/admin/setting/${appCode}`, options), 'settingDtoList');
 }
 
 export function getSettingsByKeys(settingKey: string, { role, code }: SettingKeys = {}) {
@@ -29,7 +29,7 @@ export function getSettingsByKeys(settingKey: string, { role, code }: SettingKey
     role && (keys.role = role);
     code && (keys.code = code);
     const urlSearchParams = new URLSearchParams(keys);
-    return Api.get<ISettingList>(`/admin/setting/key/${settingKey}?${urlSearchParams}`, getReqOptions());
+    return withDefaultArrayData(Api.get<ISettingList>(`/admin/setting/key/${settingKey}?${urlSearchParams}`, getReqOptions()), 'settingDtoList');
 }
 
 export function saveStaticUrl(staticUrl: string) {

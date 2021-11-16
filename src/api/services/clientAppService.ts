@@ -6,10 +6,10 @@ import {
     SaveClientApp,
 } from '@types';
 import { Api } from '../apiClient';
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 
 export function getClientAppList() {
-    return Api.get<ListResponse<ClientAppDto>>('/admin/clientApplication', getReqOptions());
+    return withDefaultArrayData(Api.get<ListResponse<ClientAppDto>>('/admin/clientApplication', getReqOptions()), 'list');
 }
 
 export async function getActiveClientApps() {

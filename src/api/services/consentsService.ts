@@ -6,10 +6,10 @@ import {
     SaveConsentRequest,
 } from '@types';
 import { Api } from '../apiClient';
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 
 export function getConsentsList() {
-    return Api.get<ListResponse<ConsentDto>>('/admin/consent', getReqOptions());
+    return withDefaultArrayData(Api.get<ListResponse<ConsentDto>>('/admin/consent', getReqOptions()), 'list');
 }
 
 export function deleteConsent(id: number) {

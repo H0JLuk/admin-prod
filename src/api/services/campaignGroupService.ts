@@ -1,4 +1,4 @@
-import { getReqOptions } from './index';
+import { getReqOptions, withDefaultArrayData } from './index';
 import { Api, FORM_DATA_CONTENT_TYPE } from '../apiClient';
 import {
     DefaultApiResponse,
@@ -25,7 +25,7 @@ export function editCampaignGroup(groupData: BundleCreateDto, groupId: number) {
 }
 
 export function getCampaignGroupList(appCode?: string) {
-    return Api.get<BundleListResponse>('/admin/campaign-group/list', getReqOptions(undefined, appCode));
+    return withDefaultArrayData(Api.get<BundleListResponse>('/admin/campaign-group/list', getReqOptions(undefined, appCode)), 'groups');
 }
 
 export function createCampaignGroupBanner(formData: FormData) {
