@@ -429,7 +429,10 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                             {TITLE_DOWNLOAD_USER}
                         </span>
                         <div className={styles.downloadButtons}>
-                            <TemplateUploadButtonsWithModal onSuccess={refreshTable} />
+                            <TemplateUploadButtonsWithModal
+                                onSuccess={refreshTable}
+                                maxFileSize={10}
+                            />
                         </div>
                         <DownloadDropDown />
                     </div>

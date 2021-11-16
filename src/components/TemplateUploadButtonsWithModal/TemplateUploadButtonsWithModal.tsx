@@ -41,6 +41,7 @@ type TemplateUploadButtonsWithModalProps = {
     btnAddLabel?: string;
     btnDeleteShow?: boolean;
     btnDeleteLabel?: string;
+    maxFileSize?: number;
 };
 
 type HandleFinishParams = {
@@ -50,12 +51,16 @@ type HandleFinishParams = {
 
 type AppListOptions = Exclude<SelectProps<string>['options'], undefined>;
 
+const checkFileSize = (fileSize: number, maxFileSize?: number): boolean =>
+    !maxFileSize ? false : fileSize > 1024 * 1024 * maxFileSize;
+
 const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalProps> = ({
     onSuccess = noop,
     btnAddShow = true,
     btnAddLabel = BUTTON_TEXT.ADD,
     btnDeleteShow = true,
     btnDeleteLabel = BUTTON_TEXT.DELETE,
+    maxFileSize,
 }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -89,6 +94,14 @@ const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalPro
     // function should always return `false` for in function `onChange` parameter file will be type `File`
     const onChangeFile = () => false;
 
+    const onUploadFile = async (info: UploadChangeParam) => {
+        if (info.file.size && checkFileSize(info.file.size, maxFileSize)) {
+            message.error(`Размер файла должен быть меньше ${maxFileSize}MB!`);
+            return;
+        }
+        setFileList(info.fileList);
+    };
+
     const handleFinish = async ({ file, appCode }: HandleFinishParams) => {
         setLoading(true);
         const options = getReqOptions();
@@ -116,6 +129,10 @@ const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalPro
     const onRemoveFile = () => setFileList([]);
 
     const normFile = (info: UploadChangeParam) => {
+        if (info.file.size && checkFileSize(info.file.size, maxFileSize)) {
+            setFileList([]);
+            return;
+        }
         if (info.file.status === 'removed' || !info.file) {
             return undefined;
         }
@@ -171,6 +188,7 @@ const TemplateUploadButtonsWithModal: React.FC<TemplateUploadButtonsWithModalPro
                             onRemove={onRemoveFile}
                             beforeUpload={onChangeFile}
                             fileList={fileList}
+                            onChange={onUploadFile}
                         >
                             <Button
                                 className={styles.uploadBtn}

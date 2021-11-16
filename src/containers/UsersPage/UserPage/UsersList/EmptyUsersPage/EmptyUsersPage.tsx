@@ -45,6 +45,7 @@ const EmptyUsersPage: React.FC<EmptyUsersPageProps> = ({ refreshTable }) => {
                         btnAddLabel={PACKAGE_ADD_NEW_BUTTON_TEXT}
                         btnDeleteShow={false}
                         onSuccess={refreshTable}
+                        maxFileSize={10}
                     />
                     <a href={templateLink('user-upload.csv')}>
                         {GET_TEMPLATE_BUTTON_TEXT}
