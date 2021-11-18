@@ -115,7 +115,11 @@
     "lint": "^0.7.0",
     "typescript": "4.3.3"
   },
+  "peerDependencies": {
+    "es-abstract": "1.18.0"
+  },
   "resolutions": {
+    "**/es-abstract": "1.18.0",
     "**/@typescript-eslint/eslint-plugin": "^4.23.0",
     "**/@typescript-eslint/parser": "^4.23.0"
   }
