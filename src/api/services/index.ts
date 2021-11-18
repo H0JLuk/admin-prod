@@ -1,4 +1,4 @@
-import { ApiRequestHeaders, ApiRequestOptions } from '@types';
+import { ApiRequestBody, ApiRequestHeaders, ApiRequestOptions } from '@types';
 import { getDefaultAppCode } from './clientAppService';
 import { getAppCode, getSession } from './sessionService';
 
@@ -18,7 +18,7 @@ export const getReqOptions = (contentType?: string, currAppCode?: string): ApiRe
     return { headers };
 };
 
-export const withDefaultArrayData = async <R = Record<string, any>>(apiRequest: Promise<R>, fieldKey: Exclude<keyof R, 'message' | 'status'>) => {
+export const withDefaultArrayData = async <R extends ApiRequestBody>(apiRequest: Promise<R>, fieldKey: Exclude<keyof R, 'message' | 'status'>) => {
     const response = await apiRequest;
     if (!response[fieldKey]) {
         response[fieldKey] = [] as unknown as R[Exclude<keyof R, 'message' | 'status'>];

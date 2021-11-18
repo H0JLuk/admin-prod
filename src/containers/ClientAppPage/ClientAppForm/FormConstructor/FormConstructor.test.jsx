@@ -31,7 +31,7 @@ describe('<FormConstructor /> test', () => {
     it('should render bannerType', () => {
         const newProps = {
             ...props,
-            row: [{ ...props.row[0], type: FORM_TYPES.BANNER }],
+            row: [{ ...props.row[0], type: FORM_TYPES.BANNER, value: Themes.COFFEE }],
         };
         const FormConstructorComponent = shallow(
             <FormConstructor { ...newProps } />

@@ -93,6 +93,7 @@ export const promoCampaignTestData: PromoCampaignDto = {
         details_button_label: '',
         details_button_url: '',
         disabled_banner_types: [],
+        sale_enabled: false,
     },
     promoCodeType: 'PERSONAL',
     standalone: true,
@@ -100,6 +101,7 @@ export const promoCampaignTestData: PromoCampaignDto = {
     orderNumber: 2,
     priority: 2,
     webUrl: 'https://www.promo.sberhealth.ru/vvo',
+    productOfferingId: null,
 };
 
 export const userTestData: UserInfo = {

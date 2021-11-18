@@ -197,14 +197,14 @@ describe('<StepInfo /> create mode tests.', () => {
 
         it('check validate function if isCopy = false', async () => {
             const resolveSpy = jest.spyOn(Promise, 'resolve');
-            const { validator } = field.prop('rules')[0];
+            const { validator } = field.prop('rules')[1];
 
             await validator('', 'test');
             expect(resolveSpy).toBeCalled();
         });
 
         it('check validate function when exists campaign on server with same externalId', async () => {
-            const { validator } = field.prop('rules')[1];
+            const { validator } = field.prop('rules')[2];
 
             /* should throw error if externalId exist on server */
             getExactExternalIDPromoCampaignList.mockReturnValue({
@@ -322,7 +322,7 @@ describe('<StepInfo /> copy mode tests', () => {
         it('check validate function if isCopy = true', async () => {
             const resolveSpy = jest.spyOn(Promise, 'resolve');
             const rejectSpy = jest.spyOn(Promise, 'reject');
-            const { validator } = field.prop('rules')[0];
+            const { validator } = field.prop('rules')[1];
             expect.assertions(2);
 
             try {

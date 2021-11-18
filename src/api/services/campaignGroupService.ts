@@ -10,7 +10,7 @@ import {
     BannerDto,
     BannerTextDto,
 } from '@types';
-import { GroupLinkSettings } from '@containers/GroupsPage/GroupForms/types';
+import { GroupLinkSettings } from '@containers/GroupsPage/GroupForms/types.d';
 
 export function createCampaignGroup(groupData: BundleCreateDto) {
     return Api.post<DefaultCreateDtoResponse>('/admin/campaign-group', groupData, getReqOptions());

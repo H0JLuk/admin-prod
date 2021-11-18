@@ -10,7 +10,7 @@ exports[`<FormConstructor /> test should be mount snap 1`] = `
 </Row>"
 `;
 
-exports[`<FormConstructor /> test should render bannerType 1`] = `"<div class=\\"imageBlock\\"><div class=\\"imageContainer\\"><img class=\\"img [object Object]\\" src=\\"/themes/[object Object]/main-page-image.svg\\" alt=\\"banner\\"/></div></div>"`;
+exports[`<FormConstructor /> test should render bannerType 1`] = `"<div class=\\"imageBlock\\"><div class=\\"imageContainer\\"><img class=\\"img coffee\\" src=\\"[object Object]\\" alt=\\"banner\\"/></div></div>"`;
 
 exports[`<FormConstructor /> test should render checkBoxes 1`] = `"<div class=\\"ant-checkbox-group\\"></div>"`;
 

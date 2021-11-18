@@ -193,6 +193,25 @@ exports[`<StepInfo/> test should match to snapshot 1`] = `
                   </div>
                 </div>
               </Col>
+              <Col span={8}>
+                <div style={{...}} className=\\"ant-col ant-col-8\\">
+                  <div className=\\"infoTitle\\">
+                    Оформить продажу
+                  </div>
+                  <div className=\\"infoText\\">
+                    <Switch disabled={true} checked={false}>
+                      <Wave insertExtraNode={true}>
+                        <Switch checked={false} prefixCls=\\"ant-switch\\" className=\\"\\" disabled={true} loadingIcon={{...}}>
+                          <button type=\\"button\\" role=\\"switch\\" aria-checked={false} disabled={true} className=\\"ant-switch ant-switch-disabled\\" onKeyDown={[Function: onInternalKeyDown]} onClick={[Function: onInternalClick]}>
+                            <div className=\\"ant-switch-handle\\" />
+                            <span className=\\"ant-switch-inner\\" />
+                          </button>
+                        </Switch>
+                      </Wave>
+                    </Switch>
+                  </div>
+                </div>
+              </Col>
               <Col span={16} className=\\"formGroup\\">
                 <div style={{...}} className=\\"ant-col ant-col-16 formGroup\\">
                   <span className=\\"formGroupLabel\\">

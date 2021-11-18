@@ -64,7 +64,7 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
 
     useEffect(() => {
         (async() => {
-            if (params.appType === 'promoCampaign' && !promoCampaignList.length) {
+            if (params.appType === 'promoCampaign') {
                 try {
                     const { promoCampaignDtoList } = await getFilteredPromoCampaignList(
                         { type: 'NORMAL' },
@@ -77,7 +77,7 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
                         console.error(e.message);
                     }
                 }
-            } else if (params.appType === 'campaignGroup' && !groupCampaignList.length) {
+            } else if (params.appType === 'campaignGroup') {
                 try {
                     const { groups } = await getCampaignGroupList(params.clientAppCode as string) ?? {};
                     const groupList = groups.map((elem) => ({ value: elem.id, label: elem.name }));
@@ -89,7 +89,7 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
                 }
             }
         })();
-    }, [params.appType, groupCampaignList.length, promoCampaignList.length, params.clientAppCode]);
+    }, [params.appType, params.clientAppCode]);
 
     const onParentUserSelect = (user: UserInfo | null) => {
         onChangeParent(user);
@@ -104,32 +104,36 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
     };
 
     const onAppSelect = (clientAppCode: string | number) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { groupId, campaignId, ...rest } = params;
         setPromoCampaignList([]);
         setGroupCampaignList([]);
-        onChangeFilter({ ...params, clientAppCode });
+        onChangeFilter({ ...rest, clientAppCode });
     };
 
-    const onAppTypeSelect = async(appType: string | number) => {
-        onChangeFilter({ ...params, appType });
-    };
-
-    const onPromoCampaignSelect = async(campaignId: string | number) => {
+    const onAppTypeSelect = (appType: string | number) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { groupId, ...rest } = params;
-        onChangeFilter({ ...rest, campaignId });
+        const { groupId, campaignId, ...rest } = params;
+        onChangeFilter({ ...rest, appType });
     };
 
-    const onCampaignGroupSelect = async(groupId: string | number) => {
+    const onAppTypeDeselect = () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { campaignId, ...rest } = params;
-        onChangeFilter({ ...rest, groupId });
+        const { appType, campaignId, groupId, ...rest } = params;
+        onChangeFilter({ ...rest });
+    };
+
+    const getOnChangeHandler = (key: string) => (value: string | number) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { [key]: oldValue, ...rest } = params;
+        onChangeFilter({ ...rest, [key]: value } as SearchParams);
     };
 
     const onLoginTypeSelect = (loginType: string | number) => {
         onChangeFilter({
             ...params,
             loginType,
-            clientAppCode: !loginType ? '' : params.clientAppCode,
+            clientAppCode: '',
         });
     };
 
@@ -195,29 +199,33 @@ const FiltrationBlock: React.FC<FiltrationBlockProps> = ({
                         placeholder={FILTER_TYPES.BY_TYPE}
                         options={TYPE_FIELD_OPTIONS}
                         onSelect={onAppTypeSelect}
+                        allowClear
+                        clearIcon={<Cross />}
+                        onClear={onAppTypeDeselect}
                         value={params.appType || undefined}
                         disabled={disabledAllFields}
                     />
                 )}
-                {params.appType === 'promoCampaign' && (
+                {!!params.clientAppCode && params.appType === 'promoCampaign' && (
                     <Select<string | number>
                         dropdownMatchSelectWidth={false}
                         className={styles.filterItem}
                         placeholder={FILTER_TYPES.BY_PROMOCAMPAIGN}
                         options={promoCampaignList}
-                        onSelect={onPromoCampaignSelect}
-                        value={params.promoCampaign || undefined}
+                        onSelect={getOnChangeHandler('campaignId')}
+                        value={Number(params.campaignId) || undefined}
                         disabled={disabledAllFields}
+                        notFoundContent={<EmptyMessage />}
                     />
                 )}
-                {params.appType === 'campaignGroup' && (
+                {!!params.clientAppCode && params.appType === 'campaignGroup' && (
                     <Select<string | number>
                         dropdownMatchSelectWidth={false}
                         className={styles.filterItem}
                         placeholder={FILTER_TYPES.BY_BUNDLE}
                         options={groupCampaignList}
-                        onSelect={onCampaignGroupSelect}
-                        value={params.campaignGroup || undefined}
+                        onSelect={getOnChangeHandler('groupId')}
+                        value={Number(params.groupId) || undefined}
                         disabled={disabledAllFields}
                         notFoundContent={<EmptyMessage />}
                     />

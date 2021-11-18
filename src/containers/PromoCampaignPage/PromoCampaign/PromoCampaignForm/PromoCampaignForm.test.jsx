@@ -282,6 +282,7 @@ describe('<PromoCampaignForm /> tests', () => {
     });
 
     it('should reject call `editPromoCampaign` function', async () => {
+        const wrapper = shallow(<PromoCampaignForm { ...testProps } mode="edit" />);
         editPromoCampaign.mockRejectedValue(new Error('test reject edit'));
         wrapper.find('ForwardRef(InternalForm)').simulate('valuesChange', {
             test: 'test_change',
@@ -296,6 +297,7 @@ describe('<PromoCampaignForm /> tests', () => {
 
     it('should call `editPromoCampaign` function', async () => {
         getDataForSend.mockReturnValue({ test: 'test data for send' });
+        const wrapper = shallow(<PromoCampaignForm { ...testProps } mode="edit" />);
         wrapper.find('Button').last().simulate('click');
 
         await sleep();
@@ -306,6 +308,7 @@ describe('<PromoCampaignForm /> tests', () => {
         checkPromoCodes.mockReturnValue('newCodeType');
         getDataForSend.mockReturnValue({ test: 'test data for send', promoCodeType: 'testType' });
         callConfirmModalForPromoCodeTypeChanging.mockReturnValue(true);
+        const wrapper = shallow(<PromoCampaignForm { ...testProps } mode="edit" />);
         wrapper.find('ForwardRef(InternalForm)').simulate('valuesChange', {
             test: 'test_change',
         });

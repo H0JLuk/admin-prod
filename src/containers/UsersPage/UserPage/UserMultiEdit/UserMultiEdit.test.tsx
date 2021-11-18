@@ -12,11 +12,12 @@ import UserFormButtonGroup from '../UserFormButtonGroup';
 jest.mock('@apiServices/usersService', () => ({
     editLocationAndSalePointUsers: jest.fn(),
     removeUser: jest.fn(),
+    editLoginTypeUsers: jest.fn(),
 }));
 
 const mockHistoryPush = jest.fn();
 let mockA = true;
-const mockUsersArray = [usersTestArray[0], usersTestArray[1]];
+const mockUsersArray = [usersTestArray[2], usersTestArray[3]];
 
 jest.mock('react-router-dom', () => ({
     useParams: () => ({ userId: 1 }),

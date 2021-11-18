@@ -11,6 +11,10 @@ import { downloadFileFunc } from '@utils/helper';
 import { showNotify, MODE } from '../../UserFormHelper';
 import { ClientAppDto, UserInfo } from '@types';
 import { FORM_RULES } from '@utils/validators';
+import EmptyMessage from '@components/EmptyMessage';
+import { ReactComponent as Cross } from '@imgs/cross.svg';
+
+import styles from './UserGenerateQRModal.module.css';
 
 type UserGenerateQRModalProps = {
     clientApps?: ClientAppDto[];
@@ -105,16 +109,10 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
         }
     };
 
-    const onChangeAppCode = () => {
-        setPromoCampaignList([]);
-        setGroupCampaignList([]);
-    };
-
-    const onAppTypeChange = async (val: string) => {
+    const fetchPromoOrGroup = async(appType: string, appCode: string) => {
         setLoading(true);
-        const appCode = form.getFieldValue('clientAppCode');
-
-        if (val === 'promoCampaign' && !promoCampaignList.length) {
+        if (appType === 'promoCampaign') {
+            form.setFieldsValue({ campaignId: null });
             try {
                 const { promoCampaignDtoList } = await getFilteredPromoCampaignList(
                     { type: 'NORMAL' },
@@ -128,7 +126,8 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
                 }
             }
         }
-        if (val === 'group' && !groupCampaignList.length) {
+        if (appType === 'group') {
+            form.setFieldsValue({ groupId: null });
             try {
                 const { groups } = await getCampaignGroupList(appCode) ?? {};
                 const groupList = groups.map((elem) => ({ value: elem.id, label: elem.name }));
@@ -140,6 +139,12 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
             }
         }
         setLoading(false);
+    };
+
+    const onChangeAppCodeOrType = () => {
+        const appType = form.getFieldValue('type');
+        const appCode = form.getFieldValue('clientAppCode');
+        fetchPromoOrGroup(appType, appCode);
     };
 
     return (
@@ -175,20 +180,22 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
                         <Select
                             placeholder={APP_CODE_PLACEHOLDER}
                             options={appsOptions}
-                            onChange={onChangeAppCode}
+                            onChange={onChangeAppCodeOrType}
                             disabled={loading}
                         />
                     </Form.Item>
                     <Form.Item
                         label={TYPE_LABEL_TEXT}
                         name="type"
-                        rules={[FORM_RULES.REQUIRED]}
                     >
                         <Select
+                            className={styles.filterItem}
                             placeholder={TYPE_PLACEHOLDER}
                             options={TYPE_SELECT_OPTIONS}
                             disabled={loading}
-                            onChange={onAppTypeChange}
+                            onChange={onChangeAppCodeOrType}
+                            clearIcon={<Cross />}
+                            allowClear
                         />
                     </Form.Item>
                     <Form.Item noStyle dependencies={['type']}>
@@ -196,12 +203,13 @@ const UserGenerateQRModal: React.FC<UserGenerateQRModalProps> = ({
                             <Form.Item
                                 {...FIELD_PROPS[(getFieldValue('type') as keyof FormItemProps['name'])]}
                                 style={!getFieldValue('type') && { display: 'none' }}
-                                rules={[FORM_RULES.REQUIRED]}
+                                rules={getFieldValue('type') && [FORM_RULES.REQUIRED]}
                             >
                                 <Select
                                     placeholder={PROMOCAMPAIGN_OR_BUNDLE[(getFieldValue('type') as keyof FormItemProps['name'])]}
                                     options={getFieldValue('type') === 'group' ? groupCampaignList : promoCampaignList}
                                     disabled={loading}
+                                    notFoundContent={<EmptyMessage />}
                                 />
                             </Form.Item>
                         )}

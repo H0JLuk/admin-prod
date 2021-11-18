@@ -1,0 +1,7 @@
+.filterItem :global(.ant-select-clear) {
+    top: 10px;
+    right: 5px !important;
+    opacity: 1 !important;
+    width: unset;
+    height: unset;
+}

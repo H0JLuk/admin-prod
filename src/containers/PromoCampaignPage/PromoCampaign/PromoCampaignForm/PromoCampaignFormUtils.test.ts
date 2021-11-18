@@ -561,8 +561,8 @@ describe('PromoCampaignFormUtils tests', () => {
         it('exist all data', () => {
             expect(normalizeFirstStepValue(dataForNormalize)).toEqual({
                 ...dataForNormalize,
-                startDate: moment('2021-04-21').startOf('day').toISOString(),
-                finishDate: moment('2021-05-20').endOf('day').toISOString(),
+                startDate: moment('2021-04-21').utc().startOf('day').toISOString(),
+                finishDate: moment('2021-05-20').utc().endOf('day').toISOString(),
                 settings: {
                     ...dataForNormalize.settings,
                     priority_on_web_url: true,
@@ -577,8 +577,8 @@ describe('PromoCampaignFormUtils tests', () => {
             };
             expect(normalizeFirstStepValue(newData)).toEqual({
                 ...newData,
-                startDate: moment('2021-04-21').startOf('day').toISOString(),
-                finishDate: moment('2021-05-20').endOf('day').toISOString(),
+                startDate: moment('2021-04-21').utc().startOf('day').toISOString(),
+                finishDate: moment('2021-05-20').utc().endOf('day').toISOString(),
                 settings: {
                     ...newData.settings,
                     priority_on_web_url: true,
@@ -643,8 +643,8 @@ describe('PromoCampaignFormUtils tests', () => {
                 banners: promoCampaignBannersObject,
                 texts: promoCampaignTextsObject,
                 datePicker: [
-                    moment.utc(promoCampaignTestData.startDate).local(),
-                    moment.utc(promoCampaignTestData.finishDate).local(),
+                    moment.utc(promoCampaignTestData.startDate),
+                    moment.utc(promoCampaignTestData.finishDate),
                 ],
                 appCode: 'test',
                 behaviorType: promoCampaignTestData.behaviorType === behaviorTypes.QR,
@@ -666,8 +666,8 @@ describe('PromoCampaignFormUtils tests', () => {
                 banners: promoCampaignBannersObject,
                 texts: promoCampaignTextsObject,
                 datePicker: [
-                    moment.utc(promoCampaignTestData.startDate).local(),
-                    moment.utc(promoCampaignTestData.finishDate).local(),
+                    moment.utc(promoCampaignTestData.startDate),
+                    moment.utc(promoCampaignTestData.finishDate),
                 ],
                 appCode: undefined,
                 promoCodeType: undefined,
@@ -711,8 +711,8 @@ describe('PromoCampaignFormUtils tests', () => {
                 banners: promoCampaignBannersObject,
                 texts: promoCampaignTextsObject,
                 datePicker: [
-                    moment.utc(promoCampaignTestData.startDate).local(),
-                    moment.utc(promoCampaignTestData.finishDate).local(),
+                    moment.utc(promoCampaignTestData.startDate),
+                    moment.utc(promoCampaignTestData.finishDate),
                 ],
                 appCode: 'testAppCode',
                 behaviorType: promoCampaignTestData.behaviorType === behaviorTypes.QR,
@@ -740,6 +740,7 @@ describe('PromoCampaignFormUtils tests', () => {
             'oneLinkAppUrl',
             'behaviorType',
             'externalId',
+            'productOfferingId',
         ]);
 
         expect(getDataForSend(promoCampaignTestData as any)).toEqual(pickData);

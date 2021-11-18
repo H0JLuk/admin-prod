@@ -64,6 +64,8 @@ const DEFAULT_PARAMS: SearchParams = {
     parentId: '',
     loginType: '',
     totalElements: 0,
+    campaignId: '',
+    groupId: '',
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -95,7 +97,7 @@ const showRestoredErrorsNotification = (message: React.ReactNode) => {
     });
 };
 
-const IGNORE_SEARCH_PARAMS = ['parentId', 'clientAppCode', 'appType'];
+const IGNORE_SEARCH_PARAMS = ['parentId', 'clientAppCode', 'appType', 'campaignId', 'groupId'];
 const defaultSelected: SelectedItems = { rowValues: [], rowKeys: [] };
 
 const UserList: React.FC<UserListProps> = ({ matchPath }) => {
@@ -353,6 +355,20 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
         }
     };
 
+    const disableQrButton = (): boolean => {
+        if (
+            params.loginType === LOGIN_TYPES_ENUM.DIRECT_LINK &&
+            !!params.clientAppCode &&
+            !!params.parentId
+        ) {
+            return params.appType
+                ? !((params.appType === 'promoCampaign' && params.campaignId) || (params.appType === 'campaignGroup' && params.groupId))
+                : false;
+        }
+
+        return true;
+    };
+
     return (
         <div className={styles.mainBlock}>
             <Header buttonBack={false} />
@@ -396,13 +412,7 @@ const UserList: React.FC<UserListProps> = ({ matchPath }) => {
                                 onClickResetPass={onClickResetPass}
                                 linkEdit={linkEdit}
                                 generateQR={generateQR}
-                                generateQRDisabled={
-                                    params.loginType !== LOGIN_TYPES_ENUM.DIRECT_LINK ||
-                                    !params.clientAppCode ||
-                                    !params.parentId ||
-                                    !params.appType ||
-                                    !((params.appType === 'promoCampaign' && params.campaignId) || (params.appType === 'campaignGroup' && params.groupId))
-                                }
+                                generateQRDisabled={disableQrButton()}
                             />
                         </div>
                         <TableDeleteModal<UserInfo>
