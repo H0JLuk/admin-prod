@@ -412,6 +412,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
         try {
             await editPromoCampaign({ ...dataForSend, id } as PromoCampaignDto);
             savePromoCampaignData({ ...dataForSend, id });
+            messageError && setMessageError('');
         } catch ({ message }) {
             setMessageError(message);
         }
@@ -423,6 +424,7 @@ const PromoCampaignForm: React.FC<PromoCampaignFormProps> = ({ mode = modes.crea
         try {
             const { id } = await createPromoCampaign(dataForSend as unknown as PromoCampaignCreateDto, appCode);
             savePromoCampaignData({ ...dataForSend, id, texts: [], banners: [] });
+            messageError && setMessageError('');
         } catch ({ message }) {
             setMessageError(message);
         }
