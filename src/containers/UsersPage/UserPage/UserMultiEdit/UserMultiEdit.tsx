@@ -101,7 +101,7 @@ const UserMultiEdit: React.FC<UserMultiEditProps> = ({ matchPath }) => {
             const salePointShouldExternal = users.every(({ role }) => ROLES_FOR_EXTERNAL_SALE_POINT.includes(role));
             const incorrectUser = users.find(({ role }) => role !== ROLES.USER);
             validateSalePoint(salePoint, salePointShouldExternal, false);
-            validateLoginType(incorrectUser);
+            loginType && validateLoginType(incorrectUser);
             const userIds = (users).reduce<number[]>((ids, user) => user.loginType === loginType ? ids : [...ids, user.id], []);
             setIsSendingInfo(true);
 
