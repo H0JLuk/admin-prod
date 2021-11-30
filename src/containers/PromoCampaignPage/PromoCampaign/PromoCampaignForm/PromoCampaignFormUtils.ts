@@ -179,6 +179,7 @@ export async function EditImgBanners(
 
 export function normalizeFirstStepValue<StepValue extends Record<string, any>>(val: StepValue) {
     const [startDate, finishDate] = val.datePicker || [];
+    const urlSourceField = [URL_SOURCE_VALUE_PROMO_CAMPAIGN, true].some(i => i === val.settings.priority_on_web_url);
 
     return {
         ...val,
@@ -186,7 +187,7 @@ export function normalizeFirstStepValue<StepValue extends Record<string, any>>(v
         finishDate: finishDate?.utc().endOf('day').toISOString(),
         settings: {
             ...val.settings,
-            priority_on_web_url: val.settings.priority_on_web_url === URL_SOURCE_VALUE_PROMO_CAMPAIGN,
+            priority_on_web_url: urlSourceField,
         },
         webUrl: val.webUrl || null,
     };
