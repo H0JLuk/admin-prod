@@ -325,8 +325,9 @@ export const designElements: FormConstructorItem[][] = [
         },
         {
             label: 'Заголовок для главной "Микс"',
-            type: FORM_TYPES.INPUT,
+            type: FORM_TYPES.TEXT_AREA,
             span: 12,
+            rows: 3,
             maxLength: 60,
             name: 'home_page_header_mix',
             rules: [
