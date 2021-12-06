@@ -770,6 +770,7 @@ describe('PromoCampaignFormUtils tests', () => {
             'startDate',
             'offerDuration',
             'oneLinkAppUrl',
+            'productOfferingId',
             'promoCodeType',
             'settings',
             'standalone',

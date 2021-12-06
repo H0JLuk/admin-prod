@@ -198,17 +198,13 @@ export function normalizePromoCampaignData<Data extends Record<string, any>>({ p
         return {};
     }
 
+    const categoryIdList = (promoCampaign as PromoCampaignDto).categoryList.map(({ categoryId }) => categoryId);
     const { banners = [], texts = [] } = promoCampaign;
 
     return {
         ...promoCampaign,
-        name: promoCampaign.name,
-        webUrl: promoCampaign.webUrl,
         promoCodeType: isCopy ? undefined : promoCampaign.promoCodeType,
-        active: promoCampaign.active,
-        dzoId: promoCampaign.dzoId,
-        type: promoCampaign.type,
-        categoryIdList: (promoCampaign as PromoCampaignDto).categoryList.map(({ categoryId }) => categoryId),
+        categoryIdList,
         banners: arrayToObject(banners, 'type', 'url'),
         texts: arrayToObject(texts, 'type', 'value'),
         datePicker: [
@@ -216,9 +212,6 @@ export function normalizePromoCampaignData<Data extends Record<string, any>>({ p
             promoCampaign.finishDate ? moment.utc(promoCampaign.finishDate) : undefined,
         ],
         appCode: isCopy ? undefined : appCode ?? getAppCode(),
-        offerDuration: promoCampaign.offerDuration,
-        settings: promoCampaign.settings,
-        standalone: promoCampaign.standalone,
         externalId: isCopy ? '' : promoCampaign.externalId,
         behaviorType: promoCampaign.behaviorType === behaviorTypes.QR,
     };
@@ -274,6 +267,7 @@ export function getPromoCampaignForCopy<
         finishDate: promoCampaign.finishDate,
         startDate: promoCampaign.startDate,
         offerDuration: promoCampaign.offerDuration,
+        productOfferingId: promoCampaign.productOfferingId,
         oneLinkAppUrl: promoCampaign.oneLinkAppUrl,
         promoCodeType: promoCampaign.promoCodeType,
         settings: promoCampaign.settings,
