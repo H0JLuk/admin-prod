@@ -10,6 +10,7 @@ enum Themes {
     COFFEE = 'coffee',
     GREEN_DAY = 'greenDay',
     NEW_YEAR = 'newYear',
+    NEW_YEAR_V2 = 'newYearV2',
     SUMMER = 'summer',
     DEFENDER_FATHERLAND_DAY = 'defenderFatherlandDay',
     WOMENS_DAY = 'womensDay',

@@ -79,7 +79,7 @@
     background-image: linear-gradient(270deg, #02436D -12.37%, #2BA54D 15.56%, #27A844 33.94%, #056690 69.98%, #062C48 103.58%);
 }
 
-.newYear {
+.newYear, .newYearV2 {
     background-image: linear-gradient(
         232.36deg,
         #EAEF00 7.94%,
