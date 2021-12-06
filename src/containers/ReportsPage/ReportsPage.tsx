@@ -45,6 +45,9 @@ type ReportsPageState = {
     salePointPromoId: number | null;
     salesReportSalePointId: number | null;
     loading: boolean;
+    promoCodesError: string | null;
+    reportError: string | null;
+    offersError: string | null;
 };
 class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
     optionRef: React.RefObject<HTMLSelectElement>;
@@ -71,6 +74,9 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
             salePointOfferId: null,
             salePointPromoId: null,
             salesReportSalePointId: null,
+            promoCodesError: null,
+            offersError: null,
+            reportError: null,
         };
     }
 
@@ -99,7 +105,6 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
             !momentEndDate.isValid() ||
             momentStartDate > momentEndDate
         ) {
-            alert(FILTER_ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -118,6 +123,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         } = this.state;
 
         if (isFiltered && !this.checkDate(startDate, endDate)) {
+            this.setState({ offersError: FILTER_ERROR_MESSAGE });
             return;
         }
 
@@ -135,10 +141,17 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
     };
 
     handleChangeDate = (date: Moment | null, isStartDate: boolean) => {
-        if (isStartDate) {
-            this.setState({ startDate: date });
-        } else {
-            this.setState({ endDate: date });
+        const { startDate, endDate } = this.state;
+        const start = isStartDate ? date : startDate;
+        const end = !isStartDate ? date : endDate;
+        this.setState({ startDate: start, endDate: end });
+
+        if (this.checkDate(start, end)) {
+            this.setState({
+                offersError: null,
+                promoCodesError: null,
+                reportError: null,
+            });
         }
     };
 
@@ -152,6 +165,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         } = this.state;
 
         if (!this.checkDate(startDate, endDate)) {
+            this.setState({ promoCodesError: FILTER_ERROR_MESSAGE });
             return;
         }
 
@@ -186,6 +200,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
         } = this.state;
 
         if (!this.checkDate(startDate, endDate)) {
+            this.setState({ reportError: FILTER_ERROR_MESSAGE });
             return;
         }
 
@@ -250,7 +265,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
     handleSalePointSalesSelect = (data: SalePointDto | null) => this.setState({ salesReportSalePointId: data ? data.id : null });
 
     render() {
-        const { startDate, endDate, isFiltered, loading } = this.state;
+        const { startDate, endDate, isFiltered, loading, offersError, promoCodesError, reportError } = this.state;
 
         const picker = (
             <div className={styles.container__block}>
@@ -262,7 +277,9 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                     locale={localeDatePicker}
                     format={DATE_FORMAT}
                     value={startDate}
-                    onChange={date => { this.handleChangeDate(date, true); }}
+                    onChange={date => {
+                        this.handleChangeDate(date, true);
+                    }}
                 />
 
                 <label className={styles.textFieldFormat}>
@@ -273,7 +290,9 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                     locale={localeDatePicker}
                     format={DATE_FORMAT}
                     value={endDate}
-                    onChange={date => { this.handleChangeDate(date, false); }}
+                    onChange={date => {
+                        this.handleChangeDate(date, false);
+                    }}
                 />
             </div>
         );
@@ -325,6 +344,7 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                         >
                             {OFFERS.LABEL}
                         </Button>
+                        <span className={styles.error}>{offersError}</span>
                     </div>
 
                     <hr />
@@ -373,11 +393,13 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                         <div className={styles.container__block}>
                             <Button
                                 onClick={this.downloadPromoCodes}
+                                className={styles.container__button}
                                 type="primary"
                                 disabled={loading}
                             >
                                 {PROMOCODES.LABEL}
                             </Button>
+                            {promoCodesError && <span className={styles.error}>{promoCodesError}</span>}
                         </div>
                     </div>
 
@@ -427,11 +449,13 @@ class ReportsPage extends Component<Record<string, unknown>, ReportsPageState> {
                         <div className={styles.container__block}>
                             <Button
                                 onClick={this.downloadSalesReport}
+                                className={styles.container__button}
                                 type="primary"
                                 disabled={loading}
                             >
                                 {REPORTS.LABEL}
                             </Button>
+                            {reportError && <span className={styles.error}>{reportError}</span>}
                         </div>
                     </div>
                 </div>
