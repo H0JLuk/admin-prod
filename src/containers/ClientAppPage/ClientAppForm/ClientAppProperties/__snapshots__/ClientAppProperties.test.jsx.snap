@@ -8,10 +8,10 @@ exports[`<ClientAppProperties /> test should match snapshot  1`] = `
       <AppFormConstructor row={{...}} isEdit={true} isCreate={false} />
     </Memo(ContentBlock)>
     <Memo(ContentBlock) maxWidth={950}>
-      <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
-      <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
-      <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
-      <AppFormConstructor row={{...}} disabledFields={{...}} isCreate={false} />
+      <AppFormConstructor row={{...}} disabledFields={{...}} hiddenFields={{...}} isCreate={false} />
+      <AppFormConstructor row={{...}} disabledFields={{...}} hiddenFields={{...}} isCreate={false} />
+      <AppFormConstructor row={{...}} disabledFields={{...}} hiddenFields={{...}} isCreate={false} />
+      <AppFormConstructor row={{...}} disabledFields={{...}} hiddenFields={{...}} isCreate={false} />
       <Row gutter={24} className=\\"row\\">
         <Col span={12}>
           <FormItem label=\\"Бизнес-роль, для которой доступно приложение\\" name=\\"businessRoleIds\\" normalize={[Function: normalize]}>
