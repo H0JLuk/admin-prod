@@ -63,11 +63,14 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
     const [loading, setLoading] = useState(false);
     const [btnStatus, setBtnStatus] = useState(true);
     const [disabledFields, setDisabledFields] = useState({} as Record<string, string[]>);
+    const [hiddenFields, setHiddenFields] = useState([] as string[]);
 
     useEffect(() => {
         isEdit && form.setFieldsValue(propertiesSettings);
         updateAuthCheckboxStatus(propertiesSettings.login_types as any);
         updateMechanicCheckboxStatus(propertiesSettings.mechanics as any);
+        const hasHiddenFields = !form.getFieldValue('notification_types')?.includes(NOTIFICATION_TYPES.PUSH);
+        hasHiddenFields && setHiddenFields(['client_notification_enabled', 'friend_notification_enabled', 'offer_limit']);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -258,6 +261,9 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
         if (Array.isArray(name)) {
             name[0] === 'login_types' && updateAuthCheckboxStatus(value);
             name[0] === 'mechanics' && updateMechanicCheckboxStatus(value);
+            if (name[0] === 'notification_types') {
+                setHiddenFields(!value.includes(NOTIFICATION_TYPES.PUSH) ? ['client_notification_enabled', 'friend_notification_enabled', 'offer_limit'] : []);
+            }
         }
         setBtnStatus(false);
     };
@@ -306,6 +312,7 @@ const ClientAppProperties: React.FC<ClientAppPropertiesProps> = ({
                             key={index}
                             row={row}
                             disabledFields={disabledFields}
+                            hiddenFields={hiddenFields}
                             isCreate={!isEdit}
                         />
                     ))}

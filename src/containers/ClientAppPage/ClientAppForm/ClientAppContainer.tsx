@@ -197,12 +197,16 @@ export function doPropertiesSettings(settings: ISettings, { id, displayName, cod
         game_mechanics,
         login_types,
         notification_types,
+        client_notification_enabled,
+        friend_notification_enabled,
         ...restSettings
     } = settings;
     const appMechanics = mechanics && JSON.parse(mechanics);
     const gameMechanics = game_mechanics && JSON.parse(game_mechanics);
     const loginTypes = login_types && JSON.parse(login_types);
     const notificationTypes = notification_types && JSON.parse(notification_types);
+    const clientNotificationEnabled = client_notification_enabled && JSON.parse(client_notification_enabled);
+    const friendNotificationEnabled = friend_notification_enabled && JSON.parse(friend_notification_enabled);
 
     return {
         id: id as unknown as string,
@@ -213,6 +217,8 @@ export function doPropertiesSettings(settings: ISettings, { id, displayName, cod
         game_mechanics: gameMechanics,
         login_types: loginTypes,
         notification_types: notificationTypes,
+        client_notification_enabled: clientNotificationEnabled,
+        friend_notification_enabled: friendNotificationEnabled,
         ...restSettings,
     };
 }

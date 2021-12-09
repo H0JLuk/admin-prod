@@ -10,12 +10,14 @@ type FormInputByTypeProps = FormConstructorFormItem & {
     isEdit?: boolean;
     canEdit?: boolean;
     disabledFields?: Record<string, string[]>;
+    hiddenFields?: string[];
 };
 
 type AppFormConstructorProps = {
     isEdit?: boolean;
     row: FormConstructorItem[];
     disabledFields?: Record<string, string[]>;
+    hiddenFields?: string[];
     isCreate?: boolean;
 };
 
@@ -49,7 +51,7 @@ const FormInputByType: React.FC<FormInputByTypeProps> = ({ isEdit, disabledField
         }
         case FORM_TYPES.INPUT: {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { type, canEdit, ...restProps } = rest;
+            const { type, canEdit, id, ...restProps } = rest;
             if (!isEdit || canEdit) {
                 return <Input allowClear {...restProps} />;
             }
@@ -60,6 +62,13 @@ const FormInputByType: React.FC<FormInputByTypeProps> = ({ isEdit, disabledField
             const { type, ...restProps } = rest;
             return <Select {...restProps} />;
         }
+        case FORM_TYPES.FORM_GROUP: {
+            return null;
+        }
+        case FORM_TYPES.CHECKBOX: {
+            const { title, id, ...restProps } = rest;
+            return <Checkbox {...restProps} >{title}</Checkbox>;
+        }
     }
 };
 
@@ -68,25 +77,38 @@ const AppFormConstructor: React.FC<AppFormConstructorProps> = ({
     isEdit,
     isCreate = false,
     disabledFields,
+    hiddenFields,
 }) => (
     <Row className={styles.propertiesRow} gutter={24}>
-        {row.map(({ label, span, rules, name, normalize, hideWhenCreate, ...restProps }) => !(isCreate && hideWhenCreate) && (
-            <Col className={styles.colFlex} key={label} span={span}>
-                <Form.Item
-                    rules={rules}
-                    name={name}
-                    className={cn({ [styles.labelBold]: isEdit })}
-                    label={label}
-                    normalize={normalize}
-                    validateTrigger="onSubmit"
-                    validateFirst
-                >
-                    <FormInputByType
-                        isEdit={isEdit}
-                        {...restProps}
+        {row.map(({ label, span, rules, name, normalize, hideWhenCreate, valuePropName, isFormGroup, items, ...restProps }, index) => !(isCreate && hideWhenCreate) && (
+            <Col className={styles.colFlex} key={index + String(label)} span={span}>
+                {!isFormGroup ? (!hiddenFields?.includes(String(name)) && (
+                    <Form.Item
+                        rules={rules}
+                        name={name}
+                        className={cn({ [styles.labelBold]: isEdit })}
+                        label={label}
+                        valuePropName={valuePropName}
+                        normalize={normalize}
+                        validateTrigger="onSubmit"
+                        validateFirst
+                    >
+                        <FormInputByType
+                            isEdit={isEdit}
+                            {...restProps}
+                            disabledFields={disabledFields}
+                        />
+                    </Form.Item>
+                )) : items?.map((internalRow, internalIndex) => (
+                    <AppFormConstructor
+                        key={internalIndex}
+                        row={internalRow}
                         disabledFields={disabledFields}
+                        hiddenFields={hiddenFields}
+                        isCreate={isCreate}
                     />
-                </Form.Item>
+                ))
+                }
             </Col>
         ))}
     </Row>

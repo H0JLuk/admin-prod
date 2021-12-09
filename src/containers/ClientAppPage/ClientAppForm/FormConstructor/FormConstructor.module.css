@@ -31,6 +31,14 @@
     align-items: flex-end;
 }
 
+.propertiesRow:nth-child(4) {
+    align-items: flex-start;
+}
+
+.propertiesRow:nth-child(4) :global(.ant-row) {
+    margin-bottom: 0 !important;
+}
+
 .propertiesRow:not(:last-child) {
     margin-bottom: 5px;
 }

@@ -10,7 +10,7 @@ import { showCount } from '@constants/common';
 import { FORM_RULES, getPatternAndMessage } from '@utils/validators';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
 import { FormItemProps, InputProps, SelectProps } from 'antd';
-import { CheckboxGroupProps } from 'antd/lib/checkbox';
+import { CheckboxGroupProps, CheckboxProps } from 'antd/lib/checkbox';
 import { TextAreaProps } from 'antd/lib/input';
 import { BannerProps } from './MainPageDesign/Banner';
 import { trimValue } from '@utils/helper';
@@ -56,9 +56,11 @@ export const banners = Object.values(Themes);
 export enum FORM_TYPES {
     INPUT = 'INPUT',
     CHECKBOX_GROUP = 'CHECKBOX_GROUP',
+    CHECKBOX = 'CHECKBOX',
     TEXT_AREA = 'TEXT_AREA',
     BANNER = 'BANNER',
     SELECT = 'SELECT',
+    FORM_GROUP = 'FORM_GROUP',
 }
 
 export enum SETTINGS_TYPES {
@@ -71,12 +73,14 @@ export enum FORM_MODES {
     EDIT = 'edit',
 }
 
-export type CommonFormConstructorItem = Pick<FormItemProps, 'rules' | 'normalize'> & {
-    label: string;
+export type CommonFormConstructorItem = Pick<FormItemProps, 'rules' | 'normalize' | 'valuePropName'> & {
+    label?: string;
     span: number | string;
     name: string;
     canEdit?: boolean;
     hideWhenCreate?: boolean;
+    isFormGroup?: boolean;
+    items?: FormConstructorItem[][];
 };
 
 export type FormConstructorInput = Omit<InputProps, 'type'> & {
@@ -100,11 +104,22 @@ export type FormConstructorSelect = SelectProps<any> & {
     type: FORM_TYPES.SELECT;
 };
 
+export type FormConstructorCheckbox = CheckboxProps & {
+    type: FORM_TYPES.CHECKBOX;
+    title?: string;
+};
+
+export type FormConstructorFormGroup = {
+    type: FORM_TYPES.FORM_GROUP;
+};
+
 export type FormConstructorFormItem =
     FormConstructorInput |
     FormConstructorCheckboxGroup |
     FormConstructorTextArea |
     FormConstructorBanner |
+    FormConstructorCheckbox |
+    FormConstructorFormGroup |
     FormConstructorSelect;
 
 export type FormConstructorItem = FormConstructorFormItem & CommonFormConstructorItem;
@@ -280,11 +295,36 @@ export const formElements: FormConstructorItem[][] = [
             name: 'login_types',
         },
         {
-            label: 'Способ отправки сообщений клиенту',
-            type: FORM_TYPES.CHECKBOX_GROUP,
+            type: FORM_TYPES.FORM_GROUP,
             span: 12,
-            options: NOTIFICATION_TYPES_OPTIONS,
-            name: 'notification_types',
+            name: '',
+            isFormGroup: true,
+            items: [
+                [{
+                    label: 'Способ отправки сообщений клиенту',
+                    type: FORM_TYPES.CHECKBOX_GROUP,
+                    span: 24,
+                    options: NOTIFICATION_TYPES_OPTIONS,
+                    name: 'notification_types',
+                }], [{
+                    title: 'Самому себе',
+                    type: FORM_TYPES.CHECKBOX,
+                    span: 24,
+                    valuePropName: 'checked',
+                    name: 'client_notification_enabled',
+                }], [{
+                    title: 'Подарок другу',
+                    type: FORM_TYPES.CHECKBOX,
+                    span: 24,
+                    valuePropName: 'checked',
+                    name: 'friend_notification_enabled',
+                }], [{
+                    label: 'Кол-во подарков',
+                    type: FORM_TYPES.INPUT,
+                    span: 12,
+                    placeholder: 'По умолчанию',
+                    name: 'offer_limit',
+                }]],
         },
     ],
 ];
